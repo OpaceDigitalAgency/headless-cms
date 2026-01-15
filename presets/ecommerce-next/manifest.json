@@ -12,7 +12,9 @@
     "pages",
     "products",
     "product-categories",
-    "product-collections"
+    "product-collections",
+    "content-types",
+    "custom-items"
   ],
   "globals": [
     "header",

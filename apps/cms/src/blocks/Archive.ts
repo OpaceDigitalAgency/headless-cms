@@ -41,9 +41,22 @@ export const archiveBlock: Block = {
         { label: 'People', value: 'people' },
         { label: 'Places', value: 'places' },
         { label: 'Collections', value: 'museum-collections' },
+        { label: 'Custom Items', value: 'custom-items' },
       ],
       admin: {
         condition: (_, siblingData) => siblingData?.populateBy === 'collection',
+      },
+    },
+    {
+      name: 'contentType',
+      type: 'relationship',
+      relationTo: 'content-types',
+      hasMany: false,
+      label: 'Content Type',
+      admin: {
+        condition: (_, siblingData) =>
+          siblingData?.populateBy === 'collection' && siblingData?.relationTo === 'custom-items',
+        description: 'Filter custom items by content type',
       },
     },
     {
@@ -70,7 +83,7 @@ export const archiveBlock: Block = {
     {
       name: 'selectedDocs',
       type: 'relationship',
-      relationTo: ['posts', 'pages', 'artifacts', 'people', 'places'],
+      relationTo: ['posts', 'pages', 'artifacts', 'people', 'places', 'custom-items'],
       hasMany: true,
       label: 'Selected Documents',
       admin: {

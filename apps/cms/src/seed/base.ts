@@ -136,6 +136,69 @@ export abstract class BaseSeeder {
   }
 
   /**
+   * Seed a custom content type and optional items
+   */
+  protected async seedCustomContentType(data: {
+    name: string
+    slug: string
+    singularLabel: string
+    pluralLabel: string
+    icon?: string
+    template: string
+    customFields?: Array<{ name: string; label: string; type: string; required?: boolean; options?: string }>
+    items?: Array<{
+      title: string
+      slug: string
+      excerpt?: string
+      content?: any
+      status?: 'draft' | 'published' | 'archived'
+      customData?: Record<string, any>
+    }>
+  }): Promise<string | null> {
+    try {
+      const contentType = await this.payload.create({
+        collection: 'content-types',
+        data: {
+          name: data.name,
+          slug: data.slug,
+          singularLabel: data.singularLabel,
+          pluralLabel: data.pluralLabel,
+          icon: data.icon || 'box',
+          template: data.template,
+          hasArchive: true,
+          archiveSlug: `items/${data.slug}`,
+          customFields: data.customFields || [],
+        },
+      })
+
+      this.trackId('content-types', contentType.id)
+
+      if (data.items && data.items.length > 0) {
+        for (const item of data.items) {
+          const created = await this.payload.create({
+            collection: 'custom-items',
+            data: {
+              title: item.title,
+              slug: item.slug,
+              excerpt: item.excerpt,
+              content: item.content,
+              contentType: contentType.id,
+              status: item.status || 'published',
+              customData: item.customData || {},
+            },
+          })
+          this.trackId('custom-items', created.id)
+        }
+      }
+
+      return contentType.id
+    } catch (error) {
+      this.error(`Failed to seed custom content type ${data.name}: ${error}`)
+      return null
+    }
+  }
+
+  /**
    * Seed a specific collection (public method)
    * Override in subclasses to provide collection-specific seeding
    */

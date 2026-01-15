@@ -9,6 +9,7 @@ import { Tools } from '../../../admin/views/Tools'
 import { SeedDataManager } from '../../../components/SeedDataManager'
 import { CollectionTemplates } from '../../../components/CollectionTemplates'
 import { ContentTypeManager } from '../../../components/ContentTypeManager'
+import { CustomDataField } from '../../../components/CustomDataField'
 
 export const importMap = {
   '/admin/TwoPanelNav': TwoPanelNav,
@@ -18,4 +19,5 @@ export const importMap = {
   '/components/SeedDataManager': SeedDataManager,
   '/components/CollectionTemplates': CollectionTemplates,
   '/components/ContentTypeManager': ContentTypeManager,
+  '/components/CustomDataField': CustomDataField,
 }

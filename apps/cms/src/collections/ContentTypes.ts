@@ -153,6 +153,16 @@ export const ContentTypes: CollectionConfig = {
         description: 'URL path for the archive page (defaults to content type slug)',
         condition: (data) => data.hasArchive,
       },
+      hooks: {
+        beforeValidate: [
+          ({ value, data }) => {
+            if (!value && data?.slug) {
+              return `items/${data.slug}`
+            }
+            return value
+          },
+        ],
+      },
     },
     // Custom Fields Definition
     {
@@ -249,9 +259,26 @@ export const ContentTypes: CollectionConfig = {
   ],
   hooks: {
     afterChange: [
-      async ({ doc, operation }) => {
+      async ({ doc, operation, req }) => {
         // Log content type changes for debugging
         console.log(`Content type ${operation}: ${doc.name} (${doc.slug})`)
+        const revalidateUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3001'
+        const archiveSlug = doc.archiveSlug || `items/${doc.slug}`
+        const archiveTail = archiveSlug.replace(/^\/?items\//, '')
+        try {
+          await fetch(`${revalidateUrl}/api/revalidate`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              secret: process.env.REVALIDATION_SECRET,
+              collection: 'content-types',
+              slug: archiveTail,
+            }),
+          })
+          req.payload.logger.info(`Revalidated content type: ${doc.slug}`)
+        } catch (error) {
+          req.payload.logger.error(`Failed to revalidate content type: ${doc.slug}`)
+        }
       },
     ],
   },

@@ -95,6 +95,46 @@ export async function seedBasicData(payload: Payload): Promise<void> {
     },
   })
 
+  // Create a sample dynamic content type
+  const customType = await payload.create({
+    collection: 'content-types',
+    data: {
+      name: 'Classic Cars',
+      slug: 'classic-cars',
+      singularLabel: 'Classic Car',
+      pluralLabel: 'Classic Cars',
+      icon: 'car',
+      template: 'archive-item',
+      hasArchive: true,
+      archiveSlug: 'items/classic-cars',
+      customFields: [
+        { name: 'year', label: 'Year', type: 'number', required: true },
+        { name: 'manufacturer', label: 'Manufacturer', type: 'text', required: true },
+        { name: 'engine', label: 'Engine', type: 'text', required: false },
+      ],
+      seedData: {
+        hasSeedData: true,
+        sampleCount: 2,
+      },
+    },
+  })
+
+  await payload.create({
+    collection: 'custom-items',
+    data: {
+      title: '1967 Ford Mustang',
+      slug: '1967-ford-mustang',
+      excerpt: 'An American muscle car icon with classic styling.',
+      contentType: customType.id,
+      status: 'published',
+      customData: {
+        year: 1967,
+        manufacturer: 'Ford',
+        engine: 'V8',
+      },
+    },
+  })
+
   // Create sample blog post
   await payload.create({
     collection: 'posts',

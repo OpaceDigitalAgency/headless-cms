@@ -18,7 +18,7 @@ export class BlogSeeder extends BaseSeeder {
   }
 
   getCollections(): string[] {
-    return ['pages', 'posts', 'categories']
+    return ['pages', 'posts', 'categories', 'content-types', 'custom-items']
   }
 
   async seed(): Promise<void> {
@@ -33,6 +33,28 @@ export class BlogSeeder extends BaseSeeder {
     // Seed posts (depends on categories)
     await this.seedPosts(categories)
 
+    // Seed a custom content type with items
+    await this.seedCustomContentType({
+      name: 'Reviews',
+      slug: 'reviews',
+      singularLabel: 'Review',
+      pluralLabel: 'Reviews',
+      icon: 'document',
+      template: 'article',
+      customFields: [
+        { name: 'rating', label: 'Rating', type: 'number', required: true },
+        { name: 'product', label: 'Product', type: 'text', required: true },
+      ],
+      items: [
+        {
+          title: 'Payload CMS Review',
+          slug: 'payload-cms-review',
+          excerpt: 'A quick look at how Payload compares for content teams.',
+          customData: { rating: 4.5, product: 'Payload CMS' },
+        },
+      ],
+    })
+
     // Update globals
     await this.seedGlobals()
 
@@ -45,6 +67,8 @@ export class BlogSeeder extends BaseSeeder {
     // Clear in reverse dependency order
     await this.clearCollection('posts')
     await this.clearCollection('pages')
+    await this.clearCollection('custom-items')
+    await this.clearCollection('content-types')
     await this.clearCollection('categories')
     
     this.log('Blog data cleared!')

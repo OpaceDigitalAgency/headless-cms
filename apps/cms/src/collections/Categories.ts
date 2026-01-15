@@ -68,44 +68,6 @@ export const Categories: CollectionConfig = {
       relationTo: 'media',
       label: 'Featured Image',
     },
-    {
-      name: 'parent',
-      type: 'relationship',
-      relationTo: 'categories',
-      label: 'Parent Category',
-      filterOptions: ({ id }) => ({
-        id: {
-          not_equals: id,
-        },
-      }),
-      admin: {
-        description: 'Select a parent category for hierarchical organization',
-      },
-    },
-    // Virtual field populated by nested-docs plugin
-    {
-      name: 'breadcrumbs',
-      type: 'array',
-      admin: {
-        readOnly: true,
-        hidden: true,
-      },
-      fields: [
-        {
-          name: 'doc',
-          type: 'relationship',
-          relationTo: 'categories',
-        },
-        {
-          name: 'url',
-          type: 'text',
-        },
-        {
-          name: 'label',
-          type: 'text',
-        },
-      ],
-    },
   ],
 
   timestamps: true,

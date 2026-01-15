@@ -24,7 +24,7 @@ export async function POST(request: NextRequest) {
   
   try {
     const body = await request.json()
-    const { secret, collection, slug, id, operation } = body
+    const { secret, collection, slug, id, operation, contentTypeSlug } = body
 
     // SECURITY: Verify secret token
     if (secret !== REVALIDATION_SECRET) {
@@ -117,6 +117,26 @@ export async function POST(request: NextRequest) {
       case 'media':
         // Media changes can affect many pages - revalidate common areas
         revalidateTag('media')
+        break
+
+      case 'custom-items':
+        if (contentTypeSlug) {
+          paths.push(`/items/${contentTypeSlug}`)
+          if (slug) {
+            paths.push(`/items/${contentTypeSlug}/${slug}`)
+          }
+        } else if (slug) {
+          paths.push(`/items/${slug}`)
+        }
+        // Also revalidate top-level items index if present
+        paths.push('/items')
+        break
+
+      case 'content-types':
+        paths.push('/items')
+        if (slug) {
+          paths.push(`/items/${slug}`)
+        }
         break
         
       case 'header':

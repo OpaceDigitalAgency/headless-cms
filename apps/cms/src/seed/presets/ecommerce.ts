@@ -18,7 +18,7 @@ export class EcommerceSeeder extends BaseSeeder {
   }
 
   getCollections(): string[] {
-    return ['pages', 'products', 'product-categories', 'product-collections']
+    return ['pages', 'products', 'product-categories', 'product-collections', 'content-types', 'custom-items']
   }
 
   async seed(): Promise<void> {
@@ -29,6 +29,28 @@ export class EcommerceSeeder extends BaseSeeder {
     const collections = await this.seedProductCollections()
     await this.seedProducts(categories, collections)
     await this.seedPages()
+
+    await this.seedCustomContentType({
+      name: 'Brands',
+      slug: 'brands',
+      singularLabel: 'Brand',
+      pluralLabel: 'Brands',
+      icon: 'service',
+      template: 'archive-item',
+      customFields: [
+        { name: 'country', label: 'Country', type: 'text', required: true },
+        { name: 'founded', label: 'Founded', type: 'number', required: false },
+      ],
+      items: [
+        {
+          title: 'Acme Co.',
+          slug: 'acme-co',
+          excerpt: 'A trusted brand for everyday products.',
+          customData: { country: 'USA', founded: 1986 },
+        },
+      ],
+    })
+
     await this.seedGlobals()
 
     this.log('Ecommerce seed completed!')
@@ -42,6 +64,8 @@ export class EcommerceSeeder extends BaseSeeder {
     await this.clearCollection('product-collections')
     await this.clearCollection('product-categories')
     await this.clearCollection('pages')
+    await this.clearCollection('custom-items')
+    await this.clearCollection('content-types')
     
     this.log('Ecommerce data cleared!')
   }

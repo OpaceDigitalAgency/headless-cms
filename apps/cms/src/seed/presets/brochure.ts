@@ -18,13 +18,35 @@ export class BrochureSeeder extends BaseSeeder {
   }
 
   getCollections(): string[] {
-    return ['pages']
+    return ['pages', 'content-types', 'custom-items']
   }
 
   async seed(): Promise<void> {
     this.log('Starting brochure seed...')
 
     await this.seedPages()
+
+    await this.seedCustomContentType({
+      name: 'Case Studies',
+      slug: 'case-studies',
+      singularLabel: 'Case Study',
+      pluralLabel: 'Case Studies',
+      icon: 'document',
+      template: 'article',
+      customFields: [
+        { name: 'industry', label: 'Industry', type: 'text', required: true },
+        { name: 'result', label: 'Result', type: 'text', required: true },
+      ],
+      items: [
+        {
+          title: 'Retail Growth Strategy',
+          slug: 'retail-growth-strategy',
+          excerpt: 'How we grew a retail brand by 120% YoY.',
+          customData: { industry: 'Retail', result: '120% YoY growth' },
+        },
+      ],
+    })
+
     await this.seedGlobals()
 
     this.log('Brochure seed completed!')
@@ -33,6 +55,8 @@ export class BrochureSeeder extends BaseSeeder {
   async clear(): Promise<void> {
     this.log('Clearing brochure data...')
     await this.clearCollection('pages')
+    await this.clearCollection('custom-items')
+    await this.clearCollection('content-types')
     this.log('Brochure data cleared!')
   }
 

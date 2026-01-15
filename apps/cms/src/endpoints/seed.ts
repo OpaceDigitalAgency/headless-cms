@@ -29,6 +29,8 @@ const COLLECTION_SEED_CONFIG: Record<string, {
   people: { label: 'People', icon: '👤', hasSeedData: true, hasSeedMedia: true },
   places: { label: 'Places', icon: '📍', hasSeedData: true, hasSeedMedia: true },
   'museum-collections': { label: 'Collections', icon: '🗂️', hasSeedData: true, hasSeedMedia: false },
+  'content-types': { label: 'Content Types', icon: '🗂️', hasSeedData: true, hasSeedMedia: false },
+  'custom-items': { label: 'Custom Items', icon: '📦', hasSeedData: true, hasSeedMedia: false },
   products: { label: 'Products', icon: '🛍️', hasSeedData: true, hasSeedMedia: true },
   'product-categories': { label: 'Product Categories', icon: '📦', hasSeedData: true, hasSeedMedia: false },
 }

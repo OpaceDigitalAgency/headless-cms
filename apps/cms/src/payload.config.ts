@@ -245,7 +245,7 @@ export default buildConfig({
   plugins: [
     // SEO Plugin - Meta tags, Open Graph, Twitter Cards
     seoPlugin({
-      collections: ['pages', 'posts', 'artifacts', 'people', 'places', 'museum-collections', 'custom-items'],
+      collections: ['pages', 'posts', 'artifacts', 'people', 'places', 'museum-collections', 'custom-items', 'content-types'],
       uploadsCollection: 'media',
       generateTitle: ({ doc }) => `${doc?.title || doc?.name || 'Untitled'} | Museum Collection`,
       generateDescription: ({ doc }) => doc?.excerpt || doc?.shortDescription || doc?.shortBio || '',
@@ -258,6 +258,12 @@ export default buildConfig({
           return `${baseUrl}/collections/${doc?.slug || ''}`
         }
         if (collectionSlug === 'custom-items') {
+          const typeSlug = typeof doc?.contentType === 'object' ? doc?.contentType?.slug : undefined
+          return typeSlug
+            ? `${baseUrl}/items/${typeSlug}/${doc?.slug || ''}`
+            : `${baseUrl}/items/${doc?.slug || ''}`
+        }
+        if (collectionSlug === 'content-types') {
           return `${baseUrl}/items/${doc?.slug || ''}`
         }
         return `${baseUrl}/${collectionSlug}/${doc?.slug || ''}`
@@ -315,7 +321,7 @@ export default buildConfig({
 
     // Search Plugin - Full-text search across collections
     searchPlugin({
-      collections: ['pages', 'posts', 'artifacts', 'people', 'places', 'museum-collections', 'custom-items'],
+      collections: ['pages', 'posts', 'artifacts', 'people', 'places', 'museum-collections', 'custom-items', 'content-types'],
       defaultPriorities: {
         pages: 10,
         posts: 20,
@@ -324,6 +330,7 @@ export default buildConfig({
         places: 50,
         'museum-collections': 60,
         'custom-items': 25,
+        'content-types': 5,
       },
       beforeSync: ({ originalDoc, searchDoc }) => ({
         ...searchDoc,

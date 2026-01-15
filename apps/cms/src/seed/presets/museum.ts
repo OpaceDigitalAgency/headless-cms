@@ -18,7 +18,7 @@ export class MuseumSeeder extends BaseSeeder {
   }
 
   getCollections(): string[] {
-    return ['pages', 'posts', 'categories', 'artifacts', 'people', 'places', 'museum-collections']
+    return ['pages', 'posts', 'categories', 'artifacts', 'people', 'places', 'museum-collections', 'content-types', 'custom-items']
   }
 
   async seed(): Promise<void> {
@@ -32,6 +32,29 @@ export class MuseumSeeder extends BaseSeeder {
     await this.seedArtifacts(people, places, collections)
     await this.seedPages()
     await this.seedPosts(categories)
+
+    await this.seedCustomContentType({
+      name: 'Exhibitions',
+      slug: 'exhibitions',
+      singularLabel: 'Exhibition',
+      pluralLabel: 'Exhibitions',
+      icon: 'event',
+      template: 'archive-item',
+      customFields: [
+        { name: 'startDate', label: 'Start Date', type: 'date', required: true },
+        { name: 'endDate', label: 'End Date', type: 'date', required: false },
+        { name: 'location', label: 'Location', type: 'text', required: true },
+      ],
+      items: [
+        {
+          title: 'Renaissance Wonders',
+          slug: 'renaissance-wonders',
+          excerpt: 'A curated exhibition of Renaissance masterpieces.',
+          customData: { startDate: '2024-06-01', endDate: '2024-09-30', location: 'Main Gallery' },
+        },
+      ],
+    })
+
     await this.seedGlobals()
 
     this.log('Museum seed completed!')
@@ -47,6 +70,8 @@ export class MuseumSeeder extends BaseSeeder {
     await this.clearCollection('museum-collections')
     await this.clearCollection('people')
     await this.clearCollection('places')
+    await this.clearCollection('custom-items')
+    await this.clearCollection('content-types')
     await this.clearCollection('categories')
     
     this.log('Museum data cleared!')

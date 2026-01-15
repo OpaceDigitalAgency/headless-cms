@@ -15,7 +15,9 @@
     "artifacts",
     "people",
     "places",
-    "museum-collections"
+    "museum-collections",
+    "content-types",
+    "custom-items"
   ],
   "globals": [
     "header",

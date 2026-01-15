@@ -1,14 +1,14 @@
 import type { CollectionConfig } from 'payload'
-import { 
-  Hero, 
-  Content, 
-  Media as MediaBlock, 
-  CTA, 
-  Gallery, 
-  Grid, 
-  Timeline, 
-  Archive, 
-  Form 
+import {
+  heroBlock,
+  contentBlock,
+  mediaBlock as MediaBlock,
+  ctaBlock,
+  galleryBlock,
+  gridBlock,
+  timelineBlock,
+  archiveBlock,
+  formBlock,
 } from '../blocks'
 
 /**
@@ -62,6 +62,12 @@ export const CustomItems: CollectionConfig = {
     },
     maxPerDoc: 25,
   },
+  indexes: [
+    {
+      fields: ['slug', 'contentType'],
+      unique: true,
+    },
+  ],
   fields: [
     // Content Type Reference
     {
@@ -91,7 +97,6 @@ export const CustomItems: CollectionConfig = {
               name: 'slug',
               type: 'text',
               required: true,
-              unique: true,
               admin: {
                 description: 'URL-friendly identifier',
               },
@@ -127,7 +132,17 @@ export const CustomItems: CollectionConfig = {
             {
               name: 'blocks',
               type: 'blocks',
-              blocks: [Hero, Content, MediaBlock, CTA, Gallery, Grid, Timeline, Archive, Form],
+              blocks: [
+                heroBlock,
+                contentBlock,
+                MediaBlock,
+                ctaBlock,
+                galleryBlock,
+                gridBlock,
+                timelineBlock,
+                archiveBlock,
+                formBlock,
+              ],
               admin: {
                 description: 'Add content sections',
               },
@@ -175,6 +190,9 @@ export const CustomItems: CollectionConfig = {
               type: 'json',
               admin: {
                 description: 'Custom field values are stored here and rendered based on the content type definition',
+                components: {
+                  Field: '/components/CustomDataField',
+                },
               },
             },
           ],
@@ -209,36 +227,8 @@ export const CustomItems: CollectionConfig = {
         },
         {
           label: 'SEO',
-          fields: [
-            {
-              name: 'meta',
-              type: 'group',
-              fields: [
-                {
-                  name: 'title',
-                  type: 'text',
-                  admin: {
-                    description: 'Override the default title tag',
-                  },
-                },
-                {
-                  name: 'description',
-                  type: 'textarea',
-                  admin: {
-                    description: 'Meta description for search engines',
-                  },
-                },
-                {
-                  name: 'image',
-                  type: 'upload',
-                  relationTo: 'media',
-                  admin: {
-                    description: 'Social sharing image',
-                  },
-                },
-              ],
-            },
-          ],
+          name: 'meta',
+          fields: [],
         },
       ],
     },
@@ -277,6 +267,70 @@ export const CustomItems: CollectionConfig = {
     },
   ],
   hooks: {
+    beforeValidate: [
+      async ({ data, operation, originalDoc, req }) => {
+        // Enforce slug uniqueness per contentType
+        if (data?.slug && data?.contentType) {
+          const existing = await req.payload.find({
+            collection: 'custom-items',
+            where: {
+              slug: { equals: data.slug },
+              contentType: { equals: data.contentType },
+              ...(operation === 'update' && originalDoc?.id ? { id: { not_equals: originalDoc.id } } : {}),
+            },
+            limit: 1,
+            depth: 0,
+          })
+          if (existing.totalDocs > 0) {
+            throw new Error(`Slug "${data.slug}" is already used for this content type`)
+          }
+        }
+
+        // Validate custom fields against content type definition
+        if (data?.customData && data?.contentType) {
+          try {
+            const contentType = await req.payload.findByID({
+              collection: 'content-types',
+              id: typeof data.contentType === 'string' ? data.contentType : data.contentType.id,
+              depth: 0,
+            })
+
+            const definitions = contentType?.customFields || []
+            const customData = data.customData || {}
+
+            for (const fieldDef of definitions) {
+              const { name, type, required } = fieldDef
+              const value = customData?.[name]
+
+              if (required && (value === undefined || value === null || value === '')) {
+                throw new Error(`Custom field "${name}" is required`)
+              }
+
+              if (value !== undefined && value !== null) {
+                switch (type) {
+                  case 'number':
+                    if (typeof value !== 'number') throw new Error(`Custom field "${name}" must be a number`)
+                    break
+                  case 'checkbox':
+                    if (typeof value !== 'boolean') throw new Error(`Custom field "${name}" must be a boolean`)
+                    break
+                  case 'date':
+                    if (isNaN(Date.parse(String(value)))) throw new Error(`Custom field "${name}" must be a valid date`)
+                    break
+                  default:
+                    if (typeof value !== 'string') throw new Error(`Custom field "${name}" must be a string`)
+                }
+              }
+            }
+          } catch (e) {
+            if (e instanceof Error) throw e
+            throw new Error('Invalid custom field data')
+          }
+        }
+
+        return data
+      },
+    ],
     beforeChange: [
       ({ data, req }) => {
         // Auto-set author on create
@@ -294,6 +348,25 @@ export const CustomItems: CollectionConfig = {
       async ({ doc, req }) => {
         if (doc.status === 'published') {
           const revalidateUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3001'
+          let contentTypeSlug: string | undefined
+          if (typeof doc.contentType === 'object' && doc.contentType?.slug) {
+            contentTypeSlug = doc.contentType.archiveSlug
+              ? doc.contentType.archiveSlug.replace(/^\/?items\//, '')
+              : doc.contentType.slug
+          } else if (doc.contentType) {
+            try {
+              const contentType = await req.payload.findByID({
+                collection: 'content-types',
+                id: doc.contentType as string,
+                depth: 0,
+              })
+              contentTypeSlug = contentType?.archiveSlug
+                ? contentType.archiveSlug.replace(/^\/?items\//, '')
+                : contentType?.slug
+            } catch {
+              contentTypeSlug = undefined
+            }
+          }
           try {
             await fetch(`${revalidateUrl}/api/revalidate`, {
               method: 'POST',
@@ -302,6 +375,7 @@ export const CustomItems: CollectionConfig = {
                 secret: process.env.REVALIDATION_SECRET,
                 collection: 'custom-items',
                 slug: doc.slug,
+                contentTypeSlug,
               }),
             })
             req.payload.logger.info(`Revalidated custom item: ${doc.slug}`)

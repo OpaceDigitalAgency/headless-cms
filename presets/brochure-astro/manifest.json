@@ -9,7 +9,9 @@
   "collections": [
     "users",
     "media",
-    "pages"
+    "pages",
+    "content-types",
+    "custom-items"
   ],
   "globals": [
     "header",

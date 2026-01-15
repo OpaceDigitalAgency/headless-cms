@@ -4,6 +4,9 @@ import { MediaBlock } from './blocks/MediaBlock'
 import { CTABlock } from './blocks/CTABlock'
 import { ArchiveBlock } from './blocks/ArchiveBlock'
 import { FormBlock } from './blocks/FormBlock'
+import { GalleryBlock } from './blocks/GalleryBlock'
+import { GridBlock } from './blocks/GridBlock'
+import { TimelineBlock } from './blocks/TimelineBlock'
 
 interface RenderBlocksProps {
   blocks: any[]
@@ -16,6 +19,9 @@ const blockComponents: Record<string, React.ComponentType<{ block: any }>> = {
   cta: CTABlock,
   archive: ArchiveBlock,
   form: FormBlock,
+  gallery: GalleryBlock,
+  grid: GridBlock,
+  timeline: TimelineBlock,
 }
 
 export function RenderBlocks({ blocks }: RenderBlocksProps) {

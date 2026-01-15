@@ -121,44 +121,6 @@ export const Collections: CollectionConfig = {
         {
           label: 'Hierarchy',
           fields: [
-            {
-              name: 'parent',
-              type: 'relationship',
-              relationTo: 'museum-collections',
-              label: 'Parent Collection',
-              filterOptions: ({ id }) => ({
-                id: {
-                  not_equals: id,
-                },
-              }),
-              admin: {
-                description: 'Select a parent collection for hierarchical organization',
-              },
-            },
-            // Virtual field populated by nested-docs plugin
-            {
-              name: 'breadcrumbs',
-              type: 'array',
-              admin: {
-                readOnly: true,
-                hidden: true,
-              },
-              fields: [
-                {
-                  name: 'doc',
-                  type: 'relationship',
-                  relationTo: 'museum-collections',
-                },
-                {
-                  name: 'url',
-                  type: 'text',
-                },
-                {
-                  name: 'label',
-                  type: 'text',
-                },
-              ],
-            },
           ],
         },
         {

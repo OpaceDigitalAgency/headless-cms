@@ -1,15 +1,9 @@
 # Suggestions & Improvements
 
-- ✅ Add a Payload-to-Astro block mapper so Astro components receive the expected props (hero image/background, CTA links, gallery media, timelines, etc.) and render blocks identically to Next.js.
-
-- ✅ Switch `custom-items` read access to respect `status` (published-only for guests) and trigger revalidation on publish.
-
-- Scope `custom-items.slug` uniqueness by `contentType` and support `archiveSlug`/`hasArchive` to avoid slug collisions across types and to generate predictable URLs.
-
-- Wire `content-types` (and any other dynamic types) into SEO/search/revalidation pipelines only if/when public routes are defined.
-
-- Enforce `ContentTypes.customFields` in the admin UI (dynamic form fields) and persist values in `customData` with validation per field definition; surface them in frontends via mapping.
-
-- Generate Drizzle migrations for the new collections/globals and include them in the repo to keep production in sync.
-
-- ✅ Add stable keys when mapping blocks in Astro (`block.id ?? index`) to avoid hydration warnings and ease diffing.
+- ✅ Payload-to-Astro block mapper implemented. Date: 2026-01-15. Notes: Added mapping layer in `apps/astro/src/components/blocks/BlockRenderer.astro`.
+- ✅ `custom-items` read access respects `status` and revalidation triggers. Date: 2026-01-15. Notes: Access rule + revalidation hook added in `apps/cms/src/collections/CustomItems.ts`.
+- ✅ Scoped `custom-items.slug` uniqueness by `contentType` and supported `archiveSlug`/`hasArchive`. Date: 2026-01-15. Notes: Compound index + validation; archive routing and links now use `archiveSlug`.
+- ✅ `content-types` wired into SEO/search/revalidation. Date: 2026-01-15. Notes: Added to SEO/search plugins and revalidation hook for `/items` paths.
+- ✅ `ContentTypes.customFields` enforced in admin UI + validation + frontend rendering. Date: 2026-01-15. Notes: `CustomDataField` UI, validation in `CustomItems`, rendered in Next/Astro detail views.
+- ✅ Drizzle migrations generated for new schema. Date: 2026-01-15. Notes: Migrations created under `apps/db/migrations`.
+- ✅ Stable keys for Astro block rendering. Date: 2026-01-15. Notes: Uses `block.id ?? index` for keys.

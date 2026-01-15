@@ -199,6 +199,106 @@ export async function getPersonBySlug(slug: string, options?: { draft?: boolean 
 }
 
 /**
+ * Fetch all content types
+ */
+export async function getContentTypes() {
+  const payload = await getPayloadClient();
+
+  return payload.find({
+    collection: 'content-types',
+    limit: 100,
+    depth: 1,
+  });
+}
+
+/**
+ * Fetch content type by slug
+ */
+export async function getContentTypeBySlug(slug: string) {
+  const payload = await getPayloadClient();
+
+  const result = await payload.find({
+    collection: 'content-types',
+    where: {
+      slug: {
+        equals: slug,
+      },
+    },
+    depth: 1,
+    limit: 1,
+  });
+
+  return result.docs[0] || null;
+}
+
+export async function getContentTypeBySlugOrArchiveSlug(slug: string) {
+  const payload = await getPayloadClient();
+  const archiveSlug = slug.startsWith('items/') ? slug : `items/${slug}`;
+
+  const result = await payload.find({
+    collection: 'content-types',
+    where: {
+      or: [
+        { slug: { equals: slug } },
+        { archiveSlug: { equals: archiveSlug } },
+      ],
+    },
+    depth: 1,
+    limit: 1,
+  });
+
+  return result.docs[0] || null;
+}
+
+/**
+ * Fetch custom items by content type id
+ */
+export async function getCustomItemsByType(contentTypeId: string, options?: { limit?: number }) {
+  const payload = await getPayloadClient();
+
+  return payload.find({
+    collection: 'custom-items',
+    limit: options?.limit || 100,
+    where: {
+      contentType: {
+        equals: contentTypeId,
+      },
+      status: {
+        equals: 'published',
+      },
+    },
+    sort: '-updatedAt',
+    depth: 2,
+  });
+}
+
+/**
+ * Fetch custom item by slug and content type id
+ */
+export async function getCustomItemBySlug(slug: string, contentTypeId: string) {
+  const payload = await getPayloadClient();
+
+  const result = await payload.find({
+    collection: 'custom-items',
+    where: {
+      slug: {
+        equals: slug,
+      },
+      contentType: {
+        equals: contentTypeId,
+      },
+      status: {
+        equals: 'published',
+      },
+    },
+    depth: 2,
+    limit: 1,
+  });
+
+  return result.docs[0] || null;
+}
+
+/**
  * Fetch all published places
  */
 export async function getPlaces(options?: { limit?: number; draft?: boolean }) {

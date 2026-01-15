@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import Image from 'next/image'
-import { getPosts, getArtifacts, getPeople, getPlaces, getMuseumCollections } from '@/lib/api'
+import { getPosts, getArtifacts, getPeople, getPlaces, getMuseumCollections, getCustomItems } from '@/lib/api'
 
 interface ArchiveBlockProps {
   block: {
@@ -11,6 +11,7 @@ interface ArchiveBlockProps {
     categories?: any[]
     limit?: number
     selectedDocs?: any[]
+    contentType?: any
     layout?: string
     columns?: string
     showImage?: boolean
@@ -33,6 +34,7 @@ export async function ArchiveBlock({ block }: ArchiveBlockProps) {
     relationTo = 'posts',
     limit = 6,
     selectedDocs,
+    contentType,
     layout = 'grid',
     columns = '3',
     showImage = true,
@@ -69,6 +71,11 @@ export async function ArchiveBlock({ block }: ArchiveBlockProps) {
           const collections = await getMuseumCollections({ limit })
           items = collections.docs
           break
+        case 'custom-items':
+          const contentTypeId = typeof contentType === 'object' ? contentType?.id : contentType
+          const customItems = await getCustomItems({ limit, contentTypeId, status: 'published' })
+          items = customItems.docs
+          break
       }
     } catch (error) {
       console.error('Failed to fetch archive items:', error)
@@ -89,6 +96,14 @@ export async function ArchiveBlock({ block }: ArchiveBlockProps) {
         return `/collections/${item.slug}`
       case 'pages':
         return `/${item.slug}`
+      case 'custom-items':
+        if (typeof item.contentType === 'object' && item.contentType?.slug) {
+          const typeSlug = item.contentType.archiveSlug
+            ? item.contentType.archiveSlug.replace(/^\\/?items\\//, '')
+            : item.contentType.slug
+          return `/items/${typeSlug}/${item.slug}`
+        }
+        return `/items/${item.slug}`
       default:
         return `/${relationTo}/${item.slug}`
     }

@@ -4,7 +4,6 @@
  * 
  * Displays a list of items from a collection (posts, artifacts, etc.)
  */
-import { getPayload } from '../../../lib/payload';
 
 interface Props {
   heading?: string;
@@ -15,6 +14,7 @@ interface Props {
   showImage?: boolean;
   showDate?: boolean;
   linkTo?: string;
+  contentType?: any;
 }
 
 const { 
@@ -25,14 +25,18 @@ const {
   showExcerpt = true,
   showImage = true,
   showDate = true,
-  linkTo
+  linkTo,
+  contentType
 } = Astro.props;
 
 // Fetch items from the collection
 let items: any[] = [];
 try {
   const cmsUrl = import.meta.env.PUBLIC_CMS_URL || 'http://localhost:3000';
-  const response = await fetch(`${cmsUrl}/api/${collection}?limit=${limit}&sort=-createdAt&depth=1`);
+  const statusQuery = collection === 'custom-items' ? '&where[status][equals]=published' : '';
+  const contentTypeId = collection === 'custom-items' && contentType ? (typeof contentType === 'object' ? contentType.id : contentType) : null;
+  const contentTypeQuery = contentTypeId ? `&where[contentType][equals]=${contentTypeId}` : '';
+  const response = await fetch(`${cmsUrl}/api/${collection}?limit=${limit}&sort=-createdAt&depth=1${statusQuery}${contentTypeQuery}`);
   if (response.ok) {
     const data = await response.json();
     items = data.docs || [];
@@ -51,6 +55,14 @@ const getItemUrl = (item: any) => {
     places: '/places',
     'custom-items': '/items',
   };
+  if (collection === 'custom-items') {
+    const typeSlug = typeof item.contentType === 'object' ? item.contentType.slug : null;
+    const archiveSlug = typeof item.contentType === 'object' ? item.contentType.archiveSlug : null;
+    const resolvedType = archiveSlug ? archiveSlug.replace(/^\\/?items\\//, '') : typeSlug;
+    if (resolvedType) {
+      return `/items/${resolvedType}/${item.slug}`;
+    }
+  }
   return `${paths[collection]}/${item.slug}`;
 };
 

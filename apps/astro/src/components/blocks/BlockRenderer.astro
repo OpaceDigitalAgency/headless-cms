@@ -106,13 +106,14 @@ const mapBlockProps = (block: any) => {
     case 'archive':
       return {
         heading: block.heading,
-        collection: block.collection || 'posts',
+        collection: block.relationTo || block.collection || 'posts',
         limit: block.limit || 6,
         layout: block.layout || 'grid',
         showExcerpt: block.showExcerpt ?? true,
         showImage: block.showImage ?? true,
         showDate: block.showDate ?? true,
         linkTo: block.linkTo || block.viewAllLink,
+        contentType: block.contentType,
       };
     case 'form':
       return {
@@ -127,7 +128,7 @@ const mapBlockProps = (block: any) => {
 ---
 
 <div class="blocks-container">
-  {blocks.map((block: any) => {
+  {blocks.map((block: any, index: number) => {
     const BlockComponent = blockComponents[block.blockType];
     
     if (!BlockComponent) {
@@ -136,6 +137,6 @@ const mapBlockProps = (block: any) => {
     }
     
     const props = mapBlockProps(block);
-    return <BlockComponent {...props} key={block.id ?? block.blockType + '-' + Math.random().toString(36).slice(2)} />;
+    return <BlockComponent {...props} key={block.id ?? `${block.blockType}-${index}`} />;
   })}
 </div>

@@ -196,6 +196,70 @@ export async function getCategoryBySlug(slug: string, options?: FetchOptions): P
 }
 
 // ===========================================
+// Content Types (Dynamic)
+// ===========================================
+
+export interface ContentType {
+  id: string
+  name: string
+  slug: string
+  singularLabel: string
+  pluralLabel: string
+  icon?: string
+  template: string
+  description?: string
+  hasArchive?: boolean
+  archiveSlug?: string
+  customFields?: Array<{
+    name: string
+    label: string
+    type: string
+    required?: boolean
+    options?: string
+  }>
+}
+
+export async function getContentTypes(options?: FetchOptions): Promise<PaginatedDocs<ContentType>> {
+  return fetchAPI<PaginatedDocs<ContentType>>('/content-types', {
+    ...options,
+    tags: ['content-types'],
+  })
+}
+
+export async function getContentTypeBySlug(slug: string, options?: FetchOptions): Promise<ContentType | null> {
+  const result = await fetchAPI<PaginatedDocs<ContentType>>(
+    `/content-types?where[slug][equals]=${encodeURIComponent(slug)}&limit=1`,
+    {
+      ...options,
+      tags: ['content-types', `content-types:${slug}`],
+    }
+  )
+  return result.docs[0] || null
+}
+
+export async function getContentTypeBySlugOrArchiveSlug(
+  slug: string,
+  options?: FetchOptions
+): Promise<ContentType | null> {
+  const archiveSlug = slug.startsWith('items/') ? slug : `items/${slug}`
+  const result = await fetchAPI<PaginatedDocs<ContentType>>(
+    `/content-types?where[or][0][slug][equals]=${encodeURIComponent(slug)}&where[or][1][archiveSlug][equals]=${encodeURIComponent(archiveSlug)}&limit=1`,
+    {
+      ...options,
+      tags: ['content-types', `content-types:${slug}`, `content-types:archive:${archiveSlug}`],
+    }
+  )
+  return result.docs[0] || null
+}
+
+export async function getContentTypeById(id: string, options?: FetchOptions): Promise<ContentType> {
+  return fetchAPI<ContentType>(`/content-types/${id}`, {
+    ...options,
+    tags: ['content-types', `content-types:id:${id}`],
+  })
+}
+
+// ===========================================
 // Artifacts (Museum)
 // ===========================================
 
@@ -238,6 +302,57 @@ export async function getArtifactBySlug(slug: string, options?: FetchOptions): P
  */
 export async function getArtifact(slug: string, options?: FetchOptions): Promise<Artifact | null> {
   return getArtifactBySlug(slug, options)
+}
+
+// ===========================================
+// Custom Items (Dynamic)
+// ===========================================
+
+export interface CustomItem {
+  id: string
+  title: string
+  slug: string
+  excerpt?: string
+  content?: any
+  blocks?: any[]
+  featuredImage?: any
+  gallery?: any[]
+  customData?: Record<string, any>
+  meta?: any
+  contentType: ContentType | string
+  status: 'draft' | 'published' | 'archived'
+  publishedAt?: string
+  createdAt: string
+  updatedAt: string
+}
+
+export async function getCustomItems(options?: FetchOptions & { limit?: number; page?: number; contentTypeId?: string; status?: string }): Promise<PaginatedDocs<CustomItem>> {
+  let endpoint = '/custom-items?sort=-updatedAt'
+
+  if (options?.limit) endpoint += `&limit=${options.limit}`
+  if (options?.page) endpoint += `&page=${options.page}`
+  if (options?.contentTypeId) endpoint += `&where[contentType][equals]=${options.contentTypeId}`
+  if (options?.status) endpoint += `&where[status][equals]=${options.status}`
+
+  return fetchAPI<PaginatedDocs<CustomItem>>(endpoint, {
+    ...options,
+    tags: ['custom-items'],
+  })
+}
+
+export async function getCustomItemBySlug(
+  slug: string,
+  options?: FetchOptions & { contentTypeId?: string; status?: string }
+): Promise<CustomItem | null> {
+  let endpoint = `/custom-items?where[slug][equals]=${encodeURIComponent(slug)}&limit=1`
+  if (options?.contentTypeId) endpoint += `&where[contentType][equals]=${options.contentTypeId}`
+  if (options?.status) endpoint += `&where[status][equals]=${options.status}`
+
+  const result = await fetchAPI<PaginatedDocs<CustomItem>>(endpoint, {
+    ...options,
+    tags: ['custom-items', `custom-items:${slug}`],
+  })
+  return result.docs[0] || null
 }
 
 // ===========================================
