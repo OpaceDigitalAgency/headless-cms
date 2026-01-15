@@ -2,104 +2,62 @@
 
 [![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/template/payload-jamstack?referralCode=payload)
 
-A production-ready, headless CMS platform built with **Payload CMS v3**, **Next.js 15**, and **Astro 4**. Features static site generation (SSG), on-demand revalidation, live preview, and one-command deployment.
+A production-ready, headless CMS platform built with **Payload CMS v3**, **Next.js 15**, and **Astro 4**. Features a WordPress-like experience with cloneable **Collection Templates**, static site generation (SSG), on-demand revalidation, live preview, and one-command deployment.
 
 ---
 
 ## Table of Contents
 
-- [Features](#features)
-- [Architecture](#architecture)
+- [The Vision: A Better WordPress](#the-vision-a-better-wordpress)
+- [How It Works: Collection Templates](#how-it-works-collection-templates)
 - [Quick Start](#quick-start)
-- [Local Development](#local-development)
+- [Core Features](#core-features)
 - [Project Structure](#project-structure)
-- [Collections](#collections)
-- [Templates](#templates)
-- [Live Preview](#live-preview)
-- [Static Generation](#static-generation)
-- [Deployment](#deployment)
-- [Environment Variables](#environment-variables)
+- [Available Collection Templates](#available-collection-templates)
+- [Customization Guide](#customization-guide)
 - [Makefile Commands](#makefile-commands)
-- [Plugins](#plugins)
-- [Customization](#customization)
+- [Deployment](#deployment)
 
 ---
 
-## Features
+## The Vision: A Better WordPress
 
-### Core Platform
-- **Payload CMS v3.14** - Latest version with all features
-- **PostgreSQL** with Drizzle ORM adapter
-- **Lexical Rich Text Editor** - Modern block-based editing
-- **TypeScript** throughout the entire codebase
-- **PNPM Monorepo** - Efficient workspace management
+This platform is designed to be a **super powerful but simple CMS**, inspired by the best parts of WordPress but with a modern, headless architecture.
 
-### Frontend Options
-- **Next.js 15** - React 19, App Router, Server Components
-- **Astro 4** - Pure static HTML output via Payload Local Loader
-- **Tailwind CSS** - Utility-first styling
-- **Dark/Light Mode** - User preference with system detection
+### Core Principles
 
-### Content Features
-- **7 Templates** - Home, Landing, Detail, List, Article, Timeline, Archive
-- **9 Block Types** - Hero, Content, Media, CTA, Archive, Form, Gallery, Grid, Timeline
-- **Versions & Drafts** - Full revision history with restore capability
-- **Live Preview** - Real-time editing preview
-- **SEO Plugin** - Meta tags, Open Graph, Twitter Cards
+1.  **Shared Foundation**: Every site starts with a common base of essential features:
+    *   **Pages**: A flexible page builder with all content blocks.
+    *   **Categories & Tags**: For universal taxonomy.
+    *   **Media Library**: With image optimization.
+    *   **Globals**: For site-wide content like headers and footers.
 
-### Presets & Scaffolding
-- **4 Starter Presets** - Blog, Brochure, Museum, Ecommerce
-- **Template-Specific Seed Data** - Conditional sample data per preset
-- **Scaffolding CLI** - `./scripts/create.sh` for new projects
-- **Admin Seed Manager** - UI for seeding/clearing sample data
+2.  **Add Content Types as Needed**: Instead of a fixed set of content types, you add what you need from a library of **Collection Templates**. Need a blog? Add the `Blog Post` template. Need a portfolio? Add the `Portfolio Item` template.
 
-### Publishing
-- **Pure SSG** - All public pages are static HTML
-- **On-Demand Revalidation** - Targeted regeneration on publish
-- **No Server Rendering** - For public traffic
-- **Preview Mode** - SSR for draft content only
+3.  **Clone and Customize**: Liked the `Museum/Archive` template but need it for a `Car Collection`? Simply clone it, rename it, and tweak the fields. No code required for basic changes.
 
-### Deployment
-- **One-Click Railway Deploy** - Instant production setup
-- **Docker Compose** - Local development environment
-- **Makefile** - All commands in one place
+4.  **Intuitive UX**: The admin panel is designed for content editors, not just developers. Everything should feel familiar and easy to use.
 
 ---
 
-## Architecture
+## How It Works: Collection Templates
 
-```
-┌─────────────────────────────────────────────────────────────────┐
-│                        MONOREPO                                  │
-├─────────────────────────────────────────────────────────────────┤
-│                                                                  │
-│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐          │
-│  │   apps/cms   │  │   apps/web   │  │  apps/astro  │          │
-│  │              │  │              │  │              │          │
-│  │  Payload CMS │  │   Next.js    │  │    Astro     │          │
-│  │  Admin Panel │  │   Frontend   │  │   Frontend   │          │
-│  │  REST/GraphQL│  │   (SSG+ISR)  │  │  (Pure SSG)  │          │
-│  └──────┬───────┘  └──────┬───────┘  └──────┬───────┘          │
-│         │                 │                 │                   │
-│         │    ┌────────────┴────────────┐    │                   │
-│         │    │     packages/shared     │    │                   │
-│         │    │     packages/templates  │    │                   │
-│         │    └─────────────────────────┘    │                   │
-│         │                                   │                   │
-│  ┌──────┴───────────────────────────────────┴───────┐          │
-│  │                   PostgreSQL                      │          │
-│  └───────────────────────────────────────────────────┘          │
-│                                                                  │
-└─────────────────────────────────────────────────────────────────┘
-```
+This is the core concept that makes the CMS so flexible. Instead of being locked into pre-defined collections, you build your site by adding and customizing templates.
 
-### Data Flow
+### The Workflow
 
-```
-Editor Publishes → Payload Hook → Revalidate API → Static Regeneration
-                                        ↓
-                              Only affected pages rebuilt
-```
+1.  **Go to the Dashboard**: Navigate to the `Dashboard` in the admin panel.
+2.  **Open Collection Templates**: Click the `📦 Collection Templates` tab.
+3.  **Browse the Library**: You'll see a list of available templates like `Blog Post`, `Product`, `Archive Item`, etc.
+4.  **Add or Clone a Template**:
+    *   **Add**: Click "Add" to create a new collection with the default name (e.g., `posts`).
+    *   **Clone**: Click "Clone" to create a copy with a custom name (e.g., clone `Archive Item` to create a `Classic Cars` collection).
+5.  **Preview with Sample Data**: Go to the `🌱 Sample Data` tab. Each of your new collections will have its own set of buttons:
+    *   `🌱 Seed Sample Data`: Populates the collection with sample content so you can see how it looks.
+    *   `🔄 Re-seed`: Clears and re-seeds the data.
+    *   `🗑️ Delete Sample Data`: Clears all sample data from that collection.
+
+This workflow allows you to rapidly prototype, preview, and build out your site's content structure.
 
 ---
 
@@ -121,13 +79,12 @@ make quickstart
 ```
 
 This will:
-1. Copy `.env.example` to `.env`
-2. Start PostgreSQL via Docker
-3. Install all dependencies
-4. Run database migrations
-5. Seed sample data with images
-6. Start CMS on http://localhost:3000
-7. Start frontend on http://localhost:3001
+1.  Copy `.env.example` to `.env`
+2.  Start PostgreSQL via Docker
+3.  Install all dependencies
+4.  Run database migrations
+5.  Start CMS on http://localhost:3000
+6.  Start frontend on http://localhost:3001
 
 **Default Login:**
 - Email: `admin@example.com`
@@ -135,51 +92,15 @@ This will:
 
 ---
 
-## Local Development
+## Core Features
 
-### Prerequisites
-
-- Node.js 20+
-- PNPM 9+
-- Docker & Docker Compose
-- Git
-
-### Manual Setup
-
-```bash
-# 1. Clone and enter directory
-git clone https://github.com/OpaceDigitalAgency/headless-cms.git
-cd headless-cms
-
-# 2. Copy environment file
-cp .env.example .env
-
-# 3. Start PostgreSQL
-docker compose up -d postgres
-
-# 4. Install dependencies
-pnpm install
-
-# 5. Run migrations
-pnpm --filter @repo/cms migrate
-
-# 6. Seed the database
-pnpm --filter @repo/cms seed
-
-# 7. Start development servers
-pnpm dev
-```
-
-### Access Points
-
-| Service | URL | Description |
-|---------|-----|-------------|
-| CMS Admin | http://localhost:3000/admin | Payload admin panel |
-| CMS API | http://localhost:3000/api | REST API endpoints |
-| GraphQL | http://localhost:3000/api/graphql | GraphQL endpoint |
-| GraphQL Playground | http://localhost:3000/api/graphql-playground | Interactive explorer |
-| Next.js Frontend | http://localhost:3001 | SSG frontend |
-| Astro Frontend | http://localhost:4321 | Pure SSG frontend |
+- **Payload CMS v3.14** with PostgreSQL
+- **Next.js 15** & **Astro 4** frontends
+- **9+ Content Blocks** for all content types (Hero, Gallery, Grid, etc.)
+- **Full Version History** with restore capability on all collections
+- **Live Preview** for real-time editing
+- **On-Demand Revalidation** for fast, static pages
+- **Admin UI** for managing Collection Templates and Seed Data
 
 ---
 
@@ -190,452 +111,99 @@ headless-cms/
 ├── apps/
 │   ├── cms/                    # Payload CMS application
 │   │   ├── src/
-│   │   │   ├── collections/    # Collection definitions
-│   │   │   ├── globals/        # Global configurations
-│   │   │   ├── blocks/         # Reusable content blocks
-│   │   │   ├── fields/         # Custom field definitions
+│   │   │   ├── collections/    # Core & pre-configured collections
+│   │   │   ├── collection-templates/ # Reusable template definitions
+│   │   │   ├── components/     # Custom admin components
 │   │   │   ├── endpoints/      # Custom API endpoints
-│   │   │   ├── seed/           # Database seeding
-│   │   │   └── payload.config.ts
-│   │   └── package.json
-│   │
-│   ├── web/                    # Next.js frontend
-│   │   ├── src/
-│   │   │   ├── app/            # App Router pages
-│   │   │   ├── components/     # React components
-│   │   │   ├── lib/            # Utilities & API client
-│   │   │   └── styles/         # Global styles
-│   │   └── package.json
-│   │
-│   └── astro/                  # Astro frontend (pure SSG)
-│       ├── src/
-│       │   ├── pages/          # Static pages
-│       │   ├── layouts/        # Page layouts
-│       │   └── lib/            # Payload Local Loader
-│       └── package.json
+│   │   │   └── seed/           # Database seeding logic
+│   └── web/                    # Next.js frontend
 │
 ├── packages/
-│   ├── shared/                 # Shared types & utilities
-│   └── templates/              # Shared template components
-│
-├── presets/                    # Starter site presets
-│   ├── blog-astro/             # Blog preset (Astro)
-│   ├── brochure-astro/         # Brochure preset (Astro)
-│   ├── museum-next/            # Museum preset (Next.js)
-│   └── ecommerce-next/         # Ecommerce preset (Next.js)
-│
-├── scripts/
-│   └── create.sh               # Project scaffolding script
+│   └── shared/                 # Shared types & utilities
 │
 ├── docs/
 │   ├── REVALIDATION_RULES.md   # Cache invalidation rules
 │   └── VERSIONING_POLICY.md    # Version management policy
 │
 ├── AGENT_CONTRACT.md           # Developer/AI agent contract
-├── docker-compose.yml          # Local development services
-├── Makefile                    # All commands
-├── pnpm-workspace.yaml         # Monorepo configuration
-└── .env.example                # Environment template
+└── Makefile                    # All commands
 ```
 
 ---
 
-## Collections
+## Available Collection Templates
 
-### Core Collections
+These are the pre-built templates you can add or clone from the admin panel.
 
-| Collection | Slug | Description |
-|------------|------|-------------|
-| Users | `users` | Admin users with roles |
-| Media | `media` | Images with auto-optimization |
-| Pages | `pages` | CMS-managed pages with blocks |
-| Posts | `posts` | Blog posts with categories |
-| Categories | `categories` | Hierarchical categorization |
-
-### Museum Example Collections
-
-| Collection | Slug | Description |
-|------------|------|-------------|
-| Artifacts | `artifacts` | Museum artifacts with metadata |
-| People | `people` | Historical figures & artists |
-| Places | `places` | Geographic locations |
-| Collections | `museum-collections` | Hierarchical artifact groupings |
-
-### Globals
-
-| Global | Slug | Description |
-|--------|------|-------------|
-| Header | `header` | Site navigation & branding |
-| Footer | `footer` | Footer links & social |
-| Settings | `settings` | Site-wide configuration |
+| Template | Default Slug | Description |
+|---|---|---|
+| **Blog Post** | `posts` | A standard blog post with rich text, blocks, categories, and tags. |
+| **Archive Item** | `artifacts` | For museum, gallery, or portfolio items. Rich metadata fields. |
+| **Product** | `products` | For ecommerce. Includes pricing, SKU, and inventory fields. |
+| **Person** | `people` | For team members, authors, or historical figures. |
+| **Place** | `places` | For locations, venues, or points of interest. |
+| **Event** | `events` | For time-based events with start/end dates and location. |
 
 ---
 
-## Templates
+## Customization Guide
 
-Templates define the layout and available fields for pages.
+### Example: Creating a "Classic Cars" Collection
 
-| Template | Use Case | Key Features |
-|----------|----------|--------------|
-| `home` | Homepage | Hero, featured content, CTAs |
-| `landing` | Marketing pages | Full-width sections, forms |
-| `detail` | Content pages | Rich text, sidebar |
-| `list` | Archive pages | Filterable grid/list |
-| `article` | Blog posts | Author, date, categories |
-| `timeline` | Chronological | Date-based entries |
-| `archive` | Collection browse | Pagination, filters |
+Let's say you want a collection for classic cars, based on the `Archive Item` template.
 
----
+1.  **Navigate to Collection Templates**: Go to `Dashboard` -> `📦 Collection Templates`.
+2.  **Find `Archive Item`**: Locate the "Archive Item" template in the library.
+3.  **Click "Clone"**: A dialog will appear.
+4.  **Enter Custom Names**:
+    *   **Collection Name**: `Classic Cars`
+    *   **Slug**: `classic-cars` (auto-generated, can be changed)
+    *   **Singular Name**: `Classic Car`
+    *   **Plural Name**: `Classic Cars`
+5.  **Confirm**: The system will create a new `classic-cars` collection.
 
-## Live Preview
+> **Note**: In the current implementation, cloning requires a server restart for the new collection to appear in the sidebar. A future update will make this process dynamic.
 
-Live Preview enables real-time editing with instant visual feedback.
+### Modifying Fields
 
-### How It Works
+To modify the fields of your new `classic-cars` collection:
 
-1. Editor opens a document in the admin panel
-2. Clicks "Live Preview" button
-3. Preview iframe loads the frontend with draft data
-4. Changes appear instantly as the editor types
+1.  **Open the Code**: Navigate to `apps/cms/src/collections/`.
+2.  **Find the File**: You'll see a new file, `classic-cars.ts` (or similar).
+3.  **Edit the Fields**: You can now add, remove, or modify the fields in this file just like any other Payload collection.
 
-### Configuration
-
-Live Preview is enabled for:
-- Pages
-- Posts
-- Artifacts
-- Header (global)
-- Footer (global)
-
-Preview URLs follow the pattern:
-```
-/preview/{collection}/{slug}
-```
-
----
-
-## Static Generation
-
-### SSG Strategy
-
-All public pages are **pre-rendered as static HTML** at build time:
-
-```typescript
-// All dynamic routes use generateStaticParams
-export async function generateStaticParams() {
-  const pages = await getPublishedPages()
-  return pages.map((page) => ({ slug: page.slug }))
-}
-
-// No time-based revalidation
-// export const revalidate = 60  ❌ NOT USED
-
-// Unknown slugs return 404
-export const dynamicParams = false
-```
-
-### On-Demand Revalidation
-
-When content is published, Payload triggers targeted regeneration:
-
-```typescript
-// Payload afterChange hook
-afterChange: [
-  async ({ doc, req }) => {
-    if (doc._status === 'published') {
-      await fetch(`${FRONTEND_URL}/api/revalidate`, {
-        method: 'POST',
-        headers: { 'x-revalidate-secret': REVALIDATION_SECRET },
-        body: JSON.stringify({
-          collection: 'pages',
-          slug: doc.slug,
-        }),
-      })
-    }
-  },
-]
-```
-
-### Preview Mode
-
-Draft content uses SSR via Next.js Draft Mode:
-
-```typescript
-// Preview route - SSR only
-export const dynamic = 'force-dynamic'
-
-export default async function PreviewPage({ params }) {
-  const { isEnabled } = draftMode()
-  if (!isEnabled) redirect('/')
-  
-  // Fetch draft content
-  const doc = await getDocument(params.collection, params.slug, true)
-  return <Renderer data={doc} />
-}
-```
-
----
-
-## Deployment
-
-### Railway (Recommended)
-
-#### One-Click Deploy
-
-[![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/template/payload-jamstack?referralCode=payload)
-
-#### Manual Deploy
-
-```bash
-# 1. Install Railway CLI
-npm install -g @railway/cli
-
-# 2. Login to Railway
-railway login
-
-# 3. Initialize project
-railway init
-
-# 4. Provision PostgreSQL
-railway add --plugin postgresql
-
-# 5. Set environment variables
-railway variables set PAYLOAD_SECRET=$(openssl rand -base64 32)
-railway variables set REVALIDATION_SECRET=$(openssl rand -base64 32)
-
-# 6. Deploy
-railway up
-```
-
-### Docker
-
-```bash
-# Build and run all services
-docker compose up --build
-
-# Or build images separately
-docker compose build cms
-docker compose build web
-```
-
-### Vercel / Netlify
-
-The Next.js frontend can be deployed to Vercel or Netlify:
-
-```bash
-# Build for production
-pnpm --filter @repo/web build
-
-# Output in apps/web/.next
-```
-
----
-
-## Environment Variables
-
-### Required
-
-| Variable | Description | Example |
-|----------|-------------|---------|
-| `DATABASE_URL` | PostgreSQL connection string | `postgresql://user:pass@host:5432/db` |
-| `PAYLOAD_SECRET` | JWT signing secret | `openssl rand -base64 32` |
-| `REVALIDATION_SECRET` | ISR revalidation secret | `openssl rand -base64 32` |
-
-### URLs
-
-| Variable | Description | Default |
-|----------|-------------|---------|
-| `PAYLOAD_PUBLIC_SERVER_URL` | CMS public URL | `http://localhost:3000` |
-| `NEXT_PUBLIC_SITE_URL` | Frontend public URL | `http://localhost:3001` |
-| `CMS_URL` | Internal CMS URL | `http://localhost:3000` |
-
-### Optional
-
-| Variable | Description |
-|----------|-------------|
-| `SMTP_HOST` | Email server hostname |
-| `SMTP_PORT` | Email server port |
-| `SMTP_USER` | Email username |
-| `SMTP_PASS` | Email password |
-| `S3_BUCKET` | S3 bucket for media |
-| `S3_REGION` | S3 region |
-| `S3_ACCESS_KEY_ID` | S3 access key |
-| `S3_SECRET_ACCESS_KEY` | S3 secret key |
+For example, you could change the `accessionNumber` field to `vinNumber`.
 
 ---
 
 ## Makefile Commands
 
-```bash
-# Development
-make dev              # Start all dev servers
-make dev-cms          # Start CMS only
-make dev-web          # Start Next.js only
-make dev-astro        # Start Astro only
+All common commands are in the `Makefile`.
 
-# Database
-make db-up            # Start PostgreSQL
-make db-down          # Stop PostgreSQL
-make db-migrate       # Run migrations
-make db-seed          # Seed sample data
-make db-reset         # Reset database
-
-# Preset Seeding
-make seed-blog        # Seed blog sample data
-make seed-brochure    # Seed brochure sample data
-make seed-museum      # Seed museum sample data (with media)
-make seed-ecommerce   # Seed ecommerce sample data (with media)
-make seed-clear       # Clear all sample data
-
-# Scaffolding
-make create           # Interactive project creation
-make blog-astro       # Create new blog (Astro)
-make brochure-astro   # Create new brochure site (Astro)
-make museum-next      # Create new museum site (Next.js)
-make ecommerce-next   # Create new ecommerce site (Next.js)
-
-# Build
-make build            # Build all apps
-make build-cms        # Build CMS
-make build-web        # Build Next.js
-make build-astro      # Build Astro
-
-# Docker
-make docker-up        # Start all services
-make docker-down      # Stop all services
-make docker-build     # Build Docker images
-
-# Deployment
-make railway-provision  # Set up Railway project
-make railway-deploy     # Deploy to Railway
-
-# Utilities
-make install          # Install dependencies
-make clean            # Clean build artifacts
-make typecheck        # Run TypeScript checks
-make lint             # Run linting
-make quickstart       # Full setup + start
-```
+| Command | Description |
+|---|---|
+| `make quickstart` | **Best for first-time use.** Clones, installs, and starts everything. |
+| `make up` | Starts all services (Postgres, CMS, Web) via Docker Compose. |
+| `make down` | Stops all running services. |
+| `make install` | Installs all dependencies using `pnpm`. |
+| `make dev` | Starts all development servers (CMS, Web, Astro). |
+| `make build` | Builds all applications for production. |
+| `make migrate` | Runs database migrations. |
+| `make seed` | Seeds the database with sample data for the **museum** preset. |
+| `make clear-seed` | Clears all sample data from the database. |
+| `make logs` | Tails the logs for all running services. |
+| `make format` | Formats the entire codebase with Prettier. |
+| `make lint` | Lints the entire codebase with ESLint. |
+| `make typecheck` | Runs TypeScript type checking. |
 
 ---
 
-## Plugins
+## Deployment
 
-### Included Plugins
+This project is optimized for deployment on **Railway**.
 
-| Plugin | Description |
-|--------|-------------|
-| `@payloadcms/plugin-seo` | SEO meta tags, Open Graph, Twitter Cards |
-| `@payloadcms/plugin-form-builder` | Dynamic form creation |
-| `@payloadcms/plugin-nested-docs` | Hierarchical collections |
-| `@payloadcms/plugin-redirects` | URL redirect management |
-| `@payloadcms/plugin-search` | Full-text search |
-| `@payloadcms/storage-s3` | S3-compatible media storage |
+- **Automatic Builds**: Railway will automatically detect the monorepo and build the `cms` and `web` applications.
+- **Environment Variables**: All required environment variables are pre-configured in the template.
+- **Database**: A PostgreSQL database is automatically provisioned and linked.
 
-### Enabling Localization
-
-Uncomment in `payload.config.ts`:
-
-```typescript
-localization: {
-  locales: [
-    { label: 'English', code: 'en' },
-    { label: 'Spanish', code: 'es' },
-    { label: 'French', code: 'fr' },
-  ],
-  defaultLocale: 'en',
-  fallback: true,
-},
-```
-
-### Email Configuration
-
-Set environment variables:
-
-```bash
-SMTP_HOST=smtp.example.com
-SMTP_PORT=587
-SMTP_USER=your-username
-SMTP_PASS=your-password
-EMAIL_FROM_NAME=Museum Collection
-EMAIL_FROM_ADDRESS=noreply@example.com
-```
-
----
-
-## Customization
-
-### Adding a New Collection
-
-1. Create collection file in `apps/cms/src/collections/`:
-
-```typescript
-// apps/cms/src/collections/Events.ts
-import type { CollectionConfig } from 'payload'
-
-export const Events: CollectionConfig = {
-  slug: 'events',
-  admin: {
-    useAsTitle: 'title',
-    group: 'Content',
-  },
-  fields: [
-    { name: 'title', type: 'text', required: true },
-    { name: 'date', type: 'date', required: true },
-    { name: 'description', type: 'richText' },
-  ],
-}
-```
-
-2. Add to `payload.config.ts`:
-
-```typescript
-import { Events } from './collections/Events'
-
-collections: [
-  // ... existing collections
-  Events,
-],
-```
-
-### Adding a New Block
-
-1. Create block file in `apps/cms/src/blocks/`:
-
-```typescript
-// apps/cms/src/blocks/Gallery.ts
-import type { Block } from 'payload'
-
-export const Gallery: Block = {
-  slug: 'gallery',
-  labels: { singular: 'Gallery', plural: 'Galleries' },
-  fields: [
-    {
-      name: 'images',
-      type: 'array',
-      fields: [
-        { name: 'image', type: 'upload', relationTo: 'media' },
-        { name: 'caption', type: 'text' },
-      ],
-    },
-  ],
-}
-```
-
-2. Add to Pages collection blocks array.
-
-3. Create frontend component in `apps/web/src/components/blocks/`.
-
----
-
-## Support
-
-- **Documentation**: [Payload CMS Docs](https://payloadcms.com/docs)
-- **GitHub Issues**: [Report bugs](https://github.com/OpaceDigitalAgency/headless-cms/issues)
-- **Discord**: [Payload Community](https://discord.com/invite/payload)
-
----
-
-## License
-
-MIT License - see [LICENSE](LICENSE) for details.
+Simply click the "Deploy on Railway" button at the top of this README.

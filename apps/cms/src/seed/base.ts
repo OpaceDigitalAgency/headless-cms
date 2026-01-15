@@ -136,18 +136,28 @@ export abstract class BaseSeeder {
   }
 
   /**
-   * Clear a specific collection
+   * Seed a specific collection (public method)
+   * Override in subclasses to provide collection-specific seeding
    */
-  protected async clearCollection(collection: string): Promise<void> {
+  public async seedCollection(collection: string): Promise<void> {
+    this.log(`Seeding collection: ${collection}`)
+    // Default implementation - subclasses should override
+    // to provide collection-specific seeding logic
+  }
+
+  /**
+   * Clear a specific collection (public method)
+   */
+  public async clearCollection(collection: string): Promise<void> {
     try {
       const docs = await this.payload.find({
-        collection,
+        collection: collection as any,
         limit: 1000,
       })
       
       for (const doc of docs.docs) {
         await this.payload.delete({
-          collection,
+          collection: collection as any,
           id: doc.id,
         })
       }

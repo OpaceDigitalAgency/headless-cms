@@ -1,14 +1,25 @@
 import type { CollectionConfig } from 'payload'
 import { slugField } from '../fields/slug'
 
+// Import all blocks for flexible content
+import { heroBlock } from '../blocks/Hero'
+import { contentBlock } from '../blocks/Content'
+import { mediaBlock } from '../blocks/Media'
+import { ctaBlock } from '../blocks/CallToAction'
+import { archiveBlock } from '../blocks/Archive'
+import { formBlock } from '../blocks/Form'
+import { galleryBlock } from '../blocks/Gallery'
+import { gridBlock } from '../blocks/Grid'
+import { timelineBlock } from '../blocks/Timeline'
+
 export const Artifacts: CollectionConfig = {
   slug: 'artifacts',
 
   admin: {
     useAsTitle: 'title',
     group: 'Museum',
-    defaultColumns: ['title', 'collections', 'people', '_status', 'updatedAt'],
-    description: 'Museum artifacts and objects',
+    defaultColumns: ['title', 'collections', 'categories', '_status', 'updatedAt'],
+    description: 'Museum artifacts and archive items with flexible content sections',
     preview: (doc) => {
       const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3001'
       return `${baseUrl}/preview/artifacts/${doc.slug}`
@@ -91,7 +102,7 @@ export const Artifacts: CollectionConfig = {
       options: [
         { label: 'Detail View', value: 'detail' },
         { label: 'Timeline View', value: 'timeline' },
-        { label: 'Gallery View', value: 'list' },
+        { label: 'Gallery View', value: 'gallery' },
       ],
       admin: {
         position: 'sidebar',
@@ -105,9 +116,23 @@ export const Artifacts: CollectionConfig = {
           label: 'Details',
           fields: [
             {
+              name: 'featuredImage',
+              type: 'upload',
+              relationTo: 'media',
+              label: 'Featured Image',
+            },
+            {
+              name: 'excerpt',
+              type: 'textarea',
+              label: 'Short Description',
+              admin: {
+                description: 'Brief summary for listings and SEO',
+              },
+            },
+            {
               name: 'description',
               type: 'richText',
-              label: 'Description',
+              label: 'Full Description',
             },
             {
               name: 'media',
@@ -136,38 +161,37 @@ export const Artifacts: CollectionConfig = {
                   fields: [
                     {
                       name: 'height',
-                      type: 'number',
-                      label: 'Height (cm)',
+                      type: 'text',
+                      label: 'Height',
                     },
                     {
                       name: 'width',
-                      type: 'number',
-                      label: 'Width (cm)',
+                      type: 'text',
+                      label: 'Width',
                     },
                     {
                       name: 'depth',
-                      type: 'number',
-                      label: 'Depth (cm)',
+                      type: 'text',
+                      label: 'Depth',
                     },
                   ],
                 },
                 {
                   name: 'weight',
-                  type: 'number',
-                  label: 'Weight (kg)',
+                  type: 'text',
+                  label: 'Weight',
                 },
               ],
             },
             {
               name: 'materials',
-              type: 'array',
+              type: 'textarea',
               label: 'Materials',
-              fields: [
-                {
-                  name: 'material',
-                  type: 'text',
-                },
-              ],
+            },
+            {
+              name: 'condition',
+              type: 'text',
+              label: 'Condition',
             },
           ],
         },
@@ -244,6 +268,61 @@ export const Artifacts: CollectionConfig = {
                   not_equals: id,
                 },
               }),
+            },
+          ],
+        },
+        {
+          label: 'Meta',
+          fields: [
+            {
+              name: 'categories',
+              type: 'relationship',
+              relationTo: 'categories',
+              hasMany: true,
+              label: 'Categories',
+              admin: {
+                description: 'Select one or more categories',
+              },
+            },
+            {
+              name: 'tags',
+              type: 'array',
+              label: 'Tags',
+              fields: [
+                {
+                  name: 'tag',
+                  type: 'text',
+                  required: true,
+                },
+              ],
+              admin: {
+                description: 'Add tags for filtering and search',
+              },
+            },
+          ],
+        },
+        {
+          label: 'Content Sections',
+          description: 'Add flexible content blocks like galleries, timelines, and more',
+          fields: [
+            {
+              name: 'contentBlocks',
+              type: 'blocks',
+              label: 'Additional Sections',
+              blocks: [
+                heroBlock,
+                contentBlock,
+                mediaBlock,
+                ctaBlock,
+                archiveBlock,
+                formBlock,
+                galleryBlock,
+                gridBlock,
+                timelineBlock,
+              ],
+              admin: {
+                description: 'Add and arrange content sections',
+              },
             },
           ],
         },

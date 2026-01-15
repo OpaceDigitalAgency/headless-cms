@@ -1,6 +1,17 @@
 import type { CollectionConfig } from 'payload'
 import { slugField } from '../fields/slug'
 
+// Import all blocks for flexible content
+import { heroBlock } from '../blocks/Hero'
+import { contentBlock } from '../blocks/Content'
+import { mediaBlock } from '../blocks/Media'
+import { ctaBlock } from '../blocks/CallToAction'
+import { archiveBlock } from '../blocks/Archive'
+import { formBlock } from '../blocks/Form'
+import { galleryBlock } from '../blocks/Gallery'
+import { gridBlock } from '../blocks/Grid'
+import { timelineBlock } from '../blocks/Timeline'
+
 export const Posts: CollectionConfig = {
   slug: 'posts',
 
@@ -8,7 +19,7 @@ export const Posts: CollectionConfig = {
     useAsTitle: 'title',
     group: 'Content',
     defaultColumns: ['title', 'author', 'categories', '_status', 'publishedAt'],
-    description: 'Create and manage blog posts',
+    description: 'Create and manage blog posts with flexible content sections',
     preview: (doc) => {
       const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3001'
       return `${baseUrl}/preview/posts/${doc.slug}`
@@ -106,8 +117,33 @@ export const Posts: CollectionConfig = {
             {
               name: 'content',
               type: 'richText',
-              label: 'Content',
+              label: 'Main Content',
               required: true,
+            },
+          ],
+        },
+        {
+          label: 'Content Sections',
+          description: 'Add flexible content blocks like galleries, CTAs, and more',
+          fields: [
+            {
+              name: 'contentBlocks',
+              type: 'blocks',
+              label: 'Additional Sections',
+              blocks: [
+                heroBlock,
+                contentBlock,
+                mediaBlock,
+                ctaBlock,
+                archiveBlock,
+                formBlock,
+                galleryBlock,
+                gridBlock,
+                timelineBlock,
+              ],
+              admin: {
+                description: 'Add and arrange content sections below the main content',
+              },
             },
           ],
         },
@@ -132,8 +168,12 @@ export const Posts: CollectionConfig = {
                 {
                   name: 'tag',
                   type: 'text',
+                  required: true,
                 },
               ],
+              admin: {
+                description: 'Add tags for filtering and search',
+              },
             },
             {
               name: 'relatedPosts',
@@ -155,6 +195,22 @@ export const Posts: CollectionConfig = {
           fields: [],
         },
       ],
+    },
+    {
+      name: 'template',
+      type: 'select',
+      label: 'Post Template',
+      defaultValue: 'article',
+      options: [
+        { label: 'Standard Article', value: 'article' },
+        { label: 'Feature Story', value: 'feature' },
+        { label: 'News Brief', value: 'brief' },
+        { label: 'Long Form', value: 'longform' },
+      ],
+      admin: {
+        position: 'sidebar',
+        description: 'Select the display template',
+      },
     },
     {
       name: 'author',
@@ -185,6 +241,15 @@ export const Posts: CollectionConfig = {
             return value
           },
         ],
+      },
+    },
+    {
+      name: 'featured',
+      type: 'checkbox',
+      label: 'Featured Post',
+      admin: {
+        position: 'sidebar',
+        description: 'Show in featured sections',
       },
     },
   ],

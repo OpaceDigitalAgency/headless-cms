@@ -32,6 +32,7 @@ import { Settings } from './globals/Settings'
 import { revalidateEndpoint } from './endpoints/revalidate'
 import { resetDataHandler } from './endpoints/resetData'
 import { seedEndpoints } from './endpoints/seed'
+import { collectionTemplateEndpoints } from './endpoints/collectionTemplates'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -365,6 +366,8 @@ export default buildConfig({
     },
     // Seed data endpoints for admin panel
     ...seedEndpoints,
+    // Collection template endpoints for admin panel
+    ...collectionTemplateEndpoints,
   ],
 
   // ===========================================

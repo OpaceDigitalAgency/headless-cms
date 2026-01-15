@@ -1,14 +1,25 @@
 import type { CollectionConfig } from 'payload'
 import { slugField } from '../fields/slug'
 
+// Import all blocks for flexible content
+import { heroBlock } from '../blocks/Hero'
+import { contentBlock } from '../blocks/Content'
+import { mediaBlock } from '../blocks/Media'
+import { ctaBlock } from '../blocks/CallToAction'
+import { archiveBlock } from '../blocks/Archive'
+import { formBlock } from '../blocks/Form'
+import { galleryBlock } from '../blocks/Gallery'
+import { gridBlock } from '../blocks/Grid'
+import { timelineBlock } from '../blocks/Timeline'
+
 export const Places: CollectionConfig = {
   slug: 'places',
 
   admin: {
     useAsTitle: 'name',
     group: 'Museum',
-    defaultColumns: ['name', 'country', '_status', 'updatedAt'],
-    description: 'Geographic locations and historical sites',
+    defaultColumns: ['name', 'placeType', 'categories', '_status', 'updatedAt'],
+    description: 'Geographic locations, venues, and historical sites',
     preview: (doc) => {
       const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3001'
       return `${baseUrl}/preview/places/${doc.slug}`
@@ -98,9 +109,17 @@ export const Places: CollectionConfig = {
           label: 'Details',
           fields: [
             {
+              name: 'shortDescription',
+              type: 'textarea',
+              label: 'Short Description',
+              admin: {
+                description: 'Brief summary for listings and SEO',
+              },
+            },
+            {
               name: 'description',
               type: 'richText',
-              label: 'Description',
+              label: 'Full Description',
             },
             {
               name: 'historicalSignificance',
@@ -125,23 +144,39 @@ export const Places: CollectionConfig = {
                 {
                   name: 'street',
                   type: 'text',
+                  label: 'Street Address',
                 },
                 {
-                  name: 'city',
+                  name: 'street2',
                   type: 'text',
+                  label: 'Address Line 2',
                 },
                 {
-                  name: 'region',
-                  type: 'text',
-                  label: 'State/Region',
+                  type: 'row',
+                  fields: [
+                    {
+                      name: 'city',
+                      type: 'text',
+                    },
+                    {
+                      name: 'region',
+                      type: 'text',
+                      label: 'State/Region',
+                    },
+                  ],
                 },
                 {
-                  name: 'country',
-                  type: 'text',
-                },
-                {
-                  name: 'postalCode',
-                  type: 'text',
+                  type: 'row',
+                  fields: [
+                    {
+                      name: 'postalCode',
+                      type: 'text',
+                    },
+                    {
+                      name: 'country',
+                      type: 'text',
+                    },
+                  ],
                 },
               ],
             },
@@ -162,6 +197,50 @@ export const Places: CollectionConfig = {
                     description: 'e.g., "Ancient", "Medieval", "1500-1800"',
                   },
                 },
+              ],
+            },
+          ],
+        },
+        {
+          label: 'Contact',
+          description: 'For venues, stores, and museums',
+          fields: [
+            {
+              name: 'phone',
+              type: 'text',
+              label: 'Phone',
+            },
+            {
+              name: 'email',
+              type: 'email',
+              label: 'Email',
+            },
+            {
+              name: 'website',
+              type: 'text',
+              label: 'Website',
+            },
+            {
+              name: 'hours',
+              type: 'array',
+              label: 'Opening Hours',
+              fields: [
+                {
+                  name: 'day',
+                  type: 'select',
+                  options: [
+                    { label: 'Monday', value: 'monday' },
+                    { label: 'Tuesday', value: 'tuesday' },
+                    { label: 'Wednesday', value: 'wednesday' },
+                    { label: 'Thursday', value: 'thursday' },
+                    { label: 'Friday', value: 'friday' },
+                    { label: 'Saturday', value: 'saturday' },
+                    { label: 'Sunday', value: 'sunday' },
+                  ],
+                },
+                { name: 'open', type: 'text', label: 'Open' },
+                { name: 'close', type: 'text', label: 'Close' },
+                { name: 'closed', type: 'checkbox', label: 'Closed' },
               ],
             },
           ],
@@ -220,6 +299,61 @@ export const Places: CollectionConfig = {
           ],
         },
         {
+          label: 'Meta',
+          fields: [
+            {
+              name: 'categories',
+              type: 'relationship',
+              relationTo: 'categories',
+              hasMany: true,
+              label: 'Categories',
+              admin: {
+                description: 'Select one or more categories',
+              },
+            },
+            {
+              name: 'tags',
+              type: 'array',
+              label: 'Tags',
+              fields: [
+                {
+                  name: 'tag',
+                  type: 'text',
+                  required: true,
+                },
+              ],
+              admin: {
+                description: 'Add tags for filtering and search',
+              },
+            },
+          ],
+        },
+        {
+          label: 'Content Sections',
+          description: 'Add flexible content blocks',
+          fields: [
+            {
+              name: 'contentBlocks',
+              type: 'blocks',
+              label: 'Additional Sections',
+              blocks: [
+                heroBlock,
+                contentBlock,
+                mediaBlock,
+                ctaBlock,
+                archiveBlock,
+                formBlock,
+                galleryBlock,
+                gridBlock,
+                timelineBlock,
+              ],
+              admin: {
+                description: 'Add and arrange content sections',
+              },
+            },
+          ],
+        },
+        {
           label: 'SEO',
           name: 'meta',
           fields: [],
@@ -227,11 +361,18 @@ export const Places: CollectionConfig = {
       ],
     },
     {
-      name: 'country',
-      type: 'text',
-      label: 'Country',
+      name: 'template',
+      type: 'select',
+      label: 'Display Template',
+      defaultValue: 'location',
+      options: [
+        { label: 'Location Page', value: 'location' },
+        { label: 'Map View', value: 'map' },
+        { label: 'Directory Card', value: 'card' },
+      ],
       admin: {
         position: 'sidebar',
+        description: 'Select the display template',
       },
     },
     {
@@ -242,8 +383,10 @@ export const Places: CollectionConfig = {
         { label: 'City', value: 'city' },
         { label: 'Region', value: 'region' },
         { label: 'Country', value: 'country' },
-        { label: 'Archaeological Site', value: 'archaeological' },
+        { label: 'Venue', value: 'venue' },
+        { label: 'Store', value: 'store' },
         { label: 'Museum', value: 'museum' },
+        { label: 'Archaeological Site', value: 'archaeological' },
         { label: 'Historical Site', value: 'historical' },
         { label: 'Other', value: 'other' },
       ],

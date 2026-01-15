@@ -1,14 +1,25 @@
 import type { CollectionConfig } from 'payload'
 import { slugField } from '../fields/slug'
 
+// Import all blocks for flexible content
+import { heroBlock } from '../blocks/Hero'
+import { contentBlock } from '../blocks/Content'
+import { mediaBlock } from '../blocks/Media'
+import { ctaBlock } from '../blocks/CallToAction'
+import { archiveBlock } from '../blocks/Archive'
+import { formBlock } from '../blocks/Form'
+import { galleryBlock } from '../blocks/Gallery'
+import { gridBlock } from '../blocks/Grid'
+import { timelineBlock } from '../blocks/Timeline'
+
 export const People: CollectionConfig = {
   slug: 'people',
 
   admin: {
     useAsTitle: 'name',
     group: 'Museum',
-    defaultColumns: ['name', 'role', 'birthDate', '_status', 'updatedAt'],
-    description: 'Historical figures, artists, and notable people',
+    defaultColumns: ['name', 'role', 'categories', '_status', 'updatedAt'],
+    description: 'Historical figures, artists, team members, and notable people',
     preview: (doc) => {
       const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3001'
       return `${baseUrl}/preview/people/${doc.slug}`
@@ -98,17 +109,17 @@ export const People: CollectionConfig = {
           label: 'Biography',
           fields: [
             {
-              name: 'biography',
-              type: 'richText',
-              label: 'Biography',
-            },
-            {
               name: 'shortBio',
               type: 'textarea',
               label: 'Short Biography',
               admin: {
-                description: 'Brief description for listings',
+                description: 'Brief description for listings and SEO',
               },
+            },
+            {
+              name: 'biography',
+              type: 'richText',
+              label: 'Full Biography',
             },
           ],
         },
@@ -174,6 +185,8 @@ export const People: CollectionConfig = {
                 { label: 'Collector', value: 'collector' },
                 { label: 'Ruler', value: 'ruler' },
                 { label: 'Scholar', value: 'scholar' },
+                { label: 'Team Member', value: 'team' },
+                { label: 'Contributor', value: 'contributor' },
                 { label: 'Other', value: 'other' },
               ],
             },
@@ -215,6 +228,52 @@ export const People: CollectionConfig = {
           ],
         },
         {
+          label: 'Contact',
+          description: 'For living people or team members',
+          fields: [
+            {
+              name: 'email',
+              type: 'email',
+              label: 'Email',
+            },
+            {
+              name: 'phone',
+              type: 'text',
+              label: 'Phone',
+            },
+            {
+              name: 'website',
+              type: 'text',
+              label: 'Website',
+            },
+            {
+              name: 'socialLinks',
+              type: 'array',
+              label: 'Social Links',
+              fields: [
+                {
+                  name: 'platform',
+                  type: 'select',
+                  options: [
+                    { label: 'LinkedIn', value: 'linkedin' },
+                    { label: 'Twitter/X', value: 'twitter' },
+                    { label: 'Instagram', value: 'instagram' },
+                    { label: 'Facebook', value: 'facebook' },
+                    { label: 'YouTube', value: 'youtube' },
+                    { label: 'GitHub', value: 'github' },
+                    { label: 'Other', value: 'other' },
+                  ],
+                },
+                {
+                  name: 'url',
+                  type: 'text',
+                  required: true,
+                },
+              ],
+            },
+          ],
+        },
+        {
           label: 'Relationships',
           fields: [
             {
@@ -227,11 +286,81 @@ export const People: CollectionConfig = {
           ],
         },
         {
+          label: 'Meta',
+          fields: [
+            {
+              name: 'categories',
+              type: 'relationship',
+              relationTo: 'categories',
+              hasMany: true,
+              label: 'Categories',
+              admin: {
+                description: 'Select one or more categories',
+              },
+            },
+            {
+              name: 'tags',
+              type: 'array',
+              label: 'Tags',
+              fields: [
+                {
+                  name: 'tag',
+                  type: 'text',
+                  required: true,
+                },
+              ],
+              admin: {
+                description: 'Add tags for filtering and search',
+              },
+            },
+          ],
+        },
+        {
+          label: 'Content Sections',
+          description: 'Add flexible content blocks',
+          fields: [
+            {
+              name: 'contentBlocks',
+              type: 'blocks',
+              label: 'Additional Sections',
+              blocks: [
+                heroBlock,
+                contentBlock,
+                mediaBlock,
+                ctaBlock,
+                archiveBlock,
+                formBlock,
+                galleryBlock,
+                gridBlock,
+                timelineBlock,
+              ],
+              admin: {
+                description: 'Add and arrange content sections',
+              },
+            },
+          ],
+        },
+        {
           label: 'SEO',
           name: 'meta',
           fields: [],
         },
       ],
+    },
+    {
+      name: 'template',
+      type: 'select',
+      label: 'Display Template',
+      defaultValue: 'profile',
+      options: [
+        { label: 'Profile Page', value: 'profile' },
+        { label: 'Team Card', value: 'card' },
+        { label: 'Biography', value: 'biography' },
+      ],
+      admin: {
+        position: 'sidebar',
+        description: 'Select the display template',
+      },
     },
     {
       name: 'featured',
