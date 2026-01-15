@@ -34,6 +34,96 @@ const blockComponents: Record<string, any> = {
   archive: ArchiveBlock,
   form: FormBlock,
 };
+
+// Map Payload block shapes to Astro component props
+const mapBlockProps = (block: any) => {
+  switch (block.blockType) {
+    case 'hero':
+      return {
+        heading: block.heading,
+        subheading: block.subheading,
+        backgroundImage: block.image?.url ? { url: block.image.url, alt: block.image.alt } : undefined,
+        alignment: block.textAlign || 'center',
+        height: block.type === 'fullscreen' ? 'full' : 'medium',
+        overlay: block.overlay !== 'none',
+        overlayOpacity: 50,
+        buttons: (block.links || []).map((link: any) => ({
+          label: link.label,
+          link: link.url || (link.page?.slug ? `/${link.page.slug}` : '#'),
+          variant: link.variant || 'primary',
+        })),
+      };
+    case 'content':
+      return {
+        content: block.columns?.[0]?.richText || block.richText || block.content,
+        columns: (block.columns?.length || 1) > 1 ? 'two' : 'one',
+        backgroundColor: block.backgroundColor && block.backgroundColor !== 'none' ? block.backgroundColor : undefined,
+      };
+    case 'media':
+      return {
+        media: block.media?.url ? {
+          url: block.media.url,
+          alt: block.media.alt,
+          mimeType: block.media.mimeType,
+          width: block.media.width,
+          height: block.media.height,
+        } : undefined,
+        caption: block.caption,
+        size: block.size === 'fullWidth' ? 'full' : block.size === 'small' ? 'small' : block.size === 'default' ? 'medium' : 'large',
+        alignment: block.position || 'center',
+      };
+    case 'cta':
+      return {
+        heading: block.heading,
+        text: block.description,
+        style: block.style === 'banner' || block.style === 'card' ? 'gradient' : block.style === 'inline' ? 'default' : 'default',
+        buttons: (block.links || []).map((link: any) => ({
+          label: link.label,
+          link: link.url || (link.page?.slug ? `/${link.page.slug}` : '#'),
+          variant: link.variant || 'primary',
+        })),
+      };
+    case 'gallery':
+      return {
+        heading: block.heading,
+        images: (block.images || []).map((img: any) => ({
+          image: img.image?.url ? { url: img.image.url, alt: img.image.alt, width: img.image.width, height: img.image.height } : undefined,
+          caption: img.caption,
+        })).filter((img: any) => img.image),
+        layout: block.layout || 'grid',
+        columns: Number(block.columns || 3),
+      };
+    case 'grid':
+      return {
+        heading: block.heading,
+        items: block.items || [],
+      };
+    case 'timeline':
+      return {
+        heading: block.heading,
+        events: block.events || block.timeline || [],
+      };
+    case 'archive':
+      return {
+        heading: block.heading,
+        collection: block.collection || 'posts',
+        limit: block.limit || 6,
+        layout: block.layout || 'grid',
+        showExcerpt: block.showExcerpt ?? true,
+        showImage: block.showImage ?? true,
+        showDate: block.showDate ?? true,
+        linkTo: block.linkTo || block.viewAllLink,
+      };
+    case 'form':
+      return {
+        form: block.form,
+        heading: block.heading,
+        description: block.description,
+      };
+    default:
+      return block;
+  }
+};
 ---
 
 <div class="blocks-container">
@@ -45,6 +135,7 @@ const blockComponents: Record<string, any> = {
       return null;
     }
     
-    return <BlockComponent {...block} />;
+    const props = mapBlockProps(block);
+    return <BlockComponent {...props} key={block.id ?? block.blockType + '-' + Math.random().toString(36).slice(2)} />;
   })}
 </div>

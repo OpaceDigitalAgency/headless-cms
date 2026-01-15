@@ -38,7 +38,17 @@ export const CustomItems: CollectionConfig = {
     listSearchableFields: ['title', 'slug'],
   },
   access: {
-    read: () => true,
+    read: ({ req: { user } }) => {
+      // Guests see published only; authenticated users see all
+      if (!user) {
+        return {
+          status: {
+            equals: 'published',
+          },
+        }
+      }
+      return true
+    },
     create: ({ req: { user } }) => Boolean(user),
     update: ({ req: { user } }) => Boolean(user),
     delete: ({ req: { user } }) => Boolean(user),
@@ -278,6 +288,28 @@ export const CustomItems: CollectionConfig = {
           data.publishedAt = new Date().toISOString()
         }
         return data
+      },
+    ],
+    afterChange: [
+      async ({ doc, req }) => {
+        if (doc.status === 'published') {
+          const revalidateUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3001'
+          try {
+            await fetch(`${revalidateUrl}/api/revalidate`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                secret: process.env.REVALIDATION_SECRET,
+                collection: 'custom-items',
+                slug: doc.slug,
+              }),
+            })
+            req.payload.logger.info(`Revalidated custom item: ${doc.slug}`)
+          } catch (error) {
+            req.payload.logger.error(`Failed to revalidate custom item: ${doc.slug}`)
+          }
+        }
+        return doc
       },
     ],
   },

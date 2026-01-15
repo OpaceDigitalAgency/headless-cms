@@ -27,7 +27,20 @@ if (!pageData) {
 const title = pageData.meta?.title || pageData.title;
 const description = pageData.meta?.description || '';
 const image = pageData.meta?.image?.url || '';
-const blocks = pageData.layout || [];
+const blocks = [
+  // If a page-level hero exists, inject it as the first block for rendering
+  ...(pageData.hero ? [{
+    blockType: 'hero',
+    heading: pageData.hero.heading,
+    subheading: pageData.hero.subheading,
+    image: pageData.hero.image,
+    links: pageData.hero.links,
+    type: pageData.hero.type,
+    overlay: pageData.hero.overlay,
+    textAlign: pageData.hero.textAlign,
+  }] : []),
+  ...(pageData.content || []),
+];
 ---
 
 <BaseLayout title={title} description={description} image={image}>
