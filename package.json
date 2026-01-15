@@ -1,0 +1,37 @@
+{
+  "name": "payload-jamstack-platform",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Payload CMS v3 + Jamstack Platform - WordPress-like CMS with static-first frontends",
+  "keywords": ["payload", "cms", "jamstack", "nextjs", "postgresql", "railway"],
+  "license": "MIT",
+  "author": "Opace Digital Agency",
+  "scripts": {
+    "dev": "pnpm -r --parallel dev",
+    "dev:cms": "pnpm --filter @repo/cms dev",
+    "dev:web": "pnpm --filter @repo/web dev",
+    "build": "pnpm -r build",
+    "build:cms": "pnpm --filter @repo/cms build",
+    "build:web": "pnpm --filter @repo/web build",
+    "start": "pnpm -r --parallel start",
+    "start:cms": "pnpm --filter @repo/cms start",
+    "start:web": "pnpm --filter @repo/web start",
+    "lint": "pnpm -r lint",
+    "typecheck": "pnpm -r typecheck",
+    "generate:types": "pnpm --filter @repo/cms generate:types",
+    "migrate": "pnpm --filter @repo/cms migrate",
+    "migrate:create": "pnpm --filter @repo/cms migrate:create",
+    "seed": "pnpm --filter @repo/cms seed",
+    "clean": "pnpm -r clean && rm -rf node_modules",
+    "prepare": "pnpm -r prepare"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "typescript": "^5.7.2"
+  },
+  "packageManager": "pnpm@9.15.0",
+  "engines": {
+    "node": ">=20.0.0",
+    "pnpm": ">=9.0.0"
+  }
+}

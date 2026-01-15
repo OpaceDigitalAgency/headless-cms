@@ -1,0 +1,234 @@
+import type { CollectionConfig } from 'payload'
+import { slugField } from '../fields/slug'
+import { heroBlock } from '../blocks/Hero'
+import { contentBlock } from '../blocks/Content'
+import { mediaBlock } from '../blocks/Media'
+import { ctaBlock } from '../blocks/CallToAction'
+import { archiveBlock } from '../blocks/Archive'
+import { formBlock } from '../blocks/Form'
+
+export const Pages: CollectionConfig = {
+  slug: 'pages',
+
+  admin: {
+    useAsTitle: 'title',
+    group: 'Content',
+    defaultColumns: ['title', 'slug', 'template', '_status', 'updatedAt'],
+    description: 'Create and manage website pages',
+    preview: (doc) => {
+      const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3001'
+      return `${baseUrl}/preview/pages/${doc.slug}`
+    },
+    livePreview: {
+      url: ({ data }) => {
+        const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3001'
+        return `${baseUrl}/preview/pages/${data.slug}`
+      },
+    },
+  },
+
+  // Enable versions and drafts
+  versions: {
+    drafts: {
+      autosave: {
+        interval: 300, // 5 minutes
+      },
+      schedulePublish: true,
+    },
+    maxPerDoc: 25,
+  },
+
+  // Access control
+  access: {
+    read: ({ req: { user } }) => {
+      // Published pages are public
+      if (!user) {
+        return {
+          _status: {
+            equals: 'published',
+          },
+        }
+      }
+      // Logged in users can see all
+      return true
+    },
+    create: ({ req: { user } }) => Boolean(user),
+    update: ({ req: { user } }) => Boolean(user),
+    delete: ({ req: { user } }) => user?.role === 'admin',
+  },
+
+  // Hooks for revalidation
+  hooks: {
+    afterChange: [
+      async ({ doc, req, operation }) => {
+        if (doc._status === 'published') {
+          // Trigger revalidation
+          const revalidateUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3001'
+          try {
+            await fetch(`${revalidateUrl}/api/revalidate`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                secret: process.env.REVALIDATION_SECRET,
+                collection: 'pages',
+                slug: doc.slug,
+              }),
+            })
+            req.payload.logger.info(`Revalidated page: ${doc.slug}`)
+          } catch (error) {
+            req.payload.logger.error(`Failed to revalidate page: ${doc.slug}`)
+          }
+        }
+        return doc
+      },
+    ],
+  },
+
+  fields: [
+    {
+      name: 'title',
+      type: 'text',
+      required: true,
+      label: 'Page Title',
+    },
+    slugField(),
+    {
+      name: 'template',
+      type: 'select',
+      required: true,
+      defaultValue: 'landing',
+      options: [
+        { label: 'Landing Page', value: 'landing' },
+        { label: 'Home Page', value: 'home' },
+        { label: 'Detail Page', value: 'detail' },
+        { label: 'Article Page', value: 'article' },
+        { label: 'Archive Page', value: 'archive' },
+      ],
+      admin: {
+        position: 'sidebar',
+        description: 'Select the page template',
+      },
+    },
+    {
+      type: 'tabs',
+      tabs: [
+        {
+          label: 'Hero',
+          fields: [
+            {
+              name: 'hero',
+              type: 'group',
+              fields: [
+                {
+                  name: 'type',
+                  type: 'select',
+                  defaultValue: 'standard',
+                  options: [
+                    { label: 'Standard', value: 'standard' },
+                    { label: 'Minimal', value: 'minimal' },
+                    { label: 'Full Screen', value: 'fullscreen' },
+                    { label: 'None', value: 'none' },
+                  ],
+                },
+                {
+                  name: 'heading',
+                  type: 'text',
+                  admin: {
+                    condition: (_, siblingData) => siblingData?.type !== 'none',
+                  },
+                },
+                {
+                  name: 'subheading',
+                  type: 'textarea',
+                  admin: {
+                    condition: (_, siblingData) => siblingData?.type !== 'none',
+                  },
+                },
+                {
+                  name: 'image',
+                  type: 'upload',
+                  relationTo: 'media',
+                  admin: {
+                    condition: (_, siblingData) => ['standard', 'fullscreen'].includes(siblingData?.type),
+                  },
+                },
+                {
+                  name: 'links',
+                  type: 'array',
+                  maxRows: 3,
+                  fields: [
+                    {
+                      name: 'label',
+                      type: 'text',
+                      required: true,
+                    },
+                    {
+                      name: 'url',
+                      type: 'text',
+                    },
+                    {
+                      name: 'page',
+                      type: 'relationship',
+                      relationTo: 'pages',
+                    },
+                    {
+                      name: 'variant',
+                      type: 'select',
+                      defaultValue: 'primary',
+                      options: [
+                        { label: 'Primary', value: 'primary' },
+                        { label: 'Secondary', value: 'secondary' },
+                      ],
+                    },
+                    {
+                      name: 'newTab',
+                      type: 'checkbox',
+                      label: 'Open in new tab',
+                    },
+                  ],
+                  admin: {
+                    condition: (_, siblingData) => siblingData?.type !== 'none',
+                  },
+                },
+              ],
+            },
+          ],
+        },
+        {
+          label: 'Content',
+          fields: [
+            {
+              name: 'content',
+              type: 'blocks',
+              blocks: [
+                heroBlock,
+                contentBlock,
+                mediaBlock,
+                ctaBlock,
+                archiveBlock,
+                formBlock,
+              ],
+            },
+          ],
+        },
+        {
+          label: 'SEO',
+          name: 'meta',
+          fields: [
+            // SEO fields are auto-generated by the SEO plugin
+          ],
+        },
+      ],
+    },
+    {
+      name: 'publishedAt',
+      type: 'date',
+      admin: {
+        position: 'sidebar',
+        date: {
+          pickerAppearance: 'dayAndTime',
+        },
+      },
+    },
+  ],
+}

@@ -1,0 +1,58 @@
+import type { Block } from 'payload'
+
+export const formBlock: Block = {
+  slug: 'form',
+  labels: {
+    singular: 'Form',
+    plural: 'Form Blocks',
+  },
+  imageURL: '/blocks/form.png',
+  imageAltText: 'Form block preview',
+  fields: [
+    {
+      name: 'form',
+      type: 'relationship',
+      relationTo: 'forms',
+      required: true,
+      label: 'Select Form',
+    },
+    {
+      name: 'enableIntro',
+      type: 'checkbox',
+      label: 'Enable Intro Content',
+    },
+    {
+      name: 'introContent',
+      type: 'richText',
+      label: 'Intro Content',
+      admin: {
+        condition: (_, siblingData) => siblingData?.enableIntro,
+      },
+    },
+    {
+      name: 'style',
+      type: 'select',
+      label: 'Form Style',
+      defaultValue: 'default',
+      options: [
+        { label: 'Default', value: 'default' },
+        { label: 'Card', value: 'card' },
+        { label: 'Inline', value: 'inline' },
+        { label: 'Full Width', value: 'fullWidth' },
+      ],
+    },
+    {
+      name: 'backgroundColor',
+      type: 'select',
+      label: 'Background Color',
+      defaultValue: 'none',
+      options: [
+        { label: 'None', value: 'none' },
+        { label: 'Light', value: 'light' },
+        { label: 'Dark', value: 'dark' },
+      ],
+    },
+  ],
+}
+
+export default formBlock

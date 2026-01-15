@@ -1,0 +1,86 @@
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  // Enable React strict mode
+  reactStrictMode: true,
+
+  // Static export for SSG (optional - can be enabled for full static)
+  // output: 'export',
+
+  // Image optimization
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: '**',
+      },
+      {
+        protocol: 'http',
+        hostname: 'localhost',
+      },
+    ],
+  },
+
+  // Transpile workspace packages
+  transpilePackages: ['@repo/shared', '@repo/templates'],
+
+  // Environment variables
+  env: {
+    NEXT_PUBLIC_CMS_URL: process.env.CMS_URL || 'http://localhost:3000',
+    NEXT_PUBLIC_SITE_URL: process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3001',
+  },
+
+  // Experimental features
+  experimental: {
+    // Enable React compiler for performance
+    reactCompiler: false,
+  },
+
+  // Headers for security and caching
+  async headers() {
+    return [
+      {
+        source: '/(.*)',
+        headers: [
+          {
+            key: 'X-Frame-Options',
+            value: 'DENY',
+          },
+          {
+            key: 'X-Content-Type-Options',
+            value: 'nosniff',
+          },
+          {
+            key: 'Referrer-Policy',
+            value: 'strict-origin-when-cross-origin',
+          },
+        ],
+      },
+      {
+        // Cache static assets
+        source: '/static/(.*)',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+        ],
+      },
+    ]
+  },
+
+  // Redirects
+  async redirects() {
+    return []
+  },
+
+  // Rewrites for preview mode
+  async rewrites() {
+    return {
+      beforeFiles: [],
+      afterFiles: [],
+      fallback: [],
+    }
+  },
+}
+
+export default nextConfig
