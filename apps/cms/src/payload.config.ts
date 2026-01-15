@@ -99,16 +99,27 @@ export default buildConfig({
     theme: 'all', // 'light' | 'dark' | 'all' (allows user to choose)
 
     components: {
-      // Custom dashboard with reset data button
+      // Custom two-panel navigation
+      Nav: '/admin/TwoPanelNav',
+      // Custom views
       views: {
         dashboard: {
-          Component: '/components/Dashboard',
+          Component: '/admin/views/Dashboard',
+        },
+        tools: {
+          Component: '/admin/views/Tools',
+          path: '/tools',
         },
       },
       // graphics: {
       //   Logo: '/components/Logo',
       //   Icon: '/components/Icon',
       // },
+    },
+
+    // Import map base directory for custom components
+    importMap: {
+      baseDir: path.resolve(dirname),
     },
 
     // Date format configuration
