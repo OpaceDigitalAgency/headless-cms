@@ -1,0 +1,98 @@
+---
+/**
+ * Hero Block Component
+ * 
+ * Full-width hero section with heading, subheading, background, and CTA buttons.
+ */
+
+interface Props {
+  heading: string;
+  subheading?: string;
+  backgroundImage?: {
+    url: string;
+    alt?: string;
+  };
+  overlay?: boolean;
+  overlayOpacity?: number;
+  alignment?: 'left' | 'center' | 'right';
+  height?: 'small' | 'medium' | 'large' | 'full';
+  buttons?: Array<{
+    label: string;
+    link: string;
+    variant?: 'primary' | 'secondary' | 'outline';
+  }>;
+}
+
+const { 
+  heading, 
+  subheading, 
+  backgroundImage, 
+  overlay = true,
+  overlayOpacity = 50,
+  alignment = 'center',
+  height = 'medium',
+  buttons = []
+} = Astro.props;
+
+const heightClasses: Record<string, string> = {
+  small: 'py-16 min-h-[300px]',
+  medium: 'py-24 min-h-[500px]',
+  large: 'py-32 min-h-[700px]',
+  full: 'py-24 min-h-screen',
+};
+
+const alignmentClasses: Record<string, string> = {
+  left: 'text-left items-start',
+  center: 'text-center items-center',
+  right: 'text-right items-end',
+};
+---
+
+<section 
+  class={`relative flex flex-col justify-center ${heightClasses[height]} ${alignmentClasses[alignment]}`}
+  style={backgroundImage?.url ? `background-image: url(${backgroundImage.url}); background-size: cover; background-position: center;` : ''}
+>
+  {/* Overlay */}
+  {overlay && backgroundImage?.url && (
+    <div 
+      class="absolute inset-0 bg-black" 
+      style={`opacity: ${overlayOpacity / 100};`}
+    />
+  )}
+  
+  {/* Content */}
+  <div class="container relative z-10">
+    <div class={`max-w-3xl ${alignment === 'center' ? 'mx-auto' : alignment === 'right' ? 'ml-auto' : ''}`}>
+      <h1 class={`text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl ${backgroundImage?.url ? 'text-white' : 'text-gray-900 dark:text-white'}`}>
+        {heading}
+      </h1>
+      
+      {subheading && (
+        <p class={`mt-6 text-xl ${backgroundImage?.url ? 'text-gray-200' : 'text-gray-600 dark:text-gray-300'}`}>
+          {subheading}
+        </p>
+      )}
+      
+      {buttons.length > 0 && (
+        <div class={`mt-8 flex flex-wrap gap-4 ${alignment === 'center' ? 'justify-center' : alignment === 'right' ? 'justify-end' : ''}`}>
+          {buttons.map((button) => {
+            const variantClasses: Record<string, string> = {
+              primary: 'bg-blue-600 text-white hover:bg-blue-700',
+              secondary: 'bg-gray-800 text-white hover:bg-gray-900',
+              outline: `border-2 ${backgroundImage?.url ? 'border-white text-white hover:bg-white/10' : 'border-gray-800 text-gray-800 hover:bg-gray-100 dark:border-white dark:text-white dark:hover:bg-white/10'}`,
+            };
+            
+            return (
+              <a 
+                href={button.link} 
+                class={`inline-flex items-center px-6 py-3 rounded-lg font-semibold transition-colors ${variantClasses[button.variant || 'primary']}`}
+              >
+                {button.label}
+              </a>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  </div>
+</section>

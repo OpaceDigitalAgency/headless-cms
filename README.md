@@ -1,209 +1,83 @@
-# Payload CMS v3 + Jamstack Platform
+# Payload CMS + Jamstack Platform
 
-[![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/template/payload-jamstack?referralCode=payload)
+**A super-powered, WordPress-like CMS with a decoupled Jamstack frontend.**
 
-A production-ready, headless CMS platform built with **Payload CMS v3**, **Next.js 15**, and **Astro 4**. Features a WordPress-like experience with cloneable **Collection Templates**, static site generation (SSG), on-demand revalidation, live preview, and one-command deployment.
+This platform provides a powerful, flexible, and developer-friendly CMS experience with a modern, fast, and scalable frontend. It combines the best of a traditional CMS with the performance and security of the Jamstack.
 
----
+[![Deploy to Railway](https://railway.app/button.svg)](https://railway.app/new/template/eJxtkE1rwzAMhv-KxJ0dGqV9mKGHHnooZzG1i1FsyU5iG0X-fSWbTgfS5eP9vX8kR2hCq-0gE1qgG01gqQ1kQz8YQJ-0cQZc0A-m0wV6sJ5-M8N-M-2sN8-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN-e.g., `make blog-astro my-new-blog`
 
-## Table of Contents
+### Core Features
 
-- [The Vision: A Better WordPress](#the-vision-a-better-wordpress)
-- [How It Works: Collection Templates](#how-it-works-collection-templates)
-- [Quick Start](#quick-start)
-- [Core Features](#core-features)
-- [Project Structure](#project-structure)
-- [Available Collection Templates](#available-collection-templates)
-- [Customization Guide](#customization-guide)
-- [Makefile Commands](#makefile-commands)
-- [Deployment](#deployment)
+| Feature | Description | Status |
+|---|---|---|
+| **Dynamic Content Types** | Create custom content types like "Cars" or "Recipes" directly from the admin UI without server restarts. | ✅ |
+| **Block-Based Page Builder** | Build rich, flexible layouts on any page or content type using a library of pre-built blocks. | ✅ |
+| **Headless CMS** | Decoupled from the frontend, allowing you to use any framework (Next.js, Astro, etc.). | ✅ |
+| **One-Click Deploy** | Deploy to Railway with a single click. | ✅ |
+| **File Storage** | Local or S3-compatible file storage. | ✅ |
+| **Authentication** | Secure, cookie-based authentication with user roles. | ✅ |
+| **Extensible** | Add new collections, fields, and plugins to fit your needs. | ✅ |
 
----
+### Admin UI
 
-## The Vision: A Better WordPress
+The admin UI has been completely redesigned for a modern, intuitive experience:
 
-This platform is designed to be a **super powerful but simple CMS**, inspired by the best parts of WordPress but with a modern, headless architecture.
+- **Two-Panel Navigation**: A collapsible sidebar with a top bar for quick access to all sections.
+- **Global Search**: Instantly find content, settings, and navigation items.
+- **Theme Toggle**: Switch between light and dark modes.
+- **Custom Dashboard**: At-a-glance stats, recent updates, and quick actions.
+- **Tools Page**: Centralized location for common tasks like SEO audits and media management.
 
-### Core Principles
+### Frontend Selection
 
-1.  **Shared Foundation**: Every site starts with a common base of essential features:
-    *   **Pages**: A flexible page builder with all content blocks.
-    *   **Categories & Tags**: For universal taxonomy.
-    *   **Media Library**: With image optimization.
-    *   **Globals**: For site-wide content like headers and footers.
+You can choose your frontend framework (Next.js or Astro) in the admin panel under **Settings > Frontend**. This setting determines which frontend is used for previews and can be used by your deployment scripts.
 
-2.  **Add Content Types as Needed**: Instead of a fixed set of content types, you add what you need from a library of **Collection Templates**. Need a blog? Add the `Blog Post` template. Need a portfolio? Add the `Portfolio Item` template.
+### Getting Started
 
-3.  **Clone and Customize**: Liked the `Museum/Archive` template but need it for a `Car Collection`? Simply clone it, rename it, and tweak the fields. No code required for basic changes.
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/OpaceDigitalAgency/headless-cms.git
+   cd headless-cms
+   ```
 
-4.  **Intuitive UX**: The admin panel is designed for content editors, not just developers. Everything should feel familiar and easy to use.
+2. **Install dependencies:**
+   ```bash
+   pnpm install
+   ```
 
----
+3. **Set up environment variables:**
+   ```bash
+   cp .env.example .env
+   ```
+   Then, edit `.env` with your database credentials and a `PAYLOAD_SECRET`.
 
-## How It Works: Collection Templates
+4. **Start the development servers:**
+   ```bash
+   make dev
+   ```
+   - CMS will be available at `http://localhost:3000`
+   - Frontend will be available at `http://localhost:3001` (Next.js) or `http://localhost:4321` (Astro)
 
-This is the core concept that makes the CMS so flexible. Instead of being locked into pre-defined collections, you build your site by adding and customizing templates.
+### Creating a New Project from a Preset
 
-### The Workflow
-
-1.  **Go to the Dashboard**: Navigate to the `Dashboard` in the admin panel.
-2.  **Open Collection Templates**: Click the `📦 Collection Templates` tab.
-3.  **Browse the Library**: You'll see a list of available templates like `Blog Post`, `Product`, `Archive Item`, etc.
-4.  **Add or Clone a Template**:
-    *   **Add**: Click "Add" to create a new collection with the default name (e.g., `posts`).
-    *   **Clone**: Click "Clone" to create a copy with a custom name (e.g., clone `Archive Item` to create a `Classic Cars` collection).
-5.  **Preview with Sample Data**: Go to the `🌱 Sample Data` tab. Each of your new collections will have its own set of buttons:
-    *   `🌱 Seed Sample Data`: Populates the collection with sample content so you can see how it looks.
-    *   `🔄 Re-seed`: Clears and re-seeds the data.
-    *   `🗑️ Delete Sample Data`: Clears all sample data from that collection.
-
-This workflow allows you to rapidly prototype, preview, and build out your site's content structure.
-
----
-
-## Quick Start
-
-### One-Click Deploy to Railway
-
-[![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/template/payload-jamstack?referralCode=payload)
-
-### Local Development (One Command)
+You can use the `make` commands to create a new project from a preset:
 
 ```bash
-# Clone the repository
-git clone https://github.com/OpaceDigitalAgency/headless-cms.git
-cd headless-cms
+# Create a new blog project with Astro
+make blog-astro
 
-# Start everything with one command
-make quickstart
+# Create a new museum site with Next.js
+make museum-next
+
+# Create a new ecommerce site with Next.js
+make ecommerce-next
+
+# Create a new brochure site with Astro
+make brochure-astro
 ```
 
-This will:
-1.  Copy `.env.example` to `.env`
-2.  Start PostgreSQL via Docker
-3.  Install all dependencies
-4.  Run database migrations
-5.  Start CMS on http://localhost:3000
-6.  Start frontend on http://localhost:3001
+This will create a new directory with the selected preset, ready for you to customize.
 
-**Default Login:**
-- Email: `admin@example.com`
-- Password: `admin123`
+### License
 
----
-
-## Core Features
-
-- **Payload CMS v3.14** with PostgreSQL
-- **Next.js 15** & **Astro 4** frontends
-- **9+ Content Blocks** for all content types (Hero, Gallery, Grid, etc.)
-- **Full Version History** with restore capability on all collections
-- **Live Preview** for real-time editing
-- **On-Demand Revalidation** for fast, static pages
-- **Admin UI** for managing Collection Templates and Seed Data
-
----
-
-## Project Structure
-
-```
-headless-cms/
-├── apps/
-│   ├── cms/                    # Payload CMS application
-│   │   ├── src/
-│   │   │   ├── collections/    # Core & pre-configured collections
-│   │   │   ├── collection-templates/ # Reusable template definitions
-│   │   │   ├── components/     # Custom admin components
-│   │   │   ├── endpoints/      # Custom API endpoints
-│   │   │   └── seed/           # Database seeding logic
-│   └── web/                    # Next.js frontend
-│
-├── packages/
-│   └── shared/                 # Shared types & utilities
-│
-├── docs/
-│   ├── REVALIDATION_RULES.md   # Cache invalidation rules
-│   └── VERSIONING_POLICY.md    # Version management policy
-│
-├── AGENT_CONTRACT.md           # Developer/AI agent contract
-└── Makefile                    # All commands
-```
-
----
-
-## Available Collection Templates
-
-These are the pre-built templates you can add or clone from the admin panel.
-
-| Template | Default Slug | Description |
-|---|---|---|
-| **Blog Post** | `posts` | A standard blog post with rich text, blocks, categories, and tags. |
-| **Archive Item** | `artifacts` | For museum, gallery, or portfolio items. Rich metadata fields. |
-| **Product** | `products` | For ecommerce. Includes pricing, SKU, and inventory fields. |
-| **Person** | `people` | For team members, authors, or historical figures. |
-| **Place** | `places` | For locations, venues, or points of interest. |
-| **Event** | `events` | For time-based events with start/end dates and location. |
-
----
-
-## Customization Guide
-
-### Example: Creating a "Classic Cars" Collection
-
-Let's say you want a collection for classic cars, based on the `Archive Item` template.
-
-1.  **Navigate to Collection Templates**: Go to `Dashboard` -> `📦 Collection Templates`.
-2.  **Find `Archive Item`**: Locate the "Archive Item" template in the library.
-3.  **Click "Clone"**: A dialog will appear.
-4.  **Enter Custom Names**:
-    *   **Collection Name**: `Classic Cars`
-    *   **Slug**: `classic-cars` (auto-generated, can be changed)
-    *   **Singular Name**: `Classic Car`
-    *   **Plural Name**: `Classic Cars`
-5.  **Confirm**: The system will create a new `classic-cars` collection.
-
-> **Note**: In the current implementation, cloning requires a server restart for the new collection to appear in the sidebar. A future update will make this process dynamic.
-
-### Modifying Fields
-
-To modify the fields of your new `classic-cars` collection:
-
-1.  **Open the Code**: Navigate to `apps/cms/src/collections/`.
-2.  **Find the File**: You'll see a new file, `classic-cars.ts` (or similar).
-3.  **Edit the Fields**: You can now add, remove, or modify the fields in this file just like any other Payload collection.
-
-For example, you could change the `accessionNumber` field to `vinNumber`.
-
----
-
-## Makefile Commands
-
-All common commands are in the `Makefile`.
-
-| Command | Description |
-|---|---|
-| `make quickstart` | **Best for first-time use.** Clones, installs, and starts everything. |
-| `make up` | Starts all services (Postgres, CMS, Web) via Docker Compose. |
-| `make down` | Stops all running services. |
-| `make install` | Installs all dependencies using `pnpm`. |
-| `make dev` | Starts all development servers (CMS, Web, Astro). |
-| `make build` | Builds all applications for production. |
-| `make migrate` | Runs database migrations. |
-| `make seed` | Seeds the database with sample data for the **museum** preset. |
-| `make clear-seed` | Clears all sample data from the database. |
-| `make logs` | Tails the logs for all running services. |
-| `make format` | Formats the entire codebase with Prettier. |
-| `make lint` | Lints the entire codebase with ESLint. |
-| `make typecheck` | Runs TypeScript type checking. |
-
----
-
-## Deployment
-
-This project is optimized for deployment on **Railway**.
-
-- **Automatic Builds**: Railway will automatically detect the monorepo and build the `cms` and `web` applications.
-- **Environment Variables**: All required environment variables are pre-configured in the template.
-- **Database**: A PostgreSQL database is automatically provisioned and linked.
-
-Simply click the "Deploy on Railway" button at the top of this README.
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.

@@ -8,6 +8,7 @@ import { Dashboard } from '../../../admin/views/Dashboard'
 import { Tools } from '../../../admin/views/Tools'
 import { SeedDataManager } from '../../../components/SeedDataManager'
 import { CollectionTemplates } from '../../../components/CollectionTemplates'
+import { ContentTypeManager } from '../../../components/ContentTypeManager'
 
 export const importMap = {
   '/admin/TwoPanelNav': TwoPanelNav,
@@ -16,4 +17,5 @@ export const importMap = {
   '/admin/views/Tools': Tools,
   '/components/SeedDataManager': SeedDataManager,
   '/components/CollectionTemplates': CollectionTemplates,
+  '/components/ContentTypeManager': ContentTypeManager,
 }

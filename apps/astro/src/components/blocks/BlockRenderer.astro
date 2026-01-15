@@ -1,0 +1,50 @@
+---
+/**
+ * Block Renderer Component
+ * 
+ * Dynamically renders content blocks based on their type.
+ * This is the main entry point for rendering page content.
+ */
+
+import HeroBlock from './HeroBlock.astro';
+import ContentBlock from './ContentBlock.astro';
+import MediaBlock from './MediaBlock.astro';
+import CTABlock from './CTABlock.astro';
+import GalleryBlock from './GalleryBlock.astro';
+import GridBlock from './GridBlock.astro';
+import TimelineBlock from './TimelineBlock.astro';
+import ArchiveBlock from './ArchiveBlock.astro';
+import FormBlock from './FormBlock.astro';
+
+interface Props {
+  blocks: any[];
+}
+
+const { blocks = [] } = Astro.props;
+
+// Map block types to components
+const blockComponents: Record<string, any> = {
+  hero: HeroBlock,
+  content: ContentBlock,
+  media: MediaBlock,
+  cta: CTABlock,
+  gallery: GalleryBlock,
+  grid: GridBlock,
+  timeline: TimelineBlock,
+  archive: ArchiveBlock,
+  form: FormBlock,
+};
+---
+
+<div class="blocks-container">
+  {blocks.map((block: any) => {
+    const BlockComponent = blockComponents[block.blockType];
+    
+    if (!BlockComponent) {
+      console.warn(`Unknown block type: ${block.blockType}`);
+      return null;
+    }
+    
+    return <BlockComponent {...block} />;
+  })}
+</div>

@@ -1,0 +1,100 @@
+---
+/**
+ * Grid Block Component
+ * 
+ * Flexible grid layout for cards, features, or any repeated content.
+ */
+
+interface Props {
+  heading?: string;
+  items?: Array<{
+    title: string;
+    description?: string;
+    icon?: string;
+    image?: {
+      url: string;
+      alt?: string;
+    };
+    link?: string;
+  }>;
+  columns?: 2 | 3 | 4;
+  style?: 'cards' | 'features' | 'minimal';
+}
+
+const { heading, items = [], columns = 3, style = 'cards' } = Astro.props;
+
+if (items.length === 0) return null;
+
+const columnClasses: Record<number, string> = {
+  2: 'grid-cols-1 md:grid-cols-2',
+  3: 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3',
+  4: 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-4',
+};
+---
+
+<section class="py-12">
+  <div class="container">
+    {heading && (
+      <h2 class="text-2xl font-bold mb-8 text-center">{heading}</h2>
+    )}
+    
+    <div class={`grid gap-6 ${columnClasses[columns]}`}>
+      {items.map((item) => {
+        const Wrapper = item.link ? 'a' : 'div';
+        const wrapperProps = item.link ? { href: item.link } : {};
+        
+        return (
+          <Wrapper 
+            {...wrapperProps}
+            class={`
+              ${style === 'cards' ? 'bg-white dark:bg-gray-800 rounded-xl shadow-md hover:shadow-lg transition-shadow overflow-hidden' : ''}
+              ${style === 'features' ? 'text-center p-6' : ''}
+              ${style === 'minimal' ? 'p-4 border-b border-gray-200 dark:border-gray-700' : ''}
+              ${item.link ? 'cursor-pointer' : ''}
+            `}
+          >
+            {/* Image (for cards style) */}
+            {style === 'cards' && item.image?.url && (
+              <div class="h-48 overflow-hidden">
+                <img 
+                  src={item.image.url} 
+                  alt={item.image.alt || item.title} 
+                  class="w-full h-full object-cover"
+                  loading="lazy"
+                />
+              </div>
+            )}
+            
+            {/* Icon (for features style) */}
+            {style === 'features' && item.icon && (
+              <div class="text-4xl mb-4">{item.icon}</div>
+            )}
+            
+            {/* Content */}
+            <div class={style === 'cards' ? 'p-6' : ''}>
+              <h3 class={`
+                font-semibold text-gray-900 dark:text-white
+                ${style === 'cards' ? 'text-lg' : ''}
+                ${style === 'features' ? 'text-xl mb-2' : ''}
+                ${style === 'minimal' ? 'text-base' : ''}
+              `}>
+                {item.title}
+              </h3>
+              
+              {item.description && (
+                <p class={`
+                  text-gray-600 dark:text-gray-300
+                  ${style === 'cards' ? 'mt-2 text-sm' : ''}
+                  ${style === 'features' ? 'text-base' : ''}
+                  ${style === 'minimal' ? 'mt-1 text-sm' : ''}
+                `}>
+                  {item.description}
+                </p>
+              )}
+            </div>
+          </Wrapper>
+        );
+      })}
+    </div>
+  </div>
+</section>

@@ -22,6 +22,8 @@ import { Artifacts } from './collections/Artifacts'
 import { People } from './collections/People'
 import { Places } from './collections/Places'
 import { Collections as MuseumCollections } from './collections/Collections'
+import { ContentTypes } from './collections/ContentTypes'
+import { CustomItems } from './collections/CustomItems'
 
 // Globals
 import { Header } from './globals/Header'
@@ -209,6 +211,9 @@ export default buildConfig({
     People,
     Places,
     MuseumCollections,
+    // Dynamic content types system
+    ContentTypes,
+    CustomItems,
   ],
 
   // ===========================================

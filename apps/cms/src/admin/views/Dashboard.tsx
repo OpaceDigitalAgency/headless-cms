@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react'
 import { SeedDataManager } from '../../components/SeedDataManager'
 import { CollectionTemplates } from '../../components/CollectionTemplates'
+import { ContentTypeManager } from '../../components/ContentTypeManager'
 
 /**
  * Collection stats configuration
@@ -49,7 +50,7 @@ interface RecentItem {
  * quick-create buttons, and site configuration shortcuts.
  */
 export const Dashboard: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<'overview' | 'templates' | 'seed'>('overview')
+  const [activeTab, setActiveTab] = useState<'overview' | 'content-types' | 'templates' | 'seed'>('overview')
   const [stats, setStats] = useState<CollectionStat[]>([])
   const [recentItems, setRecentItems] = useState<RecentItem[]>([])
   const [drafts, setDrafts] = useState<RecentItem[]>([])
@@ -162,6 +163,12 @@ export const Dashboard: React.FC = () => {
           onClick={() => setActiveTab('overview')}
         >
           📊 Overview
+        </button>
+        <button 
+          className={`ra-dashboard__tab ${activeTab === 'content-types' ? 'ra-dashboard__tab--active' : ''}`}
+          onClick={() => setActiveTab('content-types')}
+        >
+          🗂️ Content Types
         </button>
         <button 
           className={`ra-dashboard__tab ${activeTab === 'templates' ? 'ra-dashboard__tab--active' : ''}`}
@@ -321,6 +328,11 @@ export const Dashboard: React.FC = () => {
             </div>
           </div>
         </>
+      )}
+
+      {/* Content Types Tab */}
+      {activeTab === 'content-types' && (
+        <ContentTypeManager />
       )}
 
       {/* Collection Templates Tab */}

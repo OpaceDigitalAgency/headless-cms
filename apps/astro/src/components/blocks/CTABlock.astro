@@ -1,0 +1,71 @@
+---
+/**
+ * CTA (Call to Action) Block Component
+ * 
+ * Prominent call-to-action section with heading, text, and buttons.
+ */
+
+interface Props {
+  heading: string;
+  text?: string;
+  buttons?: Array<{
+    label: string;
+    link: string;
+    variant?: 'primary' | 'secondary' | 'outline';
+  }>;
+  style?: 'default' | 'gradient' | 'dark';
+}
+
+const { heading, text, buttons = [], style = 'default' } = Astro.props;
+
+const styleClasses: Record<string, string> = {
+  default: 'bg-gray-100 dark:bg-gray-800',
+  gradient: 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white',
+  dark: 'bg-gray-900 text-white',
+};
+
+const buttonVariants: Record<string, Record<string, string>> = {
+  default: {
+    primary: 'bg-blue-600 text-white hover:bg-blue-700',
+    secondary: 'bg-gray-800 text-white hover:bg-gray-900',
+    outline: 'border-2 border-gray-800 text-gray-800 hover:bg-gray-100 dark:border-white dark:text-white dark:hover:bg-white/10',
+  },
+  gradient: {
+    primary: 'bg-white text-blue-600 hover:bg-blue-50',
+    secondary: 'bg-white/20 text-white hover:bg-white/30',
+    outline: 'border-2 border-white text-white hover:bg-white/10',
+  },
+  dark: {
+    primary: 'bg-white text-gray-900 hover:bg-gray-100',
+    secondary: 'bg-gray-700 text-white hover:bg-gray-600',
+    outline: 'border-2 border-white text-white hover:bg-white/10',
+  },
+};
+---
+
+<section class={`py-16 ${styleClasses[style]}`}>
+  <div class="container">
+    <div class="max-w-3xl mx-auto text-center">
+      <h2 class="text-3xl font-bold">{heading}</h2>
+      
+      {text && (
+        <p class={`mt-4 text-lg ${style === 'default' ? 'text-gray-600 dark:text-gray-300' : 'text-white/90'}`}>
+          {text}
+        </p>
+      )}
+      
+      {buttons.length > 0 && (
+        <div class="mt-8 flex flex-wrap justify-center gap-4">
+          {buttons.map((button) => (
+            <a 
+              href={button.link}
+              class={`inline-flex items-center px-6 py-3 rounded-lg font-semibold transition-colors ${buttonVariants[style][button.variant || 'primary']}`}
+            >
+              {button.label}
+            </a>
+          ))}
+        </div>
+      )}
+    </div>
+  </div>
+</section>
