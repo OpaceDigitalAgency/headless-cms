@@ -67,7 +67,7 @@ export default buildConfig({
   // ===========================================
   db: postgresAdapter({
     pool: {
-      connectionString: process.env.DATABASE_URL || 'postgresql://postgres:postgres@localhost:5432/payload',
+      connectionString: process.env.DATABASE_URL || 'postgresql://payload:payload_secret@localhost:5432/payload',
     },
     // In production, disable auto-push and use migrations
     push: process.env.NODE_ENV !== 'production',

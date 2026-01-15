@@ -3,7 +3,14 @@
   "version": "1.0.0",
   "private": true,
   "description": "Payload CMS v3 + Jamstack Platform - WordPress-like CMS with static-first frontends",
-  "keywords": ["payload", "cms", "jamstack", "nextjs", "postgresql", "railway"],
+  "keywords": [
+    "payload",
+    "cms",
+    "jamstack",
+    "nextjs",
+    "postgresql",
+    "railway"
+  ],
   "license": "MIT",
   "author": "Opace Digital Agency",
   "scripts": {
@@ -27,6 +34,7 @@
   },
   "devDependencies": {
     "@types/node": "^22.10.0",
+    "dotenv-cli": "^11.0.0",
     "typescript": "^5.7.2"
   },
   "packageManager": "pnpm@9.15.0",
