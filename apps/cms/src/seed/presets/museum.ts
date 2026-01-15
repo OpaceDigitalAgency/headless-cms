@@ -1,0 +1,540 @@
+/**
+ * Museum Preset Seeder
+ * 
+ * Seeds sample data for the museum-next preset.
+ * Creates artifacts, people, places, and collections suitable for a museum/archive site.
+ */
+
+import type { Payload } from 'payload'
+import { BaseSeeder, createRichText, createRichTextParagraphs, type SeedOptions } from '../base'
+
+export class MuseumSeeder extends BaseSeeder {
+  constructor(payload: Payload, options: SeedOptions = {}) {
+    super(payload, options)
+  }
+
+  getPresetId(): string {
+    return 'museum-next'
+  }
+
+  getCollections(): string[] {
+    return ['pages', 'posts', 'categories', 'artifacts', 'people', 'places', 'museum-collections']
+  }
+
+  async seed(): Promise<void> {
+    this.log('Starting museum seed...')
+
+    // Seed in dependency order
+    const categories = await this.seedCategories()
+    const places = await this.seedPlaces()
+    const people = await this.seedPeople(places)
+    const collections = await this.seedMuseumCollections()
+    await this.seedArtifacts(people, places, collections)
+    await this.seedPages()
+    await this.seedPosts(categories)
+    await this.seedGlobals()
+
+    this.log('Museum seed completed!')
+  }
+
+  async clear(): Promise<void> {
+    this.log('Clearing museum data...')
+    
+    // Clear in reverse dependency order
+    await this.clearCollection('posts')
+    await this.clearCollection('pages')
+    await this.clearCollection('artifacts')
+    await this.clearCollection('museum-collections')
+    await this.clearCollection('people')
+    await this.clearCollection('places')
+    await this.clearCollection('categories')
+    
+    this.log('Museum data cleared!')
+  }
+
+  private async seedCategories(): Promise<Record<string, string>> {
+    if (!this.shouldSeedCollection('categories')) {
+      return {}
+    }
+
+    this.log('Seeding categories...')
+    
+    const categoryData = [
+      { name: 'Exhibitions', slug: 'exhibitions', description: 'Current and upcoming exhibitions' },
+      { name: 'Research', slug: 'research', description: 'Academic research and discoveries' },
+      { name: 'Events', slug: 'events', description: 'Museum events and programs' },
+    ]
+
+    const categories: Record<string, string> = {}
+    
+    for (const data of categoryData) {
+      const category = await this.create('categories', {
+        title: data.name,
+        slug: data.slug,
+        description: data.description,
+      })
+      categories[data.slug] = category.id
+    }
+
+    return categories
+  }
+
+  private async seedPlaces(): Promise<Record<string, string>> {
+    if (!this.shouldSeedCollection('places')) {
+      return {}
+    }
+
+    this.log('Seeding places...')
+
+    const placesData = [
+      {
+        name: 'Florence, Italy',
+        slug: 'florence-italy',
+        description: 'The birthplace of the Renaissance, home to countless masterpieces.',
+        country: 'Italy',
+        placeType: 'city',
+        location: [11.2558, 43.7696],
+      },
+      {
+        name: 'Rome, Italy',
+        slug: 'rome-italy',
+        description: 'The Eternal City, center of the Roman Empire and the Catholic Church.',
+        country: 'Italy',
+        placeType: 'city',
+        location: [12.4964, 41.9028],
+      },
+      {
+        name: 'Paris, France',
+        slug: 'paris-france',
+        description: 'The City of Light, a global center for art, fashion, and culture.',
+        country: 'France',
+        placeType: 'city',
+        location: [2.3522, 48.8566],
+      },
+      {
+        name: 'Athens, Greece',
+        slug: 'athens-greece',
+        description: 'The cradle of Western civilization and birthplace of democracy.',
+        country: 'Greece',
+        placeType: 'city',
+        location: [23.7275, 37.9838],
+      },
+      {
+        name: 'Cairo, Egypt',
+        slug: 'cairo-egypt',
+        description: 'Gateway to the ancient wonders of Egypt and the pyramids.',
+        country: 'Egypt',
+        placeType: 'city',
+        location: [31.2357, 30.0444],
+      },
+    ]
+
+    const places: Record<string, string> = {}
+    
+    for (const data of placesData.slice(0, this.getItemCount('places', 5))) {
+      const place = await this.create('places', {
+        name: data.name,
+        slug: data.slug,
+        description: createRichText(data.description),
+        country: data.country,
+        placeType: data.placeType,
+        location: data.location,
+        _status: 'published',
+      })
+      places[data.slug] = place.id
+    }
+
+    return places
+  }
+
+  private async seedPeople(places: Record<string, string>): Promise<Record<string, string>> {
+    if (!this.shouldSeedCollection('people')) {
+      return {}
+    }
+
+    this.log('Seeding people...')
+
+    const peopleData = [
+      {
+        name: 'Leonardo da Vinci',
+        slug: 'leonardo-da-vinci',
+        shortBio: 'Italian Renaissance polymath known for his art, science, and inventions.',
+        birthDate: '1452',
+        deathDate: '1519',
+        nationality: 'Italian',
+        birthPlace: 'florence-italy',
+        role: ['artist', 'sculptor', 'architect', 'scholar'],
+      },
+      {
+        name: 'Michelangelo Buonarroti',
+        slug: 'michelangelo-buonarroti',
+        shortBio: 'Italian sculptor, painter, architect, and poet of the High Renaissance.',
+        birthDate: '1475',
+        deathDate: '1564',
+        nationality: 'Italian',
+        birthPlace: 'florence-italy',
+        role: ['artist', 'sculptor', 'architect'],
+      },
+      {
+        name: 'Raphael Sanzio',
+        slug: 'raphael-sanzio',
+        shortBio: 'Italian painter and architect of the High Renaissance.',
+        birthDate: '1483',
+        deathDate: '1520',
+        nationality: 'Italian',
+        birthPlace: 'rome-italy',
+        role: ['artist', 'architect'],
+      },
+      {
+        name: 'Claude Monet',
+        slug: 'claude-monet',
+        shortBio: 'French painter and founder of Impressionism.',
+        birthDate: '1840',
+        deathDate: '1926',
+        nationality: 'French',
+        birthPlace: 'paris-france',
+        role: ['artist'],
+      },
+      {
+        name: 'Phidias',
+        slug: 'phidias',
+        shortBio: 'Ancient Greek sculptor, painter, and architect.',
+        birthDate: '480 BCE',
+        deathDate: '430 BCE',
+        nationality: 'Greek',
+        birthPlace: 'athens-greece',
+        role: ['sculptor', 'architect'],
+      },
+    ]
+
+    const people: Record<string, string> = {}
+    
+    for (const data of peopleData.slice(0, this.getItemCount('people', 5))) {
+      const person = await this.create('people', {
+        name: data.name,
+        slug: data.slug,
+        shortBio: data.shortBio,
+        birthDate: data.birthDate,
+        deathDate: data.deathDate,
+        nationality: data.nationality,
+        birthPlace: places[data.birthPlace] || null,
+        role: data.role,
+        _status: 'published',
+      })
+      people[data.slug] = person.id
+    }
+
+    return people
+  }
+
+  private async seedMuseumCollections(): Promise<Record<string, string>> {
+    if (!this.shouldSeedCollection('museum-collections')) {
+      return {}
+    }
+
+    this.log('Seeding museum collections...')
+
+    const collectionsData = [
+      {
+        title: 'Renaissance Masters',
+        slug: 'renaissance-masters',
+        description: 'A collection featuring works from the greatest artists of the Renaissance period.',
+        shortDescription: 'Masterpieces from the Renaissance era.',
+      },
+      {
+        title: 'Ancient Civilizations',
+        slug: 'ancient-civilizations',
+        description: 'Artifacts from ancient Greece, Rome, Egypt, and Mesopotamia.',
+        shortDescription: 'Treasures from the ancient world.',
+      },
+      {
+        title: 'Impressionist Gallery',
+        slug: 'impressionist-gallery',
+        description: 'Works from the Impressionist movement that revolutionized art.',
+        shortDescription: 'Light, color, and movement captured on canvas.',
+      },
+    ]
+
+    const collections: Record<string, string> = {}
+    
+    for (const data of collectionsData) {
+      const collection = await this.create('museum-collections', {
+        title: data.title,
+        slug: data.slug,
+        description: createRichText(data.description),
+        shortDescription: data.shortDescription,
+        _status: 'published',
+      })
+      collections[data.slug] = collection.id
+    }
+
+    return collections
+  }
+
+  private async seedArtifacts(
+    people: Record<string, string>,
+    places: Record<string, string>,
+    collections: Record<string, string>
+  ): Promise<void> {
+    if (!this.shouldSeedCollection('artifacts')) {
+      return
+    }
+
+    this.log('Seeding artifacts...')
+
+    const artifactsData = [
+      {
+        title: 'Mona Lisa',
+        slug: 'mona-lisa',
+        description: 'The most famous portrait in the world, painted by Leonardo da Vinci.',
+        dateCreated: '1503-1519',
+        people: ['leonardo-da-vinci'],
+        places: ['florence-italy'],
+        collections: ['renaissance-masters'],
+        materials: ['Oil paint', 'Poplar wood panel'],
+        dimensions: { height: 77, width: 53, depth: 0 },
+      },
+      {
+        title: 'David',
+        slug: 'david-sculpture',
+        description: 'A masterpiece of Renaissance sculpture created by Michelangelo.',
+        dateCreated: '1501-1504',
+        people: ['michelangelo-buonarroti'],
+        places: ['florence-italy'],
+        collections: ['renaissance-masters'],
+        materials: ['Marble'],
+        dimensions: { height: 517, width: 199, depth: 0 },
+      },
+      {
+        title: 'The School of Athens',
+        slug: 'school-of-athens',
+        description: 'A fresco by Raphael depicting the greatest philosophers of antiquity.',
+        dateCreated: '1509-1511',
+        people: ['raphael-sanzio'],
+        places: ['rome-italy'],
+        collections: ['renaissance-masters'],
+        materials: ['Fresco'],
+        dimensions: { height: 500, width: 770, depth: 0 },
+      },
+      {
+        title: 'Water Lilies',
+        slug: 'water-lilies',
+        description: 'A series of approximately 250 oil paintings by Claude Monet.',
+        dateCreated: '1896-1926',
+        people: ['claude-monet'],
+        places: ['paris-france'],
+        collections: ['impressionist-gallery'],
+        materials: ['Oil paint', 'Canvas'],
+        dimensions: { height: 200, width: 425, depth: 0 },
+      },
+      {
+        title: 'Athena Parthenos',
+        slug: 'athena-parthenos',
+        description: 'A massive chryselephantine sculpture of the goddess Athena.',
+        dateCreated: '447-438 BCE',
+        people: ['phidias'],
+        places: ['athens-greece'],
+        collections: ['ancient-civilizations'],
+        materials: ['Gold', 'Ivory', 'Wood'],
+        dimensions: { height: 1200, width: 0, depth: 0 },
+      },
+    ]
+
+    for (const data of artifactsData.slice(0, this.getItemCount('artifacts', 10))) {
+      await this.create('artifacts', {
+        title: data.title,
+        slug: data.slug,
+        description: createRichText(data.description),
+        dateCreated: data.dateCreated,
+        people: data.people.map(slug => people[slug]).filter(Boolean),
+        places: data.places.map(slug => places[slug]).filter(Boolean),
+        collections: data.collections.map(slug => collections[slug]).filter(Boolean),
+        materials: data.materials.map(material => ({ material })),
+        dimensions: data.dimensions,
+        _status: 'published',
+        featured: true,
+      })
+    }
+  }
+
+  private async seedPages(): Promise<void> {
+    if (!this.shouldSeedCollection('pages')) {
+      return
+    }
+
+    this.log('Seeding pages...')
+
+    // Home page
+    await this.create('pages', {
+      title: 'Home',
+      slug: 'home',
+      template: 'home',
+      _status: 'published',
+      hero: {
+        type: 'fullscreen',
+        heading: 'Discover Our Collection',
+        subheading: 'Explore thousands of artifacts, artworks, and historical treasures from around the world.',
+      },
+      content: [
+        {
+          blockType: 'grid',
+          heading: 'Featured Collections',
+          style: 'cards',
+          columns: '3',
+          items: [
+            { title: 'Renaissance Masters', description: 'Masterpieces from the Renaissance era' },
+            { title: 'Ancient Civilizations', description: 'Treasures from the ancient world' },
+            { title: 'Impressionist Gallery', description: 'Light and color captured on canvas' },
+          ],
+        },
+        {
+          blockType: 'archive',
+          heading: 'Featured Artifacts',
+          collection: 'artifacts',
+          limit: 6,
+          showFeaturedImage: true,
+        },
+      ],
+    })
+
+    // About page
+    await this.create('pages', {
+      title: 'About the Museum',
+      slug: 'about',
+      template: 'detail',
+      _status: 'published',
+      hero: {
+        type: 'standard',
+        heading: 'About Us',
+        subheading: 'Preserving and sharing cultural heritage for future generations.',
+      },
+      content: [
+        {
+          blockType: 'content',
+          columns: 'oneColumn',
+          content: createRichTextParagraphs([
+            'Our museum is dedicated to preserving and sharing the world\'s cultural heritage.',
+            'With collections spanning thousands of years and multiple continents, we offer visitors a unique journey through human history and creativity.',
+            'Our mission is to inspire curiosity, foster learning, and connect people with the stories of our shared past.',
+          ]),
+        },
+        {
+          blockType: 'timeline',
+          heading: 'Our History',
+          layout: 'vertical',
+          events: [
+            { date: '1850', title: 'Foundation', description: createRichText('The museum was founded by a group of passionate collectors.') },
+            { date: '1920', title: 'Major Expansion', description: createRichText('A new wing was added to house the growing collection.') },
+            { date: '2000', title: 'Digital Initiative', description: createRichText('The museum launched its first digital archive.') },
+          ],
+        },
+      ],
+    })
+  }
+
+  private async seedPosts(categories: Record<string, string>): Promise<void> {
+    if (!this.shouldSeedCollection('posts')) {
+      return
+    }
+
+    this.log('Seeding posts...')
+
+    const posts = [
+      {
+        title: 'New Renaissance Exhibition Opening',
+        slug: 'new-renaissance-exhibition',
+        excerpt: 'Join us for the grand opening of our new Renaissance Masters exhibition.',
+        category: 'exhibitions',
+        content: createRichTextParagraphs([
+          'We are thrilled to announce the opening of our new Renaissance Masters exhibition.',
+          'This exhibition features over 50 works from the greatest artists of the Renaissance period.',
+          'Join us for the opening reception on the first Saturday of next month.',
+        ]),
+      },
+      {
+        title: 'Recent Archaeological Discoveries',
+        slug: 'recent-archaeological-discoveries',
+        excerpt: 'Our research team has made exciting new discoveries at the excavation site.',
+        category: 'research',
+        content: createRichTextParagraphs([
+          'Our archaeological team has uncovered remarkable artifacts at the Mediterranean excavation site.',
+          'These findings provide new insights into ancient trade routes and cultural exchanges.',
+          'A detailed research paper will be published in the upcoming journal edition.',
+        ]),
+      },
+      {
+        title: 'Family Day at the Museum',
+        slug: 'family-day-museum',
+        excerpt: 'Bring the whole family for a day of fun, learning, and exploration.',
+        category: 'events',
+        content: createRichTextParagraphs([
+          'Mark your calendars for our annual Family Day event!',
+          'Activities include guided tours, hands-on workshops, and special performances.',
+          'Admission is free for children under 12 when accompanied by an adult.',
+        ]),
+      },
+    ]
+
+    for (const post of posts) {
+      await this.create('posts', {
+        title: post.title,
+        slug: post.slug,
+        excerpt: post.excerpt,
+        content: post.content,
+        categories: categories[post.category] ? [categories[post.category]] : [],
+        _status: 'published',
+        publishedAt: new Date().toISOString(),
+      })
+    }
+  }
+
+  private async seedGlobals(): Promise<void> {
+    this.log('Seeding globals...')
+
+    // Header
+    await this.updateGlobal('header', {
+      logo: {
+        text: 'Museum Collection',
+      },
+      navItems: [
+        { link: { type: 'custom', label: 'Home', url: '/' } },
+        { link: { type: 'custom', label: 'Artifacts', url: '/artifacts' } },
+        { link: { type: 'custom', label: 'People', url: '/people' } },
+        { link: { type: 'custom', label: 'Places', url: '/places' } },
+        { link: { type: 'custom', label: 'Collections', url: '/collections' } },
+        { link: { type: 'custom', label: 'Blog', url: '/blog' } },
+      ],
+    })
+
+    // Footer
+    await this.updateGlobal('footer', {
+      copyright: `© ${new Date().getFullYear()} Museum Collection. All rights reserved.`,
+      columns: [
+        {
+          label: 'Explore',
+          navItems: [
+            { link: { type: 'custom', label: 'Artifacts', url: '/artifacts' } },
+            { link: { type: 'custom', label: 'People', url: '/people' } },
+            { link: { type: 'custom', label: 'Places', url: '/places' } },
+          ],
+        },
+        {
+          label: 'Visit',
+          navItems: [
+            { link: { type: 'custom', label: 'About Us', url: '/about' } },
+            { link: { type: 'custom', label: 'Contact', url: '/contact' } },
+            { link: { type: 'custom', label: 'Hours & Admission', url: '/visit' } },
+          ],
+        },
+      ],
+    })
+
+    // Settings
+    await this.updateGlobal('settings', {
+      siteName: 'Museum Collection',
+      siteDescription: 'Explore our collection of historical artifacts, people, and places.',
+    })
+  }
+}
+
+export default MuseumSeeder

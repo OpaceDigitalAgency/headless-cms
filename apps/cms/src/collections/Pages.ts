@@ -6,6 +6,9 @@ import { mediaBlock } from '../blocks/Media'
 import { ctaBlock } from '../blocks/CallToAction'
 import { archiveBlock } from '../blocks/Archive'
 import { formBlock } from '../blocks/Form'
+import { galleryBlock } from '../blocks/Gallery'
+import { gridBlock } from '../blocks/Grid'
+import { timelineBlock } from '../blocks/Timeline'
 
 export const Pages: CollectionConfig = {
   slug: 'pages',
@@ -207,6 +210,9 @@ export const Pages: CollectionConfig = {
                 ctaBlock,
                 archiveBlock,
                 formBlock,
+                galleryBlock,
+                gridBlock,
+                timelineBlock,
               ],
             },
           ],

@@ -42,10 +42,16 @@ A production-ready, headless CMS platform built with **Payload CMS v3**, **Next.
 
 ### Content Features
 - **7 Templates** - Home, Landing, Detail, List, Article, Timeline, Archive
-- **6 Block Types** - Hero, Content, Media, CTA, Archive, Form
-- **Versions & Drafts** - Full revision history
+- **9 Block Types** - Hero, Content, Media, CTA, Archive, Form, Gallery, Grid, Timeline
+- **Versions & Drafts** - Full revision history with restore capability
 - **Live Preview** - Real-time editing preview
 - **SEO Plugin** - Meta tags, Open Graph, Twitter Cards
+
+### Presets & Scaffolding
+- **4 Starter Presets** - Blog, Brochure, Museum, Ecommerce
+- **Template-Specific Seed Data** - Conditional sample data per preset
+- **Scaffolding CLI** - `./scripts/create.sh` for new projects
+- **Admin Seed Manager** - UI for seeding/clearing sample data
 
 ### Publishing
 - **Pure SSG** - All public pages are static HTML
@@ -212,6 +218,20 @@ headless-cms/
 │   ├── shared/                 # Shared types & utilities
 │   └── templates/              # Shared template components
 │
+├── presets/                    # Starter site presets
+│   ├── blog-astro/             # Blog preset (Astro)
+│   ├── brochure-astro/         # Brochure preset (Astro)
+│   ├── museum-next/            # Museum preset (Next.js)
+│   └── ecommerce-next/         # Ecommerce preset (Next.js)
+│
+├── scripts/
+│   └── create.sh               # Project scaffolding script
+│
+├── docs/
+│   ├── REVALIDATION_RULES.md   # Cache invalidation rules
+│   └── VERSIONING_POLICY.md    # Version management policy
+│
+├── AGENT_CONTRACT.md           # Developer/AI agent contract
 ├── docker-compose.yml          # Local development services
 ├── Makefile                    # All commands
 ├── pnpm-workspace.yaml         # Monorepo configuration
@@ -459,6 +479,20 @@ make db-down          # Stop PostgreSQL
 make db-migrate       # Run migrations
 make db-seed          # Seed sample data
 make db-reset         # Reset database
+
+# Preset Seeding
+make seed-blog        # Seed blog sample data
+make seed-brochure    # Seed brochure sample data
+make seed-museum      # Seed museum sample data (with media)
+make seed-ecommerce   # Seed ecommerce sample data (with media)
+make seed-clear       # Clear all sample data
+
+# Scaffolding
+make create           # Interactive project creation
+make blog-astro       # Create new blog (Astro)
+make brochure-astro   # Create new brochure site (Astro)
+make museum-next      # Create new museum site (Next.js)
+make ecommerce-next   # Create new ecommerce site (Next.js)
 
 # Build
 make build            # Build all apps

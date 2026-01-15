@@ -1,0 +1,49 @@
+{
+  "id": "brochure-astro",
+  "name": "Brochure Site (Astro)",
+  "description": "A simple marketing/brochure website with pages and basic content blocks. Ideal for small business sites, portfolios, and landing pages.",
+  "category": "brochure",
+  "frontend": "astro",
+  "version": "1.0.0",
+  "author": "Payload CMS + Jamstack Platform",
+  "collections": [
+    "users",
+    "media",
+    "pages"
+  ],
+  "globals": [
+    "header",
+    "footer",
+    "settings"
+  ],
+  "templates": [
+    "home",
+    "landing",
+    "detail"
+  ],
+  "blocks": [
+    "hero",
+    "content",
+    "media",
+    "cta",
+    "gallery",
+    "grid"
+  ],
+  "hasSeedData": true,
+  "hasSampleMedia": true,
+  "packs": [
+    "seo",
+    "forms"
+  ],
+  "payloadVersion": "^3.0.0",
+  "requiredEnvVars": [
+    "DATABASE_URL",
+    "PAYLOAD_SECRET"
+  ],
+  "optionalEnvVars": [
+    "SMTP_HOST",
+    "SMTP_PORT",
+    "SMTP_USER",
+    "SMTP_PASS"
+  ]
+}

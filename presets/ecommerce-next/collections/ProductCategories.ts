@@ -1,14 +1,20 @@
 import type { CollectionConfig } from 'payload'
-import { slugField } from '../fields/slug'
+import { slugField } from '../../../../apps/cms/src/fields/slug'
 
-export const Categories: CollectionConfig = {
-  slug: 'categories',
+/**
+ * Product Categories Collection
+ * 
+ * Hierarchical categories for organizing products.
+ * Supports nested categories with breadcrumbs.
+ */
+export const ProductCategories: CollectionConfig = {
+  slug: 'product-categories',
 
   admin: {
-    useAsTitle: 'title',
-    group: 'Content',
-    defaultColumns: ['title', 'slug', 'parent', 'updatedAt'],
-    description: 'Organize content with categories',
+    useAsTitle: 'name',
+    group: 'Shop',
+    defaultColumns: ['name', 'slug', 'parent', 'updatedAt'],
+    description: 'Organize products into categories',
   },
 
   // Enable versions (without drafts for taxonomy items)
@@ -34,15 +40,14 @@ export const Categories: CollectionConfig = {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
               secret: process.env.REVALIDATION_SECRET,
-              collection: 'categories',
+              collection: 'product-categories',
               slug: doc.slug,
-              // Also invalidate archive pages
-              tags: [`taxonomy:category:${doc.slug}`, 'archive:posts'],
+              tags: ['taxonomy:product-category', `product-category:${doc.slug}`, 'archive:products'],
             }),
           })
-          req.payload.logger.info(`Revalidated category: ${doc.slug}`)
+          req.payload.logger.info(`Revalidated product category: ${doc.slug}`)
         } catch (error) {
-          req.payload.logger.error(`Failed to revalidate category: ${doc.slug}`)
+          req.payload.logger.error(`Failed to revalidate product category: ${doc.slug}`)
         }
         return doc
       },
@@ -51,12 +56,12 @@ export const Categories: CollectionConfig = {
 
   fields: [
     {
-      name: 'title',
+      name: 'name',
       type: 'text',
       required: true,
       label: 'Category Name',
     },
-    slugField(),
+    slugField('name'),
     {
       name: 'description',
       type: 'textarea',
@@ -71,7 +76,7 @@ export const Categories: CollectionConfig = {
     {
       name: 'parent',
       type: 'relationship',
-      relationTo: 'categories',
+      relationTo: 'product-categories',
       label: 'Parent Category',
       filterOptions: ({ id }) => ({
         id: {
@@ -82,7 +87,7 @@ export const Categories: CollectionConfig = {
         description: 'Select a parent category for hierarchical organization',
       },
     },
-    // Virtual field populated by nested-docs plugin
+    // Virtual field for breadcrumbs
     {
       name: 'breadcrumbs',
       type: 'array',
@@ -94,7 +99,7 @@ export const Categories: CollectionConfig = {
         {
           name: 'doc',
           type: 'relationship',
-          relationTo: 'categories',
+          relationTo: 'product-categories',
         },
         {
           name: 'url',
@@ -106,7 +111,17 @@ export const Categories: CollectionConfig = {
         },
       ],
     },
+    {
+      name: 'displayOrder',
+      type: 'number',
+      label: 'Display Order',
+      admin: {
+        description: 'Lower numbers appear first',
+      },
+    },
   ],
 
   timestamps: true,
 }
+
+export default ProductCategories

@@ -7,15 +7,74 @@ export const Places: CollectionConfig = {
   admin: {
     useAsTitle: 'name',
     group: 'Museum',
-    defaultColumns: ['name', 'country', 'updatedAt'],
+    defaultColumns: ['name', 'country', '_status', 'updatedAt'],
     description: 'Geographic locations and historical sites',
+    preview: (doc) => {
+      const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3001'
+      return `${baseUrl}/preview/places/${doc.slug}`
+    },
+    livePreview: {
+      url: ({ data }) => {
+        const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3001'
+        return `${baseUrl}/preview/places/${data.slug}`
+      },
+    },
   },
 
+  // Enable versions and drafts
+  versions: {
+    drafts: {
+      autosave: {
+        interval: 300, // 5 minutes
+      },
+      schedulePublish: true,
+    },
+    maxPerDoc: 25,
+  },
+
+  // Access control
   access: {
-    read: () => true,
+    read: ({ req: { user } }) => {
+      // Published items are public
+      if (!user) {
+        return {
+          _status: {
+            equals: 'published',
+          },
+        }
+      }
+      // Logged in users can see all
+      return true
+    },
     create: ({ req: { user } }) => Boolean(user),
     update: ({ req: { user } }) => Boolean(user),
     delete: ({ req: { user } }) => user?.role === 'admin',
+  },
+
+  // Hooks for revalidation
+  hooks: {
+    afterChange: [
+      async ({ doc, req }) => {
+        if (doc._status === 'published') {
+          const revalidateUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3001'
+          try {
+            await fetch(`${revalidateUrl}/api/revalidate`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                secret: process.env.REVALIDATION_SECRET,
+                collection: 'places',
+                slug: doc.slug,
+              }),
+            })
+            req.payload.logger.info(`Revalidated place: ${doc.slug}`)
+          } catch (error) {
+            req.payload.logger.error(`Failed to revalidate place: ${doc.slug}`)
+          }
+        }
+        return doc
+      },
+    ],
   },
 
   fields: [
@@ -159,6 +218,11 @@ export const Places: CollectionConfig = {
               ],
             },
           ],
+        },
+        {
+          label: 'SEO',
+          name: 'meta',
+          fields: [],
         },
       ],
     },

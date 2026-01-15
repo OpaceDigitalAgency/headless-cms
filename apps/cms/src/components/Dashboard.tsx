@@ -1,13 +1,13 @@
 'use client'
 
 import React from 'react'
-import { ResetDataButton } from './ResetDataButton'
+import { SeedDataManager } from './SeedDataManager'
 
 /**
  * Custom Dashboard Component
  * 
  * Extends the default Payload dashboard with additional functionality
- * including sample data management.
+ * including sample data management with preset selection.
  */
 export const Dashboard: React.FC = () => {
   return (
@@ -22,14 +22,22 @@ export const Dashboard: React.FC = () => {
       </h1>
       
       {/* Sample Data Management Section */}
-      <ResetDataButton />
+      <SeedDataManager />
       
       {/* Quick Links */}
+      <h2 style={{
+        margin: '0 0 16px 0',
+        fontSize: '18px',
+        fontWeight: 600,
+        color: 'var(--theme-text)',
+      }}>
+        Quick Links
+      </h2>
+      
       <div style={{
         display: 'grid',
         gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))',
         gap: '16px',
-        marginTop: '24px',
       }}>
         <DashboardCard
           title="Pages"

@@ -1,14 +1,20 @@
 import type { CollectionConfig } from 'payload'
-import { slugField } from '../fields/slug'
+import { slugField } from '../../../../apps/cms/src/fields/slug'
 
-export const Collections: CollectionConfig = {
-  slug: 'museum-collections',
+/**
+ * Product Collections
+ * 
+ * Curated collections of products (e.g., "Summer Sale", "New Arrivals", "Best Sellers").
+ * Different from categories - collections are marketing-focused groupings.
+ */
+export const ProductCollections: CollectionConfig = {
+  slug: 'product-collections',
 
   admin: {
-    useAsTitle: 'title',
-    group: 'Museum',
-    defaultColumns: ['title', 'parent', 'artifactCount', '_status', 'updatedAt'],
-    description: 'Museum collections and galleries (hierarchical)',
+    useAsTitle: 'name',
+    group: 'Shop',
+    defaultColumns: ['name', 'slug', 'featured', '_status', 'updatedAt'],
+    description: 'Curated product collections for marketing and merchandising',
     preview: (doc) => {
       const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3001'
       return `${baseUrl}/preview/collections/${doc.slug}`
@@ -25,17 +31,15 @@ export const Collections: CollectionConfig = {
   versions: {
     drafts: {
       autosave: {
-        interval: 300, // 5 minutes
+        interval: 300,
       },
       schedulePublish: true,
     },
-    maxPerDoc: 25,
+    maxPerDoc: 15,
   },
 
-  // Access control
   access: {
     read: ({ req: { user } }) => {
-      // Published items are public
       if (!user) {
         return {
           _status: {
@@ -43,7 +47,6 @@ export const Collections: CollectionConfig = {
           },
         }
       }
-      // Logged in users can see all
       return true
     },
     create: ({ req: { user } }) => Boolean(user),
@@ -63,13 +66,14 @@ export const Collections: CollectionConfig = {
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({
                 secret: process.env.REVALIDATION_SECRET,
-                collection: 'museum-collections',
+                collection: 'product-collections',
                 slug: doc.slug,
+                tags: ['collection:product-collections', `product-collection:${doc.slug}`],
               }),
             })
-            req.payload.logger.info(`Revalidated collection: ${doc.slug}`)
+            req.payload.logger.info(`Revalidated product collection: ${doc.slug}`)
           } catch (error) {
-            req.payload.logger.error(`Failed to revalidate collection: ${doc.slug}`)
+            req.payload.logger.error(`Failed to revalidate product collection: ${doc.slug}`)
           }
         }
         return doc
@@ -79,18 +83,12 @@ export const Collections: CollectionConfig = {
 
   fields: [
     {
-      name: 'title',
+      name: 'name',
       type: 'text',
       required: true,
-      label: 'Collection Title',
+      label: 'Collection Name',
     },
-    slugField(),
-    {
-      name: 'featuredImage',
-      type: 'upload',
-      relationTo: 'media',
-      label: 'Featured Image',
-    },
+    slugField('name'),
     {
       type: 'tabs',
       tabs: [
@@ -107,78 +105,44 @@ export const Collections: CollectionConfig = {
               type: 'textarea',
               label: 'Short Description',
               admin: {
-                description: 'Brief description for listings and cards',
+                description: 'Brief description for cards and listings',
               },
             },
             {
-              name: 'curator',
-              type: 'relationship',
-              relationTo: 'users',
-              label: 'Curator',
+              name: 'featuredImage',
+              type: 'upload',
+              relationTo: 'media',
+              label: 'Featured Image',
+            },
+            {
+              name: 'bannerImage',
+              type: 'upload',
+              relationTo: 'media',
+              label: 'Banner Image',
+              admin: {
+                description: 'Wide image for collection page header',
+              },
             },
           ],
         },
         {
-          label: 'Hierarchy',
+          label: 'Products',
           fields: [
             {
-              name: 'parent',
-              type: 'relationship',
-              relationTo: 'museum-collections',
-              label: 'Parent Collection',
-              filterOptions: ({ id }) => ({
-                id: {
-                  not_equals: id,
-                },
-              }),
-              admin: {
-                description: 'Select a parent collection for hierarchical organization',
-              },
-            },
-            // Virtual field populated by nested-docs plugin
-            {
-              name: 'breadcrumbs',
-              type: 'array',
-              admin: {
-                readOnly: true,
-                hidden: true,
-              },
-              fields: [
-                {
-                  name: 'doc',
-                  type: 'relationship',
-                  relationTo: 'museum-collections',
-                },
-                {
-                  name: 'url',
-                  type: 'text',
-                },
-                {
-                  name: 'label',
-                  type: 'text',
-                },
-              ],
-            },
-          ],
-        },
-        {
-          label: 'Artifacts',
-          fields: [
-            {
-              name: 'artifacts',
+              name: 'products',
               type: 'join',
-              collection: 'artifacts',
+              collection: 'products',
               on: 'collections',
-              label: 'Artifacts in Collection',
+              label: 'Products in Collection',
             },
             {
-              name: 'featuredArtifacts',
+              name: 'featuredProducts',
               type: 'relationship',
-              relationTo: 'artifacts',
+              relationTo: 'products',
               hasMany: true,
-              label: 'Featured Artifacts',
+              label: 'Featured Products',
               admin: {
-                description: 'Select artifacts to highlight in this collection',
+                description: 'Select products to highlight in this collection',
               },
             },
           ],
@@ -186,6 +150,17 @@ export const Collections: CollectionConfig = {
         {
           label: 'Display',
           fields: [
+            {
+              name: 'template',
+              type: 'select',
+              label: 'Display Template',
+              defaultValue: 'list',
+              options: [
+                { label: 'List View', value: 'list' },
+                { label: 'Grid View', value: 'grid' },
+                { label: 'Gallery View', value: 'gallery' },
+              ],
+            },
             {
               name: 'displayOrder',
               type: 'number',
@@ -195,23 +170,48 @@ export const Collections: CollectionConfig = {
               },
             },
             {
-              name: 'template',
-              type: 'select',
-              label: 'Display Template',
-              defaultValue: 'list',
-              options: [
-                { label: 'List View', value: 'list' },
-                { label: 'Grid View', value: 'grid' },
-                { label: 'Timeline View', value: 'timeline' },
-                { label: 'Gallery View', value: 'gallery' },
-              ],
-            },
-            {
               name: 'color',
               type: 'text',
               label: 'Theme Color',
               admin: {
                 description: 'Hex color code for collection branding (e.g., #3B82F6)',
+              },
+            },
+          ],
+        },
+        {
+          label: 'Promotion',
+          fields: [
+            {
+              name: 'startDate',
+              type: 'date',
+              label: 'Start Date',
+              admin: {
+                description: 'When this collection becomes active',
+                date: {
+                  pickerAppearance: 'dayAndTime',
+                },
+              },
+            },
+            {
+              name: 'endDate',
+              type: 'date',
+              label: 'End Date',
+              admin: {
+                description: 'When this collection expires (optional)',
+                date: {
+                  pickerAppearance: 'dayAndTime',
+                },
+              },
+            },
+            {
+              name: 'discountPercentage',
+              type: 'number',
+              label: 'Collection Discount %',
+              min: 0,
+              max: 100,
+              admin: {
+                description: 'Apply a discount to all products in this collection',
               },
             },
           ],
@@ -232,25 +232,16 @@ export const Collections: CollectionConfig = {
       },
     },
     {
-      name: 'artifactCount',
-      type: 'number',
-      label: 'Artifact Count',
+      name: 'showInNavigation',
+      type: 'checkbox',
+      label: 'Show in Navigation',
       admin: {
         position: 'sidebar',
-        readOnly: true,
-        description: 'Auto-calculated',
-      },
-      hooks: {
-        beforeChange: [
-          async ({ req, data }) => {
-            // This would be calculated via a hook or virtual field
-            // For now, return existing value
-            return data?.artifactCount || 0
-          },
-        ],
       },
     },
   ],
 
   timestamps: true,
 }
+
+export default ProductCollections

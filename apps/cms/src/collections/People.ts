@@ -7,15 +7,74 @@ export const People: CollectionConfig = {
   admin: {
     useAsTitle: 'name',
     group: 'Museum',
-    defaultColumns: ['name', 'role', 'birthDate', 'updatedAt'],
+    defaultColumns: ['name', 'role', 'birthDate', '_status', 'updatedAt'],
     description: 'Historical figures, artists, and notable people',
+    preview: (doc) => {
+      const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3001'
+      return `${baseUrl}/preview/people/${doc.slug}`
+    },
+    livePreview: {
+      url: ({ data }) => {
+        const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3001'
+        return `${baseUrl}/preview/people/${data.slug}`
+      },
+    },
   },
 
+  // Enable versions and drafts
+  versions: {
+    drafts: {
+      autosave: {
+        interval: 300, // 5 minutes
+      },
+      schedulePublish: true,
+    },
+    maxPerDoc: 25,
+  },
+
+  // Access control
   access: {
-    read: () => true,
+    read: ({ req: { user } }) => {
+      // Published items are public
+      if (!user) {
+        return {
+          _status: {
+            equals: 'published',
+          },
+        }
+      }
+      // Logged in users can see all
+      return true
+    },
     create: ({ req: { user } }) => Boolean(user),
     update: ({ req: { user } }) => Boolean(user),
     delete: ({ req: { user } }) => user?.role === 'admin',
+  },
+
+  // Hooks for revalidation
+  hooks: {
+    afterChange: [
+      async ({ doc, req }) => {
+        if (doc._status === 'published') {
+          const revalidateUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3001'
+          try {
+            await fetch(`${revalidateUrl}/api/revalidate`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                secret: process.env.REVALIDATION_SECRET,
+                collection: 'people',
+                slug: doc.slug,
+              }),
+            })
+            req.payload.logger.info(`Revalidated person: ${doc.slug}`)
+          } catch (error) {
+            req.payload.logger.error(`Failed to revalidate person: ${doc.slug}`)
+          }
+        }
+        return doc
+      },
+    ],
   },
 
   fields: [
@@ -166,6 +225,11 @@ export const People: CollectionConfig = {
               label: 'Related Artifacts',
             },
           ],
+        },
+        {
+          label: 'SEO',
+          name: 'meta',
+          fields: [],
         },
       ],
     },

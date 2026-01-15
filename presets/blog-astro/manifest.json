@@ -1,0 +1,51 @@
+{
+  "id": "blog-astro",
+  "name": "Blog Starter (Astro)",
+  "description": "A simple blog with posts, categories, and pages. Perfect for personal blogs, company blogs, or documentation sites.",
+  "category": "blog",
+  "frontend": "astro",
+  "version": "1.0.0",
+  "author": "Payload CMS + Jamstack Platform",
+  "collections": [
+    "users",
+    "media",
+    "pages",
+    "posts",
+    "categories"
+  ],
+  "globals": [
+    "header",
+    "footer",
+    "settings"
+  ],
+  "templates": [
+    "home",
+    "landing",
+    "detail",
+    "article",
+    "archive"
+  ],
+  "blocks": [
+    "hero",
+    "content",
+    "media",
+    "cta",
+    "archive"
+  ],
+  "hasSeedData": true,
+  "hasSampleMedia": true,
+  "packs": [
+    "seo"
+  ],
+  "payloadVersion": "^3.0.0",
+  "requiredEnvVars": [
+    "DATABASE_URL",
+    "PAYLOAD_SECRET"
+  ],
+  "optionalEnvVars": [
+    "SMTP_HOST",
+    "SMTP_PORT",
+    "SMTP_USER",
+    "SMTP_PASS"
+  ]
+}

@@ -1,0 +1,62 @@
+{
+  "id": "ecommerce-next",
+  "name": "Ecommerce Catalog (Next.js)",
+  "description": "A product catalog site with products, categories, and collections. Perfect for showcasing products with SEO-optimized static pages. Payment integration optional.",
+  "category": "ecommerce",
+  "frontend": "next",
+  "version": "1.0.0",
+  "author": "Payload CMS + Jamstack Platform",
+  "collections": [
+    "users",
+    "media",
+    "pages",
+    "products",
+    "product-categories",
+    "product-collections"
+  ],
+  "globals": [
+    "header",
+    "footer",
+    "settings"
+  ],
+  "templates": [
+    "home",
+    "landing",
+    "detail",
+    "list",
+    "archive"
+  ],
+  "blocks": [
+    "hero",
+    "content",
+    "media",
+    "cta",
+    "archive",
+    "gallery",
+    "grid"
+  ],
+  "hasSeedData": true,
+  "hasSampleMedia": true,
+  "packs": [
+    "seo",
+    "search"
+  ],
+  "payloadVersion": "^3.0.0",
+  "requiredEnvVars": [
+    "DATABASE_URL",
+    "PAYLOAD_SECRET",
+    "REVALIDATION_SECRET"
+  ],
+  "optionalEnvVars": [
+    "SMTP_HOST",
+    "SMTP_PORT",
+    "SMTP_USER",
+    "SMTP_PASS",
+    "S3_BUCKET",
+    "S3_REGION",
+    "S3_ACCESS_KEY_ID",
+    "S3_SECRET_ACCESS_KEY",
+    "STRIPE_SECRET_KEY",
+    "STRIPE_WEBHOOK_SECRET"
+  ]
+}

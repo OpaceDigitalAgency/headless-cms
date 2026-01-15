@@ -8,7 +8,9 @@
         db-migrate db-seed db-reset \
         railway-provision railway-deploy \
         dev-cms dev-web dev-astro \
-        build-cms build-web build-astro
+        build-cms build-web build-astro \
+        create blog-astro brochure-astro museum-next ecommerce-next \
+        seed-blog seed-museum seed-ecommerce
 
 # Default target
 .DEFAULT_GOAL := help
@@ -42,6 +44,29 @@ install: ## Install all dependencies
 	@echo "$(CYAN)Installing dependencies...$(NC)"
 	pnpm install
 	@echo "$(GREEN)Dependencies installed successfully!$(NC)"
+
+# ===========================================
+# Project Scaffolding
+# ===========================================
+
+create: ## Create a new project (interactive mode)
+	@./scripts/create.sh
+
+blog-astro: ## Create a new blog project with Astro frontend
+	@echo "$(CYAN)Creating blog project with Astro...$(NC)"
+	@read -p "Enter project name: " name && ./scripts/create.sh blog-astro $$name
+
+brochure-astro: ## Create a new brochure site with Astro frontend
+	@echo "$(CYAN)Creating brochure site with Astro...$(NC)"
+	@read -p "Enter project name: " name && ./scripts/create.sh brochure-astro $$name
+
+museum-next: ## Create a new museum/archive site with Next.js
+	@echo "$(CYAN)Creating museum site with Next.js...$(NC)"
+	@read -p "Enter project name: " name && ./scripts/create.sh museum-next $$name
+
+ecommerce-next: ## Create a new ecommerce catalog with Next.js
+	@echo "$(CYAN)Creating ecommerce site with Next.js...$(NC)"
+	@read -p "Enter project name: " name && ./scripts/create.sh ecommerce-next $$name
 
 # ===========================================
 # Development
@@ -172,6 +197,30 @@ db-reset: ## Reset database (drop all tables and re-migrate)
 db-studio: ## Open Drizzle Studio for database management
 	@echo "$(CYAN)Opening Drizzle Studio...$(NC)"
 	cd apps/cms && pnpm drizzle-kit studio
+
+# ===========================================
+# Preset-Specific Seeding
+# ===========================================
+
+seed-blog: ## Seed blog-specific sample data
+	@echo "$(CYAN)Seeding blog data...$(NC)"
+	SEED_PRESET=blog-astro pnpm --filter @repo/cms seed
+	@echo "$(GREEN)Blog data seeded!$(NC)"
+
+seed-museum: ## Seed museum-specific sample data
+	@echo "$(CYAN)Seeding museum data...$(NC)"
+	SEED_PRESET=museum-next pnpm --filter @repo/cms seed
+	@echo "$(GREEN)Museum data seeded!$(NC)"
+
+seed-ecommerce: ## Seed ecommerce-specific sample data
+	@echo "$(CYAN)Seeding ecommerce data...$(NC)"
+	SEED_PRESET=ecommerce-next pnpm --filter @repo/cms seed
+	@echo "$(GREEN)Ecommerce data seeded!$(NC)"
+
+seed-with-media: ## Seed data including sample media downloads
+	@echo "$(CYAN)Seeding data with media...$(NC)"
+	SEED_MEDIA=true pnpm --filter @repo/cms seed
+	@echo "$(GREEN)Data with media seeded!$(NC)"
 
 # ===========================================
 # Code Quality
