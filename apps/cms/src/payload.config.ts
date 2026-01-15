@@ -30,6 +30,7 @@ import { Settings } from './globals/Settings'
 
 // Revalidation endpoint
 import { revalidateEndpoint } from './endpoints/revalidate'
+import { resetDataHandler } from './endpoints/resetData'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -96,7 +97,12 @@ export default buildConfig({
     theme: 'all', // 'light' | 'dark' | 'all' (allows user to choose)
 
     components: {
-      // Custom admin components can be added here
+      // Custom dashboard with reset data button
+      views: {
+        dashboard: {
+          Component: '/components/Dashboard',
+        },
+      },
       // graphics: {
       //   Logo: '/components/Logo',
       //   Icon: '/components/Icon',
@@ -348,7 +354,15 @@ export default buildConfig({
   // ===========================================
   // Custom Endpoints
   // ===========================================
-  endpoints: [revalidateEndpoint],
+  endpoints: [
+    revalidateEndpoint,
+    // Reset data endpoint for admin panel
+    {
+      path: '/admin/reset-data',
+      method: 'post',
+      handler: resetDataHandler,
+    },
+  ],
 
   // ===========================================
   // TypeScript Configuration
