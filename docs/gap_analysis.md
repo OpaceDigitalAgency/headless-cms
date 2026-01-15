@@ -1,7 +1,7 @@
 # Phase 1 & 2 Gap Analysis (Current State)
 
-- **Template mapping contract (Phase 2):** `ContentTypes.customFields` still aren’t enforced or rendered; dynamic fields remain free-form JSON with no validation/UI generation.
+- **Template mapping contract (Phase 2):** `ContentTypes.customFields` still aren’t enforced or rendered; dynamic fields remain free-form JSON with no validation/UI generation. (Open)
 
-- **Starter/preset coherence (Phase 2):** Presets/starters don’t yet surface the new dynamic content system (no seed data, routes, or archives for custom types), so the feature isn’t productised in starters.
+- **Starter/preset coherence (Phase 2):** Presets/starters don’t yet surface the new dynamic content system (no seed data, routes, or archives for custom types), so the feature isn’t productised in starters. (Open)
 
-- **Migrations discipline (Phase 1):** No Drizzle migrations were added for new schema (ContentTypes, CustomItems, Settings); still relying on adapter push instead of production-safe migration flow.
+- **Migrations discipline (Phase 1):** No Drizzle migrations were added for new schema (ContentTypes, CustomItems, Settings); still relying on adapter push instead of production-safe migration flow. (Open)
