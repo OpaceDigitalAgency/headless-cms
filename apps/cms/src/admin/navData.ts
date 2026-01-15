@@ -41,17 +41,19 @@ export const navSections: NavSection[] = [
       { label: 'Pages', href: '/admin/collections/pages', icon: 'page' },
       { label: 'Posts', href: '/admin/collections/posts', icon: 'post' },
       { label: 'Categories', href: '/admin/collections/categories', icon: 'category' },
+      { label: 'Custom Items', href: '/admin/collections/custom-items', icon: 'customItem' },
+      { label: 'Content Types', href: '/admin/collections/content-types', icon: 'contentType' },
     ],
   },
   {
-    id: 'museum',
-    label: 'Museum',
-    icon: 'museum',
+    id: 'collections',
+    label: 'Collections',
+    icon: 'collection',
     items: [
       { label: 'Artifacts', href: '/admin/collections/artifacts', icon: 'artifact' },
       { label: 'People', href: '/admin/collections/people', icon: 'person' },
       { label: 'Places', href: '/admin/collections/places', icon: 'place' },
-      { label: 'Collections', href: '/admin/collections/museum-collections', icon: 'collection' },
+      { label: 'Museum Collections', href: '/admin/collections/museum-collections', icon: 'museum' },
     ],
   },
   {
@@ -64,12 +66,14 @@ export const navSections: NavSection[] = [
   },
   {
     id: 'settings',
-    label: 'Site Settings',
+    label: 'Settings',
     icon: 'settings',
     items: [
       { label: 'Header', href: '/admin/globals/header', icon: 'header' },
       { label: 'Footer', href: '/admin/globals/footer', icon: 'footer' },
-      { label: 'Settings', href: '/admin/globals/settings', icon: 'gear' },
+      { label: 'Site Settings', href: '/admin/globals/settings', icon: 'gear' },
+      { label: 'Forms', href: '/admin/collections/forms', icon: 'form' },
+      { label: 'Redirects', href: '/admin/collections/redirects', icon: 'redirect' },
     ],
   },
   {
@@ -78,9 +82,7 @@ export const navSections: NavSection[] = [
     icon: 'admin',
     items: [
       { label: 'Users', href: '/admin/collections/users', icon: 'users' },
-      { label: 'Forms', href: '/admin/collections/forms', icon: 'form' },
-      { label: 'Submissions', href: '/admin/collections/form-submissions', icon: 'inbox' },
-      { label: 'Redirects', href: '/admin/collections/redirects', icon: 'redirect' },
+      { label: 'Form Submissions', href: '/admin/collections/form-submissions', icon: 'inbox' },
     ],
   },
 ]
@@ -104,7 +106,14 @@ export const collectionSearchConfig = [
   { slug: 'people', label: 'People', titleField: 'name' },
   { slug: 'places', label: 'Places', titleField: 'name' },
   { slug: 'museum-collections', label: 'Collections', titleField: 'title' },
+  { slug: 'custom-items', label: 'Custom Items', titleField: 'title' },
+  { slug: 'content-types', label: 'Content Types', titleField: 'name' },
+  { slug: 'categories', label: 'Categories', titleField: 'title' },
   { slug: 'media', label: 'Media', titleField: 'filename' },
+  { slug: 'users', label: 'Users', titleField: 'email' },
+  { slug: 'forms', label: 'Forms', titleField: 'title' },
+  { slug: 'form-submissions', label: 'Form Submissions', titleField: 'id' },
+  { slug: 'redirects', label: 'Redirects', titleField: 'from' },
 ]
 
 /**

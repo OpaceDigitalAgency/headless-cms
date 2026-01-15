@@ -62,6 +62,20 @@ const NavIcon: Record<string, React.FC<{ size?: number }>> = {
       <line x1="7" y1="7" x2="7.01" y2="7" />
     </svg>
   ),
+  customItem: ({ size = 20 }) => (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="3" y="3" width="7" height="7" />
+      <rect x="14" y="3" width="7" height="7" />
+      <rect x="14" y="14" width="7" height="7" />
+      <rect x="3" y="14" width="7" height="7" />
+    </svg>
+  ),
+  contentType: ({ size = 20 }) => (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
+      <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
+    </svg>
+  ),
   museum: ({ size = 20 }) => (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
       <path d="M3 21h18" />
@@ -418,20 +432,8 @@ const AccountDropdown: React.FC = () => {
  */
 export const TwoPanelNav: React.FC = () => {
   const pathname = usePathname()
-  const [expandedSection, setExpandedSection] = useState<string | null>(null)
   const activeSection = resolveActiveSection(pathname)
   const activeItem = resolveActiveItem(pathname)
-
-  // Auto-expand active section
-  useEffect(() => {
-    if (activeSection) {
-      setExpandedSection(activeSection)
-    }
-  }, [activeSection])
-
-  const toggleSection = (sectionId: string) => {
-    setExpandedSection(expandedSection === sectionId ? null : sectionId)
-  }
 
   return (
     <>
@@ -448,7 +450,7 @@ export const TwoPanelNav: React.FC = () => {
 
         {/* Top-level section links */}
         <div className="ra-top-nav__links">
-          {navSections.slice(0, 4).map((section) => (
+          {navSections.map((section) => (
             <a
               key={section.id}
               href={section.items[0]?.href || '#'}
@@ -466,34 +468,22 @@ export const TwoPanelNav: React.FC = () => {
         <AccountDropdown />
       </nav>
 
-      {/* Side Navigation Rail */}
+      {/* Side Navigation Rail - Only shows sub-items of active section */}
       <aside className="ra-side-nav">
-        {navSections.map((section) => (
-          <div key={section.id} className="ra-side-nav__section">
-            <button
-              className={`ra-side-nav__section-header ${expandedSection === section.id ? 'ra-side-nav__section-header--expanded' : ''}`}
-              onClick={() => toggleSection(section.id)}
-            >
-              <span className="ra-side-nav__icon">{getIcon(section.icon, 20)}</span>
-              <span className="ra-side-nav__heading">{section.label}</span>
-              <span className="ra-side-nav__chevron">{getIcon('chevronDown', 14)}</span>
-            </button>
-            {expandedSection === section.id && (
-              <div className="ra-side-nav__items">
-                {section.items.map((item) => (
-                  <a
-                    key={item.href}
-                    href={item.href}
-                    className={`ra-side-nav__link ${activeItem === item.href ? 'ra-side-nav__link--active' : ''}`}
-                  >
-                    <span className="ra-side-nav__icon">{getIcon(item.icon, 18)}</span>
-                    <span className="ra-side-nav__label">{item.label}</span>
-                  </a>
-                ))}
-              </div>
-            )}
+        {activeSection && navSections.find(s => s.id === activeSection) && (
+          <div className="ra-side-nav__section">
+            {navSections.find(s => s.id === activeSection)!.items.map((item) => (
+              <a
+                key={item.href}
+                href={item.href}
+                className={`ra-side-nav__link ${activeItem === item.href ? 'ra-side-nav__link--active' : ''}`}
+              >
+                <span className="ra-side-nav__icon">{getIcon(item.icon, 18)}</span>
+                <span className="ra-side-nav__label">{item.label}</span>
+              </a>
+            ))}
           </div>
-        ))}
+        )}
       </aside>
     </>
   )
