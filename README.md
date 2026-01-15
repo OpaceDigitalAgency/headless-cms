@@ -11,6 +11,7 @@ This platform provides a powerful, flexible, and developer-friendly CMS experien
 ## Table of Contents
 
 - [The Vision](#the-vision)
+- [Why This Isn’t Just Payload](#why-this-isnt-just-payload)
 - [Quick Start](#quick-start)
 - [Core Features](#core-features)
 - [Dynamic Content Types](#dynamic-content-types)
@@ -36,6 +37,19 @@ This platform is designed to be a **super powerful but simple CMS**, inspired by
 3. **Block-Based Editing**: All content types support flexible block-based layouts with 9+ pre-built blocks.
 
 4. **Intuitive UX**: The admin panel is designed for content editors, not just developers.
+
+---
+
+## Why This Isn’t Just Payload
+
+This repo is a productised platform on top of Payload CMS, not a vanilla clone:
+
+- **Dynamic Content Types**: WordPress-style custom post types you can create from the dashboard (Content Type Manager) with no code or restarts; items live in `custom-items` with shared blocks and media.
+- **Dual Frontends Included**: Next.js (ISR-ready, on-demand revalidation) and Astro (pure SSG) ship together, wired to the same CMS contracts and template system.
+- **Template + Block System**: Finite, shared templates and 9+ reusable blocks across CMS/Next/Astro for consistent rendering without per-collection view code.
+- **Presets & Starters**: Prebuilt starters (blog, brochure, museum, ecommerce) plus Makefile and `scripts/create.sh` workflows to scaffold quickly.
+- **Enhanced Admin UX**: Two-panel nav, custom dashboard (stats, drafts, quick create, seed + collection templates + content types tabs), theme toggle, tools view.
+- **Operational Extras**: Railway-ready multi-service deploy, Makefile one-command workflows, seed/reset endpoints, search/SEO/redirects/nested docs/form-builder plugins enabled, optional S3 storage.
 
 ---
 

@@ -98,6 +98,13 @@ export async function getPageBySlug(slug: string, options?: FetchOptions): Promi
   return result.docs[0] || null
 }
 
+/**
+ * Convenience helper used by routes expecting `getPage`
+ */
+export async function getPage(slug: string, options?: FetchOptions): Promise<Page | null> {
+  return getPageBySlug(slug, options)
+}
+
 export async function getPageById(id: string, options?: FetchOptions): Promise<Page> {
   return fetchAPI<Page>(`/pages/${id}`, {
     ...options,
@@ -149,6 +156,13 @@ export async function getPostBySlug(slug: string, options?: FetchOptions): Promi
     }
   )
   return result.docs[0] || null
+}
+
+/**
+ * Convenience helper used by routes expecting `getPost`
+ */
+export async function getPost(slug: string, options?: FetchOptions): Promise<Post | null> {
+  return getPostBySlug(slug, options)
 }
 
 // ===========================================
@@ -217,6 +231,13 @@ export async function getArtifactBySlug(slug: string, options?: FetchOptions): P
     }
   )
   return result.docs[0] || null
+}
+
+/**
+ * Convenience helper used by routes expecting `getArtifact`
+ */
+export async function getArtifact(slug: string, options?: FetchOptions): Promise<Artifact | null> {
+  return getArtifactBySlug(slug, options)
 }
 
 // ===========================================
