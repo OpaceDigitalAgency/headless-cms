@@ -4,80 +4,253 @@
 
 This platform provides a powerful, flexible, and developer-friendly CMS experience with a modern, fast, and scalable frontend. It combines the best of a traditional CMS with the performance and security of the Jamstack.
 
-[![Deploy to Railway](https://railway.app/button.svg)](https://railway.app/new/template/eJxtkE1rwzAMhv-KxJ0dGqV9mKGHHnooZzG1i1FsyU5iG0X-fSWbTgfS5eP9vX8kR2hCq-0gE1qgG01gqQ1kQz8YQJ-0cQZc0A-m0wV6sJ5-M8N-M-2sN8-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN4-8-8-6sN-e.g., `make blog-astro my-new-blog`
+[![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/template/payload-jamstack?referralCode=payload)
 
-### Core Features
+---
 
-| Feature | Description | Status |
-|---|---|---|
-| **Dynamic Content Types** | Create custom content types like "Cars" or "Recipes" directly from the admin UI without server restarts. | ✅ |
-| **Block-Based Page Builder** | Build rich, flexible layouts on any page or content type using a library of pre-built blocks. | ✅ |
-| **Headless CMS** | Decoupled from the frontend, allowing you to use any framework (Next.js, Astro, etc.). | ✅ |
-| **One-Click Deploy** | Deploy to Railway with a single click. | ✅ |
-| **File Storage** | Local or S3-compatible file storage. | ✅ |
-| **Authentication** | Secure, cookie-based authentication with user roles. | ✅ |
-| **Extensible** | Add new collections, fields, and plugins to fit your needs. | ✅ |
+## Table of Contents
 
-### Admin UI
+- [The Vision](#the-vision)
+- [Quick Start](#quick-start)
+- [Core Features](#core-features)
+- [Dynamic Content Types](#dynamic-content-types)
+- [Admin UI Features](#admin-ui-features)
+- [Project Structure](#project-structure)
+- [Content Blocks](#content-blocks)
+- [Frontend Selection](#frontend-selection)
+- [Makefile Commands](#makefile-commands)
+- [Deployment](#deployment)
+
+---
+
+## The Vision
+
+This platform is designed to be a **super powerful but simple CMS**, inspired by the best parts of WordPress but with a modern, headless architecture.
+
+### Core Principles
+
+1. **Shared Foundation**: Every site starts with essential features like Pages, Categories, Tags, Media, and Globals.
+
+2. **Dynamic Content Types**: Create custom content types like "Classic Cars", "Recipes", or "Products" directly from the admin UI - no server restart required.
+
+3. **Block-Based Editing**: All content types support flexible block-based layouts with 9+ pre-built blocks.
+
+4. **Intuitive UX**: The admin panel is designed for content editors, not just developers.
+
+---
+
+## Quick Start
+
+### One-Click Deploy to Railway
+
+[![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/template/payload-jamstack?referralCode=payload)
+
+### Local Development
+
+```bash
+# Clone the repository
+git clone https://github.com/OpaceDigitalAgency/headless-cms.git
+cd headless-cms
+
+# Start everything with one command
+make quickstart
+```
+
+This will:
+1. Copy `.env.example` to `.env`
+2. Start PostgreSQL via Docker
+3. Install all dependencies
+4. Run database migrations
+5. Start CMS on http://localhost:3000
+6. Start frontend on http://localhost:3001
+
+**Default Login:**
+- Email: `admin@example.com`
+- Password: `admin123`
+
+---
+
+## Core Features
+
+| Feature | Description |
+|---------|-------------|
+| **Dynamic Content Types** | Create custom content types from the admin UI without server restarts |
+| **Block-Based Page Builder** | 9+ pre-built blocks for flexible layouts |
+| **Dual Frontend Support** | Next.js 15 and Astro 4 frontends included |
+| **Version History** | Full version control with restore capability on all collections |
+| **Live Preview** | Real-time editing preview |
+| **On-Demand Revalidation** | Fast, static pages with instant updates |
+| **One-Click Deploy** | Deploy to Railway instantly |
+| **S3 Storage** | Local or S3-compatible file storage |
+
+---
+
+## Dynamic Content Types
+
+The key feature that makes this CMS WordPress-like is the **Dynamic Content Types** system.
+
+### How It Works
+
+1. **Go to Dashboard** → Click the **🗂️ Content Types** tab
+2. **Create a new type** (e.g., "Classic Cars", "Recipes", "Products")
+3. **Choose a base template** (Archive Item, Product, Person, Place, Event, Article)
+4. **Add custom fields** specific to your content type
+5. **Start creating content** - no server restart needed!
+
+### Example: Creating a "Classic Cars" Collection
+
+1. Navigate to **Dashboard → 🗂️ Content Types**
+2. Click **+ New**
+3. Enter "Classic Cars" as the name
+4. Select "Archive Item" as the template
+5. Click **Create**
+6. Your new content type is ready to use immediately!
+
+All items are stored in the `custom-items` collection with a `contentType` field, similar to how WordPress stores all post types in `wp_posts`.
+
+---
+
+## Admin UI Features
 
 The admin UI has been completely redesigned for a modern, intuitive experience:
 
-- **Two-Panel Navigation**: A collapsible sidebar with a top bar for quick access to all sections.
-- **Global Search**: Instantly find content, settings, and navigation items.
-- **Theme Toggle**: Switch between light and dark modes.
-- **Custom Dashboard**: At-a-glance stats, recent updates, and quick actions.
-- **Tools Page**: Centralized location for common tasks like SEO audits and media management.
+### Two-Panel Navigation
+- Collapsible sidebar with icons
+- Top bar with quick access to all sections
+- Smooth transitions between states
 
-### Frontend Selection
+### Global Search
+- Search content, settings, and navigation items
+- Keyboard shortcuts (Enter to navigate, Escape to close)
 
-You can choose your frontend framework (Next.js or Astro) in the admin panel under **Settings > Frontend**. This setting determines which frontend is used for previews and can be used by your deployment scripts.
+### Theme Toggle
+- Light and dark mode support
+- Persists across sessions
 
-### Getting Started
+### Custom Dashboard
+- Collection stats at a glance
+- Recent updates list
+- Drafts needing review
+- Quick create buttons
+- Site configuration shortcuts
 
-1. **Clone the repository:**
-   ```bash
-   git clone https://github.com/OpaceDigitalAgency/headless-cms.git
-   cd headless-cms
-   ```
+### Tools Page
+- Publishing calendar
+- SEO audit tools
+- Media management
+- User administration
 
-2. **Install dependencies:**
-   ```bash
-   pnpm install
-   ```
+---
 
-3. **Set up environment variables:**
-   ```bash
-   cp .env.example .env
-   ```
-   Then, edit `.env` with your database credentials and a `PAYLOAD_SECRET`.
+## Project Structure
 
-4. **Start the development servers:**
-   ```bash
-   make dev
-   ```
-   - CMS will be available at `http://localhost:3000`
-   - Frontend will be available at `http://localhost:3001` (Next.js) or `http://localhost:4321` (Astro)
-
-### Creating a New Project from a Preset
-
-You can use the `make` commands to create a new project from a preset:
-
-```bash
-# Create a new blog project with Astro
-make blog-astro
-
-# Create a new museum site with Next.js
-make museum-next
-
-# Create a new ecommerce site with Next.js
-make ecommerce-next
-
-# Create a new brochure site with Astro
-make brochure-astro
+```
+headless-cms/
+├── apps/
+│   ├── cms/                    # Payload CMS application
+│   │   ├── src/
+│   │   │   ├── admin/          # Custom admin components
+│   │   │   ├── blocks/         # Content block definitions
+│   │   │   ├── collections/    # Collection configurations
+│   │   │   ├── components/     # React components
+│   │   │   ├── endpoints/      # Custom API endpoints
+│   │   │   ├── globals/        # Global configurations
+│   │   │   └── seed/           # Database seeding
+│   ├── web/                    # Next.js frontend
+│   └── astro/                  # Astro frontend
+├── packages/
+│   └── shared/                 # Shared types & utilities
+├── presets/                    # Project presets
+├── docs/                       # Documentation
+├── AGENT_CONTRACT.md           # Developer contract
+└── Makefile                    # All commands
 ```
 
-This will create a new directory with the selected preset, ready for you to customize.
+---
 
-### License
+## Content Blocks
+
+All content types support these pre-built blocks:
+
+| Block | Description |
+|-------|-------------|
+| **Hero** | Full-width hero section with heading, subheading, background, and CTAs |
+| **Content** | Rich text with optional column layouts |
+| **Media** | Images and videos with captions |
+| **CTA** | Call-to-action sections with buttons |
+| **Gallery** | Image galleries (grid, masonry, carousel, lightbox) |
+| **Grid** | Flexible grid layouts for cards and features |
+| **Timeline** | Chronological timeline displays |
+| **Archive** | Collection listings from any content type |
+| **Form** | Form builder integration |
+
+---
+
+## Frontend Selection
+
+You can choose your frontend framework in the admin panel:
+
+1. Go to **Settings → Frontend**
+2. Select your **Framework** (Next.js or Astro)
+3. Select your **Site Type** (Brochure, Blog, Museum, Ecommerce, Portfolio, Custom)
+4. Configure **Frontend URL** for preview links
+5. Toggle **Features** (Blog, Search, Forms, Comments, Newsletter, Multi-language)
+
+---
+
+## Makefile Commands
+
+| Command | Description |
+|---------|-------------|
+| `make quickstart` | First-time setup: installs, configures, and starts everything |
+| `make dev` | Start all development servers |
+| `make build` | Build all applications for production |
+| `make up` | Start services via Docker Compose |
+| `make down` | Stop all running services |
+| `make seed` | Seed database with sample data |
+| `make clear-seed` | Clear all sample data |
+| `make migrate` | Run database migrations |
+| `make lint` | Run ESLint |
+| `make typecheck` | Run TypeScript type checking |
+| `make format` | Format code with Prettier |
+
+### Preset Commands
+
+| Command | Description |
+|---------|-------------|
+| `make blog-astro` | Create a new blog project with Astro |
+| `make brochure-astro` | Create a new brochure site with Astro |
+| `make museum-next` | Create a new museum/archive site with Next.js |
+| `make ecommerce-next` | Create a new ecommerce site with Next.js |
+
+---
+
+## Deployment
+
+This project is optimized for deployment on **Railway**.
+
+### Automatic Features
+- Automatic monorepo detection and builds
+- Pre-configured environment variables
+- PostgreSQL database provisioning
+- Automatic linking between services
+
+### Deploy Steps
+1. Click the "Deploy on Railway" button above
+2. Configure your environment variables
+3. Wait for the build to complete
+4. Access your CMS at the provided URL
+
+---
+
+## Documentation
+
+- [Agent Contract](AGENT_CONTRACT.md) - Developer guidelines
+- [Revalidation Rules](docs/REVALIDATION_RULES.md) - Cache invalidation
+- [Versioning Policy](docs/VERSIONING_POLICY.md) - Version management
+
+---
+
+## License
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
