@@ -129,6 +129,15 @@
   grid-template-columns: var(--side-nav-width) 1fr;
 }
 
+/* Fix template wrapper to take full width */
+.template-default__wrap,
+.template-minimal__wrap {
+  grid-column: 2;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+}
+
 /* ===========================================
    Top Navigation Bar
    =========================================== */
