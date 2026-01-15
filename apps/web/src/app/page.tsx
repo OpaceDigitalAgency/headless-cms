@@ -2,8 +2,6 @@ import { getPageBySlug, getPosts, getArtifacts } from '@/lib/api'
 import { PageRenderer } from '@/components/PageRenderer'
 import { HomeTemplate } from '@repo/templates'
 
-export const revalidate = 60 // Revalidate every 60 seconds
-
 export default async function HomePage() {
   // Try to fetch a home page from CMS
   const page = await getPageBySlug('home').catch(() => null)
@@ -72,3 +70,6 @@ export default async function HomePage() {
     />
   )
 }
+
+// Static generation - revalidation only via on-demand webhook
+export const dynamic = 'force-static'

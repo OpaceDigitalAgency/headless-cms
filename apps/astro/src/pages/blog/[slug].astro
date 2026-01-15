@@ -1,0 +1,101 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { getPosts, getPostBySlug } from '@/lib/payload';
+
+export async function getStaticPaths() {
+  const posts = await getPosts({ limit: 1000 });
+  
+  return posts.docs.map((post) => ({
+    params: { slug: post.slug },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const postData = post || await getPostBySlug(Astro.params.slug);
+
+if (!postData) {
+  return Astro.redirect('/404');
+}
+
+const title = postData.meta?.title || postData.title;
+const description = postData.meta?.description || postData.excerpt || '';
+const image = postData.featuredImage?.url || '';
+---
+
+<BaseLayout title={title} description={description} image={image}>
+  <article class="py-16">
+    <div class="container max-w-4xl">
+      <!-- Header -->
+      <header class="mb-12">
+        {postData.categories && postData.categories.length > 0 && (
+          <div class="mb-4 flex flex-wrap gap-2">
+            {postData.categories.map((cat: any) => (
+              <span class="rounded-full bg-blue-100 px-3 py-1 text-sm font-medium text-blue-700 dark:bg-blue-900 dark:text-blue-300">
+                {cat.title}
+              </span>
+            ))}
+          </div>
+        )}
+        
+        <h1 class="text-4xl font-bold tracking-tight lg:text-5xl">{postData.title}</h1>
+        
+        <div class="mt-6 flex items-center gap-4 text-gray-500 dark:text-gray-400">
+          {postData.author && (
+            <span>By {postData.author.name || postData.author.email}</span>
+          )}
+          {postData.publishedAt && (
+            <time datetime={postData.publishedAt}>
+              {new Date(postData.publishedAt).toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+              })}
+            </time>
+          )}
+        </div>
+      </header>
+      
+      <!-- Featured Image -->
+      {postData.featuredImage?.url && (
+        <div class="mb-12 overflow-hidden rounded-xl">
+          <img 
+            src={postData.featuredImage.url} 
+            alt={postData.featuredImage.alt || postData.title}
+            class="w-full h-auto"
+          />
+        </div>
+      )}
+      
+      <!-- Content -->
+      <div class="prose-custom">
+        {postData.content_html ? (
+          <div set:html={postData.content_html} />
+        ) : (
+          <p class="text-gray-500">No content available.</p>
+        )}
+      </div>
+      
+      <!-- Tags -->
+      {postData.tags && postData.tags.length > 0 && (
+        <div class="mt-12 border-t border-gray-200 pt-8 dark:border-gray-700">
+          <h3 class="text-sm font-semibold text-gray-500 dark:text-gray-400">Tags</h3>
+          <div class="mt-2 flex flex-wrap gap-2">
+            {postData.tags.map((tag: any) => (
+              <span class="rounded bg-gray-100 px-2 py-1 text-sm text-gray-600 dark:bg-gray-800 dark:text-gray-300">
+                {tag.tag}
+              </span>
+            ))}
+          </div>
+        </div>
+      )}
+      
+      <!-- Back link -->
+      <div class="mt-12">
+        <a href="/blog" class="text-blue-600 hover:text-blue-700 dark:text-blue-400">
+          ← Back to Blog
+        </a>
+      </div>
+    </div>
+  </article>
+</BaseLayout>

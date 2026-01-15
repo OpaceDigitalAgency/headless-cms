@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 /* ===========================================
-   Base Styles
+   Base Styles with Dark Mode Support
    =========================================== */
 
 @layer base {
@@ -11,14 +11,30 @@
     --font-sans: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     --font-serif: Georgia, Cambria, 'Times New Roman', Times, serif;
     --font-mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Monaco, Consolas, monospace;
+    
+    /* Light mode colors */
+    --color-background: 255 255 255;
+    --color-foreground: 17 24 39;
+    --color-muted: 107 114 128;
+    --color-border: 229 231 235;
+    --color-card: 255 255 255;
+  }
+
+  .dark {
+    --color-background: 15 23 42;
+    --color-foreground: 248 250 252;
+    --color-muted: 148 163 184;
+    --color-border: 51 65 85;
+    --color-card: 30 41 59;
   }
 
   html {
     @apply scroll-smooth;
+    transition: background-color 0.2s ease, color 0.2s ease;
   }
 
   body {
-    @apply bg-white text-gray-900 antialiased;
+    @apply bg-white text-gray-900 antialiased dark:bg-slate-900 dark:text-slate-100;
   }
 
   /* Focus styles */
@@ -28,7 +44,7 @@
 }
 
 /* ===========================================
-   Component Styles
+   Component Styles with Dark Mode
    =========================================== */
 
 @layer components {
@@ -47,26 +63,58 @@
   }
 
   .btn-secondary {
-    @apply btn bg-secondary-100 text-secondary-900 hover:bg-secondary-200 focus-visible:ring-secondary-500;
+    @apply btn bg-gray-100 text-gray-900 hover:bg-gray-200 focus-visible:ring-gray-500 dark:bg-slate-700 dark:text-slate-100 dark:hover:bg-slate-600;
   }
 
   .btn-outline {
-    @apply btn border border-gray-300 bg-transparent hover:bg-gray-50 focus-visible:ring-gray-500;
+    @apply btn border border-gray-300 bg-transparent hover:bg-gray-50 focus-visible:ring-gray-500 dark:border-slate-600 dark:hover:bg-slate-800;
   }
 
   /* Cards */
   .card {
-    @apply rounded-xl bg-white shadow-sm ring-1 ring-gray-200;
+    @apply rounded-xl bg-white shadow-sm ring-1 ring-gray-200 dark:bg-slate-800 dark:ring-slate-700;
   }
 
   /* Links */
   .link {
-    @apply text-primary-600 hover:text-primary-700 underline underline-offset-2;
+    @apply text-primary-600 hover:text-primary-700 underline underline-offset-2 dark:text-primary-400 dark:hover:text-primary-300;
+  }
+
+  /* Prose/Rich Text with Dark Mode */
+  .prose-custom {
+    @apply prose prose-gray max-w-none dark:prose-invert;
+    @apply prose-headings:font-bold prose-headings:tracking-tight;
+    @apply prose-a:text-primary-600 prose-a:no-underline hover:prose-a:underline dark:prose-a:text-primary-400;
+    @apply prose-img:rounded-lg;
+    @apply prose-code:bg-gray-100 prose-code:px-1 prose-code:py-0.5 prose-code:rounded dark:prose-code:bg-slate-800;
+    @apply prose-pre:bg-gray-900 dark:prose-pre:bg-slate-950;
   }
 }
 
 /* ===========================================
-   Template Styles
+   Theme Toggle Component
+   =========================================== */
+
+.theme-toggle {
+  @apply relative inline-flex h-10 w-10 items-center justify-center rounded-lg hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors;
+}
+
+.theme-toggle-icon {
+  @apply h-5 w-5;
+}
+
+/* Sun icon - visible in dark mode */
+.theme-toggle .sun-icon {
+  @apply hidden dark:block;
+}
+
+/* Moon icon - visible in light mode */
+.theme-toggle .moon-icon {
+  @apply block dark:hidden;
+}
+
+/* ===========================================
+   Template Styles with Dark Mode
    =========================================== */
 
 /* Detail Template */
@@ -79,15 +127,15 @@
 }
 
 .detail-heading {
-  @apply text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl;
+  @apply text-4xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-5xl;
 }
 
 .detail-subheading {
-  @apply mt-4 text-xl text-gray-600;
+  @apply mt-4 text-xl text-gray-600 dark:text-slate-300;
 }
 
 .detail-meta {
-  @apply mt-6 flex flex-wrap items-center gap-4 text-sm text-gray-500;
+  @apply mt-6 flex flex-wrap items-center gap-4 text-sm text-gray-500 dark:text-slate-400;
 }
 
 .detail-author {
@@ -115,7 +163,7 @@
 }
 
 .detail-body {
-  @apply prose prose-lg max-w-none;
+  @apply prose prose-lg max-w-none dark:prose-invert;
 }
 
 .detail-sidebar {
@@ -139,7 +187,7 @@
 }
 
 .detail-related {
-  @apply mt-16 border-t pt-12;
+  @apply mt-16 border-t border-gray-200 dark:border-slate-700 pt-12;
 }
 
 .related-grid {
@@ -155,7 +203,7 @@
 }
 
 .related-item h3 {
-  @apply p-4 font-medium;
+  @apply p-4 font-medium text-gray-900 dark:text-white;
 }
 
 /* List Template */
@@ -168,7 +216,7 @@
 }
 
 .list-heading {
-  @apply text-3xl font-bold tracking-tight text-gray-900;
+  @apply text-3xl font-bold tracking-tight text-gray-900 dark:text-white;
 }
 
 .list-items--grid {
@@ -196,11 +244,11 @@
 }
 
 .list-item-title {
-  @apply font-semibold text-gray-900;
+  @apply font-semibold text-gray-900 dark:text-white;
 }
 
 .list-item-excerpt {
-  @apply mt-2 text-sm text-gray-600 line-clamp-2;
+  @apply mt-2 text-sm text-gray-600 dark:text-slate-300 line-clamp-2;
 }
 
 .list-pagination {
@@ -278,15 +326,15 @@
 }
 
 .category-link {
-  @apply rounded-full bg-primary-100 px-3 py-1 text-sm font-medium text-primary-700 hover:bg-primary-200;
+  @apply rounded-full bg-primary-100 px-3 py-1 text-sm font-medium text-primary-700 hover:bg-primary-200 dark:bg-primary-900 dark:text-primary-300 dark:hover:bg-primary-800;
 }
 
 .article-heading {
-  @apply text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl;
+  @apply text-4xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-5xl;
 }
 
 .article-meta {
-  @apply mt-6 flex flex-wrap items-center justify-center gap-4 text-sm text-gray-500;
+  @apply mt-6 flex flex-wrap items-center justify-center gap-4 text-sm text-gray-500 dark:text-slate-400;
 }
 
 .article-featured-image {
@@ -310,7 +358,7 @@
 }
 
 .article-toc h2 {
-  @apply mb-4 text-sm font-semibold uppercase tracking-wide text-gray-500;
+  @apply mb-4 text-sm font-semibold uppercase tracking-wide text-gray-500 dark:text-slate-400;
 }
 
 .article-toc ul {
@@ -318,7 +366,7 @@
 }
 
 .toc-item a {
-  @apply text-gray-600 hover:text-gray-900;
+  @apply text-gray-600 hover:text-gray-900 dark:text-slate-400 dark:hover:text-white;
 }
 
 .toc-item--level-3 {
@@ -326,23 +374,23 @@
 }
 
 .article-content {
-  @apply prose prose-lg max-w-none lg:col-span-3;
+  @apply prose prose-lg max-w-none dark:prose-invert lg:col-span-3;
 }
 
 .article-tags {
-  @apply mx-auto mt-12 flex max-w-3xl flex-wrap items-center gap-2 border-t pt-8;
+  @apply mx-auto mt-12 flex max-w-3xl flex-wrap items-center gap-2 border-t border-gray-200 dark:border-slate-700 pt-8;
 }
 
 .tags-label {
-  @apply text-sm font-medium text-gray-500;
+  @apply text-sm font-medium text-gray-500 dark:text-slate-400;
 }
 
 .tag-link {
-  @apply rounded-full bg-gray-100 px-3 py-1 text-sm text-gray-700 hover:bg-gray-200;
+  @apply rounded-full bg-gray-100 px-3 py-1 text-sm text-gray-700 hover:bg-gray-200 dark:bg-slate-700 dark:text-slate-300 dark:hover:bg-slate-600;
 }
 
 .article-related {
-  @apply mt-16 border-t pt-12;
+  @apply mt-16 border-t border-gray-200 dark:border-slate-700 pt-12;
 }
 
 .related-posts-grid {
@@ -362,11 +410,11 @@
 }
 
 .related-post-content h3 {
-  @apply font-semibold text-gray-900;
+  @apply font-semibold text-gray-900 dark:text-white;
 }
 
 .related-post-content p {
-  @apply mt-2 text-sm text-gray-600 line-clamp-2;
+  @apply mt-2 text-sm text-gray-600 dark:text-slate-300 line-clamp-2;
 }
 
 /* Timeline Template */
@@ -379,7 +427,7 @@
 }
 
 .timeline-heading {
-  @apply text-3xl font-bold tracking-tight text-gray-900;
+  @apply text-3xl font-bold tracking-tight text-gray-900 dark:text-white;
 }
 
 .timeline-container {
@@ -387,7 +435,7 @@
 }
 
 .timeline-container::before {
-  @apply absolute left-1/2 top-0 h-full w-0.5 -translate-x-1/2 bg-gray-200;
+  @apply absolute left-1/2 top-0 h-full w-0.5 -translate-x-1/2 bg-gray-200 dark:bg-slate-700;
   content: '';
 }
 
@@ -412,7 +460,7 @@
 }
 
 .event-marker {
-  @apply absolute left-1/2 top-4 h-4 w-4 -translate-x-1/2 rounded-full border-4 border-white bg-primary-500 shadow;
+  @apply absolute left-1/2 top-4 h-4 w-4 -translate-x-1/2 rounded-full border-4 border-white dark:border-slate-900 bg-primary-500 shadow;
 }
 
 .event-card {
@@ -420,15 +468,15 @@
 }
 
 .event-date {
-  @apply text-sm font-medium text-primary-600;
+  @apply text-sm font-medium text-primary-600 dark:text-primary-400;
 }
 
 .event-title {
-  @apply mt-1 font-semibold text-gray-900;
+  @apply mt-1 font-semibold text-gray-900 dark:text-white;
 }
 
 .event-description {
-  @apply mt-2 text-sm text-gray-600;
+  @apply mt-2 text-sm text-gray-600 dark:text-slate-300;
 }
 
 /* Home Template */
@@ -453,11 +501,11 @@
 }
 
 .section-header h2 {
-  @apply text-3xl font-bold tracking-tight text-gray-900;
+  @apply text-3xl font-bold tracking-tight text-gray-900 dark:text-white;
 }
 
 .section-header p {
-  @apply mt-2 text-lg text-gray-600;
+  @apply mt-2 text-lg text-gray-600 dark:text-slate-300;
 }
 
 .featured-grid {
@@ -485,128 +533,117 @@
 }
 
 .featured-category {
-  @apply text-sm font-medium text-primary-600;
+  @apply text-sm font-medium text-primary-600 dark:text-primary-400;
 }
 
 .featured-content h3 {
-  @apply mt-1 font-semibold text-gray-900;
+  @apply mt-1 font-semibold text-gray-900 dark:text-white;
 }
 
 .featured-content p {
-  @apply mt-2 text-sm text-gray-600 line-clamp-2;
+  @apply mt-2 text-sm text-gray-600 dark:text-slate-300 line-clamp-2;
 }
 
 .section-cta {
   @apply mt-8 text-center;
 }
 
-.section-cta-link {
-  @apply link font-medium;
-}
-
 /* Archive Template */
 .archive-template {
-  @apply min-h-screen;
+  @apply container py-12;
 }
 
 .archive-header {
-  @apply relative bg-gray-100 py-16;
-}
-
-.archive-hero-image {
-  @apply absolute inset-0;
-}
-
-.archive-hero-image img {
-  @apply h-full w-full object-cover opacity-20;
-}
-
-.archive-header-content {
-  @apply container relative z-10;
+  @apply mb-8;
 }
 
 .archive-heading {
-  @apply text-4xl font-bold tracking-tight text-gray-900;
+  @apply text-3xl font-bold tracking-tight text-gray-900 dark:text-white;
 }
 
-.archive-layout {
-  @apply container grid gap-12 py-12 lg:grid-cols-4;
+.archive-filters {
+  @apply mb-8 flex flex-wrap items-center gap-4;
 }
 
-.archive-main {
-  @apply lg:col-span-3;
+.filter-group {
+  @apply flex items-center gap-2;
 }
 
-.archive-items {
-  @apply space-y-6;
+.filter-label {
+  @apply text-sm font-medium text-gray-700 dark:text-slate-300;
+}
+
+.filter-select {
+  @apply rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm dark:border-slate-600 dark:bg-slate-800;
+}
+
+.archive-grid {
+  @apply grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4;
 }
 
 .archive-item {
   @apply card overflow-hidden transition-shadow hover:shadow-md;
 }
 
-.archive-item-link {
-  @apply flex flex-col sm:flex-row;
-}
-
-.archive-item-image {
-  @apply sm:w-48 flex-shrink-0;
-}
-
 .archive-item-image img {
-  @apply h-48 w-full object-cover sm:h-full;
+  @apply h-40 w-full object-cover;
 }
 
 .archive-item-content {
-  @apply flex-1 p-4;
+  @apply p-4;
 }
 
 .archive-item-title {
-  @apply font-semibold text-gray-900;
-}
-
-.archive-item-excerpt {
-  @apply mt-2 text-sm text-gray-600 line-clamp-2;
+  @apply font-semibold text-gray-900 dark:text-white;
 }
 
 .archive-item-meta {
-  @apply mt-4 flex items-center gap-4 text-sm text-gray-500;
+  @apply mt-1 text-sm text-gray-500 dark:text-slate-400;
 }
 
 .archive-pagination {
-  @apply mt-12;
+  @apply mt-12 flex items-center justify-center gap-2;
 }
 
-.pagination-controls {
-  @apply flex items-center justify-center gap-2;
+.pagination-btn {
+  @apply rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium hover:bg-gray-50 dark:border-slate-600 dark:hover:bg-slate-800;
 }
 
-.pagination-number {
-  @apply rounded-lg px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100;
+.pagination-btn--active {
+  @apply bg-primary-600 text-white border-primary-600 hover:bg-primary-700;
 }
 
-.pagination-number--active {
-  @apply bg-primary-600 text-white hover:bg-primary-700;
+/* ===========================================
+   Custom Scrollbar with Dark Mode
+   =========================================== */
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
 }
 
-.archive-sidebar {
-  @apply space-y-8;
+::-webkit-scrollbar-track {
+  @apply bg-gray-100 dark:bg-slate-800;
 }
 
-.related-archives h3 {
-  @apply mb-4 text-lg font-semibold text-gray-900;
+::-webkit-scrollbar-thumb {
+  @apply bg-gray-300 rounded-full dark:bg-slate-600;
 }
 
-.related-archives ul {
-  @apply space-y-2;
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-gray-400 dark:bg-slate-500;
 }
 
-.related-archives a {
-  @apply flex items-center justify-between text-gray-600 hover:text-gray-900;
+/* ===========================================
+   Preview Mode Banner
+   =========================================== */
+
+.preview-banner {
+  @apply fixed top-0 left-0 right-0 z-50 bg-amber-500 px-4 py-2 text-center text-sm font-medium text-amber-900 shadow-md;
 }
 
-.archive-count {
-  @apply text-sm text-gray-400;
+.preview-banner a {
+  @apply ml-4 rounded bg-amber-700 px-3 py-1 text-xs text-white hover:bg-amber-800;
 }
 
 /* ===========================================

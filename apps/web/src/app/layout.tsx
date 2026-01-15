@@ -30,6 +30,21 @@ export async function generateMetadata(): Promise<Metadata> {
   }
 }
 
+// Script to prevent flash of wrong theme
+const themeScript = `
+  (function() {
+    try {
+      var theme = localStorage.getItem('theme');
+      if (!theme) {
+        theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      }
+      if (theme === 'dark') {
+        document.documentElement.classList.add('dark');
+      }
+    } catch (e) {}
+  })();
+`
+
 export default async function RootLayout({
   children,
 }: {
@@ -46,8 +61,12 @@ export default async function RootLayout({
   }
 
   return (
-    <html lang="en">
-      <body className="flex min-h-screen flex-col">
+    <html lang="en" suppressHydrationWarning>
+      <head>
+        {/* Inline script to prevent flash of wrong theme */}
+        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+      </head>
+      <body className="flex min-h-screen flex-col bg-white text-gray-900 dark:bg-slate-900 dark:text-slate-100 transition-colors">
         {header && <Header data={header} />}
         <main className="flex-1">{children}</main>
         {footer && <Footer data={footer} />}

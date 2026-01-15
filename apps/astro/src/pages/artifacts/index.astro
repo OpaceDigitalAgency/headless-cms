@@ -1,0 +1,58 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { getArtifacts } from '@/lib/payload';
+
+const artifacts = await getArtifacts({ limit: 500 });
+---
+
+<BaseLayout title="Artifacts" description="Explore our collection of historical artifacts">
+  <div class="container py-16">
+    <header class="mb-12 text-center">
+      <h1 class="text-4xl font-bold tracking-tight">Artifacts</h1>
+      <p class="mt-4 text-lg text-gray-600 dark:text-gray-300">
+        Explore our collection of historical artifacts
+      </p>
+    </header>
+
+    <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      {artifacts.docs.map((artifact: any) => {
+        const primaryImage = artifact.media?.[0]?.image;
+        
+        return (
+          <a href={`/artifacts/${artifact.slug}`} class="card overflow-hidden group">
+            {primaryImage?.url && (
+              <div class="relative h-48 overflow-hidden">
+                <img 
+                  src={primaryImage.url} 
+                  alt={primaryImage.alt || artifact.title}
+                  class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                />
+              </div>
+            )}
+            <div class="p-4">
+              <h2 class="font-semibold text-gray-900 dark:text-white">{artifact.title}</h2>
+              {artifact.dateCreated && (
+                <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">{artifact.dateCreated}</p>
+              )}
+              {artifact.materials && artifact.materials.length > 0 && (
+                <div class="mt-2 flex flex-wrap gap-1">
+                  {artifact.materials.slice(0, 2).map((item: any) => (
+                    <span class="rounded bg-gray-100 dark:bg-gray-700 px-2 py-0.5 text-xs text-gray-600 dark:text-gray-300">
+                      {item.material}
+                    </span>
+                  ))}
+                </div>
+              )}
+            </div>
+          </a>
+        );
+      })}
+    </div>
+
+    {artifacts.docs.length === 0 && (
+      <div class="text-center text-gray-500 dark:text-gray-400">
+        <p>No artifacts found.</p>
+      </div>
+    )}
+  </div>
+</BaseLayout>

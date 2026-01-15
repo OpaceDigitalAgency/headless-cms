@@ -1,0 +1,61 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { getPeople } from '@/lib/payload';
+
+const people = await getPeople({ limit: 500 });
+---
+
+<BaseLayout title="People" description="Historical figures and artists in our collection">
+  <div class="container py-16">
+    <header class="mb-12 text-center">
+      <h1 class="text-4xl font-bold tracking-tight">People</h1>
+      <p class="mt-4 text-lg text-gray-600 dark:text-gray-300">
+        Historical figures and artists connected to our collection
+      </p>
+    </header>
+
+    <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      {people.docs.map((person: any) => (
+        <a href={`/people/${person.slug}`} class="card overflow-hidden group">
+          {person.portrait?.url && (
+            <div class="relative h-64 overflow-hidden">
+              <img 
+                src={person.portrait.url} 
+                alt={person.name}
+                class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+              />
+            </div>
+          )}
+          <div class="p-4">
+            <h2 class="font-semibold text-gray-900 dark:text-white">{person.name}</h2>
+            {(person.birthDate || person.deathDate) && (
+              <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                {person.birthDate}
+                {person.birthDate && person.deathDate && ' – '}
+                {person.deathDate}
+              </p>
+            )}
+            {person.nationality && (
+              <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">{person.nationality}</p>
+            )}
+            {person.role && person.role.length > 0 && (
+              <div class="mt-2 flex flex-wrap gap-1">
+                {person.role.slice(0, 2).map((role: string) => (
+                  <span class="rounded bg-gray-100 dark:bg-gray-700 px-2 py-0.5 text-xs capitalize text-gray-600 dark:text-gray-300">
+                    {role}
+                  </span>
+                ))}
+              </div>
+            )}
+          </div>
+        </a>
+      ))}
+    </div>
+
+    {people.docs.length === 0 && (
+      <div class="text-center text-gray-500 dark:text-gray-400">
+        <p>No people found.</p>
+      </div>
+    )}
+  </div>
+</BaseLayout>

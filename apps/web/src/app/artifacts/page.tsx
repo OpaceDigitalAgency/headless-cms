@@ -9,13 +9,13 @@ export const metadata: Metadata = {
 }
 
 export default async function ArtifactsPage() {
-  const artifacts = await getArtifacts({ limit: 50 })
+  const artifacts = await getArtifacts({ limit: 500, where: { _status: { equals: 'published' } } })
 
   return (
     <div className="container py-16">
       <header className="mb-12 text-center">
-        <h1 className="text-4xl font-bold tracking-tight text-gray-900">Artifacts</h1>
-        <p className="mt-4 text-lg text-gray-600">
+        <h1 className="text-4xl font-bold tracking-tight text-gray-900 dark:text-white">Artifacts</h1>
+        <p className="mt-4 text-lg text-gray-600 dark:text-gray-300">
           Explore our collection of historical artifacts
         </p>
       </header>
@@ -41,16 +41,16 @@ export default async function ArtifactsPage() {
                 </div>
               )}
               <div className="p-4">
-                <h2 className="font-semibold text-gray-900">{artifact.title}</h2>
+                <h2 className="font-semibold text-gray-900 dark:text-white">{artifact.title}</h2>
                 {artifact.dateCreated && (
-                  <p className="mt-1 text-sm text-gray-500">{artifact.dateCreated}</p>
+                  <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">{artifact.dateCreated}</p>
                 )}
                 {artifact.materials && artifact.materials.length > 0 && (
                   <div className="mt-2 flex flex-wrap gap-1">
                     {artifact.materials.slice(0, 2).map((item: any, index: number) => (
                       <span
                         key={index}
-                        className="rounded bg-gray-100 px-2 py-0.5 text-xs text-gray-600"
+                        className="rounded bg-gray-100 dark:bg-gray-700 px-2 py-0.5 text-xs text-gray-600 dark:text-gray-300"
                       >
                         {item.material}
                       </span>
@@ -64,7 +64,7 @@ export default async function ArtifactsPage() {
       </div>
 
       {artifacts.docs.length === 0 && (
-        <div className="text-center text-gray-500">
+        <div className="text-center text-gray-500 dark:text-gray-400">
           <p>No artifacts found.</p>
         </div>
       )}
@@ -72,4 +72,5 @@ export default async function ArtifactsPage() {
   )
 }
 
-export const revalidate = 60
+// Static generation - revalidation only via on-demand webhook
+export const dynamic = 'force-static'

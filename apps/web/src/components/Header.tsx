@@ -1,12 +1,72 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import type { Header as HeaderType } from '@/lib/api'
 
 interface HeaderProps {
   data: HeaderType
+}
+
+function ThemeToggle() {
+  const [theme, setTheme] = useState<'light' | 'dark'>('light')
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+    // Check for saved theme or system preference
+    const savedTheme = localStorage.getItem('theme') as 'light' | 'dark' | null
+    const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+    const initialTheme = savedTheme || systemTheme
+    setTheme(initialTheme)
+    document.documentElement.classList.toggle('dark', initialTheme === 'dark')
+  }, [])
+
+  const toggleTheme = () => {
+    const newTheme = theme === 'light' ? 'dark' : 'light'
+    setTheme(newTheme)
+    localStorage.setItem('theme', newTheme)
+    document.documentElement.classList.toggle('dark', newTheme === 'dark')
+  }
+
+  // Prevent hydration mismatch
+  if (!mounted) {
+    return (
+      <button className="theme-toggle" aria-label="Toggle theme">
+        <div className="h-5 w-5" />
+      </button>
+    )
+  }
+
+  return (
+    <button
+      onClick={toggleTheme}
+      className="theme-toggle"
+      aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
+    >
+      {/* Sun icon - shown in dark mode */}
+      <svg
+        className={`theme-toggle-icon ${theme === 'dark' ? 'block' : 'hidden'}`}
+        fill="currentColor"
+        viewBox="0 0 20 20"
+      >
+        <path
+          fillRule="evenodd"
+          d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"
+          clipRule="evenodd"
+        />
+      </svg>
+      {/* Moon icon - shown in light mode */}
+      <svg
+        className={`theme-toggle-icon ${theme === 'light' ? 'block' : 'hidden'}`}
+        fill="currentColor"
+        viewBox="0 0 20 20"
+      >
+        <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
+      </svg>
+    </button>
+  )
 }
 
 export function Header({ data }: HeaderProps) {
@@ -19,7 +79,7 @@ export function Header({ data }: HeaderProps) {
   }
 
   return (
-    <header className="sticky top-0 z-40 bg-white shadow-sm">
+    <header className="sticky top-0 z-40 bg-white/80 backdrop-blur-sm shadow-sm dark:bg-slate-900/80 dark:shadow-slate-800/50 transition-colors">
       <nav className="container flex h-16 items-center justify-between">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2">
@@ -32,7 +92,7 @@ export function Header({ data }: HeaderProps) {
               className="h-8 w-auto"
             />
           ) : (
-            <span className="text-xl font-bold text-gray-900">
+            <span className="text-xl font-bold text-gray-900 dark:text-white">
               {data.logoText || 'Site'}
             </span>
           )}
@@ -44,24 +104,24 @@ export function Header({ data }: HeaderProps) {
             <div key={index} className="relative">
               {item.type === 'dropdown' ? (
                 <div className="group">
-                  <button className="flex items-center gap-1 text-sm font-medium text-gray-700 hover:text-gray-900">
+                  <button className="flex items-center gap-1 text-sm font-medium text-gray-700 hover:text-gray-900 dark:text-slate-300 dark:hover:text-white">
                     {item.label}
                     <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                     </svg>
                   </button>
                   <div className="invisible absolute left-0 top-full pt-2 opacity-0 transition-all group-hover:visible group-hover:opacity-100">
-                    <div className="min-w-[200px] rounded-lg bg-white p-2 shadow-lg ring-1 ring-gray-200">
+                    <div className="min-w-[200px] rounded-lg bg-white p-2 shadow-lg ring-1 ring-gray-200 dark:bg-slate-800 dark:ring-slate-700">
                       {item.children?.map((child: any, childIndex: number) => (
                         <Link
                           key={childIndex}
                           href={getUrl(child)}
                           target={child.newTab ? '_blank' : undefined}
-                          className="block rounded-md px-3 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                          className="block rounded-md px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-slate-300 dark:hover:bg-slate-700"
                         >
                           {child.label}
                           {child.description && (
-                            <span className="block text-xs text-gray-500">{child.description}</span>
+                            <span className="block text-xs text-gray-500 dark:text-slate-400">{child.description}</span>
                           )}
                         </Link>
                       ))}
@@ -72,13 +132,16 @@ export function Header({ data }: HeaderProps) {
                 <Link
                   href={getUrl(item)}
                   target={item.newTab ? '_blank' : undefined}
-                  className="text-sm font-medium text-gray-700 hover:text-gray-900"
+                  className="text-sm font-medium text-gray-700 hover:text-gray-900 dark:text-slate-300 dark:hover:text-white"
                 >
                   {item.label}
                 </Link>
               )}
             </div>
           ))}
+
+          {/* Theme Toggle */}
+          <ThemeToggle />
 
           {/* CTA Button */}
           {data.ctaButton?.show && (
@@ -92,31 +155,34 @@ export function Header({ data }: HeaderProps) {
           )}
         </div>
 
-        {/* Mobile Menu Button */}
-        <button
-          className="md:hidden"
-          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          aria-label="Toggle menu"
-        >
-          <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            {mobileMenuOpen ? (
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-            ) : (
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-            )}
-          </svg>
-        </button>
+        {/* Mobile: Theme Toggle + Menu Button */}
+        <div className="flex items-center gap-2 md:hidden">
+          <ThemeToggle />
+          <button
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            aria-label="Toggle menu"
+            className="p-2"
+          >
+            <svg className="h-6 w-6 text-gray-700 dark:text-slate-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              {mobileMenuOpen ? (
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              ) : (
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              )}
+            </svg>
+          </button>
+        </div>
       </nav>
 
       {/* Mobile Menu */}
       {mobileMenuOpen && (
-        <div className="border-t bg-white md:hidden">
+        <div className="border-t border-gray-200 bg-white dark:border-slate-700 dark:bg-slate-900 md:hidden">
           <div className="container space-y-1 py-4">
             {data.navItems?.map((item, index) => (
               <div key={index}>
                 {item.type === 'dropdown' ? (
                   <>
-                    <span className="block px-3 py-2 text-sm font-medium text-gray-500">
+                    <span className="block px-3 py-2 text-sm font-medium text-gray-500 dark:text-slate-400">
                       {item.label}
                     </span>
                     {item.children?.map((child: any, childIndex: number) => (
@@ -124,7 +190,7 @@ export function Header({ data }: HeaderProps) {
                         key={childIndex}
                         href={getUrl(child)}
                         target={child.newTab ? '_blank' : undefined}
-                        className="block px-6 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                        className="block px-6 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-slate-300 dark:hover:bg-slate-800"
                         onClick={() => setMobileMenuOpen(false)}
                       >
                         {child.label}
@@ -135,7 +201,7 @@ export function Header({ data }: HeaderProps) {
                   <Link
                     href={getUrl(item)}
                     target={item.newTab ? '_blank' : undefined}
-                    className="block px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100"
+                    className="block px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 dark:text-slate-300 dark:hover:bg-slate-800"
                     onClick={() => setMobileMenuOpen(false)}
                   >
                     {item.label}

@@ -9,13 +9,13 @@ export const metadata: Metadata = {
 }
 
 export default async function BlogPage() {
-  const posts = await getPosts({ limit: 20 })
+  const posts = await getPosts({ limit: 100, where: { _status: { equals: 'published' } } })
 
   return (
     <div className="container py-16">
       <header className="mb-12 text-center">
-        <h1 className="text-4xl font-bold tracking-tight text-gray-900">Blog</h1>
-        <p className="mt-4 text-lg text-gray-600">
+        <h1 className="text-4xl font-bold tracking-tight text-gray-900 dark:text-white">Blog</h1>
+        <p className="mt-4 text-lg text-gray-600 dark:text-gray-300">
           Latest news, articles, and updates
         </p>
       </header>
@@ -43,16 +43,16 @@ export default async function BlogPage() {
                   {post.categories.map((cat: any) => (
                     <span
                       key={cat.id}
-                      className="rounded-full bg-primary-100 px-2 py-0.5 text-xs font-medium text-primary-700"
+                      className="rounded-full bg-primary-100 px-2 py-0.5 text-xs font-medium text-primary-700 dark:bg-primary-900 dark:text-primary-300"
                     >
                       {cat.title}
                     </span>
                   ))}
                 </div>
               )}
-              <h2 className="text-xl font-semibold text-gray-900">{post.title}</h2>
+              <h2 className="text-xl font-semibold text-gray-900 dark:text-white">{post.title}</h2>
               {post.excerpt && (
-                <p className="mt-2 text-gray-600 line-clamp-2">{post.excerpt}</p>
+                <p className="mt-2 text-gray-600 dark:text-gray-300 line-clamp-2">{post.excerpt}</p>
               )}
               {post.publishedAt && (
                 <p className="mt-4 text-sm text-gray-400">
@@ -69,7 +69,7 @@ export default async function BlogPage() {
       </div>
 
       {posts.docs.length === 0 && (
-        <div className="text-center text-gray-500">
+        <div className="text-center text-gray-500 dark:text-gray-400">
           <p>No posts found.</p>
         </div>
       )}
@@ -77,4 +77,5 @@ export default async function BlogPage() {
   )
 }
 
-export const revalidate = 60
+// Static generation - revalidation only via on-demand webhook
+export const dynamic = 'force-static'

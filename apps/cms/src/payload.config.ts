@@ -1,6 +1,6 @@
 import { buildConfig } from 'payload'
 import { postgresAdapter } from '@payloadcms/db-postgres'
-import { lexicalEditor } from '@payloadcms/richtext-lexical'
+import { lexicalEditor, HeadingFeature, LinkFeature, UploadFeature, BlockquoteFeature, OrderedListFeature, UnorderedListFeature, ParagraphFeature, InlineCodeFeature, BoldFeature, ItalicFeature, UnderlineFeature, StrikethroughFeature } from '@payloadcms/richtext-lexical'
 import { seoPlugin } from '@payloadcms/plugin-seo'
 import { formBuilderPlugin } from '@payloadcms/plugin-form-builder'
 import { nestedDocsPlugin } from '@payloadcms/plugin-nested-docs'
@@ -10,6 +10,7 @@ import { s3Storage } from '@payloadcms/storage-s3'
 import sharp from 'sharp'
 import path from 'path'
 import { fileURLToPath } from 'url'
+import nodemailer from 'nodemailer'
 
 // Collections
 import { Users } from './collections/Users'
@@ -33,6 +34,21 @@ import { revalidateEndpoint } from './endpoints/revalidate'
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
+// ===========================================
+// Email Transport Configuration
+// ===========================================
+const emailTransport = process.env.SMTP_HOST
+  ? nodemailer.createTransport({
+      host: process.env.SMTP_HOST,
+      port: parseInt(process.env.SMTP_PORT || '587'),
+      secure: process.env.SMTP_SECURE === 'true',
+      auth: {
+        user: process.env.SMTP_USER,
+        pass: process.env.SMTP_PASS,
+      },
+    })
+  : undefined
+
 export default buildConfig({
   // ===========================================
   // Core Configuration
@@ -54,6 +70,17 @@ export default buildConfig({
   }),
 
   // ===========================================
+  // Email Configuration
+  // ===========================================
+  email: emailTransport
+    ? {
+        transport: emailTransport,
+        fromName: process.env.EMAIL_FROM_NAME || 'Payload CMS',
+        fromAddress: process.env.EMAIL_FROM_ADDRESS || 'noreply@example.com',
+      }
+    : undefined,
+
+  // ===========================================
   // Admin Panel Configuration
   // ===========================================
   admin: {
@@ -65,6 +92,9 @@ export default buildConfig({
       ogImage: '/og-image.png',
     },
 
+    // Theme configuration - supports light and dark mode
+    theme: 'all', // 'light' | 'dark' | 'all' (allows user to choose)
+
     components: {
       // Custom admin components can be added here
       // graphics: {
@@ -72,6 +102,9 @@ export default buildConfig({
       //   Icon: '/components/Icon',
       // },
     },
+
+    // Date format configuration
+    dateFormat: 'MMMM dd, yyyy',
 
     // Live Preview configuration
     livePreview: {
@@ -100,12 +133,46 @@ export default buildConfig({
   },
 
   // ===========================================
-  // Rich Text Editor (Lexical)
+  // Rich Text Editor (Lexical) - Full Configuration
   // ===========================================
   editor: lexicalEditor({
     features: ({ defaultFeatures }) => [
       ...defaultFeatures,
-      // Additional Lexical features can be added here
+      // Heading feature with all levels
+      HeadingFeature({
+        enabledHeadingSizes: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'],
+      }),
+      // Link feature with custom fields
+      LinkFeature({
+        enabledCollections: ['pages', 'posts', 'artifacts'],
+        fields: [
+          {
+            name: 'rel',
+            label: 'Rel Attribute',
+            type: 'select',
+            options: [
+              { label: 'None', value: '' },
+              { label: 'No Follow', value: 'nofollow' },
+              { label: 'No Opener', value: 'noopener' },
+              { label: 'No Referrer', value: 'noreferrer' },
+            ],
+          },
+        ],
+      }),
+      // Upload feature for inline images
+      UploadFeature({
+        collections: {
+          media: {
+            fields: [
+              {
+                name: 'caption',
+                type: 'text',
+                label: 'Caption',
+              },
+            ],
+          },
+        },
+      }),
     ],
   }),
 
@@ -135,37 +202,55 @@ export default buildConfig({
   ],
 
   // ===========================================
+  // Localization (Optional - uncomment to enable)
+  // ===========================================
+  // localization: {
+  //   locales: [
+  //     { label: 'English', code: 'en' },
+  //     { label: 'Spanish', code: 'es' },
+  //     { label: 'French', code: 'fr' },
+  //     { label: 'German', code: 'de' },
+  //   ],
+  //   defaultLocale: 'en',
+  //   fallback: true,
+  // },
+
+  // ===========================================
   // Plugins
   // ===========================================
   plugins: [
-    // SEO Plugin
+    // SEO Plugin - Meta tags, Open Graph, Twitter Cards
     seoPlugin({
-      collections: ['pages', 'posts', 'artifacts'],
+      collections: ['pages', 'posts', 'artifacts', 'people', 'places', 'museum-collections'],
       uploadsCollection: 'media',
-      generateTitle: ({ doc }) => `${doc?.title || 'Untitled'} | My Site`,
-      generateDescription: ({ doc }) => doc?.excerpt || doc?.description || '',
+      generateTitle: ({ doc }) => `${doc?.title || doc?.name || 'Untitled'} | Museum Collection`,
+      generateDescription: ({ doc }) => doc?.excerpt || doc?.shortDescription || doc?.shortBio || '',
       generateURL: ({ doc, collectionSlug }) => {
         const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3001'
         if (collectionSlug === 'pages') {
-          return `${baseUrl}/${doc?.slug || ''}`
+          return doc?.slug === 'home' ? baseUrl : `${baseUrl}/${doc?.slug || ''}`
+        }
+        if (collectionSlug === 'museum-collections') {
+          return `${baseUrl}/collections/${doc?.slug || ''}`
         }
         return `${baseUrl}/${collectionSlug}/${doc?.slug || ''}`
       },
+      twitterCreator: '@museum',
     }),
 
-    // Form Builder Plugin
+    // Form Builder Plugin - Contact forms, surveys, etc.
     formBuilderPlugin({
       fields: {
         text: true,
         textarea: true,
         select: true,
         email: true,
-        state: false,
-        country: false,
+        state: true,
+        country: true,
         checkbox: true,
         number: true,
         message: true,
-        payment: false,
+        payment: false, // Enable if using Stripe
       },
       formOverrides: {
         admin: {
@@ -177,18 +262,23 @@ export default buildConfig({
           group: 'Forms',
         },
       },
+      // Email notifications for form submissions
+      ...(emailTransport && {
+        handlePayment: undefined,
+        beforeEmail: (emails) => emails,
+      }),
     }),
 
-    // Nested Docs Plugin (for hierarchical collections)
+    // Nested Docs Plugin - Hierarchical collections
     nestedDocsPlugin({
       collections: ['museum-collections', 'categories'],
-      generateLabel: (_, doc) => doc.title as string,
+      generateLabel: (_, doc) => (doc.title || doc.name) as string,
       generateURL: (docs) => docs.reduce((url, doc) => `${url}/${doc.slug}`, ''),
     }),
 
-    // Redirects Plugin
+    // Redirects Plugin - URL redirects management
     redirectsPlugin({
-      collections: ['pages', 'posts'],
+      collections: ['pages', 'posts', 'artifacts'],
       overrides: {
         admin: {
           group: 'Settings',
@@ -196,19 +286,20 @@ export default buildConfig({
       },
     }),
 
-    // Search Plugin
+    // Search Plugin - Full-text search across collections
     searchPlugin({
-      collections: ['pages', 'posts', 'artifacts', 'people', 'places'],
+      collections: ['pages', 'posts', 'artifacts', 'people', 'places', 'museum-collections'],
       defaultPriorities: {
         pages: 10,
         posts: 20,
         artifacts: 30,
         people: 40,
         places: 50,
+        'museum-collections': 60,
       },
       beforeSync: ({ originalDoc, searchDoc }) => ({
         ...searchDoc,
-        excerpt: originalDoc?.excerpt || originalDoc?.description || '',
+        excerpt: originalDoc?.excerpt || originalDoc?.shortDescription || originalDoc?.shortBio || '',
       }),
     }),
 
@@ -219,6 +310,9 @@ export default buildConfig({
             collections: {
               media: {
                 prefix: 'media',
+                generateFileURL: ({ filename }) => {
+                  return `${process.env.S3_CDN_URL || `https://${process.env.S3_BUCKET}.s3.${process.env.S3_REGION || 'us-east-1'}.amazonaws.com`}/media/${filename}`
+                },
               },
             },
             bucket: process.env.S3_BUCKET,
@@ -234,6 +328,22 @@ export default buildConfig({
         ]
       : []),
   ],
+
+  // ===========================================
+  // Jobs Queue Configuration (Background Tasks)
+  // ===========================================
+  jobs: {
+    // Enable jobs queue for background processing
+    // Useful for: email sending, image processing, scheduled tasks
+    access: {
+      run: ({ req }) => {
+        // Only allow authenticated admin users to run jobs
+        return req.user?.role === 'admin'
+      },
+    },
+    // Job tasks can be defined here
+    tasks: [],
+  },
 
   // ===========================================
   // Custom Endpoints
@@ -261,11 +371,30 @@ export default buildConfig({
   sharp,
 
   // ===========================================
+  // Upload Configuration
+  // ===========================================
+  upload: {
+    limits: {
+      fileSize: 10 * 1024 * 1024, // 10MB max file size
+    },
+  },
+
+  // ===========================================
+  // Rate Limiting
+  // ===========================================
+  rateLimit: {
+    max: 500, // Max requests per window
+    window: 60 * 1000, // 1 minute window
+    trustProxy: true,
+  },
+
+  // ===========================================
   // CORS Configuration
   // ===========================================
   cors: [
     process.env.PAYLOAD_PUBLIC_SERVER_URL || 'http://localhost:3000',
     process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3001',
+    'http://localhost:4321', // Astro dev server
   ].filter(Boolean),
 
   // ===========================================
@@ -274,6 +403,7 @@ export default buildConfig({
   csrf: [
     process.env.PAYLOAD_PUBLIC_SERVER_URL || 'http://localhost:3000',
     process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3001',
+    'http://localhost:4321', // Astro dev server
   ].filter(Boolean),
 
   // ===========================================
@@ -283,11 +413,35 @@ export default buildConfig({
   maxDepth: 10,
 
   // ===========================================
+  // Debug Mode (Development Only)
+  // ===========================================
+  debug: process.env.NODE_ENV !== 'production',
+
+  // ===========================================
+  // Telemetry (Disable in production if needed)
+  // ===========================================
+  telemetry: process.env.PAYLOAD_TELEMETRY !== 'false',
+
+  // ===========================================
   // Initialization Hook
   // ===========================================
   onInit: async (payload) => {
+    payload.logger.info('═══════════════════════════════════════════════════════')
     payload.logger.info('Payload CMS initialized successfully')
+    payload.logger.info('═══════════════════════════════════════════════════════')
     payload.logger.info(`Server URL: ${payload.config.serverURL}`)
     payload.logger.info(`Admin URL: ${payload.config.serverURL}/admin`)
+    payload.logger.info(`GraphQL: ${payload.config.serverURL}/api/graphql`)
+    payload.logger.info(`Environment: ${process.env.NODE_ENV || 'development'}`)
+    
+    if (process.env.S3_BUCKET) {
+      payload.logger.info(`S3 Storage: Enabled (${process.env.S3_BUCKET})`)
+    }
+    
+    if (emailTransport) {
+      payload.logger.info(`Email: Enabled (${process.env.SMTP_HOST})`)
+    }
+    
+    payload.logger.info('═══════════════════════════════════════════════════════')
   },
 })

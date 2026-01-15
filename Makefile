@@ -7,7 +7,8 @@
         docker-up docker-down docker-build docker-clean \
         db-migrate db-seed db-reset \
         railway-provision railway-deploy \
-        cms-dev web-dev
+        dev-cms dev-web dev-astro \
+        build-cms build-web build-astro
 
 # Default target
 .DEFAULT_GOAL := help
@@ -48,19 +49,23 @@ install: ## Install all dependencies
 
 dev: ## Start all services in development mode (requires Docker)
 	@echo "$(CYAN)Starting development environment...$(NC)"
-	docker-compose up -d postgres
+	docker compose up -d postgres
 	@echo "$(YELLOW)Waiting for PostgreSQL to be ready...$(NC)"
 	@sleep 5
 	@echo "$(CYAN)Starting CMS and Web in parallel...$(NC)"
 	pnpm dev
 
-cms-dev: ## Start only the CMS in development mode
+dev-cms: ## Start only the CMS in development mode
 	@echo "$(CYAN)Starting CMS development server...$(NC)"
-	cd apps/cms && pnpm dev
+	pnpm --filter @repo/cms dev
 
-web-dev: ## Start only the Web frontend in development mode
-	@echo "$(CYAN)Starting Web development server...$(NC)"
-	cd apps/web && pnpm dev
+dev-web: ## Start only the Next.js frontend in development mode
+	@echo "$(CYAN)Starting Next.js development server...$(NC)"
+	pnpm --filter @repo/web dev
+
+dev-astro: ## Start only the Astro frontend in development mode
+	@echo "$(CYAN)Starting Astro development server...$(NC)"
+	pnpm --filter @repo/astro dev
 
 # ===========================================
 # Build
@@ -73,11 +78,15 @@ build: ## Build all packages for production
 
 build-cms: ## Build only the CMS
 	@echo "$(CYAN)Building CMS...$(NC)"
-	cd apps/cms && pnpm build
+	pnpm --filter @repo/cms build
 
-build-web: ## Build only the Web frontend
-	@echo "$(CYAN)Building Web frontend...$(NC)"
-	cd apps/web && pnpm build
+build-web: ## Build only the Next.js frontend
+	@echo "$(CYAN)Building Next.js frontend...$(NC)"
+	pnpm --filter @repo/web build
+
+build-astro: ## Build only the Astro frontend (pure SSG)
+	@echo "$(CYAN)Building Astro frontend...$(NC)"
+	pnpm --filter @repo/astro build
 
 # ===========================================
 # Production
@@ -89,7 +98,7 @@ start: ## Start all services in production mode
 
 stop: ## Stop all running services
 	@echo "$(CYAN)Stopping services...$(NC)"
-	docker-compose down
+	docker compose down
 	@echo "$(GREEN)Services stopped.$(NC)"
 
 # ===========================================
@@ -98,55 +107,66 @@ stop: ## Stop all running services
 
 docker-up: ## Start all services with Docker Compose
 	@echo "$(CYAN)Starting Docker services...$(NC)"
-	docker-compose up -d
+	docker compose up -d
 	@echo "$(GREEN)Services started!$(NC)"
 	@echo ""
-	@echo "$(CYAN)CMS:$(NC) http://localhost:3000/admin"
-	@echo "$(CYAN)Web:$(NC) http://localhost:3001"
+	@echo "$(CYAN)CMS:$(NC)      http://localhost:3000/admin"
+	@echo "$(CYAN)Next.js:$(NC)  http://localhost:3001"
+	@echo "$(CYAN)Astro:$(NC)    http://localhost:4321"
 
 docker-down: ## Stop all Docker services
 	@echo "$(CYAN)Stopping Docker services...$(NC)"
-	docker-compose down
+	docker compose down
 	@echo "$(GREEN)Services stopped.$(NC)"
 
 docker-build: ## Build Docker images
 	@echo "$(CYAN)Building Docker images...$(NC)"
-	docker-compose build
+	docker compose build
 	@echo "$(GREEN)Images built successfully!$(NC)"
 
 docker-clean: ## Remove all Docker containers, volumes, and images
 	@echo "$(YELLOW)Warning: This will remove all data!$(NC)"
 	@read -p "Are you sure? [y/N] " confirm && [ "$$confirm" = "y" ]
-	docker-compose down -v --rmi all
+	docker compose down -v --rmi all
 	@echo "$(GREEN)Docker resources cleaned.$(NC)"
 
 docker-logs: ## View Docker logs
-	docker-compose logs -f
+	docker compose logs -f
 
 docker-logs-cms: ## View CMS Docker logs
-	docker-compose logs -f cms
+	docker compose logs -f cms
 
 docker-logs-web: ## View Web Docker logs
-	docker-compose logs -f web
+	docker compose logs -f web
 
 # ===========================================
 # Database
 # ===========================================
 
+db-up: ## Start only PostgreSQL
+	@echo "$(CYAN)Starting PostgreSQL...$(NC)"
+	docker compose up -d postgres
+	@echo "$(GREEN)PostgreSQL started on port 5432$(NC)"
+
+db-down: ## Stop PostgreSQL
+	@echo "$(CYAN)Stopping PostgreSQL...$(NC)"
+	docker compose stop postgres
+	@echo "$(GREEN)PostgreSQL stopped.$(NC)"
+
 db-migrate: ## Run database migrations
 	@echo "$(CYAN)Running database migrations...$(NC)"
-	cd apps/cms && pnpm payload migrate
+	pnpm --filter @repo/cms migrate
 	@echo "$(GREEN)Migrations completed!$(NC)"
 
 db-seed: ## Seed the database with sample data
 	@echo "$(CYAN)Seeding database...$(NC)"
-	cd apps/cms && pnpm seed
+	pnpm --filter @repo/cms seed
 	@echo "$(GREEN)Database seeded!$(NC)"
 
 db-reset: ## Reset database (drop all tables and re-migrate)
 	@echo "$(YELLOW)Warning: This will delete all data!$(NC)"
 	@read -p "Are you sure? [y/N] " confirm && [ "$$confirm" = "y" ]
-	cd apps/cms && pnpm payload migrate:reset
+	pnpm --filter @repo/cms migrate:reset
 	@echo "$(GREEN)Database reset!$(NC)"
 
 db-studio: ## Open Drizzle Studio for database management
@@ -212,13 +232,14 @@ clean: ## Clean all build artifacts and dependencies
 	rm -rf node_modules
 	rm -rf apps/cms/node_modules apps/cms/.next apps/cms/dist
 	rm -rf apps/web/node_modules apps/web/.next apps/web/dist
+	rm -rf apps/astro/node_modules apps/astro/dist
 	rm -rf packages/shared/node_modules packages/shared/dist
 	rm -rf packages/templates/node_modules packages/templates/dist
 	@echo "$(GREEN)Cleanup completed!$(NC)"
 
 clean-docker: ## Clean Docker resources
 	@echo "$(CYAN)Cleaning Docker resources...$(NC)"
-	docker-compose down -v
+	docker compose down -v
 	docker system prune -f
 	@echo "$(GREEN)Docker cleanup completed!$(NC)"
 
@@ -239,6 +260,16 @@ env-setup: ## Create .env file from example
 generate-secret: ## Generate a random secret key
 	@echo "$(CYAN)Generated secret:$(NC)"
 	@openssl rand -hex 32
+
+generate-types: ## Generate TypeScript types from Payload
+	@echo "$(CYAN)Generating TypeScript types...$(NC)"
+	pnpm --filter @repo/cms generate:types
+	@echo "$(GREEN)Types generated!$(NC)"
+
+generate-graphql: ## Generate GraphQL schema
+	@echo "$(CYAN)Generating GraphQL schema...$(NC)"
+	pnpm --filter @repo/cms generate:graphql
+	@echo "$(GREEN)GraphQL schema generated!$(NC)"
 
 check-deps: ## Check for outdated dependencies
 	@echo "$(CYAN)Checking for outdated dependencies...$(NC)"
@@ -261,21 +292,33 @@ setup: env-setup install ## Complete setup for new developers
 	@echo ""
 	@echo "Next steps:"
 	@echo "  1. Edit .env with your configuration"
-	@echo "  2. Run 'make docker-up' to start services"
-	@echo "  3. Run 'make db-seed' to add sample data"
-	@echo "  4. Visit http://localhost:3000/admin"
+	@echo "  2. Run 'make db-up' to start PostgreSQL"
+	@echo "  3. Run 'make db-migrate' to run migrations"
+	@echo "  4. Run 'make db-seed' to add sample data"
+	@echo "  5. Run 'make dev' to start all services"
 	@echo ""
 
-quickstart: setup docker-up ## One-command quickstart (setup + start)
+quickstart: env-setup install db-up ## One-command quickstart (setup + start)
+	@echo "$(YELLOW)Waiting for PostgreSQL to be ready...$(NC)"
+	@sleep 5
+	@echo "$(CYAN)Running migrations...$(NC)"
+	@pnpm --filter @repo/cms migrate || true
+	@echo "$(CYAN)Seeding database...$(NC)"
+	@pnpm --filter @repo/cms seed || true
 	@echo ""
 	@echo "$(GREEN)========================================$(NC)"
 	@echo "$(GREEN)Quickstart completed!$(NC)"
 	@echo "$(GREEN)========================================$(NC)"
 	@echo ""
-	@echo "$(CYAN)CMS Admin:$(NC) http://localhost:3000/admin"
-	@echo "$(CYAN)Frontend:$(NC)  http://localhost:3001"
+	@echo "$(CYAN)Starting development servers...$(NC)"
+	@echo ""
+	@echo "Access points:"
+	@echo "  $(CYAN)CMS Admin:$(NC)  http://localhost:3000/admin"
+	@echo "  $(CYAN)Next.js:$(NC)    http://localhost:3001"
+	@echo "  $(CYAN)Astro:$(NC)      http://localhost:4321"
 	@echo ""
 	@echo "Default admin credentials:"
 	@echo "  Email: admin@example.com"
 	@echo "  Password: admin123"
 	@echo ""
+	@pnpm dev

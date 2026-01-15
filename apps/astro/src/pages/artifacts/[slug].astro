@@ -1,0 +1,138 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { getArtifacts, getArtifactBySlug } from '@/lib/payload';
+
+export async function getStaticPaths() {
+  const artifacts = await getArtifacts({ limit: 1000 });
+  
+  return artifacts.docs.map((artifact) => ({
+    params: { slug: artifact.slug },
+    props: { artifact },
+  }));
+}
+
+const { artifact } = Astro.props;
+const artifactData = artifact || await getArtifactBySlug(Astro.params.slug);
+
+if (!artifactData) {
+  return Astro.redirect('/404');
+}
+
+const title = artifactData.meta?.title || artifactData.title;
+const description = artifactData.meta?.description || '';
+const primaryImage = artifactData.media?.[0]?.image;
+---
+
+<BaseLayout title={title} description={description} image={primaryImage?.url}>
+  <article class="py-16">
+    <div class="container">
+      <div class="grid gap-12 lg:grid-cols-2">
+        <!-- Image Gallery -->
+        <div>
+          {primaryImage?.url && (
+            <div class="overflow-hidden rounded-xl">
+              <img 
+                src={primaryImage.url} 
+                alt={primaryImage.alt || artifactData.title}
+                class="w-full h-auto"
+              />
+            </div>
+          )}
+          
+          {artifactData.media && artifactData.media.length > 1 && (
+            <div class="mt-4 grid grid-cols-4 gap-2">
+              {artifactData.media.slice(1).map((item: any) => (
+                <div class="overflow-hidden rounded-lg">
+                  <img 
+                    src={item.image?.url} 
+                    alt={item.image?.alt || artifactData.title}
+                    class="w-full h-20 object-cover"
+                  />
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+        
+        <!-- Details -->
+        <div>
+          <h1 class="text-3xl font-bold tracking-tight lg:text-4xl">{artifactData.title}</h1>
+          
+          {artifactData.dateCreated && (
+            <p class="mt-2 text-lg text-gray-500 dark:text-gray-400">{artifactData.dateCreated}</p>
+          )}
+          
+          <!-- Description -->
+          {artifactData.description_html && (
+            <div class="mt-6 prose-custom" set:html={artifactData.description_html} />
+          )}
+          
+          <!-- Details Table -->
+          <div class="mt-8 space-y-4">
+            {artifactData.materials && artifactData.materials.length > 0 && (
+              <div>
+                <h3 class="text-sm font-semibold text-gray-500 dark:text-gray-400">Materials</h3>
+                <div class="mt-1 flex flex-wrap gap-2">
+                  {artifactData.materials.map((item: any) => (
+                    <span class="rounded bg-gray-100 dark:bg-gray-800 px-2 py-1 text-sm">
+                      {item.material}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
+            
+            {artifactData.dimensions && (
+              <div>
+                <h3 class="text-sm font-semibold text-gray-500 dark:text-gray-400">Dimensions</h3>
+                <p class="mt-1">
+                  {artifactData.dimensions.height && `H: ${artifactData.dimensions.height}${artifactData.dimensions.unit || 'cm'}`}
+                  {artifactData.dimensions.width && ` × W: ${artifactData.dimensions.width}${artifactData.dimensions.unit || 'cm'}`}
+                  {artifactData.dimensions.depth && ` × D: ${artifactData.dimensions.depth}${artifactData.dimensions.unit || 'cm'}`}
+                </p>
+              </div>
+            )}
+            
+            {artifactData.provenance && (
+              <div>
+                <h3 class="text-sm font-semibold text-gray-500 dark:text-gray-400">Provenance</h3>
+                <p class="mt-1">{artifactData.provenance}</p>
+              </div>
+            )}
+            
+            {artifactData.accessionNumber && (
+              <div>
+                <h3 class="text-sm font-semibold text-gray-500 dark:text-gray-400">Accession Number</h3>
+                <p class="mt-1">{artifactData.accessionNumber}</p>
+              </div>
+            )}
+          </div>
+          
+          <!-- Related -->
+          {artifactData.relatedArtifacts && artifactData.relatedArtifacts.length > 0 && (
+            <div class="mt-8">
+              <h3 class="text-sm font-semibold text-gray-500 dark:text-gray-400">Related Artifacts</h3>
+              <div class="mt-2 flex flex-wrap gap-2">
+                {artifactData.relatedArtifacts.map((related: any) => (
+                  <a 
+                    href={`/artifacts/${related.slug}`}
+                    class="text-blue-600 hover:text-blue-700 dark:text-blue-400"
+                  >
+                    {related.title}
+                  </a>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+      
+      <!-- Back link -->
+      <div class="mt-12">
+        <a href="/artifacts" class="text-blue-600 hover:text-blue-700 dark:text-blue-400">
+          ← Back to Artifacts
+        </a>
+      </div>
+    </div>
+  </article>
+</BaseLayout>

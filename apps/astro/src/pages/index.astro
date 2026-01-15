@@ -1,0 +1,137 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { getPageBySlug, getPosts, getArtifacts } from '@/lib/payload';
+
+// Fetch home page content at build time
+const page = await getPageBySlug('home').catch(() => null);
+const posts = await getPosts({ limit: 3 }).catch(() => ({ docs: [] }));
+const artifacts = await getArtifacts({ limit: 6 }).catch(() => ({ docs: [] }));
+
+const title = page?.meta?.title || 'Home';
+const description = page?.meta?.description || 'Welcome to our Payload CMS + Astro site';
+---
+
+<BaseLayout title={title} description={description}>
+  <!-- Hero Section -->
+  <section class="relative bg-gradient-to-br from-blue-600 to-blue-800 py-24 text-white">
+    <div class="container">
+      <div class="max-w-3xl">
+        <h1 class="text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
+          {page?.title || 'Welcome to Payload CMS + Astro'}
+        </h1>
+        <p class="mt-6 text-xl text-blue-100">
+          A modern, open-source CMS platform with static-first delivery. 
+          Built with Payload CMS v3 and Astro for blazing-fast performance.
+        </p>
+        <div class="mt-8 flex flex-wrap gap-4">
+          <a href="/artifacts" class="btn-primary bg-white text-blue-600 hover:bg-blue-50">
+            Explore Artifacts
+          </a>
+          <a href="/blog" class="btn-outline border-white text-white hover:bg-white/10">
+            Read Blog
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured Artifacts -->
+  {artifacts.docs.length > 0 && (
+    <section class="py-16">
+      <div class="container">
+        <div class="flex items-center justify-between mb-8">
+          <h2 class="text-3xl font-bold">Featured Artifacts</h2>
+          <a href="/artifacts" class="text-blue-600 hover:text-blue-700 dark:text-blue-400">
+            View all →
+          </a>
+        </div>
+        <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {artifacts.docs.map((artifact: any) => {
+            const image = artifact.media?.[0]?.image;
+            return (
+              <a href={`/artifacts/${artifact.slug}`} class="card overflow-hidden group">
+                {image?.url && (
+                  <div class="relative h-48 overflow-hidden">
+                    <img 
+                      src={image.url} 
+                      alt={image.alt || artifact.title}
+                      class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                    />
+                  </div>
+                )}
+                <div class="p-4">
+                  <h3 class="font-semibold text-gray-900 dark:text-white">{artifact.title}</h3>
+                  {artifact.dateCreated && (
+                    <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">{artifact.dateCreated}</p>
+                  )}
+                </div>
+              </a>
+            );
+          })}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- Latest Posts -->
+  {posts.docs.length > 0 && (
+    <section class="py-16 bg-gray-50 dark:bg-gray-800/50">
+      <div class="container">
+        <div class="flex items-center justify-between mb-8">
+          <h2 class="text-3xl font-bold">Latest Posts</h2>
+          <a href="/blog" class="text-blue-600 hover:text-blue-700 dark:text-blue-400">
+            View all →
+          </a>
+        </div>
+        <div class="grid gap-8 md:grid-cols-3">
+          {posts.docs.map((post: any) => (
+            <a href={`/blog/${post.slug}`} class="card overflow-hidden group">
+              {post.featuredImage?.url && (
+                <div class="relative h-48 overflow-hidden">
+                  <img 
+                    src={post.featuredImage.url} 
+                    alt={post.featuredImage.alt || post.title}
+                    class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                  />
+                </div>
+              )}
+              <div class="p-6">
+                <h3 class="font-semibold text-lg text-gray-900 dark:text-white">{post.title}</h3>
+                {post.excerpt && (
+                  <p class="mt-2 text-gray-600 dark:text-gray-300 line-clamp-2">{post.excerpt}</p>
+                )}
+                {post.publishedAt && (
+                  <p class="mt-4 text-sm text-gray-400">
+                    {new Date(post.publishedAt).toLocaleDateString('en-US', {
+                      year: 'numeric',
+                      month: 'long',
+                      day: 'numeric',
+                    })}
+                  </p>
+                )}
+              </div>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- CTA Section -->
+  <section class="py-16">
+    <div class="container">
+      <div class="rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-600 p-12 text-center text-white">
+        <h2 class="text-3xl font-bold">Ready to get started?</h2>
+        <p class="mt-4 text-lg text-blue-100">
+          Create your first page in the admin panel
+        </p>
+        <a 
+          href={`${import.meta.env.PUBLIC_CMS_URL || 'http://localhost:3000'}/admin`}
+          class="mt-8 inline-flex items-center rounded-lg bg-white px-6 py-3 font-semibold text-blue-600 hover:bg-blue-50"
+        >
+          Open Admin Panel
+        </a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

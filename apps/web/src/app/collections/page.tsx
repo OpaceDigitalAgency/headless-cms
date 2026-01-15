@@ -9,13 +9,13 @@ export const metadata: Metadata = {
 }
 
 export default async function CollectionsPage() {
-  const collections = await getMuseumCollections({ limit: 50 })
+  const collections = await getMuseumCollections({ limit: 500, where: { _status: { equals: 'published' } } })
 
   return (
     <div className="container py-16">
       <header className="mb-12 text-center">
-        <h1 className="text-4xl font-bold tracking-tight text-gray-900">Collections</h1>
-        <p className="mt-4 text-lg text-gray-600">
+        <h1 className="text-4xl font-bold tracking-tight text-gray-900 dark:text-white">Collections</h1>
+        <p className="mt-4 text-lg text-gray-600 dark:text-gray-300">
           Browse our curated museum collections
         </p>
       </header>
@@ -42,13 +42,13 @@ export default async function CollectionsPage() {
               </div>
             )}
             {!collection.featuredImage?.url && (
-              <div className="bg-gray-100 p-6">
-                <h2 className="text-xl font-bold text-gray-900">{collection.title}</h2>
+              <div className="bg-gray-100 dark:bg-gray-800 p-6">
+                <h2 className="text-xl font-bold text-gray-900 dark:text-white">{collection.title}</h2>
               </div>
             )}
             <div className="p-4">
               {collection.shortDescription && (
-                <p className="text-gray-600 line-clamp-2">{collection.shortDescription}</p>
+                <p className="text-gray-600 dark:text-gray-300 line-clamp-2">{collection.shortDescription}</p>
               )}
               {collection.artifactCount !== undefined && (
                 <p className="mt-2 text-sm text-gray-400">
@@ -61,7 +61,7 @@ export default async function CollectionsPage() {
       </div>
 
       {collections.docs.length === 0 && (
-        <div className="text-center text-gray-500">
+        <div className="text-center text-gray-500 dark:text-gray-400">
           <p>No collections found.</p>
         </div>
       )}
@@ -69,4 +69,5 @@ export default async function CollectionsPage() {
   )
 }
 
-export const revalidate = 60
+// Static generation - revalidation only via on-demand webhook
+export const dynamic = 'force-static'

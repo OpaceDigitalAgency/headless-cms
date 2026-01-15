@@ -7,9 +7,13 @@ interface ArtifactPageProps {
   params: Promise<{ slug: string }>
 }
 
+/**
+ * Generate static params for all published artifacts
+ * This runs at build time to pre-render all artifacts
+ */
 export async function generateStaticParams() {
   try {
-    const artifacts = await getArtifacts({ limit: 100 })
+    const artifacts = await getArtifacts({ limit: 1000, where: { _status: { equals: 'published' } } })
     return artifacts.docs.map((artifact) => ({
       slug: artifact.slug,
     }))
@@ -66,5 +70,8 @@ export default async function ArtifactPage({ params }: ArtifactPageProps) {
   }
 }
 
-export const revalidate = 60
-export const dynamicParams = true
+// CRITICAL: Static generation only
+// - dynamicParams = false: Unknown slugs return 404, no server generation
+// - No revalidate: Updates only via on-demand revalidation from Payload hooks
+export const dynamicParams = false
+export const dynamic = 'force-static'

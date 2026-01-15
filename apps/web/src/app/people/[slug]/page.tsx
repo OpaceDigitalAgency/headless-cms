@@ -7,9 +7,13 @@ interface PersonPageProps {
   params: Promise<{ slug: string }>
 }
 
+/**
+ * Generate static params for all published people
+ * This runs at build time to pre-render all people pages
+ */
 export async function generateStaticParams() {
   try {
-    const people = await getPeople({ limit: 100 })
+    const people = await getPeople({ limit: 1000, where: { _status: { equals: 'published' } } })
     return people.docs.map((person) => ({
       slug: person.slug,
     }))
@@ -64,5 +68,8 @@ export default async function PersonPage({ params }: PersonPageProps) {
   }
 }
 
-export const revalidate = 60
-export const dynamicParams = true
+// CRITICAL: Static generation only
+// - dynamicParams = false: Unknown slugs return 404, no server generation
+// - No revalidate: Updates only via on-demand revalidation from Payload hooks
+export const dynamicParams = false
+export const dynamic = 'force-static'

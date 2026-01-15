@@ -1,0 +1,92 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { getPlaces, getPlaceBySlug } from '@/lib/payload';
+
+export async function getStaticPaths() {
+  const places = await getPlaces({ limit: 1000 });
+  
+  return places.docs.map((place) => ({
+    params: { slug: place.slug },
+    props: { place },
+  }));
+}
+
+const { place } = Astro.props;
+const placeData = place || await getPlaceBySlug(Astro.params.slug);
+
+if (!placeData) {
+  return Astro.redirect('/404');
+}
+
+const title = placeData.meta?.title || placeData.name;
+const description = placeData.meta?.description || '';
+---
+
+<BaseLayout title={title} description={description} image={placeData.featuredImage?.url}>
+  <article class="py-16">
+    <div class="container max-w-4xl">
+      <!-- Header -->
+      <header class="mb-8">
+        <h1 class="text-3xl font-bold tracking-tight lg:text-4xl">{placeData.name}</h1>
+        
+        <div class="mt-4 flex flex-wrap items-center gap-4 text-gray-500 dark:text-gray-400">
+          {placeData.country && <span>{placeData.country}</span>}
+          {placeData.placeType && (
+            <span class="rounded-full bg-gray-100 px-3 py-1 text-sm capitalize dark:bg-gray-800">
+              {placeData.placeType}
+            </span>
+          )}
+        </div>
+      </header>
+      
+      <!-- Featured Image -->
+      {placeData.featuredImage?.url && (
+        <div class="mb-8 overflow-hidden rounded-xl">
+          <img 
+            src={placeData.featuredImage.url} 
+            alt={placeData.featuredImage.alt || placeData.name}
+            class="w-full h-auto"
+          />
+        </div>
+      )}
+      
+      <!-- Description -->
+      {placeData.description_html && (
+        <div class="prose-custom" set:html={placeData.description_html} />
+      )}
+      
+      <!-- Details -->
+      <div class="mt-8 grid gap-6 md:grid-cols-2">
+        {placeData.historicalNames && placeData.historicalNames.length > 0 && (
+          <div class="card p-4">
+            <h3 class="font-semibold">Historical Names</h3>
+            <ul class="mt-2 space-y-1">
+              {placeData.historicalNames.map((item: any) => (
+                <li class="text-gray-600 dark:text-gray-300">
+                  {item.name}
+                  {item.period && <span class="text-sm text-gray-400"> ({item.period})</span>}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+        
+        {placeData.coordinates && (
+          <div class="card p-4">
+            <h3 class="font-semibold">Coordinates</h3>
+            <p class="mt-2 text-gray-600 dark:text-gray-300">
+              {placeData.coordinates.latitude}, {placeData.coordinates.longitude}
+            </p>
+          </div>
+        )}
+      </div>
+      
+      <!-- Back link -->
+      <div class="mt-12">
+        <a href="/places" class="text-blue-600 hover:text-blue-700 dark:text-blue-400">
+          ← Back to Places
+        </a>
+      </div>
+    </div>
+  </article>
+</BaseLayout>

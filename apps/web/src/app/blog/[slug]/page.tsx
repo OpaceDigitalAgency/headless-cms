@@ -7,9 +7,13 @@ interface PostPageProps {
   params: Promise<{ slug: string }>
 }
 
+/**
+ * Generate static params for all published posts
+ * This runs at build time to pre-render all posts
+ */
 export async function generateStaticParams() {
   try {
-    const posts = await getPosts({ limit: 100 })
+    const posts = await getPosts({ limit: 1000, where: { _status: { equals: 'published' } } })
     return posts.docs.map((post) => ({
       slug: post.slug,
     }))
@@ -66,5 +70,8 @@ export default async function PostPage({ params }: PostPageProps) {
   }
 }
 
-export const revalidate = 60
-export const dynamicParams = true
+// CRITICAL: Static generation only
+// - dynamicParams = false: Unknown slugs return 404, no server generation
+// - No revalidate: Updates only via on-demand revalidation from Payload hooks
+export const dynamicParams = false
+export const dynamic = 'force-static'

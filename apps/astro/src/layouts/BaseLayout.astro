@@ -1,0 +1,147 @@
+---
+import { getHeader, getFooter, getSettings } from '@/lib/payload';
+import '@/styles/globals.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+}
+
+const { title, description, image } = Astro.props;
+
+// Fetch global data at build time
+const [header, footer, settings] = await Promise.all([
+  getHeader().catch(() => null),
+  getFooter().catch(() => null),
+  getSettings().catch(() => null),
+]);
+
+const siteTitle = settings?.siteName || 'Payload CMS + Astro';
+const pageTitle = title ? `${title} | ${siteTitle}` : siteTitle;
+const pageDescription = description || settings?.defaultMeta?.description || '';
+const pageImage = image || settings?.defaultMeta?.image?.url || '';
+---
+
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="generator" content={Astro.generator} />
+    
+    <!-- SEO -->
+    <title>{pageTitle}</title>
+    <meta name="description" content={pageDescription} />
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={pageDescription} />
+    {pageImage && <meta property="og:image" content={pageImage} />}
+    <meta property="og:type" content="website" />
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={pageDescription} />
+    {pageImage && <meta name="twitter:image" content={pageImage} />}
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    
+    <!-- Dark mode script (runs before render to prevent flash) -->
+    <script is:inline>
+      const theme = localStorage.getItem('theme') || 
+        (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      document.documentElement.classList.toggle('dark', theme === 'dark');
+    </script>
+  </head>
+  <body class="min-h-screen bg-white text-gray-900 dark:bg-gray-900 dark:text-gray-100 transition-colors">
+    <!-- Header -->
+    <header class="sticky top-0 z-40 w-full border-b border-gray-200 bg-white/80 backdrop-blur-sm dark:border-gray-800 dark:bg-gray-900/80">
+      <div class="container mx-auto flex h-16 items-center justify-between px-4">
+        <a href="/" class="text-xl font-bold">
+          {siteTitle}
+        </a>
+        
+        <nav class="hidden md:flex items-center gap-6">
+          {header?.navItems?.map((item: any) => (
+            <a 
+              href={item.link?.url || '#'} 
+              class="text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white transition-colors"
+            >
+              {item.link?.label}
+            </a>
+          ))}
+        </nav>
+        
+        <!-- Theme toggle -->
+        <button 
+          id="theme-toggle"
+          class="rounded-lg p-2 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+          aria-label="Toggle theme"
+        >
+          <svg class="h-5 w-5 hidden dark:block" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" />
+          </svg>
+          <svg class="h-5 w-5 block dark:hidden" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
+          </svg>
+        </button>
+      </div>
+    </header>
+    
+    <!-- Main content -->
+    <main>
+      <slot />
+    </main>
+    
+    <!-- Footer -->
+    <footer class="border-t border-gray-200 bg-gray-50 dark:border-gray-800 dark:bg-gray-900">
+      <div class="container mx-auto px-4 py-12">
+        <div class="grid gap-8 md:grid-cols-4">
+          <!-- Brand -->
+          <div>
+            <h3 class="text-lg font-bold">{siteTitle}</h3>
+            {footer?.copyright && (
+              <p class="mt-2 text-sm text-gray-600 dark:text-gray-400">{footer.copyright}</p>
+            )}
+          </div>
+          
+          <!-- Footer columns -->
+          {footer?.columns?.map((column: any) => (
+            <div>
+              <h4 class="font-semibold mb-3">{column.label}</h4>
+              <ul class="space-y-2">
+                {column.navItems?.map((item: any) => (
+                  <li>
+                    <a 
+                      href={item.link?.url || '#'} 
+                      class="text-sm text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white transition-colors"
+                    >
+                      {item.link?.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+        
+        <!-- Bottom bar -->
+        <div class="mt-8 border-t border-gray-200 pt-8 text-center text-sm text-gray-500 dark:border-gray-800 dark:text-gray-400">
+          <p>Built with Payload CMS + Astro</p>
+        </div>
+      </div>
+    </footer>
+    
+    <!-- Theme toggle script -->
+    <script>
+      const toggle = document.getElementById('theme-toggle');
+      toggle?.addEventListener('click', () => {
+        const isDark = document.documentElement.classList.toggle('dark');
+        localStorage.setItem('theme', isDark ? 'dark' : 'light');
+      });
+    </script>
+  </body>
+</html>

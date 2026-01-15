@@ -7,9 +7,13 @@ interface PlacePageProps {
   params: Promise<{ slug: string }>
 }
 
+/**
+ * Generate static params for all published places
+ * This runs at build time to pre-render all place pages
+ */
 export async function generateStaticParams() {
   try {
-    const places = await getPlaces({ limit: 100 })
+    const places = await getPlaces({ limit: 1000, where: { _status: { equals: 'published' } } })
     return places.docs.map((place) => ({
       slug: place.slug,
     }))
@@ -64,5 +68,8 @@ export default async function PlacePage({ params }: PlacePageProps) {
   }
 }
 
-export const revalidate = 60
-export const dynamicParams = true
+// CRITICAL: Static generation only
+// - dynamicParams = false: Unknown slugs return 404, no server generation
+// - No revalidate: Updates only via on-demand revalidation from Payload hooks
+export const dynamicParams = false
+export const dynamic = 'force-static'

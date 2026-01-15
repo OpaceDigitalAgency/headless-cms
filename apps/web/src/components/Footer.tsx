@@ -60,7 +60,7 @@ export function Footer({ data }: FooterProps) {
   const copyright = data.copyright?.replace('{year}', String(currentYear)) || `© ${currentYear} All rights reserved.`
 
   return (
-    <footer className="border-t bg-gray-50">
+    <footer className="border-t border-gray-200 bg-gray-50 dark:border-slate-800 dark:bg-slate-900/50 transition-colors">
       <div className="container py-12">
         <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-5">
           {/* Logo and Description */}
@@ -74,10 +74,10 @@ export function Footer({ data }: FooterProps) {
                 className="h-8 w-auto"
               />
             ) : (
-              <span className="text-xl font-bold text-gray-900">Site</span>
+              <span className="text-xl font-bold text-gray-900 dark:text-white">Site</span>
             )}
             {data.description && (
-              <p className="mt-4 text-sm text-gray-600">{data.description}</p>
+              <p className="mt-4 text-sm text-gray-600 dark:text-slate-400">{data.description}</p>
             )}
             
             {/* Social Links */}
@@ -89,7 +89,7 @@ export function Footer({ data }: FooterProps) {
                     href={social.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-gray-400 transition-colors hover:text-gray-600"
+                    className="text-gray-400 transition-colors hover:text-gray-600 dark:text-slate-500 dark:hover:text-slate-300"
                     aria-label={social.platform}
                   >
                     {socialIcons[social.platform] || social.platform}
@@ -103,7 +103,7 @@ export function Footer({ data }: FooterProps) {
           {data.columns?.map((column, index) => (
             <div key={index}>
               {column.heading && (
-                <h3 className="text-sm font-semibold uppercase tracking-wide text-gray-900">
+                <h3 className="text-sm font-semibold uppercase tracking-wide text-gray-900 dark:text-white">
                   {column.heading}
                 </h3>
               )}
@@ -114,7 +114,7 @@ export function Footer({ data }: FooterProps) {
                       <Link
                         href={getUrl(link)}
                         target={link.newTab ? '_blank' : undefined}
-                        className="text-sm text-gray-600 hover:text-gray-900"
+                        className="text-sm text-gray-600 hover:text-gray-900 dark:text-slate-400 dark:hover:text-white transition-colors"
                       >
                         {link.label}
                       </Link>
@@ -127,8 +127,8 @@ export function Footer({ data }: FooterProps) {
         </div>
 
         {/* Bottom Bar */}
-        <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t pt-8 md:flex-row">
-          <p className="text-sm text-gray-500">{copyright}</p>
+        <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-gray-200 dark:border-slate-800 pt-8 md:flex-row">
+          <p className="text-sm text-gray-500 dark:text-slate-500">{copyright}</p>
           
           {data.legalLinks && data.legalLinks.length > 0 && (
             <div className="flex gap-6">
@@ -136,7 +136,7 @@ export function Footer({ data }: FooterProps) {
                 <Link
                   key={index}
                   href={getUrl(link)}
-                  className="text-sm text-gray-500 hover:text-gray-700"
+                  className="text-sm text-gray-500 hover:text-gray-700 dark:text-slate-500 dark:hover:text-slate-300 transition-colors"
                 >
                   {link.label}
                 </Link>

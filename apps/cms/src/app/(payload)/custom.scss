@@ -1,28 +1,196 @@
 /* Custom styles for Payload Admin Panel */
+/* Supports both light and dark modes */
 
-/* You can customize the admin panel appearance here */
+/* Light mode theme (default) */
+:root {
+  --theme-elevation-0: #ffffff;
+  --theme-elevation-50: #f9fafb;
+  --theme-elevation-100: #f3f4f6;
+  --theme-elevation-150: #e5e7eb;
+  --theme-elevation-200: #d1d5db;
+  --theme-elevation-250: #c4c8ce;
+  --theme-elevation-300: #9ca3af;
+  --theme-elevation-350: #8b929d;
+  --theme-elevation-400: #6b7280;
+  --theme-elevation-450: #5c6370;
+  --theme-elevation-500: #4b5563;
+  --theme-elevation-550: #404854;
+  --theme-elevation-600: #374151;
+  --theme-elevation-650: #2e3744;
+  --theme-elevation-700: #1f2937;
+  --theme-elevation-750: #1a222e;
+  --theme-elevation-800: #111827;
+  --theme-elevation-850: #0d131d;
+  --theme-elevation-900: #030712;
+  --theme-elevation-950: #020409;
+  --theme-elevation-1000: #000000;
 
-/* Example: Custom primary color */
-// :root {
-//   --theme-elevation-0: #ffffff;
-//   --theme-elevation-50: #f7f7f7;
-//   --theme-elevation-100: #efefef;
-//   --theme-elevation-150: #e8e8e8;
-//   --theme-elevation-200: #dfdfdf;
-//   --theme-elevation-250: #d8d8d8;
-//   --theme-elevation-300: #cfcfcf;
-//   --theme-elevation-350: #c8c8c8;
-//   --theme-elevation-400: #bfbfbf;
-//   --theme-elevation-450: #b8b8b8;
-//   --theme-elevation-500: #afafaf;
-//   --theme-elevation-550: #a8a8a8;
-//   --theme-elevation-600: #9f9f9f;
-//   --theme-elevation-650: #989898;
-//   --theme-elevation-700: #8f8f8f;
-//   --theme-elevation-750: #888888;
-//   --theme-elevation-800: #7f7f7f;
-//   --theme-elevation-850: #787878;
-//   --theme-elevation-900: #6f6f6f;
-//   --theme-elevation-950: #686868;
-//   --theme-elevation-1000: #5f5f5f;
-// }
+  /* Primary brand color - blue */
+  --theme-success-50: #ecfdf5;
+  --theme-success-100: #d1fae5;
+  --theme-success-200: #a7f3d0;
+  --theme-success-300: #6ee7b7;
+  --theme-success-400: #34d399;
+  --theme-success-500: #10b981;
+  --theme-success-600: #059669;
+  --theme-success-700: #047857;
+
+  --theme-error-50: #fef2f2;
+  --theme-error-100: #fee2e2;
+  --theme-error-200: #fecaca;
+  --theme-error-300: #fca5a5;
+  --theme-error-400: #f87171;
+  --theme-error-500: #ef4444;
+  --theme-error-600: #dc2626;
+  --theme-error-700: #b91c1c;
+
+  --theme-warning-50: #fffbeb;
+  --theme-warning-100: #fef3c7;
+  --theme-warning-200: #fde68a;
+  --theme-warning-300: #fcd34d;
+  --theme-warning-400: #fbbf24;
+  --theme-warning-500: #f59e0b;
+  --theme-warning-600: #d97706;
+  --theme-warning-700: #b45309;
+}
+
+/* Dark mode theme */
+[data-theme="dark"] {
+  --theme-elevation-0: #0f172a;
+  --theme-elevation-50: #1e293b;
+  --theme-elevation-100: #273449;
+  --theme-elevation-150: #334155;
+  --theme-elevation-200: #3f4e63;
+  --theme-elevation-250: #475569;
+  --theme-elevation-300: #536278;
+  --theme-elevation-350: #5f6f87;
+  --theme-elevation-400: #64748b;
+  --theme-elevation-450: #7a8799;
+  --theme-elevation-500: #94a3b8;
+  --theme-elevation-550: #a3b0c2;
+  --theme-elevation-600: #cbd5e1;
+  --theme-elevation-650: #d7dfe9;
+  --theme-elevation-700: #e2e8f0;
+  --theme-elevation-750: #eaeff5;
+  --theme-elevation-800: #f1f5f9;
+  --theme-elevation-850: #f6f8fb;
+  --theme-elevation-900: #f8fafc;
+  --theme-elevation-950: #fbfcfd;
+  --theme-elevation-1000: #ffffff;
+}
+
+/* Custom admin panel styling */
+.payload-admin {
+  /* Smooth transitions for theme switching */
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--theme-elevation-100);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--theme-elevation-300);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--theme-elevation-400);
+}
+
+/* Dark mode scrollbar */
+[data-theme="dark"] ::-webkit-scrollbar-track {
+  background: var(--theme-elevation-100);
+}
+
+[data-theme="dark"] ::-webkit-scrollbar-thumb {
+  background: var(--theme-elevation-300);
+}
+
+/* Better focus states */
+*:focus-visible {
+  outline: 2px solid var(--theme-elevation-500);
+  outline-offset: 2px;
+}
+
+/* Card hover effects */
+.card,
+.collection-list__item {
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.card:hover,
+.collection-list__item:hover {
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+/* Preview banner styling */
+.preview-banner {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 9999;
+  background: linear-gradient(90deg, #f59e0b, #d97706);
+  color: #78350f;
+  padding: 0.5rem 1rem;
+  text-align: center;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+/* Live preview iframe styling */
+.live-preview-frame {
+  border: none;
+  width: 100%;
+  height: 100%;
+}
+
+/* Rich text editor improvements */
+.rich-text-lexical {
+  min-height: 200px;
+}
+
+/* Better table styling in admin */
+.table {
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.table th,
+.table td {
+  border-bottom: 1px solid var(--theme-elevation-150);
+}
+
+/* Status badges */
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.status-badge--published {
+  background-color: var(--theme-success-100);
+  color: var(--theme-success-700);
+}
+
+.status-badge--draft {
+  background-color: var(--theme-warning-100);
+  color: var(--theme-warning-700);
+}
+
+/* Responsive improvements */
+@media (max-width: 768px) {
+  .nav-group__toggle {
+    padding: 0.75rem 1rem;
+  }
+}
