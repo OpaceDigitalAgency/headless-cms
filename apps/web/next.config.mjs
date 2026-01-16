@@ -39,7 +39,36 @@ const nextConfig = {
   async headers() {
     return [
       {
-        source: '/(.*)',
+        // Allow preview routes to be embedded in CMS iframe
+        source: '/preview/(.*)',
+        headers: [
+          {
+            key: 'X-Frame-Options',
+            value: 'SAMEORIGIN',
+          },
+          {
+            key: 'Content-Security-Policy',
+            value: "frame-ancestors 'self' http://localhost:3000",
+          },
+        ],
+      },
+      {
+        // Allow API routes to be embedded (for draft mode)
+        source: '/api/(.*)',
+        headers: [
+          {
+            key: 'X-Frame-Options',
+            value: 'SAMEORIGIN',
+          },
+          {
+            key: 'Content-Security-Policy',
+            value: "frame-ancestors 'self' http://localhost:3000",
+          },
+        ],
+      },
+      {
+        // Deny framing for all other routes
+        source: '/((?!preview|api).*)',
         headers: [
           {
             key: 'X-Frame-Options',
