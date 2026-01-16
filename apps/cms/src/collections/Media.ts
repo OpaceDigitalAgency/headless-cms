@@ -6,7 +6,7 @@ export const Media: CollectionConfig = {
   admin: {
     useAsTitle: 'filename',
     group: 'Content',
-    defaultColumns: ['filename', 'alt', 'filesize', 'generatedSizes', 'mimeType', 'createdAt'],
+    defaultColumns: ['filename', 'alt', 'filesize', 'mimeType', 'createdAt'],
     description: 'Upload and manage media files with automatic optimisation',
   },
 
@@ -317,6 +317,7 @@ export const Media: CollectionConfig = {
         },
         description: 'Image sizes that were generated',
         readOnly: true,
+        hidden: true,
       },
       hooks: {
         afterRead: [

@@ -1,5 +1,6 @@
 import type { Endpoint } from 'payload'
 import { createSeeder, isValidPresetId, PRESET_IDS, PRESET_METADATA, type PresetId } from '../seed/presets'
+import { ensureShowcasePage } from '../seed/showcase'
 
 /**
  * Seed API Endpoints
@@ -254,7 +255,7 @@ export const seedCollectionEndpoint: Endpoint = {
 
       const config = COLLECTION_SEED_CONFIG[slug]
 
-      // Use museum preset as base for seeding individual collections
+      // Use the core preset (museum-next) to cover all collections
       const seeder = createSeeder('museum-next', payload, {
         downloadMedia: includeMedia && config.hasSeedMedia,
         clearExisting: action === 'reseed',
@@ -311,6 +312,48 @@ export const seedCollectionEndpoint: Endpoint = {
 }
 
 /**
+ * POST /api/seed/showcase
+ * Creates or updates the Blocks Showcase page
+ */
+export const seedShowcaseEndpoint: Endpoint = {
+  path: '/seed/showcase',
+  method: 'post',
+  handler: async (req) => {
+    const { payload, user } = req
+
+    if (!user) {
+      return Response.json(
+        { success: false, message: 'Authentication required' },
+        { status: 401 }
+      )
+    }
+
+    if (user.role !== 'admin') {
+      return Response.json(
+        { success: false, message: 'Admin access required' },
+        { status: 403 }
+      )
+    }
+
+    try {
+      const page = await ensureShowcasePage(payload, { updateHeader: true })
+      return Response.json({
+        success: true,
+        message: 'Blocks Showcase page created/updated',
+        pageId: page.id,
+        slug: page.slug,
+      })
+    } catch (error) {
+      payload.logger.error('Showcase seed failed:', error)
+      return Response.json(
+        { success: false, message: `Operation failed: ${error}` },
+        { status: 500 }
+      )
+    }
+  },
+}
+
+/**
  * POST /api/seed/all
  * Seed or clear all collections at once
  */
@@ -340,7 +383,7 @@ export const seedAllEndpoint: Endpoint = {
       const body = await req.json?.() || {}
       const { action } = body
 
-      // Use museum preset as it has the most collections
+      // Use the core preset (museum-next) as it has the most collections
       const seeder = createSeeder('museum-next', payload, {
         downloadMedia: false,
         clearExisting: false,
@@ -386,6 +429,7 @@ export const seedEndpoints: Endpoint[] = [
   getCollectionsStatusEndpoint,
   seedActionEndpoint,
   seedCollectionEndpoint,
+  seedShowcaseEndpoint,
   seedAllEndpoint,
 ]
 

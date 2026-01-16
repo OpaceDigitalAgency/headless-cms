@@ -7,7 +7,7 @@
 
 export { BlogSeeder } from './blog'
 export { BrochureSeeder } from './brochure'
-export { MuseumSeeder } from './museum'
+export { CoreSeeder } from './core'
 export { EcommerceSeeder } from './ecommerce'
 
 import type { Payload } from 'payload'
@@ -15,7 +15,7 @@ import type { SeedOptions, BaseSeeder } from '../base'
 import { seederRegistry } from '../base'
 import { BlogSeeder } from './blog'
 import { BrochureSeeder } from './brochure'
-import { MuseumSeeder } from './museum'
+import { CoreSeeder } from './core'
 import { EcommerceSeeder } from './ecommerce'
 
 /**
@@ -84,7 +84,7 @@ export function createSeeder(
     case 'brochure-astro':
       return new BrochureSeeder(payload, options)
     case 'museum-next':
-      return new MuseumSeeder(payload, options)
+      return new CoreSeeder(payload, options)
     case 'ecommerce-next':
       return new EcommerceSeeder(payload, options)
     default:

@@ -4,17 +4,34 @@ import React, { useState, useEffect } from 'react'
 import { SeedDataManager } from '../../components/SeedDataManager'
 import { CollectionTemplates } from '../../components/CollectionTemplates'
 import { ContentTypeManager } from '../../components/ContentTypeManager'
+import {
+  FileTextIcon,
+  EditIcon,
+  ArtifactIcon,
+  ImageIcon,
+  UserIcon,
+  MapPinIcon,
+  UploadIcon,
+  SettingsIcon,
+  ChevronUpIcon,
+  ChevronDownIcon,
+  UsersIcon,
+  BarChartIcon,
+  FolderIcon,
+  PackageIcon,
+  SeedIcon
+} from '../icons'
 
 /**
  * Collection stats configuration
  */
 const statsConfig = [
-  { slug: 'pages', label: 'Pages', icon: '📄', color: '#3b82f6' },
-  { slug: 'posts', label: 'Posts', icon: '📝', color: '#10b981' },
-  { slug: 'artifacts', label: 'Artifacts', icon: '🏺', color: '#f59e0b' },
-  { slug: 'media', label: 'Media', icon: '🖼️', color: '#8b5cf6' },
-  { slug: 'people', label: 'People', icon: '👤', color: '#ec4899' },
-  { slug: 'places', label: 'Places', icon: '📍', color: '#06b6d4' },
+  { slug: 'pages', label: 'Pages', Icon: FileTextIcon, color: '#3b82f6' },
+  { slug: 'posts', label: 'Posts', Icon: EditIcon, color: '#10b981' },
+  { slug: 'artifacts', label: 'Artifacts', Icon: ArtifactIcon, color: '#f59e0b' },
+  { slug: 'media', label: 'Media', Icon: ImageIcon, color: '#8b5cf6' },
+  { slug: 'people', label: 'People', Icon: UserIcon, color: '#ec4899' },
+  { slug: 'places', label: 'Places', Icon: MapPinIcon, color: '#06b6d4' },
 ]
 
 /**
@@ -29,7 +46,7 @@ const recentConfig = [
 interface CollectionStat {
   slug: string
   label: string
-  icon: string
+  Icon: React.FC<{ size?: number; className?: string }>
   color: string
   count: number
 }
@@ -158,29 +175,29 @@ export const Dashboard: React.FC = () => {
 
       {/* Tab Navigation */}
       <div className="ra-dashboard__tabs">
-        <button 
+        <button
           className={`ra-dashboard__tab ${activeTab === 'overview' ? 'ra-dashboard__tab--active' : ''}`}
           onClick={() => setActiveTab('overview')}
         >
-          📊 Overview
+          <BarChartIcon size={16} /> Overview
         </button>
-        <button 
+        <button
           className={`ra-dashboard__tab ${activeTab === 'content-types' ? 'ra-dashboard__tab--active' : ''}`}
           onClick={() => setActiveTab('content-types')}
         >
-          🗂️ Content Types
+          <FolderIcon size={16} /> Content Types
         </button>
-        <button 
+        <button
           className={`ra-dashboard__tab ${activeTab === 'templates' ? 'ra-dashboard__tab--active' : ''}`}
           onClick={() => setActiveTab('templates')}
         >
-          📦 Collection Templates
+          <PackageIcon size={16} /> Collection Templates
         </button>
-        <button 
+        <button
           className={`ra-dashboard__tab ${activeTab === 'seed' ? 'ra-dashboard__tab--active' : ''}`}
           onClick={() => setActiveTab('seed')}
         >
-          🌱 Sample Data
+          <SeedIcon size={16} /> Sample Data
         </button>
       </div>
 
@@ -189,23 +206,26 @@ export const Dashboard: React.FC = () => {
         <>
           {/* Stats Grid */}
           <div className="ra-dashboard__stats">
-            {stats.map((stat) => (
-              <a 
-                key={stat.slug} 
-                href={`/admin/collections/${stat.slug}`}
-                className="ra-dashboard__stat-card"
-              >
-                <div className="ra-dashboard__stat-icon" style={{ backgroundColor: `${stat.color}20`, color: stat.color }}>
-                  {stat.icon}
-                </div>
-                <div className="ra-dashboard__stat-content">
-                  <span className="ra-dashboard__stat-count">
-                    {isLoading ? '...' : stat.count}
-                  </span>
-                  <span className="ra-dashboard__stat-label">{stat.label}</span>
-                </div>
-              </a>
-            ))}
+            {stats.map((stat) => {
+              const IconComponent = stat.Icon
+              return (
+                <a
+                  key={stat.slug}
+                  href={`/admin/collections/${stat.slug}`}
+                  className="ra-dashboard__stat-card"
+                >
+                  <div className="ra-dashboard__stat-icon" style={{ backgroundColor: `${stat.color}20`, color: stat.color }}>
+                    <IconComponent size={24} />
+                  </div>
+                  <div className="ra-dashboard__stat-content">
+                    <span className="ra-dashboard__stat-count">
+                      {isLoading ? '...' : stat.count}
+                    </span>
+                    <span className="ra-dashboard__stat-label">{stat.label}</span>
+                  </div>
+                </a>
+              )
+            })}
           </div>
 
           {/* Two-column grid for recent and drafts */}
@@ -279,16 +299,16 @@ export const Dashboard: React.FC = () => {
             <h2>Quick Create</h2>
             <div className="ra-dashboard__quick-actions">
               <a href="/admin/collections/pages/create" className="ra-dashboard__quick-btn">
-                <span>📄</span> New Page
+                <FileTextIcon size={18} /> New Page
               </a>
               <a href="/admin/collections/posts/create" className="ra-dashboard__quick-btn">
-                <span>📝</span> New Post
+                <EditIcon size={18} /> New Post
               </a>
               <a href="/admin/collections/artifacts/create" className="ra-dashboard__quick-btn">
-                <span>🏺</span> New Artifact
+                <ArtifactIcon size={18} /> New Artifact
               </a>
               <a href="/admin/collections/media/create" className="ra-dashboard__quick-btn">
-                <span>🖼️</span> Upload Media
+                <UploadIcon size={18} /> Upload Media
               </a>
             </div>
           </div>
@@ -298,28 +318,28 @@ export const Dashboard: React.FC = () => {
             <h2>Site Configuration</h2>
             <div className="ra-dashboard__config-grid">
               <a href="/admin/globals/header" className="ra-dashboard__config-card">
-                <span className="ra-dashboard__config-icon">🔝</span>
+                <span className="ra-dashboard__config-icon"><ChevronUpIcon size={20} /></span>
                 <div>
                   <h3>Header</h3>
                   <p>Navigation & branding</p>
                 </div>
               </a>
               <a href="/admin/globals/footer" className="ra-dashboard__config-card">
-                <span className="ra-dashboard__config-icon">🔻</span>
+                <span className="ra-dashboard__config-icon"><ChevronDownIcon size={20} /></span>
                 <div>
                   <h3>Footer</h3>
                   <p>Links & social</p>
                 </div>
               </a>
               <a href="/admin/globals/settings" className="ra-dashboard__config-card">
-                <span className="ra-dashboard__config-icon">⚙️</span>
+                <span className="ra-dashboard__config-icon"><SettingsIcon size={20} /></span>
                 <div>
                   <h3>Settings</h3>
                   <p>Site-wide config</p>
                 </div>
               </a>
               <a href="/admin/collections/users" className="ra-dashboard__config-card">
-                <span className="ra-dashboard__config-icon">👥</span>
+                <span className="ra-dashboard__config-icon"><UsersIcon size={20} /></span>
                 <div>
                   <h3>Users</h3>
                   <p>Manage admins</p>

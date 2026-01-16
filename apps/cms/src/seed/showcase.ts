@@ -72,7 +72,7 @@ async function getOrCreateShowcaseForm(payload: Payload) {
 async function ensureHeaderLink(payload: Payload) {
   const header = await payload.findGlobal({ slug: 'header' })
   const navItems = Array.isArray(header?.navItems) ? header.navItems : []
-  const hasShowcase = navItems.some((item: any) => item?.link?.url === '/blocks-showcase')
+  const hasShowcase = navItems.some((item: any) => item?.url === '/blocks-showcase')
 
   if (hasShowcase) return
 
@@ -81,7 +81,7 @@ async function ensureHeaderLink(payload: Payload) {
     data: {
       ...header,
       navItems: [
-        { link: { type: 'custom', label: 'Blocks Showcase', url: '/blocks-showcase' } },
+        { label: 'Blocks Showcase', type: 'link', url: '/blocks-showcase' },
         ...navItems,
       ],
     },
@@ -89,11 +89,11 @@ async function ensureHeaderLink(payload: Payload) {
 }
 
 export async function ensureShowcasePage(payload: Payload, options?: { updateHeader?: boolean }) {
-  const heroImage = await getOrCreateMedia(payload, 'showcase-hero.png', 'Showcase hero image')
-  const mediaImage = await getOrCreateMedia(payload, 'showcase-media.png', 'Showcase media image')
-  const galleryImage = await getOrCreateMedia(payload, 'showcase-gallery.png', 'Showcase gallery image')
-  const logoImage = await getOrCreateMedia(payload, 'showcase-logo.png', 'Showcase logo image')
-  const avatarImage = await getOrCreateMedia(payload, 'showcase-avatar.png', 'Showcase avatar image')
+  const heroImage = await getOrCreateMedia(payload, 'showcase-hero.png', 'Showcase hero image (placeholder)')
+  const mediaImage = await getOrCreateMedia(payload, 'showcase-media.png', 'Showcase media image (placeholder)')
+  const galleryImage = await getOrCreateMedia(payload, 'showcase-gallery.png', 'Showcase gallery image (placeholder)')
+  const logoImage = await getOrCreateMedia(payload, 'showcase-logo.png', 'Showcase logo image (placeholder)')
+  const avatarImage = await getOrCreateMedia(payload, 'showcase-avatar.png', 'Showcase avatar image (placeholder)')
   const showcaseForm = await getOrCreateShowcaseForm(payload)
 
   const pageData = {

@@ -1,18 +1,45 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
-import { 
-  allTemplates, 
-  TEMPLATE_CATEGORIES, 
+import {
+  allTemplates,
+  TEMPLATE_CATEGORIES,
   COLLECTION_BUNDLES,
   type CollectionTemplate,
   type TemplateCategory,
   type BundleId,
 } from '../collection-templates'
+import {
+  FileTextIcon,
+  EditIcon,
+  ArtifactIcon,
+  UserIcon,
+  MapPinIcon,
+  CalendarIcon,
+  ShoppingCartIcon,
+  ImageIcon,
+  PackageIcon,
+  type IconProps
+} from '../admin/icons'
+
+// Map emoji icons to SVG icon components
+const getIconComponent = (iconString: string): React.FC<IconProps> => {
+  const iconMap: Record<string, React.FC<IconProps>> = {
+    '📝': EditIcon,
+    '🏛️': ArtifactIcon,
+    '🛒': ShoppingCartIcon,
+    '👤': UserIcon,
+    '📍': MapPinIcon,
+    '📅': CalendarIcon,
+    '🎬': ImageIcon,
+    '📦': PackageIcon,
+  }
+  return iconMap[iconString] || EditIcon
+}
 
 /**
  * Collection Templates Browser
- * 
+ *
  * Allows users to browse, preview, and add collection templates to their CMS.
  * Similar to WordPress plugin/theme browser.
  */
@@ -183,43 +210,54 @@ export const CollectionTemplates: React.FC = () => {
             backgroundColor: selectedCategory === 'bundles' ? '#0070f3' : '#f0f0f0',
             color: selectedCategory === 'bundles' ? 'white' : '#333',
             fontWeight: selectedCategory === 'bundles' ? 600 : 400,
+            display: 'flex',
+            alignItems: 'center',
+            gap: '6px',
           }}
         >
-          📦 Bundles
+          <PackageIcon size={16} /> Bundles
         </button>
-        {Object.entries(TEMPLATE_CATEGORIES).map(([key, { label, icon }]) => (
-          <button
-            key={key}
-            onClick={() => setSelectedCategory(key as TemplateCategory)}
-            style={{
-              padding: '8px 16px',
-              border: 'none',
-              borderRadius: '4px',
-              cursor: 'pointer',
-              backgroundColor: selectedCategory === key ? '#0070f3' : '#f0f0f0',
-              color: selectedCategory === key ? 'white' : '#333',
-              fontWeight: selectedCategory === key ? 600 : 400,
-            }}
-          >
-            {icon} {label}
-          </button>
-        ))}
+        {Object.entries(TEMPLATE_CATEGORIES).map(([key, { label, icon }]) => {
+          const IconComponent = getIconComponent(icon)
+          return (
+            <button
+              key={key}
+              onClick={() => setSelectedCategory(key as TemplateCategory)}
+              style={{
+                padding: '8px 16px',
+                border: 'none',
+                borderRadius: '4px',
+                cursor: 'pointer',
+                backgroundColor: selectedCategory === key ? '#0070f3' : '#f0f0f0',
+                color: selectedCategory === key ? 'white' : '#333',
+                fontWeight: selectedCategory === key ? 600 : 400,
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px',
+              }}
+            >
+              <IconComponent size={16} /> {label}
+            </button>
+          )
+        })}
       </div>
 
       {/* Bundles View */}
       {selectedCategory === 'bundles' && (
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '16px' }}>
-          {Object.entries(COLLECTION_BUNDLES).map(([id, bundle]) => (
-            <div
-              key={id}
-              style={{
-                border: '1px solid #e0e0e0',
-                borderRadius: '8px',
-                padding: '20px',
-                backgroundColor: 'white',
-              }}
-            >
-              <div style={{ fontSize: '32px', marginBottom: '10px' }}>{bundle.icon}</div>
+          {Object.entries(COLLECTION_BUNDLES).map(([id, bundle]) => {
+            const IconComponent = getIconComponent(bundle.icon)
+            return (
+              <div
+                key={id}
+                style={{
+                  border: '1px solid #e0e0e0',
+                  borderRadius: '8px',
+                  padding: '20px',
+                  backgroundColor: 'white',
+                }}
+              >
+                <div style={{ marginBottom: '10px' }}><IconComponent size={32} /></div>
               <h3 style={{ margin: '0 0 8px 0', fontSize: '18px' }}>{bundle.name}</h3>
               <p style={{ margin: '0 0 12px 0', color: '#666', fontSize: '14px' }}>
                 {bundle.description}
@@ -244,7 +282,8 @@ export const CollectionTemplates: React.FC = () => {
                 {isAdding ? 'Adding...' : 'Add Bundle'}
               </button>
             </div>
-          ))}
+          )
+          })}
         </div>
       )}
 
@@ -253,6 +292,7 @@ export const CollectionTemplates: React.FC = () => {
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '16px' }}>
           {filteredTemplates.map((template) => {
             const isInstalled = installedCollections.includes(template.defaultSlug)
+            const IconComponent = getIconComponent(template.icon)
             return (
               <div
                 key={template.id}
@@ -267,7 +307,7 @@ export const CollectionTemplates: React.FC = () => {
                 onClick={() => !isInstalled && handleSelectTemplate(template)}
               >
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                  <div style={{ fontSize: '32px', marginBottom: '10px' }}>{template.icon}</div>
+                  <div style={{ marginBottom: '10px' }}><IconComponent size={32} /></div>
                   {isInstalled && (
                     <span style={{
                       fontSize: '11px',

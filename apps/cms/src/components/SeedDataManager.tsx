@@ -1,6 +1,16 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
+import {
+  FileTextIcon,
+  EditIcon,
+  ArtifactIcon,
+  UserIcon,
+  MapPinIcon,
+  TagIcon,
+  FolderIcon,
+  type IconProps
+} from '../admin/icons'
 
 /**
  * Collection seed status
@@ -11,7 +21,7 @@ interface CollectionSeedStatus {
   count: number
   hasSeedData: boolean
   hasSeedMedia: boolean
-  icon: string
+  Icon: React.FC<IconProps>
 }
 
 /**
@@ -53,16 +63,39 @@ export const SeedDataManager: React.FC = () => {
     fetchPresets()
   }, [])
 
+  const getIconForCollection = (slug: string): React.FC<IconProps> => {
+    const iconMap: Record<string, React.FC<IconProps>> = {
+      'pages': FileTextIcon,
+      'posts': EditIcon,
+      'categories': TagIcon,
+      'artifacts': ArtifactIcon,
+      'people': UserIcon,
+      'places': MapPinIcon,
+      'museum-collections': FolderIcon,
+      'content-types': FolderIcon,
+      'custom-items': FolderIcon,
+      'products': FolderIcon,
+      'product-categories': TagIcon,
+      'product-collections': FolderIcon,
+    }
+    return iconMap[slug] || FileTextIcon
+  }
+
   const fetchCollectionStatus = async () => {
     setLoading(true)
     try {
       const response = await fetch('/api/seed/collections')
       if (response.ok) {
         const data = await response.json()
-        setCollections(data.collections || getDefaultCollections())
+        // Map the API response to include Icon components
+        const collectionsWithIcons = (data.collections || []).map((c: any) => ({
+          ...c,
+          Icon: getIconForCollection(c.slug)
+        }))
+        setCollections(collectionsWithIcons.length > 0 ? collectionsWithIcons : getDefaultCollections())
         // Initialize media preferences
         const mediaPrefs: Record<string, boolean> = {}
-        ;(data.collections || getDefaultCollections()).forEach((c: CollectionSeedStatus) => {
+        collectionsWithIcons.forEach((c: CollectionSeedStatus) => {
           if (c.hasSeedMedia) {
             mediaPrefs[c.slug] = true
           }
@@ -94,13 +127,13 @@ export const SeedDataManager: React.FC = () => {
   }
 
   const getDefaultCollections = (): CollectionSeedStatus[] => [
-    { slug: 'pages', label: 'Pages', count: 0, hasSeedData: true, hasSeedMedia: false, icon: '📄' },
-    { slug: 'posts', label: 'Posts', count: 0, hasSeedData: true, hasSeedMedia: false, icon: '📝' },
-    { slug: 'categories', label: 'Categories', count: 0, hasSeedData: true, hasSeedMedia: false, icon: '🏷️' },
-    { slug: 'artifacts', label: 'Artifacts', count: 0, hasSeedData: true, hasSeedMedia: true, icon: '🏺' },
-    { slug: 'people', label: 'People', count: 0, hasSeedData: true, hasSeedMedia: true, icon: '👤' },
-    { slug: 'places', label: 'Places', count: 0, hasSeedData: true, hasSeedMedia: true, icon: '📍' },
-    { slug: 'museum-collections', label: 'Collections', count: 0, hasSeedData: true, hasSeedMedia: false, icon: '🗂️' },
+    { slug: 'pages', label: 'Pages', count: 0, hasSeedData: true, hasSeedMedia: false, Icon: FileTextIcon },
+    { slug: 'posts', label: 'Posts', count: 0, hasSeedData: true, hasSeedMedia: false, Icon: EditIcon },
+    { slug: 'categories', label: 'Categories', count: 0, hasSeedData: true, hasSeedMedia: false, Icon: TagIcon },
+    { slug: 'artifacts', label: 'Artifacts', count: 0, hasSeedData: true, hasSeedMedia: true, Icon: ArtifactIcon },
+    { slug: 'people', label: 'People', count: 0, hasSeedData: true, hasSeedMedia: true, Icon: UserIcon },
+    { slug: 'places', label: 'Places', count: 0, hasSeedData: true, hasSeedMedia: true, Icon: MapPinIcon },
+    { slug: 'museum-collections', label: 'Collections', count: 0, hasSeedData: true, hasSeedMedia: false, Icon: FolderIcon },
   ]
 
   const getDefaultPresets = (): PresetInfo[] => [
@@ -214,6 +247,31 @@ export const SeedDataManager: React.FC = () => {
       }
     } catch (error) {
       setMessage({ type: 'error', text: `An error occurred while ${action}ing data` })
+    } finally {
+      setActionInProgress(null)
+    }
+  }
+
+  const handleCreateShowcase = async () => {
+    setActionInProgress('pages-showcase')
+    setMessage({ type: 'info', text: 'Creating Blocks Showcase page...' })
+
+    try {
+      const response = await fetch('/api/seed/showcase', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+      })
+
+      const data = await response.json()
+
+      if (response.ok) {
+        setMessage({ type: 'success', text: data.message || 'Blocks Showcase page created.' })
+        fetchCollectionStatus()
+      } else {
+        setMessage({ type: 'error', text: data.message || 'Failed to create Blocks Showcase page.' })
+      }
+    } catch (error) {
+      setMessage({ type: 'error', text: 'Failed to create Blocks Showcase page. Please try again.' })
     } finally {
       setActionInProgress(null)
     }
@@ -363,6 +421,7 @@ export const SeedDataManager: React.FC = () => {
                 onSeed={() => handleSeedCollection(collection.slug, 'seed')}
                 onClear={() => handleSeedCollection(collection.slug, 'clear')}
                 onReseed={() => handleSeedCollection(collection.slug, 'reseed')}
+                onCreateShowcase={collection.slug === 'pages' ? handleCreateShowcase : undefined}
                 actionInProgress={actionInProgress}
               />
             ))}
@@ -532,6 +591,7 @@ interface CollectionSeedCardProps {
   onSeed: () => void
   onClear: () => void
   onReseed: () => void
+  onCreateShowcase?: () => void
   actionInProgress: string | null
 }
 
@@ -542,11 +602,13 @@ const CollectionSeedCard: React.FC<CollectionSeedCardProps> = ({
   onSeed,
   onClear,
   onReseed,
+  onCreateShowcase,
   actionInProgress,
 }) => {
-  const { slug, label, count, hasSeedMedia, icon } = collection
+  const { slug, label, count, hasSeedMedia, Icon: IconComponent } = collection
   const hasData = count > 0
   const isProcessing = actionInProgress?.startsWith(slug)
+  const isShowcaseAction = slug === 'pages' && Boolean(onCreateShowcase)
 
   return (
     <div style={{
@@ -558,7 +620,7 @@ const CollectionSeedCard: React.FC<CollectionSeedCardProps> = ({
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '12px' }}>
         <div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
-            <span style={{ fontSize: '20px' }}>{icon}</span>
+            <IconComponent size={20} className="ra-seed-card-icon" />
             <h3 style={{ margin: 0, fontSize: '16px', fontWeight: 600 }}>{label}</h3>
           </div>
           <p style={{ margin: 0, fontSize: '12px', color: 'var(--theme-elevation-600)' }}>
@@ -652,6 +714,24 @@ const CollectionSeedCard: React.FC<CollectionSeedCardProps> = ({
               {actionInProgress === `${slug}-clear` ? 'Clearing...' : '🗑️ Delete'}
             </button>
           </>
+        )}
+        {isShowcaseAction && (
+          <button
+            onClick={onCreateShowcase}
+            disabled={isProcessing}
+            style={{
+              padding: '6px 12px',
+              backgroundColor: '#0d6efd',
+              color: 'white',
+              border: 'none',
+              borderRadius: '4px',
+              cursor: isProcessing ? 'not-allowed' : 'pointer',
+              opacity: isProcessing ? 0.6 : 1,
+              fontSize: '12px',
+            }}
+          >
+            {actionInProgress === 'pages-showcase' ? 'Creating...' : '✨ Create Blocks Showcase'}
+          </button>
         )}
       </div>
     </div>
