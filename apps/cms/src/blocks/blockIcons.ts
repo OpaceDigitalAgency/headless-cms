@@ -28,4 +28,37 @@ export const blockIcons = {
   timeline: svgData(
     '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none" stroke="#64748b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="20" y1="14" x2="20" y2="50"/><circle cx="20" cy="18" r="4"/><circle cx="20" cy="32" r="4"/><circle cx="20" cy="46" r="4"/><line x1="30" y1="18" x2="52" y2="18"/><line x1="30" y1="32" x2="48" y2="32"/><line x1="30" y1="46" x2="44" y2="46"/></svg>',
   ),
+  quote: svgData(
+    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none" stroke="#64748b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 24h12v12H20l-2 6"/><path d="M38 24h12v12H40l-2 6"/></svg>',
+  ),
+  features: svgData(
+    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none" stroke="#64748b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="14" cy="18" r="3"/><line x1="22" y1="18" x2="50" y2="18"/><circle cx="14" cy="30" r="3"/><line x1="22" y1="30" x2="46" y2="30"/><circle cx="14" cy="42" r="3"/><line x1="22" y1="42" x2="40" y2="42"/></svg>',
+  ),
+  stats: svgData(
+    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none" stroke="#64748b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="16" y1="44" x2="16" y2="26"/><line x1="32" y1="44" x2="32" y2="18"/><line x1="48" y1="44" x2="48" y2="30"/><line x1="12" y1="46" x2="52" y2="46"/></svg>',
+  ),
+  logos: svgData(
+    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none" stroke="#64748b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="10" y="22" width="12" height="12" rx="2"/><rect x="26" y="22" width="12" height="12" rx="2"/><rect x="42" y="22" width="12" height="12" rx="2"/></svg>',
+  ),
+  testimonials: svgData(
+    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none" stroke="#64748b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="24" cy="22" r="6"/><path d="M14 44c2-6 18-6 20 0"/><path d="M36 20h14v10H40l-4 4v-4h-4z"/></svg>',
+  ),
+  faq: svgData(
+    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none" stroke="#64748b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="32" cy="32" r="18"/><path d="M26 26a6 6 0 0 1 12 0c0 4-6 4-6 8"/><circle cx="32" cy="42" r="1"/></svg>',
+  ),
+  pricing: svgData(
+    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none" stroke="#64748b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="14" y="16" width="36" height="32" rx="4"/><path d="M32 24v16"/><path d="M26 30c0-2 2-4 6-4s6 2 6 4-2 4-6 4-6 2-6 4"/></svg>',
+  ),
+  team: svgData(
+    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none" stroke="#64748b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="22" cy="22" r="6"/><circle cx="42" cy="24" r="5"/><path d="M10 46c2-6 20-6 24 0"/><path d="M32 46c1-4 14-5 18 0"/></svg>',
+  ),
+  embed: svgData(
+    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none" stroke="#64748b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="10" y="18" width="44" height="28" rx="4"/><polygon points="30,26 40,32 30,38"/></svg>',
+  ),
+  spacer: svgData(
+    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none" stroke="#64748b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="32" x2="52" y2="32"/><line x1="20" y1="24" x2="20" y2="40"/><line x1="44" y1="24" x2="44" y2="40"/></svg>',
+  ),
+  html: svgData(
+    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none" stroke="#64748b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="26,20 16,32 26,44"/><polyline points="38,20 48,32 38,44"/><line x1="30" y1="18" x2="34" y2="46"/></svg>',
+  ),
 };

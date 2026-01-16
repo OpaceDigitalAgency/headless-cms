@@ -141,45 +141,55 @@ export default buildConfig({
   // Rich Text Editor (Lexical) - Full Configuration
   // ===========================================
   editor: lexicalEditor({
-    features: ({ defaultFeatures }) => [
-      ...defaultFeatures,
-      FixedToolbarFeature(),
-      // Heading feature with all levels
-      HeadingFeature({
-        enabledHeadingSizes: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'],
-      }),
-      // Link feature with custom fields
-      LinkFeature({
-        enabledCollections: ['pages', 'posts', 'artifacts'],
-        fields: [
-          {
-            name: 'rel',
-            label: 'Rel Attribute',
-            type: 'select',
-            options: [
-              { label: 'None', value: '' },
-              { label: 'No Follow', value: 'nofollow' },
-              { label: 'No Opener', value: 'noopener' },
-              { label: 'No Referrer', value: 'noreferrer' },
-            ],
+    features: ({ defaultFeatures }) => {
+      // Filter out default features that we want to customize to avoid duplicates
+      const filteredFeatures = defaultFeatures.filter((feature) => {
+        // Remove default HeadingFeature, LinkFeature, and UploadFeature so we can add customized versions
+        const featureName = feature?.key || ''
+        return featureName !== 'heading' && featureName !== 'link' && featureName !== 'upload'
+      })
+
+      return [
+        ...filteredFeatures,
+        // Fixed toolbar (always visible at top)
+        FixedToolbarFeature(),
+        // Heading feature with all levels enabled
+        HeadingFeature({
+          enabledHeadingSizes: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'],
+        }),
+        // Link feature with custom rel attribute field
+        LinkFeature({
+          enabledCollections: ['pages', 'posts', 'artifacts'],
+          fields: [
+            {
+              name: 'rel',
+              label: 'Rel Attribute',
+              type: 'select',
+              options: [
+                { label: 'None', value: '' },
+                { label: 'No Follow', value: 'nofollow' },
+                { label: 'No Opener', value: 'noopener' },
+                { label: 'No Referrer', value: 'noreferrer' },
+              ],
+            },
+          ],
+        }),
+        // Upload feature for inline images with caption support
+        UploadFeature({
+          collections: {
+            media: {
+              fields: [
+                {
+                  name: 'caption',
+                  type: 'text',
+                  label: 'Caption',
+                },
+              ],
+            },
           },
-        ],
-      }),
-      // Upload feature for inline images
-      UploadFeature({
-        collections: {
-          media: {
-            fields: [
-              {
-                name: 'caption',
-                type: 'text',
-                label: 'Caption',
-              },
-            ],
-          },
-        },
-      }),
-    ],
+        }),
+      ]
+    },
   }),
 
   // ===========================================

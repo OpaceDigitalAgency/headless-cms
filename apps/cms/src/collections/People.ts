@@ -9,6 +9,17 @@ import { mediaBlock } from '../blocks/Media'
 import { ctaBlock } from '../blocks/CallToAction'
 import { archiveBlock } from '../blocks/Archive'
 import { formBlock } from '../blocks/Form'
+import { quoteBlock } from '../blocks/Quote'
+import { featuresBlock } from '../blocks/Features'
+import { statsBlock } from '../blocks/Stats'
+import { logoCloudBlock } from '../blocks/LogoCloud'
+import { testimonialsBlock } from '../blocks/Testimonials'
+import { faqBlock } from '../blocks/FAQ'
+import { pricingBlock } from '../blocks/Pricing'
+import { teamBlock } from '../blocks/Team'
+import { embedBlock } from '../blocks/Embed'
+import { spacerBlock } from '../blocks/Spacer'
+import { htmlBlock } from '../blocks/HTML'
 import { galleryBlock } from '../blocks/Gallery'
 import { gridBlock } from '../blocks/Grid'
 import { timelineBlock } from '../blocks/Timeline'
@@ -323,11 +334,22 @@ export const People: CollectionConfig = {
                 contentBlock,
                 mediaBlock,
                 ctaBlock,
+                quoteBlock,
+                featuresBlock,
+                statsBlock,
+                logoCloudBlock,
+                testimonialsBlock,
+                faqBlock,
+                pricingBlock,
+                teamBlock,
+                embedBlock,
                 archiveBlock,
                 formBlock,
                 galleryBlock,
                 gridBlock,
                 timelineBlock,
+                spacerBlock,
+                htmlBlock,
               ],
               admin: {
                 description: 'Add and arrange content sections',
