@@ -6,8 +6,8 @@ export const Media: CollectionConfig = {
   admin: {
     useAsTitle: 'filename',
     group: 'Content',
-    defaultColumns: ['filename', 'alt', 'mimeType', 'createdAt'],
-    description: 'Upload and manage media files with automatic optimization',
+    defaultColumns: ['filename', 'alt', 'filesize', 'generatedSizes', 'mimeType', 'createdAt'],
+    description: 'Upload and manage media files with automatic optimisation',
   },
 
   // Enable file uploads with full optimization
@@ -237,12 +237,23 @@ export const Media: CollectionConfig = {
 
   fields: [
     {
+      name: 'filesize',
+      type: 'number',
+      admin: {
+        components: {
+          Cell: '/components/FileSizeCell',
+        },
+        readOnly: true,
+        hidden: true,
+      },
+    },
+    {
       name: 'alt',
       type: 'text',
       label: 'Alt Text',
-      required: true,
+      required: false,
       admin: {
-        description: 'Describe the image for accessibility and SEO',
+        description: 'Describe the image for accessibility and SEO. Defaults to filename if not provided.',
       },
     },
     {
@@ -294,7 +305,40 @@ export const Media: CollectionConfig = {
         },
       ],
       admin: {
-        description: 'Tags for organizing media',
+        description: 'Tags for organising media',
+      },
+    },
+    {
+      name: 'imageSizesInfo',
+      type: 'ui',
+      admin: {
+        components: {
+          Field: () => null,
+        },
+        description: '📐 Image Sizes: When you upload an image, multiple optimised sizes are automatically generated (blur, thumbnail, small, card, medium, tablet, large, desktop, xlarge, og, plus AVIF versions). The front-end automatically selects the optimal size based on the viewport and device. You don\'t need to manually choose a size - the system handles this for responsive images. Click "Edit Image" to see all generated sizes.',
+        position: 'sidebar',
+      },
+    },
+    {
+      name: 'generatedSizes',
+      type: 'text',
+      admin: {
+        components: {
+          Cell: '/components/GeneratedSizesCell',
+        },
+        description: 'Image sizes that were generated',
+        readOnly: true,
+      },
+      hooks: {
+        afterRead: [
+          ({ data }) => {
+            if (data?.sizes && typeof data.sizes === 'object') {
+              const sizeNames = Object.keys(data.sizes).filter(key => data.sizes[key]?.filename)
+              return sizeNames.length > 0 ? sizeNames.join(', ') : 'None'
+            }
+            return 'None'
+          },
+        ],
       },
     },
   ],

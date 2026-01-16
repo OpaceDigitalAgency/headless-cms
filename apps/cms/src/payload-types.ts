@@ -216,7 +216,7 @@ export interface User {
   password?: string | null;
 }
 /**
- * Upload and manage media files with automatic optimization
+ * Upload and manage media files with automatic optimisation
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "media".
@@ -224,9 +224,9 @@ export interface User {
 export interface Media {
   id: number;
   /**
-   * Describe the image for accessibility and SEO
+   * Describe the image for accessibility and SEO. Defaults to filename if not provided.
    */
-  alt: string;
+  alt?: string | null;
   /**
    * Optional caption to display with the image
    */
@@ -244,7 +244,7 @@ export interface Media {
    */
   dominantColor?: string | null;
   /**
-   * Tags for organizing media
+   * Tags for organising media
    */
   tags?:
     | {
@@ -252,6 +252,10 @@ export interface Media {
         id?: string | null;
       }[]
     | null;
+  /**
+   * Image sizes that were generated
+   */
+  generatedSizes?: string | null;
   updatedAt: string;
   createdAt: string;
   url?: string | null;
@@ -4825,6 +4829,7 @@ export interface MediaSelect<T extends boolean = true> {
         tag?: T;
         id?: T;
       };
+  generatedSizes?: T;
   updatedAt?: T;
   createdAt?: T;
   url?: T;
