@@ -3,7 +3,7 @@ import type { GlobalConfig } from 'payload'
 export const Settings: GlobalConfig = {
   slug: 'settings',
   label: 'Site Settings',
-  
+
   admin: {
     group: 'Site',
     description: 'Global site settings and configuration',
@@ -12,6 +12,30 @@ export const Settings: GlobalConfig = {
   access: {
     read: () => true,
     update: ({ req: { user } }) => user?.role === 'admin',
+  },
+
+  // Hooks for revalidation
+  hooks: {
+    afterChange: [
+      async ({ doc, req }) => {
+        const revalidateUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3001'
+        try {
+          await fetch(`${revalidateUrl}/api/revalidate`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              secret: process.env.REVALIDATION_SECRET,
+              global: 'settings',
+              tags: ['settings'],
+            }),
+          })
+          req.payload.logger.info('Revalidated settings global')
+        } catch (error) {
+          req.payload.logger.error('Failed to revalidate settings global')
+        }
+        return doc
+      },
+    ],
   },
 
   fields: [

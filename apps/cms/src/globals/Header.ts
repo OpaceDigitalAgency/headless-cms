@@ -3,7 +3,7 @@ import type { GlobalConfig } from 'payload'
 export const Header: GlobalConfig = {
   slug: 'header',
   label: 'Header',
-  
+
   admin: {
     group: 'Site',
     description: 'Configure the site header and navigation',
@@ -12,6 +12,30 @@ export const Header: GlobalConfig = {
   access: {
     read: () => true,
     update: ({ req: { user } }) => Boolean(user),
+  },
+
+  // Hooks for revalidation
+  hooks: {
+    afterChange: [
+      async ({ doc, req }) => {
+        const revalidateUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3001'
+        try {
+          await fetch(`${revalidateUrl}/api/revalidate`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              secret: process.env.REVALIDATION_SECRET,
+              global: 'header',
+              tags: ['header'],
+            }),
+          })
+          req.payload.logger.info('Revalidated header global')
+        } catch (error) {
+          req.payload.logger.error('Failed to revalidate header global')
+        }
+        return doc
+      },
+    ],
   },
 
   fields: [

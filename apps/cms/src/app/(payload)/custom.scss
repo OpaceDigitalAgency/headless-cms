@@ -414,6 +414,7 @@
 
 .ra-side-nav__section {
   margin-bottom: 0.25rem;
+  top:60px !important;
 }
 
 .ra-side-nav__section-header {
@@ -1070,10 +1071,20 @@
    Fix Duplicate Tabs Issue
    =========================================== */
 
-/* Only hide duplicate tabs when there are nested tabs-field elements */
-/* This preserves tabs when there's only one set */
-.document-fields__fields > .render-fields > .tabs-field:first-child:has(+ * .tabs-field) {
+/* Hide the outer/first set of tabs when there are nested tabs */
+/* Target: .document-fields__fields > .tabs-field that contains nested .tabs-field */
+.document-fields__fields > .tabs-field:has(.tabs-field) > .tabs-field__tabs-wrap {
   display: none !important;
+}
+
+/* Also hide the first tab content that wraps the nested tabs */
+.document-fields__fields > .tabs-field:has(.tabs-field) > .tabs-field__content-wrap > .tabs-field__tab:first-child {
+  display: none !important;
+}
+
+/* Show the nested tabs directly */
+.document-fields__fields > .tabs-field:has(.tabs-field) > .tabs-field__content-wrap {
+  display: block !important;
 }
 
 /* ===========================================
@@ -1102,6 +1113,41 @@
 }
 
 /* ===========================================
+   Drawer Thumbnail Icon Fallbacks
+   =========================================== */
+
+.blocks-drawer__default-image,
+.items-drawer__default-image {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 110px;
+  background: linear-gradient(135deg, var(--theme-elevation-50), var(--theme-elevation-100));
+  border: 1px dashed var(--theme-elevation-200);
+  border-radius: var(--border-radius-md);
+}
+
+.blocks-drawer__default-image img,
+.blocks-drawer__default-image svg,
+.items-drawer__default-image img,
+.items-drawer__default-image svg {
+  display: none;
+}
+
+.blocks-drawer__default-image::after,
+.items-drawer__default-image::after {
+  content: "";
+  width: 38px;
+  height: 38px;
+  background: var(--theme-success-500);
+  opacity: 0.85;
+  -webkit-mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0%200%2024%2024'><rect x='3' y='3' width='7' height='7' rx='1'/><rect x='14' y='3' width='7' height='7' rx='1'/><rect x='3' y='14' width='7' height='7' rx='1'/><rect x='14' y='14' width='7' height='7' rx='1'/></svg>") center/contain no-repeat;
+  mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0%200%2024%2024'><rect x='3' y='3' width='7' height='7' rx='1'/><rect x='14' y='3' width='7' height='7' rx='1'/><rect x='3' y='14' width='7' height='7' rx='1'/><rect x='14' y='14' width='7' height='7' rx='1'/></svg>") center/contain no-repeat;
+}
+
+/* ===========================================
    Fix Sidebar Toggle Position
    =========================================== */
 
@@ -1111,27 +1157,35 @@
   top: calc(var(--top-nav-height) + 0.75rem) !important;
   left: 0.75rem !important;
   z-index: 95 !important;
-  width: 44px !important;
-  height: 44px !important;
+  width: 48px !important;
+  height: 48px !important;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
   background: var(--theme-elevation-0) !important;
-  border: 1px solid var(--theme-elevation-200) !important;
-  border-radius: var(--border-radius-md) !important;
+  border: 2px solid var(--theme-elevation-300) !important;
+  border-radius: 12px !important;
   cursor: pointer !important;
-  transition: all 0.2s ease !important;
-  box-shadow: var(--shadow-sm) !important;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
 }
 
 .nav-toggler:hover {
-  background: var(--theme-elevation-100) !important;
-  border-color: var(--theme-success-400) !important;
-  box-shadow: var(--shadow-md) !important;
+  background: var(--theme-elevation-50) !important;
+  border-color: var(--theme-success-500) !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15) !important;
+  transform: translateY(-2px) !important;
+}
+
+.nav-toggler:active {
+  transform: translateY(0) scale(0.97) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
 }
 
 .nav-toggler svg {
-  color: var(--theme-elevation-600) !important;
+  width: 22px !important;
+  height: 22px !important;
+  color: var(--theme-elevation-700) !important;
   transition: color 0.2s ease !important;
 }
 
