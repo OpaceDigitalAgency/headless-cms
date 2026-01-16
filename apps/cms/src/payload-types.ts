@@ -77,6 +77,9 @@ export interface Config {
     people: Person;
     places: Place;
     'museum-collections': MuseumCollection;
+    products: Product;
+    events: Event;
+    'archive-items': ArchiveItem;
     'content-types': ContentType;
     'custom-items': CustomItem;
     forms: Form;
@@ -112,6 +115,9 @@ export interface Config {
     people: PeopleSelect<false> | PeopleSelect<true>;
     places: PlacesSelect<false> | PlacesSelect<true>;
     'museum-collections': MuseumCollectionsSelect<false> | MuseumCollectionsSelect<true>;
+    products: ProductsSelect<false> | ProductsSelect<true>;
+    events: EventsSelect<false> | EventsSelect<true>;
+    'archive-items': ArchiveItemsSelect<false> | ArchiveItemsSelect<true>;
     'content-types': ContentTypesSelect<false> | ContentTypesSelect<true>;
     'custom-items': CustomItemsSelect<false> | CustomItemsSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
@@ -4466,6 +4472,1338 @@ export interface MuseumCollection {
   _status?: ('draft' | 'published') | null;
 }
 /**
+ * Products, services, or inventory items with pricing and variants
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "products".
+ */
+export interface Product {
+  id: number;
+  title: string;
+  /**
+   * URL-friendly identifier (auto-generated from title)
+   */
+  slug: string;
+  featuredImage?: (number | null) | Media;
+  /**
+   * Brief summary for listings and SEO
+   */
+  excerpt?: string | null;
+  richContent?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  gallery?:
+    | {
+        image: number | Media;
+        caption?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Regular price
+   */
+  price: number;
+  /**
+   * Optional discounted price
+   */
+  salePrice?: number | null;
+  currency?: ('GBP' | 'USD' | 'EUR') | null;
+  taxable?: boolean | null;
+  /**
+   * Stock Keeping Unit
+   */
+  sku?: string | null;
+  barcode?: string | null;
+  stockQuantity?: number | null;
+  lowStockThreshold?: number | null;
+  trackInventory?: boolean | null;
+  allowBackorder?: boolean | null;
+  variants?:
+    | {
+        name: string;
+        sku?: string | null;
+        price?: number | null;
+        stockQuantity?: number | null;
+        image?: (number | null) | Media;
+        id?: string | null;
+      }[]
+    | null;
+  weight?: number | null;
+  length?: number | null;
+  width?: number | null;
+  height?: number | null;
+  shippingClass?: ('standard' | 'express' | 'freight' | 'digital') | null;
+  /**
+   * Select one or more categories
+   */
+  categories?: (number | Category)[] | null;
+  /**
+   * Add tags for filtering and search
+   */
+  tags?: (number | Tag)[] | null;
+  relatedProducts?: (number | Product)[] | null;
+  /**
+   * Add and arrange content sections
+   */
+  contentBlocks?:
+    | (
+        | {
+            type?: ('standard' | 'minimal' | 'fullscreen' | 'split' | 'video') | null;
+            heading: string;
+            subheading?: string | null;
+            image?: (number | null) | Media;
+            /**
+             * YouTube or Vimeo URL
+             */
+            videoUrl?: string | null;
+            overlay?: ('none' | 'light' | 'dark' | 'gradient') | null;
+            textAlign?: ('left' | 'center' | 'right') | null;
+            links?:
+              | {
+                  label: string;
+                  url?: string | null;
+                  page?: (number | null) | Page;
+                  variant?: ('primary' | 'secondary' | 'outline') | null;
+                  newTab?: boolean | null;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'hero';
+          }
+        | {
+            columns?:
+              | {
+                  size?: ('oneThird' | 'half' | 'twoThirds' | 'full') | null;
+                  richText?: {
+                    root: {
+                      type: string;
+                      children: {
+                        type: any;
+                        version: number;
+                        [k: string]: unknown;
+                      }[];
+                      direction: ('ltr' | 'rtl') | null;
+                      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                      indent: number;
+                      version: number;
+                    };
+                    [k: string]: unknown;
+                  } | null;
+                  enableLink?: boolean | null;
+                  link?: {
+                    label?: string | null;
+                    url?: string | null;
+                    page?: (number | null) | Page;
+                    newTab?: boolean | null;
+                  };
+                  id?: string | null;
+                }[]
+              | null;
+            backgroundColor?: ('none' | 'light' | 'dark' | 'primary' | 'secondary') | null;
+            paddingTop?: ('none' | 'small' | 'medium' | 'large') | null;
+            paddingBottom?: ('none' | 'small' | 'medium' | 'large') | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'content';
+          }
+        | {
+            media: number | Media;
+            caption?: string | null;
+            size?: ('small' | 'default' | 'large' | 'fullWidth') | null;
+            position?: ('left' | 'center' | 'right') | null;
+            enableLink?: boolean | null;
+            link?: {
+              url?: string | null;
+              page?: (number | null) | Page;
+              newTab?: boolean | null;
+            };
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'media';
+          }
+        | {
+            style?: ('standard' | 'banner' | 'card' | 'inline') | null;
+            heading: string;
+            description?: string | null;
+            image?: (number | null) | Media;
+            links?:
+              | {
+                  label: string;
+                  url?: string | null;
+                  page?: (number | null) | Page;
+                  variant?: ('primary' | 'secondary' | 'outline') | null;
+                  newTab?: boolean | null;
+                  id?: string | null;
+                }[]
+              | null;
+            backgroundColor?: ('none' | 'light' | 'dark' | 'primary' | 'secondary') | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'cta';
+          }
+        | {
+            heading?: string | null;
+            description?: string | null;
+            populateBy?: ('collection' | 'selection') | null;
+            relationTo?:
+              | ('posts' | 'pages' | 'artifacts' | 'people' | 'places' | 'museum-collections' | 'custom-items')
+              | null;
+            /**
+             * Filter custom items by content type
+             */
+            contentType?: (number | null) | ContentType;
+            categories?: (number | Category)[] | null;
+            limit?: number | null;
+            selectedDocs?:
+              | (
+                  | {
+                      relationTo: 'posts';
+                      value: number | Post;
+                    }
+                  | {
+                      relationTo: 'pages';
+                      value: number | Page;
+                    }
+                  | {
+                      relationTo: 'artifacts';
+                      value: number | Artifact;
+                    }
+                  | {
+                      relationTo: 'people';
+                      value: number | Person;
+                    }
+                  | {
+                      relationTo: 'places';
+                      value: number | Place;
+                    }
+                  | {
+                      relationTo: 'custom-items';
+                      value: number | CustomItem;
+                    }
+                )[]
+              | null;
+            layout?: ('grid' | 'list' | 'cards' | 'carousel') | null;
+            columns?: ('2' | '3' | '4') | null;
+            showImage?: boolean | null;
+            showExcerpt?: boolean | null;
+            showDate?: boolean | null;
+            showAuthor?: boolean | null;
+            link?: {
+              show?: boolean | null;
+              label?: string | null;
+              url?: string | null;
+            };
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'archive';
+          }
+        | {
+            form: number | Form;
+            enableIntro?: boolean | null;
+            introContent?: {
+              root: {
+                type: string;
+                children: {
+                  type: any;
+                  version: number;
+                  [k: string]: unknown;
+                }[];
+                direction: ('ltr' | 'rtl') | null;
+                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                indent: number;
+                version: number;
+              };
+              [k: string]: unknown;
+            } | null;
+            style?: ('default' | 'card' | 'inline' | 'fullWidth') | null;
+            backgroundColor?: ('none' | 'light' | 'dark') | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'form';
+          }
+        | {
+            /**
+             * Optional heading for the gallery section
+             */
+            heading?: string | null;
+            /**
+             * Optional description text
+             */
+            description?: string | null;
+            /**
+             * Choose how images are displayed
+             */
+            layout: 'grid' | 'masonry' | 'carousel' | 'lightbox' | 'slider';
+            /**
+             * Number of columns on desktop
+             */
+            columns?: ('2' | '3' | '4' | '5' | '6') | null;
+            /**
+             * Space between images
+             */
+            gap?: ('none' | 'small' | 'medium' | 'large') | null;
+            /**
+             * Force images to a specific aspect ratio
+             */
+            aspectRatio?: ('auto' | 'square' | 'landscape' | 'portrait' | 'wide') | null;
+            images: {
+              image: number | Media;
+              caption?: string | null;
+              link?: {
+                url?: string | null;
+                page?: (number | null) | Page;
+                newTab?: boolean | null;
+              };
+              id?: string | null;
+            }[];
+            showCaptions?: boolean | null;
+            /**
+             * Allow clicking images to view full size
+             */
+            enableLightbox?: boolean | null;
+            autoplay?: boolean | null;
+            autoplaySpeed?: number | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'gallery';
+          }
+        | {
+            heading?: string | null;
+            description?: string | null;
+            /**
+             * Choose the visual style of grid items
+             */
+            style: 'cards' | 'features' | 'icons' | 'stats' | 'team' | 'testimonials' | 'logos';
+            /**
+             * Number of columns on desktop
+             */
+            columns: '1' | '2' | '3' | '4' | '5' | '6';
+            gap?: ('none' | 'small' | 'medium' | 'large') | null;
+            /**
+             * Text alignment within grid items
+             */
+            alignment?: ('left' | 'center' | 'right') | null;
+            items: {
+              image?: (number | null) | Media;
+              /**
+               * Lucide icon name (e.g., "star", "heart", "check")
+               */
+              icon?: string | null;
+              title: string;
+              subtitle?: string | null;
+              description?: string | null;
+              /**
+               * e.g., "99%", "10K+", "$1M"
+               */
+              stat?: string | null;
+              link?: {
+                url?: string | null;
+                page?: (number | null) | Page;
+                /**
+                 * e.g., "Learn More", "Read More"
+                 */
+                label?: string | null;
+                newTab?: boolean | null;
+              };
+              id?: string | null;
+            }[];
+            showBorder?: boolean | null;
+            showShadow?: boolean | null;
+            /**
+             * Effect when hovering over items
+             */
+            hoverEffect?: ('none' | 'lift' | 'scale' | 'glow') | null;
+            cta?: {
+              show?: boolean | null;
+              label?: string | null;
+              url?: string | null;
+              page?: (number | null) | Page;
+            };
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'grid';
+          }
+        | {
+            heading?: string | null;
+            description?: string | null;
+            /**
+             * Choose the timeline layout style
+             */
+            layout: 'vertical' | 'alternating' | 'horizontal' | 'compact';
+            lineStyle?: ('solid' | 'dashed' | 'dotted' | 'gradient') | null;
+            markerStyle?: ('circle' | 'diamond' | 'square' | 'icon' | 'number' | 'image') | null;
+            events: {
+              /**
+               * e.g., "2024", "Jan 2024", "1500 BCE", "Renaissance Period"
+               */
+              date: string;
+              title: string;
+              description?: {
+                root: {
+                  type: string;
+                  children: {
+                    type: any;
+                    version: number;
+                    [k: string]: unknown;
+                  }[];
+                  direction: ('ltr' | 'rtl') | null;
+                  format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                  indent: number;
+                  version: number;
+                };
+                [k: string]: unknown;
+              } | null;
+              image?: (number | null) | Media;
+              /**
+               * Lucide icon name (used when marker style is "icon")
+               */
+              icon?: string | null;
+              /**
+               * Hex color code (e.g., #3B82F6) or leave empty for default
+               */
+              color?: string | null;
+              link?: {
+                url?: string | null;
+                page?: (number | null) | Page;
+                artifact?: (number | null) | Artifact;
+                person?: (number | null) | Person;
+                label?: string | null;
+                newTab?: boolean | null;
+              };
+              /**
+               * Highlight this event with special styling
+               */
+              featured?: boolean | null;
+              id?: string | null;
+            }[];
+            showConnectors?: boolean | null;
+            showDates?: boolean | null;
+            /**
+             * Reveal events as user scrolls
+             */
+            animateOnScroll?: boolean | null;
+            sortOrder?: ('chronological' | 'reverse' | 'manual') | null;
+            backgroundColor?: ('transparent' | 'light' | 'dark' | 'primary') | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'timeline';
+          }
+      )[]
+    | null;
+  meta?: {};
+  /**
+   * Show in featured sections
+   */
+  featured?: boolean | null;
+  status?: ('active' | 'draft' | 'archived' | 'out-of-stock') | null;
+  /**
+   * Select the display template
+   */
+  template: 'standard' | 'featured' | 'quick';
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * Events, exhibitions, workshops, or performances with dates and venues
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "events".
+ */
+export interface Event {
+  id: number;
+  title: string;
+  /**
+   * URL-friendly identifier (auto-generated from title)
+   */
+  slug: string;
+  featuredImage?: (number | null) | Media;
+  /**
+   * Brief summary for listings and SEO
+   */
+  excerpt?: string | null;
+  richContent?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  eventType?:
+    | ('exhibition' | 'workshop' | 'conference' | 'performance' | 'lecture' | 'tour' | 'opening' | 'other')
+    | null;
+  startDate: string;
+  endDate?: string | null;
+  allDay?: boolean | null;
+  recurring?: {
+    isRecurring?: boolean | null;
+    frequency?: ('daily' | 'weekly' | 'monthly' | 'yearly') | null;
+    recurrenceEnd?: string | null;
+  };
+  venue?: (number | null) | Place;
+  onlineEvent?: boolean | null;
+  onlineUrl?: string | null;
+  /**
+   * Additional location information
+   */
+  customLocation?: string | null;
+  requiresRegistration?: boolean | null;
+  registrationUrl?: string | null;
+  capacity?: number | null;
+  registered?: number | null;
+  price?: {
+    isFree?: boolean | null;
+    amount?: number | null;
+    currency?: ('GBP' | 'USD' | 'EUR') | null;
+  };
+  /**
+   * Select one or more categories
+   */
+  categories?: (number | Category)[] | null;
+  /**
+   * Add tags for filtering and search
+   */
+  tags?: (number | Tag)[] | null;
+  organizers?: (number | Person)[] | null;
+  relatedEvents?: (number | Event)[] | null;
+  /**
+   * Add and arrange content sections
+   */
+  contentBlocks?:
+    | (
+        | {
+            type?: ('standard' | 'minimal' | 'fullscreen' | 'split' | 'video') | null;
+            heading: string;
+            subheading?: string | null;
+            image?: (number | null) | Media;
+            /**
+             * YouTube or Vimeo URL
+             */
+            videoUrl?: string | null;
+            overlay?: ('none' | 'light' | 'dark' | 'gradient') | null;
+            textAlign?: ('left' | 'center' | 'right') | null;
+            links?:
+              | {
+                  label: string;
+                  url?: string | null;
+                  page?: (number | null) | Page;
+                  variant?: ('primary' | 'secondary' | 'outline') | null;
+                  newTab?: boolean | null;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'hero';
+          }
+        | {
+            columns?:
+              | {
+                  size?: ('oneThird' | 'half' | 'twoThirds' | 'full') | null;
+                  richText?: {
+                    root: {
+                      type: string;
+                      children: {
+                        type: any;
+                        version: number;
+                        [k: string]: unknown;
+                      }[];
+                      direction: ('ltr' | 'rtl') | null;
+                      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                      indent: number;
+                      version: number;
+                    };
+                    [k: string]: unknown;
+                  } | null;
+                  enableLink?: boolean | null;
+                  link?: {
+                    label?: string | null;
+                    url?: string | null;
+                    page?: (number | null) | Page;
+                    newTab?: boolean | null;
+                  };
+                  id?: string | null;
+                }[]
+              | null;
+            backgroundColor?: ('none' | 'light' | 'dark' | 'primary' | 'secondary') | null;
+            paddingTop?: ('none' | 'small' | 'medium' | 'large') | null;
+            paddingBottom?: ('none' | 'small' | 'medium' | 'large') | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'content';
+          }
+        | {
+            media: number | Media;
+            caption?: string | null;
+            size?: ('small' | 'default' | 'large' | 'fullWidth') | null;
+            position?: ('left' | 'center' | 'right') | null;
+            enableLink?: boolean | null;
+            link?: {
+              url?: string | null;
+              page?: (number | null) | Page;
+              newTab?: boolean | null;
+            };
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'media';
+          }
+        | {
+            style?: ('standard' | 'banner' | 'card' | 'inline') | null;
+            heading: string;
+            description?: string | null;
+            image?: (number | null) | Media;
+            links?:
+              | {
+                  label: string;
+                  url?: string | null;
+                  page?: (number | null) | Page;
+                  variant?: ('primary' | 'secondary' | 'outline') | null;
+                  newTab?: boolean | null;
+                  id?: string | null;
+                }[]
+              | null;
+            backgroundColor?: ('none' | 'light' | 'dark' | 'primary' | 'secondary') | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'cta';
+          }
+        | {
+            heading?: string | null;
+            description?: string | null;
+            populateBy?: ('collection' | 'selection') | null;
+            relationTo?:
+              | ('posts' | 'pages' | 'artifacts' | 'people' | 'places' | 'museum-collections' | 'custom-items')
+              | null;
+            /**
+             * Filter custom items by content type
+             */
+            contentType?: (number | null) | ContentType;
+            categories?: (number | Category)[] | null;
+            limit?: number | null;
+            selectedDocs?:
+              | (
+                  | {
+                      relationTo: 'posts';
+                      value: number | Post;
+                    }
+                  | {
+                      relationTo: 'pages';
+                      value: number | Page;
+                    }
+                  | {
+                      relationTo: 'artifacts';
+                      value: number | Artifact;
+                    }
+                  | {
+                      relationTo: 'people';
+                      value: number | Person;
+                    }
+                  | {
+                      relationTo: 'places';
+                      value: number | Place;
+                    }
+                  | {
+                      relationTo: 'custom-items';
+                      value: number | CustomItem;
+                    }
+                )[]
+              | null;
+            layout?: ('grid' | 'list' | 'cards' | 'carousel') | null;
+            columns?: ('2' | '3' | '4') | null;
+            showImage?: boolean | null;
+            showExcerpt?: boolean | null;
+            showDate?: boolean | null;
+            showAuthor?: boolean | null;
+            link?: {
+              show?: boolean | null;
+              label?: string | null;
+              url?: string | null;
+            };
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'archive';
+          }
+        | {
+            form: number | Form;
+            enableIntro?: boolean | null;
+            introContent?: {
+              root: {
+                type: string;
+                children: {
+                  type: any;
+                  version: number;
+                  [k: string]: unknown;
+                }[];
+                direction: ('ltr' | 'rtl') | null;
+                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                indent: number;
+                version: number;
+              };
+              [k: string]: unknown;
+            } | null;
+            style?: ('default' | 'card' | 'inline' | 'fullWidth') | null;
+            backgroundColor?: ('none' | 'light' | 'dark') | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'form';
+          }
+        | {
+            /**
+             * Optional heading for the gallery section
+             */
+            heading?: string | null;
+            /**
+             * Optional description text
+             */
+            description?: string | null;
+            /**
+             * Choose how images are displayed
+             */
+            layout: 'grid' | 'masonry' | 'carousel' | 'lightbox' | 'slider';
+            /**
+             * Number of columns on desktop
+             */
+            columns?: ('2' | '3' | '4' | '5' | '6') | null;
+            /**
+             * Space between images
+             */
+            gap?: ('none' | 'small' | 'medium' | 'large') | null;
+            /**
+             * Force images to a specific aspect ratio
+             */
+            aspectRatio?: ('auto' | 'square' | 'landscape' | 'portrait' | 'wide') | null;
+            images: {
+              image: number | Media;
+              caption?: string | null;
+              link?: {
+                url?: string | null;
+                page?: (number | null) | Page;
+                newTab?: boolean | null;
+              };
+              id?: string | null;
+            }[];
+            showCaptions?: boolean | null;
+            /**
+             * Allow clicking images to view full size
+             */
+            enableLightbox?: boolean | null;
+            autoplay?: boolean | null;
+            autoplaySpeed?: number | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'gallery';
+          }
+        | {
+            heading?: string | null;
+            description?: string | null;
+            /**
+             * Choose the visual style of grid items
+             */
+            style: 'cards' | 'features' | 'icons' | 'stats' | 'team' | 'testimonials' | 'logos';
+            /**
+             * Number of columns on desktop
+             */
+            columns: '1' | '2' | '3' | '4' | '5' | '6';
+            gap?: ('none' | 'small' | 'medium' | 'large') | null;
+            /**
+             * Text alignment within grid items
+             */
+            alignment?: ('left' | 'center' | 'right') | null;
+            items: {
+              image?: (number | null) | Media;
+              /**
+               * Lucide icon name (e.g., "star", "heart", "check")
+               */
+              icon?: string | null;
+              title: string;
+              subtitle?: string | null;
+              description?: string | null;
+              /**
+               * e.g., "99%", "10K+", "$1M"
+               */
+              stat?: string | null;
+              link?: {
+                url?: string | null;
+                page?: (number | null) | Page;
+                /**
+                 * e.g., "Learn More", "Read More"
+                 */
+                label?: string | null;
+                newTab?: boolean | null;
+              };
+              id?: string | null;
+            }[];
+            showBorder?: boolean | null;
+            showShadow?: boolean | null;
+            /**
+             * Effect when hovering over items
+             */
+            hoverEffect?: ('none' | 'lift' | 'scale' | 'glow') | null;
+            cta?: {
+              show?: boolean | null;
+              label?: string | null;
+              url?: string | null;
+              page?: (number | null) | Page;
+            };
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'grid';
+          }
+        | {
+            heading?: string | null;
+            description?: string | null;
+            /**
+             * Choose the timeline layout style
+             */
+            layout: 'vertical' | 'alternating' | 'horizontal' | 'compact';
+            lineStyle?: ('solid' | 'dashed' | 'dotted' | 'gradient') | null;
+            markerStyle?: ('circle' | 'diamond' | 'square' | 'icon' | 'number' | 'image') | null;
+            events: {
+              /**
+               * e.g., "2024", "Jan 2024", "1500 BCE", "Renaissance Period"
+               */
+              date: string;
+              title: string;
+              description?: {
+                root: {
+                  type: string;
+                  children: {
+                    type: any;
+                    version: number;
+                    [k: string]: unknown;
+                  }[];
+                  direction: ('ltr' | 'rtl') | null;
+                  format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                  indent: number;
+                  version: number;
+                };
+                [k: string]: unknown;
+              } | null;
+              image?: (number | null) | Media;
+              /**
+               * Lucide icon name (used when marker style is "icon")
+               */
+              icon?: string | null;
+              /**
+               * Hex color code (e.g., #3B82F6) or leave empty for default
+               */
+              color?: string | null;
+              link?: {
+                url?: string | null;
+                page?: (number | null) | Page;
+                artifact?: (number | null) | Artifact;
+                person?: (number | null) | Person;
+                label?: string | null;
+                newTab?: boolean | null;
+              };
+              /**
+               * Highlight this event with special styling
+               */
+              featured?: boolean | null;
+              id?: string | null;
+            }[];
+            showConnectors?: boolean | null;
+            showDates?: boolean | null;
+            /**
+             * Reveal events as user scrolls
+             */
+            animateOnScroll?: boolean | null;
+            sortOrder?: ('chronological' | 'reverse' | 'manual') | null;
+            backgroundColor?: ('transparent' | 'light' | 'dark' | 'primary') | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'timeline';
+          }
+      )[]
+    | null;
+  meta?: {};
+  /**
+   * Show in featured sections
+   */
+  featured?: boolean | null;
+  status?: ('upcoming' | 'ongoing' | 'completed' | 'cancelled' | 'postponed') | null;
+  /**
+   * Select the display template
+   */
+  template: 'event' | 'calendar' | 'card';
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * Museum artifacts, gallery pieces, portfolio items, or collectibles
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "archive-items".
+ */
+export interface ArchiveItem {
+  id: number;
+  title: string;
+  /**
+   * URL-friendly identifier (auto-generated from title)
+   */
+  slug: string;
+  featuredImage?: (number | null) | Media;
+  /**
+   * Brief summary for listings and SEO
+   */
+  excerpt?: string | null;
+  richContent?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  gallery?:
+    | {
+        image: number | Media;
+        caption?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  specifications?: {
+    height?: string | null;
+    width?: string | null;
+    depth?: string | null;
+    weight?: string | null;
+    materials?: string | null;
+    condition?: string | null;
+  };
+  /**
+   * e.g., "circa 1965" or "1920-1925"
+   */
+  dateCreated?: string | null;
+  dateAcquired?: string | null;
+  provenance?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  catalogNumber?: string | null;
+  /**
+   * People who created or owned this item
+   */
+  creators?: (number | Person)[] | null;
+  /**
+   * Where this item was made or found
+   */
+  origins?: (number | Place)[] | null;
+  relatedItems?: (number | Artifact)[] | null;
+  /**
+   * Select one or more categories
+   */
+  categories?: (number | Category)[] | null;
+  /**
+   * Add tags for filtering and search
+   */
+  tags?: (number | Tag)[] | null;
+  /**
+   * Add and arrange content sections
+   */
+  contentBlocks?:
+    | (
+        | {
+            type?: ('standard' | 'minimal' | 'fullscreen' | 'split' | 'video') | null;
+            heading: string;
+            subheading?: string | null;
+            image?: (number | null) | Media;
+            /**
+             * YouTube or Vimeo URL
+             */
+            videoUrl?: string | null;
+            overlay?: ('none' | 'light' | 'dark' | 'gradient') | null;
+            textAlign?: ('left' | 'center' | 'right') | null;
+            links?:
+              | {
+                  label: string;
+                  url?: string | null;
+                  page?: (number | null) | Page;
+                  variant?: ('primary' | 'secondary' | 'outline') | null;
+                  newTab?: boolean | null;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'hero';
+          }
+        | {
+            columns?:
+              | {
+                  size?: ('oneThird' | 'half' | 'twoThirds' | 'full') | null;
+                  richText?: {
+                    root: {
+                      type: string;
+                      children: {
+                        type: any;
+                        version: number;
+                        [k: string]: unknown;
+                      }[];
+                      direction: ('ltr' | 'rtl') | null;
+                      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                      indent: number;
+                      version: number;
+                    };
+                    [k: string]: unknown;
+                  } | null;
+                  enableLink?: boolean | null;
+                  link?: {
+                    label?: string | null;
+                    url?: string | null;
+                    page?: (number | null) | Page;
+                    newTab?: boolean | null;
+                  };
+                  id?: string | null;
+                }[]
+              | null;
+            backgroundColor?: ('none' | 'light' | 'dark' | 'primary' | 'secondary') | null;
+            paddingTop?: ('none' | 'small' | 'medium' | 'large') | null;
+            paddingBottom?: ('none' | 'small' | 'medium' | 'large') | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'content';
+          }
+        | {
+            media: number | Media;
+            caption?: string | null;
+            size?: ('small' | 'default' | 'large' | 'fullWidth') | null;
+            position?: ('left' | 'center' | 'right') | null;
+            enableLink?: boolean | null;
+            link?: {
+              url?: string | null;
+              page?: (number | null) | Page;
+              newTab?: boolean | null;
+            };
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'media';
+          }
+        | {
+            style?: ('standard' | 'banner' | 'card' | 'inline') | null;
+            heading: string;
+            description?: string | null;
+            image?: (number | null) | Media;
+            links?:
+              | {
+                  label: string;
+                  url?: string | null;
+                  page?: (number | null) | Page;
+                  variant?: ('primary' | 'secondary' | 'outline') | null;
+                  newTab?: boolean | null;
+                  id?: string | null;
+                }[]
+              | null;
+            backgroundColor?: ('none' | 'light' | 'dark' | 'primary' | 'secondary') | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'cta';
+          }
+        | {
+            heading?: string | null;
+            description?: string | null;
+            populateBy?: ('collection' | 'selection') | null;
+            relationTo?:
+              | ('posts' | 'pages' | 'artifacts' | 'people' | 'places' | 'museum-collections' | 'custom-items')
+              | null;
+            /**
+             * Filter custom items by content type
+             */
+            contentType?: (number | null) | ContentType;
+            categories?: (number | Category)[] | null;
+            limit?: number | null;
+            selectedDocs?:
+              | (
+                  | {
+                      relationTo: 'posts';
+                      value: number | Post;
+                    }
+                  | {
+                      relationTo: 'pages';
+                      value: number | Page;
+                    }
+                  | {
+                      relationTo: 'artifacts';
+                      value: number | Artifact;
+                    }
+                  | {
+                      relationTo: 'people';
+                      value: number | Person;
+                    }
+                  | {
+                      relationTo: 'places';
+                      value: number | Place;
+                    }
+                  | {
+                      relationTo: 'custom-items';
+                      value: number | CustomItem;
+                    }
+                )[]
+              | null;
+            layout?: ('grid' | 'list' | 'cards' | 'carousel') | null;
+            columns?: ('2' | '3' | '4') | null;
+            showImage?: boolean | null;
+            showExcerpt?: boolean | null;
+            showDate?: boolean | null;
+            showAuthor?: boolean | null;
+            link?: {
+              show?: boolean | null;
+              label?: string | null;
+              url?: string | null;
+            };
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'archive';
+          }
+        | {
+            form: number | Form;
+            enableIntro?: boolean | null;
+            introContent?: {
+              root: {
+                type: string;
+                children: {
+                  type: any;
+                  version: number;
+                  [k: string]: unknown;
+                }[];
+                direction: ('ltr' | 'rtl') | null;
+                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                indent: number;
+                version: number;
+              };
+              [k: string]: unknown;
+            } | null;
+            style?: ('default' | 'card' | 'inline' | 'fullWidth') | null;
+            backgroundColor?: ('none' | 'light' | 'dark') | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'form';
+          }
+        | {
+            /**
+             * Optional heading for the gallery section
+             */
+            heading?: string | null;
+            /**
+             * Optional description text
+             */
+            description?: string | null;
+            /**
+             * Choose how images are displayed
+             */
+            layout: 'grid' | 'masonry' | 'carousel' | 'lightbox' | 'slider';
+            /**
+             * Number of columns on desktop
+             */
+            columns?: ('2' | '3' | '4' | '5' | '6') | null;
+            /**
+             * Space between images
+             */
+            gap?: ('none' | 'small' | 'medium' | 'large') | null;
+            /**
+             * Force images to a specific aspect ratio
+             */
+            aspectRatio?: ('auto' | 'square' | 'landscape' | 'portrait' | 'wide') | null;
+            images: {
+              image: number | Media;
+              caption?: string | null;
+              link?: {
+                url?: string | null;
+                page?: (number | null) | Page;
+                newTab?: boolean | null;
+              };
+              id?: string | null;
+            }[];
+            showCaptions?: boolean | null;
+            /**
+             * Allow clicking images to view full size
+             */
+            enableLightbox?: boolean | null;
+            autoplay?: boolean | null;
+            autoplaySpeed?: number | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'gallery';
+          }
+        | {
+            heading?: string | null;
+            description?: string | null;
+            /**
+             * Choose the visual style of grid items
+             */
+            style: 'cards' | 'features' | 'icons' | 'stats' | 'team' | 'testimonials' | 'logos';
+            /**
+             * Number of columns on desktop
+             */
+            columns: '1' | '2' | '3' | '4' | '5' | '6';
+            gap?: ('none' | 'small' | 'medium' | 'large') | null;
+            /**
+             * Text alignment within grid items
+             */
+            alignment?: ('left' | 'center' | 'right') | null;
+            items: {
+              image?: (number | null) | Media;
+              /**
+               * Lucide icon name (e.g., "star", "heart", "check")
+               */
+              icon?: string | null;
+              title: string;
+              subtitle?: string | null;
+              description?: string | null;
+              /**
+               * e.g., "99%", "10K+", "$1M"
+               */
+              stat?: string | null;
+              link?: {
+                url?: string | null;
+                page?: (number | null) | Page;
+                /**
+                 * e.g., "Learn More", "Read More"
+                 */
+                label?: string | null;
+                newTab?: boolean | null;
+              };
+              id?: string | null;
+            }[];
+            showBorder?: boolean | null;
+            showShadow?: boolean | null;
+            /**
+             * Effect when hovering over items
+             */
+            hoverEffect?: ('none' | 'lift' | 'scale' | 'glow') | null;
+            cta?: {
+              show?: boolean | null;
+              label?: string | null;
+              url?: string | null;
+              page?: (number | null) | Page;
+            };
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'grid';
+          }
+        | {
+            heading?: string | null;
+            description?: string | null;
+            /**
+             * Choose the timeline layout style
+             */
+            layout: 'vertical' | 'alternating' | 'horizontal' | 'compact';
+            lineStyle?: ('solid' | 'dashed' | 'dotted' | 'gradient') | null;
+            markerStyle?: ('circle' | 'diamond' | 'square' | 'icon' | 'number' | 'image') | null;
+            events: {
+              /**
+               * e.g., "2024", "Jan 2024", "1500 BCE", "Renaissance Period"
+               */
+              date: string;
+              title: string;
+              description?: {
+                root: {
+                  type: string;
+                  children: {
+                    type: any;
+                    version: number;
+                    [k: string]: unknown;
+                  }[];
+                  direction: ('ltr' | 'rtl') | null;
+                  format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                  indent: number;
+                  version: number;
+                };
+                [k: string]: unknown;
+              } | null;
+              image?: (number | null) | Media;
+              /**
+               * Lucide icon name (used when marker style is "icon")
+               */
+              icon?: string | null;
+              /**
+               * Hex color code (e.g., #3B82F6) or leave empty for default
+               */
+              color?: string | null;
+              link?: {
+                url?: string | null;
+                page?: (number | null) | Page;
+                artifact?: (number | null) | Artifact;
+                person?: (number | null) | Person;
+                label?: string | null;
+                newTab?: boolean | null;
+              };
+              /**
+               * Highlight this event with special styling
+               */
+              featured?: boolean | null;
+              id?: string | null;
+            }[];
+            showConnectors?: boolean | null;
+            showDates?: boolean | null;
+            /**
+             * Reveal events as user scrolls
+             */
+            animateOnScroll?: boolean | null;
+            sortOrder?: ('chronological' | 'reverse' | 'manual') | null;
+            backgroundColor?: ('transparent' | 'light' | 'dark' | 'primary') | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'timeline';
+          }
+      )[]
+    | null;
+  meta?: {};
+  /**
+   * Show in featured sections
+   */
+  featured?: boolean | null;
+  onDisplay?: boolean | null;
+  location?: string | null;
+  /**
+   * Select the display template
+   */
+  template: 'detail' | 'gallery' | 'timeline';
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "form-submissions".
  */
@@ -4710,6 +6048,18 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'museum-collections';
         value: number | MuseumCollection;
+      } | null)
+    | ({
+        relationTo: 'products';
+        value: number | Product;
+      } | null)
+    | ({
+        relationTo: 'events';
+        value: number | Event;
+      } | null)
+    | ({
+        relationTo: 'archive-items';
+        value: number | ArchiveItem;
       } | null)
     | ({
         relationTo: 'content-types';
@@ -7320,6 +8670,869 @@ export interface MuseumCollectionsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "products_select".
+ */
+export interface ProductsSelect<T extends boolean = true> {
+  title?: T;
+  slug?: T;
+  featuredImage?: T;
+  excerpt?: T;
+  richContent?: T;
+  gallery?:
+    | T
+    | {
+        image?: T;
+        caption?: T;
+        id?: T;
+      };
+  price?: T;
+  salePrice?: T;
+  currency?: T;
+  taxable?: T;
+  sku?: T;
+  barcode?: T;
+  stockQuantity?: T;
+  lowStockThreshold?: T;
+  trackInventory?: T;
+  allowBackorder?: T;
+  variants?:
+    | T
+    | {
+        name?: T;
+        sku?: T;
+        price?: T;
+        stockQuantity?: T;
+        image?: T;
+        id?: T;
+      };
+  weight?: T;
+  length?: T;
+  width?: T;
+  height?: T;
+  shippingClass?: T;
+  categories?: T;
+  tags?: T;
+  relatedProducts?: T;
+  contentBlocks?:
+    | T
+    | {
+        hero?:
+          | T
+          | {
+              type?: T;
+              heading?: T;
+              subheading?: T;
+              image?: T;
+              videoUrl?: T;
+              overlay?: T;
+              textAlign?: T;
+              links?:
+                | T
+                | {
+                    label?: T;
+                    url?: T;
+                    page?: T;
+                    variant?: T;
+                    newTab?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        content?:
+          | T
+          | {
+              columns?:
+                | T
+                | {
+                    size?: T;
+                    richText?: T;
+                    enableLink?: T;
+                    link?:
+                      | T
+                      | {
+                          label?: T;
+                          url?: T;
+                          page?: T;
+                          newTab?: T;
+                        };
+                    id?: T;
+                  };
+              backgroundColor?: T;
+              paddingTop?: T;
+              paddingBottom?: T;
+              id?: T;
+              blockName?: T;
+            };
+        media?:
+          | T
+          | {
+              media?: T;
+              caption?: T;
+              size?: T;
+              position?: T;
+              enableLink?: T;
+              link?:
+                | T
+                | {
+                    url?: T;
+                    page?: T;
+                    newTab?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        cta?:
+          | T
+          | {
+              style?: T;
+              heading?: T;
+              description?: T;
+              image?: T;
+              links?:
+                | T
+                | {
+                    label?: T;
+                    url?: T;
+                    page?: T;
+                    variant?: T;
+                    newTab?: T;
+                    id?: T;
+                  };
+              backgroundColor?: T;
+              id?: T;
+              blockName?: T;
+            };
+        archive?:
+          | T
+          | {
+              heading?: T;
+              description?: T;
+              populateBy?: T;
+              relationTo?: T;
+              contentType?: T;
+              categories?: T;
+              limit?: T;
+              selectedDocs?: T;
+              layout?: T;
+              columns?: T;
+              showImage?: T;
+              showExcerpt?: T;
+              showDate?: T;
+              showAuthor?: T;
+              link?:
+                | T
+                | {
+                    show?: T;
+                    label?: T;
+                    url?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        form?:
+          | T
+          | {
+              form?: T;
+              enableIntro?: T;
+              introContent?: T;
+              style?: T;
+              backgroundColor?: T;
+              id?: T;
+              blockName?: T;
+            };
+        gallery?:
+          | T
+          | {
+              heading?: T;
+              description?: T;
+              layout?: T;
+              columns?: T;
+              gap?: T;
+              aspectRatio?: T;
+              images?:
+                | T
+                | {
+                    image?: T;
+                    caption?: T;
+                    link?:
+                      | T
+                      | {
+                          url?: T;
+                          page?: T;
+                          newTab?: T;
+                        };
+                    id?: T;
+                  };
+              showCaptions?: T;
+              enableLightbox?: T;
+              autoplay?: T;
+              autoplaySpeed?: T;
+              id?: T;
+              blockName?: T;
+            };
+        grid?:
+          | T
+          | {
+              heading?: T;
+              description?: T;
+              style?: T;
+              columns?: T;
+              gap?: T;
+              alignment?: T;
+              items?:
+                | T
+                | {
+                    image?: T;
+                    icon?: T;
+                    title?: T;
+                    subtitle?: T;
+                    description?: T;
+                    stat?: T;
+                    link?:
+                      | T
+                      | {
+                          url?: T;
+                          page?: T;
+                          label?: T;
+                          newTab?: T;
+                        };
+                    id?: T;
+                  };
+              showBorder?: T;
+              showShadow?: T;
+              hoverEffect?: T;
+              cta?:
+                | T
+                | {
+                    show?: T;
+                    label?: T;
+                    url?: T;
+                    page?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        timeline?:
+          | T
+          | {
+              heading?: T;
+              description?: T;
+              layout?: T;
+              lineStyle?: T;
+              markerStyle?: T;
+              events?:
+                | T
+                | {
+                    date?: T;
+                    title?: T;
+                    description?: T;
+                    image?: T;
+                    icon?: T;
+                    color?: T;
+                    link?:
+                      | T
+                      | {
+                          url?: T;
+                          page?: T;
+                          artifact?: T;
+                          person?: T;
+                          label?: T;
+                          newTab?: T;
+                        };
+                    featured?: T;
+                    id?: T;
+                  };
+              showConnectors?: T;
+              showDates?: T;
+              animateOnScroll?: T;
+              sortOrder?: T;
+              backgroundColor?: T;
+              id?: T;
+              blockName?: T;
+            };
+      };
+  meta?: T | {};
+  featured?: T;
+  status?: T;
+  template?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "events_select".
+ */
+export interface EventsSelect<T extends boolean = true> {
+  title?: T;
+  slug?: T;
+  featuredImage?: T;
+  excerpt?: T;
+  richContent?: T;
+  eventType?: T;
+  startDate?: T;
+  endDate?: T;
+  allDay?: T;
+  recurring?:
+    | T
+    | {
+        isRecurring?: T;
+        frequency?: T;
+        recurrenceEnd?: T;
+      };
+  venue?: T;
+  onlineEvent?: T;
+  onlineUrl?: T;
+  customLocation?: T;
+  requiresRegistration?: T;
+  registrationUrl?: T;
+  capacity?: T;
+  registered?: T;
+  price?:
+    | T
+    | {
+        isFree?: T;
+        amount?: T;
+        currency?: T;
+      };
+  categories?: T;
+  tags?: T;
+  organizers?: T;
+  relatedEvents?: T;
+  contentBlocks?:
+    | T
+    | {
+        hero?:
+          | T
+          | {
+              type?: T;
+              heading?: T;
+              subheading?: T;
+              image?: T;
+              videoUrl?: T;
+              overlay?: T;
+              textAlign?: T;
+              links?:
+                | T
+                | {
+                    label?: T;
+                    url?: T;
+                    page?: T;
+                    variant?: T;
+                    newTab?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        content?:
+          | T
+          | {
+              columns?:
+                | T
+                | {
+                    size?: T;
+                    richText?: T;
+                    enableLink?: T;
+                    link?:
+                      | T
+                      | {
+                          label?: T;
+                          url?: T;
+                          page?: T;
+                          newTab?: T;
+                        };
+                    id?: T;
+                  };
+              backgroundColor?: T;
+              paddingTop?: T;
+              paddingBottom?: T;
+              id?: T;
+              blockName?: T;
+            };
+        media?:
+          | T
+          | {
+              media?: T;
+              caption?: T;
+              size?: T;
+              position?: T;
+              enableLink?: T;
+              link?:
+                | T
+                | {
+                    url?: T;
+                    page?: T;
+                    newTab?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        cta?:
+          | T
+          | {
+              style?: T;
+              heading?: T;
+              description?: T;
+              image?: T;
+              links?:
+                | T
+                | {
+                    label?: T;
+                    url?: T;
+                    page?: T;
+                    variant?: T;
+                    newTab?: T;
+                    id?: T;
+                  };
+              backgroundColor?: T;
+              id?: T;
+              blockName?: T;
+            };
+        archive?:
+          | T
+          | {
+              heading?: T;
+              description?: T;
+              populateBy?: T;
+              relationTo?: T;
+              contentType?: T;
+              categories?: T;
+              limit?: T;
+              selectedDocs?: T;
+              layout?: T;
+              columns?: T;
+              showImage?: T;
+              showExcerpt?: T;
+              showDate?: T;
+              showAuthor?: T;
+              link?:
+                | T
+                | {
+                    show?: T;
+                    label?: T;
+                    url?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        form?:
+          | T
+          | {
+              form?: T;
+              enableIntro?: T;
+              introContent?: T;
+              style?: T;
+              backgroundColor?: T;
+              id?: T;
+              blockName?: T;
+            };
+        gallery?:
+          | T
+          | {
+              heading?: T;
+              description?: T;
+              layout?: T;
+              columns?: T;
+              gap?: T;
+              aspectRatio?: T;
+              images?:
+                | T
+                | {
+                    image?: T;
+                    caption?: T;
+                    link?:
+                      | T
+                      | {
+                          url?: T;
+                          page?: T;
+                          newTab?: T;
+                        };
+                    id?: T;
+                  };
+              showCaptions?: T;
+              enableLightbox?: T;
+              autoplay?: T;
+              autoplaySpeed?: T;
+              id?: T;
+              blockName?: T;
+            };
+        grid?:
+          | T
+          | {
+              heading?: T;
+              description?: T;
+              style?: T;
+              columns?: T;
+              gap?: T;
+              alignment?: T;
+              items?:
+                | T
+                | {
+                    image?: T;
+                    icon?: T;
+                    title?: T;
+                    subtitle?: T;
+                    description?: T;
+                    stat?: T;
+                    link?:
+                      | T
+                      | {
+                          url?: T;
+                          page?: T;
+                          label?: T;
+                          newTab?: T;
+                        };
+                    id?: T;
+                  };
+              showBorder?: T;
+              showShadow?: T;
+              hoverEffect?: T;
+              cta?:
+                | T
+                | {
+                    show?: T;
+                    label?: T;
+                    url?: T;
+                    page?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        timeline?:
+          | T
+          | {
+              heading?: T;
+              description?: T;
+              layout?: T;
+              lineStyle?: T;
+              markerStyle?: T;
+              events?:
+                | T
+                | {
+                    date?: T;
+                    title?: T;
+                    description?: T;
+                    image?: T;
+                    icon?: T;
+                    color?: T;
+                    link?:
+                      | T
+                      | {
+                          url?: T;
+                          page?: T;
+                          artifact?: T;
+                          person?: T;
+                          label?: T;
+                          newTab?: T;
+                        };
+                    featured?: T;
+                    id?: T;
+                  };
+              showConnectors?: T;
+              showDates?: T;
+              animateOnScroll?: T;
+              sortOrder?: T;
+              backgroundColor?: T;
+              id?: T;
+              blockName?: T;
+            };
+      };
+  meta?: T | {};
+  featured?: T;
+  status?: T;
+  template?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "archive-items_select".
+ */
+export interface ArchiveItemsSelect<T extends boolean = true> {
+  title?: T;
+  slug?: T;
+  featuredImage?: T;
+  excerpt?: T;
+  richContent?: T;
+  gallery?:
+    | T
+    | {
+        image?: T;
+        caption?: T;
+        id?: T;
+      };
+  specifications?:
+    | T
+    | {
+        height?: T;
+        width?: T;
+        depth?: T;
+        weight?: T;
+        materials?: T;
+        condition?: T;
+      };
+  dateCreated?: T;
+  dateAcquired?: T;
+  provenance?: T;
+  catalogNumber?: T;
+  creators?: T;
+  origins?: T;
+  relatedItems?: T;
+  categories?: T;
+  tags?: T;
+  contentBlocks?:
+    | T
+    | {
+        hero?:
+          | T
+          | {
+              type?: T;
+              heading?: T;
+              subheading?: T;
+              image?: T;
+              videoUrl?: T;
+              overlay?: T;
+              textAlign?: T;
+              links?:
+                | T
+                | {
+                    label?: T;
+                    url?: T;
+                    page?: T;
+                    variant?: T;
+                    newTab?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        content?:
+          | T
+          | {
+              columns?:
+                | T
+                | {
+                    size?: T;
+                    richText?: T;
+                    enableLink?: T;
+                    link?:
+                      | T
+                      | {
+                          label?: T;
+                          url?: T;
+                          page?: T;
+                          newTab?: T;
+                        };
+                    id?: T;
+                  };
+              backgroundColor?: T;
+              paddingTop?: T;
+              paddingBottom?: T;
+              id?: T;
+              blockName?: T;
+            };
+        media?:
+          | T
+          | {
+              media?: T;
+              caption?: T;
+              size?: T;
+              position?: T;
+              enableLink?: T;
+              link?:
+                | T
+                | {
+                    url?: T;
+                    page?: T;
+                    newTab?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        cta?:
+          | T
+          | {
+              style?: T;
+              heading?: T;
+              description?: T;
+              image?: T;
+              links?:
+                | T
+                | {
+                    label?: T;
+                    url?: T;
+                    page?: T;
+                    variant?: T;
+                    newTab?: T;
+                    id?: T;
+                  };
+              backgroundColor?: T;
+              id?: T;
+              blockName?: T;
+            };
+        archive?:
+          | T
+          | {
+              heading?: T;
+              description?: T;
+              populateBy?: T;
+              relationTo?: T;
+              contentType?: T;
+              categories?: T;
+              limit?: T;
+              selectedDocs?: T;
+              layout?: T;
+              columns?: T;
+              showImage?: T;
+              showExcerpt?: T;
+              showDate?: T;
+              showAuthor?: T;
+              link?:
+                | T
+                | {
+                    show?: T;
+                    label?: T;
+                    url?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        form?:
+          | T
+          | {
+              form?: T;
+              enableIntro?: T;
+              introContent?: T;
+              style?: T;
+              backgroundColor?: T;
+              id?: T;
+              blockName?: T;
+            };
+        gallery?:
+          | T
+          | {
+              heading?: T;
+              description?: T;
+              layout?: T;
+              columns?: T;
+              gap?: T;
+              aspectRatio?: T;
+              images?:
+                | T
+                | {
+                    image?: T;
+                    caption?: T;
+                    link?:
+                      | T
+                      | {
+                          url?: T;
+                          page?: T;
+                          newTab?: T;
+                        };
+                    id?: T;
+                  };
+              showCaptions?: T;
+              enableLightbox?: T;
+              autoplay?: T;
+              autoplaySpeed?: T;
+              id?: T;
+              blockName?: T;
+            };
+        grid?:
+          | T
+          | {
+              heading?: T;
+              description?: T;
+              style?: T;
+              columns?: T;
+              gap?: T;
+              alignment?: T;
+              items?:
+                | T
+                | {
+                    image?: T;
+                    icon?: T;
+                    title?: T;
+                    subtitle?: T;
+                    description?: T;
+                    stat?: T;
+                    link?:
+                      | T
+                      | {
+                          url?: T;
+                          page?: T;
+                          label?: T;
+                          newTab?: T;
+                        };
+                    id?: T;
+                  };
+              showBorder?: T;
+              showShadow?: T;
+              hoverEffect?: T;
+              cta?:
+                | T
+                | {
+                    show?: T;
+                    label?: T;
+                    url?: T;
+                    page?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        timeline?:
+          | T
+          | {
+              heading?: T;
+              description?: T;
+              layout?: T;
+              lineStyle?: T;
+              markerStyle?: T;
+              events?:
+                | T
+                | {
+                    date?: T;
+                    title?: T;
+                    description?: T;
+                    image?: T;
+                    icon?: T;
+                    color?: T;
+                    link?:
+                      | T
+                      | {
+                          url?: T;
+                          page?: T;
+                          artifact?: T;
+                          person?: T;
+                          label?: T;
+                          newTab?: T;
+                        };
+                    featured?: T;
+                    id?: T;
+                  };
+              showConnectors?: T;
+              showDates?: T;
+              animateOnScroll?: T;
+              sortOrder?: T;
+              backgroundColor?: T;
+              id?: T;
+              blockName?: T;
+            };
+      };
+  meta?: T | {};
+  featured?: T;
+  onDisplay?: T;
+  location?: T;
+  template?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "content-types_select".
  */
 export interface ContentTypesSelect<T extends boolean = true> {
@@ -8428,6 +10641,18 @@ export interface TaskSchedulePublish {
       | ({
           relationTo: 'museum-collections';
           value: number | MuseumCollection;
+        } | null)
+      | ({
+          relationTo: 'products';
+          value: number | Product;
+        } | null)
+      | ({
+          relationTo: 'events';
+          value: number | Event;
+        } | null)
+      | ({
+          relationTo: 'archive-items';
+          value: number | ArchiveItem;
         } | null)
       | ({
           relationTo: 'custom-items';

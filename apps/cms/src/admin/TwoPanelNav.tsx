@@ -445,6 +445,18 @@ export const TwoPanelNav: React.FC = () => {
   const pathname = usePathname()
   const activeSection = resolveActiveSection(pathname)
   const activeItem = resolveActiveItem(pathname)
+  const [isCompact, setIsCompact] = useState(true)
+
+  useEffect(() => {
+    const stored = window.localStorage.getItem('ra-density')
+    setIsCompact(stored !== 'comfortable')
+  }, [])
+
+  useEffect(() => {
+    const root = document.documentElement
+    root.classList.toggle('ra-density-compact', isCompact)
+    window.localStorage.setItem('ra-density', isCompact ? 'compact' : 'comfortable')
+  }, [isCompact])
 
   return (
     <>
@@ -475,6 +487,15 @@ export const TwoPanelNav: React.FC = () => {
         <div className="ra-top-nav__spacer" />
 
         <AdminSearch />
+        <button
+          type="button"
+          className={`ra-top-nav__density ${isCompact ? 'ra-top-nav__density--active' : ''}`}
+          onClick={() => setIsCompact((prev) => !prev)}
+          aria-pressed={isCompact}
+          title={isCompact ? 'Switch to comfortable spacing' : 'Switch to compact spacing'}
+        >
+          {isCompact ? 'Compact' : 'Comfort'}
+        </button>
         <ThemeToggle />
         <AccountDropdown />
       </nav>

@@ -31,6 +31,9 @@ import { Places } from './collections/Places'
 import { Collections as MuseumCollections } from './collections/Collections'
 import { ContentTypes } from './collections/ContentTypes'
 import { CustomItems } from './collections/CustomItems'
+import { Products } from './collections/Products'
+import { Events } from './collections/Events'
+import { ArchiveItems } from './collections/ArchiveItems'
 
 // Globals
 import { Header } from './globals/Header'
@@ -208,6 +211,10 @@ export default buildConfig({
     People,
     Places,
     MuseumCollections,
+    // Template-based collections
+    Products,
+    Events,
+    ArchiveItems,
     // Dynamic content types system
     ContentTypes,
     CustomItems,

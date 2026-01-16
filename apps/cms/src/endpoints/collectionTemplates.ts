@@ -110,76 +110,26 @@ export const addTemplateEndpoint: Endpoint = {
       const { payload } = req
       const existingCollection = payload.config.collections.find(c => c.slug === slug)
       if (existingCollection) {
-        return Response.json(
-          { success: false, message: `Collection already exists: ${slug}` },
-          { status: 409 }
-        )
+        // Collection already exists - this is expected for pre-configured templates
+        payload.logger.info(`Collection template already available: ${templateId} (${slug})`)
+        return Response.json({
+          success: true,
+          message: `Collection "${customName}" is now available!`,
+          collection: {
+            templateId,
+            customName,
+            slug,
+            singular: singular || customName.replace(/s$/, ''),
+            plural: plural || customName,
+          },
+        })
       }
 
-      // Create collection config from template
-      const collectionConfig = {
-        slug,
-        labels: {
-          singular: singular || customName.replace(/s$/, ''),
-          plural: plural || customName,
-        },
-        admin: {
-          useAsTitle: 'title',
-          group: template.adminGroup,
-          defaultColumns: ['title', '_status', 'updatedAt'],
-          description: template.description,
-        },
-        versions: {
-          drafts: {
-            autosave: { interval: 300 },
-            schedulePublish: true,
-          },
-          maxPerDoc: 25,
-        },
-        access: {
-          read: ({ req: { user } }) => {
-            if (!user) return { _status: { equals: 'published' } }
-            return true
-          },
-          create: ({ req: { user } }) => Boolean(user),
-          update: ({ req: { user } }) => Boolean(user),
-          delete: ({ req: { user } }) => user?.role === 'admin',
-        },
-        fields: template.fields,
-        hooks: {
-          afterChange: [
-            async ({ doc, req }) => {
-              if (doc._status === 'published') {
-                const revalidateUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3001'
-                try {
-                  await fetch(`${revalidateUrl}/api/revalidate`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                      secret: process.env.REVALIDATION_SECRET,
-                      collection: slug,
-                      slug: doc.slug,
-                    }),
-                  })
-                } catch (error) {
-                  payload.logger.error(`Failed to revalidate ${slug}:`, error)
-                }
-              }
-              return doc
-            },
-          ],
-        },
-      }
-
-      // Register collection with Payload
-      payload.config.collections.push(collectionConfig as any)
-
-      // Log the action
-      payload.logger.info(`Collection template installed: ${templateId} as "${customName}" (${slug})`)
-
+      // If collection doesn't exist, it means it's a custom template that needs to be pre-configured
+      payload.logger.warn(`Collection template not pre-configured: ${templateId} (${slug})`)
       return Response.json({
-        success: true,
-        message: `Collection "${customName}" has been successfully added!`,
+        success: false,
+        message: `Collection "${customName}" is not yet available. Please contact your administrator to enable this collection type.`,
         collection: {
           templateId,
           customName,
@@ -187,7 +137,7 @@ export const addTemplateEndpoint: Endpoint = {
           singular: singular || customName.replace(/s$/, ''),
           plural: plural || customName,
         },
-      })
+      }, { status: 400 })
     } catch (error) {
       console.error('Error adding template:', error)
       return Response.json(
@@ -218,14 +168,14 @@ export const addBundleEndpoint: Endpoint = {
       }
 
       const bundle = COLLECTION_BUNDLES[bundleId as BundleId]
-      const addedCollections = []
-      const failedCollections = []
+      const availableCollections = []
+      const unavailableCollections = []
 
-      // Install each template in the bundle
+      // Check each template in the bundle
       for (const templateId of bundle.templates) {
         const template = getTemplateById(templateId)
         if (!template) {
-          failedCollections.push(`${templateId} (template not found)`)
+          unavailableCollections.push(`${templateId} (template not found)`)
           continue
         }
 
@@ -233,81 +183,24 @@ export const addBundleEndpoint: Endpoint = {
         const existingCollection = payload.config.collections.find(c => c.slug === slug)
 
         if (existingCollection) {
-          failedCollections.push(`${template.name} (already exists)`)
-          continue
+          availableCollections.push(template.name)
+        } else {
+          unavailableCollections.push(`${template.name} (not pre-configured)`)
         }
-
-        // Create and register collection
-        const collectionConfig = {
-          slug,
-          labels: {
-            singular: template.defaultSingular,
-            plural: template.defaultPlural,
-          },
-          admin: {
-            useAsTitle: 'title',
-            group: template.adminGroup,
-            defaultColumns: ['title', '_status', 'updatedAt'],
-            description: template.description,
-          },
-          versions: {
-            drafts: {
-              autosave: { interval: 300 },
-              schedulePublish: true,
-            },
-            maxPerDoc: 25,
-          },
-          access: {
-            read: ({ req: { user } }) => {
-              if (!user) return { _status: { equals: 'published' } }
-              return true
-            },
-            create: ({ req: { user } }) => Boolean(user),
-            update: ({ req: { user } }) => Boolean(user),
-            delete: ({ req: { user } }) => user?.role === 'admin',
-          },
-          fields: template.fields,
-          hooks: {
-            afterChange: [
-              async ({ doc, req }) => {
-                if (doc._status === 'published') {
-                  const revalidateUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3001'
-                  try {
-                    await fetch(`${revalidateUrl}/api/revalidate`, {
-                      method: 'POST',
-                      headers: { 'Content-Type': 'application/json' },
-                      body: JSON.stringify({
-                        secret: process.env.REVALIDATION_SECRET,
-                        collection: slug,
-                        slug: doc.slug,
-                      }),
-                    })
-                  } catch (error) {
-                    payload.logger.error(`Failed to revalidate ${slug}:`, error)
-                  }
-                }
-                return doc
-              },
-            ],
-          },
-        }
-
-        payload.config.collections.push(collectionConfig as any)
-        addedCollections.push(template.name)
       }
 
-      payload.logger.info(`Bundle installed: ${bundleId} (${addedCollections.join(', ')})`)
+      payload.logger.info(`Bundle accessed: ${bundleId} (${availableCollections.join(', ')})`)
 
       return Response.json({
-        success: addedCollections.length > 0,
-        message: addedCollections.length > 0
-          ? `Bundle "${bundle.name}" has been successfully added!`
-          : `Failed to add bundle "${bundle.name}"`,
+        success: availableCollections.length > 0,
+        message: availableCollections.length > 0
+          ? `Bundle "${bundle.name}" is now available! Collections: ${availableCollections.join(', ')}`
+          : `Bundle "${bundle.name}" is not yet available.`,
         bundle: {
           id: bundleId,
           name: bundle.name,
-          addedCollections,
-          failedCollections,
+          availableCollections,
+          unavailableCollections,
         },
       })
     } catch (error) {
