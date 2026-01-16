@@ -41,7 +41,7 @@ export const navSections: NavSection[] = [
       { label: 'Pages', href: '/admin/collections/pages', icon: 'page' },
       { label: 'Posts', href: '/admin/collections/posts', icon: 'post' },
       { label: 'Categories', href: '/admin/collections/categories', icon: 'category' },
-      { label: 'Tags', href: '/admin/collections/tags', icon: 'tag' },
+      { label: 'Tags', href: '/admin/collections/tags', icon: 'tags' },
       { label: 'Custom Items', href: '/admin/collections/custom-items', icon: 'customItem' },
       { label: 'Content Types', href: '/admin/collections/content-types', icon: 'contentType' },
     ],
