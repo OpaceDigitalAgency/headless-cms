@@ -414,7 +414,7 @@
 
 .ra-side-nav__section {
   margin-bottom: 0.25rem;
-  top:60px !important;
+  margin-top:20px !important;
 }
 
 .ra-side-nav__section-header {
@@ -1071,19 +1071,19 @@
    Fix Duplicate Tabs Issue
    =========================================== */
 
-/* Hide the outer/first set of tabs when there are nested tabs */
-/* Target: .document-fields__fields > .tabs-field that contains nested .tabs-field */
+/* Hide the outer/first set of tabs (navigation only) when there are nested tabs */
+/* This hides the duplicate Content/SEO tabs, leaving only Hero/Content/SEO visible */
 .document-fields__fields > .tabs-field:has(.tabs-field) > .tabs-field__tabs-wrap {
   display: none !important;
 }
 
-/* Also hide the first tab content that wraps the nested tabs */
-.document-fields__fields > .tabs-field:has(.tabs-field) > .tabs-field__content-wrap > .tabs-field__tab:first-child {
-  display: none !important;
+/* Make the outer tabs-field content display as block to show content without the tab navigation */
+.document-fields__fields > .tabs-field:has(.tabs-field) > .tabs-field__content-wrap {
+  display: block !important;
 }
 
-/* Show the nested tabs directly */
-.document-fields__fields > .tabs-field:has(.tabs-field) > .tabs-field__content-wrap {
+/* Ensure the tab content (which contains form fields) is visible */
+.document-fields__fields > .tabs-field:has(.tabs-field) > .tabs-field__content-wrap > .tabs-field__tab {
   display: block !important;
 }
 
@@ -1157,17 +1157,11 @@
   top: calc(var(--top-nav-height) + 0.75rem) !important;
   left: 0.75rem !important;
   z-index: 95 !important;
-  width: 48px !important;
-  height: 48px !important;
+  width: 38px !important;
+  height: 38px !important;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
-  background: var(--theme-elevation-0) !important;
-  border: 2px solid var(--theme-elevation-300) !important;
-  border-radius: 12px !important;
-  cursor: pointer !important;
-  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
 }
 
 .nav-toggler:hover {
@@ -1209,3 +1203,12 @@
 .template-minimal.template-minimal--nav-open .nav-toggler {
   left: 0.75rem !important;
 }
+
+.hamburger__open-icon, .hamburger__close-icon {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;    /* vertical */
+    justify-content: center; /* horizontal */
+}
+

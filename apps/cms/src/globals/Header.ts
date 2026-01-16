@@ -25,8 +25,7 @@ export const Header: GlobalConfig = {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
               secret: process.env.REVALIDATION_SECRET,
-              global: 'header',
-              tags: ['header'],
+              collection: 'header',
             }),
           })
           req.payload.logger.info('Revalidated header global')

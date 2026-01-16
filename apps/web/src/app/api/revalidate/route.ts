@@ -140,12 +140,31 @@ export async function POST(request: NextRequest) {
         break
         
       case 'header':
+        // Header changes affect all pages - revalidate the header tag
+        revalidateTag('header')
+        revalidateTag('global')
+        // Revalidate all known paths since header appears on every page
+        paths.push('/')
+        revalidatePath('/', 'layout')
+        console.log('[Revalidate] Header global - revalidating layout')
+        break
+
       case 'footer':
-      case 'settings':
-        // Global changes affect all pages
-        // Revalidate the global tag and home page
+        // Footer changes affect all pages - revalidate the footer tag
+        revalidateTag('footer')
         revalidateTag('global')
         paths.push('/')
+        revalidatePath('/', 'layout')
+        console.log('[Revalidate] Footer global - revalidating layout')
+        break
+
+      case 'settings':
+        // Settings changes affect all pages
+        revalidateTag('settings')
+        revalidateTag('global')
+        paths.push('/')
+        revalidatePath('/', 'layout')
+        console.log('[Revalidate] Settings global - revalidating layout')
         break
     }
 

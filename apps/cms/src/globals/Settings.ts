@@ -25,8 +25,7 @@ export const Settings: GlobalConfig = {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
               secret: process.env.REVALIDATION_SECRET,
-              global: 'settings',
-              tags: ['settings'],
+              collection: 'settings',
             }),
           })
           req.payload.logger.info('Revalidated settings global')

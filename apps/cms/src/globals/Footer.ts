@@ -25,8 +25,7 @@ export const Footer: GlobalConfig = {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
               secret: process.env.REVALIDATION_SECRET,
-              global: 'footer',
-              tags: ['footer'],
+              collection: 'footer',
             }),
           })
           req.payload.logger.info('Revalidated footer global')
