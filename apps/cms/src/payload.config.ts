@@ -12,6 +12,12 @@ import path from 'path'
 import { fileURLToPath } from 'url'
 import nodemailer from 'nodemailer'
 
+// Environment validation
+import { validateEnv } from './lib/validateEnv'
+
+// Validate environment variables before starting
+validateEnv()
+
 // Collections
 import { Users } from './collections/Users'
 import { Media } from './collections/Media'

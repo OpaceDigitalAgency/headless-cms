@@ -296,15 +296,21 @@ clean-docker: ## Clean Docker resources
 # Utilities
 # ===========================================
 
-env-setup: ## Create .env file from example
+env-setup: ## Create .env files from examples
 	@echo "$(CYAN)Setting up environment...$(NC)"
 	@if [ ! -f .env ]; then \
 		cp .env.example .env; \
-		echo "$(GREEN).env file created from .env.example$(NC)"; \
-		echo "$(YELLOW)Please edit .env with your configuration$(NC)"; \
+		echo "$(GREEN)Root .env file created from .env.example$(NC)"; \
 	else \
-		echo "$(YELLOW).env file already exists$(NC)"; \
+		echo "$(YELLOW)Root .env file already exists$(NC)"; \
 	fi
+	@if [ ! -e apps/cms/.env ]; then \
+		ln -s ../../.env apps/cms/.env; \
+		echo "$(GREEN)CMS .env symlink created (points to root .env)$(NC)"; \
+	else \
+		echo "$(YELLOW)CMS .env already exists$(NC)"; \
+	fi
+	@echo "$(YELLOW)Please edit .env with your configuration if needed$(NC)"
 
 generate-secret: ## Generate a random secret key
 	@echo "$(CYAN)Generated secret:$(NC)"

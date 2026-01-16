@@ -117,21 +117,18 @@
    =========================================== */
 
 /* Adjust Payload's template layout for top nav */
-.template-default,
-.template-minimal {
+.template-default {
   margin-top: var(--top-nav-height);
   grid-template-columns: var(--side-nav-collapsed-width) 1fr;
   transition: grid-template-columns 0.2s ease-in-out;
 }
 
-.template-default.template-default--nav-open,
-.template-minimal.template-minimal--nav-open {
+.template-default.template-default--nav-open {
   grid-template-columns: var(--side-nav-width) 1fr;
 }
 
 /* Fix template wrapper to take full width */
-.template-default__wrap,
-.template-minimal__wrap {
+.template-default__wrap {
   grid-column: 2;
   width: 100%;
   max-width: 100%;

@@ -71,16 +71,19 @@ make quickstart
 ```
 
 This will:
-1. Copy `.env.example` to `.env`
-2. Start PostgreSQL via Docker
-3. Install all dependencies
-4. Run database migrations
-5. Start CMS on http://localhost:3000
-6. Start frontend on http://localhost:3001
+1. ✅ Create `.env` files from examples
+2. ✅ Install all dependencies
+3. ✅ Start PostgreSQL via Docker
+4. ✅ Run database migrations
+5. ✅ Seed sample data
+6. ✅ Start CMS on http://localhost:3000
 
-**Default Login:**
-- Email: `admin@example.com`
-- Password: `admin123`
+**Then create your first admin user:**
+1. Open http://localhost:3000/admin/create-first-user
+2. Fill in your credentials
+3. Start using the CMS!
+
+**See [QUICK_START.md](QUICK_START.md) for detailed setup instructions.**
 
 ---
 
