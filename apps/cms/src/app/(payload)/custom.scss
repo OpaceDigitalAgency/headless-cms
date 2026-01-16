@@ -1248,6 +1248,59 @@
   opacity: 1;
 }
 
+/* Payload v3 blocks drawer (real class names) */
+.blocks-drawer {
+  background: linear-gradient(140deg, var(--theme-elevation-50), var(--theme-elevation-0));
+}
+
+.blocks-drawer__blocks {
+  gap: 1rem;
+  padding: 0.75rem;
+}
+
+.blocks-drawer__block .thumbnail-card {
+  background: var(--theme-elevation-0);
+  border: 1px solid var(--theme-elevation-150);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-sm);
+  padding: 1rem 1rem 0.75rem;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+}
+
+.blocks-drawer__block .thumbnail-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--theme-elevation-200);
+}
+
+.blocks-drawer__default-image {
+  display: grid;
+  place-items: center;
+  padding: 0.5rem 0.75rem 0.25rem;
+}
+
+.blocks-drawer__default-image img,
+.blocks-drawer__default-image svg {
+  width: 60px;
+  height: 60px;
+  color: var(--theme-elevation-500);
+  opacity: 0.85;
+  stroke-width: 1.6;
+}
+
+.blocks-drawer__block .thumbnail-card:hover .blocks-drawer__default-image img,
+.blocks-drawer__block .thumbnail-card:hover .blocks-drawer__default-image svg {
+  color: var(--theme-success-600);
+  opacity: 1;
+}
+
+.blocks-drawer__block .thumbnail-card__label {
+  margin-top: 0.5rem;
+  color: var(--theme-elevation-700);
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
 /* ===========================================
    Collection List Selection Actions - Make Prominent
    =========================================== */

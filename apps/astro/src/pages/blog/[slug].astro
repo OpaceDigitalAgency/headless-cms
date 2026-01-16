@@ -1,10 +1,11 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
+import BlockRenderer from '@/components/blocks/BlockRenderer.astro';
 import { getPosts, getPostBySlug } from '@/lib/payload';
 
 export async function getStaticPaths() {
   const posts = await getPosts({ limit: 1000 });
-  
+
   return posts.docs.map((post) => ({
     params: { slug: post.slug },
     props: { post },
@@ -21,6 +22,7 @@ if (!postData) {
 const title = postData.meta?.title || postData.title;
 const description = postData.meta?.description || postData.excerpt || '';
 const image = postData.featuredImage?.url || '';
+const contentBlocks = postData.contentBlocks || [];
 ---
 
 <BaseLayout title={title} description={description} image={image}>
@@ -37,9 +39,9 @@ const image = postData.featuredImage?.url || '';
             ))}
           </div>
         )}
-        
+
         <h1 class="text-4xl font-bold tracking-tight lg:text-5xl">{postData.title}</h1>
-        
+
         <div class="mt-6 flex items-center gap-4 text-gray-500 dark:text-gray-400">
           {postData.author && (
             <span>By {postData.author.name || postData.author.email}</span>
@@ -55,18 +57,18 @@ const image = postData.featuredImage?.url || '';
           )}
         </div>
       </header>
-      
+
       <!-- Featured Image -->
       {postData.featuredImage?.url && (
         <div class="mb-12 overflow-hidden rounded-xl">
-          <img 
-            src={postData.featuredImage.url} 
+          <img
+            src={postData.featuredImage.url}
             alt={postData.featuredImage.alt || postData.title}
             class="w-full h-auto"
           />
         </div>
       )}
-      
+
       <!-- Content -->
       <div class="prose-custom">
         {postData.content_html ? (
@@ -75,7 +77,14 @@ const image = postData.featuredImage?.url || '';
           <p class="text-gray-500">No content available.</p>
         )}
       </div>
-      
+
+      <!-- Additional Content Blocks -->
+      {contentBlocks.length > 0 && (
+        <div class="mt-12">
+          <BlockRenderer blocks={contentBlocks} />
+        </div>
+      )}
+
       <!-- Tags -->
       {postData.tags && postData.tags.length > 0 && (
         <div class="mt-12 border-t border-gray-200 pt-8 dark:border-gray-700">
@@ -89,7 +98,7 @@ const image = postData.featuredImage?.url || '';
           </div>
         </div>
       )}
-      
+
       <!-- Back link -->
       <div class="mt-12">
         <a href="/blog" class="text-blue-600 hover:text-blue-700 dark:text-blue-400">

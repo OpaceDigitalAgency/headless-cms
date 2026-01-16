@@ -1,6 +1,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { RichText } from './RichText'
+import { RenderBlocks } from './RenderBlocks'
 
 interface PostRendererProps {
   post: any
@@ -11,6 +12,7 @@ export function PostRenderer({ post }: PostRendererProps) {
     title,
     excerpt,
     content,
+    contentBlocks,
     featuredImage,
     categories,
     author,
@@ -86,6 +88,13 @@ export function PostRenderer({ post }: PostRendererProps) {
           {content && <RichText content={content} />}
         </div>
       </div>
+
+      {/* Additional Content Blocks */}
+      {contentBlocks && contentBlocks.length > 0 && (
+        <div className="mt-12">
+          <RenderBlocks blocks={contentBlocks} />
+        </div>
+      )}
 
       {/* Tags */}
       {post.tags && post.tags.length > 0 && (

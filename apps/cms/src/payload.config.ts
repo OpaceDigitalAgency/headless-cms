@@ -1,6 +1,6 @@
 import { buildConfig } from 'payload'
 import { postgresAdapter } from '@payloadcms/db-postgres'
-import { lexicalEditor, HeadingFeature, LinkFeature, UploadFeature, BlockquoteFeature, OrderedListFeature, UnorderedListFeature, ParagraphFeature, InlineCodeFeature, BoldFeature, ItalicFeature, UnderlineFeature, StrikethroughFeature } from '@payloadcms/richtext-lexical'
+import { lexicalEditor, FixedToolbarFeature, HeadingFeature, LinkFeature, UploadFeature, BlockquoteFeature, OrderedListFeature, UnorderedListFeature, ParagraphFeature, InlineCodeFeature, BoldFeature, ItalicFeature, UnderlineFeature, StrikethroughFeature } from '@payloadcms/richtext-lexical'
 import { seoPlugin } from '@payloadcms/plugin-seo'
 import { formBuilderPlugin } from '@payloadcms/plugin-form-builder'
 import { nestedDocsPlugin } from '@payloadcms/plugin-nested-docs'
@@ -143,6 +143,7 @@ export default buildConfig({
   editor: lexicalEditor({
     features: ({ defaultFeatures }) => [
       ...defaultFeatures,
+      FixedToolbarFeature(),
       // Heading feature with all levels
       HeadingFeature({
         enabledHeadingSizes: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'],
