@@ -55,6 +55,7 @@ export const CollectionTemplates: React.FC = () => {
   const [customName, setCustomName] = useState('')
   const [customSlug, setCustomSlug] = useState('')
   const [isAdding, setIsAdding] = useState(false)
+  const [addingBundleId, setAddingBundleId] = useState<BundleId | null>(null)
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null)
   const [installedCollections, setInstalledCollections] = useState<string[]>([])
 
@@ -127,7 +128,7 @@ export const CollectionTemplates: React.FC = () => {
     const bundle = COLLECTION_BUNDLES[bundleId]
     if (!bundle) return
 
-    setIsAdding(true)
+    setAddingBundleId(bundleId)
     setMessage(null)
 
     try {
@@ -148,7 +149,7 @@ export const CollectionTemplates: React.FC = () => {
     } catch (error) {
       setMessage({ type: 'error', text: 'Failed to add bundle. Please try again.' })
     } finally {
-      setIsAdding(false)
+      setAddingBundleId(null)
     }
   }
 
@@ -272,19 +273,19 @@ export const CollectionTemplates: React.FC = () => {
               </p>
               <button
                 onClick={() => handleAddBundle(id as BundleId)}
-                disabled={isAdding}
+                disabled={addingBundleId === id}
                 style={{
                   padding: '10px 20px',
                   backgroundColor: '#0070f3',
                   color: 'white',
                   border: 'none',
                   borderRadius: '4px',
-                  cursor: isAdding ? 'not-allowed' : 'pointer',
-                  opacity: isAdding ? 0.6 : 1,
+                  cursor: addingBundleId === id ? 'not-allowed' : 'pointer',
+                  opacity: addingBundleId === id ? 0.6 : 1,
                   width: '100%',
                 }}
               >
-                {isAdding ? 'Adding...' : 'Add Bundle'}
+                {addingBundleId === id ? 'Adding...' : 'Add Bundle'}
               </button>
             </div>
           )
