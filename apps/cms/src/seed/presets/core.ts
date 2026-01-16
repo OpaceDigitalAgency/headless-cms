@@ -1,14 +1,15 @@
 /**
- * Museum Preset Seeder
- * 
+ * Core Preset Seeder
+ *
  * Seeds sample data for the museum-next preset.
- * Creates artifacts, people, places, and collections suitable for a museum/archive site.
+ * Used as the "kitchen sink" preset to cover the broadest set of collections.
  */
 
 import type { Payload } from 'payload'
 import { BaseSeeder, createRichText, createRichTextParagraphs, type SeedOptions } from '../base'
+import { ensureShowcasePage } from '../showcase'
 
-export class MuseumSeeder extends BaseSeeder {
+export class CoreSeeder extends BaseSeeder {
   constructor(payload: Payload, options: SeedOptions = {}) {
     super(payload, options)
   }
@@ -22,7 +23,7 @@ export class MuseumSeeder extends BaseSeeder {
   }
 
   async seed(): Promise<void> {
-    this.log('Starting museum seed...')
+    this.log('Starting core preset seed...')
 
     // Seed in dependency order
     const categories = await this.seedCategories()
@@ -33,35 +34,15 @@ export class MuseumSeeder extends BaseSeeder {
     await this.seedPages()
     await this.seedPosts(categories)
 
-    await this.seedCustomContentType({
-      name: 'Exhibitions',
-      slug: 'exhibitions',
-      singularLabel: 'Exhibition',
-      pluralLabel: 'Exhibitions',
-      icon: 'event',
-      template: 'archive-item',
-      customFields: [
-        { name: 'startDate', label: 'Start Date', type: 'date', required: true },
-        { name: 'endDate', label: 'End Date', type: 'date', required: false },
-        { name: 'location', label: 'Location', type: 'text', required: true },
-      ],
-      items: [
-        {
-          title: 'Renaissance Wonders',
-          slug: 'renaissance-wonders',
-          excerpt: 'A curated exhibition of Renaissance masterpieces.',
-          customData: { startDate: '2024-06-01', endDate: '2024-09-30', location: 'Main Gallery' },
-        },
-      ],
-    })
+    await this.seedShowcaseContentType()
 
     await this.seedGlobals()
 
-    this.log('Museum seed completed!')
+    this.log('Core preset seed completed!')
   }
 
   async clear(): Promise<void> {
-    this.log('Clearing museum data...')
+    this.log('Clearing core preset data...')
     
     // Clear in reverse dependency order
     await this.clearCollection('posts')
@@ -74,7 +55,47 @@ export class MuseumSeeder extends BaseSeeder {
     await this.clearCollection('content-types')
     await this.clearCollection('categories')
     
-    this.log('Museum data cleared!')
+    this.log('Core preset data cleared!')
+  }
+
+  public async seedCollection(collection: string): Promise<void> {
+    switch (collection) {
+      case 'categories':
+        await this.seedCategories()
+        return
+      case 'places':
+        await this.seedPlaces()
+        return
+      case 'people': {
+        const places = await this.seedPlaces()
+        await this.seedPeople(places)
+        return
+      }
+      case 'museum-collections':
+        await this.seedMuseumCollections()
+        return
+      case 'artifacts': {
+        const places = await this.seedPlaces()
+        const people = await this.seedPeople(places)
+        const collections = await this.seedMuseumCollections()
+        await this.seedArtifacts(people, places, collections)
+        return
+      }
+      case 'posts': {
+        const categories = await this.seedCategories()
+        await this.seedPosts(categories)
+        return
+      }
+      case 'pages':
+        await this.seedPages()
+        return
+      case 'content-types':
+      case 'custom-items':
+        await this.seedShowcaseContentType()
+        return
+      default:
+        this.log(`No seed handler for collection: ${collection}`)
+    }
   }
 
   private async seedCategories(): Promise<Record<string, string>> {
@@ -170,6 +191,34 @@ export class MuseumSeeder extends BaseSeeder {
     }
 
     return places
+  }
+
+  private async seedShowcaseContentType(): Promise<void> {
+    if (!this.shouldSeedCollection('content-types') && !this.shouldSeedCollection('custom-items')) {
+      return
+    }
+
+    await this.seedCustomContentType({
+      name: 'Exhibitions',
+      slug: 'exhibitions',
+      singularLabel: 'Exhibition',
+      pluralLabel: 'Exhibitions',
+      icon: 'event',
+      template: 'archive-item',
+      customFields: [
+        { name: 'startDate', label: 'Start Date', type: 'date', required: true },
+        { name: 'endDate', label: 'End Date', type: 'date', required: false },
+        { name: 'location', label: 'Location', type: 'text', required: true },
+      ],
+      items: [
+        {
+          title: 'Renaissance Wonders',
+          slug: 'renaissance-wonders',
+          excerpt: 'A curated exhibition of Renaissance masterpieces.',
+          customData: { startDate: '2024-06-01', endDate: '2024-09-30', location: 'Main Gallery' },
+        },
+      ],
+    })
   }
 
   private async seedPeople(places: Record<string, string>): Promise<Record<string, string>> {

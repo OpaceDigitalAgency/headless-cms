@@ -2,31 +2,29 @@
 
 import React from 'react'
 
-interface GeneratedSizesCellProps {
-  data?: {
-    sizes?: Record<string, { filename?: string }>
-  }
-}
+const GeneratedSizesCell = (props: any) => {
+  const { cellData, rowData } = props
 
-export const GeneratedSizesCell: React.FC<GeneratedSizesCellProps> = ({ data }) => {
-  if (!data?.sizes || typeof data.sizes !== 'object') {
+  // cellData contains the string from the afterRead hook
+  if (!cellData || cellData === 'None') {
     return <span style={{ color: '#999' }}>None</span>
   }
 
-  const sizeNames = Object.keys(data.sizes).filter(key => data.sizes[key]?.filename)
-  
+  // Parse the comma-separated string
+  const sizeNames = cellData.split(', ').filter(Boolean)
+
   if (sizeNames.length === 0) {
     return <span style={{ color: '#999' }}>None</span>
   }
 
   return (
-    <div style={{ 
-      display: 'flex', 
-      flexWrap: 'wrap', 
+    <div style={{
+      display: 'flex',
+      flexWrap: 'wrap',
       gap: '4px',
       maxWidth: '300px'
     }}>
-      {sizeNames.map((size, index) => (
+      {sizeNames.slice(0, 5).map((size: string) => (
         <span
           key={size}
           style={{
@@ -41,12 +39,21 @@ export const GeneratedSizesCell: React.FC<GeneratedSizesCellProps> = ({ data }) 
           {size}
         </span>
       ))}
-      <span style={{ 
-        fontSize: '11px', 
+      {sizeNames.length > 5 && (
+        <span style={{
+          fontSize: '11px',
+          color: '#666',
+          marginLeft: '4px'
+        }}>
+          +{sizeNames.length - 5} more
+        </span>
+      )}
+      <span style={{
+        fontSize: '11px',
         color: '#666',
         marginLeft: '4px'
       }}>
-        ({sizeNames.length} sizes)
+        ({sizeNames.length} total)
       </span>
     </div>
   )

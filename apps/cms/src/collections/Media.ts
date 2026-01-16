@@ -237,17 +237,6 @@ export const Media: CollectionConfig = {
 
   fields: [
     {
-      name: 'filesize',
-      type: 'number',
-      admin: {
-        components: {
-          Cell: '/components/FileSizeCell',
-        },
-        readOnly: true,
-        hidden: true,
-      },
-    },
-    {
       name: 'alt',
       type: 'text',
       label: 'Alt Text',
@@ -324,7 +313,7 @@ export const Media: CollectionConfig = {
       type: 'text',
       admin: {
         components: {
-          Cell: '/components/GeneratedSizesCell',
+          Cell: '/components/GeneratedSizesCell#default',
         },
         description: 'Image sizes that were generated',
         readOnly: true,
@@ -358,7 +347,19 @@ export const Media: CollectionConfig = {
       },
     ],
     afterChange: [
-      async ({ doc, req }) => {
+      async ({ doc, req, operation }) => {
+        let needsUpdate = false
+        const updateData: any = {}
+
+        // Auto-generate alt text from filename if not provided (for new uploads)
+        if (operation === 'create' && !doc.alt && doc.filename) {
+          updateData.alt = doc.filename
+            .replace(/\.[^/.]+$/, '') // Remove extension
+            .replace(/[-_]/g, ' ') // Replace dashes/underscores with spaces
+            .replace(/\b\w/g, (l: string) => l.toUpperCase()) // Capitalize words
+          needsUpdate = true
+        }
+
         // Generate blur data URL after upload
         if (doc.mimeType?.startsWith('image/') && doc.sizes?.blur?.url) {
           try {
@@ -377,25 +378,29 @@ export const Media: CollectionConfig = {
                 .toBuffer()
               
               const blurDataURL = `data:image/webp;base64,${blurBuffer.toString('base64')}`
-              
+
               // Get dominant color
               const { dominant } = await sharp(blurPath).stats()
               const dominantColor = `#${dominant.r.toString(16).padStart(2, '0')}${dominant.g.toString(16).padStart(2, '0')}${dominant.b.toString(16).padStart(2, '0')}`
-              
-              // Update the document with blur data
-              await req.payload.update({
-                collection: 'media',
-                id: doc.id,
-                data: {
-                  blurDataURL,
-                  dominantColor,
-                },
-              })
+
+              updateData.blurDataURL = blurDataURL
+              updateData.dominantColor = dominantColor
+              needsUpdate = true
             }
           } catch (error) {
             console.error('Error generating blur placeholder:', error)
           }
         }
+
+        // Update the document if needed
+        if (needsUpdate) {
+          await req.payload.update({
+            collection: 'media',
+            id: doc.id,
+            data: updateData,
+          })
+        }
+
         return doc
       },
     ],
