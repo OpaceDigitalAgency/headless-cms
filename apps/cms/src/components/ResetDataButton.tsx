@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react'
 import { useConfig } from '@payloadcms/ui'
+import { SettingsIcon, TrashIcon } from '../admin/icons'
 
 /**
  * Reset Data Button Component
@@ -125,15 +126,15 @@ export const ResetDataButton: React.FC = () => {
           backgroundColor: 'var(--theme-error-100)',
           border: '1px solid var(--theme-error-500)',
         }}>
-          <p style={{ 
-            margin: '0 0 12px 0', 
+          <p style={{
+            margin: '0 0 12px 0',
             fontSize: '14px',
             fontWeight: 500,
             color: 'var(--theme-error-500)',
           }}>
-            {showConfirm === 'clear' 
-              ? '⚠️ Are you sure you want to clear ALL data? This cannot be undone!'
-              : '⚠️ This will clear existing data and re-seed with sample content. Continue?'
+            {showConfirm === 'clear'
+              ? 'Are you sure you want to clear ALL data? This cannot be undone!'
+              : 'This will clear existing data and re-seed with sample content. Continue?'
             }
           </p>
           <div style={{ display: 'flex', gap: '8px' }}>
@@ -192,7 +193,7 @@ export const ResetDataButton: React.FC = () => {
               gap: '8px',
             }}
           >
-            <span>🔄</span> Re-seed Sample Data
+            <SettingsIcon size={16} /> Re-seed Sample Data
           </button>
           <button
             onClick={() => setShowConfirm('clear')}
@@ -211,7 +212,7 @@ export const ResetDataButton: React.FC = () => {
               gap: '8px',
             }}
           >
-            <span>🗑️</span> Clear All Data
+            <TrashIcon size={16} /> Clear All Data
           </button>
         </div>
       )}

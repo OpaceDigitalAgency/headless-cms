@@ -979,17 +979,17 @@ export interface ContentType {
   icon?:
     | (
         | 'box'
-        | 'car'
-        | 'artifact'
-        | 'cart'
+        | 'product'
+        | 'archive'
+        | 'shopping-bag'
         | 'person'
         | 'location'
         | 'event'
         | 'document'
-        | 'art'
-        | 'food'
-        | 'property'
-        | 'service'
+        | 'archive-item'
+        | 'image'
+        | 'settings'
+        | 'users'
       )
     | null;
   /**

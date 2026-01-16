@@ -9,6 +9,8 @@ import {
   MapPinIcon,
   TagIcon,
   FolderIcon,
+  SettingsIcon,
+  TrashIcon,
   type IconProps
 } from '../admin/icons'
 
@@ -384,9 +386,12 @@ export const SeedDataManager: React.FC = () => {
                 cursor: actionInProgress ? 'not-allowed' : 'pointer',
                 opacity: actionInProgress ? 0.6 : 1,
                 fontSize: '13px',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px',
               }}
             >
-              {actionInProgress === 'preset-seed' ? 'Seeding...' : '🌱 Seed All'}
+              <SettingsIcon size={14} /> {actionInProgress === 'preset-seed' ? 'Seeding...' : 'Seed All'}
             </button>
             {hasAnyData && (
               <button
@@ -401,9 +406,12 @@ export const SeedDataManager: React.FC = () => {
                   cursor: actionInProgress ? 'not-allowed' : 'pointer',
                   opacity: actionInProgress ? 0.6 : 1,
                   fontSize: '13px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '6px',
                 }}
               >
-                {actionInProgress === 'preset-clear' ? 'Clearing...' : '🗑️ Clear All'}
+                <TrashIcon size={14} /> {actionInProgress === 'preset-clear' ? 'Clearing...' : 'Clear All'}
               </button>
             )}
           </div>
@@ -527,9 +535,12 @@ export const SeedDataManager: React.FC = () => {
                 color: 'white',
                 cursor: actionInProgress ? 'not-allowed' : 'pointer',
                 opacity: actionInProgress ? 0.6 : 1,
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
               }}
             >
-              {actionInProgress === 'preset-seed' ? 'Processing...' : '🌱 Seed Sample Data'}
+              <SettingsIcon size={16} /> {actionInProgress === 'preset-seed' ? 'Processing...' : 'Seed Sample Data'}
             </button>
 
             {hasAnyData && (
@@ -547,9 +558,12 @@ export const SeedDataManager: React.FC = () => {
                     color: 'var(--theme-text)',
                     cursor: actionInProgress ? 'not-allowed' : 'pointer',
                     opacity: actionInProgress ? 0.6 : 1,
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '8px',
                   }}
                 >
-                  🔄 Re-seed Sample Data
+                  <SettingsIcon size={16} /> Re-seed Sample Data
                 </button>
                 <button
                   onClick={() => handlePresetAction('clear')}
@@ -564,9 +578,12 @@ export const SeedDataManager: React.FC = () => {
                     color: '#dc3545',
                     cursor: actionInProgress ? 'not-allowed' : 'pointer',
                     opacity: actionInProgress ? 0.6 : 1,
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '8px',
                   }}
                 >
-                  🗑️ Delete Sample Data
+                  <TrashIcon size={16} /> Delete Sample Data
                 </button>
               </>
             )}
@@ -676,9 +693,12 @@ const CollectionSeedCard: React.FC<CollectionSeedCardProps> = ({
               cursor: isProcessing ? 'not-allowed' : 'pointer',
               opacity: isProcessing ? 0.6 : 1,
               fontSize: '12px',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '4px',
             }}
           >
-            {actionInProgress === `${slug}-seed` ? 'Seeding...' : '🌱 Seed'}
+            <SettingsIcon size={12} /> {actionInProgress === `${slug}-seed` ? 'Seeding...' : 'Seed'}
           </button>
         )}
         {hasData && (
@@ -695,9 +715,12 @@ const CollectionSeedCard: React.FC<CollectionSeedCardProps> = ({
                 cursor: isProcessing ? 'not-allowed' : 'pointer',
                 opacity: isProcessing ? 0.6 : 1,
                 fontSize: '12px',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '4px',
               }}
             >
-              {actionInProgress === `${slug}-reseed` ? 'Re-seeding...' : '🔄 Re-seed'}
+              <SettingsIcon size={12} /> {actionInProgress === `${slug}-reseed` ? 'Re-seeding...' : 'Re-seed'}
             </button>
             <button
               onClick={onClear}
@@ -711,9 +734,12 @@ const CollectionSeedCard: React.FC<CollectionSeedCardProps> = ({
                 cursor: isProcessing ? 'not-allowed' : 'pointer',
                 opacity: isProcessing ? 0.6 : 1,
                 fontSize: '12px',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '4px',
               }}
             >
-              {actionInProgress === `${slug}-clear` ? 'Clearing...' : '🗑️ Delete'}
+              <TrashIcon size={12} /> {actionInProgress === `${slug}-clear` ? 'Clearing...' : 'Delete'}
             </button>
           </>
         )}
@@ -730,9 +756,12 @@ const CollectionSeedCard: React.FC<CollectionSeedCardProps> = ({
               cursor: isProcessing ? 'not-allowed' : 'pointer',
               opacity: isProcessing ? 0.6 : 1,
               fontSize: '12px',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '4px',
             }}
           >
-            {actionInProgress === 'pages-showcase' ? 'Creating...' : '✨ Create Blocks Showcase'}
+            <SettingsIcon size={12} /> {actionInProgress === 'pages-showcase' ? 'Creating...' : 'Create Blocks Showcase'}
           </button>
         )}
       </div>
