@@ -4,12 +4,24 @@ import {
   contentBlock,
   mediaBlock as MediaBlock,
   ctaBlock,
+  quoteBlock,
+  featuresBlock,
+  statsBlock,
+  logoCloudBlock,
+  testimonialsBlock,
+  faqBlock,
+  pricingBlock,
+  teamBlock,
+  embedBlock,
   galleryBlock,
   gridBlock,
   timelineBlock,
   archiveBlock,
   formBlock,
+  spacerBlock,
+  htmlBlock,
 } from '../blocks'
+import { getPreviewUrl } from '../utils/preview'
 
 /**
  * Custom Items Collection
@@ -36,6 +48,28 @@ export const CustomItems: CollectionConfig = {
     defaultColumns: ['title', 'contentType', 'status', 'updatedAt'],
     description: 'Items belonging to your custom content types',
     listSearchableFields: ['title', 'slug'],
+    preview: (doc) => {
+      // Build preview URL with content type
+      if (doc.contentType && typeof doc.contentType === 'object' && doc.contentType.slug) {
+        const typeSlug = doc.contentType.archiveSlug
+          ? doc.contentType.archiveSlug.replace(/^\/?items\//, '')
+          : doc.contentType.slug
+        return getPreviewUrl({ collection: 'custom-items', slug: `${typeSlug}/${doc.slug}` })
+      }
+      return getPreviewUrl({ collection: 'custom-items', slug: doc.slug })
+    },
+    livePreview: {
+      url: ({ data }) => {
+        // Build live preview URL with content type
+        if (data?.contentType && typeof data.contentType === 'object' && data.contentType.slug) {
+          const typeSlug = data.contentType.archiveSlug
+            ? data.contentType.archiveSlug.replace(/^\/?items\//, '')
+            : data.contentType.slug
+          return getPreviewUrl({ collection: 'custom-items', slug: `${typeSlug}/${data.slug}` })
+        }
+        return getPreviewUrl({ collection: 'custom-items', slug: data?.slug })
+      },
+    },
   },
   access: {
     read: ({ req: { user } }) => {
@@ -137,11 +171,22 @@ export const CustomItems: CollectionConfig = {
                 contentBlock,
                 MediaBlock,
                 ctaBlock,
+                quoteBlock,
+                featuresBlock,
+                statsBlock,
+                logoCloudBlock,
+                testimonialsBlock,
+                faqBlock,
+                pricingBlock,
+                teamBlock,
+                embedBlock,
                 galleryBlock,
                 gridBlock,
                 timelineBlock,
                 archiveBlock,
                 formBlock,
+                spacerBlock,
+                htmlBlock,
               ],
               admin: {
                 description: 'Add content sections',
@@ -287,13 +332,28 @@ export const CustomItems: CollectionConfig = {
         }
 
         // Validate custom fields against content type definition
-        if (data?.customData && data?.contentType) {
+        // Only validate on publish, not on draft autosaves
+        const isPublishing = data?._status === 'published' || (operation === 'update' && originalDoc?._status === 'published' && data?._status !== 'draft')
+
+        if (data?.contentType && isPublishing) {
           try {
+            const contentTypeId = typeof data.contentType === 'string' ? data.contentType : data.contentType?.id
+
+            if (!contentTypeId) {
+              // Skip validation if no content type ID
+              return data
+            }
+
             const contentType = await req.payload.findByID({
               collection: 'content-types',
-              id: typeof data.contentType === 'string' ? data.contentType : data.contentType.id,
+              id: contentTypeId,
               depth: 0,
             })
+
+            if (!contentType) {
+              // Skip validation if content type not found
+              return data
+            }
 
             const definitions = contentType?.customFields || []
             const customData = data.customData || {}
@@ -303,7 +363,7 @@ export const CustomItems: CollectionConfig = {
               const value = customData?.[name]
 
               if (required && (value === undefined || value === null || value === '')) {
-                throw new Error(`Custom field "${name}" is required`)
+                throw new Error(`Custom field "${name}" is required for publishing`)
               }
 
               if (value !== undefined && value !== null) {
@@ -323,6 +383,8 @@ export const CustomItems: CollectionConfig = {
               }
             }
           } catch (e) {
+            // Log the error for debugging
+            req.payload.logger.error(`Custom field validation error: ${e instanceof Error ? e.message : 'Unknown error'}`)
             if (e instanceof Error) throw e
             throw new Error('Invalid custom field data')
           }

@@ -506,6 +506,161 @@ export interface Page {
             blockType: 'cta';
           }
         | {
+            quote: string;
+            author?: string | null;
+            role?: string | null;
+            align?: ('left' | 'center' | 'right') | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'quote';
+          }
+        | {
+            heading?: string | null;
+            subheading?: string | null;
+            layout?: ('grid' | 'list') | null;
+            items?:
+              | {
+                  title: string;
+                  description?: string | null;
+                  icon?: string | null;
+                  media?: (number | null) | Media;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'features';
+          }
+        | {
+            heading?: string | null;
+            subheading?: string | null;
+            stats?:
+              | {
+                  value: string;
+                  label: string;
+                  description?: string | null;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'stats';
+          }
+        | {
+            heading?: string | null;
+            logos?:
+              | {
+                  logo: number | Media;
+                  label?: string | null;
+                  url?: string | null;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'logoCloud';
+          }
+        | {
+            heading?: string | null;
+            items?:
+              | {
+                  quote: string;
+                  name: string;
+                  role?: string | null;
+                  company?: string | null;
+                  avatar?: (number | null) | Media;
+                  rating?: number | null;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'testimonials';
+          }
+        | {
+            heading?: string | null;
+            items?:
+              | {
+                  question: string;
+                  answer: {
+                    root: {
+                      type: string;
+                      children: {
+                        type: any;
+                        version: number;
+                        [k: string]: unknown;
+                      }[];
+                      direction: ('ltr' | 'rtl') | null;
+                      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                      indent: number;
+                      version: number;
+                    };
+                    [k: string]: unknown;
+                  };
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'faq';
+          }
+        | {
+            heading?: string | null;
+            subheading?: string | null;
+            plans?:
+              | {
+                  name: string;
+                  price: string;
+                  period?: string | null;
+                  description?: string | null;
+                  features?:
+                    | {
+                        feature: string;
+                        id?: string | null;
+                      }[]
+                    | null;
+                  ctaLabel?: string | null;
+                  ctaUrl?: string | null;
+                  featured?: boolean | null;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'pricing';
+          }
+        | {
+            heading?: string | null;
+            members?:
+              | {
+                  name: string;
+                  role?: string | null;
+                  bio?: string | null;
+                  photo?: (number | null) | Media;
+                  socials?:
+                    | {
+                        label: string;
+                        url: string;
+                        id?: string | null;
+                      }[]
+                    | null;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'team';
+          }
+        | {
+            heading?: string | null;
+            url: string;
+            caption?: string | null;
+            aspectRatio?: ('16:9' | '4:3' | '1:1' | '21:9') | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'embed';
+          }
+        | {
             heading?: string | null;
             description?: string | null;
             populateBy?: ('collection' | 'selection') | null;
@@ -752,6 +907,23 @@ export interface Page {
             blockName?: string | null;
             blockType: 'timeline';
           }
+        | {
+            style?: ('space' | 'divider') | null;
+            size?: ('xs' | 'sm' | 'md' | 'lg' | 'xl') | null;
+            lineStyle?: ('solid' | 'dashed' | 'dotted') | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'spacer';
+          }
+        | {
+            /**
+             * Use trusted HTML only. This will be rendered as-is on the site.
+             */
+            html: string;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'html';
+          }
       )[]
     | null;
   meta?: {
@@ -765,7 +937,7 @@ export interface Page {
   /**
    * Select the page template
    */
-  template: 'landing' | 'home' | 'detail' | 'article' | 'archive';
+  template: 'landing' | 'home' | 'detail' | 'article' | 'archive' | 'showcase';
   publishedAt?: string | null;
   updatedAt: string;
   createdAt: string;
@@ -1038,6 +1210,161 @@ export interface Post {
             blockType: 'cta';
           }
         | {
+            quote: string;
+            author?: string | null;
+            role?: string | null;
+            align?: ('left' | 'center' | 'right') | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'quote';
+          }
+        | {
+            heading?: string | null;
+            subheading?: string | null;
+            layout?: ('grid' | 'list') | null;
+            items?:
+              | {
+                  title: string;
+                  description?: string | null;
+                  icon?: string | null;
+                  media?: (number | null) | Media;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'features';
+          }
+        | {
+            heading?: string | null;
+            subheading?: string | null;
+            stats?:
+              | {
+                  value: string;
+                  label: string;
+                  description?: string | null;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'stats';
+          }
+        | {
+            heading?: string | null;
+            logos?:
+              | {
+                  logo: number | Media;
+                  label?: string | null;
+                  url?: string | null;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'logoCloud';
+          }
+        | {
+            heading?: string | null;
+            items?:
+              | {
+                  quote: string;
+                  name: string;
+                  role?: string | null;
+                  company?: string | null;
+                  avatar?: (number | null) | Media;
+                  rating?: number | null;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'testimonials';
+          }
+        | {
+            heading?: string | null;
+            items?:
+              | {
+                  question: string;
+                  answer: {
+                    root: {
+                      type: string;
+                      children: {
+                        type: any;
+                        version: number;
+                        [k: string]: unknown;
+                      }[];
+                      direction: ('ltr' | 'rtl') | null;
+                      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                      indent: number;
+                      version: number;
+                    };
+                    [k: string]: unknown;
+                  };
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'faq';
+          }
+        | {
+            heading?: string | null;
+            subheading?: string | null;
+            plans?:
+              | {
+                  name: string;
+                  price: string;
+                  period?: string | null;
+                  description?: string | null;
+                  features?:
+                    | {
+                        feature: string;
+                        id?: string | null;
+                      }[]
+                    | null;
+                  ctaLabel?: string | null;
+                  ctaUrl?: string | null;
+                  featured?: boolean | null;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'pricing';
+          }
+        | {
+            heading?: string | null;
+            members?:
+              | {
+                  name: string;
+                  role?: string | null;
+                  bio?: string | null;
+                  photo?: (number | null) | Media;
+                  socials?:
+                    | {
+                        label: string;
+                        url: string;
+                        id?: string | null;
+                      }[]
+                    | null;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'team';
+          }
+        | {
+            heading?: string | null;
+            url: string;
+            caption?: string | null;
+            aspectRatio?: ('16:9' | '4:3' | '1:1' | '21:9') | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'embed';
+          }
+        | {
             heading?: string | null;
             description?: string | null;
             populateBy?: ('collection' | 'selection') | null;
@@ -1283,6 +1610,23 @@ export interface Post {
             id?: string | null;
             blockName?: string | null;
             blockType: 'timeline';
+          }
+        | {
+            style?: ('space' | 'divider') | null;
+            size?: ('xs' | 'sm' | 'md' | 'lg' | 'xl') | null;
+            lineStyle?: ('solid' | 'dashed' | 'dotted') | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'spacer';
+          }
+        | {
+            /**
+             * Use trusted HTML only. This will be rendered as-is on the site.
+             */
+            html: string;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'html';
           }
       )[]
     | null;
@@ -1523,6 +1867,161 @@ export interface Artifact {
             blockType: 'cta';
           }
         | {
+            quote: string;
+            author?: string | null;
+            role?: string | null;
+            align?: ('left' | 'center' | 'right') | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'quote';
+          }
+        | {
+            heading?: string | null;
+            subheading?: string | null;
+            layout?: ('grid' | 'list') | null;
+            items?:
+              | {
+                  title: string;
+                  description?: string | null;
+                  icon?: string | null;
+                  media?: (number | null) | Media;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'features';
+          }
+        | {
+            heading?: string | null;
+            subheading?: string | null;
+            stats?:
+              | {
+                  value: string;
+                  label: string;
+                  description?: string | null;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'stats';
+          }
+        | {
+            heading?: string | null;
+            logos?:
+              | {
+                  logo: number | Media;
+                  label?: string | null;
+                  url?: string | null;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'logoCloud';
+          }
+        | {
+            heading?: string | null;
+            items?:
+              | {
+                  quote: string;
+                  name: string;
+                  role?: string | null;
+                  company?: string | null;
+                  avatar?: (number | null) | Media;
+                  rating?: number | null;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'testimonials';
+          }
+        | {
+            heading?: string | null;
+            items?:
+              | {
+                  question: string;
+                  answer: {
+                    root: {
+                      type: string;
+                      children: {
+                        type: any;
+                        version: number;
+                        [k: string]: unknown;
+                      }[];
+                      direction: ('ltr' | 'rtl') | null;
+                      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                      indent: number;
+                      version: number;
+                    };
+                    [k: string]: unknown;
+                  };
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'faq';
+          }
+        | {
+            heading?: string | null;
+            subheading?: string | null;
+            plans?:
+              | {
+                  name: string;
+                  price: string;
+                  period?: string | null;
+                  description?: string | null;
+                  features?:
+                    | {
+                        feature: string;
+                        id?: string | null;
+                      }[]
+                    | null;
+                  ctaLabel?: string | null;
+                  ctaUrl?: string | null;
+                  featured?: boolean | null;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'pricing';
+          }
+        | {
+            heading?: string | null;
+            members?:
+              | {
+                  name: string;
+                  role?: string | null;
+                  bio?: string | null;
+                  photo?: (number | null) | Media;
+                  socials?:
+                    | {
+                        label: string;
+                        url: string;
+                        id?: string | null;
+                      }[]
+                    | null;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'team';
+          }
+        | {
+            heading?: string | null;
+            url: string;
+            caption?: string | null;
+            aspectRatio?: ('16:9' | '4:3' | '1:1' | '21:9') | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'embed';
+          }
+        | {
             heading?: string | null;
             description?: string | null;
             populateBy?: ('collection' | 'selection') | null;
@@ -1768,6 +2267,23 @@ export interface Artifact {
             id?: string | null;
             blockName?: string | null;
             blockType: 'timeline';
+          }
+        | {
+            style?: ('space' | 'divider') | null;
+            size?: ('xs' | 'sm' | 'md' | 'lg' | 'xl') | null;
+            lineStyle?: ('solid' | 'dashed' | 'dotted') | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'spacer';
+          }
+        | {
+            /**
+             * Use trusted HTML only. This will be rendered as-is on the site.
+             */
+            html: string;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'html';
           }
       )[]
     | null;
@@ -1986,6 +2502,161 @@ export interface Person {
             blockType: 'cta';
           }
         | {
+            quote: string;
+            author?: string | null;
+            role?: string | null;
+            align?: ('left' | 'center' | 'right') | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'quote';
+          }
+        | {
+            heading?: string | null;
+            subheading?: string | null;
+            layout?: ('grid' | 'list') | null;
+            items?:
+              | {
+                  title: string;
+                  description?: string | null;
+                  icon?: string | null;
+                  media?: (number | null) | Media;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'features';
+          }
+        | {
+            heading?: string | null;
+            subheading?: string | null;
+            stats?:
+              | {
+                  value: string;
+                  label: string;
+                  description?: string | null;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'stats';
+          }
+        | {
+            heading?: string | null;
+            logos?:
+              | {
+                  logo: number | Media;
+                  label?: string | null;
+                  url?: string | null;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'logoCloud';
+          }
+        | {
+            heading?: string | null;
+            items?:
+              | {
+                  quote: string;
+                  name: string;
+                  role?: string | null;
+                  company?: string | null;
+                  avatar?: (number | null) | Media;
+                  rating?: number | null;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'testimonials';
+          }
+        | {
+            heading?: string | null;
+            items?:
+              | {
+                  question: string;
+                  answer: {
+                    root: {
+                      type: string;
+                      children: {
+                        type: any;
+                        version: number;
+                        [k: string]: unknown;
+                      }[];
+                      direction: ('ltr' | 'rtl') | null;
+                      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                      indent: number;
+                      version: number;
+                    };
+                    [k: string]: unknown;
+                  };
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'faq';
+          }
+        | {
+            heading?: string | null;
+            subheading?: string | null;
+            plans?:
+              | {
+                  name: string;
+                  price: string;
+                  period?: string | null;
+                  description?: string | null;
+                  features?:
+                    | {
+                        feature: string;
+                        id?: string | null;
+                      }[]
+                    | null;
+                  ctaLabel?: string | null;
+                  ctaUrl?: string | null;
+                  featured?: boolean | null;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'pricing';
+          }
+        | {
+            heading?: string | null;
+            members?:
+              | {
+                  name: string;
+                  role?: string | null;
+                  bio?: string | null;
+                  photo?: (number | null) | Media;
+                  socials?:
+                    | {
+                        label: string;
+                        url: string;
+                        id?: string | null;
+                      }[]
+                    | null;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'team';
+          }
+        | {
+            heading?: string | null;
+            url: string;
+            caption?: string | null;
+            aspectRatio?: ('16:9' | '4:3' | '1:1' | '21:9') | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'embed';
+          }
+        | {
             heading?: string | null;
             description?: string | null;
             populateBy?: ('collection' | 'selection') | null;
@@ -2231,6 +2902,23 @@ export interface Person {
             id?: string | null;
             blockName?: string | null;
             blockType: 'timeline';
+          }
+        | {
+            style?: ('space' | 'divider') | null;
+            size?: ('xs' | 'sm' | 'md' | 'lg' | 'xl') | null;
+            lineStyle?: ('solid' | 'dashed' | 'dotted') | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'spacer';
+          }
+        | {
+            /**
+             * Use trusted HTML only. This will be rendered as-is on the site.
+             */
+            html: string;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'html';
           }
       )[]
     | null;
@@ -2467,6 +3155,161 @@ export interface Place {
             blockType: 'cta';
           }
         | {
+            quote: string;
+            author?: string | null;
+            role?: string | null;
+            align?: ('left' | 'center' | 'right') | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'quote';
+          }
+        | {
+            heading?: string | null;
+            subheading?: string | null;
+            layout?: ('grid' | 'list') | null;
+            items?:
+              | {
+                  title: string;
+                  description?: string | null;
+                  icon?: string | null;
+                  media?: (number | null) | Media;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'features';
+          }
+        | {
+            heading?: string | null;
+            subheading?: string | null;
+            stats?:
+              | {
+                  value: string;
+                  label: string;
+                  description?: string | null;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'stats';
+          }
+        | {
+            heading?: string | null;
+            logos?:
+              | {
+                  logo: number | Media;
+                  label?: string | null;
+                  url?: string | null;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'logoCloud';
+          }
+        | {
+            heading?: string | null;
+            items?:
+              | {
+                  quote: string;
+                  name: string;
+                  role?: string | null;
+                  company?: string | null;
+                  avatar?: (number | null) | Media;
+                  rating?: number | null;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'testimonials';
+          }
+        | {
+            heading?: string | null;
+            items?:
+              | {
+                  question: string;
+                  answer: {
+                    root: {
+                      type: string;
+                      children: {
+                        type: any;
+                        version: number;
+                        [k: string]: unknown;
+                      }[];
+                      direction: ('ltr' | 'rtl') | null;
+                      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                      indent: number;
+                      version: number;
+                    };
+                    [k: string]: unknown;
+                  };
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'faq';
+          }
+        | {
+            heading?: string | null;
+            subheading?: string | null;
+            plans?:
+              | {
+                  name: string;
+                  price: string;
+                  period?: string | null;
+                  description?: string | null;
+                  features?:
+                    | {
+                        feature: string;
+                        id?: string | null;
+                      }[]
+                    | null;
+                  ctaLabel?: string | null;
+                  ctaUrl?: string | null;
+                  featured?: boolean | null;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'pricing';
+          }
+        | {
+            heading?: string | null;
+            members?:
+              | {
+                  name: string;
+                  role?: string | null;
+                  bio?: string | null;
+                  photo?: (number | null) | Media;
+                  socials?:
+                    | {
+                        label: string;
+                        url: string;
+                        id?: string | null;
+                      }[]
+                    | null;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'team';
+          }
+        | {
+            heading?: string | null;
+            url: string;
+            caption?: string | null;
+            aspectRatio?: ('16:9' | '4:3' | '1:1' | '21:9') | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'embed';
+          }
+        | {
             heading?: string | null;
             description?: string | null;
             populateBy?: ('collection' | 'selection') | null;
@@ -2712,6 +3555,23 @@ export interface Place {
             id?: string | null;
             blockName?: string | null;
             blockType: 'timeline';
+          }
+        | {
+            style?: ('space' | 'divider') | null;
+            size?: ('xs' | 'sm' | 'md' | 'lg' | 'xl') | null;
+            lineStyle?: ('solid' | 'dashed' | 'dotted') | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'spacer';
+          }
+        | {
+            /**
+             * Use trusted HTML only. This will be rendered as-is on the site.
+             */
+            html: string;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'html';
           }
       )[]
     | null;
@@ -2876,6 +3736,161 @@ export interface CustomItem {
             blockType: 'cta';
           }
         | {
+            quote: string;
+            author?: string | null;
+            role?: string | null;
+            align?: ('left' | 'center' | 'right') | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'quote';
+          }
+        | {
+            heading?: string | null;
+            subheading?: string | null;
+            layout?: ('grid' | 'list') | null;
+            items?:
+              | {
+                  title: string;
+                  description?: string | null;
+                  icon?: string | null;
+                  media?: (number | null) | Media;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'features';
+          }
+        | {
+            heading?: string | null;
+            subheading?: string | null;
+            stats?:
+              | {
+                  value: string;
+                  label: string;
+                  description?: string | null;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'stats';
+          }
+        | {
+            heading?: string | null;
+            logos?:
+              | {
+                  logo: number | Media;
+                  label?: string | null;
+                  url?: string | null;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'logoCloud';
+          }
+        | {
+            heading?: string | null;
+            items?:
+              | {
+                  quote: string;
+                  name: string;
+                  role?: string | null;
+                  company?: string | null;
+                  avatar?: (number | null) | Media;
+                  rating?: number | null;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'testimonials';
+          }
+        | {
+            heading?: string | null;
+            items?:
+              | {
+                  question: string;
+                  answer: {
+                    root: {
+                      type: string;
+                      children: {
+                        type: any;
+                        version: number;
+                        [k: string]: unknown;
+                      }[];
+                      direction: ('ltr' | 'rtl') | null;
+                      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                      indent: number;
+                      version: number;
+                    };
+                    [k: string]: unknown;
+                  };
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'faq';
+          }
+        | {
+            heading?: string | null;
+            subheading?: string | null;
+            plans?:
+              | {
+                  name: string;
+                  price: string;
+                  period?: string | null;
+                  description?: string | null;
+                  features?:
+                    | {
+                        feature: string;
+                        id?: string | null;
+                      }[]
+                    | null;
+                  ctaLabel?: string | null;
+                  ctaUrl?: string | null;
+                  featured?: boolean | null;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'pricing';
+          }
+        | {
+            heading?: string | null;
+            members?:
+              | {
+                  name: string;
+                  role?: string | null;
+                  bio?: string | null;
+                  photo?: (number | null) | Media;
+                  socials?:
+                    | {
+                        label: string;
+                        url: string;
+                        id?: string | null;
+                      }[]
+                    | null;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'team';
+          }
+        | {
+            heading?: string | null;
+            url: string;
+            caption?: string | null;
+            aspectRatio?: ('16:9' | '4:3' | '1:1' | '21:9') | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'embed';
+          }
+        | {
             /**
              * Optional heading for the gallery section
              */
@@ -3121,6 +4136,23 @@ export interface CustomItem {
             id?: string | null;
             blockName?: string | null;
             blockType: 'form';
+          }
+        | {
+            style?: ('space' | 'divider') | null;
+            size?: ('xs' | 'sm' | 'md' | 'lg' | 'xl') | null;
+            lineStyle?: ('solid' | 'dashed' | 'dotted') | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'spacer';
+          }
+        | {
+            /**
+             * Use trusted HTML only. This will be rendered as-is on the site.
+             */
+            html: string;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'html';
           }
       )[]
     | null;
@@ -4064,6 +5096,156 @@ export interface PagesSelect<T extends boolean = true> {
               id?: T;
               blockName?: T;
             };
+        quote?:
+          | T
+          | {
+              quote?: T;
+              author?: T;
+              role?: T;
+              align?: T;
+              id?: T;
+              blockName?: T;
+            };
+        features?:
+          | T
+          | {
+              heading?: T;
+              subheading?: T;
+              layout?: T;
+              items?:
+                | T
+                | {
+                    title?: T;
+                    description?: T;
+                    icon?: T;
+                    media?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        stats?:
+          | T
+          | {
+              heading?: T;
+              subheading?: T;
+              stats?:
+                | T
+                | {
+                    value?: T;
+                    label?: T;
+                    description?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        logoCloud?:
+          | T
+          | {
+              heading?: T;
+              logos?:
+                | T
+                | {
+                    logo?: T;
+                    label?: T;
+                    url?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        testimonials?:
+          | T
+          | {
+              heading?: T;
+              items?:
+                | T
+                | {
+                    quote?: T;
+                    name?: T;
+                    role?: T;
+                    company?: T;
+                    avatar?: T;
+                    rating?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        faq?:
+          | T
+          | {
+              heading?: T;
+              items?:
+                | T
+                | {
+                    question?: T;
+                    answer?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        pricing?:
+          | T
+          | {
+              heading?: T;
+              subheading?: T;
+              plans?:
+                | T
+                | {
+                    name?: T;
+                    price?: T;
+                    period?: T;
+                    description?: T;
+                    features?:
+                      | T
+                      | {
+                          feature?: T;
+                          id?: T;
+                        };
+                    ctaLabel?: T;
+                    ctaUrl?: T;
+                    featured?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        team?:
+          | T
+          | {
+              heading?: T;
+              members?:
+                | T
+                | {
+                    name?: T;
+                    role?: T;
+                    bio?: T;
+                    photo?: T;
+                    socials?:
+                      | T
+                      | {
+                          label?: T;
+                          url?: T;
+                          id?: T;
+                        };
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        embed?:
+          | T
+          | {
+              heading?: T;
+              url?: T;
+              caption?: T;
+              aspectRatio?: T;
+              id?: T;
+              blockName?: T;
+            };
         archive?:
           | T
           | {
@@ -4209,6 +5391,22 @@ export interface PagesSelect<T extends boolean = true> {
               animateOnScroll?: T;
               sortOrder?: T;
               backgroundColor?: T;
+              id?: T;
+              blockName?: T;
+            };
+        spacer?:
+          | T
+          | {
+              style?: T;
+              size?: T;
+              lineStyle?: T;
+              id?: T;
+              blockName?: T;
+            };
+        html?:
+          | T
+          | {
+              html?: T;
               id?: T;
               blockName?: T;
             };
@@ -4326,6 +5524,156 @@ export interface PostsSelect<T extends boolean = true> {
               id?: T;
               blockName?: T;
             };
+        quote?:
+          | T
+          | {
+              quote?: T;
+              author?: T;
+              role?: T;
+              align?: T;
+              id?: T;
+              blockName?: T;
+            };
+        features?:
+          | T
+          | {
+              heading?: T;
+              subheading?: T;
+              layout?: T;
+              items?:
+                | T
+                | {
+                    title?: T;
+                    description?: T;
+                    icon?: T;
+                    media?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        stats?:
+          | T
+          | {
+              heading?: T;
+              subheading?: T;
+              stats?:
+                | T
+                | {
+                    value?: T;
+                    label?: T;
+                    description?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        logoCloud?:
+          | T
+          | {
+              heading?: T;
+              logos?:
+                | T
+                | {
+                    logo?: T;
+                    label?: T;
+                    url?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        testimonials?:
+          | T
+          | {
+              heading?: T;
+              items?:
+                | T
+                | {
+                    quote?: T;
+                    name?: T;
+                    role?: T;
+                    company?: T;
+                    avatar?: T;
+                    rating?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        faq?:
+          | T
+          | {
+              heading?: T;
+              items?:
+                | T
+                | {
+                    question?: T;
+                    answer?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        pricing?:
+          | T
+          | {
+              heading?: T;
+              subheading?: T;
+              plans?:
+                | T
+                | {
+                    name?: T;
+                    price?: T;
+                    period?: T;
+                    description?: T;
+                    features?:
+                      | T
+                      | {
+                          feature?: T;
+                          id?: T;
+                        };
+                    ctaLabel?: T;
+                    ctaUrl?: T;
+                    featured?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        team?:
+          | T
+          | {
+              heading?: T;
+              members?:
+                | T
+                | {
+                    name?: T;
+                    role?: T;
+                    bio?: T;
+                    photo?: T;
+                    socials?:
+                      | T
+                      | {
+                          label?: T;
+                          url?: T;
+                          id?: T;
+                        };
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        embed?:
+          | T
+          | {
+              heading?: T;
+              url?: T;
+              caption?: T;
+              aspectRatio?: T;
+              id?: T;
+              blockName?: T;
+            };
         archive?:
           | T
           | {
@@ -4471,6 +5819,22 @@ export interface PostsSelect<T extends boolean = true> {
               animateOnScroll?: T;
               sortOrder?: T;
               backgroundColor?: T;
+              id?: T;
+              blockName?: T;
+            };
+        spacer?:
+          | T
+          | {
+              style?: T;
+              size?: T;
+              lineStyle?: T;
+              id?: T;
+              blockName?: T;
+            };
+        html?:
+          | T
+          | {
+              html?: T;
               id?: T;
               blockName?: T;
             };
@@ -4652,6 +6016,156 @@ export interface ArtifactsSelect<T extends boolean = true> {
               id?: T;
               blockName?: T;
             };
+        quote?:
+          | T
+          | {
+              quote?: T;
+              author?: T;
+              role?: T;
+              align?: T;
+              id?: T;
+              blockName?: T;
+            };
+        features?:
+          | T
+          | {
+              heading?: T;
+              subheading?: T;
+              layout?: T;
+              items?:
+                | T
+                | {
+                    title?: T;
+                    description?: T;
+                    icon?: T;
+                    media?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        stats?:
+          | T
+          | {
+              heading?: T;
+              subheading?: T;
+              stats?:
+                | T
+                | {
+                    value?: T;
+                    label?: T;
+                    description?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        logoCloud?:
+          | T
+          | {
+              heading?: T;
+              logos?:
+                | T
+                | {
+                    logo?: T;
+                    label?: T;
+                    url?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        testimonials?:
+          | T
+          | {
+              heading?: T;
+              items?:
+                | T
+                | {
+                    quote?: T;
+                    name?: T;
+                    role?: T;
+                    company?: T;
+                    avatar?: T;
+                    rating?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        faq?:
+          | T
+          | {
+              heading?: T;
+              items?:
+                | T
+                | {
+                    question?: T;
+                    answer?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        pricing?:
+          | T
+          | {
+              heading?: T;
+              subheading?: T;
+              plans?:
+                | T
+                | {
+                    name?: T;
+                    price?: T;
+                    period?: T;
+                    description?: T;
+                    features?:
+                      | T
+                      | {
+                          feature?: T;
+                          id?: T;
+                        };
+                    ctaLabel?: T;
+                    ctaUrl?: T;
+                    featured?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        team?:
+          | T
+          | {
+              heading?: T;
+              members?:
+                | T
+                | {
+                    name?: T;
+                    role?: T;
+                    bio?: T;
+                    photo?: T;
+                    socials?:
+                      | T
+                      | {
+                          label?: T;
+                          url?: T;
+                          id?: T;
+                        };
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        embed?:
+          | T
+          | {
+              heading?: T;
+              url?: T;
+              caption?: T;
+              aspectRatio?: T;
+              id?: T;
+              blockName?: T;
+            };
         archive?:
           | T
           | {
@@ -4797,6 +6311,22 @@ export interface ArtifactsSelect<T extends boolean = true> {
               animateOnScroll?: T;
               sortOrder?: T;
               backgroundColor?: T;
+              id?: T;
+              blockName?: T;
+            };
+        spacer?:
+          | T
+          | {
+              style?: T;
+              size?: T;
+              lineStyle?: T;
+              id?: T;
+              blockName?: T;
+            };
+        html?:
+          | T
+          | {
+              html?: T;
               id?: T;
               blockName?: T;
             };
@@ -4947,6 +6477,156 @@ export interface PeopleSelect<T extends boolean = true> {
               id?: T;
               blockName?: T;
             };
+        quote?:
+          | T
+          | {
+              quote?: T;
+              author?: T;
+              role?: T;
+              align?: T;
+              id?: T;
+              blockName?: T;
+            };
+        features?:
+          | T
+          | {
+              heading?: T;
+              subheading?: T;
+              layout?: T;
+              items?:
+                | T
+                | {
+                    title?: T;
+                    description?: T;
+                    icon?: T;
+                    media?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        stats?:
+          | T
+          | {
+              heading?: T;
+              subheading?: T;
+              stats?:
+                | T
+                | {
+                    value?: T;
+                    label?: T;
+                    description?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        logoCloud?:
+          | T
+          | {
+              heading?: T;
+              logos?:
+                | T
+                | {
+                    logo?: T;
+                    label?: T;
+                    url?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        testimonials?:
+          | T
+          | {
+              heading?: T;
+              items?:
+                | T
+                | {
+                    quote?: T;
+                    name?: T;
+                    role?: T;
+                    company?: T;
+                    avatar?: T;
+                    rating?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        faq?:
+          | T
+          | {
+              heading?: T;
+              items?:
+                | T
+                | {
+                    question?: T;
+                    answer?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        pricing?:
+          | T
+          | {
+              heading?: T;
+              subheading?: T;
+              plans?:
+                | T
+                | {
+                    name?: T;
+                    price?: T;
+                    period?: T;
+                    description?: T;
+                    features?:
+                      | T
+                      | {
+                          feature?: T;
+                          id?: T;
+                        };
+                    ctaLabel?: T;
+                    ctaUrl?: T;
+                    featured?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        team?:
+          | T
+          | {
+              heading?: T;
+              members?:
+                | T
+                | {
+                    name?: T;
+                    role?: T;
+                    bio?: T;
+                    photo?: T;
+                    socials?:
+                      | T
+                      | {
+                          label?: T;
+                          url?: T;
+                          id?: T;
+                        };
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        embed?:
+          | T
+          | {
+              heading?: T;
+              url?: T;
+              caption?: T;
+              aspectRatio?: T;
+              id?: T;
+              blockName?: T;
+            };
         archive?:
           | T
           | {
@@ -5092,6 +6772,22 @@ export interface PeopleSelect<T extends boolean = true> {
               animateOnScroll?: T;
               sortOrder?: T;
               backgroundColor?: T;
+              id?: T;
+              blockName?: T;
+            };
+        spacer?:
+          | T
+          | {
+              style?: T;
+              size?: T;
+              lineStyle?: T;
+              id?: T;
+              blockName?: T;
+            };
+        html?:
+          | T
+          | {
+              html?: T;
               id?: T;
               blockName?: T;
             };
@@ -5257,6 +6953,156 @@ export interface PlacesSelect<T extends boolean = true> {
               id?: T;
               blockName?: T;
             };
+        quote?:
+          | T
+          | {
+              quote?: T;
+              author?: T;
+              role?: T;
+              align?: T;
+              id?: T;
+              blockName?: T;
+            };
+        features?:
+          | T
+          | {
+              heading?: T;
+              subheading?: T;
+              layout?: T;
+              items?:
+                | T
+                | {
+                    title?: T;
+                    description?: T;
+                    icon?: T;
+                    media?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        stats?:
+          | T
+          | {
+              heading?: T;
+              subheading?: T;
+              stats?:
+                | T
+                | {
+                    value?: T;
+                    label?: T;
+                    description?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        logoCloud?:
+          | T
+          | {
+              heading?: T;
+              logos?:
+                | T
+                | {
+                    logo?: T;
+                    label?: T;
+                    url?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        testimonials?:
+          | T
+          | {
+              heading?: T;
+              items?:
+                | T
+                | {
+                    quote?: T;
+                    name?: T;
+                    role?: T;
+                    company?: T;
+                    avatar?: T;
+                    rating?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        faq?:
+          | T
+          | {
+              heading?: T;
+              items?:
+                | T
+                | {
+                    question?: T;
+                    answer?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        pricing?:
+          | T
+          | {
+              heading?: T;
+              subheading?: T;
+              plans?:
+                | T
+                | {
+                    name?: T;
+                    price?: T;
+                    period?: T;
+                    description?: T;
+                    features?:
+                      | T
+                      | {
+                          feature?: T;
+                          id?: T;
+                        };
+                    ctaLabel?: T;
+                    ctaUrl?: T;
+                    featured?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        team?:
+          | T
+          | {
+              heading?: T;
+              members?:
+                | T
+                | {
+                    name?: T;
+                    role?: T;
+                    bio?: T;
+                    photo?: T;
+                    socials?:
+                      | T
+                      | {
+                          label?: T;
+                          url?: T;
+                          id?: T;
+                        };
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        embed?:
+          | T
+          | {
+              heading?: T;
+              url?: T;
+              caption?: T;
+              aspectRatio?: T;
+              id?: T;
+              blockName?: T;
+            };
         archive?:
           | T
           | {
@@ -5402,6 +7248,22 @@ export interface PlacesSelect<T extends boolean = true> {
               animateOnScroll?: T;
               sortOrder?: T;
               backgroundColor?: T;
+              id?: T;
+              blockName?: T;
+            };
+        spacer?:
+          | T
+          | {
+              style?: T;
+              size?: T;
+              lineStyle?: T;
+              id?: T;
+              blockName?: T;
+            };
+        html?:
+          | T
+          | {
+              html?: T;
               id?: T;
               blockName?: T;
             };
@@ -5598,6 +7460,156 @@ export interface CustomItemsSelect<T extends boolean = true> {
               id?: T;
               blockName?: T;
             };
+        quote?:
+          | T
+          | {
+              quote?: T;
+              author?: T;
+              role?: T;
+              align?: T;
+              id?: T;
+              blockName?: T;
+            };
+        features?:
+          | T
+          | {
+              heading?: T;
+              subheading?: T;
+              layout?: T;
+              items?:
+                | T
+                | {
+                    title?: T;
+                    description?: T;
+                    icon?: T;
+                    media?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        stats?:
+          | T
+          | {
+              heading?: T;
+              subheading?: T;
+              stats?:
+                | T
+                | {
+                    value?: T;
+                    label?: T;
+                    description?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        logoCloud?:
+          | T
+          | {
+              heading?: T;
+              logos?:
+                | T
+                | {
+                    logo?: T;
+                    label?: T;
+                    url?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        testimonials?:
+          | T
+          | {
+              heading?: T;
+              items?:
+                | T
+                | {
+                    quote?: T;
+                    name?: T;
+                    role?: T;
+                    company?: T;
+                    avatar?: T;
+                    rating?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        faq?:
+          | T
+          | {
+              heading?: T;
+              items?:
+                | T
+                | {
+                    question?: T;
+                    answer?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        pricing?:
+          | T
+          | {
+              heading?: T;
+              subheading?: T;
+              plans?:
+                | T
+                | {
+                    name?: T;
+                    price?: T;
+                    period?: T;
+                    description?: T;
+                    features?:
+                      | T
+                      | {
+                          feature?: T;
+                          id?: T;
+                        };
+                    ctaLabel?: T;
+                    ctaUrl?: T;
+                    featured?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        team?:
+          | T
+          | {
+              heading?: T;
+              members?:
+                | T
+                | {
+                    name?: T;
+                    role?: T;
+                    bio?: T;
+                    photo?: T;
+                    socials?:
+                      | T
+                      | {
+                          label?: T;
+                          url?: T;
+                          id?: T;
+                        };
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        embed?:
+          | T
+          | {
+              heading?: T;
+              url?: T;
+              caption?: T;
+              aspectRatio?: T;
+              id?: T;
+              blockName?: T;
+            };
         gallery?:
           | T
           | {
@@ -5743,6 +7755,22 @@ export interface CustomItemsSelect<T extends boolean = true> {
               introContent?: T;
               style?: T;
               backgroundColor?: T;
+              id?: T;
+              blockName?: T;
+            };
+        spacer?:
+          | T
+          | {
+              style?: T;
+              size?: T;
+              lineStyle?: T;
+              id?: T;
+              blockName?: T;
+            };
+        html?:
+          | T
+          | {
+              html?: T;
               id?: T;
               blockName?: T;
             };

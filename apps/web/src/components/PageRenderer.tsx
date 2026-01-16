@@ -31,6 +31,7 @@ export function PageRenderer({ page }: PageRendererProps) {
   // Render based on template
   switch (template) {
     case 'landing':
+    case 'showcase':
       return (
         <LandingTemplate
           hero={heroData}

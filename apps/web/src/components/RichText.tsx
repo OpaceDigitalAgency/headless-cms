@@ -64,7 +64,8 @@ function renderLexicalNode(node: any, index: number): React.ReactNode {
       )
 
     case 'heading':
-      const HeadingTag = `h${node.tag || 2}` as keyof JSX.IntrinsicElements
+      // node.tag contains the full tag name (e.g., 'h1', 'h2') from Lexical editor
+      const HeadingTag = (node.tag || 'h2') as keyof JSX.IntrinsicElements
       return (
         <HeadingTag key={index}>
           {node.children?.map((child: any, i: number) => renderLexicalNode(child, i))}

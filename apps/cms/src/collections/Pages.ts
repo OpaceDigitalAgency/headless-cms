@@ -225,6 +225,7 @@ export const Pages: CollectionConfig = {
         { label: 'Detail Page', value: 'detail' },
         { label: 'Article Page', value: 'article' },
         { label: 'Archive Page', value: 'archive' },
+        { label: 'Blocks Showcase', value: 'showcase' },
       ],
       admin: {
         position: 'sidebar',

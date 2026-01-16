@@ -17,6 +17,7 @@ This platform provides a powerful, flexible, and developer-friendly CMS experien
 - [Dynamic Content Types](#dynamic-content-types)
 - [Admin UI Features](#admin-ui-features)
 - [Project Structure](#project-structure)
+- [Built-in Content Types](#built-in-content-types)
 - [Content Blocks](#content-blocks)
 - [Frontend Selection](#frontend-selection)
 - [Makefile Commands](#makefile-commands)
@@ -92,7 +93,7 @@ This will:
 | Feature | Description |
 |---------|-------------|
 | **Dynamic Content Types** | Create custom content types from the admin UI without server restarts |
-| **Block-Based Page Builder** | 9+ pre-built blocks for flexible layouts |
+| **Block-Based Page Builder** | 20+ pre-built blocks for flexible layouts |
 | **Dual Frontend Support** | Next.js 15 and Astro 4 frontends included |
 | **Version History** | Full version control with restore capability on all collections |
 | **Live Preview** | Real-time editing preview |
@@ -185,6 +186,30 @@ headless-cms/
 
 ---
 
+## Built-in Content Types
+
+These are the content types available out of the box (plus Dynamic Content Types you create in the admin):
+
+### Collections
+- **Pages** (`pages`)
+- **Posts** (`posts`)
+- **Categories** (`categories`)
+- **Media** (`media`)
+- **Artifacts** (`artifacts`)
+- **People** (`people`)
+- **Places** (`places`)
+- **Museum Collections** (`museum-collections`)
+- **Content Types** (`content-types`) - dynamic content type definitions
+- **Custom Items** (`custom-items`) - instances of dynamic content types
+- **Users** (`users`)
+
+### Globals
+- **Header** (`header`)
+- **Footer** (`footer`)
+- **Settings** (`settings`)
+
+---
+
 ## Content Blocks
 
 All content types support these pre-built blocks:
@@ -195,11 +220,22 @@ All content types support these pre-built blocks:
 | **Content** | Rich text with optional column layouts |
 | **Media** | Images and videos with captions |
 | **CTA** | Call-to-action sections with buttons |
-| **Gallery** | Image galleries (grid, masonry, carousel, lightbox) |
+| **Quote** | Pull-quote with attribution and alignment options |
+| **Features** | Feature list with icons or media |
+| **Stats** | Key metrics and KPI highlights |
+| **Logo Cloud** | Brand/logo grid with optional links |
+| **Testimonials** | Quote cards with avatar and rating |
+| **FAQ** | Collapsible Q&A list |
+| **Pricing** | Pricing tiers with feature lists |
+| **Team** | Team members with bios and social links |
+| **Embed** | Responsive iframe embeds (video, maps, etc.) |
 | **Grid** | Flexible grid layouts for cards and features |
 | **Timeline** | Chronological timeline displays |
 | **Archive** | Collection listings from any content type |
 | **Form** | Form builder integration |
+| **Gallery** | Image galleries (grid, masonry, carousel, lightbox) |
+| **Spacer / Divider** | Vertical spacing and separators |
+| **Custom HTML** | Render trusted HTML markup |
 
 ---
 

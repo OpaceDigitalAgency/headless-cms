@@ -9,6 +9,17 @@ import { FormBlock } from './blocks/FormBlock'
 import { GalleryBlock } from './blocks/GalleryBlock'
 import { GridBlock } from './blocks/GridBlock'
 import { TimelineBlock } from './blocks/TimelineBlock'
+import { QuoteBlock } from './blocks/QuoteBlock'
+import { FeaturesBlock } from './blocks/FeaturesBlock'
+import { StatsBlock } from './blocks/StatsBlock'
+import { LogoCloudBlock } from './blocks/LogoCloudBlock'
+import { TestimonialsBlock } from './blocks/TestimonialsBlock'
+import { FaqBlock } from './blocks/FaqBlock'
+import { PricingBlock } from './blocks/PricingBlock'
+import { TeamBlock } from './blocks/TeamBlock'
+import { EmbedBlock } from './blocks/EmbedBlock'
+import { SpacerBlock } from './blocks/SpacerBlock'
+import { HtmlBlock } from './blocks/HtmlBlock'
 
 interface PageRendererProps {
   page: any // Using Payload's generated types would be ideal
@@ -42,16 +53,28 @@ export function PageRenderer({ page }: PageRendererProps) {
     content: ContentBlock,
     media: MediaBlock,
     cta: CTABlock,
+    quote: QuoteBlock,
+    features: FeaturesBlock,
+    stats: StatsBlock,
+    logoCloud: LogoCloudBlock,
+    testimonials: TestimonialsBlock,
+    faq: FaqBlock,
+    pricing: PricingBlock,
+    team: TeamBlock,
+    embed: EmbedBlock,
     archive: ArchiveBlock,
     form: FormBlock,
     gallery: GalleryBlock,
     grid: GridBlock,
     timeline: TimelineBlock,
+    spacer: SpacerBlock,
+    html: HtmlBlock,
   }
 
   // Render based on template
   switch (template) {
     case 'landing':
+    case 'showcase':
       return (
         <LandingTemplate
           hero={heroData}

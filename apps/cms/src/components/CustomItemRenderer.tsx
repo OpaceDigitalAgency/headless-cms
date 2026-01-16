@@ -2,6 +2,19 @@
 import { RichText } from './RichText'
 import { RenderBlocks } from './RenderBlocks'
 
+interface ContentType {
+  id: string
+  name: string
+  slug: string
+  customFields?: Array<{
+    name: string
+    label: string
+    type: string
+    required?: boolean
+    options?: string
+  }>
+}
+
 interface CustomItemRendererProps {
   item: any
   contentType: ContentType

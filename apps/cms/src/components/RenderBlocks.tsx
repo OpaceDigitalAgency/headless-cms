@@ -7,6 +7,17 @@ import { FormBlock } from './blocks/FormBlock'
 import { GalleryBlock } from './blocks/GalleryBlock'
 import { GridBlock } from './blocks/GridBlock'
 import { TimelineBlock } from './blocks/TimelineBlock'
+import { QuoteBlock } from './blocks/QuoteBlock'
+import { FeaturesBlock } from './blocks/FeaturesBlock'
+import { StatsBlock } from './blocks/StatsBlock'
+import { LogoCloudBlock } from './blocks/LogoCloudBlock'
+import { TestimonialsBlock } from './blocks/TestimonialsBlock'
+import { FaqBlock } from './blocks/FaqBlock'
+import { PricingBlock } from './blocks/PricingBlock'
+import { TeamBlock } from './blocks/TeamBlock'
+import { EmbedBlock } from './blocks/EmbedBlock'
+import { SpacerBlock } from './blocks/SpacerBlock'
+import { HtmlBlock } from './blocks/HtmlBlock'
 
 interface RenderBlocksProps {
   blocks: any[]
@@ -17,11 +28,22 @@ const blockComponents: Record<string, React.ComponentType<{ block: any }>> = {
   content: ContentBlock,
   media: MediaBlock,
   cta: CTABlock,
+  quote: QuoteBlock,
+  features: FeaturesBlock,
+  stats: StatsBlock,
+  logoCloud: LogoCloudBlock,
+  testimonials: TestimonialsBlock,
+  faq: FaqBlock,
+  pricing: PricingBlock,
+  team: TeamBlock,
+  embed: EmbedBlock,
   archive: ArchiveBlock,
   form: FormBlock,
   gallery: GalleryBlock,
   grid: GridBlock,
   timeline: TimelineBlock,
+  spacer: SpacerBlock,
+  html: HtmlBlock,
 }
 
 export function RenderBlocks({ blocks }: RenderBlocksProps) {
