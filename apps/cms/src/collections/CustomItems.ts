@@ -126,6 +126,9 @@ export const CustomItems: CollectionConfig = {
               name: 'title',
               type: 'text',
               required: true,
+              admin: {
+                placeholder: 'Enter a title for this item...',
+              },
             },
             {
               name: 'slug',
