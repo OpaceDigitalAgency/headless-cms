@@ -28,7 +28,7 @@ export const eventTemplate: CollectionTemplate = {
   name: 'Event',
   description: 'Events, exhibitions, workshops, or performances with dates and venues',
   category: 'events',
-  icon: '📅',
+  icon: 'calendar',
   defaultSlug: 'events',
   defaultSingular: 'Event',
   defaultPlural: 'Events',

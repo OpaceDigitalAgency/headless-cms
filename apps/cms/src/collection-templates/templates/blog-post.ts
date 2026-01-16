@@ -27,7 +27,7 @@ export const blogPostTemplate: CollectionTemplate = {
   name: 'Blog Post',
   description: 'Articles, news, and blog content with rich text and flexible sections',
   category: 'content',
-  icon: '📝',
+  icon: 'edit',
   defaultSlug: 'posts',
   defaultSingular: 'Post',
   defaultPlural: 'Posts',

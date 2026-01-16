@@ -16,25 +16,30 @@ import {
   UserIcon,
   MapPinIcon,
   CalendarIcon,
-  ShoppingCartIcon,
+  ShoppingBagIcon,
   ImageIcon,
   PackageIcon,
+  ArchiveIcon,
+  BoxIcon,
   type IconProps
 } from '../admin/icons'
 
-// Map emoji icons to SVG icon components
-const getIconComponent = (iconString: string): React.FC<IconProps> => {
+// Map icon names to SVG icon components
+const getIconComponent = (iconName: string): React.FC<IconProps> => {
   const iconMap: Record<string, React.FC<IconProps>> = {
-    '📝': EditIcon,
-    '🏛️': ArtifactIcon,
-    '🛒': ShoppingCartIcon,
-    '👤': UserIcon,
-    '📍': MapPinIcon,
-    '📅': CalendarIcon,
-    '🎬': ImageIcon,
-    '📦': PackageIcon,
+    'edit': EditIcon,
+    'archive': ArchiveIcon,
+    'shopping-bag': ShoppingBagIcon,
+    'user': UserIcon,
+    'map-pin': MapPinIcon,
+    'calendar': CalendarIcon,
+    'image': ImageIcon,
+    'box': BoxIcon,
+    'artifact': ArtifactIcon,
+    'file-text': FileTextIcon,
+    'package': PackageIcon,
   }
-  return iconMap[iconString] || EditIcon
+  return iconMap[iconName] || EditIcon
 }
 
 /**

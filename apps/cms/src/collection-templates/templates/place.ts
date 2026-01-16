@@ -30,7 +30,7 @@ export const placeTemplate: CollectionTemplate = {
   name: 'Place',
   description: 'Locations like venues, stores, historical sites, or geographic origins',
   category: 'places',
-  icon: '📍',
+  icon: 'map-pin',
   defaultSlug: 'places',
   defaultSingular: 'Place',
   defaultPlural: 'Places',

@@ -12,7 +12,8 @@ import {
   ClipboardIcon,
   InboxIcon,
   UsersIcon,
-  ZapIcon
+  ZapIcon,
+  FileTextIcon
 } from '../icons'
 
 /**
@@ -201,35 +202,41 @@ export const Tools: React.FC = () => {
       <div className="ra-tools__section">
         <h2>Documentation</h2>
         <div className="ra-tools__docs-grid">
-          <a 
-            href="https://payloadcms.com/docs" 
+          <a
+            href="https://payloadcms.com/docs"
             className="ra-tools__doc-link"
             target="_blank"
             rel="noopener noreferrer"
           >
-            <span>📚</span>
+            <div className="ra-tools__doc-icon">
+              <FileTextIcon size={24} />
+            </div>
             <div>
               <h3>Payload CMS Docs</h3>
               <p>Official documentation</p>
             </div>
           </a>
-          <a 
-            href="/admin" 
+          <a
+            href="/admin"
             className="ra-tools__doc-link"
           >
-            <span>📖</span>
+            <div className="ra-tools__doc-icon">
+              <FileTextIcon size={24} />
+            </div>
             <div>
               <h3>Agent Contract</h3>
               <p>Development guidelines</p>
             </div>
           </a>
-          <a 
-            href="/api" 
+          <a
+            href="/api"
             className="ra-tools__doc-link"
             target="_blank"
             rel="noopener noreferrer"
           >
-            <span>🔗</span>
+            <div className="ra-tools__doc-icon">
+              <ZapIcon size={24} />
+            </div>
             <div>
               <h3>REST API</h3>
               <p>API endpoints</p>

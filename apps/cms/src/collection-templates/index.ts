@@ -165,31 +165,31 @@ export const COLLECTION_BUNDLES = {
     name: 'Blog',
     description: 'A complete blog with posts, categories, and tags',
     templates: ['blog-post'],
-    icon: '📝',
+    icon: 'edit',
   },
   museum: {
     name: 'Museum/Archive',
     description: 'Archive items with people and places',
     templates: ['archive-item', 'person', 'place'],
-    icon: '🏛️',
+    icon: 'archive',
   },
   ecommerce: {
     name: 'Ecommerce',
     description: 'Product catalog with inventory',
     templates: ['product'],
-    icon: '🛒',
+    icon: 'shopping-bag',
   },
   directory: {
     name: 'Directory',
     description: 'People and places directory',
     templates: ['person', 'place'],
-    icon: '📇',
+    icon: 'users',
   },
   events: {
     name: 'Events',
     description: 'Events with venues',
     templates: ['event', 'place'],
-    icon: '📅',
+    icon: 'calendar',
   },
 }
 

@@ -177,9 +177,11 @@ export async function getPosts(
   if (options?.category) endpoint += `&where[categories][in]=${options.category}`
   if (options?.tag) endpoint += `&where[tags][in]=${options.tag}`
 
+  const cacheTags = ['posts', ...(options?.tags || [])]
+
   return fetchAPI<PaginatedDocs<Post>>(endpoint, {
     ...options,
-    tags: ['posts'],
+    tags: cacheTags,
   })
 }
 

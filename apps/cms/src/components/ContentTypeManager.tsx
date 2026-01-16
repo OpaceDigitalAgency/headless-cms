@@ -1,10 +1,21 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
+import {
+  BoxIcon,
+  ShoppingBagIcon,
+  ArtifactIcon,
+  UserIcon,
+  MapPinIcon,
+  CalendarIcon,
+  DocumentIcon,
+  ArchiveIcon,
+  type IconProps
+} from '../admin/icons'
 
 /**
  * Content Type Manager Component
- * 
+ *
  * Provides a user-friendly interface for managing dynamic content types.
  * Allows users to create, edit, and manage content types without server restart.
  */
@@ -37,19 +48,16 @@ interface CustomItem {
   updatedAt: string
 }
 
-const iconMap: Record<string, string> = {
-  box: '📦',
-  car: '🚗',
-  artifact: '🏺',
-  cart: '🛒',
-  person: '👤',
-  location: '📍',
-  event: '📅',
-  document: '📝',
-  art: '🎨',
-  food: '🍽️',
-  property: '🏠',
-  service: '💼',
+const iconMap: Record<string, React.FC<IconProps>> = {
+  box: BoxIcon,
+  product: ShoppingBagIcon,
+  artifact: ArtifactIcon,
+  cart: ShoppingBagIcon,
+  person: UserIcon,
+  location: MapPinIcon,
+  event: CalendarIcon,
+  document: DocumentIcon,
+  archive: ArchiveIcon,
 }
 
 export const ContentTypeManager: React.FC = () => {
@@ -226,7 +234,10 @@ export const ContentTypeManager: React.FC = () => {
           border-left: 3px solid var(--theme-success-500);
         }
         .ctm__type-icon {
-          font-size: 1.25rem;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: var(--theme-elevation-600);
         }
         .ctm__type-info {
           flex: 1;
@@ -400,19 +411,24 @@ export const ContentTypeManager: React.FC = () => {
           </div>
         ) : (
           <ul className="ctm__type-list">
-            {contentTypes.map((type) => (
-              <li
-                key={type.id}
-                className={`ctm__type-item ${selectedType?.id === type.id ? 'ctm__type-item--active' : ''}`}
-                onClick={() => setSelectedType(type)}
-              >
-                <span className="ctm__type-icon">{iconMap[type.icon] || '📦'}</span>
-                <div className="ctm__type-info">
-                  <div className="ctm__type-name">{type.name}</div>
-                  <div className="ctm__type-count">{type.itemCount || 0} items</div>
-                </div>
-              </li>
-            ))}
+            {contentTypes.map((type) => {
+              const IconComponent = iconMap[type.icon] || BoxIcon
+              return (
+                <li
+                  key={type.id}
+                  className={`ctm__type-item ${selectedType?.id === type.id ? 'ctm__type-item--active' : ''}`}
+                  onClick={() => setSelectedType(type)}
+                >
+                  <div className="ctm__type-icon">
+                    <IconComponent size={20} />
+                  </div>
+                  <div className="ctm__type-info">
+                    <div className="ctm__type-name">{type.name}</div>
+                    <div className="ctm__type-count">{type.itemCount || 0} items</div>
+                  </div>
+                </li>
+              )
+            })}
           </ul>
         )}
       </div>
@@ -423,7 +439,10 @@ export const ContentTypeManager: React.FC = () => {
           <>
             <div className="ctm__main-header">
               <h2>
-                <span>{iconMap[selectedType.icon] || '📦'}</span>
+                {(() => {
+                  const IconComponent = iconMap[selectedType.icon] || BoxIcon
+                  return <IconComponent size={24} />
+                })()}
                 {selectedType.pluralLabel}
               </h2>
               <div className="ctm__actions">

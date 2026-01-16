@@ -29,7 +29,7 @@ export const productTemplate: CollectionTemplate = {
   name: 'Product',
   description: 'Products, services, or inventory items with pricing and variants',
   category: 'commerce',
-  icon: '🛒',
+  icon: 'shopping-bag',
   defaultSlug: 'products',
   defaultSingular: 'Product',
   defaultPlural: 'Products',

@@ -32,7 +32,7 @@ export const archiveItemTemplate: CollectionTemplate = {
   name: 'Archive Item',
   description: 'Catalogued items like museum artifacts, portfolio pieces, or collectibles',
   category: 'archive',
-  icon: '🏛️',
+  icon: 'archive',
   defaultSlug: 'items',
   defaultSingular: 'Item',
   defaultPlural: 'Items',

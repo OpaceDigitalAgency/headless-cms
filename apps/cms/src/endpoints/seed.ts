@@ -23,17 +23,17 @@ const COLLECTION_SEED_CONFIG: Record<string, {
   hasSeedData: boolean
   hasSeedMedia: boolean
 }> = {
-  pages: { label: 'Pages', icon: '📄', hasSeedData: true, hasSeedMedia: false },
-  posts: { label: 'Posts', icon: '📝', hasSeedData: true, hasSeedMedia: false },
-  categories: { label: 'Categories', icon: '🏷️', hasSeedData: true, hasSeedMedia: false },
-  artifacts: { label: 'Artifacts', icon: '🏺', hasSeedData: true, hasSeedMedia: true },
-  people: { label: 'People', icon: '👤', hasSeedData: true, hasSeedMedia: true },
-  places: { label: 'Places', icon: '📍', hasSeedData: true, hasSeedMedia: true },
-  'museum-collections': { label: 'Collections', icon: '🗂️', hasSeedData: true, hasSeedMedia: false },
-  'content-types': { label: 'Content Types', icon: '🗂️', hasSeedData: true, hasSeedMedia: false },
-  'custom-items': { label: 'Custom Items', icon: '📦', hasSeedData: true, hasSeedMedia: false },
-  products: { label: 'Products', icon: '🛍️', hasSeedData: true, hasSeedMedia: true },
-  'product-categories': { label: 'Product Categories', icon: '📦', hasSeedData: true, hasSeedMedia: false },
+  pages: { label: 'Pages', icon: 'file-text', hasSeedData: true, hasSeedMedia: false },
+  posts: { label: 'Posts', icon: 'edit', hasSeedData: true, hasSeedMedia: false },
+  categories: { label: 'Categories', icon: 'tag', hasSeedData: true, hasSeedMedia: false },
+  artifacts: { label: 'Artifacts', icon: 'artifact', hasSeedData: true, hasSeedMedia: true },
+  people: { label: 'People', icon: 'user', hasSeedData: true, hasSeedMedia: true },
+  places: { label: 'Places', icon: 'map-pin', hasSeedData: true, hasSeedMedia: true },
+  'museum-collections': { label: 'Collections', icon: 'archive', hasSeedData: true, hasSeedMedia: false },
+  'content-types': { label: 'Content Types', icon: 'archive', hasSeedData: true, hasSeedMedia: false },
+  'custom-items': { label: 'Custom Items', icon: 'box', hasSeedData: true, hasSeedMedia: false },
+  products: { label: 'Products', icon: 'shopping-bag', hasSeedData: true, hasSeedMedia: true },
+  'product-categories': { label: 'Product Categories', icon: 'box', hasSeedData: true, hasSeedMedia: false },
 }
 
 /**

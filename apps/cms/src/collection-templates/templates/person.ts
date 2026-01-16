@@ -29,7 +29,7 @@ export const personTemplate: CollectionTemplate = {
   name: 'Person',
   description: 'People profiles like team members, artists, or historical figures',
   category: 'people',
-  icon: '👤',
+  icon: 'user',
   defaultSlug: 'people',
   defaultSingular: 'Person',
   defaultPlural: 'People',
