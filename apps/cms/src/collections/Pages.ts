@@ -27,7 +27,7 @@ export const Pages: CollectionConfig = {
   slug: 'pages',
 
   admin: {
-    useAsTitle: (doc) => doc?.title || 'Untitled Page',
+    useAsTitle: 'title',
     group: 'Content',
     defaultColumns: ['title', 'slug', 'template', '_status', 'updatedAt'],
     description: 'Create and manage website pages',

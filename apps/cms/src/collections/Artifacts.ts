@@ -28,7 +28,7 @@ export const Artifacts: CollectionConfig = {
   slug: 'artifacts',
 
   admin: {
-    useAsTitle: (doc) => doc?.title || 'Untitled Artifact',
+    useAsTitle: 'title',
     group: 'Museum',
     defaultColumns: ['title', 'collections', 'categories', '_status', 'updatedAt'],
     description: 'Museum artifacts and archive items with flexible content sections',

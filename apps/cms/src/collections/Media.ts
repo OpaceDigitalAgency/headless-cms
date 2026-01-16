@@ -4,7 +4,7 @@ export const Media: CollectionConfig = {
   slug: 'media',
 
   admin: {
-    useAsTitle: (doc) => doc?.filename || 'Untitled Media',
+    useAsTitle: 'filename',
     group: 'Content',
     defaultColumns: ['filename', 'alt', 'mimeType', 'createdAt'],
     description: 'Upload and manage media files with automatic optimization',

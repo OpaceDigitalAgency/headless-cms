@@ -28,7 +28,7 @@ export const Places: CollectionConfig = {
   slug: 'places',
 
   admin: {
-    useAsTitle: (doc) => doc?.name || 'Untitled Place',
+    useAsTitle: 'name',
     group: 'Museum',
     defaultColumns: ['name', 'placeType', 'categories', '_status', 'updatedAt'],
     description: 'Geographic locations, venues, and historical sites',
