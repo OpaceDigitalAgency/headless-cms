@@ -313,7 +313,7 @@ export const Media: CollectionConfig = {
       type: 'text',
       admin: {
         components: {
-          Cell: '/components/GeneratedSizesCell#default',
+          Cell: '/components/GeneratedSizesCell',
         },
         description: 'Image sizes that were generated',
         readOnly: true,
