@@ -1113,41 +1113,6 @@
 }
 
 /* ===========================================
-   Drawer Thumbnail Icon Fallbacks
-   =========================================== */
-
-.blocks-drawer__default-image,
-.items-drawer__default-image {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  min-height: 110px;
-  background: linear-gradient(135deg, var(--theme-elevation-50), var(--theme-elevation-100));
-  border: 1px dashed var(--theme-elevation-200);
-  border-radius: var(--border-radius-md);
-}
-
-.blocks-drawer__default-image img,
-.blocks-drawer__default-image svg,
-.items-drawer__default-image img,
-.items-drawer__default-image svg {
-  display: none;
-}
-
-.blocks-drawer__default-image::after,
-.items-drawer__default-image::after {
-  content: "";
-  width: 38px;
-  height: 38px;
-  background: var(--theme-success-500);
-  opacity: 0.85;
-  -webkit-mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0%200%2024%2024'><rect x='3' y='3' width='7' height='7' rx='1'/><rect x='14' y='3' width='7' height='7' rx='1'/><rect x='3' y='14' width='7' height='7' rx='1'/><rect x='14' y='14' width='7' height='7' rx='1'/></svg>") center/contain no-repeat;
-  mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0%200%2024%2024'><rect x='3' y='3' width='7' height='7' rx='1'/><rect x='14' y='3' width='7' height='7' rx='1'/><rect x='3' y='14' width='7' height='7' rx='1'/><rect x='14' y='14' width='7' height='7' rx='1'/></svg>") center/contain no-repeat;
-}
-
-/* ===========================================
    Fix Sidebar Toggle Position
    =========================================== */
 
@@ -1212,3 +1177,154 @@
     justify-content: center; /* horizontal */
 }
 
+/* ===========================================
+   Block Selector (Add Content) Polish
+   =========================================== */
+
+:is(.blocks-field__drawer, .block-select__drawer, .block-selector, .blocks-field__modal) {
+  background: linear-gradient(140deg, var(--theme-elevation-50), var(--theme-elevation-0));
+}
+
+:is(.blocks-field__drawer, .block-select__drawer, .block-selector, .blocks-field__modal)
+  :is(.drawer__header, .drawer__title, .block-select__header, .block-selector__header) {
+  color: var(--theme-elevation-800);
+}
+
+:is(.blocks-field__drawer, .block-select__drawer, .block-selector, .blocks-field__modal)
+  :is(.block-select__list, .block-selector__list, .blocks-field__blocks, .blocks-field__block-list) {
+  gap: 0.75rem;
+  padding: 0.75rem;
+}
+
+:is(.blocks-field__drawer, .block-select__drawer, .block-selector, .blocks-field__modal)
+  :is(.block-select__block, .block-selector__block, .blocks-field__block) {
+  background: var(--theme-elevation-0);
+  border: 1px solid var(--theme-elevation-150);
+  border-radius: var(--border-radius-md);
+  box-shadow: var(--shadow-sm);
+  padding: 0.75rem;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 100px;
+}
+
+:is(.blocks-field__drawer, .block-select__drawer, .block-selector, .blocks-field__modal)
+  :is(.block-select__block:hover, .block-selector__block:hover, .blocks-field__block:hover) {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--theme-elevation-200);
+  background: var(--theme-elevation-50);
+}
+
+:is(.blocks-field__drawer, .block-select__drawer, .block-selector, .blocks-field__modal)
+  :is(.block-select__block-title, .block-selector__block-title, .blocks-field__block-title) {
+  color: var(--theme-elevation-700);
+  font-weight: 500;
+  font-size: 0.875rem;
+  letter-spacing: 0.01em;
+  text-align: center;
+}
+
+:is(.blocks-field__drawer, .block-select__drawer, .block-selector, .blocks-field__modal)
+  :is(svg, .icon, .block-select__block-icon, .block-selector__block-icon) {
+  color: var(--theme-elevation-500);
+}
+
+:is(.blocks-field__drawer, .block-select__drawer, .block-selector, .blocks-field__modal)
+  :is(.block-select__block svg, .block-selector__block svg, .blocks-field__block svg) {
+  width: 40px;
+  height: 40px;
+  stroke-width: 1.5;
+  opacity: 0.8;
+}
+
+:is(.blocks-field__drawer, .block-select__drawer, .block-selector, .blocks-field__modal)
+  :is(.block-select__block:hover svg, .block-selector__block:hover svg, .blocks-field__block:hover svg) {
+  color: var(--theme-elevation-700);
+  opacity: 1;
+}
+
+/* ===========================================
+   Collection List Row Actions - Make Prominent
+   =========================================== */
+
+/* Target Payload's cell action buttons in collection list rows */
+.cell-actions {
+  display: flex !important;
+  gap: 0.5rem !important;
+  align-items: center !important;
+}
+
+/* Style all action buttons with better visibility */
+.cell-actions button,
+.cell-actions a,
+.cell-actions [role="button"] {
+  padding: 0.5rem 0.875rem !important;
+  border-radius: var(--border-radius-md) !important;
+  font-weight: 500 !important;
+  font-size: 0.8125rem !important;
+  transition: all 0.2s ease !important;
+  cursor: pointer !important;
+  border: none !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 0.375rem !important;
+}
+
+/* Edit/View button - Primary blue */
+.cell-actions button:has(svg[aria-label*="Edit"]),
+.cell-actions button:has(svg[aria-label*="View"]),
+.cell-actions a[href*="/edit"],
+.cell-actions a[href*="/view"] {
+  background: var(--theme-primary-500) !important;
+  color: white !important;
+}
+
+.cell-actions button:has(svg[aria-label*="Edit"]):hover,
+.cell-actions button:has(svg[aria-label*="View"]):hover,
+.cell-actions a[href*="/edit"]:hover,
+.cell-actions a[href*="/view"]:hover {
+  background: var(--theme-primary-600) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12) !important;
+  transform: translateY(-1px) !important;
+}
+
+/* Publish button - Success green */
+.cell-actions button:has(svg[aria-label*="Publish"]) {
+  background: var(--theme-success-500) !important;
+  color: white !important;
+}
+
+.cell-actions button:has(svg[aria-label*="Publish"]):hover {
+  background: var(--theme-success-600) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12) !important;
+  transform: translateY(-1px) !important;
+}
+
+/* Unpublish button - Warning amber */
+.cell-actions button:has(svg[aria-label*="Unpublish"]) {
+  background: var(--theme-warning-500) !important;
+  color: white !important;
+}
+
+.cell-actions button:has(svg[aria-label*="Unpublish"]):hover {
+  background: var(--theme-warning-600) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12) !important;
+  transform: translateY(-1px) !important;
+}
+
+/* Delete button - Error red */
+.cell-actions button:has(svg[aria-label*="Delete"]) {
+  background: var(--theme-error-500) !important;
+  color: white !important;
+}
+
+.cell-actions button:has(svg[aria-label*="Delete"]):hover {
+  background: var(--theme-error-600) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12) !important;
+  transform: translateY(-1px) !important;
+}
