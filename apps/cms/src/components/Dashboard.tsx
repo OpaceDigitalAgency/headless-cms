@@ -3,6 +3,17 @@
 import React, { useState } from 'react'
 import { SeedDataManager } from './SeedDataManager'
 import { CollectionTemplates } from './CollectionTemplates'
+import {
+  FileTextIcon,
+  EditIcon,
+  ImageIcon,
+  ArtifactIcon,
+  UserIcon,
+  MapPinIcon,
+  SettingsIcon,
+  UsersIcon,
+  type IconProps
+} from '../admin/icons'
 
 /**
  * Custom Dashboard Component
@@ -31,23 +42,26 @@ export const Dashboard: React.FC = () => {
         marginBottom: '24px',
         borderBottom: '1px solid var(--theme-elevation-200)',
       }}>
-        <TabButton 
-          active={activeTab === 'overview'} 
+        <TabButton
+          active={activeTab === 'overview'}
           onClick={() => setActiveTab('overview')}
+          icon={<FileTextIcon size={18} />}
         >
-          📊 Overview
+          Overview
         </TabButton>
-        <TabButton 
-          active={activeTab === 'templates'} 
+        <TabButton
+          active={activeTab === 'templates'}
           onClick={() => setActiveTab('templates')}
+          icon={<ImageIcon size={18} />}
         >
-          📦 Collection Templates
+          Collection Templates
         </TabButton>
-        <TabButton 
-          active={activeTab === 'seed'} 
+        <TabButton
+          active={activeTab === 'seed'}
           onClick={() => setActiveTab('seed')}
+          icon={<SettingsIcon size={18} />}
         >
-          🌱 Sample Data
+          Sample Data
         </TabButton>
       </div>
 
@@ -63,7 +77,7 @@ export const Dashboard: React.FC = () => {
             border: '1px solid var(--theme-elevation-100)',
           }}>
             <h2 style={{ margin: '0 0 12px 0', fontSize: '18px', fontWeight: 600 }}>
-              👋 Welcome to Your CMS
+              Welcome to Your CMS
             </h2>
             <p style={{ margin: '0 0 16px 0', color: 'var(--theme-elevation-800)' }}>
               This is a flexible headless CMS. Here's how to get started:
@@ -103,49 +117,49 @@ export const Dashboard: React.FC = () => {
               title="Pages"
               description="Manage website pages"
               href="/admin/collections/pages"
-              icon="📄"
+              icon={<FileTextIcon size={24} />}
             />
             <DashboardCard
               title="Posts"
               description="Blog posts and articles"
               href="/admin/collections/posts"
-              icon="📝"
+              icon={<EditIcon size={24} />}
             />
             <DashboardCard
               title="Media"
               description="Images and files"
               href="/admin/collections/media"
-              icon="🖼️"
+              icon={<ImageIcon size={24} />}
             />
             <DashboardCard
               title="Artifacts"
               description="Museum collection items"
               href="/admin/collections/artifacts"
-              icon="🏺"
+              icon={<ArtifactIcon size={24} />}
             />
             <DashboardCard
               title="People"
               description="Historical figures"
               href="/admin/collections/people"
-              icon="👤"
+              icon={<UserIcon size={24} />}
             />
             <DashboardCard
               title="Places"
               description="Geographic locations"
               href="/admin/collections/places"
-              icon="📍"
+              icon={<MapPinIcon size={24} />}
             />
             <DashboardCard
               title="Settings"
               description="Site configuration"
               href="/admin/globals/settings"
-              icon="⚙️"
+              icon={<SettingsIcon size={24} />}
             />
             <DashboardCard
               title="Users"
               description="Manage admin users"
               href="/admin/collections/users"
-              icon="👥"
+              icon={<UsersIcon size={24} />}
             />
           </div>
         </>
@@ -168,9 +182,10 @@ interface TabButtonProps {
   active: boolean
   onClick: () => void
   children: React.ReactNode
+  icon?: React.ReactNode
 }
 
-const TabButton: React.FC<TabButtonProps> = ({ active, onClick, children }) => (
+const TabButton: React.FC<TabButtonProps> = ({ active, onClick, children, icon }) => (
   <button
     onClick={onClick}
     style={{
@@ -183,8 +198,12 @@ const TabButton: React.FC<TabButtonProps> = ({ active, onClick, children }) => (
       fontWeight: active ? 600 : 400,
       color: active ? 'var(--theme-text)' : 'var(--theme-elevation-600)',
       transition: 'all 0.2s ease',
+      display: 'flex',
+      alignItems: 'center',
+      gap: '8px',
     }}
   >
+    {icon}
     {children}
   </button>
 )
@@ -193,7 +212,7 @@ interface DashboardCardProps {
   title: string
   description: string
   href: string
-  icon: string
+  icon: React.ReactNode
 }
 
 const DashboardCard: React.FC<DashboardCardProps> = ({ title, description, href, icon }) => {
@@ -218,7 +237,7 @@ const DashboardCard: React.FC<DashboardCardProps> = ({ title, description, href,
         e.currentTarget.style.borderColor = 'transparent'
       }}
     >
-      <div style={{ fontSize: '28px', marginBottom: '8px' }}>{icon}</div>
+      <div style={{ marginBottom: '8px', color: 'var(--theme-elevation-600)' }}>{icon}</div>
       <h3 style={{ 
         margin: '0 0 4px 0', 
         fontSize: '16px',

@@ -147,36 +147,36 @@ export const TEMPLATE_CATEGORIES: Record<TemplateCategory, { label: string; desc
   content: {
     label: 'Content',
     description: 'Blog posts, articles, and written content',
-    icon: '📝',
+    icon: 'edit',
   },
   archive: {
     label: 'Archive',
     description: 'Collections of items like museum artifacts, portfolio pieces',
-    icon: '🏛️',
+    icon: 'archive',
   },
   commerce: {
     label: 'Commerce',
     description: 'Products, services, and inventory items',
-    icon: '🛒',
+    icon: 'shopping-bag',
   },
   people: {
     label: 'People',
     description: 'Team members, artists, authors, historical figures',
-    icon: '👤',
+    icon: 'user',
   },
   places: {
     label: 'Places',
     description: 'Locations, venues, geographic origins',
-    icon: '📍',
+    icon: 'map-pin',
   },
   events: {
     label: 'Events',
     description: 'Events, exhibitions, shows, appointments',
-    icon: '📅',
+    icon: 'calendar',
   },
   media: {
     label: 'Media',
     description: 'Video, audio, documents, downloads',
-    icon: '🎬',
+    icon: 'image',
   },
 }
