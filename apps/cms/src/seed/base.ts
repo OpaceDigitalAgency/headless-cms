@@ -271,6 +271,7 @@ export abstract class BaseSeeder {
     const doc = await this.payload.create({
       collection,
       data,
+      overrideAccess: true, // Bypass access control for seeding
     })
     this.trackId(collection, doc.id)
     return doc as T
@@ -304,6 +305,35 @@ export abstract class BaseSeeder {
    */
   protected getItemCount(collection: string, defaultCount: number): number {
     return this.options.itemCounts?.[collection] || defaultCount
+  }
+
+  /**
+   * Get or create an admin user to use as author for posts
+   */
+  protected async getOrCreateAdminUser(): Promise<string> {
+    const existing = await this.payload.find({
+      collection: 'users',
+      where: { role: { equals: 'admin' } },
+      limit: 1,
+    })
+
+    if (existing.docs[0]) {
+      return existing.docs[0].id
+    }
+
+    // Create a default admin user if none exists (bypass access control)
+    const admin = await this.payload.create({
+      collection: 'users',
+      data: {
+        email: 'admin@example.com',
+        password: 'admin123',
+        name: 'Admin User',
+        role: 'admin',
+      },
+      overrideAccess: true, // Bypass access control for seeding
+    })
+
+    return admin.id
   }
 }
 

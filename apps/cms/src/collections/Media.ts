@@ -395,11 +395,17 @@ export const Media: CollectionConfig = {
 
         // Update the document if needed
         if (needsUpdate) {
-          await req.payload.update({
-            collection: 'media',
-            id: doc.id,
-            data: updateData,
-          })
+          try {
+            await req.payload.update({
+              collection: 'media',
+              id: doc.id,
+              data: updateData,
+              overrideAccess: true, // Allow updates during seeding without user context
+            })
+          } catch (updateError) {
+            // Log but don't fail - afterChange hooks shouldn't break the create operation
+            console.error('Media afterChange update failed (this is non-critical):', updateError)
+          }
         }
 
         return doc

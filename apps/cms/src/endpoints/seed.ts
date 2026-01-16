@@ -304,6 +304,18 @@ export const seedCollectionEndpoint: Endpoint = {
       }
     } catch (error) {
       payload.logger.error('Collection seed action failed:', error)
+      payload.logger.error('Error type:', typeof error)
+      payload.logger.error('Error constructor:', error?.constructor?.name)
+      if (error instanceof Error) {
+        payload.logger.error('Error message:', error.message)
+        payload.logger.error('Error stack:', error.stack)
+      }
+      // Also log as JSON to see all properties
+      try {
+        payload.logger.error('Error JSON:', JSON.stringify(error, Object.getOwnPropertyNames(error), 2))
+      } catch {
+        payload.logger.error('Could not stringify error')
+      }
       const errorMessage = error instanceof Error ? error.message : String(error)
       return Response.json(
         { success: false, message: `Operation failed: ${errorMessage}` },
@@ -348,6 +360,10 @@ export const seedShowcaseEndpoint: Endpoint = {
     } catch (error) {
       payload.logger.error('Showcase seed failed:', error)
       const errorMessage = error instanceof Error ? error.message : String(error)
+      const errorStack = error instanceof Error ? error.stack : undefined
+      if (errorStack) {
+        payload.logger.error('Stack trace:', errorStack)
+      }
       return Response.json(
         { success: false, message: `Operation failed: ${errorMessage}` },
         { status: 500 }

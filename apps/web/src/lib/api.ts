@@ -158,6 +158,7 @@ export interface Post {
   content?: any
   featuredImage?: any
   categories?: any[]
+  tags?: any[]
   author?: any
   publishedAt?: string
   meta?: any
@@ -167,13 +168,14 @@ export interface Post {
 }
 
 export async function getPosts(
-  options?: FetchOptions & { limit?: number; page?: number; category?: string }
+  options?: FetchOptions & { limit?: number; page?: number; category?: string; tag?: string }
 ): Promise<PaginatedDocs<Post>> {
   let endpoint = '/posts?sort=-publishedAt'
   
   if (options?.limit) endpoint += `&limit=${options.limit}`
   if (options?.page) endpoint += `&page=${options.page}`
   if (options?.category) endpoint += `&where[categories][in]=${options.category}`
+  if (options?.tag) endpoint += `&where[tags][in]=${options.tag}`
 
   return fetchAPI<PaginatedDocs<Post>>(endpoint, {
     ...options,
@@ -224,6 +226,35 @@ export async function getCategoryBySlug(slug: string, options?: FetchOptions): P
     {
       ...options,
       tags: ['categories', `categories:${slug}`],
+    }
+  )
+  return result.docs[0] || null
+}
+
+// ===========================================
+// Tags
+// ===========================================
+
+export interface Tag {
+  id: string
+  title: string
+  slug: string
+  description?: string
+}
+
+export async function getTags(options?: FetchOptions): Promise<PaginatedDocs<Tag>> {
+  return fetchAPI<PaginatedDocs<Tag>>('/tags', {
+    ...options,
+    tags: ['tags'],
+  })
+}
+
+export async function getTagBySlug(slug: string, options?: FetchOptions): Promise<Tag | null> {
+  const result = await fetchAPI<PaginatedDocs<Tag>>(
+    `/tags?where[slug][equals]=${encodeURIComponent(slug)}&limit=1`,
+    {
+      ...options,
+      tags: ['tags', `tags:${slug}`],
     }
   )
   return result.docs[0] || null

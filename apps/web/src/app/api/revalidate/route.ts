@@ -24,7 +24,7 @@ export async function POST(request: NextRequest) {
   
   try {
     const body = await request.json()
-    const { secret, collection, slug, id, operation, contentTypeSlug } = body
+    const { secret, collection, slug, id, operation, contentTypeSlug, tags: extraTags } = body
 
     // SECURITY: Verify secret token
     if (secret !== REVALIDATION_SECRET) {
@@ -50,6 +50,10 @@ export async function POST(request: NextRequest) {
       if (id) {
         tags.push(`${collection}:id:${id}`)
       }
+    }
+
+    if (Array.isArray(extraTags)) {
+      tags.push(...extraTags)
     }
 
     // Revalidate all tags
@@ -112,6 +116,16 @@ export async function POST(request: NextRequest) {
       case 'categories':
         // Category changes affect blog listing
         paths.push('/blog')
+        if (slug) {
+          paths.push(`/blog/category/${slug}`)
+        }
+        break
+
+      case 'tags':
+        paths.push('/blog')
+        if (slug) {
+          paths.push(`/blog/tag/${slug}`)
+        }
         break
         
       case 'media':

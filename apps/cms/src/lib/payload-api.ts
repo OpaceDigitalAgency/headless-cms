@@ -85,6 +85,82 @@ export const getPostBySlug = async (slug: string, draft = false) => {
   return result.docs[0] || null
 }
 
+export const getPostsByCategory = async (categoryId: string | number, limit = 100) => {
+  const payload = await getPayloadClient()
+  return payload.find({
+    collection: 'posts',
+    limit,
+    where: {
+      _status: { equals: 'published' },
+      categories: { in: [categoryId] },
+    },
+    depth: 2,
+    sort: '-publishedAt',
+  })
+}
+
+export const getPostsByTag = async (tagId: string | number, limit = 100) => {
+  const payload = await getPayloadClient()
+  return payload.find({
+    collection: 'posts',
+    limit,
+    where: {
+      _status: { equals: 'published' },
+      tags: { in: [tagId] },
+    },
+    depth: 2,
+    sort: '-publishedAt',
+  })
+}
+
+// ===========================================
+// Categories
+// ===========================================
+
+export const getCategories = async (limit = 1000) => {
+  const payload = await getPayloadClient()
+  return payload.find({
+    collection: 'categories',
+    limit,
+    depth: 1,
+  })
+}
+
+export const getCategoryBySlug = async (slug: string) => {
+  const payload = await getPayloadClient()
+  const result = await payload.find({
+    collection: 'categories',
+    where: { slug: { equals: slug } },
+    depth: 1,
+    limit: 1,
+  })
+  return result.docs[0] || null
+}
+
+// ===========================================
+// Tags
+// ===========================================
+
+export const getTags = async (limit = 1000) => {
+  const payload = await getPayloadClient()
+  return payload.find({
+    collection: 'tags',
+    limit,
+    depth: 1,
+  })
+}
+
+export const getTagBySlug = async (slug: string) => {
+  const payload = await getPayloadClient()
+  const result = await payload.find({
+    collection: 'tags',
+    where: { slug: { equals: slug } },
+    depth: 1,
+    limit: 1,
+  })
+  return result.docs[0] || null
+}
+
 // ===========================================
 // Artifacts
 // ===========================================

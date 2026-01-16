@@ -1,17 +1,16 @@
 import type { CollectionConfig } from 'payload'
 import { slugField } from '../fields/slug'
 
-export const Categories: CollectionConfig = {
-  slug: 'categories',
+export const Tags: CollectionConfig = {
+  slug: 'tags',
 
   admin: {
     useAsTitle: 'title',
     group: 'Content',
     defaultColumns: ['title', 'slug', 'postsCount', 'updatedAt'],
-    description: 'Organize content with categories',
+    description: 'Organize content with tags',
   },
 
-  // Enable versions (without drafts for taxonomy items)
   versions: {
     maxPerDoc: 10,
   },
@@ -23,7 +22,6 @@ export const Categories: CollectionConfig = {
     delete: ({ req: { user } }) => user?.role === 'admin',
   },
 
-  // Hooks for revalidation
   hooks: {
     afterRead: [
       async ({ doc, req }) => {
@@ -31,7 +29,7 @@ export const Categories: CollectionConfig = {
           const result = await req.payload.count({
             collection: 'posts',
             where: {
-              categories: {
+              tags: {
                 in: [doc.id],
               },
             },
@@ -54,15 +52,14 @@ export const Categories: CollectionConfig = {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
               secret: process.env.REVALIDATION_SECRET,
-              collection: 'categories',
+              collection: 'tags',
               slug: doc.slug,
-              // Also invalidate archive pages
-              tags: [`taxonomy:category:${doc.slug}`, 'archive:posts'],
+              tags: [`taxonomy:tag:${doc.slug}`, 'archive:posts'],
             }),
           })
-          req.payload.logger.info(`Revalidated category: ${doc.slug}`)
+          req.payload.logger.info(`Revalidated tag: ${doc.slug}`)
         } catch (error) {
-          req.payload.logger.error(`Failed to revalidate category: ${doc.slug}`)
+          req.payload.logger.error(`Failed to revalidate tag: ${doc.slug}`)
         }
         return doc
       },
@@ -74,19 +71,13 @@ export const Categories: CollectionConfig = {
       name: 'title',
       type: 'text',
       required: true,
-      label: 'Category Name',
+      label: 'Tag Name',
     },
     slugField(),
     {
       name: 'description',
       type: 'textarea',
       label: 'Description',
-    },
-    {
-      name: 'featuredImage',
-      type: 'upload',
-      relationTo: 'media',
-      label: 'Featured Image',
     },
     {
       name: 'postsCount',

@@ -306,15 +306,10 @@ export const People: CollectionConfig = {
             },
             {
               name: 'tags',
-              type: 'array',
+              type: 'relationship',
+              relationTo: 'tags',
+              hasMany: true,
               label: 'Tags',
-              fields: [
-                {
-                  name: 'tag',
-                  type: 'text',
-                  required: true,
-                },
-              ],
               admin: {
                 description: 'Add tags for filtering and search',
               },

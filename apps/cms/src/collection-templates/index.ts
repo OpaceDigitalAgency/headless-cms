@@ -151,6 +151,7 @@ export const templateRegistry = new TemplateRegistry()
 export const CORE_COLLECTIONS = [
   'pages',
   'categories',
+  'tags',
   'media',
   'users',
 ]
@@ -162,7 +163,7 @@ export const CORE_COLLECTIONS = [
 export const COLLECTION_BUNDLES = {
   blog: {
     name: 'Blog',
-    description: 'A complete blog with posts and categories',
+    description: 'A complete blog with posts, categories, and tags',
     templates: ['blog-post'],
     icon: '📝',
   },

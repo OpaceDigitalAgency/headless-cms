@@ -537,6 +537,9 @@ export class CoreSeeder extends BaseSeeder {
 
     this.log('Seeding posts...')
 
+    // Get admin user to use as author
+    const adminId = await this.getOrCreateAdminUser()
+
     const posts = [
       {
         title: 'New Renaissance Exhibition Opening',
@@ -580,6 +583,7 @@ export class CoreSeeder extends BaseSeeder {
         excerpt: post.excerpt,
         content: post.content,
         categories: categories[post.category] ? [categories[post.category]] : [],
+        author: adminId,
         _status: 'published',
         publishedAt: new Date().toISOString(),
       })

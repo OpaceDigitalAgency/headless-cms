@@ -1,6 +1,15 @@
 import type { Page } from '@/lib/api'
 import { RenderBlocks } from './RenderBlocks'
 import { LandingTemplate, DetailTemplate, ListTemplate, ArticleTemplate } from '@repo/templates'
+import { HeroBlock } from './blocks/HeroBlock'
+import { ContentBlock } from './blocks/ContentBlock'
+import { MediaBlock } from './blocks/MediaBlock'
+import { CTABlock } from './blocks/CTABlock'
+import { ArchiveBlock } from './blocks/ArchiveBlock'
+import { FormBlock } from './blocks/FormBlock'
+import { GalleryBlock } from './blocks/GalleryBlock'
+import { GridBlock } from './blocks/GridBlock'
+import { TimelineBlock } from './blocks/TimelineBlock'
 
 interface PageRendererProps {
   page: Page
@@ -28,6 +37,19 @@ export function PageRenderer({ page }: PageRendererProps) {
       }
     : undefined
 
+  // Block component mapping
+  const blockComponents: Record<string, React.ComponentType<{ block: any }>> = {
+    hero: HeroBlock,
+    content: ContentBlock,
+    media: MediaBlock,
+    cta: CTABlock,
+    archive: ArchiveBlock,
+    form: FormBlock,
+    gallery: GalleryBlock,
+    grid: GridBlock,
+    timeline: TimelineBlock,
+  }
+
   // Render based on template
   switch (template) {
     case 'landing':
@@ -35,7 +57,20 @@ export function PageRenderer({ page }: PageRendererProps) {
       return (
         <LandingTemplate
           hero={heroData}
-          blocks={content ? <RenderBlocks blocks={content} /> : null}
+          blocks={content}
+          renderBlock={(block) => {
+            const BlockComponent = blockComponents[block.blockType]
+            if (!BlockComponent) {
+              return (
+                <div className="container">
+                  <div className="rounded-lg border border-dashed border-gray-300 bg-gray-50 p-8 text-center text-gray-500">
+                    Unknown block type: {block.blockType}
+                  </div>
+                </div>
+              )
+            }
+            return <BlockComponent block={block} />
+          }}
         />
       )
 

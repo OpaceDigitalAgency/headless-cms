@@ -48,18 +48,33 @@ async function getOrCreateMedia(payload: Payload, filename: string, alt: string,
                       'image/jpeg'
 
       payload.logger.info(`Successfully downloaded ${filename} (${buffer.length} bytes)`)
-      return payload.create({
-        collection: 'media',
-        data: { alt },
-        file: {
-          data: buffer,
-          mimetype,
-          name: filename,
-          size: buffer.length,
-        },
-      })
+      payload.logger.info(`Uploading to media collection...`)
+      try {
+        const media = await payload.create({
+          collection: 'media',
+          data: { alt },
+          file: {
+            data: buffer,
+            mimetype,
+            name: filename,
+            size: buffer.length,
+          },
+          overrideAccess: true, // Bypass access control for seeding
+        })
+        payload.logger.info(`Successfully uploaded media: ${media.id}`)
+        return media
+      } catch (uploadError) {
+        payload.logger.error(`Failed to upload media:`, uploadError)
+        payload.logger.error(`Upload error type: ${typeof uploadError}`)
+        payload.logger.error(`Upload error constructor: ${uploadError?.constructor?.name}`)
+        if (uploadError instanceof Error) {
+          payload.logger.error(`Upload error message: ${uploadError.message}`)
+          payload.logger.error(`Upload error stack: ${uploadError.stack}`)
+        }
+        throw uploadError // Re-throw to propagate the error
+      }
     } catch (error) {
-      payload.logger.error(`Failed to download Unsplash image ${unsplashUrl}:`, error)
+      payload.logger.error(`Failed to download/upload Unsplash image ${unsplashUrl}:`, error)
       // Fall back to tiny placeholder on error
     }
   }
@@ -76,6 +91,7 @@ async function getOrCreateMedia(payload: Payload, filename: string, alt: string,
       name: filename,
       size: buffer.length,
     },
+    overrideAccess: true, // Bypass access control for seeding
   })
 }
 
@@ -140,6 +156,35 @@ async function ensureHeaderLink(payload: Payload) {
 }
 
 async function ensureSamplePosts(payload: Payload) {
+  // Get or create admin user to use as author
+  payload.logger.info('[Showcase] Looking for admin user...')
+  const adminUser = await payload.find({
+    collection: 'users',
+    where: { role: { equals: 'admin' } },
+    limit: 1,
+  })
+
+  let adminId: string
+  if (adminUser.docs[0]) {
+    adminId = adminUser.docs[0].id
+    payload.logger.info(`[Showcase] Found admin user: ${adminId}`)
+  } else {
+    // Create a default admin user if none exists (bypass access control)
+    payload.logger.info('[Showcase] No admin user found, creating one...')
+    const admin = await payload.create({
+      collection: 'users',
+      data: {
+        email: 'admin@example.com',
+        password: 'admin123',
+        name: 'Admin User',
+        role: 'admin',
+      },
+      overrideAccess: true, // Bypass access control
+    })
+    adminId = admin.id
+    payload.logger.info(`[Showcase] Created admin user: ${adminId}`)
+  }
+
   // Create sample posts for the Archive block to display
   const posts = [
     {
@@ -178,6 +223,7 @@ async function ensureSamplePosts(payload: Payload) {
       SHOWCASE_IMAGES[post.imageKey]
     )
 
+    payload.logger.info(`[Showcase] Creating post "${post.title}" with author: ${adminId}`)
     await payload.create({
       collection: 'posts',
       data: {
@@ -189,10 +235,13 @@ async function ensureSamplePosts(payload: Payload) {
           'This is sample content for the showcase page. In a real application, this would contain the full article content.',
         ]),
         featuredImage: featuredImage.id,
+        author: adminId,
         _status: 'published',
         publishedAt: new Date().toISOString(),
       },
+      overrideAccess: true, // Bypass access control for seeding
     })
+    payload.logger.info(`[Showcase] Successfully created post "${post.title}"`)
   }
 }
 

@@ -371,11 +371,11 @@
 }
 
 .landing-blocks {
-  @apply space-y-16 py-16;
+  @apply space-y-0;
 }
 
 .landing-block {
-  @apply container;
+  /* Blocks handle their own containers and spacing */
 }
 
 /* Article Template */

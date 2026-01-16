@@ -72,6 +72,7 @@ export interface Config {
     pages: Page;
     posts: Post;
     categories: Category;
+    tags: Tag;
     artifacts: Artifact;
     people: Person;
     places: Place;
@@ -106,6 +107,7 @@ export interface Config {
     pages: PagesSelect<false> | PagesSelect<true>;
     posts: PostsSelect<false> | PostsSelect<true>;
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
+    tags: TagsSelect<false> | TagsSelect<true>;
     artifacts: ArtifactsSelect<false> | ArtifactsSelect<true>;
     people: PeopleSelect<false> | PeopleSelect<true>;
     places: PlacesSelect<false> | PlacesSelect<true>;
@@ -1067,6 +1069,7 @@ export interface Category {
   slug: string;
   description?: string | null;
   featuredImage?: (number | null) | Media;
+  postsCount?: number | null;
   parent?: (number | null) | Category;
   breadcrumbs?:
     | {
@@ -1641,12 +1644,7 @@ export interface Post {
   /**
    * Add tags for filtering and search
    */
-  tags?:
-    | {
-        tag: string;
-        id?: string | null;
-      }[]
-    | null;
+  tags?: (number | Tag)[] | null;
   relatedPosts?: (number | Post)[] | null;
   meta?: {
     title?: string | null;
@@ -1763,12 +1761,7 @@ export interface Artifact {
   /**
    * Add tags for filtering and search
    */
-  tags?:
-    | {
-        tag: string;
-        id?: string | null;
-      }[]
-    | null;
+  tags?: (number | Tag)[] | null;
   /**
    * Add and arrange content sections
    */
@@ -2398,12 +2391,7 @@ export interface Person {
   /**
    * Add tags for filtering and search
    */
-  tags?:
-    | {
-        tag: string;
-        id?: string | null;
-      }[]
-    | null;
+  tags?: (number | Tag)[] | null;
   /**
    * Add and arrange content sections
    */
@@ -3051,12 +3039,7 @@ export interface Place {
   /**
    * Add tags for filtering and search
    */
-  tags?:
-    | {
-        tag: string;
-        id?: string | null;
-      }[]
-    | null;
+  tags?: (number | Tag)[] | null;
   /**
    * Add and arrange content sections
    */
@@ -3598,6 +3581,24 @@ export interface Place {
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
+}
+/**
+ * Organize content with tags
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "tags".
+ */
+export interface Tag {
+  id: number;
+  title: string;
+  /**
+   * URL-friendly identifier (auto-generated from title)
+   */
+  slug: string;
+  description?: string | null;
+  postsCount?: number | null;
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * Items belonging to your custom content types
@@ -4193,12 +4194,7 @@ export interface CustomItem {
   /**
    * Add tags for filtering
    */
-  tags?:
-    | {
-        tag: string;
-        id?: string | null;
-      }[]
-    | null;
+  tags?: (number | Tag)[] | null;
   meta?: {
     title?: string | null;
     description?: string | null;
@@ -4694,6 +4690,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'categories';
         value: number | Category;
+      } | null)
+    | ({
+        relationTo: 'tags';
+        value: number | Tag;
       } | null)
     | ({
         relationTo: 'artifacts';
@@ -5845,12 +5845,7 @@ export interface PostsSelect<T extends boolean = true> {
             };
       };
   categories?: T;
-  tags?:
-    | T
-    | {
-        tag?: T;
-        id?: T;
-      };
+  tags?: T;
   relatedPosts?: T;
   meta?:
     | T
@@ -5876,6 +5871,7 @@ export interface CategoriesSelect<T extends boolean = true> {
   slug?: T;
   description?: T;
   featuredImage?: T;
+  postsCount?: T;
   parent?: T;
   breadcrumbs?:
     | T
@@ -5885,6 +5881,18 @@ export interface CategoriesSelect<T extends boolean = true> {
         label?: T;
         id?: T;
       };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "tags_select".
+ */
+export interface TagsSelect<T extends boolean = true> {
+  title?: T;
+  slug?: T;
+  description?: T;
+  postsCount?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -5925,12 +5933,7 @@ export interface ArtifactsSelect<T extends boolean = true> {
   collections?: T;
   relatedArtifacts?: T;
   categories?: T;
-  tags?:
-    | T
-    | {
-        tag?: T;
-        id?: T;
-      };
+  tags?: T;
   contentBlocks?:
     | T
     | {
@@ -6386,12 +6389,7 @@ export interface PeopleSelect<T extends boolean = true> {
       };
   relatedArtifacts?: T;
   categories?: T;
-  tags?:
-    | T
-    | {
-        tag?: T;
-        id?: T;
-      };
+  tags?: T;
   contentBlocks?:
     | T
     | {
@@ -6862,12 +6860,7 @@ export interface PlacesSelect<T extends boolean = true> {
         id?: T;
       };
   categories?: T;
-  tags?:
-    | T
-    | {
-        tag?: T;
-        id?: T;
-      };
+  tags?: T;
   contentBlocks?:
     | T
     | {
@@ -7790,12 +7783,7 @@ export interface CustomItemsSelect<T extends boolean = true> {
       };
   customData?: T;
   categories?: T;
-  tags?:
-    | T
-    | {
-        tag?: T;
-        id?: T;
-      };
+  tags?: T;
   meta?:
     | T
     | {

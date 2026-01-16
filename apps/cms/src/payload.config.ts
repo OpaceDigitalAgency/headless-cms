@@ -24,6 +24,7 @@ import { Media } from './collections/Media'
 import { Pages } from './collections/Pages'
 import { Posts } from './collections/Posts'
 import { Categories } from './collections/Categories'
+import { Tags } from './collections/Tags'
 import { Artifacts } from './collections/Artifacts'
 import { People } from './collections/People'
 import { Places } from './collections/Places'
@@ -201,6 +202,7 @@ export default buildConfig({
     Pages,
     Posts,
     Categories,
+    Tags,
     // Museum example collections
     Artifacts,
     People,

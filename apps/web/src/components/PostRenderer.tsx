@@ -104,10 +104,10 @@ export function PostRenderer({ post }: PostRendererProps) {
           {post.tags.map((tag: any, index: number) => (
             <Link
               key={index}
-              href={`/blog/tag/${tag.tag}`}
+              href={`/blog/tag/${encodeURIComponent(tag?.slug || tag?.tag || tag)}`}
               className="tag-link"
             >
-              {tag.tag}
+              {tag?.title || tag?.tag || tag?.slug || tag}
             </Link>
           ))}
         </div>
