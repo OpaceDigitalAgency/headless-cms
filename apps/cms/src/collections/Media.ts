@@ -302,7 +302,7 @@ export const Media: CollectionConfig = {
       type: 'ui',
       admin: {
         components: {
-          Field: () => null,
+          Field: '/components/EmptyField',
         },
         description: '📐 Image Sizes: When you upload an image, multiple optimised sizes are automatically generated (blur, thumbnail, small, card, medium, tablet, large, desktop, xlarge, og, plus AVIF versions). The front-end automatically selects the optimal size based on the viewport and device. You don\'t need to manually choose a size - the system handles this for responsive images. Click "Edit Image" to see all generated sizes.',
         position: 'sidebar',
