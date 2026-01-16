@@ -4,6 +4,7 @@
  */
 
 const CMS_URL = process.env.CMS_URL || process.env.NEXT_PUBLIC_CMS_URL || 'http://localhost:3000'
+const isDevelopment = process.env.NODE_ENV === 'development'
 
 export interface FetchOptions {
   draft?: boolean
@@ -15,15 +16,19 @@ export interface FetchOptions {
 
 /**
  * Generic fetch function for CMS API
+ * In development, we use 'no-store' to always get fresh data
+ * In production, we use 'force-cache' with revalidation tags
  */
 async function fetchAPI<T>(
   endpoint: string,
   options: FetchOptions = {}
 ): Promise<T> {
-  const { draft = false, depth = 2, locale, cache = 'force-cache', tags } = options
+  // Use no-store in development to always get fresh data
+  const defaultCache: RequestCache = isDevelopment ? 'no-store' : 'force-cache'
+  const { draft = false, depth = 2, locale, cache = defaultCache, tags } = options
 
   const url = new URL(`/api${endpoint}`, CMS_URL)
-  
+
   if (depth) url.searchParams.set('depth', String(depth))
   if (locale) url.searchParams.set('locale', locale)
   if (draft) url.searchParams.set('draft', 'true')
@@ -36,8 +41,8 @@ async function fetchAPI<T>(
     cache,
   }
 
-  // Add Next.js cache tags for revalidation
-  if (tags && tags.length > 0) {
+  // Add Next.js cache tags for revalidation (production only)
+  if (tags && tags.length > 0 && !isDevelopment) {
     (fetchOptions as any).next = { tags }
   }
 
