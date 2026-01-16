@@ -44,7 +44,7 @@ export const CustomItems: CollectionConfig = {
   },
   admin: {
     group: 'Content',
-    useAsTitle: 'title',
+    useAsTitle: (doc) => doc?.title || 'Untitled Custom Item',
     defaultColumns: ['title', 'contentType', 'status', 'updatedAt'],
     description: 'Items belonging to your custom content types',
     listSearchableFields: ['title', 'slug'],

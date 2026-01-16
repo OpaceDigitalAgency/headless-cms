@@ -28,7 +28,7 @@ export const Posts: CollectionConfig = {
   slug: 'posts',
 
   admin: {
-    useAsTitle: 'title',
+    useAsTitle: (doc) => doc?.title || 'Untitled Post',
     group: 'Content',
     defaultColumns: ['title', 'author', 'categories', '_status', 'publishedAt'],
     description: 'Create and manage blog posts with flexible content sections',

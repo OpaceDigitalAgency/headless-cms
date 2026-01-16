@@ -5,7 +5,7 @@ export const Categories: CollectionConfig = {
   slug: 'categories',
 
   admin: {
-    useAsTitle: 'title',
+    useAsTitle: (doc) => doc?.title || 'Untitled Category',
     group: 'Content',
     defaultColumns: ['title', 'slug', 'parent', 'updatedAt'],
     description: 'Organize content with categories',

@@ -21,7 +21,7 @@ export const ContentTypes: CollectionConfig = {
   },
   admin: {
     group: 'Settings',
-    useAsTitle: 'name',
+    useAsTitle: (doc) => doc?.name || 'Untitled Content Type',
     defaultColumns: ['name', 'slug', 'template', 'itemCount', 'updatedAt'],
     description: 'Define custom content types like "Classic Cars", "Recipes", or "Products"',
   },

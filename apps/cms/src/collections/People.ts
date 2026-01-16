@@ -28,7 +28,7 @@ export const People: CollectionConfig = {
   slug: 'people',
 
   admin: {
-    useAsTitle: 'name',
+    useAsTitle: (doc) => doc?.name || 'Untitled Person',
     group: 'Museum',
     defaultColumns: ['name', 'role', 'categories', '_status', 'updatedAt'],
     description: 'Historical figures, artists, team members, and notable people',

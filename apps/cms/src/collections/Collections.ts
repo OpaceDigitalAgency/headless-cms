@@ -6,7 +6,7 @@ export const Collections: CollectionConfig = {
   slug: 'museum-collections',
 
   admin: {
-    useAsTitle: 'title',
+    useAsTitle: (doc) => doc?.title || 'Untitled Collection',
     group: 'Museum',
     defaultColumns: ['title', 'parent', 'artifactCount', '_status', 'updatedAt'],
     description: 'Museum collections and galleries (hierarchical)',
