@@ -30,15 +30,36 @@ async function getOrCreateMedia(payload: Payload, filename: string, alt: string,
     return existing.docs[0]
   }
 
-  // If Unsplash URL provided, use external URL (Payload supports this)
+  // If Unsplash URL provided, download it and upload to Payload
   if (unsplashUrl) {
-    return payload.create({
-      collection: 'media',
-      data: {
-        alt,
-        url: unsplashUrl,
-      },
-    })
+    try {
+      const response = await fetch(unsplashUrl)
+      if (!response.ok) {
+        throw new Error(`Failed to fetch image: ${response.statusText}`)
+      }
+
+      const arrayBuffer = await response.arrayBuffer()
+      const buffer = Buffer.from(arrayBuffer)
+
+      // Determine mimetype from URL or default to jpeg
+      const mimetype = filename.endsWith('.png') ? 'image/png' :
+                      filename.endsWith('.webp') ? 'image/webp' :
+                      'image/jpeg'
+
+      return payload.create({
+        collection: 'media',
+        data: { alt },
+        file: {
+          data: buffer,
+          mimetype,
+          name: filename,
+          size: buffer.length,
+        },
+      })
+    } catch (error) {
+      console.error(`Failed to download Unsplash image ${unsplashUrl}:`, error)
+      // Fall back to tiny placeholder on error
+    }
   }
 
   // Fallback to tiny placeholder
