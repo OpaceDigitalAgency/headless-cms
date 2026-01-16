@@ -133,30 +133,8 @@ export default buildConfig({
     // Date format configuration
     dateFormat: 'MMMM dd, yyyy',
 
-    // Live Preview configuration
-    livePreview: {
-      breakpoints: [
-        { label: 'Mobile', name: 'mobile', width: 375, height: 667 },
-        { label: 'Tablet', name: 'tablet', width: 768, height: 1024 },
-        { label: 'Desktop', name: 'desktop', width: 1440, height: 900 },
-      ],
-      collections: ['pages', 'posts', 'artifacts'],
-      globals: ['header', 'footer'],
-      url: ({ data, collectionConfig, globalConfig }) => {
-        const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3001'
-        
-        if (collectionConfig) {
-          const slug = data?.slug || data?.id
-          return `${baseUrl}/preview/${collectionConfig.slug}/${slug}`
-        }
-        
-        if (globalConfig) {
-          return `${baseUrl}/preview/globals/${globalConfig.slug}`
-        }
-        
-        return baseUrl
-      },
-    },
+    // Live Preview configuration - Defined at collection level for better control
+    // See individual collection configs (Pages.ts, Posts.ts, etc.) for livePreview settings
   },
 
   // ===========================================
@@ -252,6 +230,7 @@ export default buildConfig({
     // SEO Plugin - Meta tags, Open Graph, Twitter Cards
     seoPlugin({
       collections: ['pages', 'posts', 'artifacts', 'people', 'places', 'museum-collections', 'custom-items', 'content-types'],
+      tabbedUI: true,
       uploadsCollection: 'media',
       generateTitle: ({ doc }) => `${doc?.title || doc?.name || 'Untitled'} | Museum Collection`,
       generateDescription: ({ doc }) => doc?.excerpt || doc?.shortDescription || doc?.shortBio || '',

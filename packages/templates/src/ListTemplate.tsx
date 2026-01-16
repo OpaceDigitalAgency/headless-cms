@@ -25,7 +25,8 @@ export interface ListItem {
 export interface ListTemplateProps {
   heading: string;
   subheading?: string;
-  items: ListItem[];
+  items?: ListItem[];
+  content?: React.ReactNode; // Alternative to items for custom content
   pagination?: {
     currentPage: number;
     totalPages: number;
@@ -43,7 +44,8 @@ export interface ListTemplateProps {
 export function ListTemplate({
   heading,
   subheading,
-  items,
+  items = [],
+  content,
   pagination,
   filters,
   emptyMessage = 'No items found.',
@@ -61,8 +63,10 @@ export function ListTemplate({
       {/* Filters */}
       {filters && <div className="list-filters">{filters}</div>}
 
-      {/* Items */}
-      {items.length > 0 ? (
+      {/* Custom Content or Items */}
+      {content ? (
+        <div className="list-content">{content}</div>
+      ) : items.length > 0 ? (
         <div className={`list-items list-items--${layout}`}>
           {items.map((item) => (
             <article key={item.id} className="list-item">

@@ -1,4 +1,5 @@
 import type { CollectionConfig } from 'payload'
+import { getPreviewUrl } from '../utils/preview'
 import { slugField } from '../fields/slug'
 
 export const Collections: CollectionConfig = {
@@ -9,15 +10,9 @@ export const Collections: CollectionConfig = {
     group: 'Museum',
     defaultColumns: ['title', 'parent', 'artifactCount', '_status', 'updatedAt'],
     description: 'Museum collections and galleries (hierarchical)',
-    preview: (doc) => {
-      const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3001'
-      return `${baseUrl}/preview/collections/${doc.slug}`
-    },
+    preview: (doc) => getPreviewUrl({ collection: 'collections', slug: doc.slug }),
     livePreview: {
-      url: ({ data }) => {
-        const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3001'
-        return `${baseUrl}/preview/collections/${data.slug}`
-      },
+      url: ({ data }) => getPreviewUrl({ collection: 'collections', slug: data?.slug }),
     },
   },
 

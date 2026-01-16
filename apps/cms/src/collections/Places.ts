@@ -1,5 +1,6 @@
 import type { CollectionConfig } from 'payload'
 import { slugField } from '../fields/slug'
+import { getPreviewUrl } from '../utils/preview'
 
 // Import all blocks for flexible content
 import { heroBlock } from '../blocks/Hero'
@@ -20,15 +21,9 @@ export const Places: CollectionConfig = {
     group: 'Museum',
     defaultColumns: ['name', 'placeType', 'categories', '_status', 'updatedAt'],
     description: 'Geographic locations, venues, and historical sites',
-    preview: (doc) => {
-      const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3001'
-      return `${baseUrl}/preview/places/${doc.slug}`
-    },
+    preview: (doc) => getPreviewUrl({ collection: 'places', slug: doc.slug }),
     livePreview: {
-      url: ({ data }) => {
-        const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3001'
-        return `${baseUrl}/preview/places/${data.slug}`
-      },
+      url: ({ data }) => getPreviewUrl({ collection: 'places', slug: data?.slug }),
     },
   },
 

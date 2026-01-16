@@ -5,6 +5,14 @@
  * Templates receive mapped fields from collections via the field mapping system.
  */
 
+import { DetailTemplate } from './DetailTemplate';
+import { ListTemplate } from './ListTemplate';
+import { LandingTemplate } from './LandingTemplate';
+import { TimelineTemplate } from './TimelineTemplate';
+import { ArticleTemplate } from './ArticleTemplate';
+import { HomeTemplate } from './HomeTemplate';
+import { ArchiveTemplate } from './ArchiveTemplate';
+
 export { DetailTemplate } from './DetailTemplate';
 export type { DetailTemplateProps } from './DetailTemplate';
 

@@ -1,5 +1,6 @@
 import type { CollectionConfig } from 'payload'
 import { slugField } from '../fields/slug'
+import { getPreviewUrl } from '../utils/preview'
 
 // Import all blocks for flexible content
 import { heroBlock } from '../blocks/Hero'
@@ -20,15 +21,9 @@ export const Artifacts: CollectionConfig = {
     group: 'Museum',
     defaultColumns: ['title', 'collections', 'categories', '_status', 'updatedAt'],
     description: 'Museum artifacts and archive items with flexible content sections',
-    preview: (doc) => {
-      const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3001'
-      return `${baseUrl}/preview/artifacts/${doc.slug}`
-    },
+    preview: (doc) => getPreviewUrl({ collection: 'artifacts', slug: doc.slug }),
     livePreview: {
-      url: ({ data }) => {
-        const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3001'
-        return `${baseUrl}/preview/artifacts/${data.slug}`
-      },
+      url: ({ data }) => getPreviewUrl({ collection: 'artifacts', slug: data?.slug }),
     },
   },
 

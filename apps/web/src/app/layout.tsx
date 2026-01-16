@@ -61,12 +61,9 @@ export default async function RootLayout({
   }
 
   return (
-    <html lang="en" suppressHydrationWarning>
-      <head>
-        {/* Inline script to prevent flash of wrong theme */}
+    <html lang="en" suppressHydrationWarning={true}>
+      <body className="flex min-h-screen flex-col bg-white text-gray-900 dark:bg-slate-900 dark:text-slate-100 transition-colors" suppressHydrationWarning={true}>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
-      </head>
-      <body className="flex min-h-screen flex-col bg-white text-gray-900 dark:bg-slate-900 dark:text-slate-100 transition-colors">
         {header && <Header data={header} />}
         <main className="flex-1">{children}</main>
         {footer && <Footer data={footer} />}

@@ -9,7 +9,8 @@ export interface ArticleTemplateProps {
   heading: string;
   subheading?: string;
   excerpt?: string;
-  body: React.ReactNode;
+  body?: React.ReactNode;
+  content?: React.ReactNode; // Alias for body
   featuredImage?: {
     url: string;
     alt?: string;
@@ -57,6 +58,7 @@ export function ArticleTemplate({
   subheading,
   excerpt,
   body,
+  content,
   featuredImage,
   author,
   date,
@@ -69,6 +71,8 @@ export function ArticleTemplate({
   showTableOfContents = true,
   className = '',
 }: ArticleTemplateProps) {
+  // Use content as alias for body if body is not provided
+  const mainContent = body || content;
   return (
     <article className={`article-template ${className}`}>
       {/* Article Header */}
@@ -151,7 +155,7 @@ export function ArticleTemplate({
         )}
 
         {/* Main Content */}
-        <div className="article-content">{body}</div>
+        <div className="article-content">{mainContent}</div>
       </div>
 
       {/* Tags */}

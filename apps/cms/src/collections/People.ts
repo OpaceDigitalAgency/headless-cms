@@ -1,5 +1,6 @@
 import type { CollectionConfig } from 'payload'
 import { slugField } from '../fields/slug'
+import { getPreviewUrl } from '../utils/preview'
 
 // Import all blocks for flexible content
 import { heroBlock } from '../blocks/Hero'
@@ -20,15 +21,9 @@ export const People: CollectionConfig = {
     group: 'Museum',
     defaultColumns: ['name', 'role', 'categories', '_status', 'updatedAt'],
     description: 'Historical figures, artists, team members, and notable people',
-    preview: (doc) => {
-      const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3001'
-      return `${baseUrl}/preview/people/${doc.slug}`
-    },
+    preview: (doc) => getPreviewUrl({ collection: 'people', slug: doc.slug }),
     livePreview: {
-      url: ({ data }) => {
-        const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3001'
-        return `${baseUrl}/preview/people/${data.slug}`
-      },
+      url: ({ data }) => getPreviewUrl({ collection: 'people', slug: data?.slug }),
     },
   },
 

@@ -10,6 +10,7 @@ export interface DetailTemplateProps {
   heading: string;
   subheading?: string;
   body?: React.ReactNode;
+  content?: React.ReactNode; // Alias for body
   excerpt?: string;
   featuredImage?: {
     url: string;
@@ -47,6 +48,7 @@ export function DetailTemplate({
   heading,
   subheading,
   body,
+  content,
   excerpt,
   featuredImage,
   gallery,
@@ -58,6 +60,8 @@ export function DetailTemplate({
   categories,
   className = '',
 }: DetailTemplateProps) {
+  // Use content as alias for body if body is not provided
+  const mainContent = body || content;
   return (
     <article className={`detail-template ${className}`}>
       {/* Header Section */}
@@ -107,8 +111,8 @@ export function DetailTemplate({
       <div className="detail-content-wrapper">
         <div className="detail-main">
           {excerpt && <p className="detail-excerpt">{excerpt}</p>}
-          
-          {body && <div className="detail-body">{body}</div>}
+
+          {mainContent && <div className="detail-body">{mainContent}</div>}
 
           {/* Gallery */}
           {gallery && gallery.length > 0 && (

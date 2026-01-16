@@ -391,10 +391,6 @@ export interface Page {
    * URL-friendly identifier (auto-generated from title)
    */
   slug: string;
-  /**
-   * Select the page template
-   */
-  template: 'landing' | 'home' | 'detail' | 'article' | 'archive';
   hero?: {
     type?: ('standard' | 'minimal' | 'fullscreen' | 'none') | null;
     heading?: string | null;
@@ -766,6 +762,10 @@ export interface Page {
      */
     image?: (number | null) | Media;
   };
+  /**
+   * Select the page template
+   */
+  template: 'landing' | 'home' | 'detail' | 'article' | 'archive';
   publishedAt?: string | null;
   updatedAt: string;
   createdAt: string;
@@ -3956,7 +3956,6 @@ export interface MediaSelect<T extends boolean = true> {
 export interface PagesSelect<T extends boolean = true> {
   title?: T;
   slug?: T;
-  template?: T;
   hero?:
     | T
     | {
@@ -4221,6 +4220,7 @@ export interface PagesSelect<T extends boolean = true> {
         description?: T;
         image?: T;
       };
+  template?: T;
   publishedAt?: T;
   updatedAt?: T;
   createdAt?: T;

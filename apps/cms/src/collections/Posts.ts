@@ -1,5 +1,6 @@
 import type { CollectionConfig } from 'payload'
 import { slugField } from '../fields/slug'
+import { getPreviewUrl } from '../utils/preview'
 
 // Import all blocks for flexible content
 import { heroBlock } from '../blocks/Hero'
@@ -20,15 +21,9 @@ export const Posts: CollectionConfig = {
     group: 'Content',
     defaultColumns: ['title', 'author', 'categories', '_status', 'publishedAt'],
     description: 'Create and manage blog posts with flexible content sections',
-    preview: (doc) => {
-      const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3001'
-      return `${baseUrl}/preview/posts/${doc.slug}`
-    },
+    preview: (doc) => getPreviewUrl({ collection: 'posts', slug: doc.slug }),
     livePreview: {
-      url: ({ data }) => {
-        const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3001'
-        return `${baseUrl}/preview/posts/${data.slug}`
-      },
+      url: ({ data }) => getPreviewUrl({ collection: 'posts', slug: data?.slug }),
     },
   },
 

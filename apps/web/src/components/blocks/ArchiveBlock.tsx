@@ -99,7 +99,7 @@ export async function ArchiveBlock({ block }: ArchiveBlockProps) {
       case 'custom-items':
         if (typeof item.contentType === 'object' && item.contentType?.slug) {
           const typeSlug = item.contentType.archiveSlug
-            ? item.contentType.archiveSlug.replace(/^\\/?items\\//, '')
+            ? item.contentType.archiveSlug.replace(/^\/?items\//, '')
             : item.contentType.slug
           return `/items/${typeSlug}/${item.slug}`
         }

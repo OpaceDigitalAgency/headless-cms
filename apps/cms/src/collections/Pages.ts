@@ -9,6 +9,7 @@ import { formBlock } from '../blocks/Form'
 import { galleryBlock } from '../blocks/Gallery'
 import { gridBlock } from '../blocks/Grid'
 import { timelineBlock } from '../blocks/Timeline'
+import { getPreviewUrl } from '../utils/preview'
 
 export const Pages: CollectionConfig = {
   slug: 'pages',
@@ -18,15 +19,9 @@ export const Pages: CollectionConfig = {
     group: 'Content',
     defaultColumns: ['title', 'slug', 'template', '_status', 'updatedAt'],
     description: 'Create and manage website pages',
-    preview: (doc) => {
-      const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3001'
-      return `${baseUrl}/preview/pages/${doc.slug}`
-    },
+    preview: (doc) => getPreviewUrl({ collection: 'pages', slug: doc.slug }),
     livePreview: {
-      url: ({ data }) => {
-        const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3001'
-        return `${baseUrl}/preview/pages/${data.slug}`
-      },
+      url: ({ data }) => getPreviewUrl({ collection: 'pages', slug: data?.slug }),
     },
   },
 
@@ -95,23 +90,6 @@ export const Pages: CollectionConfig = {
       label: 'Page Title',
     },
     slugField(),
-    {
-      name: 'template',
-      type: 'select',
-      required: true,
-      defaultValue: 'landing',
-      options: [
-        { label: 'Landing Page', value: 'landing' },
-        { label: 'Home Page', value: 'home' },
-        { label: 'Detail Page', value: 'detail' },
-        { label: 'Article Page', value: 'article' },
-        { label: 'Archive Page', value: 'archive' },
-      ],
-      admin: {
-        position: 'sidebar',
-        description: 'Select the page template',
-      },
-    },
     {
       type: 'tabs',
       tabs: [
@@ -225,6 +203,23 @@ export const Pages: CollectionConfig = {
           ],
         },
       ],
+    },
+    {
+      name: 'template',
+      type: 'select',
+      required: true,
+      defaultValue: 'landing',
+      options: [
+        { label: 'Landing Page', value: 'landing' },
+        { label: 'Home Page', value: 'home' },
+        { label: 'Detail Page', value: 'detail' },
+        { label: 'Article Page', value: 'article' },
+        { label: 'Archive Page', value: 'archive' },
+      ],
+      admin: {
+        position: 'sidebar',
+        description: 'Select the page template',
+      },
     },
     {
       name: 'publishedAt',
