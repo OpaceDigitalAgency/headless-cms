@@ -1249,82 +1249,144 @@
 }
 
 /* ===========================================
-   Collection List Row Actions - Make Prominent
+   Collection List Selection Actions - Make Prominent
    =========================================== */
 
-/* Target Payload's cell action buttons in collection list rows */
-.cell-actions {
-  display: flex !important;
-  gap: 0.5rem !important;
-  align-items: center !important;
-}
-
-/* Style all action buttons with better visibility */
-.cell-actions button,
-.cell-actions a,
-.cell-actions [role="button"] {
-  padding: 0.5rem 0.875rem !important;
+/* Style the list selection action buttons (Edit, Publish, Unpublish, Delete) */
+.list-selection__button {
+  padding: 0.625rem 1rem !important;
   border-radius: var(--border-radius-md) !important;
-  font-weight: 500 !important;
-  font-size: 0.8125rem !important;
+  font-weight: 600 !important;
+  font-size: 0.875rem !important;
   transition: all 0.2s ease !important;
   cursor: pointer !important;
   border: none !important;
   display: inline-flex !important;
   align-items: center !important;
-  gap: 0.375rem !important;
+  gap: 0.5rem !important;
+  text-transform: capitalize !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
 }
 
-/* Edit/View button - Primary blue */
-.cell-actions button:has(svg[aria-label*="Edit"]),
-.cell-actions button:has(svg[aria-label*="View"]),
-.cell-actions a[href*="/edit"],
-.cell-actions a[href*="/view"] {
-  background: var(--theme-primary-500) !important;
+/* Edit button - Primary blue */
+.edit-many__toggle {
+  background: #3b82f6 !important;
   color: white !important;
 }
 
-.cell-actions button:has(svg[aria-label*="Edit"]):hover,
-.cell-actions button:has(svg[aria-label*="View"]):hover,
-.cell-actions a[href*="/edit"]:hover,
-.cell-actions a[href*="/view"]:hover {
-  background: var(--theme-primary-600) !important;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12) !important;
-  transform: translateY(-1px) !important;
+.edit-many__toggle:hover {
+  background: #2563eb !important;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3) !important;
+  transform: translateY(-2px) !important;
 }
 
 /* Publish button - Success green */
-.cell-actions button:has(svg[aria-label*="Publish"]) {
-  background: var(--theme-success-500) !important;
+.list-selection__button[aria-label="Publish"] {
+  background: #10b981 !important;
   color: white !important;
 }
 
-.cell-actions button:has(svg[aria-label*="Publish"]):hover {
-  background: var(--theme-success-600) !important;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12) !important;
-  transform: translateY(-1px) !important;
+.list-selection__button[aria-label="Publish"]:hover {
+  background: #059669 !important;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3) !important;
+  transform: translateY(-2px) !important;
 }
 
 /* Unpublish button - Warning amber */
-.cell-actions button:has(svg[aria-label*="Unpublish"]) {
-  background: var(--theme-warning-500) !important;
+.list-selection__button[aria-label="Unpublish"] {
+  background: #f59e0b !important;
   color: white !important;
 }
 
-.cell-actions button:has(svg[aria-label*="Unpublish"]):hover {
-  background: var(--theme-warning-600) !important;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12) !important;
-  transform: translateY(-1px) !important;
+.list-selection__button[aria-label="Unpublish"]:hover {
+  background: #d97706 !important;
+  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3) !important;
+  transform: translateY(-2px) !important;
 }
 
 /* Delete button - Error red */
-.cell-actions button:has(svg[aria-label*="Delete"]) {
-  background: var(--theme-error-500) !important;
+.delete-documents__toggle {
+  background: #ef4444 !important;
   color: white !important;
 }
 
-.cell-actions button:has(svg[aria-label*="Delete"]):hover {
-  background: var(--theme-error-600) !important;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12) !important;
-  transform: translateY(-1px) !important;
+.delete-documents__toggle:hover {
+  background: #dc2626 !important;
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3) !important;
+  transform: translateY(-2px) !important;
+}
+
+/* ===========================================
+   Lexical RichText Editor - Show WYSIWYG Toolbar
+   =========================================== */
+
+/* Ensure the Lexical editor toolbar is always visible */
+.lexical-toolbar,
+.rich-text-lexical__toolbar,
+[class*="toolbar"] {
+  display: flex !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 10 !important;
+  background: var(--theme-elevation-0) !important;
+  border-bottom: 1px solid var(--theme-elevation-150) !important;
+  padding: 0.5rem !important;
+  gap: 0.25rem !important;
+  flex-wrap: wrap !important;
+}
+
+/* Make toolbar buttons visible and styled */
+.lexical-toolbar button,
+.rich-text-lexical__toolbar button,
+[class*="toolbar"] button {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 0.375rem 0.5rem !important;
+  border-radius: var(--border-radius-sm) !important;
+  background: var(--theme-elevation-50) !important;
+  border: 1px solid var(--theme-elevation-150) !important;
+  color: var(--theme-elevation-700) !important;
+  font-size: 0.875rem !important;
+  cursor: pointer !important;
+  transition: all 0.15s ease !important;
+}
+
+.lexical-toolbar button:hover,
+.rich-text-lexical__toolbar button:hover,
+[class*="toolbar"] button:hover {
+  background: var(--theme-elevation-100) !important;
+  border-color: var(--theme-elevation-200) !important;
+  color: var(--theme-elevation-900) !important;
+}
+
+.lexical-toolbar button.active,
+.rich-text-lexical__toolbar button.active,
+[class*="toolbar"] button.active {
+  background: var(--theme-primary-500) !important;
+  border-color: var(--theme-primary-600) !important;
+  color: white !important;
+}
+
+/* Ensure the editor content area is visible */
+.lexical-editor,
+.rich-text-lexical__editor,
+[class*="ContentEditable"] {
+  min-height: 200px !important;
+  padding: 1rem !important;
+  background: var(--theme-elevation-0) !important;
+  border: 1px solid var(--theme-elevation-150) !important;
+  border-radius: var(--border-radius-md) !important;
+  color: var(--theme-elevation-900) !important;
+}
+
+/* Make sure the editor wrapper is visible */
+.rich-text-lexical,
+.lexical-wrapper,
+[class*="RichText"] {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
 }

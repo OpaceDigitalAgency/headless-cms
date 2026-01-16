@@ -10,6 +10,7 @@ import { galleryBlock } from '../blocks/Gallery'
 import { gridBlock } from '../blocks/Grid'
 import { timelineBlock } from '../blocks/Timeline'
 import { getPreviewUrl } from '../utils/preview'
+import { revalidatePage } from '../lib/revalidate'
 
 export const Pages: CollectionConfig = {
   slug: 'pages',
@@ -55,27 +56,14 @@ export const Pages: CollectionConfig = {
     delete: ({ req: { user } }) => user?.role === 'admin',
   },
 
-  // Hooks for revalidation
+  // Hooks for revalidation - direct calls since we're in the same Next.js app
   hooks: {
     afterChange: [
-      async ({ doc, req, operation }) => {
+      async ({ doc, previousDoc, req }) => {
         if (doc._status === 'published') {
-          // Trigger revalidation
-          const revalidateUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3001'
-          try {
-            await fetch(`${revalidateUrl}/api/revalidate`, {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({
-                secret: process.env.REVALIDATION_SECRET,
-                collection: 'pages',
-                slug: doc.slug,
-              }),
-            })
-            req.payload.logger.info(`Revalidated page: ${doc.slug}`)
-          } catch (error) {
-            req.payload.logger.error(`Failed to revalidate page: ${doc.slug}`)
-          }
+          // Direct revalidation - no webhook needed
+          revalidatePage(doc.slug, previousDoc?.slug)
+          req.payload.logger.info(`Revalidated page: ${doc.slug}`)
         }
         return doc
       },

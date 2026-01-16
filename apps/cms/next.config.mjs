@@ -5,6 +5,9 @@ const nextConfig = {
   // Enable React strict mode for better development experience
   reactStrictMode: true,
 
+  // Transpile workspace packages
+  transpilePackages: ['@repo/shared', '@repo/templates'],
+
   // Experimental features
   experimental: {
     // Enable React compiler for performance
@@ -26,41 +29,42 @@ const nextConfig = {
   },
 
   // Webpack configuration
-  webpack: (config) => {
+  webpack: (config, { isServer }) => {
     // Handle node modules that need to be transpiled
     config.resolve.fallback = {
       ...config.resolve.fallback,
       fs: false,
       path: false,
     }
+
+    // Fix for Payload CMS client components bundling issue
+    // This prevents the "__webpack_modules__[moduleId] is not a function" error
+    if (!isServer) {
+      config.optimization = {
+        ...config.optimization,
+        moduleIds: 'named',
+      }
+    }
+
     return config
   },
 
   // Environment variables available to the browser
   env: {
     NEXT_PUBLIC_SERVER_URL: process.env.PAYLOAD_PUBLIC_SERVER_URL || 'http://localhost:3000',
-  },
-
-  // Redirects
-  async redirects() {
-    return [
-      {
-        source: '/',
-        destination: '/admin',
-        permanent: false,
-      },
-    ]
+    NEXT_PUBLIC_SITE_URL: process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000',
   },
 
   // Headers for security
   async headers() {
     return [
       {
-        source: '/(.*)',
+        // Allow all routes to be embedded in same-origin iframes for CMS live preview
+        source: '/:path*',
         headers: [
           {
             key: 'X-Frame-Options',
-            value: 'DENY',
+            value: 'SAMEORIGIN',
           },
           {
             key: 'X-Content-Type-Options',

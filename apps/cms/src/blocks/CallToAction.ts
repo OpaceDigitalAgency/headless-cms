@@ -1,4 +1,5 @@
 import type { Block } from 'payload'
+import { blockIcons } from './blockIcons'
 
 export const ctaBlock: Block = {
   slug: 'cta',
@@ -6,7 +7,7 @@ export const ctaBlock: Block = {
     singular: 'Call to Action',
     plural: 'Call to Action Blocks',
   },
-  imageURL: '/blocks/cta.png',
+  imageURL: blockIcons.callToAction,
   imageAltText: 'CTA block preview',
   fields: [
     {

@@ -1,4 +1,5 @@
 import type { GlobalConfig } from 'payload'
+import { revalidateHeader } from '../lib/revalidate'
 
 export const Header: GlobalConfig = {
   slug: 'header',
@@ -14,24 +15,13 @@ export const Header: GlobalConfig = {
     update: ({ req: { user } }) => Boolean(user),
   },
 
-  // Hooks for revalidation
+  // Hooks for revalidation - direct calls since we're in the same Next.js app
   hooks: {
     afterChange: [
       async ({ doc, req }) => {
-        const revalidateUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3001'
-        try {
-          await fetch(`${revalidateUrl}/api/revalidate`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              secret: process.env.REVALIDATION_SECRET,
-              collection: 'header',
-            }),
-          })
-          req.payload.logger.info('Revalidated header global')
-        } catch (error) {
-          req.payload.logger.error('Failed to revalidate header global')
-        }
+        // Direct revalidation - no webhook needed
+        revalidateHeader()
+        req.payload.logger.info('Revalidated header global')
         return doc
       },
     ],

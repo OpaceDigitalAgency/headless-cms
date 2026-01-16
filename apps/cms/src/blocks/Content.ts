@@ -1,4 +1,5 @@
 import type { Block } from 'payload'
+import { blockIcons } from './blockIcons'
 
 export const contentBlock: Block = {
   slug: 'content',
@@ -6,7 +7,7 @@ export const contentBlock: Block = {
     singular: 'Content',
     plural: 'Content Blocks',
   },
-  imageURL: '/blocks/content.png',
+  imageURL: blockIcons.content,
   imageAltText: 'Content block preview',
   fields: [
     {

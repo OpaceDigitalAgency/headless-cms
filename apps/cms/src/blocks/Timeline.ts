@@ -1,4 +1,5 @@
 import type { Block } from 'payload'
+import { blockIcons } from './blockIcons'
 
 /**
  * Timeline Block
@@ -12,7 +13,7 @@ export const timelineBlock: Block = {
     singular: 'Timeline',
     plural: 'Timelines',
   },
-  imageURL: '/blocks/timeline.png',
+  imageURL: blockIcons.timeline,
   imageAltText: 'Timeline block preview',
   fields: [
     {

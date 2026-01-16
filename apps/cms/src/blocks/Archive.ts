@@ -1,4 +1,5 @@
 import type { Block } from 'payload'
+import { blockIcons } from './blockIcons'
 
 export const archiveBlock: Block = {
   slug: 'archive',
@@ -6,7 +7,7 @@ export const archiveBlock: Block = {
     singular: 'Archive',
     plural: 'Archive Blocks',
   },
-  imageURL: '/blocks/archive.png',
+  imageURL: blockIcons.archive,
   imageAltText: 'Archive block preview',
   fields: [
     {

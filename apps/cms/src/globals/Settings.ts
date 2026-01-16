@@ -1,4 +1,5 @@
 import type { GlobalConfig } from 'payload'
+import { revalidateSettings } from '../lib/revalidate'
 
 export const Settings: GlobalConfig = {
   slug: 'settings',
@@ -14,24 +15,13 @@ export const Settings: GlobalConfig = {
     update: ({ req: { user } }) => user?.role === 'admin',
   },
 
-  // Hooks for revalidation
+  // Hooks for revalidation - direct calls since we're in the same Next.js app
   hooks: {
     afterChange: [
       async ({ doc, req }) => {
-        const revalidateUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3001'
-        try {
-          await fetch(`${revalidateUrl}/api/revalidate`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              secret: process.env.REVALIDATION_SECRET,
-              collection: 'settings',
-            }),
-          })
-          req.payload.logger.info('Revalidated settings global')
-        } catch (error) {
-          req.payload.logger.error('Failed to revalidate settings global')
-        }
+        // Direct revalidation - no webhook needed
+        revalidateSettings()
+        req.payload.logger.info('Revalidated settings global')
         return doc
       },
     ],

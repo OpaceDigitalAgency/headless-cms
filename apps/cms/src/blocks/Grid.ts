@@ -1,4 +1,5 @@
 import type { Block } from 'payload'
+import { blockIcons } from './blockIcons'
 
 /**
  * Grid Block
@@ -12,7 +13,7 @@ export const gridBlock: Block = {
     singular: 'Grid',
     plural: 'Grids',
   },
-  imageURL: '/blocks/grid.png',
+  imageURL: blockIcons.grid,
   imageAltText: 'Grid block preview',
   fields: [
     {

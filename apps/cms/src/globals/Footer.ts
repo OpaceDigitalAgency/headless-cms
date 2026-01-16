@@ -1,4 +1,5 @@
 import type { GlobalConfig } from 'payload'
+import { revalidateFooter } from '../lib/revalidate'
 
 export const Footer: GlobalConfig = {
   slug: 'footer',
@@ -14,24 +15,13 @@ export const Footer: GlobalConfig = {
     update: ({ req: { user } }) => Boolean(user),
   },
 
-  // Hooks for revalidation
+  // Hooks for revalidation - direct calls since we're in the same Next.js app
   hooks: {
     afterChange: [
       async ({ doc, req }) => {
-        const revalidateUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3001'
-        try {
-          await fetch(`${revalidateUrl}/api/revalidate`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              secret: process.env.REVALIDATION_SECRET,
-              collection: 'footer',
-            }),
-          })
-          req.payload.logger.info('Revalidated footer global')
-        } catch (error) {
-          req.payload.logger.error('Failed to revalidate footer global')
-        }
+        // Direct revalidation - no webhook needed
+        revalidateFooter()
+        req.payload.logger.info('Revalidated footer global')
         return doc
       },
     ],

@@ -1,4 +1,5 @@
 import type { Block } from 'payload'
+import { blockIcons } from './blockIcons'
 
 /**
  * Gallery Block
@@ -12,7 +13,7 @@ export const galleryBlock: Block = {
     singular: 'Gallery',
     plural: 'Galleries',
   },
-  imageURL: '/blocks/gallery.png',
+  imageURL: blockIcons.gallery,
   imageAltText: 'Gallery block preview',
   fields: [
     {
