@@ -207,8 +207,9 @@ export const seedActionEndpoint: Endpoint = {
       }
     } catch (error) {
       payload.logger.error('Seed action failed:', error)
+      const errorMessage = error instanceof Error ? error.message : String(error)
       return Response.json(
-        { success: false, message: `Operation failed: ${error}` },
+        { success: false, message: `Operation failed: ${errorMessage}` },
         { status: 500 }
       )
     }
@@ -303,8 +304,9 @@ export const seedCollectionEndpoint: Endpoint = {
       }
     } catch (error) {
       payload.logger.error('Collection seed action failed:', error)
+      const errorMessage = error instanceof Error ? error.message : String(error)
       return Response.json(
-        { success: false, message: `Operation failed: ${error}` },
+        { success: false, message: `Operation failed: ${errorMessage}` },
         { status: 500 }
       )
     }
@@ -345,8 +347,9 @@ export const seedShowcaseEndpoint: Endpoint = {
       })
     } catch (error) {
       payload.logger.error('Showcase seed failed:', error)
+      const errorMessage = error instanceof Error ? error.message : String(error)
       return Response.json(
-        { success: false, message: `Operation failed: ${error}` },
+        { success: false, message: `Operation failed: ${errorMessage}` },
         { status: 500 }
       )
     }
@@ -412,8 +415,9 @@ export const seedAllEndpoint: Endpoint = {
       }
     } catch (error) {
       payload.logger.error('Seed all action failed:', error)
+      const errorMessage = error instanceof Error ? error.message : String(error)
       return Response.json(
-        { success: false, message: `Operation failed: ${error}` },
+        { success: false, message: `Operation failed: ${errorMessage}` },
         { status: 500 }
       )
     }

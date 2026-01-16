@@ -33,9 +33,10 @@ async function getOrCreateMedia(payload: Payload, filename: string, alt: string,
   // If Unsplash URL provided, download it and upload to Payload
   if (unsplashUrl) {
     try {
+      payload.logger.info(`Downloading image from Unsplash: ${unsplashUrl}`)
       const response = await fetch(unsplashUrl)
       if (!response.ok) {
-        throw new Error(`Failed to fetch image: ${response.statusText}`)
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`)
       }
 
       const arrayBuffer = await response.arrayBuffer()
@@ -46,6 +47,7 @@ async function getOrCreateMedia(payload: Payload, filename: string, alt: string,
                       filename.endsWith('.webp') ? 'image/webp' :
                       'image/jpeg'
 
+      payload.logger.info(`Successfully downloaded ${filename} (${buffer.length} bytes)`)
       return payload.create({
         collection: 'media',
         data: { alt },
@@ -57,12 +59,13 @@ async function getOrCreateMedia(payload: Payload, filename: string, alt: string,
         },
       })
     } catch (error) {
-      console.error(`Failed to download Unsplash image ${unsplashUrl}:`, error)
+      payload.logger.error(`Failed to download Unsplash image ${unsplashUrl}:`, error)
       // Fall back to tiny placeholder on error
     }
   }
 
   // Fallback to tiny placeholder
+  payload.logger.info(`Using placeholder for ${filename}`)
   const buffer = Buffer.from(TINY_PNG_BASE64, 'base64')
   return payload.create({
     collection: 'media',
