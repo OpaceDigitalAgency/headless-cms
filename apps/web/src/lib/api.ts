@@ -1,10 +1,22 @@
 /**
  * CMS API Client
  * Fetches data from Payload CMS REST API
+ *
+ * CACHING STRATEGY:
+ * - Development: Always fetch fresh data (no-store)
+ * - Production: Use ISR with time-based revalidation (60 seconds) + tag-based on-demand revalidation
+ *
+ * This ensures:
+ * 1. Live preview always shows fresh data (draft mode uses no-store)
+ * 2. Published changes appear within 60 seconds at most (time-based ISR)
+ * 3. Immediate updates when webhook revalidation works (on-demand ISR)
  */
 
 const CMS_URL = process.env.CMS_URL || process.env.NEXT_PUBLIC_CMS_URL || 'http://localhost:3000'
 const isDevelopment = process.env.NODE_ENV === 'development'
+
+// Time-based revalidation interval in seconds (fallback if webhooks fail)
+const REVALIDATE_INTERVAL = 60
 
 export interface FetchOptions {
   draft?: boolean
@@ -12,20 +24,26 @@ export interface FetchOptions {
   locale?: string
   cache?: RequestCache
   tags?: string[]
+  revalidate?: number | false  // Time-based revalidation in seconds
 }
 
 /**
  * Generic fetch function for CMS API
  * In development, we use 'no-store' to always get fresh data
- * In production, we use 'force-cache' with revalidation tags
+ * In production, we use ISR with both time-based and tag-based revalidation
  */
 async function fetchAPI<T>(
   endpoint: string,
   options: FetchOptions = {}
 ): Promise<T> {
-  // Use no-store in development to always get fresh data
-  const defaultCache: RequestCache = isDevelopment ? 'no-store' : 'force-cache'
-  const { draft = false, depth = 2, locale, cache = defaultCache, tags } = options
+  const {
+    draft = false,
+    depth = 2,
+    locale,
+    cache,
+    tags,
+    revalidate = REVALIDATE_INTERVAL  // Default: revalidate every 60 seconds
+  } = options
 
   const url = new URL(`/api${endpoint}`, CMS_URL)
 
@@ -33,17 +51,28 @@ async function fetchAPI<T>(
   if (locale) url.searchParams.set('locale', locale)
   if (draft) url.searchParams.set('draft', 'true')
 
-  const fetchOptions: RequestInit = {
+  const fetchOptions: RequestInit & { next?: { tags?: string[], revalidate?: number | false } } = {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
     },
-    cache,
   }
 
-  // Add Next.js cache tags for revalidation (production only)
-  if (tags && tags.length > 0 && !isDevelopment) {
-    (fetchOptions as any).next = { tags }
+  // Development: Always fetch fresh data
+  if (isDevelopment || draft) {
+    fetchOptions.cache = 'no-store'
+  } else {
+    // Production: Use ISR with time-based + tag-based revalidation
+    fetchOptions.next = {
+      revalidate,  // Time-based ISR (e.g., every 60 seconds)
+      ...(tags && tags.length > 0 ? { tags } : {}),  // Tag-based on-demand revalidation
+    }
+  }
+
+  // Allow explicit cache override
+  if (cache) {
+    fetchOptions.cache = cache
+    delete fetchOptions.next  // Can't use both cache and next.revalidate
   }
 
   const response = await fetch(url.toString(), fetchOptions)
