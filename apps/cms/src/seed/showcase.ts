@@ -1,10 +1,25 @@
 import type { Payload } from 'payload'
 import { createRichText, createRichTextParagraphs } from './base'
 
+// Unsplash images for showcase - free to use with proper attribution
+const SHOWCASE_IMAGES = {
+  hero: 'https://images.unsplash.com/photo-1557804506-669a67965ba0?w=1920&h=1080&fit=crop&q=80',
+  media: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1200&h=800&fit=crop&q=80',
+  gallery1: 'https://images.unsplash.com/photo-1551434678-e076c223a692?w=800&h=600&fit=crop&q=80',
+  gallery2: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=800&h=600&fit=crop&q=80',
+  gallery3: 'https://images.unsplash.com/photo-1553877522-43269d4ea984?w=800&h=600&fit=crop&q=80',
+  logo: 'https://images.unsplash.com/photo-1599305445671-ac291c95aaa9?w=400&h=400&fit=crop&q=80',
+  avatar1: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&q=80',
+  avatar2: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=400&fit=crop&q=80',
+  postImage1: 'https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=1200&h=600&fit=crop&q=80',
+  postImage2: 'https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?w=1200&h=600&fit=crop&q=80',
+  postImage3: 'https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?w=1200&h=600&fit=crop&q=80',
+}
+
 const TINY_PNG_BASE64 =
   'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+4x8UAAAAASUVORK5CYII='
 
-async function getOrCreateMedia(payload: Payload, filename: string, alt: string) {
+async function getOrCreateMedia(payload: Payload, filename: string, alt: string, unsplashUrl?: string) {
   const existing = await payload.find({
     collection: 'media',
     limit: 1,
@@ -15,6 +30,18 @@ async function getOrCreateMedia(payload: Payload, filename: string, alt: string)
     return existing.docs[0]
   }
 
+  // If Unsplash URL provided, use external URL (Payload supports this)
+  if (unsplashUrl) {
+    return payload.create({
+      collection: 'media',
+      data: {
+        alt,
+        url: unsplashUrl,
+      },
+    })
+  }
+
+  // Fallback to tiny placeholder
   const buffer = Buffer.from(TINY_PNG_BASE64, 'base64')
   return payload.create({
     collection: 'media',
@@ -88,12 +115,75 @@ async function ensureHeaderLink(payload: Payload) {
   })
 }
 
+async function ensureSamplePosts(payload: Payload) {
+  // Create sample posts for the Archive block to display
+  const posts = [
+    {
+      title: 'Getting Started with Headless CMS',
+      slug: 'getting-started-headless-cms',
+      excerpt: 'Learn the fundamentals of headless CMS architecture and why it matters for modern web development.',
+      imageKey: 'postImage1' as const,
+    },
+    {
+      title: 'Building Scalable Content Models',
+      slug: 'building-scalable-content-models',
+      excerpt: 'Best practices for designing flexible and maintainable content structures that grow with your needs.',
+      imageKey: 'postImage2' as const,
+    },
+    {
+      title: 'Optimising Performance with Static Generation',
+      slug: 'optimising-performance-static-generation',
+      excerpt: 'Discover how static site generation can dramatically improve your site speed and user experience.',
+      imageKey: 'postImage3' as const,
+    },
+  ]
+
+  for (const post of posts) {
+    const existing = await payload.find({
+      collection: 'posts',
+      limit: 1,
+      where: { slug: { equals: post.slug } },
+    })
+
+    if (existing.docs[0]) continue
+
+    const featuredImage = await getOrCreateMedia(
+      payload,
+      `showcase-post-${post.imageKey}.webp`,
+      post.title,
+      SHOWCASE_IMAGES[post.imageKey]
+    )
+
+    await payload.create({
+      collection: 'posts',
+      data: {
+        title: post.title,
+        slug: post.slug,
+        excerpt: post.excerpt,
+        content: createRichTextParagraphs([
+          post.excerpt,
+          'This is sample content for the showcase page. In a real application, this would contain the full article content.',
+        ]),
+        featuredImage: featuredImage.id,
+        _status: 'published',
+        publishedAt: new Date().toISOString(),
+      },
+    })
+  }
+}
+
 export async function ensureShowcasePage(payload: Payload, options?: { updateHeader?: boolean }) {
-  const heroImage = await getOrCreateMedia(payload, 'showcase-hero.png', 'Showcase hero image (placeholder)')
-  const mediaImage = await getOrCreateMedia(payload, 'showcase-media.png', 'Showcase media image (placeholder)')
-  const galleryImage = await getOrCreateMedia(payload, 'showcase-gallery.png', 'Showcase gallery image (placeholder)')
-  const logoImage = await getOrCreateMedia(payload, 'showcase-logo.png', 'Showcase logo image (placeholder)')
-  const avatarImage = await getOrCreateMedia(payload, 'showcase-avatar.png', 'Showcase avatar image (placeholder)')
+  // Create sample posts first so Archive block has content to display
+  await ensureSamplePosts(payload)
+
+  const heroImage = await getOrCreateMedia(payload, 'showcase-hero.webp', 'Stunning business team collaboration', SHOWCASE_IMAGES.hero)
+  const mediaImage = await getOrCreateMedia(payload, 'showcase-media.webp', 'Modern workspace with analytics', SHOWCASE_IMAGES.media)
+  const galleryImage1 = await getOrCreateMedia(payload, 'showcase-gallery-1.webp', 'Team collaboration', SHOWCASE_IMAGES.gallery1)
+  const galleryImage2 = await getOrCreateMedia(payload, 'showcase-gallery-2.webp', 'Creative workspace', SHOWCASE_IMAGES.gallery2)
+  const galleryImage3 = await getOrCreateMedia(payload, 'showcase-gallery-3.webp', 'Business meeting', SHOWCASE_IMAGES.gallery3)
+  const logoImage = await getOrCreateMedia(payload, 'showcase-logo.webp', 'Company logo', SHOWCASE_IMAGES.logo)
+  const avatar1Image = await getOrCreateMedia(payload, 'showcase-avatar-1.webp', 'Alex Rivera', SHOWCASE_IMAGES.avatar1)
+  const avatar2Image = await getOrCreateMedia(payload, 'showcase-avatar-2.webp', 'Jamie Lee', SHOWCASE_IMAGES.avatar2)
   const showcaseForm = await getOrCreateShowcaseForm(payload)
 
   const pageData = {
@@ -117,6 +207,22 @@ export async function ensureShowcasePage(payload: Payload, options?: { updateHea
       ],
     },
     content: [
+      {
+        blockType: 'hero',
+        heading: 'Hero Block Example',
+        subheading: 'This is a reusable hero block that can be added anywhere in your content',
+        image: mediaImage.id,
+        overlay: 'dark',
+        textAlign: 'center',
+        type: 'standard',
+        links: [
+          {
+            label: 'Learn More',
+            url: '/about',
+            variant: 'primary',
+          },
+        ],
+      },
       {
         blockType: 'content',
         backgroundColor: 'light',
@@ -201,7 +307,7 @@ export async function ensureShowcasePage(payload: Payload, options?: { updateHea
             name: 'Alex Rivera',
             role: 'Product Lead',
             company: 'Northwind',
-            avatar: avatarImage.id,
+            avatar: avatar1Image.id,
             rating: 5,
           },
           {
@@ -209,7 +315,7 @@ export async function ensureShowcasePage(payload: Payload, options?: { updateHea
             name: 'Jamie Lee',
             role: 'Marketing Manager',
             company: 'Fabrikam',
-            avatar: avatarImage.id,
+            avatar: avatar2Image.id,
             rating: 4,
           },
         ],
@@ -262,14 +368,14 @@ export async function ensureShowcasePage(payload: Payload, options?: { updateHea
             name: 'Morgan Chen',
             role: 'Creative Director',
             bio: 'Leads the design and brand experience.',
-            photo: avatarImage.id,
+            photo: avatar1Image.id,
             socials: [{ label: 'LinkedIn', url: 'https://linkedin.com' }],
           },
           {
             name: 'Priya Singh',
             role: 'Engineering Lead',
             bio: 'Owns architecture and performance.',
-            photo: avatarImage.id,
+            photo: avatar2Image.id,
             socials: [{ label: 'GitHub', url: 'https://github.com' }],
           },
         ],
@@ -336,9 +442,9 @@ export async function ensureShowcasePage(payload: Payload, options?: { updateHea
         gap: 'medium',
         aspectRatio: 'landscape',
         images: [
-          { image: galleryImage.id, caption: 'Sample Image 1' },
-          { image: galleryImage.id, caption: 'Sample Image 2' },
-          { image: galleryImage.id, caption: 'Sample Image 3' },
+          { image: galleryImage1.id, caption: 'Team Collaboration' },
+          { image: galleryImage2.id, caption: 'Creative Workspace' },
+          { image: galleryImage3.id, caption: 'Business Meeting' },
         ],
         showCaptions: true,
         enableLightbox: false,
@@ -370,11 +476,14 @@ export async function ensureShowcasePage(payload: Payload, options?: { updateHea
         blockType: 'spacer',
         style: 'divider',
         size: 'lg',
-        lineStyle: 'dashed',
+        lineStyle: 'solid',
       },
       {
         blockType: 'html',
-        html: '<div style="padding:16px;border:1px dashed #cbd5f5;border-radius:12px;">Custom HTML block output for advanced layouts.</div>',
+        html: `<div style="max-width: 800px; margin: 0 auto; padding: 32px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 16px; color: white; text-align: center; box-shadow: 0 10px 40px rgba(0,0,0,0.1);">
+          <h3 style="margin: 0 0 16px 0; font-size: 28px; font-weight: bold;">Custom HTML Block</h3>
+          <p style="margin: 0; font-size: 18px; opacity: 0.95;">This demonstrates advanced custom layouts with inline styles. Perfect for unique design requirements or third-party integrations.</p>
+        </div>`,
       },
     ],
   }

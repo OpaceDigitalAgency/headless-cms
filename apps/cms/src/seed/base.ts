@@ -41,7 +41,22 @@ export function createRichText(text: string) {
       children: [
         {
           type: 'paragraph',
-          children: [{ text }],
+          children: [
+            {
+              type: 'text',
+              text,
+              format: 0,
+              mode: 'normal',
+              style: '',
+              detail: 0,
+              version: 1,
+            },
+          ],
+          direction: 'ltr',
+          format: '',
+          indent: 0,
+          textFormat: 0,
+          version: 1,
         },
       ],
       direction: 'ltr',
@@ -61,7 +76,22 @@ export function createRichTextParagraphs(paragraphs: string[]) {
       type: 'root',
       children: paragraphs.map(text => ({
         type: 'paragraph',
-        children: [{ text }],
+        children: [
+          {
+            type: 'text',
+            text,
+            format: 0,
+            mode: 'normal',
+            style: '',
+            detail: 0,
+            version: 1,
+          },
+        ],
+        direction: 'ltr',
+        format: '',
+        indent: 0,
+        textFormat: 0,
+        version: 1,
       })),
       direction: 'ltr',
       format: '',

@@ -52,28 +52,28 @@ export async function ArchiveBlock({ block }: ArchiveBlockProps) {
     try {
       switch (relationTo) {
         case 'posts':
-          const posts = await getPosts({ limit })
+          const posts = await getPosts(limit)
           items = posts.docs
           break
         case 'artifacts':
-          const artifacts = await getArtifacts({ limit })
+          const artifacts = await getArtifacts(limit)
           items = artifacts.docs
           break
         case 'people':
-          const people = await getPeople({ limit })
+          const people = await getPeople(limit)
           items = people.docs
           break
         case 'places':
-          const places = await getPlaces({ limit })
+          const places = await getPlaces(limit)
           items = places.docs
           break
         case 'museum-collections':
-          const collections = await getMuseumCollections({ limit })
+          const collections = await getMuseumCollections(limit)
           items = collections.docs
           break
         case 'custom-items':
           const contentTypeId = typeof contentType === 'object' ? contentType?.id : contentType
-          const customItems = await getCustomItems({ limit, contentTypeId, status: 'published' })
+          const customItems = await getCustomItems(limit, contentTypeId)
           items = customItems.docs
           break
       }
