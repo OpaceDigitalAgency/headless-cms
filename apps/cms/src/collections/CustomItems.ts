@@ -60,14 +60,21 @@ export const CustomItems: CollectionConfig = {
     },
     livePreview: {
       url: ({ data }) => {
+        // Don't show preview until we have both contentType and slug
+        if (!data?.slug || !data?.contentType) {
+          return null // This disables the preview panel
+        }
+
         // Build live preview URL with content type
-        if (data?.contentType && typeof data.contentType === 'object' && data.contentType.slug) {
+        if (typeof data.contentType === 'object' && data.contentType.slug) {
           const typeSlug = data.contentType.archiveSlug
             ? data.contentType.archiveSlug.replace(/^\/?items\//, '')
             : data.contentType.slug
           return getPreviewUrl({ collection: 'custom-items', slug: `${typeSlug}/${data.slug}` })
         }
-        return getPreviewUrl({ collection: 'custom-items', slug: data?.slug })
+
+        // Fallback to draft API route if contentType is just an ID
+        return getPreviewUrl({ collection: 'custom-items', slug: data.slug })
       },
     },
   },
