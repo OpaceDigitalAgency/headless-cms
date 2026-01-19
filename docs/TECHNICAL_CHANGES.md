@@ -2,7 +2,11 @@
 
 ## Overview
 
-This document tracks technical implementation details, outstanding issues, and code changes related to the CMS architecture. For navigation structure and taxonomy design, see **SHARED_TAXONOMY_SYSTEM.md**.
+This document tracks technical implementation details, outstanding issues, code changes, and future roadmap for the CMS architecture.
+
+**Related Documentation:**
+- **SHARED_TAXONOMY_SYSTEM.md** - Navigation structure, taxonomy design, and architecture
+- **TECHNICAL_CHANGES.md** (this file) - Implementation details, issues, and roadmap
 
 ---
 

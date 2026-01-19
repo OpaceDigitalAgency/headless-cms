@@ -416,7 +416,7 @@ const AdminSearch: React.FC<{
             <div className="ra-top-nav__search-loading">Searching...</div>
           ) : results.length > 0 ? (
             results.map((result, index) => (
-              <a
+              <Link
                 key={`${result.href}-${index}`}
                 href={result.href}
                 className="ra-top-nav__search-result"
@@ -427,7 +427,7 @@ const AdminSearch: React.FC<{
               >
                 <span className="ra-top-nav__search-result-title">{result.title}</span>
                 <span className="ra-top-nav__search-result-type">{result.type}</span>
-              </a>
+              </Link>
             ))
           ) : (
             <div className="ra-top-nav__search-empty">No results found</div>
@@ -477,10 +477,10 @@ const AccountDropdown: React.FC = () => {
       </button>
       {isOpen && (
         <div className="ra-top-nav__dropdown">
-          <a href="/admin/account" className="ra-top-nav__dropdown-item">
+          <Link href="/admin/account" className="ra-top-nav__dropdown-item">
             {getIcon('user', 16)}
             <span>My Account</span>
-          </a>
+          </Link>
           <button 
             className="ra-top-nav__dropdown-item ra-top-nav__dropdown-item--danger"
             onClick={handleLogout}
@@ -541,7 +541,7 @@ export const TwoPanelNav: React.FC = () => {
       const cacheTime = sessionStorage.getItem('nav-cache-time')
       const cacheAge = cacheTime ? now - parseInt(cacheTime) : null
 
-      if (cacheAge !== null && cacheAge < 300000) {
+      if (cachedNavData && cacheAge !== null && cacheAge < 300000) {
         return
       }
 
