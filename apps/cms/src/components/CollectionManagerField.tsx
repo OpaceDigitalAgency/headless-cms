@@ -50,6 +50,7 @@ export const CollectionManagerField: React.FC<CollectionManagerFieldProps> = ({ 
   const [collections, setCollections] = useState<CollectionInfo[]>([])
   const [items, setItems] = useState<CollectionSetting[]>([])
   const [isLoading, setIsLoading] = useState(true)
+  const [errorMessage, setErrorMessage] = useState<string | null>(null)
   const initializedRef = useRef(false)
 
   const collectionsBySlug = useMemo(() => {
@@ -61,14 +62,23 @@ export const CollectionManagerField: React.FC<CollectionManagerFieldProps> = ({ 
   useEffect(() => {
     const fetchCollections = async () => {
       try {
-        const response = await fetch('/api/admin/collection-manager')
+        setErrorMessage(null)
+        const response = await fetch('/api/admin/collection-manager', {
+          credentials: 'include',
+        })
         if (response.ok) {
           const data = await response.json()
           setCollections(Array.isArray(data.collections) ? data.collections : [])
+        } else {
+          const payloadError = await response.json().catch(() => null)
+          const message = payloadError?.error || `Failed to load collections (status ${response.status})`
+          setErrorMessage(message)
+          setCollections([])
         }
       } catch (error) {
         console.error('Failed to load collections for manager:', error)
         setCollections([])
+        setErrorMessage('Failed to load collections. Please refresh and try again.')
       }
     }
 
@@ -147,6 +157,8 @@ export const CollectionManagerField: React.FC<CollectionManagerFieldProps> = ({ 
 
       {isLoading ? (
         <div className="ra-collection-manager__loading">Loading collections...</div>
+      ) : errorMessage ? (
+        <div className="ra-collection-manager__loading">{errorMessage}</div>
       ) : items.length === 0 ? (
         <div className="ra-collection-manager__loading">No collections available.</div>
       ) : (

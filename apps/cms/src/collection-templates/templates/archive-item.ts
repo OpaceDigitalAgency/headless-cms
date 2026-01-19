@@ -138,16 +138,6 @@ export const archiveItemTemplate: CollectionTemplate = {
                 id: { not_equals: id },
               }),
             },
-            {
-              name: 'collections',
-              type: 'relationship',
-              relationTo: 'museum-collections',
-              hasMany: true,
-              label: 'Collections',
-              admin: {
-                description: 'Galleries or collections this item belongs to',
-              },
-            },
           ],
         },
         {

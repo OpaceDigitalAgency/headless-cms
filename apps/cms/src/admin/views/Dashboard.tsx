@@ -86,7 +86,7 @@ interface RecentItem {
 
 /**
  * Custom Dashboard Component
- * 
+ *
  * Enhanced dashboard with collection stats, recent updates, drafts,
  * quick-create buttons, and site configuration shortcuts.
  */
@@ -97,6 +97,17 @@ export const Dashboard: React.FC = () => {
   const [drafts, setDrafts] = useState<RecentItem[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [collectionSlugs, setCollectionSlugs] = useState<string[]>([])
+
+  // Check URL for tab parameter on mount
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search)
+      const tab = params.get('tab')
+      if (tab === 'templates' || tab === 'content-types') {
+        setActiveTab(tab as 'templates' | 'content-types')
+      }
+    }
+  }, [])
 
   // Fetch collection stats and recent items
   useEffect(() => {

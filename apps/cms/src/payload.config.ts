@@ -27,7 +27,6 @@ import { Categories } from './collections/Categories'
 import { Tags } from './collections/Tags'
 import { People } from './collections/People'
 import { Places } from './collections/Places'
-import { Collections as MuseumCollections } from './collections/Collections'
 import { Products } from './collections/Products'
 import { ProductCategories } from './collections/ProductCategories'
 import { ProductCollections } from './collections/ProductCollections'
@@ -210,16 +209,15 @@ export default buildConfig({
     Posts,
     Categories,
     Tags,
-    // Archive & Museum collections
+    // Base collections
     ArchiveItems,
     People,
     Places,
-    MuseumCollections,
-    // Template-based collections
+    Events,
+    // Ecommerce
     Products,
     ProductCategories,
     ProductCollections,
-    Events,
     // Dynamic content types system
     ContentTypes,
     CustomItems,
@@ -255,18 +253,15 @@ export default buildConfig({
   plugins: [
     // SEO Plugin - Meta tags, Open Graph, Twitter Cards
     seoPlugin({
-      collections: ['pages', 'posts', 'archive-items', 'people', 'places', 'museum-collections', 'custom-items', 'content-types'],
+      collections: ['pages', 'posts', 'archive-items', 'people', 'places', 'events', 'products', 'custom-items', 'content-types'],
       tabbedUI: true,
       uploadsCollection: 'media',
-      generateTitle: ({ doc }) => `${doc?.title || doc?.name || 'Untitled'} | Museum Collection`,
+      generateTitle: ({ doc }) => `${doc?.title || doc?.name || 'Untitled'} | CMS`,
       generateDescription: ({ doc }) => doc?.excerpt || doc?.shortDescription || doc?.shortBio || '',
       generateURL: ({ doc, collectionSlug }) => {
         const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3001'
         if (collectionSlug === 'pages') {
           return doc?.slug === 'home' ? baseUrl : `${baseUrl}/${doc?.slug || ''}`
-        }
-        if (collectionSlug === 'museum-collections') {
-          return `${baseUrl}/collections/${doc?.slug || ''}`
         }
         if (collectionSlug === 'custom-items') {
           const typeSlug = typeof doc?.contentType === 'object' ? doc?.contentType?.slug : undefined
@@ -279,7 +274,7 @@ export default buildConfig({
         }
         return `${baseUrl}/${collectionSlug}/${doc?.slug || ''}`
       },
-      twitterCreator: '@museum',
+      twitterCreator: '@cms',
     }),
 
     // Form Builder Plugin - Contact forms, surveys, etc.
@@ -333,14 +328,15 @@ export default buildConfig({
 
     // Search Plugin - Full-text search across collections
     searchPlugin({
-      collections: ['pages', 'posts', 'archive-items', 'people', 'places', 'museum-collections', 'custom-items', 'content-types'],
+      collections: ['pages', 'posts', 'archive-items', 'people', 'places', 'events', 'products', 'custom-items', 'content-types'],
       defaultPriorities: {
         pages: 10,
         posts: 20,
         'archive-items': 30,
         people: 40,
         places: 50,
-        'museum-collections': 60,
+        events: 35,
+        products: 45,
         'custom-items': 25,
         'content-types': 5,
       },

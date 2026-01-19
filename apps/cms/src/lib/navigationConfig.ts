@@ -33,10 +33,6 @@ export const collectionsSectionSlugs = [
   'people',
   'places',
   'events',
-  'products',
-  'product-categories',
-  'product-collections',
-  'museum-collections',
 ]
 
 const mediaSlugs = ['media']

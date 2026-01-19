@@ -99,7 +99,18 @@ export const navigationEndpoint: Endpoint = {
       ],
     })
 
-    // 2. Tools (top-level)
+    // 2. Collections Management (links to Dashboard Collections tab)
+    // This replaces the default collections section to provide a unified interface
+    navSections.push({
+      id: 'collections',
+      label: 'Collections',
+      icon: 'collection',
+      items: [
+        { label: 'Manage Collections', href: '/admin?tab=templates', icon: 'collection', slug: 'collections-manager' },
+      ],
+    })
+
+    // 3. Tools (top-level)
     navSections.push({
       id: 'tools',
       label: 'Tools',
@@ -175,6 +186,9 @@ export const navigationEndpoint: Endpoint = {
     }
 
     sectionOrder.forEach((sectionId) => {
+      // Skip the 'collections' section as we've already added it above with a link to Dashboard
+      if (sectionId === 'collections') return
+
       const items = buildSectionItems(sectionId)
       if (items.length === 0) return
       navSections.push({
@@ -185,12 +199,41 @@ export const navigationEndpoint: Endpoint = {
       })
     })
 
-    // Build globals list for search
+    // Build globals list for search + navigation
     const globals = payload.config.globals.map((global) => ({
       label: global.label || global.slug,
       href: `/admin/globals/${global.slug}`,
       slug: global.slug,
     }))
+
+    const globalIconMap: Record<string, string> = {
+      header: 'header',
+      footer: 'footer',
+      settings: 'gear',
+      'navigation-settings': 'settings',
+    }
+
+    const globalNavItems = globals.map((global) => ({
+      label: global.label,
+      href: global.href,
+      icon: globalIconMap[global.slug] || 'settings',
+      slug: global.slug,
+      _order: Number.MAX_SAFE_INTEGER,
+    }))
+
+    if (globalNavItems.length > 0) {
+      const settingsSection = navSections.find((section) => section.id === 'settings')
+      if (settingsSection) {
+        settingsSection.items.push(...globalNavItems)
+      } else {
+        navSections.push({
+          id: 'settings',
+          label: sectionMeta.settings.label,
+          icon: sectionMeta.settings.icon,
+          items: globalNavItems,
+        })
+      }
+    }
 
     // Build collection search config
     const collectionSearchConfig = collections

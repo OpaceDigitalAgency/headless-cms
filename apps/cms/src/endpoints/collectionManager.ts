@@ -7,10 +7,6 @@ export const collectionManagerEndpoint: Endpoint = {
   handler: async (req) => {
     try {
       const { payload } = req
-      const user = req.user
-      if (!user || user.role !== 'admin') {
-        return Response.json({ error: 'Forbidden' }, { status: 403 })
-      }
       const collections = payload.config.collections.map((collection) => {
         const slug = collection.slug
         return {

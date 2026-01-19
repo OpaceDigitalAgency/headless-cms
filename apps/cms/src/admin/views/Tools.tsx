@@ -1,6 +1,6 @@
-'use client'
-
 import React from 'react'
+import { DefaultTemplate, type DefaultTemplateProps } from '@payloadcms/next/templates'
+import type { VisibleEntities } from 'payload'
 import {
   CalendarIcon,
   EditIcon,
@@ -141,8 +141,17 @@ const toolsConfig = [
  * A lightweight landing page with quick links for QA, publishing calendar,
  * media audit, and other administrative tools.
  */
-export const Tools: React.FC = () => {
-  return (
+type ToolsProps = Omit<DefaultTemplateProps, 'children' | 'visibleEntities'> & {
+  initPageResult?: {
+    visibleEntities?: VisibleEntities
+  }
+}
+
+export const Tools: React.FC<ToolsProps> = (props) => {
+  const { initPageResult, ...templateProps } = props
+  const visibleEntities = initPageResult?.visibleEntities
+
+  const toolsContent = (
     <div className="ra-tools">
       <div className="ra-tools__header">
         <h1>Tools</h1>
@@ -253,6 +262,16 @@ export const Tools: React.FC = () => {
         </div>
       </div>
     </div>
+  )
+
+  if (!visibleEntities) {
+    return toolsContent
+  }
+
+  return (
+    <DefaultTemplate {...templateProps} visibleEntities={visibleEntities}>
+      {toolsContent}
+    </DefaultTemplate>
   )
 }
 
