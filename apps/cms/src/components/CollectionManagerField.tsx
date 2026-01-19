@@ -117,6 +117,14 @@ export const CollectionManagerField: React.FC<CollectionManagerFieldProps> = ({ 
     setItems(normalized)
   }
 
+  const clearNavigationCache = () => {
+    if (typeof window !== 'undefined') {
+      sessionStorage.removeItem('nav-data')
+      sessionStorage.removeItem('nav-cache-time')
+      alert('Navigation cache cleared! Please refresh the page to see changes in the navigation menu.')
+    }
+  }
+
   return (
     <div className="ra-collection-manager">
       <div className="ra-collection-manager__header">
@@ -124,11 +132,17 @@ export const CollectionManagerField: React.FC<CollectionManagerFieldProps> = ({ 
           <div className="field-label">{label || 'Collection Navigation'}</div>
           <div className="field-description">
             Toggle visibility, choose sections, and reorder collections in the admin navigation.
+            After saving changes, click "Clear Cache & Refresh" below to see updates in the navigation menu.
           </div>
         </div>
-        <button type="button" className="ra-collection-manager__reset" onClick={resetToDefaults}>
-          Reset to defaults
-        </button>
+        <div style={{ display: 'flex', gap: '8px' }}>
+          <button type="button" className="ra-collection-manager__reset" onClick={clearNavigationCache}>
+            Clear Cache & Refresh
+          </button>
+          <button type="button" className="ra-collection-manager__reset" onClick={resetToDefaults}>
+            Reset to defaults
+          </button>
+        </div>
       </div>
 
       {isLoading ? (

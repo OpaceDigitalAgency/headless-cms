@@ -96,6 +96,15 @@ export const navigationEndpoint: Endpoint = {
       icon: 'dashboard',
       items: [
         { label: 'Overview', href: '/admin', icon: 'home', slug: 'dashboard' },
+      ],
+    })
+
+    // 2. Tools (top-level)
+    navSections.push({
+      id: 'tools',
+      label: 'Tools',
+      icon: 'tools',
+      items: [
         { label: 'Tools', href: '/admin/tools', icon: 'tools', slug: 'tools' },
       ],
     })

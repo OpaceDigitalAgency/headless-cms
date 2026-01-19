@@ -34,6 +34,13 @@ export const navSections: NavSection[] = [
     icon: 'dashboard',
     items: [
       { label: 'Overview', href: '/admin', icon: 'home' },
+    ],
+  },
+  {
+    id: 'tools',
+    label: 'Tools',
+    icon: 'tools',
+    items: [
       { label: 'Tools', href: '/admin/tools', icon: 'tools' },
     ],
   },

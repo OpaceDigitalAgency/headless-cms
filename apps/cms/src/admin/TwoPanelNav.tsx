@@ -579,7 +579,7 @@ export const TwoPanelNav: React.FC = () => {
   // Define which sections should appear in the top menu
   // Only show major sections, not sub-groupings like Museum, Shop, Archive
   const topMenuSections = navSections.filter(section =>
-    ['dashboard', 'content', 'taxonomy', 'collections', 'shop', 'media', 'forms', 'settings', 'admin'].includes(section.id)
+    ['dashboard', 'tools', 'content', 'taxonomy', 'collections', 'shop', 'media', 'forms', 'settings', 'admin'].includes(section.id)
   )
 
   return (
