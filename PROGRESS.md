@@ -1,10 +1,90 @@
-# Architecture Consolidation Progress
+# Project Progress
 
-## Brief
+## Latest Update: Shared Taxonomy System Implementation
+
+**Date:** 19 January 2026
+**Objective:** Implement a comprehensive shared taxonomy system with hierarchical categories across all content collections.
+
+### Changes Implemented
+
+#### 1. Hierarchical Categories
+- **Added parent field** to Categories collection for unlimited nesting depth
+- **Updated nestedDocsPlugin** configuration to support category hierarchies
+- Categories now support parent-child relationships (e.g., History > Ancient History > Ancient Rome)
+
+#### 2. Shared Taxonomy Across Collections
+- Categories and Tags are now **shared across**:
+  - Posts
+  - Archive Items
+  - Events
+  - People
+  - Custom Items
+- **Separate taxonomy** for ecommerce (Product Categories & Product Collections)
+
+#### 3. Admin Navigation Reorganisation
+- **New "Taxonomy" section** in admin navigation (separate from Content)
+- Categories and Tags moved from "Content" group to "Taxonomy" group
+- Improved mobile accessibility with dedicated taxonomy section
+
+#### 4. Enhanced Usage Tracking
+- Categories and Tags now count usage across **all collections**
+- Sidebar displays breakdown by collection type:
+  - Total Items
+  - Posts Count
+  - Archive Items Count
+  - Events Count
+  - People Count
+  - Custom Items Count
+
+#### 5. Improved Revalidation
+- Updated revalidation hooks for:
+  - Archive Items
+  - Events
+  - People
+- All collections now properly invalidate taxonomy-related cache tags
+- Cross-collection filtering support on frontend
+
+### Files Modified
+
+**Collections:**
+- `apps/cms/src/collections/Categories.ts` - Added parent field, hierarchical support, cross-collection counting
+- `apps/cms/src/collections/Tags.ts` - Added cross-collection counting
+- `apps/cms/src/collections/ArchiveItems.ts` - Added taxonomy revalidation hooks
+- `apps/cms/src/collections/Events.ts` - Added taxonomy revalidation hooks
+- `apps/cms/src/collections/People.ts` - Added taxonomy revalidation hooks
+
+**Configuration:**
+- `apps/cms/src/payload.config.ts` - Updated nestedDocsPlugin for categories
+- `apps/cms/src/admin/navData.ts` - Added support for nested navigation items
+
+**Templates:**
+- Event and Archive Item templates already had taxonomy fields (no changes needed)
+- People collection already had taxonomy fields (no changes needed)
+
+### Benefits
+
+✅ **Unified Content Discovery** - Find all content about a topic across different types
+✅ **Hierarchical Organisation** - Nested categories prevent flat, overwhelming lists
+✅ **Better Mobile UX** - Dedicated Taxonomy section accessible on all devices
+✅ **Cross-Collection Filtering** - Filter by category/tag across Posts, Events, People, etc.
+✅ **Flexible Customisation** - Custom Content Types automatically inherit taxonomy
+✅ **Improved Analytics** - See exactly where each category/tag is used
+
+### Next Steps
+
+- [ ] Create comprehensive seed data demonstrating hierarchical categories
+- [ ] Add "Manage Categories/Tags" buttons to collection list pages (mobile UX enhancement)
+- [ ] Implement frontend category archive pages with cross-collection content
+- [ ] Add breadcrumb navigation for hierarchical categories
+- [ ] Update documentation with taxonomy usage examples
+
+---
+
+## Previous Update: Architecture Consolidation
 
 **Objective:** Consolidate the separate Payload CMS (`apps/cms`) and Next.js frontend (`apps/web`) applications into a single unified Next.js application.
 
-**Requested by:** User  
+**Requested by:** User
 **Date Started:** 16 January 2026
 
 ---

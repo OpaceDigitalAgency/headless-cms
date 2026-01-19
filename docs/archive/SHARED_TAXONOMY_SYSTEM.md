@@ -6,46 +6,65 @@ The CMS admin navigation is organized into logical sections to improve usability
 
 ```
 Dashboard
-├── Dashboard (overview)
 
-Content
-├── Pages
-├── Posts
-├── Events
-├── Custom Items
+Content (URLs)
+├── Pages                     (installed by default)
+├── Posts / Blog               (installed by default)
+├── Case Studies               (add-on)
+├── Resources / Guides         (add-on)
+├── Event Pages                (add-on)
+├── Services                   (add-on)
+├── Archive Pages              (add-on)
+├── Recipes                    (add-on)
+├── Courses                    (add-on)
+├── Jobs                       (add-on)
+├── Contact Page               (add-on)
+└── About Page                 (add-on)
 
-Taxonomy (NEW - Separate Section)
-├── Categories (hierarchical, shared across content)
-├── Tags (shared across content)
-
-Collections
-├── Archive Items (flexible, customizable base collection)
-├── People
-├── Places
-├── Museum Collections (galleries/exhibitions)
-
-Shop
+Shop (Data + Pages) - add-on 
 ├── Products
 ├── Product Categories
-├── Product Collections
+└── Product Collections
 
-Media
-├── Media Library
+Structured Data (Reusable) - add-on 
+├── People
+│   └── (team members, characters, authors, actors, etc.)
+├── Events (Data)
+│   └── (dates, venues, schedules reused across pages)
+├── Places / Locations
+│   └── (addresses, maps, hours)
+├── FAQs
+│   └── (question / answer pairs)
+├── Testimonials
+├── Galleries
+├── Feature Lists
+├── Stats / Highlights
+└── Service Definitions
 
-Forms
-├── Forms
-├── Form Submissions
 
-Settings
-├── Settings
-├── Header
-├── Footer
+Taxonomy - installed by default
+├── Categories   (hierarchical)
+└── Tags         (flat)
+
+Media 
+└── Media Library
+
+Site Settings
+├── Global Settings
+├── Header / Footer
 ├── Redirects
-├── Search Index
+└── Search Index
 
-Admin
+Users & Access
 ├── Users
-├── Content Types (for creating custom collections)
+├── Roles
+└── Permissions
+
+System
+├── Webhooks
+├── API Keys
+├── Migrations
+└── Logs
 ```
 
 ### Key Design Decisions
@@ -229,54 +248,6 @@ Clicking opens the Categories/Tags collection in a modal or new tab.
 
 ---
 
-## Navigation Structure
-
-### Correct Sidebar Organization
-
-```
-Dashboard
-├── Overview
-└── Tools
-
-Content
-├── Pages
-├── Posts
-├── Archive Items
-├── Events
-└── Custom Items
-
-Taxonomy (NEW SECTION - Shared Across All Content)
-├── Categories (hierarchical, parent-child relationships)
-└── Tags
-
-Collections
-├── People
-├── Places
-└── Museum Collections (galleries/exhibitions)
-
-Shop (Ecommerce - Separate Taxonomy)
-├── Products
-├── Product Categories
-└── Product Collections
-
-Media
-└── Media Library
-
-Forms
-├── Forms
-└── Form Submissions
-
-Settings
-├── Settings
-├── Header
-├── Footer
-├── Redirects
-└── Search Index
-
-Admin
-└── Users
-```
-
 **Key Points:**
 - ✅ Categories/Tags are **independent**, not nested under Posts
 - ✅ Clearly shows they're **shared** across Posts, Archive Items, Events, People, Custom Items
@@ -416,63 +387,5 @@ Category: "Ancient Rome"
 - **Shared Taxonomy System** - Implemented across Posts, Archive Items, Events, People
 - **Generic Archive Architecture** - Archive Items as flexible base for Custom Content Types
 
----
 
-## Implementation Progress
-
-### ✅ Completed
-
-1. **Removed Artifacts Collection**
-   - Deleted `/artifacts` page routes from web and astro apps
-   - Removed artifacts from all API functions (getArtifacts, getArtifactBySlug)
-   - Updated all references in blocks and components to use archive-items
-   - Removed artifacts from icon maps and navigation configuration
-
-2. **Separated Taxonomy Section**
-   - Categories and Tags now in dedicated "Taxonomy" section in admin navigation
-   - No longer nested under Posts (fixes mobile accessibility issue)
-   - Clearly visible as shared resources across all content types
-   - Updated navigation.ts to create separate Taxonomy section
-
-3. **Updated Navigation Structure**
-   - Dashboard section: Overview, Tools
-   - Content section: Pages, Posts, Archive Items, Events, Custom Items
-   - **Taxonomy section (NEW)**: Categories, Tags
-   - Collections section: People, Places, Museum Collections
-   - Shop section: Products, Product Categories, Product Collections
-   - Media, Forms, Settings, Admin sections
-
-4. **Updated All References to Archive Items**
-   - Web app: Updated getArchiveItems() API functions
-   - Astro app: Updated getArchiveItems() API functions
-   - Archive.ts block: Changed relationTo from 'artifacts' to 'archive-items'
-   - ArchiveBlock.tsx (web): Updated switch case to use archive-items
-   - ArchiveBlock.tsx (cms): Updated switch case to use archive-items
-   - ArchiveBlock.astro: Updated paths and field references
-   - CollectionRenderer.tsx (web): Updated to use archiveItems field
-   - CollectionRenderer.tsx (cms): Updated to use archiveItems field
-   - Collections page (astro): Updated to use archiveItems field
-
-5. **Fixed InvalidFieldRelationship Error**
-   - Removed all references to 'artifacts' collection from codebase
-   - Updated seed data to use 'archive-items' instead of 'artifacts'
-   - Updated Timeline block to use 'archive-items' relationTo
-   - Updated all API endpoints (draft, revalidate) to use 'archive-items'
-   - Updated preview page to use 'archive-items' collection
-   - Updated home page to use getArchiveItems() function
-   - Updated payload.config.ts plugins to reference 'archive-items'
-   - Updated SeedDataManager component to use 'archive-items'
-   - Updated ArchiveBlock component to use 'archive-items'
-   - Updated core seeder to remove artifacts seeding
-   - Updated resetData endpoint to use 'archive-items'
-   - **✅ Dev server now starts successfully with no InvalidFieldRelationship errors**
-   - **✅ All artifacts references removed from codebase**
-
-### 📋 Remaining Tasks
-
-- [ ] Test Archive Items functionality
-- [ ] Test cross-collection filtering with shared taxonomy
-- [ ] Test hierarchical category display in admin UI
-- [ ] Test mobile navigation with collapsed sidebar
-- [ ] Document Custom Content Type creation workflow
 

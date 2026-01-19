@@ -32,6 +32,7 @@ import { PreviewComponent as PreviewComponent_a8a977ebc872c5d5ea7ee689724c0860 }
 import { default as default_78d34716f26bbc38d2d51d55b25955ba } from '../../../components/CustomDataField'
 import { LinkToDoc as LinkToDoc_aead06e4cbf6b2620c5c51c9ab283634 } from '@payloadcms/plugin-search/client'
 import { ReindexButton as ReindexButton_aead06e4cbf6b2620c5c51c9ab283634 } from '@payloadcms/plugin-search/client'
+import { default as default_1723744e6ae59cf3653e63611d4cba7a } from '../../../components/CollectionManagerField'
 import { default as default_81e915c9ba204d29f7fc1265572ed8be } from '../../../admin/TwoPanelNav'
 import { default as default_c7d7fc284b3b0552574b75a0421f4260 } from '../../../admin/views/Dashboard'
 import { default as default_a30289e25b7b0ddf21b0d6206ba3514b } from '../../../admin/views/Tools'
@@ -72,6 +73,7 @@ export const importMap = {
   "/components/CustomDataField#default": default_78d34716f26bbc38d2d51d55b25955ba,
   "@payloadcms/plugin-search/client#LinkToDoc": LinkToDoc_aead06e4cbf6b2620c5c51c9ab283634,
   "@payloadcms/plugin-search/client#ReindexButton": ReindexButton_aead06e4cbf6b2620c5c51c9ab283634,
+  "/components/CollectionManagerField#default": default_1723744e6ae59cf3653e63611d4cba7a,
   "/admin/TwoPanelNav#default": default_81e915c9ba204d29f7fc1265572ed8be,
   "/admin/views/Dashboard#default": default_c7d7fc284b3b0552574b75a0421f4260,
   "/admin/views/Tools#default": default_a30289e25b7b0ddf21b0d6206ba3514b,

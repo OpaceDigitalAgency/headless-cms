@@ -6,9 +6,9 @@ export const Categories: CollectionConfig = {
 
   admin: {
     useAsTitle: 'title',
-    group: 'Content',
-    defaultColumns: ['title', 'slug', 'postsCount', 'updatedAt'],
-    description: 'Organize content with categories',
+    group: 'Taxonomy',
+    defaultColumns: ['title', 'slug', 'parent', 'totalCount', 'updatedAt'],
+    description: 'Hierarchical categories shared across Posts, Archive Items, Events, People, and Custom Items',
   },
 
   // Enable versions (without drafts for taxonomy items)
@@ -23,22 +23,50 @@ export const Categories: CollectionConfig = {
     delete: ({ req: { user } }) => user?.role === 'admin',
   },
 
-  // Hooks for revalidation
+  // Hooks for revalidation and counting
   hooks: {
     afterRead: [
       async ({ doc, req }) => {
         try {
-          const result = await req.payload.count({
-            collection: 'posts',
-            where: {
-              categories: {
-                in: [doc.id],
-              },
-            },
-          })
+          // Count usage across all collections that use categories
+          const [postsCount, archiveItemsCount, eventsCount, peopleCount, customItemsCount] = await Promise.all([
+            req.payload.count({
+              collection: 'posts',
+              where: { categories: { in: [doc.id] } },
+            }),
+            req.payload.count({
+              collection: 'archive-items',
+              where: { categories: { in: [doc.id] } },
+            }),
+            req.payload.count({
+              collection: 'events',
+              where: { categories: { in: [doc.id] } },
+            }),
+            req.payload.count({
+              collection: 'people',
+              where: { categories: { in: [doc.id] } },
+            }),
+            req.payload.count({
+              collection: 'custom-items',
+              where: { categories: { in: [doc.id] } },
+            }),
+          ])
+
+          const totalCount =
+            postsCount.totalDocs +
+            archiveItemsCount.totalDocs +
+            eventsCount.totalDocs +
+            peopleCount.totalDocs +
+            customItemsCount.totalDocs
+
           return {
             ...doc,
-            postsCount: result.totalDocs,
+            postsCount: postsCount.totalDocs,
+            archiveItemsCount: archiveItemsCount.totalDocs,
+            eventsCount: eventsCount.totalDocs,
+            peopleCount: peopleCount.totalDocs,
+            customItemsCount: customItemsCount.totalDocs,
+            totalCount,
           }
         } catch {
           return doc
@@ -56,8 +84,15 @@ export const Categories: CollectionConfig = {
               secret: process.env.REVALIDATION_SECRET,
               collection: 'categories',
               slug: doc.slug,
-              // Also invalidate archive pages
-              tags: [`taxonomy:category:${doc.slug}`, 'archive:posts'],
+              // Invalidate all archive pages that might use this category
+              tags: [
+                `taxonomy:category:${doc.slug}`,
+                'archive:posts',
+                'archive:archive-items',
+                'archive:events',
+                'archive:people',
+                'archive:custom-items',
+              ],
             }),
           })
           req.payload.logger.info(`Revalidated category: ${doc.slug}`)
@@ -78,6 +113,18 @@ export const Categories: CollectionConfig = {
     },
     slugField(),
     {
+      name: 'parent',
+      type: 'relationship',
+      relationTo: 'categories',
+      label: 'Parent Category',
+      admin: {
+        description: 'Optional: Select a parent category to create a hierarchy',
+      },
+      filterOptions: ({ id }) => ({
+        id: { not_equals: id },
+      }),
+    },
+    {
       name: 'description',
       type: 'textarea',
       label: 'Description',
@@ -89,9 +136,55 @@ export const Categories: CollectionConfig = {
       label: 'Featured Image',
     },
     {
+      name: 'totalCount',
+      type: 'number',
+      label: 'Total Items',
+      admin: {
+        position: 'sidebar',
+        readOnly: true,
+        description: 'Total items across all collections',
+      },
+    },
+    {
       name: 'postsCount',
       type: 'number',
-      label: 'Assigned Posts',
+      label: 'Posts',
+      admin: {
+        position: 'sidebar',
+        readOnly: true,
+      },
+    },
+    {
+      name: 'archiveItemsCount',
+      type: 'number',
+      label: 'Archive Items',
+      admin: {
+        position: 'sidebar',
+        readOnly: true,
+      },
+    },
+    {
+      name: 'eventsCount',
+      type: 'number',
+      label: 'Events',
+      admin: {
+        position: 'sidebar',
+        readOnly: true,
+      },
+    },
+    {
+      name: 'peopleCount',
+      type: 'number',
+      label: 'People',
+      admin: {
+        position: 'sidebar',
+        readOnly: true,
+      },
+    },
+    {
+      name: 'customItemsCount',
+      type: 'number',
+      label: 'Custom Items',
       admin: {
         position: 'sidebar',
         readOnly: true,

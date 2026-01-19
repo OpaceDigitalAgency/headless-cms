@@ -40,6 +40,7 @@ import { CustomItems } from './collections/CustomItems'
 import { Header } from './globals/Header'
 import { Footer } from './globals/Footer'
 import { Settings } from './globals/Settings'
+import { NavigationSettings } from './globals/NavigationSettings'
 
 // Revalidation endpoint
 import { revalidateEndpoint } from './endpoints/revalidate'
@@ -47,6 +48,7 @@ import { resetDataHandler } from './endpoints/resetData'
 import { seedEndpoints } from './endpoints/seed'
 import { collectionTemplateEndpoints } from './endpoints/collectionTemplates'
 import { navigationEndpoint } from './endpoints/navigation'
+import { collectionManagerEndpoint } from './endpoints/collectionManager'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -230,6 +232,7 @@ export default buildConfig({
     Header,
     Footer,
     Settings,
+    NavigationSettings,
   ],
 
   // ===========================================
@@ -312,9 +315,10 @@ export default buildConfig({
 
     // Nested Docs Plugin - Hierarchical collections
     nestedDocsPlugin({
-      collections: ['museum-collections', 'categories'],
+      collections: ['categories'],
       generateLabel: (_, doc) => (doc.title || doc.name) as string,
       generateURL: (docs) => docs.reduce((url, doc) => `${url}/${doc.slug}`, ''),
+      parentFieldSlug: 'parent',
     }),
 
     // Redirects Plugin - URL redirects management
@@ -401,6 +405,8 @@ export default buildConfig({
     },
     // Dynamic navigation endpoint
     navigationEndpoint,
+    // Collection manager endpoint for admin UI
+    collectionManagerEndpoint,
     // Seed data endpoints for admin panel
     ...seedEndpoints,
     // Collection template endpoints for admin panel

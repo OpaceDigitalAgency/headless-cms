@@ -45,6 +45,19 @@ This document tracks technical implementation details, outstanding issues, code 
 Dashboard → Content → Taxonomy → Collections → Shop → Media → Forms → Settings → Admin
 ```
 
+### 3. Collection Navigation Manager Added
+**Status:** ✅ Complete
+
+**Files Added/Updated:**
+- Added: `apps/cms/src/globals/NavigationSettings.ts`
+- Added: `apps/cms/src/components/CollectionManagerField.tsx`
+- Added: `apps/cms/src/endpoints/collectionManager.ts`
+- Updated: `apps/cms/src/endpoints/navigation.ts` - Applies visibility, section, and ordering overrides
+- Updated: `apps/cms/src/admin/views/Tools.tsx` - Added Navigation Manager link
+- Updated: `apps/cms/src/app/(payload)/custom.scss` - Manager UI styles
+
+**Result:** Admins can toggle visibility, reorder collections, and change sections without code changes.
+
 ---
 
 ## ❌ **Outstanding Technical Issues**
@@ -53,10 +66,10 @@ Dashboard → Content → Taxonomy → Collections → Shop → Media → Forms 
 **Problem:** Navigation component unmounts/remounts when navigating between pages
 **Cause:** Payload's routing causes full page reload
 **Impact:** Minor UX issue - menu briefly disappears
-**Status:** Partially mitigated by caching
+**Status:** Partially mitigated by caching and client-side links (nav still remounts)
 
 **Possible Solutions:**
-- Use React Router's Link component instead of `<a>` tags
+- Use Next.js Link component instead of `<a>` tags (implemented)
 - Keep navigation in a persistent layout component
 - Accept as Payload's default behaviour
 
@@ -64,17 +77,12 @@ Dashboard → Content → Taxonomy → Collections → Shop → Media → Forms 
 **Problem:** When sidebar is collapsed on mobile, nested items are hidden
 **Affected:** Product Categories/Collections (under Products)
 **Note:** Categories/Tags now in separate Taxonomy section, so this is less critical
-**Status:** Needs solution
+**Status:** ✅ Resolved via Option A (nested links remain visible when collapsed)
 
 **Recommended Solutions (in order of preference):**
 
 **Option A: Always Show Nested Items (SIMPLE - 5 minutes)**
-```scss
-// Remove from custom.scss:
-.ra-side-nav--collapsed .ra-side-nav__link--nested {
-  display: none;
-}
-```
+Applied in `custom.scss` by removing the collapsed rule that hid nested links.
 Pros: Quick fix, no code complexity
 Cons: Might look cluttered on mobile
 
@@ -101,12 +109,15 @@ Cons: Takes up screen space on mobile
 
 **Current Process:**
 - Adding new collections → Edit `payload.config.ts`
-- Hiding collections → Edit collection file
-- Reorganizing navigation → Edit `navigation.ts`
-- Renaming collections → Edit multiple files
+- Renaming collections → Edit multiple files + data migration
 - Restart server required
 
-**Future Enhancement:** Build Collection Manager UI (see ROADMAP section below)
+**Now Available:**
+- Enable/disable collections in navigation
+- Reorder collections in navigation
+- Move collections between sections
+
+**Future Enhancement:** Adding/removing collections still requires code changes. Navigation ordering/visibility is now handled via the Collection Manager UI.
 
 ### 4. Museum Collections Should Be Renamed to Galleries
 **Current:** `museum-collections`
@@ -133,7 +144,7 @@ Cons: Takes up screen space on mobile
 - [ ] Add category/tag filtering to Archive blocks
 
 ### Mobile & UX
-- [ ] Fix nested items accessibility on mobile (choose Option A, B, or C above)
+- [x] Fix nested items accessibility on mobile (Option A applied)
 - [ ] Test mobile UX with sidebar collapsed
 - [ ] Investigate menu flashing on navigation
 
@@ -144,7 +155,7 @@ Cons: Takes up screen space on mobile
 ### Dashboard & Collection Management
 - [ ] Add collection statistics to dashboard
 - [ ] Implement bulk operations (publish, delete, duplicate, export)
-- [ ] Build Collection Manager UI for drag-and-drop navigation
+- [x] Build Collection Manager UI for navigation ordering/visibility
 - [ ] Add import/export functionality (CSV/JSON)
 - [ ] Implement duplicate collection feature
 - [ ] Add batch edit capability
@@ -158,10 +169,9 @@ Cons: Takes up screen space on mobile
 
 ### Priority: HIGH (1-2 weeks)
 
-**1. Fix Mobile Nested Items Accessibility**
-- Choose and implement one of the three options above
+**1. Fix Mobile Nested Items Accessibility (Complete)**
+- Option A applied (nested links remain visible)
 - Test on actual mobile devices
-- Estimated effort: 5 minutes to 2 hours depending on option
 
 **2. Dashboard Improvements**
 - Add collection statistics (item counts, recent activity)
@@ -171,10 +181,9 @@ Cons: Takes up screen space on mobile
 
 ### Priority: MEDIUM (2-4 weeks)
 
-**3. Collection Manager UI**
+**3. Collection Manager UI (Complete)**
 - Enable/disable collections from admin UI
-- Drag-and-drop menu reordering
-- No code changes required
+- Menu reordering in navigation settings
 - Estimated effort: 8-12 hours
 
 **4. Shared Taxonomy Features**
@@ -241,7 +250,7 @@ Cons: Takes up screen space on mobile
 ## ❓ **FAQ - Common Questions Answered**
 
 **Q: Can I add/remove/reorganize collections from the CMS admin without code changes?**
-A: NO - Currently requires editing `payload.config.ts` and `navigation.ts`. This could be built as a future enhancement (Collection Manager UI).
+A: Partial. You can now reorder or hide collections in the navigation UI, but adding/removing collections still requires editing `payload.config.ts` and restarting.
 
 **Q: Why does the menu still vanish when I navigate?**
 A: Payload's routing causes the navigation component to unmount/remount. Caching helps but doesn't eliminate the flash. This is a Payload limitation that could be addressed with React Router integration.
@@ -254,4 +263,3 @@ A: It exists as `museum-collections` in the code. Renaming to `galleries` requir
 
 **Q: How do I create a custom collection type?**
 A: Use the Archive Items template as a base and create a Custom Content Type. This allows you to add custom fields without duplicating code. See SHARED_TAXONOMY_SYSTEM.md for examples.
-

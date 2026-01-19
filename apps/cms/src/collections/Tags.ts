@@ -6,9 +6,9 @@ export const Tags: CollectionConfig = {
 
   admin: {
     useAsTitle: 'title',
-    group: 'Content',
-    defaultColumns: ['title', 'slug', 'postsCount', 'updatedAt'],
-    description: 'Organize content with tags',
+    group: 'Taxonomy',
+    defaultColumns: ['title', 'slug', 'totalCount', 'updatedAt'],
+    description: 'Flat tags shared across Posts, Archive Items, Events, People, and Custom Items',
   },
 
   versions: {
@@ -26,17 +26,45 @@ export const Tags: CollectionConfig = {
     afterRead: [
       async ({ doc, req }) => {
         try {
-          const result = await req.payload.count({
-            collection: 'posts',
-            where: {
-              tags: {
-                in: [doc.id],
-              },
-            },
-          })
+          // Count usage across all collections that use tags
+          const [postsCount, archiveItemsCount, eventsCount, peopleCount, customItemsCount] = await Promise.all([
+            req.payload.count({
+              collection: 'posts',
+              where: { tags: { in: [doc.id] } },
+            }),
+            req.payload.count({
+              collection: 'archive-items',
+              where: { tags: { in: [doc.id] } },
+            }),
+            req.payload.count({
+              collection: 'events',
+              where: { tags: { in: [doc.id] } },
+            }),
+            req.payload.count({
+              collection: 'people',
+              where: { tags: { in: [doc.id] } },
+            }),
+            req.payload.count({
+              collection: 'custom-items',
+              where: { tags: { in: [doc.id] } },
+            }),
+          ])
+
+          const totalCount =
+            postsCount.totalDocs +
+            archiveItemsCount.totalDocs +
+            eventsCount.totalDocs +
+            peopleCount.totalDocs +
+            customItemsCount.totalDocs
+
           return {
             ...doc,
-            postsCount: result.totalDocs,
+            postsCount: postsCount.totalDocs,
+            archiveItemsCount: archiveItemsCount.totalDocs,
+            eventsCount: eventsCount.totalDocs,
+            peopleCount: peopleCount.totalDocs,
+            customItemsCount: customItemsCount.totalDocs,
+            totalCount,
           }
         } catch {
           return doc
@@ -54,7 +82,15 @@ export const Tags: CollectionConfig = {
               secret: process.env.REVALIDATION_SECRET,
               collection: 'tags',
               slug: doc.slug,
-              tags: [`taxonomy:tag:${doc.slug}`, 'archive:posts'],
+              // Invalidate all archive pages that might use this tag
+              tags: [
+                `taxonomy:tag:${doc.slug}`,
+                'archive:posts',
+                'archive:archive-items',
+                'archive:events',
+                'archive:people',
+                'archive:custom-items',
+              ],
             }),
           })
           req.payload.logger.info(`Revalidated tag: ${doc.slug}`)
@@ -80,9 +116,55 @@ export const Tags: CollectionConfig = {
       label: 'Description',
     },
     {
+      name: 'totalCount',
+      type: 'number',
+      label: 'Total Items',
+      admin: {
+        position: 'sidebar',
+        readOnly: true,
+        description: 'Total items across all collections',
+      },
+    },
+    {
       name: 'postsCount',
       type: 'number',
-      label: 'Assigned Posts',
+      label: 'Posts',
+      admin: {
+        position: 'sidebar',
+        readOnly: true,
+      },
+    },
+    {
+      name: 'archiveItemsCount',
+      type: 'number',
+      label: 'Archive Items',
+      admin: {
+        position: 'sidebar',
+        readOnly: true,
+      },
+    },
+    {
+      name: 'eventsCount',
+      type: 'number',
+      label: 'Events',
+      admin: {
+        position: 'sidebar',
+        readOnly: true,
+      },
+    },
+    {
+      name: 'peopleCount',
+      type: 'number',
+      label: 'People',
+      admin: {
+        position: 'sidebar',
+        readOnly: true,
+      },
+    },
+    {
+      name: 'customItemsCount',
+      type: 'number',
+      label: 'Custom Items',
       admin: {
         position: 'sidebar',
         readOnly: true,

@@ -13,7 +13,8 @@ import {
   InboxIcon,
   UsersIcon,
   ZapIcon,
-  FileTextIcon
+  FileTextIcon,
+  FolderIcon
 } from '../icons'
 
 /**
@@ -75,6 +76,13 @@ const toolsConfig = [
   {
     category: 'Site Configuration',
     tools: [
+      {
+        title: 'Navigation Manager',
+        description: 'Reorder and toggle collections in the admin menu',
+        Icon: FolderIcon,
+        href: '/admin/globals/navigation-settings',
+        color: '#0f766e',
+      },
       {
         title: 'Redirects',
         description: 'Manage URL redirects',

@@ -1,6 +1,6 @@
 /**
  * Navigation Data Configuration
- * 
+ *
  * Defines the structure of the admin navigation including sections,
  * items, icons, and routing. Used by TwoPanelNav component.
  */
@@ -11,6 +11,10 @@ export interface NavItem {
   icon: string
   /** Optional badge count */
   badge?: number
+  /** Optional nested items (for hierarchical navigation) */
+  items?: NavItem[]
+  /** Optional slug for identification */
+  slug?: string
 }
 
 export interface NavSection {

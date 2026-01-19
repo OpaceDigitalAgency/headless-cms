@@ -143,11 +143,13 @@ export interface Config {
     header: Header;
     footer: Footer;
     settings: Setting;
+    'navigation-settings': NavigationSetting;
   };
   globalsSelect: {
     header: HeaderSelect<false> | HeaderSelect<true>;
     footer: FooterSelect<false> | FooterSelect<true>;
     settings: SettingsSelect<false> | SettingsSelect<true>;
+    'navigation-settings': NavigationSettingsSelect<false> | NavigationSettingsSelect<true>;
   };
   locale: null;
   user: User & {
@@ -1066,7 +1068,7 @@ export interface ContentType {
   createdAt: string;
 }
 /**
- * Organize content with categories
+ * Hierarchical categories shared across Posts, Archive Items, Events, People, and Custom Items
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "categories".
@@ -1078,10 +1080,21 @@ export interface Category {
    * URL-friendly identifier (auto-generated from title)
    */
   slug: string;
+  /**
+   * Optional: Select a parent category to create a hierarchy
+   */
+  parent?: (number | null) | Category;
   description?: string | null;
   featuredImage?: (number | null) | Media;
+  /**
+   * Total items across all collections
+   */
+  totalCount?: number | null;
   postsCount?: number | null;
-  parent?: (number | null) | Category;
+  archiveItemsCount?: number | null;
+  eventsCount?: number | null;
+  peopleCount?: number | null;
+  customItemsCount?: number | null;
   breadcrumbs?:
     | {
         doc?: (number | null) | Category;
@@ -3422,7 +3435,7 @@ export interface Place {
   _status?: ('draft' | 'published') | null;
 }
 /**
- * Organize content with tags
+ * Flat tags shared across Posts, Archive Items, Events, People, and Custom Items
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "tags".
@@ -3435,7 +3448,15 @@ export interface Tag {
    */
   slug: string;
   description?: string | null;
+  /**
+   * Total items across all collections
+   */
+  totalCount?: number | null;
   postsCount?: number | null;
+  archiveItemsCount?: number | null;
+  eventsCount?: number | null;
+  peopleCount?: number | null;
+  customItemsCount?: number | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -4291,15 +4312,6 @@ export interface MuseumCollection {
    * Auto-calculated
    */
   artifactCount?: number | null;
-  parent?: (number | null) | MuseumCollection;
-  breadcrumbs?:
-    | {
-        doc?: (number | null) | MuseumCollection;
-        url?: string | null;
-        label?: string | null;
-        id?: string | null;
-      }[]
-    | null;
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
@@ -6723,10 +6735,15 @@ export interface PostsSelect<T extends boolean = true> {
 export interface CategoriesSelect<T extends boolean = true> {
   title?: T;
   slug?: T;
+  parent?: T;
   description?: T;
   featuredImage?: T;
+  totalCount?: T;
   postsCount?: T;
-  parent?: T;
+  archiveItemsCount?: T;
+  eventsCount?: T;
+  peopleCount?: T;
+  customItemsCount?: T;
   breadcrumbs?:
     | T
     | {
@@ -6746,7 +6763,12 @@ export interface TagsSelect<T extends boolean = true> {
   title?: T;
   slug?: T;
   description?: T;
+  totalCount?: T;
   postsCount?: T;
+  archiveItemsCount?: T;
+  eventsCount?: T;
+  peopleCount?: T;
+  customItemsCount?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -7993,15 +8015,6 @@ export interface MuseumCollectionsSelect<T extends boolean = true> {
       };
   featured?: T;
   artifactCount?: T;
-  parent?: T;
-  breadcrumbs?:
-    | T
-    | {
-        doc?: T;
-        url?: T;
-        label?: T;
-        id?: T;
-      };
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
@@ -9564,6 +9577,26 @@ export interface Setting {
   createdAt?: string | null;
 }
 /**
+ * Control which collections appear in the admin navigation and how they are grouped.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "navigation-settings".
+ */
+export interface NavigationSetting {
+  id: number;
+  collections?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "header_select".
  */
@@ -9708,6 +9741,16 @@ export interface SettingsSelect<T extends boolean = true> {
   bodyScripts?: T;
   maintenanceMode?: T;
   maintenanceMessage?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "navigation-settings_select".
+ */
+export interface NavigationSettingsSelect<T extends boolean = true> {
+  collections?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;

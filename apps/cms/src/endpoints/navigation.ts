@@ -1,4 +1,6 @@
 import type { Endpoint } from 'payload'
+import { getDefaultSectionForSlug, nestedCollections, sectionOrder } from '../lib/navigationConfig'
+import type { SectionId } from '../lib/navigationConfig'
 
 /**
  * Navigation endpoint that dynamically builds navigation from Payload collections
@@ -49,44 +51,14 @@ export const navigationEndpoint: Endpoint = {
       users: 'users',
     }
 
-    // Define section order and metadata
-    const sectionOrder = ['Content', 'Taxonomy', 'Collections', 'Shop', 'Media', 'Forms', 'Settings', 'Admin']
-    const sectionIcons: Record<string, string> = {
-      Content: 'content',
-      Taxonomy: 'tags',
-      Collections: 'collection',
-      Shop: 'shopping-bag',
-      Media: 'media',
-      Forms: 'form',
-      Settings: 'settings',
-      Admin: 'admin',
-    }
-
-    // Define which collections should be nested under their parent
-    const nestedCollections: Record<string, string[]> = {
-      products: ['product-categories', 'product-collections'],
-    }
-
-    // Define taxonomy collections (shared across content types)
-    const taxonomySlugs = ['categories', 'tags']
-
-    // Define shop collections (ecommerce-specific)
-    const shopSlugs = ['products', 'product-categories', 'product-collections']
-
-    // Define which collections belong to Collections section (not Content)
-    const collectionsSectionSlugs = [
-      'archive-items',
-      'people',
-      'places',
-      'events',
-      'products',
-      'product-categories',
-      'product-collections',
-      'museum-collections', // TODO: Rename to 'galleries' in future
-    ]
+    const navigationSettings = await payload.findGlobal({ slug: 'navigation-settings', depth: 0 }).catch(() => null)
+    const collectionOverrides = Array.isArray(navigationSettings?.collections) ? navigationSettings.collections : []
+    const overridesBySlug = new Map(collectionOverrides.map((item: any) => [item.slug, item]))
+    const orderBySlug = new Map(collectionOverrides.map((item: any, index: number) => [item.slug, index]))
 
     // Build collection items map
     const collectionItems: Record<string, any> = {}
+    const collectionSections: Record<string, SectionId> = {}
 
     collections.forEach((collection) => {
       const slug = collection.slug
@@ -94,12 +66,24 @@ export const navigationEndpoint: Endpoint = {
       // Skip hidden collections
       if (collection.admin?.hidden) return
 
+      const override = overridesBySlug.get(slug)
+      if (override?.enabled === false) return
+
+      const labelOverride = typeof override?.label === 'string' ? override.label.trim() : ''
+      const label = labelOverride || collection.labels?.plural || collection.slug
+      const overrideSection = override?.section as SectionId | undefined
+      const section = overrideSection && sectionOrder.includes(overrideSection)
+        ? overrideSection
+        : getDefaultSectionForSlug(slug)
+
       collectionItems[slug] = {
-        label: collection.labels?.plural || collection.slug,
+        label,
         href: `/admin/collections/${slug}`,
         icon: iconMap[slug] || 'collection',
         slug,
+        _order: orderBySlug.has(slug) ? orderBySlug.get(slug) : Number.MAX_SAFE_INTEGER,
       }
+      collectionSections[slug] = section
     })
 
     // Build navigation sections
@@ -116,137 +100,81 @@ export const navigationEndpoint: Endpoint = {
       ],
     })
 
-    // 2. Content Section (Pages, Posts, Archive Items, Events, People)
-    const contentItems: any[] = []
+    const sectionItemsMap: Record<SectionId, any[]> = {
+      content: [],
+      taxonomy: [],
+      collections: [],
+      shop: [],
+      media: [],
+      forms: [],
+      settings: [],
+      admin: [],
+    }
 
-    // Add all collections that are NOT in Collections, Shop, or Taxonomy sections
     Object.entries(collectionItems).forEach(([slug, item]) => {
-      // Skip if it's in Collections, Shop, or Taxonomy sections
-      if (collectionsSectionSlugs.includes(slug) || shopSlugs.includes(slug) || taxonomySlugs.includes(slug)) return
-
-      // Skip if it's a nested item (will be added under parent)
-      const isNested = Object.values(nestedCollections).some(nested => nested.includes(slug))
-      if (isNested) return
-
-      contentItems.push(item)
+      const section = collectionSections[slug] || getDefaultSectionForSlug(slug)
+      sectionItemsMap[section].push(item)
     })
 
-    if (contentItems.length > 0) {
-      navSections.push({
-        id: 'content',
-        label: 'Content',
-        icon: 'content',
-        items: contentItems,
+    const nestedChildrenBySection = new Map<SectionId, Set<string>>()
+    sectionOrder.forEach((sectionId) => nestedChildrenBySection.set(sectionId, new Set()))
+    Object.entries(nestedCollections).forEach(([parentSlug, childSlugs]) => {
+      const parentSection = collectionSections[parentSlug]
+      if (!parentSection) return
+      const childSet = nestedChildrenBySection.get(parentSection)
+      childSlugs.forEach((childSlug) => {
+        if (collectionSections[childSlug] === parentSection) {
+          childSet?.add(childSlug)
+        }
       })
-    }
-
-    // 3. Taxonomy Section (Categories, Tags - shared across content types)
-    const taxonomyItems: any[] = []
-
-    taxonomySlugs.forEach(slug => {
-      if (collectionItems[slug]) {
-        taxonomyItems.push(collectionItems[slug])
-      }
     })
 
-    if (taxonomyItems.length > 0) {
-      navSections.push({
-        id: 'taxonomy',
-        label: 'Taxonomy',
-        icon: 'tags',
-        items: taxonomyItems,
-      })
-    }
+    const buildSectionItems = (sectionId: SectionId) => {
+      const items = sectionItemsMap[sectionId] || []
+      const nestedChildren = nestedChildrenBySection.get(sectionId) || new Set<string>()
+      const filtered = items.filter((item) => !nestedChildren.has(item.slug))
 
-    // 3. Collections Section (direct links, no section labels)
-    const collectionsItems: any[] = []
-
-    // Add all collections that belong to Collections section
-    collectionsSectionSlugs.forEach(slug => {
-      if (!collectionItems[slug]) return
-
-      // Skip if it's a nested item (will be added under parent)
-      const isNested = Object.values(nestedCollections).some(nested => nested.includes(slug))
-      if (isNested) return
-
-      const item = { ...collectionItems[slug] }
-
-      // Check if this item has nested children
-      const children = nestedCollections[slug]
-      if (children) {
-        const nestedItems: any[] = []
-        children.forEach(childSlug => {
-          if (collectionItems[childSlug]) {
-            nestedItems.push(collectionItems[childSlug])
-          }
-        })
+      filtered.forEach((item) => {
+        const children = nestedCollections[item.slug]
+        if (!children) return
+        const nestedItems = children
+          .map((childSlug) => collectionItems[childSlug])
+          .filter(Boolean)
+          .filter((child) => collectionSections[child.slug] === sectionId)
+          .sort((a, b) => (a._order || 0) - (b._order || 0))
 
         if (nestedItems.length > 0) {
           item.items = nestedItems
         }
-      }
+      })
 
-      collectionsItems.push(item)
+      return filtered.sort((a, b) => {
+        if (a._order !== b._order) return a._order - b._order
+        return (a.label || '').localeCompare(b.label || '')
+      })
+    }
+
+    const sectionMeta: Record<SectionId, { label: string; icon: string }> = {
+      content: { label: 'Content', icon: 'content' },
+      taxonomy: { label: 'Taxonomy', icon: 'tags' },
+      collections: { label: 'Collections', icon: 'collection' },
+      shop: { label: 'Shop', icon: 'collection' },
+      media: { label: 'Media', icon: 'media' },
+      forms: { label: 'Forms', icon: 'form' },
+      settings: { label: 'Settings', icon: 'settings' },
+      admin: { label: 'Admin', icon: 'admin' },
+    }
+
+    sectionOrder.forEach((sectionId) => {
+      const items = buildSectionItems(sectionId)
+      if (items.length === 0) return
+      navSections.push({
+        id: sectionId,
+        label: sectionMeta[sectionId].label,
+        icon: sectionMeta[sectionId].icon,
+        items,
+      })
     })
-
-    if (collectionsItems.length > 0) {
-      navSections.push({
-        id: 'collections',
-        label: 'Collections',
-        icon: 'collection',
-        items: collectionsItems,
-      })
-    }
-
-    // 4. Media Section
-    if (collectionItems['media']) {
-      navSections.push({
-        id: 'media',
-        label: 'Media',
-        icon: 'media',
-        items: [collectionItems['media']],
-      })
-    }
-
-    // 5. Forms Section
-    const formsItems: any[] = []
-    if (collectionItems['forms']) formsItems.push(collectionItems['forms'])
-    if (collectionItems['form-submissions']) formsItems.push(collectionItems['form-submissions'])
-
-    if (formsItems.length > 0) {
-      navSections.push({
-        id: 'forms',
-        label: 'Forms',
-        icon: 'form',
-        items: formsItems,
-      })
-    }
-
-    // 6. Settings Section
-    const settingsItems: any[] = []
-    if (collectionItems['redirects']) settingsItems.push(collectionItems['redirects'])
-
-    if (settingsItems.length > 0) {
-      navSections.push({
-        id: 'settings',
-        label: 'Settings',
-        icon: 'settings',
-        items: settingsItems,
-      })
-    }
-
-    // 7. Admin Section
-    const adminItems: any[] = []
-    if (collectionItems['users']) adminItems.push(collectionItems['users'])
-
-    if (adminItems.length > 0) {
-      navSections.push({
-        id: 'admin',
-        label: 'Admin',
-        icon: 'admin',
-        items: adminItems,
-      })
-    }
 
     // Build globals list for search
     const globals = payload.config.globals.map((global) => ({
@@ -258,6 +186,10 @@ export const navigationEndpoint: Endpoint = {
     // Build collection search config
     const collectionSearchConfig = collections
       .filter((collection) => !collection.admin?.hidden)
+      .filter((collection) => {
+        const override = overridesBySlug.get(collection.slug)
+        return override?.enabled !== false
+      })
       .map((collection) => {
         // Determine the title field
         let titleField = 'title'
@@ -273,9 +205,13 @@ export const navigationEndpoint: Endpoint = {
           titleField = 'name'
         }
 
+        const override = overridesBySlug.get(collection.slug)
+        const labelOverride = typeof override?.label === 'string' ? override.label.trim() : ''
+        const label = labelOverride || collection.labels?.plural || collection.slug
+
         return {
           slug: collection.slug,
-          label: collection.labels?.plural || collection.slug,
+          label,
           titleField,
         }
       })
@@ -294,4 +230,3 @@ export const navigationEndpoint: Endpoint = {
     }
   },
 }
-
