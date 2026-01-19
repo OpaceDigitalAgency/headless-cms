@@ -241,32 +241,49 @@ Dashboard
 Content
 ├── Pages
 ├── Posts
-├── Archive 
+├── Archive Items
 ├── Events
-└── People
+└── Custom Items
 
-Taxonomy (NEW SECTION)
-├── Categories
+Taxonomy (NEW SECTION - Shared Across All Content)
+├── Categories (hierarchical, parent-child relationships)
 └── Tags
 
 Collections
-├── Museum Collections
-└── Places
+├── People
+├── Places
+└── Museum Collections (galleries/exhibitions)
 
-Shop
+Shop (Ecommerce - Separate Taxonomy)
 ├── Products
 ├── Product Categories
 └── Product Collections
 
 Media
 └── Media Library
+
+Forms
+├── Forms
+└── Form Submissions
+
+Settings
+├── Settings
+├── Header
+├── Footer
+├── Redirects
+└── Search Index
+
+Admin
+└── Users
 ```
 
 **Key Points:**
 - ✅ Categories/Tags are **independent**, not nested under Posts
-- ✅ Clearly shows they're **shared** across content types
+- ✅ Clearly shows they're **shared** across Posts, Archive Items, Events, People, Custom Items
 - ✅ Product taxonomy is **separate** (ecommerce-specific)
 - ✅ Museum Collections is a **grouping collection**, not taxonomy
+- ✅ Archive Items is the **flexible base** for any collection type
+- ✅ **No Artifacts collection** - use Archive Items instead
 
 ---
 
@@ -406,26 +423,35 @@ Category: "Ancient Rome"
 ### ✅ Completed
 
 1. **Removed Artifacts Collection**
-   - Deleted `/artifacts` page routes
-   - Removed artifacts seed data
-   - Updated all references in payload.config.ts (redirects and search plugins)
-   - Updated field mappings to use archive-items instead of artifacts
+   - Deleted `/artifacts` page routes from web and astro apps
+   - Removed artifacts from all API functions (getArtifacts, getArtifactBySlug)
+   - Updated all references in blocks and components to use archive-items
+   - Removed artifacts from icon maps and navigation configuration
 
 2. **Separated Taxonomy Section**
    - Categories and Tags now in dedicated "Taxonomy" section in admin navigation
    - No longer nested under Posts (fixes mobile accessibility issue)
    - Clearly visible as shared resources across all content types
+   - Updated navigation.ts to create separate Taxonomy section
 
 3. **Updated Navigation Structure**
-   - Seed data updated to reference archive-items instead of artifacts
-   - Navigation links updated in header and footer
-   - Site descriptions updated
+   - Dashboard section: Overview, Tools
+   - Content section: Pages, Posts, Archive Items, Events, Custom Items
+   - **Taxonomy section (NEW)**: Categories, Tags
+   - Collections section: People, Places, Museum Collections
+   - Shop section: Products, Product Categories, Product Collections
+   - Media, Forms, Settings, Admin sections
 
-4. **Field Mappings Updated**
-   - Archive Items: Updated to use correct field names (gallery, creators, origins)
-   - People: Updated relatedItems field mapping
-   - Places: Updated relatedItems field mapping
-   - Collections: Updated archiveItems field mapping
+4. **Updated All References to Archive Items**
+   - Web app: Updated getArchiveItems() API functions
+   - Astro app: Updated getArchiveItems() API functions
+   - Archive.ts block: Changed relationTo from 'artifacts' to 'archive-items'
+   - ArchiveBlock.tsx (web): Updated switch case to use archive-items
+   - ArchiveBlock.tsx (cms): Updated switch case to use archive-items
+   - ArchiveBlock.astro: Updated paths and field references
+   - CollectionRenderer.tsx (web): Updated to use archiveItems field
+   - CollectionRenderer.tsx (cms): Updated to use archiveItems field
+   - Collections page (astro): Updated to use archiveItems field
 
 5. **Fixed InvalidFieldRelationship Error**
    - Removed all references to 'artifacts' collection from codebase
@@ -440,7 +466,7 @@ Category: "Ancient Rome"
    - Updated core seeder to remove artifacts seeding
    - Updated resetData endpoint to use 'archive-items'
    - **✅ Dev server now starts successfully with no InvalidFieldRelationship errors**
-   - Database migration ready to rename artifacts_id → archive_items_id
+   - **✅ All artifacts references removed from codebase**
 
 ### 📋 Remaining Tasks
 
