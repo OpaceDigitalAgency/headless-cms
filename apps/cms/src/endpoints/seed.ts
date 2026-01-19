@@ -27,7 +27,7 @@ const COLLECTION_SEED_CONFIG: Record<string, {
   posts: { label: 'Posts', icon: 'edit', hasSeedData: true, hasSeedMedia: false },
   categories: { label: 'Categories', icon: 'tag', hasSeedData: true, hasSeedMedia: false },
   tags: { label: 'Tags', icon: 'tag', hasSeedData: false, hasSeedMedia: false },
-  artifacts: { label: 'Artifacts', icon: 'artifact', hasSeedData: true, hasSeedMedia: true },
+  'archive-items': { label: 'Archive Items', icon: 'archive', hasSeedData: true, hasSeedMedia: true },
   people: { label: 'People', icon: 'user', hasSeedData: true, hasSeedMedia: true },
   places: { label: 'Places', icon: 'map-pin', hasSeedData: true, hasSeedMedia: true },
   'museum-collections': { label: 'Collections', icon: 'archive', hasSeedData: true, hasSeedMedia: false },
@@ -35,6 +35,9 @@ const COLLECTION_SEED_CONFIG: Record<string, {
   'custom-items': { label: 'Custom Items', icon: 'box', hasSeedData: true, hasSeedMedia: false },
   products: { label: 'Products', icon: 'shopping-bag', hasSeedData: true, hasSeedMedia: true },
   'product-categories': { label: 'Product Categories', icon: 'box', hasSeedData: true, hasSeedMedia: false },
+  'product-collections': { label: 'Product Collections', icon: 'shopping-bag', hasSeedData: true, hasSeedMedia: false },
+  events: { label: 'Events', icon: 'calendar', hasSeedData: true, hasSeedMedia: true },
+  'archive-items': { label: 'Archive Items', icon: 'archive', hasSeedData: true, hasSeedMedia: true },
 }
 
 /**
@@ -66,20 +69,20 @@ export const getSeedStatusEndpoint: Endpoint = {
 
     try {
       // Check if any sample data exists by looking at multiple collections
-      const [pages, posts, artifacts] = await Promise.all([
+      const [pages, posts, archiveItems] = await Promise.all([
         payload.count({ collection: 'pages' }),
         payload.count({ collection: 'posts' }),
-        payload.count({ collection: 'artifacts' }),
+        payload.count({ collection: 'archive-items' }),
       ])
 
-      const hasData = pages.totalDocs > 0 || posts.totalDocs > 0 || artifacts.totalDocs > 0
+      const hasData = pages.totalDocs > 0 || posts.totalDocs > 0 || archiveItems.totalDocs > 0
 
       return Response.json({
         hasData,
         counts: {
           pages: pages.totalDocs,
           posts: posts.totalDocs,
-          artifacts: artifacts.totalDocs,
+          'archive-items': archiveItems.totalDocs,
         },
       })
     } catch (error) {

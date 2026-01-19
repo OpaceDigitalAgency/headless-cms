@@ -34,6 +34,7 @@ export const productTemplate: CollectionTemplate = {
   defaultSingular: 'Product',
   defaultPlural: 'Products',
   adminGroup: 'Shop',
+  status: 'installed', // Currently installed
   hasSeedData: true,
   hasSeedMedia: true,
   seedDataCount: 12,
@@ -218,6 +219,16 @@ export const productTemplate: CollectionTemplate = {
           label: 'Meta',
           fields: [
             categoriesField,
+            {
+              name: 'collections',
+              type: 'relationship',
+              relationTo: 'product-collections',
+              hasMany: true,
+              label: 'Collections',
+              admin: {
+                description: 'Assign this product to collections',
+              },
+            },
             tagsField,
             {
               name: 'relatedProducts',
@@ -246,18 +257,18 @@ export const productTemplate: CollectionTemplate = {
     },
     featuredField,
     {
-      name: 'status',
+      name: 'availability',
       type: 'select',
-      label: 'Product Status',
+      label: 'Availability',
       defaultValue: 'active',
       options: [
         { label: 'Active', value: 'active' },
-        { label: 'Draft', value: 'draft' },
         { label: 'Archived', value: 'archived' },
         { label: 'Out of Stock', value: 'out-of-stock' },
       ],
       admin: {
         position: 'sidebar',
+        description: 'Product availability status (separate from draft/published)',
       },
     },
     templateField([

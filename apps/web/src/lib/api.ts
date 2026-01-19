@@ -327,17 +327,17 @@ export async function getContentTypeById(id: string, options?: FetchOptions): Pr
 }
 
 // ===========================================
-// Artifacts (Museum)
+// Archive Items (Museum)
 // ===========================================
 
-export interface Artifact {
+export interface ArchiveItem {
   id: string
   title: string
   slug: string
   description?: any
-  media?: any[]
-  people?: any[]
-  places?: any[]
+  gallery?: any[]
+  creators?: any[]
+  origins?: any[]
   collections?: any[]
   template: string
   meta?: any
@@ -346,29 +346,29 @@ export interface Artifact {
   updatedAt: string
 }
 
-export async function getArtifacts(options?: FetchOptions): Promise<PaginatedDocs<Artifact>> {
-  return fetchAPI<PaginatedDocs<Artifact>>('/artifacts', {
+export async function getArchiveItems(options?: FetchOptions): Promise<PaginatedDocs<ArchiveItem>> {
+  return fetchAPI<PaginatedDocs<ArchiveItem>>('/archive-items', {
     ...options,
-    tags: ['artifacts'],
+    tags: ['archive-items'],
   })
 }
 
-export async function getArtifactBySlug(slug: string, options?: FetchOptions): Promise<Artifact | null> {
-  const result = await fetchAPI<PaginatedDocs<Artifact>>(
-    `/artifacts?where[slug][equals]=${encodeURIComponent(slug)}&limit=1`,
+export async function getArchiveItemBySlug(slug: string, options?: FetchOptions): Promise<ArchiveItem | null> {
+  const result = await fetchAPI<PaginatedDocs<ArchiveItem>>(
+    `/archive-items?where[slug][equals]=${encodeURIComponent(slug)}&limit=1`,
     {
       ...options,
-      tags: ['artifacts', `artifacts:${slug}`],
+      tags: ['archive-items', `archive-items:${slug}`],
     }
   )
   return result.docs[0] || null
 }
 
 /**
- * Convenience helper used by routes expecting `getArtifact`
+ * Convenience helper used by routes expecting `getArchiveItem`
  */
-export async function getArtifact(slug: string, options?: FetchOptions): Promise<Artifact | null> {
-  return getArtifactBySlug(slug, options)
+export async function getArchiveItem(slug: string, options?: FetchOptions): Promise<ArchiveItem | null> {
+  return getArchiveItemBySlug(slug, options)
 }
 
 // ===========================================

@@ -255,11 +255,11 @@ export const Places: CollectionConfig = {
           label: 'Relationships',
           fields: [
             {
-              name: 'relatedArtifacts',
+              name: 'relatedItems',
               type: 'join',
-              collection: 'artifacts',
-              on: 'places',
-              label: 'Related Artifacts',
+              collection: 'archive-items',
+              on: 'origins',
+              label: 'Related Items',
             },
             {
               name: 'relatedPeople',

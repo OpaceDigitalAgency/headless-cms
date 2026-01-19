@@ -36,8 +36,8 @@ export async function GET(request: NextRequest) {
     case 'posts':
       redirectUrl = `/blog/${slug}`
       break
-    case 'artifacts':
-      redirectUrl = `/artifacts/${slug}`
+    case 'archive-items':
+      redirectUrl = `/items/${slug}`
       break
     case 'people':
       redirectUrl = `/people/${slug}`

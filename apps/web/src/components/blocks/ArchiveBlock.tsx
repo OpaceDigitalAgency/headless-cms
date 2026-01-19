@@ -55,9 +55,9 @@ export async function ArchiveBlock({ block }: ArchiveBlockProps) {
           const posts = await getPosts({ limit })
           items = posts.docs
           break
-        case 'artifacts':
-          const artifacts = await getArtifacts({ limit })
-          items = artifacts.docs
+        case 'archive-items':
+          const archiveItems = await getArchiveItems({ limit })
+          items = archiveItems.docs
           break
         case 'people':
           const people = await getPeople({ limit })

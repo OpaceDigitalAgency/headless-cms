@@ -283,11 +283,11 @@ export const People: CollectionConfig = {
           label: 'Relationships',
           fields: [
             {
-              name: 'relatedArtifacts',
+              name: 'relatedItems',
               type: 'join',
-              collection: 'artifacts',
-              on: 'people',
-              label: 'Related Artifacts',
+              collection: 'archive-items',
+              on: 'creators',
+              label: 'Related Items',
             },
           ],
         },

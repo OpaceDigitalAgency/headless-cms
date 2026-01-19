@@ -8,7 +8,10 @@
 import * as fs from 'fs'
 import * as path from 'path'
 import * as https from 'https'
+import { fileURLToPath } from 'url'
 
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
 const MEDIA_DIR = path.join(__dirname, 'media')
 
 // Sample images from Unsplash (free to use)
@@ -221,7 +224,8 @@ export function mediaExists(key: keyof typeof SAMPLE_IMAGES): boolean {
 }
 
 // Run if executed directly
-if (require.main === module) {
+const isMain = import.meta.url === `file://${process.argv[1]}`
+if (isMain) {
   downloadAllMedia()
     .then(() => process.exit(0))
     .catch((error) => {

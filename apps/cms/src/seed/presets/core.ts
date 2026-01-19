@@ -19,7 +19,7 @@ export class CoreSeeder extends BaseSeeder {
   }
 
   getCollections(): string[] {
-    return ['pages', 'posts', 'categories', 'artifacts', 'people', 'places', 'museum-collections', 'content-types', 'custom-items']
+    return ['pages', 'posts', 'categories', 'people', 'places', 'museum-collections', 'events', 'archive-items', 'content-types', 'custom-items']
   }
 
   async seed(): Promise<void> {
@@ -30,7 +30,8 @@ export class CoreSeeder extends BaseSeeder {
     const places = await this.seedPlaces()
     const people = await this.seedPeople(places)
     const collections = await this.seedMuseumCollections()
-    await this.seedArtifacts(people, places, collections)
+    await this.seedEvents(places)
+    await this.seedArchiveItems(people, places)
     await this.seedPages()
     await this.seedPosts(categories)
 
@@ -43,18 +44,19 @@ export class CoreSeeder extends BaseSeeder {
 
   async clear(): Promise<void> {
     this.log('Clearing core preset data...')
-    
+
     // Clear in reverse dependency order
     await this.clearCollection('posts')
     await this.clearCollection('pages')
-    await this.clearCollection('artifacts')
+    await this.clearCollection('archive-items')
+    await this.clearCollection('events')
     await this.clearCollection('museum-collections')
     await this.clearCollection('people')
     await this.clearCollection('places')
     await this.clearCollection('custom-items')
     await this.clearCollection('content-types')
     await this.clearCollection('categories')
-    
+
     this.log('Core preset data cleared!')
   }
 
@@ -74,13 +76,6 @@ export class CoreSeeder extends BaseSeeder {
       case 'museum-collections':
         await this.seedMuseumCollections()
         return
-      case 'artifacts': {
-        const places = await this.seedPlaces()
-        const people = await this.seedPeople(places)
-        const collections = await this.seedMuseumCollections()
-        await this.seedArtifacts(people, places, collections)
-        return
-      }
       case 'posts': {
         const categories = await this.seedCategories()
         await this.seedPosts(categories)
@@ -345,92 +340,6 @@ export class CoreSeeder extends BaseSeeder {
     return collections
   }
 
-  private async seedArtifacts(
-    people: Record<string, string>,
-    places: Record<string, string>,
-    collections: Record<string, string>
-  ): Promise<void> {
-    if (!this.shouldSeedCollection('artifacts')) {
-      return
-    }
-
-    this.log('Seeding artifacts...')
-
-    const artifactsData = [
-      {
-        title: 'Mona Lisa',
-        slug: 'mona-lisa',
-        description: 'The most famous portrait in the world, painted by Leonardo da Vinci.',
-        dateCreated: '1503-1519',
-        people: ['leonardo-da-vinci'],
-        places: ['florence-italy'],
-        collections: ['renaissance-masters'],
-        materials: ['Oil paint', 'Poplar wood panel'],
-        dimensions: { height: 77, width: 53, depth: 0 },
-      },
-      {
-        title: 'David',
-        slug: 'david-sculpture',
-        description: 'A masterpiece of Renaissance sculpture created by Michelangelo.',
-        dateCreated: '1501-1504',
-        people: ['michelangelo-buonarroti'],
-        places: ['florence-italy'],
-        collections: ['renaissance-masters'],
-        materials: ['Marble'],
-        dimensions: { height: 517, width: 199, depth: 0 },
-      },
-      {
-        title: 'The School of Athens',
-        slug: 'school-of-athens',
-        description: 'A fresco by Raphael depicting the greatest philosophers of antiquity.',
-        dateCreated: '1509-1511',
-        people: ['raphael-sanzio'],
-        places: ['rome-italy'],
-        collections: ['renaissance-masters'],
-        materials: ['Fresco'],
-        dimensions: { height: 500, width: 770, depth: 0 },
-      },
-      {
-        title: 'Water Lilies',
-        slug: 'water-lilies',
-        description: 'A series of approximately 250 oil paintings by Claude Monet.',
-        dateCreated: '1896-1926',
-        people: ['claude-monet'],
-        places: ['paris-france'],
-        collections: ['impressionist-gallery'],
-        materials: ['Oil paint', 'Canvas'],
-        dimensions: { height: 200, width: 425, depth: 0 },
-      },
-      {
-        title: 'Athena Parthenos',
-        slug: 'athena-parthenos',
-        description: 'A massive chryselephantine sculpture of the goddess Athena.',
-        dateCreated: '447-438 BCE',
-        people: ['phidias'],
-        places: ['athens-greece'],
-        collections: ['ancient-civilizations'],
-        materials: ['Gold', 'Ivory', 'Wood'],
-        dimensions: { height: 1200, width: 0, depth: 0 },
-      },
-    ]
-
-    for (const data of artifactsData.slice(0, this.getItemCount('artifacts', 10))) {
-      await this.create('artifacts', {
-        title: data.title,
-        slug: data.slug,
-        description: createRichText(data.description),
-        dateCreated: data.dateCreated,
-        people: data.people.map(slug => people[slug]).filter(Boolean),
-        places: data.places.map(slug => places[slug]).filter(Boolean),
-        collections: data.collections.map(slug => collections[slug]).filter(Boolean),
-        materials: data.materials.map(material => ({ material })),
-        dimensions: data.dimensions,
-        _status: 'published',
-        featured: true,
-      })
-    }
-  }
-
   private async seedPages(): Promise<void> {
     if (!this.shouldSeedCollection('pages')) {
       return
@@ -466,10 +375,10 @@ export class CoreSeeder extends BaseSeeder {
         },
         {
           blockType: 'archive',
-          heading: 'Featured Artifacts',
-          description: 'A curated selection of standout artifacts.',
+          heading: 'Featured Archive Items',
+          description: 'A curated selection of standout items.',
           populateBy: 'collection',
-          relationTo: 'artifacts',
+          relationTo: 'archive-items',
           limit: 6,
           layout: 'grid',
           columns: '3',
@@ -637,6 +546,146 @@ export class CoreSeeder extends BaseSeeder {
       siteName: 'Museum Collection',
       siteDescription: 'Explore our collection of historical artifacts, people, and places.',
     })
+  }
+
+  private async seedEvents(places: Record<string, string>): Promise<void> {
+    if (!this.shouldSeedCollection('events')) {
+      return
+    }
+
+    this.log('Seeding events...')
+
+    const eventsData = [
+      {
+        title: 'Renaissance Art Exhibition',
+        slug: 'renaissance-art-exhibition',
+        excerpt: 'A comprehensive exhibition showcasing masterpieces from the Renaissance period.',
+        eventType: 'exhibition',
+        startDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(), // 30 days from now
+        endDate: new Date(Date.now() + 120 * 24 * 60 * 60 * 1000).toISOString(), // 120 days from now
+        venue: places['florence-italy'],
+      },
+      {
+        title: 'Curator Talk: Ancient Civilisations',
+        slug: 'curator-talk-ancient-civilisations',
+        excerpt: 'Join our lead curator for an in-depth discussion about ancient civilisations.',
+        eventType: 'lecture',
+        startDate: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toISOString(), // 14 days from now
+        endDate: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000 + 2 * 60 * 60 * 1000).toISOString(), // 2 hours later
+      },
+      {
+        title: 'Family Workshop: Pottery Making',
+        slug: 'family-workshop-pottery-making',
+        excerpt: 'Hands-on pottery workshop for families. Learn traditional techniques.',
+        eventType: 'workshop',
+        startDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(), // 7 days from now
+        endDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000 + 3 * 60 * 60 * 1000).toISOString(), // 3 hours later
+        capacity: 20,
+      },
+      {
+        title: 'Museum Night: After Hours Tour',
+        slug: 'museum-night-after-hours-tour',
+        excerpt: 'Experience the museum in a new light with our exclusive after-hours tour.',
+        eventType: 'tour',
+        startDate: new Date(Date.now() + 21 * 24 * 60 * 60 * 1000).toISOString(), // 21 days from now
+        endDate: new Date(Date.now() + 21 * 24 * 60 * 60 * 1000 + 2 * 60 * 60 * 1000).toISOString(), // 2 hours later
+        capacity: 30,
+      },
+      {
+        title: 'Classical Music Performance',
+        slug: 'classical-music-performance',
+        excerpt: 'An evening of classical music in the museum\'s grand hall.',
+        eventType: 'performance',
+        startDate: new Date(Date.now() + 45 * 24 * 60 * 60 * 1000).toISOString(), // 45 days from now
+        endDate: new Date(Date.now() + 45 * 24 * 60 * 60 * 1000 + 2 * 60 * 60 * 1000).toISOString(), // 2 hours later
+        capacity: 100,
+      },
+    ]
+
+    for (const event of eventsData.slice(0, this.getItemCount('events', 5))) {
+      await this.create('events', {
+        title: event.title,
+        slug: event.slug,
+        excerpt: event.excerpt,
+        content: createRichTextParagraphs([
+          event.excerpt,
+          'This event offers a unique opportunity to engage with our collection and experts.',
+          'Booking is recommended as spaces are limited.',
+        ]),
+        eventType: event.eventType,
+        startDate: event.startDate,
+        endDate: event.endDate,
+        venue: event.venue,
+        capacity: event.capacity,
+        _status: 'published',
+      })
+    }
+  }
+
+  private async seedArchiveItems(people: Record<string, string>, places: Record<string, string>): Promise<void> {
+    if (!this.shouldSeedCollection('archive-items')) {
+      return
+    }
+
+    this.log('Seeding archive items...')
+
+    const archiveItemsData = [
+      {
+        title: 'Leonardo\'s Notebook',
+        slug: 'leonardos-notebook',
+        excerpt: 'Original notebook containing sketches and notes by Leonardo da Vinci.',
+        itemType: 'document',
+        creator: people['leonardo-da-vinci'],
+        origin: places['florence-italy'],
+        dateCreated: '1490-01-01',
+      },
+      {
+        title: 'Renaissance Painting Techniques Manual',
+        slug: 'renaissance-painting-techniques-manual',
+        excerpt: 'A comprehensive guide to painting techniques used during the Renaissance.',
+        itemType: 'document',
+        origin: places['florence-italy'],
+        dateCreated: '1520-01-01',
+      },
+      {
+        title: 'Ancient Roman Coin Collection',
+        slug: 'ancient-roman-coin-collection',
+        excerpt: 'A collection of coins from the Roman Empire period.',
+        itemType: 'artifact',
+        dateCreated: '100-01-01',
+      },
+      {
+        title: 'Medieval Manuscript',
+        slug: 'medieval-manuscript',
+        excerpt: 'Illuminated manuscript from the medieval period.',
+        itemType: 'document',
+        dateCreated: '1200-01-01',
+      },
+      {
+        title: 'Victorian Era Photographs',
+        slug: 'victorian-era-photographs',
+        excerpt: 'Collection of photographs from the Victorian era.',
+        itemType: 'photograph',
+        dateCreated: '1880-01-01',
+      },
+    ]
+
+    for (const item of archiveItemsData.slice(0, this.getItemCount('archive-items', 5))) {
+      await this.create('archive-items', {
+        title: item.title,
+        slug: item.slug,
+        excerpt: item.excerpt,
+        description: createRichTextParagraphs([
+          item.excerpt,
+          'This item is part of our permanent collection and represents an important piece of history.',
+        ]),
+        itemType: item.itemType,
+        creator: item.creator,
+        origin: item.origin,
+        dateCreated: item.dateCreated,
+        _status: 'published',
+      })
+    }
   }
 }
 

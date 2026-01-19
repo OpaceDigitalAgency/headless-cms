@@ -33,10 +33,11 @@ export const archiveItemTemplate: CollectionTemplate = {
   description: 'Catalogued items like museum artifacts, portfolio pieces, or collectibles',
   category: 'archive',
   icon: 'archive',
-  defaultSlug: 'items',
-  defaultSingular: 'Item',
-  defaultPlural: 'Items',
+  defaultSlug: 'archive-items',
+  defaultSingular: 'Archive Item',
+  defaultPlural: 'Archive Items',
   adminGroup: 'Archive',
+  status: 'installed', // Currently installed
   includesRelated: ['person', 'place'],
   hasSeedData: true,
   hasSeedMedia: true,
@@ -130,12 +131,22 @@ export const archiveItemTemplate: CollectionTemplate = {
             {
               name: 'relatedItems',
               type: 'relationship',
-              relationTo: 'artifacts',
+              relationTo: 'archive-items',
               hasMany: true,
               label: 'Related Items',
               filterOptions: ({ id }) => ({
                 id: { not_equals: id },
               }),
+            },
+            {
+              name: 'collections',
+              type: 'relationship',
+              relationTo: 'museum-collections',
+              hasMany: true,
+              label: 'Collections',
+              admin: {
+                description: 'Galleries or collections this item belongs to',
+              },
             },
           ],
         },

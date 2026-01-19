@@ -56,8 +56,8 @@ export const PRESET_METADATA: Record<PresetId, {
   },
   'museum-next': {
     name: 'Museum (Next.js)',
-    description: 'A museum/archive site with artifacts, people, and places',
-    collections: ['pages', 'posts', 'categories', 'artifacts', 'people', 'places', 'museum-collections', 'content-types', 'custom-items'],
+    description: 'A museum/archive site with archive items, people, and places',
+    collections: ['pages', 'posts', 'categories', 'archive-items', 'people', 'places', 'museum-collections', 'content-types', 'custom-items'],
     hasSeedData: true,
     hasSampleMedia: true,
   },

@@ -1,3 +1,5 @@
+'use server'
+
 /**
  * Revalidation Utilities
  *
@@ -14,61 +16,61 @@ import { revalidatePath, revalidateTag } from 'next/cache'
 /**
  * Revalidate a page by its slug
  */
-export function revalidatePage(slug: string, previousSlug?: string) {
+export async function revalidatePage(slug: string, previousSlug?: string) {
   const path = slug === 'home' ? '/' : `/${slug}`
-  
+
   revalidatePath(path)
   revalidateTag('pages')
-  
+
   // If slug changed, also revalidate the old path
   if (previousSlug && previousSlug !== slug) {
     const oldPath = previousSlug === 'home' ? '/' : `/${previousSlug}`
     revalidatePath(oldPath)
   }
-  
+
   console.log(`[Revalidate] Page: ${path}`)
 }
 
 /**
  * Revalidate a post by its slug
  */
-export function revalidatePost(slug: string, previousSlug?: string) {
+export async function revalidatePost(slug: string, previousSlug?: string) {
   const path = `/blog/${slug}`
-  
+
   revalidatePath(path)
   revalidatePath('/blog') // Blog listing page
   revalidateTag('posts')
-  
+
   // If slug changed, also revalidate the old path
   if (previousSlug && previousSlug !== slug) {
     revalidatePath(`/blog/${previousSlug}`)
   }
-  
+
   console.log(`[Revalidate] Post: ${path}`)
 }
 
 /**
- * Revalidate an artifact by its slug
+ * Revalidate an archive item by its slug
  */
-export function revalidateArtifact(slug: string, previousSlug?: string) {
-  const path = `/artifacts/${slug}`
-  
+export async function revalidateArchiveItem(slug: string, previousSlug?: string) {
+  const path = `/items/${slug}`
+
   revalidatePath(path)
-  revalidatePath('/artifacts') // Artifacts listing page
-  revalidateTag('artifacts')
-  
+  revalidatePath('/items') // Items listing page
+  revalidateTag('archive-items')
+
   // If slug changed, also revalidate the old path
   if (previousSlug && previousSlug !== slug) {
-    revalidatePath(`/artifacts/${previousSlug}`)
+    revalidatePath(`/items/${previousSlug}`)
   }
-  
-  console.log(`[Revalidate] Artifact: ${path}`)
+
+  console.log(`[Revalidate] Archive Item: ${path}`)
 }
 
 /**
  * Revalidate header global
  */
-export function revalidateHeader() {
+export async function revalidateHeader() {
   revalidateTag('header')
   // Header appears on all pages, revalidate the layout
   revalidatePath('/', 'layout')
@@ -78,7 +80,7 @@ export function revalidateHeader() {
 /**
  * Revalidate footer global
  */
-export function revalidateFooter() {
+export async function revalidateFooter() {
   revalidateTag('footer')
   // Footer appears on all pages, revalidate the layout
   revalidatePath('/', 'layout')
@@ -88,7 +90,7 @@ export function revalidateFooter() {
 /**
  * Revalidate settings global
  */
-export function revalidateSettings() {
+export async function revalidateSettings() {
   revalidateTag('settings')
   // Settings affect all pages, revalidate the layout
   revalidatePath('/', 'layout')

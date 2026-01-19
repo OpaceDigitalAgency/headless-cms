@@ -25,15 +25,16 @@ import { Pages } from './collections/Pages'
 import { Posts } from './collections/Posts'
 import { Categories } from './collections/Categories'
 import { Tags } from './collections/Tags'
-import { Artifacts } from './collections/Artifacts'
 import { People } from './collections/People'
 import { Places } from './collections/Places'
 import { Collections as MuseumCollections } from './collections/Collections'
-import { ContentTypes } from './collections/ContentTypes'
-import { CustomItems } from './collections/CustomItems'
 import { Products } from './collections/Products'
+import { ProductCategories } from './collections/ProductCategories'
+import { ProductCollections } from './collections/ProductCollections'
 import { Events } from './collections/Events'
 import { ArchiveItems } from './collections/ArchiveItems'
+import { ContentTypes } from './collections/ContentTypes'
+import { CustomItems } from './collections/CustomItems'
 
 // Globals
 import { Header } from './globals/Header'
@@ -45,6 +46,7 @@ import { revalidateEndpoint } from './endpoints/revalidate'
 import { resetDataHandler } from './endpoints/resetData'
 import { seedEndpoints } from './endpoints/seed'
 import { collectionTemplateEndpoints } from './endpoints/collectionTemplates'
+import { navigationEndpoint } from './endpoints/navigation'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -163,7 +165,7 @@ export default buildConfig({
         }),
         // Link feature with custom rel attribute field
         LinkFeature({
-          enabledCollections: ['pages', 'posts', 'artifacts'],
+          enabledCollections: ['pages', 'posts', 'archive-items'],
           fields: [
             {
               name: 'rel',
@@ -206,15 +208,16 @@ export default buildConfig({
     Posts,
     Categories,
     Tags,
-    // Museum example collections
-    Artifacts,
+    // Archive & Museum collections
+    ArchiveItems,
     People,
     Places,
     MuseumCollections,
     // Template-based collections
     Products,
+    ProductCategories,
+    ProductCollections,
     Events,
-    ArchiveItems,
     // Dynamic content types system
     ContentTypes,
     CustomItems,
@@ -249,7 +252,7 @@ export default buildConfig({
   plugins: [
     // SEO Plugin - Meta tags, Open Graph, Twitter Cards
     seoPlugin({
-      collections: ['pages', 'posts', 'artifacts', 'people', 'places', 'museum-collections', 'custom-items', 'content-types'],
+      collections: ['pages', 'posts', 'archive-items', 'people', 'places', 'museum-collections', 'custom-items', 'content-types'],
       tabbedUI: true,
       uploadsCollection: 'media',
       generateTitle: ({ doc }) => `${doc?.title || doc?.name || 'Untitled'} | Museum Collection`,
@@ -316,7 +319,7 @@ export default buildConfig({
 
     // Redirects Plugin - URL redirects management
     redirectsPlugin({
-      collections: ['pages', 'posts', 'artifacts'],
+      collections: ['pages', 'posts', 'archive-items'],
       overrides: {
         admin: {
           group: 'Settings',
@@ -326,11 +329,11 @@ export default buildConfig({
 
     // Search Plugin - Full-text search across collections
     searchPlugin({
-      collections: ['pages', 'posts', 'artifacts', 'people', 'places', 'museum-collections', 'custom-items', 'content-types'],
+      collections: ['pages', 'posts', 'archive-items', 'people', 'places', 'museum-collections', 'custom-items', 'content-types'],
       defaultPriorities: {
         pages: 10,
         posts: 20,
-        artifacts: 30,
+        'archive-items': 30,
         people: 40,
         places: 50,
         'museum-collections': 60,
@@ -396,6 +399,8 @@ export default buildConfig({
       method: 'post',
       handler: resetDataHandler,
     },
+    // Dynamic navigation endpoint
+    navigationEndpoint,
     // Seed data endpoints for admin panel
     ...seedEndpoints,
     // Collection template endpoints for admin panel

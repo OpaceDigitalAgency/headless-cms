@@ -91,7 +91,7 @@ export async function seedBasicData(payload: Payload): Promise<void> {
         {
           blockType: 'hero',
           heading: 'Welcome to the Museum',
-          subheading: 'Discover our collection of artifacts, people, and places',
+          subheading: 'Discover our collection of archive items, people, and places',
           style: 'fullWidth',
         },
         {
@@ -103,7 +103,7 @@ export async function seedBasicData(payload: Payload): Promise<void> {
             {
               size: 'full',
               richText: createRichText(
-                'Explore our extensive collection of historical artifacts and learn about the people and places that shaped history.',
+                'Explore our extensive collection of archive items and learn about the people and places that shaped history.',
               ),
             },
           ],
@@ -492,26 +492,7 @@ export async function seedBasicData(payload: Payload): Promise<void> {
     },
   })
 
-  // Create sample artifact
-  await payload.create({
-    collection: 'artifacts',
-    data: {
-      name: 'Ancient Pottery Vessel',
-      slug: 'ancient-pottery-vessel',
-      shortDescription: 'A beautifully preserved pottery vessel from the ancient world.',
-      _status: 'published',
-      dateCreated: '500 BCE',
-      period: 'Classical Period',
-      materials: [{ material: 'Clay' }, { material: 'Natural pigments' }],
-      dimensions: {
-        height: 30,
-        width: 20,
-        depth: 20,
-        unit: 'cm',
-      },
-      provenance: 'Discovered during archaeological excavations in the Mediterranean region.',
-    },
-  })
+
 
   // Create sample person
   await payload.create({
@@ -567,7 +548,7 @@ export async function seedBasicData(payload: Payload): Promise<void> {
       navItems: [
         { link: { type: 'custom', label: 'Home', url: '/' } },
         { link: { type: 'custom', label: 'Blocks Showcase', url: '/blocks-showcase' } },
-        { link: { type: 'custom', label: 'Artifacts', url: '/artifacts' } },
+        { link: { type: 'custom', label: 'Archive Items', url: '/items' } },
         { link: { type: 'custom', label: 'People', url: '/people' } },
         { link: { type: 'custom', label: 'Places', url: '/places' } },
         { link: { type: 'custom', label: 'Collections', url: '/collections' } },
@@ -585,7 +566,7 @@ export async function seedBasicData(payload: Payload): Promise<void> {
         {
           label: 'Explore',
           navItems: [
-            { link: { type: 'custom', label: 'Artifacts', url: '/artifacts' } },
+            { link: { type: 'custom', label: 'Archive Items', url: '/items' } },
             { link: { type: 'custom', label: 'People', url: '/people' } },
             { link: { type: 'custom', label: 'Places', url: '/places' } },
           ],
@@ -606,7 +587,7 @@ export async function seedBasicData(payload: Payload): Promise<void> {
     slug: 'settings',
     data: {
       siteName: 'Museum Collection',
-      siteDescription: 'Explore our collection of historical artifacts, people, and places.',
+      siteDescription: 'Explore our collection of archive items, people, and places.',
     },
   })
 

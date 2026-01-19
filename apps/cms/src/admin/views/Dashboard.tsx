@@ -1,8 +1,7 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
-import { SeedDataManager } from '../../components/SeedDataManager'
-import { CollectionTemplates } from '../../components/CollectionTemplates'
+import { UnifiedCollectionTemplates } from '../../components/UnifiedCollectionTemplates'
 import { ContentTypeManager } from '../../components/ContentTypeManager'
 import {
   FileTextIcon,
@@ -23,25 +22,50 @@ import {
 } from '../icons'
 
 /**
- * Collection stats configuration
+ * Icon mapping for collections
  */
-const statsConfig = [
-  { slug: 'pages', label: 'Pages', Icon: FileTextIcon, color: '#3b82f6' },
-  { slug: 'posts', label: 'Posts', Icon: EditIcon, color: '#10b981' },
-  { slug: 'artifacts', label: 'Artifacts', Icon: ArtifactIcon, color: '#f59e0b' },
-  { slug: 'media', label: 'Media', Icon: ImageIcon, color: '#8b5cf6' },
-  { slug: 'people', label: 'People', Icon: UserIcon, color: '#ec4899' },
-  { slug: 'places', label: 'Places', Icon: MapPinIcon, color: '#06b6d4' },
-]
+const iconMap: Record<string, any> = {
+  pages: FileTextIcon,
+  posts: EditIcon,
+  'archive-items': ArtifactIcon,
+  media: ImageIcon,
+  people: UserIcon,
+  places: MapPinIcon,
+  events: EditIcon,
+  products: PackageIcon,
+  'product-categories': FolderIcon,
+  'product-collections': PackageIcon,
+  'museum-collections': FolderIcon,
+  categories: FolderIcon,
+  tags: FolderIcon,
+  forms: FileTextIcon,
+  'form-submissions': FileTextIcon,
+  redirects: FileTextIcon,
+  users: UsersIcon,
+}
 
 /**
- * Recent items configuration
+ * Color mapping for collections
  */
-const recentConfig = [
-  { slug: 'pages', label: 'Pages', titleField: 'title' },
-  { slug: 'posts', label: 'Posts', titleField: 'title' },
-  { slug: 'artifacts', label: 'Artifacts', titleField: 'title' },
-]
+const colorMap: Record<string, string> = {
+  pages: '#3b82f6',
+  posts: '#10b981',
+  'archive-items': '#f59e0b',
+  media: '#8b5cf6',
+  people: '#ec4899',
+  places: '#06b6d4',
+  events: '#f97316',
+  products: '#14b8a6',
+  'product-categories': '#6366f1',
+  'museum-collections': '#8b5cf6',
+  'product-collections': '#8b5cf6',
+  categories: '#6366f1',
+  tags: '#84cc16',
+  forms: '#3b82f6',
+  'form-submissions': '#10b981',
+  redirects: '#f59e0b',
+  users: '#ec4899',
+}
 
 interface CollectionStat {
   slug: string
@@ -67,84 +91,179 @@ interface RecentItem {
  * quick-create buttons, and site configuration shortcuts.
  */
 export const Dashboard: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<'overview' | 'content-types' | 'templates' | 'seed'>('overview')
+  const [activeTab, setActiveTab] = useState<'overview' | 'content-types' | 'templates'>('overview')
   const [stats, setStats] = useState<CollectionStat[]>([])
   const [recentItems, setRecentItems] = useState<RecentItem[]>([])
   const [drafts, setDrafts] = useState<RecentItem[]>([])
   const [isLoading, setIsLoading] = useState(true)
+  const [collectionSlugs, setCollectionSlugs] = useState<string[]>([])
 
   // Fetch collection stats and recent items
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true)
-      
-      // Fetch stats
-      const statsPromises = statsConfig.map(async (config) => {
-        try {
-          const response = await fetch(`/api/${config.slug}?limit=0`)
-          if (response.ok) {
-            const data = await response.json()
-            return { ...config, count: data.totalDocs || 0 }
-          }
-        } catch (e) {
-          // Ignore errors
+
+      try {
+        // First, fetch the navigation data to get all collections dynamically
+        const navResponse = await fetch('/api/admin/navigation')
+        if (navResponse.ok) {
+          const navData = await navResponse.json()
+
+          // Extract all collection slugs from navigation
+          const slugs: string[] = []
+          navData.navSections?.forEach((section: any) => {
+            section.items?.forEach((item: any) => {
+              if (item.slug && item.slug !== 'dashboard' && item.slug !== 'tools') {
+                slugs.push(item.slug)
+              }
+              // Also check nested items
+              if (item.items) {
+                item.items.forEach((nestedItem: any) => {
+                  if (nestedItem.slug) {
+                    slugs.push(nestedItem.slug)
+                  }
+                })
+              }
+            })
+          })
+
+          setCollectionSlugs(slugs)
+
+          // Fetch stats for each collection
+          const statsPromises = slugs.map(async (slug) => {
+            try {
+              const response = await fetch(`/api/${slug}?limit=0`)
+              if (response.ok) {
+                const data = await response.json()
+
+                // Get label from navigation data
+                let label = slug
+                navData.navSections?.forEach((section: any) => {
+                  section.items?.forEach((item: any) => {
+                    if (item.slug === slug) {
+                      label = item.label
+                    }
+                    if (item.items) {
+                      item.items.forEach((nestedItem: any) => {
+                        if (nestedItem.slug === slug) {
+                          label = nestedItem.label
+                        }
+                      })
+                    }
+                  })
+                })
+
+                return {
+                  slug,
+                  label,
+                  Icon: iconMap[slug] || FileTextIcon,
+                  color: colorMap[slug] || '#6b7280',
+                  count: data.totalDocs || 0,
+                }
+              }
+            } catch (e) {
+              // Ignore errors
+            }
+            return null
+          })
+
+          // Fetch recent items from main content collections
+          const recentSlugs = ['pages', 'posts', 'archive-items', 'events', 'products'].filter(s => slugs.includes(s))
+          const recentPromises = recentSlugs.map(async (slug) => {
+            try {
+              const response = await fetch(`/api/${slug}?limit=3&sort=-updatedAt`)
+              if (response.ok) {
+                const data = await response.json()
+
+                // Determine title field
+                let titleField = 'title'
+                if (slug === 'people' || slug === 'places') titleField = 'name'
+                if (slug === 'media') titleField = 'filename'
+
+                // Get label
+                let label = slug.charAt(0).toUpperCase() + slug.slice(1)
+                navData.navSections?.forEach((section: any) => {
+                  section.items?.forEach((item: any) => {
+                    if (item.slug === slug) label = item.label
+                    if (item.items) {
+                      item.items.forEach((nestedItem: any) => {
+                        if (nestedItem.slug === slug) label = nestedItem.label
+                      })
+                    }
+                  })
+                })
+
+                return data.docs?.map((doc: any) => ({
+                  id: doc.id,
+                  title: doc[titleField] || 'Untitled',
+                  collection: slug,
+                  collectionLabel: label,
+                  updatedAt: doc.updatedAt,
+                  status: doc._status || 'published',
+                })) || []
+              }
+            } catch (e) {
+              // Ignore errors
+            }
+            return []
+          })
+
+          // Fetch drafts
+          const draftsPromises = recentSlugs.map(async (slug) => {
+            try {
+              const response = await fetch(`/api/${slug}?limit=3&where[_status][equals]=draft`)
+              if (response.ok) {
+                const data = await response.json()
+
+                // Determine title field
+                let titleField = 'title'
+                if (slug === 'people' || slug === 'places') titleField = 'name'
+                if (slug === 'media') titleField = 'filename'
+
+                // Get label
+                let label = slug.charAt(0).toUpperCase() + slug.slice(1)
+                navData.navSections?.forEach((section: any) => {
+                  section.items?.forEach((item: any) => {
+                    if (item.slug === slug) label = item.label
+                    if (item.items) {
+                      item.items.forEach((nestedItem: any) => {
+                        if (nestedItem.slug === slug) label = nestedItem.label
+                      })
+                    }
+                  })
+                })
+
+                return data.docs?.map((doc: any) => ({
+                  id: doc.id,
+                  title: doc[titleField] || 'Untitled',
+                  collection: slug,
+                  collectionLabel: label,
+                  updatedAt: doc.updatedAt,
+                  status: 'draft',
+                })) || []
+              }
+            } catch (e) {
+              // Ignore errors
+            }
+            return []
+          })
+
+          const [statsResults, recentResults, draftsResults] = await Promise.all([
+            Promise.all(statsPromises),
+            Promise.all(recentPromises),
+            Promise.all(draftsPromises),
+          ])
+
+          setStats(statsResults.filter(Boolean) as CollectionStat[])
+          setRecentItems(recentResults.flat().sort((a, b) =>
+            new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
+          ).slice(0, 5))
+          setDrafts(draftsResults.flat().slice(0, 5))
         }
-        return { ...config, count: 0 }
-      })
+      } catch (error) {
+        console.error('Failed to fetch dashboard data:', error)
+      }
 
-      // Fetch recent items
-      const recentPromises = recentConfig.map(async (config) => {
-        try {
-          const response = await fetch(`/api/${config.slug}?limit=3&sort=-updatedAt`)
-          if (response.ok) {
-            const data = await response.json()
-            return data.docs?.map((doc: any) => ({
-              id: doc.id,
-              title: doc[config.titleField] || 'Untitled',
-              collection: config.slug,
-              collectionLabel: config.label,
-              updatedAt: doc.updatedAt,
-              status: doc._status || 'published',
-            })) || []
-          }
-        } catch (e) {
-          // Ignore errors
-        }
-        return []
-      })
-
-      // Fetch drafts
-      const draftsPromises = recentConfig.map(async (config) => {
-        try {
-          const response = await fetch(`/api/${config.slug}?limit=3&where[_status][equals]=draft`)
-          if (response.ok) {
-            const data = await response.json()
-            return data.docs?.map((doc: any) => ({
-              id: doc.id,
-              title: doc[config.titleField] || 'Untitled',
-              collection: config.slug,
-              collectionLabel: config.label,
-              updatedAt: doc.updatedAt,
-              status: 'draft',
-            })) || []
-          }
-        } catch (e) {
-          // Ignore errors
-        }
-        return []
-      })
-
-      const [statsResults, recentResults, draftsResults] = await Promise.all([
-        Promise.all(statsPromises),
-        Promise.all(recentPromises),
-        Promise.all(draftsPromises),
-      ])
-
-      setStats(statsResults)
-      setRecentItems(recentResults.flat().sort((a, b) => 
-        new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
-      ).slice(0, 5))
-      setDrafts(draftsResults.flat().slice(0, 5))
       setIsLoading(false)
     }
 
@@ -191,13 +310,7 @@ export const Dashboard: React.FC = () => {
           className={`ra-dashboard__tab ${activeTab === 'templates' ? 'ra-dashboard__tab--active' : ''}`}
           onClick={() => setActiveTab('templates')}
         >
-          <PackageIcon size={16} /> Collection Templates
-        </button>
-        <button
-          className={`ra-dashboard__tab ${activeTab === 'seed' ? 'ra-dashboard__tab--active' : ''}`}
-          onClick={() => setActiveTab('seed')}
-        >
-          <SeedIcon size={16} /> Sample Data
+          <PackageIcon size={16} /> Collections
         </button>
       </div>
 
@@ -298,18 +411,36 @@ export const Dashboard: React.FC = () => {
           <div className="ra-dashboard__section">
             <h2>Quick Create</h2>
             <div className="ra-dashboard__quick-actions">
-              <a href="/admin/collections/pages/create" className="ra-dashboard__quick-btn">
-                <FileTextIcon size={18} /> New Page
-              </a>
-              <a href="/admin/collections/posts/create" className="ra-dashboard__quick-btn">
-                <EditIcon size={18} /> New Post
-              </a>
-              <a href="/admin/collections/artifacts/create" className="ra-dashboard__quick-btn">
-                <ArtifactIcon size={18} /> New Artifact
-              </a>
-              <a href="/admin/collections/media/create" className="ra-dashboard__quick-btn">
-                <UploadIcon size={18} /> Upload Media
-              </a>
+              {collectionSlugs.includes('pages') && (
+                <a href="/admin/collections/pages/create" className="ra-dashboard__quick-btn">
+                  <FileTextIcon size={18} /> New Page
+                </a>
+              )}
+              {collectionSlugs.includes('posts') && (
+                <a href="/admin/collections/posts/create" className="ra-dashboard__quick-btn">
+                  <EditIcon size={18} /> New Post
+                </a>
+              )}
+              {collectionSlugs.includes('archive-items') && (
+                <a href="/admin/collections/archive-items/create" className="ra-dashboard__quick-btn">
+                  <ArtifactIcon size={18} /> New Archive Item
+                </a>
+              )}
+              {collectionSlugs.includes('events') && (
+                <a href="/admin/collections/events/create" className="ra-dashboard__quick-btn">
+                  <EditIcon size={18} /> New Event
+                </a>
+              )}
+              {collectionSlugs.includes('products') && (
+                <a href="/admin/collections/products/create" className="ra-dashboard__quick-btn">
+                  <PackageIcon size={18} /> New Product
+                </a>
+              )}
+              {collectionSlugs.includes('media') && (
+                <a href="/admin/collections/media/create" className="ra-dashboard__quick-btn">
+                  <UploadIcon size={18} /> Upload Media
+                </a>
+              )}
             </div>
           </div>
 
@@ -355,14 +486,9 @@ export const Dashboard: React.FC = () => {
         <ContentTypeManager />
       )}
 
-      {/* Collection Templates Tab */}
+      {/* Collection Templates Tab (Unified with Sample Data) */}
       {activeTab === 'templates' && (
-        <CollectionTemplates />
-      )}
-
-      {/* Sample Data Tab */}
-      {activeTab === 'seed' && (
-        <SeedDataManager />
+        <UnifiedCollectionTemplates />
       )}
     </div>
   )

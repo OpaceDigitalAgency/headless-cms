@@ -33,6 +33,7 @@ export const eventTemplate: CollectionTemplate = {
   defaultSingular: 'Event',
   defaultPlural: 'Events',
   adminGroup: 'Content',
+  status: 'installed', // Currently installed
   hasSeedData: true,
   hasSeedMedia: false,
   seedDataCount: 5,
@@ -279,7 +280,7 @@ export const eventTemplate: CollectionTemplate = {
     },
     featuredField,
     {
-      name: 'status',
+      name: 'eventStatus',
       type: 'select',
       label: 'Event Status',
       defaultValue: 'upcoming',
@@ -292,6 +293,7 @@ export const eventTemplate: CollectionTemplate = {
       ],
       admin: {
         position: 'sidebar',
+        description: 'Event status (separate from draft/published)',
       },
     },
     templateField([

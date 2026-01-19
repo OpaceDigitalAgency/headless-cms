@@ -73,13 +73,14 @@ export interface Config {
     posts: Post;
     categories: Category;
     tags: Tag;
-    artifacts: Artifact;
+    'archive-items': ArchiveItem;
     people: Person;
     places: Place;
     'museum-collections': MuseumCollection;
     products: Product;
+    'product-categories': ProductCategory;
+    'product-collections': ProductCollection;
     events: Event;
-    'archive-items': ArchiveItem;
     'content-types': ContentType;
     'custom-items': CustomItem;
     forms: Form;
@@ -94,14 +95,17 @@ export interface Config {
   };
   collectionsJoins: {
     people: {
-      relatedArtifacts: 'artifacts';
+      relatedItems: 'archive-items';
     };
     places: {
-      relatedArtifacts: 'artifacts';
+      relatedItems: 'archive-items';
       relatedPeople: 'people';
     };
     'museum-collections': {
-      artifacts: 'artifacts';
+      archiveItems: 'archive-items';
+    };
+    'product-collections': {
+      products: 'products';
     };
   };
   collectionsSelect: {
@@ -111,13 +115,14 @@ export interface Config {
     posts: PostsSelect<false> | PostsSelect<true>;
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
     tags: TagsSelect<false> | TagsSelect<true>;
-    artifacts: ArtifactsSelect<false> | ArtifactsSelect<true>;
+    'archive-items': ArchiveItemsSelect<false> | ArchiveItemsSelect<true>;
     people: PeopleSelect<false> | PeopleSelect<true>;
     places: PlacesSelect<false> | PlacesSelect<true>;
     'museum-collections': MuseumCollectionsSelect<false> | MuseumCollectionsSelect<true>;
     products: ProductsSelect<false> | ProductsSelect<true>;
+    'product-categories': ProductCategoriesSelect<false> | ProductCategoriesSelect<true>;
+    'product-collections': ProductCollectionsSelect<false> | ProductCollectionsSelect<true>;
     events: EventsSelect<false> | EventsSelect<true>;
-    'archive-items': ArchiveItemsSelect<false> | ArchiveItemsSelect<true>;
     'content-types': ContentTypesSelect<false> | ContentTypesSelect<true>;
     'custom-items': CustomItemsSelect<false> | CustomItemsSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
@@ -677,7 +682,7 @@ export interface Page {
             description?: string | null;
             populateBy?: ('collection' | 'selection') | null;
             relationTo?:
-              | ('posts' | 'pages' | 'artifacts' | 'people' | 'places' | 'museum-collections' | 'custom-items')
+              | ('posts' | 'pages' | 'archive-items' | 'people' | 'places' | 'museum-collections' | 'custom-items')
               | null;
             /**
              * Filter custom items by content type
@@ -696,8 +701,8 @@ export interface Page {
                       value: number | Page;
                     }
                   | {
-                      relationTo: 'artifacts';
-                      value: number | Artifact;
+                      relationTo: 'archive-items';
+                      value: number | ArchiveItem;
                     }
                   | {
                       relationTo: 'people';
@@ -896,7 +901,7 @@ export interface Page {
               link?: {
                 url?: string | null;
                 page?: (number | null) | Page;
-                artifact?: (number | null) | Artifact;
+                archiveItem?: (number | null) | ArchiveItem;
                 person?: (number | null) | Person;
                 label?: string | null;
                 newTab?: boolean | null;
@@ -1382,7 +1387,7 @@ export interface Post {
             description?: string | null;
             populateBy?: ('collection' | 'selection') | null;
             relationTo?:
-              | ('posts' | 'pages' | 'artifacts' | 'people' | 'places' | 'museum-collections' | 'custom-items')
+              | ('posts' | 'pages' | 'archive-items' | 'people' | 'places' | 'museum-collections' | 'custom-items')
               | null;
             /**
              * Filter custom items by content type
@@ -1401,8 +1406,8 @@ export interface Post {
                       value: number | Page;
                     }
                   | {
-                      relationTo: 'artifacts';
-                      value: number | Artifact;
+                      relationTo: 'archive-items';
+                      value: number | ArchiveItem;
                     }
                   | {
                       relationTo: 'people';
@@ -1601,7 +1606,7 @@ export interface Post {
               link?: {
                 url?: string | null;
                 page?: (number | null) | Page;
-                artifact?: (number | null) | Artifact;
+                archiveItem?: (number | null) | ArchiveItem;
                 person?: (number | null) | Person;
                 label?: string | null;
                 newTab?: boolean | null;
@@ -1675,28 +1680,24 @@ export interface Post {
   _status?: ('draft' | 'published') | null;
 }
 /**
- * Museum artifacts and archive items with flexible content sections
+ * Museum artifacts, gallery pieces, portfolio items, or collectibles
  *
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "artifacts".
+ * via the `definition` "archive-items".
  */
-export interface Artifact {
+export interface ArchiveItem {
   id: number;
   title: string;
   /**
    * URL-friendly identifier (auto-generated from title)
    */
   slug: string;
-  /**
-   * Select the display template
-   */
-  template: 'detail' | 'timeline' | 'gallery';
   featuredImage?: (number | null) | Media;
   /**
    * Brief summary for listings and SEO
    */
   excerpt?: string | null;
-  description?: {
+  richContent?: {
     root: {
       type: string;
       children: {
@@ -1711,23 +1712,23 @@ export interface Artifact {
     };
     [k: string]: unknown;
   } | null;
-  media?:
+  gallery?:
     | {
         image: number | Media;
         caption?: string | null;
         id?: string | null;
       }[]
     | null;
-  dimensions?: {
+  specifications?: {
     height?: string | null;
     width?: string | null;
     depth?: string | null;
     weight?: string | null;
+    materials?: string | null;
+    condition?: string | null;
   };
-  materials?: string | null;
-  condition?: string | null;
   /**
-   * e.g., "circa 1500 BCE" or "1920-1925"
+   * e.g., "circa 1965" or "1920-1925"
    */
   dateCreated?: string | null;
   dateAcquired?: string | null;
@@ -1746,20 +1747,20 @@ export interface Artifact {
     };
     [k: string]: unknown;
   } | null;
-  accessionNumber?: string | null;
+  catalogNumber?: string | null;
   /**
-   * Artists, creators, previous owners, etc.
+   * People who created or owned this item
    */
-  people?: (number | Person)[] | null;
+  creators?: (number | Person)[] | null;
   /**
-   * Origin, discovery location, etc.
+   * Where this item was made or found
    */
-  places?: (number | Place)[] | null;
+  origins?: (number | Place)[] | null;
+  relatedItems?: (number | ArchiveItem)[] | null;
   /**
-   * Museum collections this artifact belongs to
+   * Galleries or collections this item belongs to
    */
   collections?: (number | MuseumCollection)[] | null;
-  relatedArtifacts?: (number | Artifact)[] | null;
   /**
    * Select one or more categories
    */
@@ -1870,166 +1871,11 @@ export interface Artifact {
             blockType: 'cta';
           }
         | {
-            quote: string;
-            author?: string | null;
-            role?: string | null;
-            align?: ('left' | 'center' | 'right') | null;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'quote';
-          }
-        | {
-            heading?: string | null;
-            subheading?: string | null;
-            layout?: ('grid' | 'list') | null;
-            items?:
-              | {
-                  title: string;
-                  description?: string | null;
-                  icon?: string | null;
-                  media?: (number | null) | Media;
-                  id?: string | null;
-                }[]
-              | null;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'features';
-          }
-        | {
-            heading?: string | null;
-            subheading?: string | null;
-            stats?:
-              | {
-                  value: string;
-                  label: string;
-                  description?: string | null;
-                  id?: string | null;
-                }[]
-              | null;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'stats';
-          }
-        | {
-            heading?: string | null;
-            logos?:
-              | {
-                  logo: number | Media;
-                  label?: string | null;
-                  url?: string | null;
-                  id?: string | null;
-                }[]
-              | null;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'logoCloud';
-          }
-        | {
-            heading?: string | null;
-            items?:
-              | {
-                  quote: string;
-                  name: string;
-                  role?: string | null;
-                  company?: string | null;
-                  avatar?: (number | null) | Media;
-                  rating?: number | null;
-                  id?: string | null;
-                }[]
-              | null;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'testimonials';
-          }
-        | {
-            heading?: string | null;
-            items?:
-              | {
-                  question: string;
-                  answer: {
-                    root: {
-                      type: string;
-                      children: {
-                        type: any;
-                        version: number;
-                        [k: string]: unknown;
-                      }[];
-                      direction: ('ltr' | 'rtl') | null;
-                      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-                      indent: number;
-                      version: number;
-                    };
-                    [k: string]: unknown;
-                  };
-                  id?: string | null;
-                }[]
-              | null;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'faq';
-          }
-        | {
-            heading?: string | null;
-            subheading?: string | null;
-            plans?:
-              | {
-                  name: string;
-                  price: string;
-                  period?: string | null;
-                  description?: string | null;
-                  features?:
-                    | {
-                        feature: string;
-                        id?: string | null;
-                      }[]
-                    | null;
-                  ctaLabel?: string | null;
-                  ctaUrl?: string | null;
-                  featured?: boolean | null;
-                  id?: string | null;
-                }[]
-              | null;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'pricing';
-          }
-        | {
-            heading?: string | null;
-            members?:
-              | {
-                  name: string;
-                  role?: string | null;
-                  bio?: string | null;
-                  photo?: (number | null) | Media;
-                  socials?:
-                    | {
-                        label: string;
-                        url: string;
-                        id?: string | null;
-                      }[]
-                    | null;
-                  id?: string | null;
-                }[]
-              | null;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'team';
-          }
-        | {
-            heading?: string | null;
-            url: string;
-            caption?: string | null;
-            aspectRatio?: ('16:9' | '4:3' | '1:1' | '21:9') | null;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'embed';
-          }
-        | {
             heading?: string | null;
             description?: string | null;
             populateBy?: ('collection' | 'selection') | null;
             relationTo?:
-              | ('posts' | 'pages' | 'artifacts' | 'people' | 'places' | 'museum-collections' | 'custom-items')
+              | ('posts' | 'pages' | 'archive-items' | 'people' | 'places' | 'museum-collections' | 'custom-items')
               | null;
             /**
              * Filter custom items by content type
@@ -2048,8 +1894,8 @@ export interface Artifact {
                       value: number | Page;
                     }
                   | {
-                      relationTo: 'artifacts';
-                      value: number | Artifact;
+                      relationTo: 'archive-items';
+                      value: number | ArchiveItem;
                     }
                   | {
                       relationTo: 'people';
@@ -2248,7 +2094,7 @@ export interface Artifact {
               link?: {
                 url?: string | null;
                 page?: (number | null) | Page;
-                artifact?: (number | null) | Artifact;
+                archiveItem?: (number | null) | ArchiveItem;
                 person?: (number | null) | Person;
                 label?: string | null;
                 newTab?: boolean | null;
@@ -2271,23 +2117,6 @@ export interface Artifact {
             blockName?: string | null;
             blockType: 'timeline';
           }
-        | {
-            style?: ('space' | 'divider') | null;
-            size?: ('xs' | 'sm' | 'md' | 'lg' | 'xl') | null;
-            lineStyle?: ('solid' | 'dashed' | 'dotted') | null;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'spacer';
-          }
-        | {
-            /**
-             * Use trusted HTML only. This will be rendered as-is on the site.
-             */
-            html: string;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'html';
-          }
       )[]
     | null;
   meta?: {
@@ -2299,11 +2128,15 @@ export interface Artifact {
     image?: (number | null) | Media;
   };
   /**
-   * Show on homepage and featured sections
+   * Show in featured sections
    */
   featured?: boolean | null;
   onDisplay?: boolean | null;
-  gallery?: string | null;
+  location?: string | null;
+  /**
+   * Select the display template
+   */
+  template: 'detail' | 'gallery' | 'timeline';
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
@@ -2385,8 +2218,8 @@ export interface Person {
         id?: string | null;
       }[]
     | null;
-  relatedArtifacts?: {
-    docs?: (number | Artifact)[];
+  relatedItems?: {
+    docs?: (number | ArchiveItem)[];
     hasNextPage?: boolean;
     totalDocs?: number;
   };
@@ -2659,7 +2492,7 @@ export interface Person {
             description?: string | null;
             populateBy?: ('collection' | 'selection') | null;
             relationTo?:
-              | ('posts' | 'pages' | 'artifacts' | 'people' | 'places' | 'museum-collections' | 'custom-items')
+              | ('posts' | 'pages' | 'archive-items' | 'people' | 'places' | 'museum-collections' | 'custom-items')
               | null;
             /**
              * Filter custom items by content type
@@ -2678,8 +2511,8 @@ export interface Person {
                       value: number | Page;
                     }
                   | {
-                      relationTo: 'artifacts';
-                      value: number | Artifact;
+                      relationTo: 'archive-items';
+                      value: number | ArchiveItem;
                     }
                   | {
                       relationTo: 'people';
@@ -2878,7 +2711,7 @@ export interface Person {
               link?: {
                 url?: string | null;
                 page?: (number | null) | Page;
-                artifact?: (number | null) | Artifact;
+                archiveItem?: (number | null) | ArchiveItem;
                 person?: (number | null) | Person;
                 label?: string | null;
                 newTab?: boolean | null;
@@ -3020,8 +2853,8 @@ export interface Place {
         id?: string | null;
       }[]
     | null;
-  relatedArtifacts?: {
-    docs?: (number | Artifact)[];
+  relatedItems?: {
+    docs?: (number | ArchiveItem)[];
     hasNextPage?: boolean;
     totalDocs?: number;
   };
@@ -3307,7 +3140,7 @@ export interface Place {
             description?: string | null;
             populateBy?: ('collection' | 'selection') | null;
             relationTo?:
-              | ('posts' | 'pages' | 'artifacts' | 'people' | 'places' | 'museum-collections' | 'custom-items')
+              | ('posts' | 'pages' | 'archive-items' | 'people' | 'places' | 'museum-collections' | 'custom-items')
               | null;
             /**
              * Filter custom items by content type
@@ -3326,8 +3159,8 @@ export interface Place {
                       value: number | Page;
                     }
                   | {
-                      relationTo: 'artifacts';
-                      value: number | Artifact;
+                      relationTo: 'archive-items';
+                      value: number | ArchiveItem;
                     }
                   | {
                       relationTo: 'people';
@@ -3526,7 +3359,7 @@ export interface Place {
               link?: {
                 url?: string | null;
                 page?: (number | null) | Page;
-                artifact?: (number | null) | Artifact;
+                archiveItem?: (number | null) | ArchiveItem;
                 person?: (number | null) | Person;
                 label?: string | null;
                 newTab?: boolean | null;
@@ -4045,7 +3878,7 @@ export interface CustomItem {
               link?: {
                 url?: string | null;
                 page?: (number | null) | Page;
-                artifact?: (number | null) | Artifact;
+                archiveItem?: (number | null) | ArchiveItem;
                 person?: (number | null) | Person;
                 label?: string | null;
                 newTab?: boolean | null;
@@ -4073,7 +3906,7 @@ export interface CustomItem {
             description?: string | null;
             populateBy?: ('collection' | 'selection') | null;
             relationTo?:
-              | ('posts' | 'pages' | 'artifacts' | 'people' | 'places' | 'museum-collections' | 'custom-items')
+              | ('posts' | 'pages' | 'archive-items' | 'people' | 'places' | 'museum-collections' | 'custom-items')
               | null;
             /**
              * Filter custom items by content type
@@ -4092,8 +3925,8 @@ export interface CustomItem {
                       value: number | Page;
                     }
                   | {
-                      relationTo: 'artifacts';
-                      value: number | Artifact;
+                      relationTo: 'archive-items';
+                      value: number | ArchiveItem;
                     }
                   | {
                       relationTo: 'people';
@@ -4427,15 +4260,15 @@ export interface MuseumCollection {
    */
   shortDescription?: string | null;
   curator?: (number | null) | User;
-  artifacts?: {
-    docs?: (number | Artifact)[];
+  archiveItems?: {
+    docs?: (number | ArchiveItem)[];
     hasNextPage?: boolean;
     totalDocs?: number;
   };
   /**
-   * Select artifacts to highlight in this collection
+   * Select archive items to highlight in this collection
    */
-  featuredArtifacts?: (number | Artifact)[] | null;
+  featuredItems?: (number | ArchiveItem)[] | null;
   /**
    * Lower numbers appear first
    */
@@ -4550,6 +4383,10 @@ export interface Product {
    */
   categories?: (number | Category)[] | null;
   /**
+   * Assign this product to collections
+   */
+  collections?: (number | ProductCollection)[] | null;
+  /**
    * Add tags for filtering and search
    */
   tags?: (number | Tag)[] | null;
@@ -4660,7 +4497,7 @@ export interface Product {
             description?: string | null;
             populateBy?: ('collection' | 'selection') | null;
             relationTo?:
-              | ('posts' | 'pages' | 'artifacts' | 'people' | 'places' | 'museum-collections' | 'custom-items')
+              | ('posts' | 'pages' | 'archive-items' | 'people' | 'places' | 'museum-collections' | 'custom-items')
               | null;
             /**
              * Filter custom items by content type
@@ -4679,8 +4516,8 @@ export interface Product {
                       value: number | Page;
                     }
                   | {
-                      relationTo: 'artifacts';
-                      value: number | Artifact;
+                      relationTo: 'archive-items';
+                      value: number | ArchiveItem;
                     }
                   | {
                       relationTo: 'people';
@@ -4879,7 +4716,7 @@ export interface Product {
               link?: {
                 url?: string | null;
                 page?: (number | null) | Page;
-                artifact?: (number | null) | Artifact;
+                archiveItem?: (number | null) | ArchiveItem;
                 person?: (number | null) | Person;
                 label?: string | null;
                 newTab?: boolean | null;
@@ -4909,7 +4746,10 @@ export interface Product {
    * Show in featured sections
    */
   featured?: boolean | null;
-  status?: ('active' | 'draft' | 'archived' | 'out-of-stock') | null;
+  /**
+   * Product availability status (separate from draft/published)
+   */
+  availability?: ('active' | 'archived' | 'out-of-stock') | null;
   /**
    * Select the display template
    */
@@ -4917,6 +4757,114 @@ export interface Product {
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
+}
+/**
+ * Curated product collections for marketing and merchandising
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "product-collections".
+ */
+export interface ProductCollection {
+  id: number;
+  name: string;
+  /**
+   * URL-friendly identifier (auto-generated from title)
+   */
+  slug: string;
+  description?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  /**
+   * Brief description for cards and listings
+   */
+  shortDescription?: string | null;
+  featuredImage?: (number | null) | Media;
+  /**
+   * Wide image for collection page header
+   */
+  bannerImage?: (number | null) | Media;
+  products?: {
+    docs?: (number | Product)[];
+    hasNextPage?: boolean;
+    totalDocs?: number;
+  };
+  /**
+   * Select products to highlight in this collection
+   */
+  featuredProducts?: (number | Product)[] | null;
+  template?: ('list' | 'grid' | 'gallery') | null;
+  /**
+   * Lower numbers appear first
+   */
+  displayOrder?: number | null;
+  /**
+   * Hex colour code for collection branding (e.g., #3B82F6)
+   */
+  color?: string | null;
+  /**
+   * When this collection becomes active
+   */
+  startDate?: string | null;
+  /**
+   * When this collection expires (optional)
+   */
+  endDate?: string | null;
+  /**
+   * Apply a discount to all products in this collection
+   */
+  discountPercentage?: number | null;
+  meta?: {};
+  featured?: boolean | null;
+  showInNavigation?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * Organise products into categories
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "product-categories".
+ */
+export interface ProductCategory {
+  id: number;
+  name: string;
+  /**
+   * URL-friendly identifier (auto-generated from title)
+   */
+  slug: string;
+  description?: string | null;
+  featuredImage?: (number | null) | Media;
+  /**
+   * Select a parent category for hierarchical organisation
+   */
+  parent?: (number | null) | ProductCategory;
+  breadcrumbs?:
+    | {
+        doc?: (number | null) | ProductCategory;
+        url?: string | null;
+        label?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Lower numbers appear first
+   */
+  displayOrder?: number | null;
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * Events, exhibitions, workshops, or performances with dates and venues
@@ -5094,7 +5042,7 @@ export interface Event {
             description?: string | null;
             populateBy?: ('collection' | 'selection') | null;
             relationTo?:
-              | ('posts' | 'pages' | 'artifacts' | 'people' | 'places' | 'museum-collections' | 'custom-items')
+              | ('posts' | 'pages' | 'archive-items' | 'people' | 'places' | 'museum-collections' | 'custom-items')
               | null;
             /**
              * Filter custom items by content type
@@ -5113,8 +5061,8 @@ export interface Event {
                       value: number | Page;
                     }
                   | {
-                      relationTo: 'artifacts';
-                      value: number | Artifact;
+                      relationTo: 'archive-items';
+                      value: number | ArchiveItem;
                     }
                   | {
                       relationTo: 'people';
@@ -5313,7 +5261,7 @@ export interface Event {
               link?: {
                 url?: string | null;
                 page?: (number | null) | Page;
-                artifact?: (number | null) | Artifact;
+                archiveItem?: (number | null) | ArchiveItem;
                 person?: (number | null) | Person;
                 label?: string | null;
                 newTab?: boolean | null;
@@ -5343,462 +5291,14 @@ export interface Event {
    * Show in featured sections
    */
   featured?: boolean | null;
-  status?: ('upcoming' | 'ongoing' | 'completed' | 'cancelled' | 'postponed') | null;
+  /**
+   * Event status (separate from draft/published)
+   */
+  eventStatus?: ('upcoming' | 'ongoing' | 'completed' | 'cancelled' | 'postponed') | null;
   /**
    * Select the display template
    */
   template: 'event' | 'calendar' | 'card';
-  updatedAt: string;
-  createdAt: string;
-  _status?: ('draft' | 'published') | null;
-}
-/**
- * Museum artifacts, gallery pieces, portfolio items, or collectibles
- *
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "archive-items".
- */
-export interface ArchiveItem {
-  id: number;
-  title: string;
-  /**
-   * URL-friendly identifier (auto-generated from title)
-   */
-  slug: string;
-  featuredImage?: (number | null) | Media;
-  /**
-   * Brief summary for listings and SEO
-   */
-  excerpt?: string | null;
-  richContent?: {
-    root: {
-      type: string;
-      children: {
-        type: any;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  } | null;
-  gallery?:
-    | {
-        image: number | Media;
-        caption?: string | null;
-        id?: string | null;
-      }[]
-    | null;
-  specifications?: {
-    height?: string | null;
-    width?: string | null;
-    depth?: string | null;
-    weight?: string | null;
-    materials?: string | null;
-    condition?: string | null;
-  };
-  /**
-   * e.g., "circa 1965" or "1920-1925"
-   */
-  dateCreated?: string | null;
-  dateAcquired?: string | null;
-  provenance?: {
-    root: {
-      type: string;
-      children: {
-        type: any;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  } | null;
-  catalogNumber?: string | null;
-  /**
-   * People who created or owned this item
-   */
-  creators?: (number | Person)[] | null;
-  /**
-   * Where this item was made or found
-   */
-  origins?: (number | Place)[] | null;
-  relatedItems?: (number | Artifact)[] | null;
-  /**
-   * Select one or more categories
-   */
-  categories?: (number | Category)[] | null;
-  /**
-   * Add tags for filtering and search
-   */
-  tags?: (number | Tag)[] | null;
-  /**
-   * Add and arrange content sections
-   */
-  contentBlocks?:
-    | (
-        | {
-            type?: ('standard' | 'minimal' | 'fullscreen' | 'split' | 'video') | null;
-            heading: string;
-            subheading?: string | null;
-            image?: (number | null) | Media;
-            /**
-             * YouTube or Vimeo URL
-             */
-            videoUrl?: string | null;
-            overlay?: ('none' | 'light' | 'dark' | 'gradient') | null;
-            textAlign?: ('left' | 'center' | 'right') | null;
-            links?:
-              | {
-                  label: string;
-                  url?: string | null;
-                  page?: (number | null) | Page;
-                  variant?: ('primary' | 'secondary' | 'outline') | null;
-                  newTab?: boolean | null;
-                  id?: string | null;
-                }[]
-              | null;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'hero';
-          }
-        | {
-            columns?:
-              | {
-                  size?: ('oneThird' | 'half' | 'twoThirds' | 'full') | null;
-                  richText?: {
-                    root: {
-                      type: string;
-                      children: {
-                        type: any;
-                        version: number;
-                        [k: string]: unknown;
-                      }[];
-                      direction: ('ltr' | 'rtl') | null;
-                      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-                      indent: number;
-                      version: number;
-                    };
-                    [k: string]: unknown;
-                  } | null;
-                  enableLink?: boolean | null;
-                  link?: {
-                    label?: string | null;
-                    url?: string | null;
-                    page?: (number | null) | Page;
-                    newTab?: boolean | null;
-                  };
-                  id?: string | null;
-                }[]
-              | null;
-            backgroundColor?: ('none' | 'light' | 'dark' | 'primary' | 'secondary') | null;
-            paddingTop?: ('none' | 'small' | 'medium' | 'large') | null;
-            paddingBottom?: ('none' | 'small' | 'medium' | 'large') | null;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'content';
-          }
-        | {
-            media: number | Media;
-            caption?: string | null;
-            size?: ('small' | 'default' | 'large' | 'fullWidth') | null;
-            position?: ('left' | 'center' | 'right') | null;
-            enableLink?: boolean | null;
-            link?: {
-              url?: string | null;
-              page?: (number | null) | Page;
-              newTab?: boolean | null;
-            };
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'media';
-          }
-        | {
-            style?: ('standard' | 'banner' | 'card' | 'inline') | null;
-            heading: string;
-            description?: string | null;
-            image?: (number | null) | Media;
-            links?:
-              | {
-                  label: string;
-                  url?: string | null;
-                  page?: (number | null) | Page;
-                  variant?: ('primary' | 'secondary' | 'outline') | null;
-                  newTab?: boolean | null;
-                  id?: string | null;
-                }[]
-              | null;
-            backgroundColor?: ('none' | 'light' | 'dark' | 'primary' | 'secondary') | null;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'cta';
-          }
-        | {
-            heading?: string | null;
-            description?: string | null;
-            populateBy?: ('collection' | 'selection') | null;
-            relationTo?:
-              | ('posts' | 'pages' | 'artifacts' | 'people' | 'places' | 'museum-collections' | 'custom-items')
-              | null;
-            /**
-             * Filter custom items by content type
-             */
-            contentType?: (number | null) | ContentType;
-            categories?: (number | Category)[] | null;
-            limit?: number | null;
-            selectedDocs?:
-              | (
-                  | {
-                      relationTo: 'posts';
-                      value: number | Post;
-                    }
-                  | {
-                      relationTo: 'pages';
-                      value: number | Page;
-                    }
-                  | {
-                      relationTo: 'artifacts';
-                      value: number | Artifact;
-                    }
-                  | {
-                      relationTo: 'people';
-                      value: number | Person;
-                    }
-                  | {
-                      relationTo: 'places';
-                      value: number | Place;
-                    }
-                  | {
-                      relationTo: 'custom-items';
-                      value: number | CustomItem;
-                    }
-                )[]
-              | null;
-            layout?: ('grid' | 'list' | 'cards' | 'carousel') | null;
-            columns?: ('2' | '3' | '4') | null;
-            showImage?: boolean | null;
-            showExcerpt?: boolean | null;
-            showDate?: boolean | null;
-            showAuthor?: boolean | null;
-            link?: {
-              show?: boolean | null;
-              label?: string | null;
-              url?: string | null;
-            };
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'archive';
-          }
-        | {
-            form: number | Form;
-            enableIntro?: boolean | null;
-            introContent?: {
-              root: {
-                type: string;
-                children: {
-                  type: any;
-                  version: number;
-                  [k: string]: unknown;
-                }[];
-                direction: ('ltr' | 'rtl') | null;
-                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-                indent: number;
-                version: number;
-              };
-              [k: string]: unknown;
-            } | null;
-            style?: ('default' | 'card' | 'inline' | 'fullWidth') | null;
-            backgroundColor?: ('none' | 'light' | 'dark') | null;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'form';
-          }
-        | {
-            /**
-             * Optional heading for the gallery section
-             */
-            heading?: string | null;
-            /**
-             * Optional description text
-             */
-            description?: string | null;
-            /**
-             * Choose how images are displayed
-             */
-            layout: 'grid' | 'masonry' | 'carousel' | 'lightbox' | 'slider';
-            /**
-             * Number of columns on desktop
-             */
-            columns?: ('2' | '3' | '4' | '5' | '6') | null;
-            /**
-             * Space between images
-             */
-            gap?: ('none' | 'small' | 'medium' | 'large') | null;
-            /**
-             * Force images to a specific aspect ratio
-             */
-            aspectRatio?: ('auto' | 'square' | 'landscape' | 'portrait' | 'wide') | null;
-            images: {
-              image: number | Media;
-              caption?: string | null;
-              link?: {
-                url?: string | null;
-                page?: (number | null) | Page;
-                newTab?: boolean | null;
-              };
-              id?: string | null;
-            }[];
-            showCaptions?: boolean | null;
-            /**
-             * Allow clicking images to view full size
-             */
-            enableLightbox?: boolean | null;
-            autoplay?: boolean | null;
-            autoplaySpeed?: number | null;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'gallery';
-          }
-        | {
-            heading?: string | null;
-            description?: string | null;
-            /**
-             * Choose the visual style of grid items
-             */
-            style: 'cards' | 'features' | 'icons' | 'stats' | 'team' | 'testimonials' | 'logos';
-            /**
-             * Number of columns on desktop
-             */
-            columns: '1' | '2' | '3' | '4' | '5' | '6';
-            gap?: ('none' | 'small' | 'medium' | 'large') | null;
-            /**
-             * Text alignment within grid items
-             */
-            alignment?: ('left' | 'center' | 'right') | null;
-            items: {
-              image?: (number | null) | Media;
-              /**
-               * Lucide icon name (e.g., "star", "heart", "check")
-               */
-              icon?: string | null;
-              title: string;
-              subtitle?: string | null;
-              description?: string | null;
-              /**
-               * e.g., "99%", "10K+", "$1M"
-               */
-              stat?: string | null;
-              link?: {
-                url?: string | null;
-                page?: (number | null) | Page;
-                /**
-                 * e.g., "Learn More", "Read More"
-                 */
-                label?: string | null;
-                newTab?: boolean | null;
-              };
-              id?: string | null;
-            }[];
-            showBorder?: boolean | null;
-            showShadow?: boolean | null;
-            /**
-             * Effect when hovering over items
-             */
-            hoverEffect?: ('none' | 'lift' | 'scale' | 'glow') | null;
-            cta?: {
-              show?: boolean | null;
-              label?: string | null;
-              url?: string | null;
-              page?: (number | null) | Page;
-            };
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'grid';
-          }
-        | {
-            heading?: string | null;
-            description?: string | null;
-            /**
-             * Choose the timeline layout style
-             */
-            layout: 'vertical' | 'alternating' | 'horizontal' | 'compact';
-            lineStyle?: ('solid' | 'dashed' | 'dotted' | 'gradient') | null;
-            markerStyle?: ('circle' | 'diamond' | 'square' | 'icon' | 'number' | 'image') | null;
-            events: {
-              /**
-               * e.g., "2024", "Jan 2024", "1500 BCE", "Renaissance Period"
-               */
-              date: string;
-              title: string;
-              description?: {
-                root: {
-                  type: string;
-                  children: {
-                    type: any;
-                    version: number;
-                    [k: string]: unknown;
-                  }[];
-                  direction: ('ltr' | 'rtl') | null;
-                  format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-                  indent: number;
-                  version: number;
-                };
-                [k: string]: unknown;
-              } | null;
-              image?: (number | null) | Media;
-              /**
-               * Lucide icon name (used when marker style is "icon")
-               */
-              icon?: string | null;
-              /**
-               * Hex color code (e.g., #3B82F6) or leave empty for default
-               */
-              color?: string | null;
-              link?: {
-                url?: string | null;
-                page?: (number | null) | Page;
-                artifact?: (number | null) | Artifact;
-                person?: (number | null) | Person;
-                label?: string | null;
-                newTab?: boolean | null;
-              };
-              /**
-               * Highlight this event with special styling
-               */
-              featured?: boolean | null;
-              id?: string | null;
-            }[];
-            showConnectors?: boolean | null;
-            showDates?: boolean | null;
-            /**
-             * Reveal events as user scrolls
-             */
-            animateOnScroll?: boolean | null;
-            sortOrder?: ('chronological' | 'reverse' | 'manual') | null;
-            backgroundColor?: ('transparent' | 'light' | 'dark' | 'primary') | null;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'timeline';
-          }
-      )[]
-    | null;
-  meta?: {};
-  /**
-   * Show in featured sections
-   */
-  featured?: boolean | null;
-  onDisplay?: boolean | null;
-  location?: string | null;
-  /**
-   * Select the display template
-   */
-  template: 'detail' | 'gallery' | 'timeline';
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
@@ -5839,8 +5339,8 @@ export interface Redirect {
           value: number | Post;
         } | null)
       | ({
-          relationTo: 'artifacts';
-          value: number | Artifact;
+          relationTo: 'archive-items';
+          value: number | ArchiveItem;
         } | null);
     url?: string | null;
   };
@@ -5867,8 +5367,8 @@ export interface Search {
         value: number | Post;
       }
     | {
-        relationTo: 'artifacts';
-        value: number | Artifact;
+        relationTo: 'archive-items';
+        value: number | ArchiveItem;
       }
     | {
         relationTo: 'people';
@@ -6034,8 +5534,8 @@ export interface PayloadLockedDocument {
         value: number | Tag;
       } | null)
     | ({
-        relationTo: 'artifacts';
-        value: number | Artifact;
+        relationTo: 'archive-items';
+        value: number | ArchiveItem;
       } | null)
     | ({
         relationTo: 'people';
@@ -6054,12 +5554,16 @@ export interface PayloadLockedDocument {
         value: number | Product;
       } | null)
     | ({
-        relationTo: 'events';
-        value: number | Event;
+        relationTo: 'product-categories';
+        value: number | ProductCategory;
       } | null)
     | ({
-        relationTo: 'archive-items';
-        value: number | ArchiveItem;
+        relationTo: 'product-collections';
+        value: number | ProductCollection;
+      } | null)
+    | ({
+        relationTo: 'events';
+        value: number | Event;
       } | null)
     | ({
         relationTo: 'content-types';
@@ -6733,7 +6237,7 @@ export interface PagesSelect<T extends boolean = true> {
                       | {
                           url?: T;
                           page?: T;
-                          artifact?: T;
+                          archiveItem?: T;
                           person?: T;
                           label?: T;
                           newTab?: T;
@@ -7161,7 +6665,7 @@ export interface PostsSelect<T extends boolean = true> {
                       | {
                           url?: T;
                           page?: T;
-                          artifact?: T;
+                          archiveItem?: T;
                           person?: T;
                           label?: T;
                           newTab?: T;
@@ -7248,40 +6752,39 @@ export interface TagsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "artifacts_select".
+ * via the `definition` "archive-items_select".
  */
-export interface ArtifactsSelect<T extends boolean = true> {
+export interface ArchiveItemsSelect<T extends boolean = true> {
   title?: T;
   slug?: T;
-  template?: T;
   featuredImage?: T;
   excerpt?: T;
-  description?: T;
-  media?:
+  richContent?: T;
+  gallery?:
     | T
     | {
         image?: T;
         caption?: T;
         id?: T;
       };
-  dimensions?:
+  specifications?:
     | T
     | {
         height?: T;
         width?: T;
         depth?: T;
         weight?: T;
+        materials?: T;
+        condition?: T;
       };
-  materials?: T;
-  condition?: T;
   dateCreated?: T;
   dateAcquired?: T;
   provenance?: T;
-  accessionNumber?: T;
-  people?: T;
-  places?: T;
+  catalogNumber?: T;
+  creators?: T;
+  origins?: T;
+  relatedItems?: T;
   collections?: T;
-  relatedArtifacts?: T;
   categories?: T;
   tags?: T;
   contentBlocks?:
@@ -7371,156 +6874,6 @@ export interface ArtifactsSelect<T extends boolean = true> {
                     id?: T;
                   };
               backgroundColor?: T;
-              id?: T;
-              blockName?: T;
-            };
-        quote?:
-          | T
-          | {
-              quote?: T;
-              author?: T;
-              role?: T;
-              align?: T;
-              id?: T;
-              blockName?: T;
-            };
-        features?:
-          | T
-          | {
-              heading?: T;
-              subheading?: T;
-              layout?: T;
-              items?:
-                | T
-                | {
-                    title?: T;
-                    description?: T;
-                    icon?: T;
-                    media?: T;
-                    id?: T;
-                  };
-              id?: T;
-              blockName?: T;
-            };
-        stats?:
-          | T
-          | {
-              heading?: T;
-              subheading?: T;
-              stats?:
-                | T
-                | {
-                    value?: T;
-                    label?: T;
-                    description?: T;
-                    id?: T;
-                  };
-              id?: T;
-              blockName?: T;
-            };
-        logoCloud?:
-          | T
-          | {
-              heading?: T;
-              logos?:
-                | T
-                | {
-                    logo?: T;
-                    label?: T;
-                    url?: T;
-                    id?: T;
-                  };
-              id?: T;
-              blockName?: T;
-            };
-        testimonials?:
-          | T
-          | {
-              heading?: T;
-              items?:
-                | T
-                | {
-                    quote?: T;
-                    name?: T;
-                    role?: T;
-                    company?: T;
-                    avatar?: T;
-                    rating?: T;
-                    id?: T;
-                  };
-              id?: T;
-              blockName?: T;
-            };
-        faq?:
-          | T
-          | {
-              heading?: T;
-              items?:
-                | T
-                | {
-                    question?: T;
-                    answer?: T;
-                    id?: T;
-                  };
-              id?: T;
-              blockName?: T;
-            };
-        pricing?:
-          | T
-          | {
-              heading?: T;
-              subheading?: T;
-              plans?:
-                | T
-                | {
-                    name?: T;
-                    price?: T;
-                    period?: T;
-                    description?: T;
-                    features?:
-                      | T
-                      | {
-                          feature?: T;
-                          id?: T;
-                        };
-                    ctaLabel?: T;
-                    ctaUrl?: T;
-                    featured?: T;
-                    id?: T;
-                  };
-              id?: T;
-              blockName?: T;
-            };
-        team?:
-          | T
-          | {
-              heading?: T;
-              members?:
-                | T
-                | {
-                    name?: T;
-                    role?: T;
-                    bio?: T;
-                    photo?: T;
-                    socials?:
-                      | T
-                      | {
-                          label?: T;
-                          url?: T;
-                          id?: T;
-                        };
-                    id?: T;
-                  };
-              id?: T;
-              blockName?: T;
-            };
-        embed?:
-          | T
-          | {
-              heading?: T;
-              url?: T;
-              caption?: T;
-              aspectRatio?: T;
               id?: T;
               blockName?: T;
             };
@@ -7656,7 +7009,7 @@ export interface ArtifactsSelect<T extends boolean = true> {
                       | {
                           url?: T;
                           page?: T;
-                          artifact?: T;
+                          archiveItem?: T;
                           person?: T;
                           label?: T;
                           newTab?: T;
@@ -7672,22 +7025,6 @@ export interface ArtifactsSelect<T extends boolean = true> {
               id?: T;
               blockName?: T;
             };
-        spacer?:
-          | T
-          | {
-              style?: T;
-              size?: T;
-              lineStyle?: T;
-              id?: T;
-              blockName?: T;
-            };
-        html?:
-          | T
-          | {
-              html?: T;
-              id?: T;
-              blockName?: T;
-            };
       };
   meta?:
     | T
@@ -7698,7 +7035,8 @@ export interface ArtifactsSelect<T extends boolean = true> {
       };
   featured?: T;
   onDisplay?: T;
-  gallery?: T;
+  location?: T;
+  template?: T;
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
@@ -7737,7 +7075,7 @@ export interface PeopleSelect<T extends boolean = true> {
         url?: T;
         id?: T;
       };
-  relatedArtifacts?: T;
+  relatedItems?: T;
   categories?: T;
   tags?: T;
   contentBlocks?:
@@ -8112,7 +7450,7 @@ export interface PeopleSelect<T extends boolean = true> {
                       | {
                           url?: T;
                           page?: T;
-                          artifact?: T;
+                          archiveItem?: T;
                           person?: T;
                           label?: T;
                           newTab?: T;
@@ -8199,7 +7537,7 @@ export interface PlacesSelect<T extends boolean = true> {
         closed?: T;
         id?: T;
       };
-  relatedArtifacts?: T;
+  relatedItems?: T;
   relatedPeople?: T;
   relatedPlaces?: T;
   gallery?:
@@ -8583,7 +7921,7 @@ export interface PlacesSelect<T extends boolean = true> {
                       | {
                           url?: T;
                           page?: T;
-                          artifact?: T;
+                          archiveItem?: T;
                           person?: T;
                           label?: T;
                           newTab?: T;
@@ -8641,8 +7979,8 @@ export interface MuseumCollectionsSelect<T extends boolean = true> {
   description?: T;
   shortDescription?: T;
   curator?: T;
-  artifacts?: T;
-  featuredArtifacts?: T;
+  archiveItems?: T;
+  featuredItems?: T;
   displayOrder?: T;
   template?: T;
   color?: T;
@@ -8711,6 +8049,7 @@ export interface ProductsSelect<T extends boolean = true> {
   height?: T;
   shippingClass?: T;
   categories?: T;
+  collections?: T;
   tags?: T;
   relatedProducts?: T;
   contentBlocks?:
@@ -8935,7 +8274,7 @@ export interface ProductsSelect<T extends boolean = true> {
                       | {
                           url?: T;
                           page?: T;
-                          artifact?: T;
+                          archiveItem?: T;
                           person?: T;
                           label?: T;
                           newTab?: T;
@@ -8954,8 +8293,56 @@ export interface ProductsSelect<T extends boolean = true> {
       };
   meta?: T | {};
   featured?: T;
-  status?: T;
+  availability?: T;
   template?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "product-categories_select".
+ */
+export interface ProductCategoriesSelect<T extends boolean = true> {
+  name?: T;
+  slug?: T;
+  description?: T;
+  featuredImage?: T;
+  parent?: T;
+  breadcrumbs?:
+    | T
+    | {
+        doc?: T;
+        url?: T;
+        label?: T;
+        id?: T;
+      };
+  displayOrder?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "product-collections_select".
+ */
+export interface ProductCollectionsSelect<T extends boolean = true> {
+  name?: T;
+  slug?: T;
+  description?: T;
+  shortDescription?: T;
+  featuredImage?: T;
+  bannerImage?: T;
+  products?: T;
+  featuredProducts?: T;
+  template?: T;
+  displayOrder?: T;
+  color?: T;
+  startDate?: T;
+  endDate?: T;
+  discountPercentage?: T;
+  meta?: T | {};
+  featured?: T;
+  showInNavigation?: T;
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
@@ -9222,7 +8609,7 @@ export interface EventsSelect<T extends boolean = true> {
                       | {
                           url?: T;
                           page?: T;
-                          artifact?: T;
+                          archiveItem?: T;
                           person?: T;
                           label?: T;
                           newTab?: T;
@@ -9241,291 +8628,7 @@ export interface EventsSelect<T extends boolean = true> {
       };
   meta?: T | {};
   featured?: T;
-  status?: T;
-  template?: T;
-  updatedAt?: T;
-  createdAt?: T;
-  _status?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "archive-items_select".
- */
-export interface ArchiveItemsSelect<T extends boolean = true> {
-  title?: T;
-  slug?: T;
-  featuredImage?: T;
-  excerpt?: T;
-  richContent?: T;
-  gallery?:
-    | T
-    | {
-        image?: T;
-        caption?: T;
-        id?: T;
-      };
-  specifications?:
-    | T
-    | {
-        height?: T;
-        width?: T;
-        depth?: T;
-        weight?: T;
-        materials?: T;
-        condition?: T;
-      };
-  dateCreated?: T;
-  dateAcquired?: T;
-  provenance?: T;
-  catalogNumber?: T;
-  creators?: T;
-  origins?: T;
-  relatedItems?: T;
-  categories?: T;
-  tags?: T;
-  contentBlocks?:
-    | T
-    | {
-        hero?:
-          | T
-          | {
-              type?: T;
-              heading?: T;
-              subheading?: T;
-              image?: T;
-              videoUrl?: T;
-              overlay?: T;
-              textAlign?: T;
-              links?:
-                | T
-                | {
-                    label?: T;
-                    url?: T;
-                    page?: T;
-                    variant?: T;
-                    newTab?: T;
-                    id?: T;
-                  };
-              id?: T;
-              blockName?: T;
-            };
-        content?:
-          | T
-          | {
-              columns?:
-                | T
-                | {
-                    size?: T;
-                    richText?: T;
-                    enableLink?: T;
-                    link?:
-                      | T
-                      | {
-                          label?: T;
-                          url?: T;
-                          page?: T;
-                          newTab?: T;
-                        };
-                    id?: T;
-                  };
-              backgroundColor?: T;
-              paddingTop?: T;
-              paddingBottom?: T;
-              id?: T;
-              blockName?: T;
-            };
-        media?:
-          | T
-          | {
-              media?: T;
-              caption?: T;
-              size?: T;
-              position?: T;
-              enableLink?: T;
-              link?:
-                | T
-                | {
-                    url?: T;
-                    page?: T;
-                    newTab?: T;
-                  };
-              id?: T;
-              blockName?: T;
-            };
-        cta?:
-          | T
-          | {
-              style?: T;
-              heading?: T;
-              description?: T;
-              image?: T;
-              links?:
-                | T
-                | {
-                    label?: T;
-                    url?: T;
-                    page?: T;
-                    variant?: T;
-                    newTab?: T;
-                    id?: T;
-                  };
-              backgroundColor?: T;
-              id?: T;
-              blockName?: T;
-            };
-        archive?:
-          | T
-          | {
-              heading?: T;
-              description?: T;
-              populateBy?: T;
-              relationTo?: T;
-              contentType?: T;
-              categories?: T;
-              limit?: T;
-              selectedDocs?: T;
-              layout?: T;
-              columns?: T;
-              showImage?: T;
-              showExcerpt?: T;
-              showDate?: T;
-              showAuthor?: T;
-              link?:
-                | T
-                | {
-                    show?: T;
-                    label?: T;
-                    url?: T;
-                  };
-              id?: T;
-              blockName?: T;
-            };
-        form?:
-          | T
-          | {
-              form?: T;
-              enableIntro?: T;
-              introContent?: T;
-              style?: T;
-              backgroundColor?: T;
-              id?: T;
-              blockName?: T;
-            };
-        gallery?:
-          | T
-          | {
-              heading?: T;
-              description?: T;
-              layout?: T;
-              columns?: T;
-              gap?: T;
-              aspectRatio?: T;
-              images?:
-                | T
-                | {
-                    image?: T;
-                    caption?: T;
-                    link?:
-                      | T
-                      | {
-                          url?: T;
-                          page?: T;
-                          newTab?: T;
-                        };
-                    id?: T;
-                  };
-              showCaptions?: T;
-              enableLightbox?: T;
-              autoplay?: T;
-              autoplaySpeed?: T;
-              id?: T;
-              blockName?: T;
-            };
-        grid?:
-          | T
-          | {
-              heading?: T;
-              description?: T;
-              style?: T;
-              columns?: T;
-              gap?: T;
-              alignment?: T;
-              items?:
-                | T
-                | {
-                    image?: T;
-                    icon?: T;
-                    title?: T;
-                    subtitle?: T;
-                    description?: T;
-                    stat?: T;
-                    link?:
-                      | T
-                      | {
-                          url?: T;
-                          page?: T;
-                          label?: T;
-                          newTab?: T;
-                        };
-                    id?: T;
-                  };
-              showBorder?: T;
-              showShadow?: T;
-              hoverEffect?: T;
-              cta?:
-                | T
-                | {
-                    show?: T;
-                    label?: T;
-                    url?: T;
-                    page?: T;
-                  };
-              id?: T;
-              blockName?: T;
-            };
-        timeline?:
-          | T
-          | {
-              heading?: T;
-              description?: T;
-              layout?: T;
-              lineStyle?: T;
-              markerStyle?: T;
-              events?:
-                | T
-                | {
-                    date?: T;
-                    title?: T;
-                    description?: T;
-                    image?: T;
-                    icon?: T;
-                    color?: T;
-                    link?:
-                      | T
-                      | {
-                          url?: T;
-                          page?: T;
-                          artifact?: T;
-                          person?: T;
-                          label?: T;
-                          newTab?: T;
-                        };
-                    featured?: T;
-                    id?: T;
-                  };
-              showConnectors?: T;
-              showDates?: T;
-              animateOnScroll?: T;
-              sortOrder?: T;
-              backgroundColor?: T;
-              id?: T;
-              blockName?: T;
-            };
-      };
-  meta?: T | {};
-  featured?: T;
-  onDisplay?: T;
-  location?: T;
+  eventStatus?: T;
   template?: T;
   updatedAt?: T;
   createdAt?: T;
@@ -9915,7 +9018,7 @@ export interface CustomItemsSelect<T extends boolean = true> {
                       | {
                           url?: T;
                           page?: T;
-                          artifact?: T;
+                          archiveItem?: T;
                           person?: T;
                           label?: T;
                           newTab?: T;
@@ -10627,8 +9730,8 @@ export interface TaskSchedulePublish {
           value: number | Post;
         } | null)
       | ({
-          relationTo: 'artifacts';
-          value: number | Artifact;
+          relationTo: 'archive-items';
+          value: number | ArchiveItem;
         } | null)
       | ({
           relationTo: 'people';
@@ -10647,12 +9750,12 @@ export interface TaskSchedulePublish {
           value: number | Product;
         } | null)
       | ({
-          relationTo: 'events';
-          value: number | Event;
+          relationTo: 'product-collections';
+          value: number | ProductCollection;
         } | null)
       | ({
-          relationTo: 'archive-items';
-          value: number | ArchiveItem;
+          relationTo: 'events';
+          value: number | Event;
         } | null)
       | ({
           relationTo: 'custom-items';

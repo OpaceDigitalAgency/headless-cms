@@ -11,7 +11,7 @@ import type { CollectionConfig, Field } from 'payload'
 /**
  * Template category for grouping in the UI
  */
-export type TemplateCategory = 
+export type TemplateCategory =
   | 'content'      // Blog posts, articles, news
   | 'archive'      // Museum, gallery, portfolio items
   | 'commerce'     // Products, services, inventory
@@ -21,50 +21,61 @@ export type TemplateCategory =
   | 'media'        // Video, audio, documents
 
 /**
+ * Collection installation status
+ */
+export type CollectionStatus =
+  | 'core'         // Always installed, cannot be disabled (Pages, Posts, Media, etc.)
+  | 'installed'    // Currently installed and active
+  | 'available'    // Available to install but not currently active
+
+/**
  * Collection Template Definition
- * 
+ *
  * Describes a template that can be instantiated as a new collection.
  */
 export interface CollectionTemplate {
   /** Unique template identifier */
   id: string
-  
+
   /** Display name in the UI */
   name: string
-  
+
   /** Brief description of what this template is for */
   description: string
-  
+
   /** Category for grouping in the UI */
   category: TemplateCategory
-  
+
   /** Icon identifier for the UI */
   icon: string
-  
+
   /** Default slug for the collection (can be customized) */
   defaultSlug: string
-  
+
   /** Default singular label */
   defaultSingular: string
-  
+
   /** Default plural label */
   defaultPlural: string
-  
+
   /** Admin group this collection appears in */
   adminGroup: string
-  
+
+  /** Installation status - determines if this is core, installed, or available */
+  status: CollectionStatus
+
   /** Whether this template includes related sub-collections */
   includesRelated?: string[]
-  
+
   /** Field definitions for this template */
   fields: Field[]
-  
+
   /** Whether sample data is available */
   hasSeedData: boolean
-  
+
   /** Whether sample media is available */
   hasSeedMedia: boolean
-  
+
   /** Sample data count hint */
   seedDataCount?: number
 }

@@ -132,10 +132,10 @@ export const timelineBlock: Block = {
               label: 'Or select a page',
             },
             {
-              name: 'artifact',
+              name: 'archiveItem',
               type: 'relationship',
-              relationTo: 'artifacts',
-              label: 'Or link to artifact',
+              relationTo: 'archive-items',
+              label: 'Or link to archive item',
             },
             {
               name: 'person',

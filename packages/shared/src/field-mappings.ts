@@ -46,22 +46,22 @@ export const postsTemplateConfig: CollectionTemplateConfig = {
 };
 
 /**
- * Artifacts collection field mapping (museum example)
+ * Archive Items collection field mapping (museum example)
  */
-export const artifactsFieldMapping: FieldMapping = {
+export const archiveItemsFieldMapping: FieldMapping = {
   title: 'heading',
   description: 'body',
-  media: 'gallery',
-  people: 'relatedItems',
-  places: 'relatedItems',
+  gallery: 'gallery',
+  creators: 'relatedItems',
+  origins: 'relatedItems',
   collections: 'categories',
   meta: 'metadata',
 };
 
-export const artifactsTemplateConfig: CollectionTemplateConfig = {
+export const archiveItemsTemplateConfig: CollectionTemplateConfig = {
   defaultTemplate: 'detail',
   availableTemplates: ['detail', 'timeline', 'list'],
-  fieldMapping: artifactsFieldMapping,
+  fieldMapping: archiveItemsFieldMapping,
 };
 
 /**
@@ -72,7 +72,7 @@ export const peopleFieldMapping: FieldMapping = {
   biography: 'body',
   portrait: 'featuredImage',
   birthDate: 'date',
-  relatedArtifacts: 'relatedItems',
+  relatedItems: 'relatedItems',
 };
 
 export const peopleTemplateConfig: CollectionTemplateConfig = {
@@ -89,7 +89,7 @@ export const placesFieldMapping: FieldMapping = {
   description: 'body',
   featuredImage: 'featuredImage',
   location: 'metadata',
-  relatedArtifacts: 'relatedItems',
+  relatedItems: 'relatedItems',
 };
 
 export const placesTemplateConfig: CollectionTemplateConfig = {
@@ -107,7 +107,7 @@ export const collectionsFieldMapping: FieldMapping = {
   featuredImage: 'featuredImage',
   parent: 'metadata',
   children: 'relatedItems',
-  artifacts: 'relatedItems',
+  archiveItems: 'relatedItems',
 };
 
 export const collectionsTemplateConfig: CollectionTemplateConfig = {

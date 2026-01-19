@@ -38,7 +38,7 @@ export const archiveBlock: Block = {
       options: [
         { label: 'Posts', value: 'posts' },
         { label: 'Pages', value: 'pages' },
-        { label: 'Artifacts', value: 'artifacts' },
+        { label: 'Archive Items', value: 'archive-items' },
         { label: 'People', value: 'people' },
         { label: 'Places', value: 'places' },
         { label: 'Collections', value: 'museum-collections' },
@@ -84,7 +84,7 @@ export const archiveBlock: Block = {
     {
       name: 'selectedDocs',
       type: 'relationship',
-      relationTo: ['posts', 'pages', 'artifacts', 'people', 'places', 'custom-items'],
+      relationTo: ['posts', 'pages', 'archive-items', 'people', 'places', 'custom-items'],
       hasMany: true,
       label: 'Selected Documents',
       admin: {

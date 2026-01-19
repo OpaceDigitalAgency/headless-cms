@@ -3,14 +3,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react'
 import { useRouter, usePathname } from 'next/navigation'
 import { ThemeToggle } from './ThemeToggle'
-import { 
-  navSections, 
-  globalLinks, 
-  collectionSearchConfig, 
-  resolveActiveSection, 
-  resolveActiveItem,
-  type NavSection 
-} from './navData'
+import type { NavSection } from './navData'
 
 /**
  * Icon components for navigation
@@ -225,9 +218,73 @@ const getIcon = (name: string, size = 20) => {
 }
 
 /**
+ * Resolve which section is active based on current path
+ */
+function resolveActiveSection(pathname: string, navSections: NavSection[]): string | null {
+  for (const section of navSections) {
+    for (const item of section.items) {
+      // Check direct item
+      if (item.href === '/admin' && pathname === '/admin') {
+        return section.id
+      }
+      if (item.href && item.href !== '/admin' && pathname.startsWith(item.href)) {
+        return section.id
+      }
+
+      // Check nested items
+      if (item.items) {
+        for (const nestedItem of item.items) {
+          if (nestedItem.href === '/admin' && pathname === '/admin') {
+            return section.id
+          }
+          if (nestedItem.href && nestedItem.href !== '/admin' && pathname.startsWith(nestedItem.href)) {
+            return section.id
+          }
+        }
+      }
+    }
+  }
+  return null
+}
+
+/**
+ * Resolve which item is active based on current path
+ */
+function resolveActiveItem(pathname: string, navSections: NavSection[]): string | null {
+  for (const section of navSections) {
+    for (const item of section.items) {
+      // Check direct item
+      if (item.href === '/admin' && pathname === '/admin') {
+        return item.href
+      }
+      if (item.href && item.href !== '/admin' && pathname.startsWith(item.href)) {
+        return item.href
+      }
+
+      // Check nested items
+      if (item.items) {
+        for (const nestedItem of item.items) {
+          if (nestedItem.href === '/admin' && pathname === '/admin') {
+            return nestedItem.href
+          }
+          if (nestedItem.href && nestedItem.href !== '/admin' && pathname.startsWith(nestedItem.href)) {
+            return nestedItem.href
+          }
+        }
+      }
+    }
+  }
+  return null
+}
+
+/**
  * Admin Search Component
  */
-const AdminSearch: React.FC = () => {
+const AdminSearch: React.FC<{
+  navSections: NavSection[]
+  globalLinks: Array<{ label: string; href: string; slug: string }>
+  collectionSearchConfig: Array<{ slug: string; label: string; titleField: string }>
+}> = ({ navSections, globalLinks, collectionSearchConfig }) => {
   const router = useRouter()
   const [query, setQuery] = useState('')
   const [results, setResults] = useState<Array<{ type: string; label: string; href: string; title: string }>>([])
@@ -438,14 +495,64 @@ const AccountDropdown: React.FC = () => {
 
 /**
  * Two-Panel Navigation Component
- * 
+ *
  * Replaces Payload's default nav with a fixed top bar and collapsible sidebar.
+ * Fetches navigation dynamically from the server to reflect enabled collections.
  */
 export const TwoPanelNav: React.FC = () => {
   const pathname = usePathname()
-  const activeSection = resolveActiveSection(pathname)
-  const activeItem = resolveActiveItem(pathname)
   const [isCompact, setIsCompact] = useState(true)
+  const [navSections, setNavSections] = useState<NavSection[]>([])
+  const [globalLinks, setGlobalLinks] = useState<Array<{ label: string; href: string; slug: string }>>([])
+  const [collectionSearchConfig, setCollectionSearchConfig] = useState<Array<{ slug: string; label: string; titleField: string }>>([])
+  const [isLoading, setIsLoading] = useState(true)
+
+  const activeSection = resolveActiveSection(pathname, navSections)
+  const activeItem = resolveActiveItem(pathname, navSections)
+
+  // Fetch dynamic navigation on mount with caching
+  useEffect(() => {
+    const fetchNavigation = async () => {
+      // Check cache first (synchronously to avoid flash)
+      const cached = sessionStorage.getItem('nav-data')
+      const cacheTime = sessionStorage.getItem('nav-cache-time')
+      const now = Date.now()
+
+      // Use cache immediately if available and less than 5 minutes old
+      if (cached && cacheTime && (now - parseInt(cacheTime)) < 300000) {
+        try {
+          const data = JSON.parse(cached)
+          setNavSections(data.navSections || [])
+          setGlobalLinks(data.globals || [])
+          setCollectionSearchConfig(data.collectionSearchConfig || [])
+          setIsLoading(false)
+          return
+        } catch (e) {
+          // Cache corrupted, fetch fresh
+        }
+      }
+
+      // Fetch fresh data
+      try {
+        const response = await fetch('/api/admin/navigation')
+        if (response.ok) {
+          const data = await response.json()
+          setNavSections(data.navSections || [])
+          setGlobalLinks(data.globals || [])
+          setCollectionSearchConfig(data.collectionSearchConfig || [])
+
+          // Cache the data
+          sessionStorage.setItem('nav-data', JSON.stringify(data))
+          sessionStorage.setItem('nav-cache-time', now.toString())
+        }
+      } catch (error) {
+        console.error('Failed to fetch navigation:', error)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+    fetchNavigation()
+  }, [])
 
   useEffect(() => {
     const stored = window.localStorage.getItem('ra-density')
@@ -457,6 +564,12 @@ export const TwoPanelNav: React.FC = () => {
     root.classList.toggle('ra-density-compact', isCompact)
     window.localStorage.setItem('ra-density', isCompact ? 'compact' : 'comfortable')
   }, [isCompact])
+
+  // Define which sections should appear in the top menu
+  // Only show major sections, not sub-groupings like Museum, Shop, Archive
+  const topMenuSections = navSections.filter(section =>
+    ['dashboard', 'content', 'collections', 'media', 'forms', 'settings', 'admin'].includes(section.id)
+  )
 
   return (
     <>
@@ -471,22 +584,49 @@ export const TwoPanelNav: React.FC = () => {
           <span>CMS</span>
         </a>
 
-        {/* Top-level section links */}
+        {/* Top-level section links - only show major sections */}
         <div className="ra-top-nav__links">
-          {navSections.map((section) => (
-            <a
-              key={section.id}
-              href={section.items[0]?.href || '#'}
-              className={`ra-top-nav__link ${activeSection === section.id ? 'ra-top-nav__link--active' : ''}`}
-            >
-              {section.label}
-            </a>
-          ))}
+          {isLoading ? (
+            // Loading skeleton
+            <>
+              <div className="ra-top-nav__link ra-top-nav__link--skeleton" style={{ width: '80px', height: '20px', background: 'var(--theme-elevation-100)', borderRadius: '4px' }} />
+              <div className="ra-top-nav__link ra-top-nav__link--skeleton" style={{ width: '70px', height: '20px', background: 'var(--theme-elevation-100)', borderRadius: '4px' }} />
+              <div className="ra-top-nav__link ra-top-nav__link--skeleton" style={{ width: '60px', height: '20px', background: 'var(--theme-elevation-100)', borderRadius: '4px' }} />
+            </>
+          ) : (
+            topMenuSections.map((section) => {
+              // For sections with nested items, find the first actual href
+              let sectionHref = '#'
+              if (section.items && section.items.length > 0) {
+                // Check if first item has href directly
+                if (section.items[0].href) {
+                  sectionHref = section.items[0].href
+                } else if (section.items[0].items && section.items[0].items.length > 0) {
+                  // If first item is a label with nested items, use first nested item's href
+                  sectionHref = section.items[0].items[0]?.href || '#'
+                }
+              }
+
+              return (
+                <a
+                  key={section.id}
+                  href={sectionHref}
+                  className={`ra-top-nav__link ${activeSection === section.id ? 'ra-top-nav__link--active' : ''}`}
+                >
+                  {section.label}
+                </a>
+              )
+            })
+          )}
         </div>
 
         <div className="ra-top-nav__spacer" />
 
-        <AdminSearch />
+        <AdminSearch
+          navSections={navSections}
+          globalLinks={globalLinks}
+          collectionSearchConfig={collectionSearchConfig}
+        />
         <button
           type="button"
           className={`ra-top-nav__density ${isCompact ? 'ra-top-nav__density--active' : ''}`}
@@ -504,16 +644,44 @@ export const TwoPanelNav: React.FC = () => {
       <aside className="ra-side-nav">
         {activeSection && navSections.find(s => s.id === activeSection) && (
           <div className="ra-side-nav__section">
-            {navSections.find(s => s.id === activeSection)!.items.map((item) => (
-              <a
-                key={item.href}
-                href={item.href}
-                className={`ra-side-nav__link ${activeItem === item.href ? 'ra-side-nav__link--active' : ''}`}
-              >
-                <span className="ra-side-nav__icon">{getIcon(item.icon, 18)}</span>
-                <span className="ra-side-nav__label">{item.label}</span>
-              </a>
-            ))}
+            {navSections.find(s => s.id === activeSection)!.items.map((item, index) => {
+              // Check if this is an item with nested items (like Posts with Categories/Tags, or Products with Categories/Collections)
+              if (item.items && item.href) {
+                return (
+                  <div key={item.href} className="ra-side-nav__subsection">
+                    <a
+                      href={item.href}
+                      className={`ra-side-nav__link ${activeItem === item.href ? 'ra-side-nav__link--active' : ''}`}
+                    >
+                      <span className="ra-side-nav__icon">{getIcon(item.icon, 18)}</span>
+                      <span className="ra-side-nav__label">{item.label}</span>
+                    </a>
+                    {item.items.map((nestedItem: any) => (
+                      <a
+                        key={nestedItem.href}
+                        href={nestedItem.href}
+                        className={`ra-side-nav__link ra-side-nav__link--nested ${activeItem === nestedItem.href ? 'ra-side-nav__link--active' : ''}`}
+                      >
+                        <span className="ra-side-nav__icon">{getIcon(nestedItem.icon, 18)}</span>
+                        <span className="ra-side-nav__label">{nestedItem.label}</span>
+                      </a>
+                    ))}
+                  </div>
+                )
+              }
+
+              // Regular item without nesting
+              return (
+                <a
+                  key={item.href || `item-${index}`}
+                  href={item.href}
+                  className={`ra-side-nav__link ${activeItem === item.href ? 'ra-side-nav__link--active' : ''}`}
+                >
+                  <span className="ra-side-nav__icon">{getIcon(item.icon, 18)}</span>
+                  <span className="ra-side-nav__label">{item.label}</span>
+                </a>
+              )
+            })}
           </div>
         )}
       </aside>

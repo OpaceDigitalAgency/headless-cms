@@ -40,6 +40,8 @@ export const navSections: NavSection[] = [
     items: [
       { label: 'Pages', href: '/admin/collections/pages', icon: 'page' },
       { label: 'Posts', href: '/admin/collections/posts', icon: 'post' },
+      { label: 'Events', href: '/admin/collections/events', icon: 'post' },
+      { label: 'Archive Items', href: '/admin/collections/archive-items', icon: 'artifact' },
       { label: 'Categories', href: '/admin/collections/categories', icon: 'category' },
       { label: 'Tags', href: '/admin/collections/tags', icon: 'tags' },
       { label: 'Custom Items', href: '/admin/collections/custom-items', icon: 'customItem' },
@@ -55,6 +57,16 @@ export const navSections: NavSection[] = [
       { label: 'People', href: '/admin/collections/people', icon: 'person' },
       { label: 'Places', href: '/admin/collections/places', icon: 'place' },
       { label: 'Museum Collections', href: '/admin/collections/museum-collections', icon: 'museum' },
+    ],
+  },
+  {
+    id: 'shop',
+    label: 'Shop',
+    icon: 'collection',
+    items: [
+      { label: 'Products', href: '/admin/collections/products', icon: 'collection' },
+      { label: 'Product Categories', href: '/admin/collections/product-categories', icon: 'category' },
+      { label: 'Product Collections', href: '/admin/collections/product-collections', icon: 'collection' },
     ],
   },
   {
@@ -103,7 +115,9 @@ export const globalLinks = [
 export const collectionSearchConfig = [
   { slug: 'pages', label: 'Pages', titleField: 'title' },
   { slug: 'posts', label: 'Posts', titleField: 'title' },
-  { slug: 'artifacts', label: 'Artifacts', titleField: 'title' },
+  { slug: 'events', label: 'Events', titleField: 'title' },
+  { slug: 'archive-items', label: 'Archive Items', titleField: 'title' },
+  { slug: 'products', label: 'Products', titleField: 'title' },
   { slug: 'people', label: 'People', titleField: 'name' },
   { slug: 'places', label: 'Places', titleField: 'name' },
   { slug: 'museum-collections', label: 'Collections', titleField: 'title' },
@@ -111,6 +125,8 @@ export const collectionSearchConfig = [
   { slug: 'content-types', label: 'Content Types', titleField: 'name' },
   { slug: 'categories', label: 'Categories', titleField: 'title' },
   { slug: 'tags', label: 'Tags', titleField: 'title' },
+  { slug: 'product-categories', label: 'Product Categories', titleField: 'title' },
+  { slug: 'product-collections', label: 'Product Collections', titleField: 'title' },
   { slug: 'media', label: 'Media', titleField: 'filename' },
   { slug: 'users', label: 'Users', titleField: 'email' },
   { slug: 'forms', label: 'Forms', titleField: 'title' },

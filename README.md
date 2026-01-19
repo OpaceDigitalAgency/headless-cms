@@ -260,12 +260,37 @@ You can choose your frontend framework in the admin panel:
 | `make build` | Build all applications for production |
 | `make up` | Start services via Docker Compose |
 | `make down` | Stop all running services |
+| `make db-fresh` | **Fresh database with regenerated migrations** (use after schema changes) |
+| `make db-migrate` | Run database migrations |
+| `make db-reset` | Reset database (drop all tables and re-migrate) |
+| `make db-seed` | Seed database with sample data |
 | `make seed` | Seed database with sample data |
 | `make clear-seed` | Clear all sample data |
-| `make migrate` | Run database migrations |
 | `make lint` | Run ESLint |
 | `make typecheck` | Run TypeScript type checking |
 | `make format` | Format code with Prettier |
+
+### Database Management
+
+When making **core schema changes** (adding/removing/renaming collections, fields, etc.), use:
+
+```bash
+make db-fresh
+```
+
+This will:
+1. Stop any running dev servers
+2. Remove the database volume and recreate PostgreSQL
+3. Clear all old migration files
+4. Generate fresh migrations from your current Payload schema
+5. Run the new migrations
+
+Then:
+```bash
+make dev
+```
+
+Create your admin user at http://localhost:3000/admin/create-first-user and run seed scripts from within the CMS.
 
 ### Preset Commands
 

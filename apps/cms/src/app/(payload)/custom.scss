@@ -495,12 +495,45 @@
   flex: 1;
 }
 
+/* Subsection styles (for nested items) */
+.ra-side-nav__subsection {
+  margin-bottom: 1rem;
+}
+
+.ra-side-nav__label-header {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0.625rem 1rem;
+  color: var(--theme-elevation-600);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.25rem;
+}
+
+.ra-side-nav__label-text {
+  flex: 1;
+}
+
+.ra-side-nav__link--nested {
+  padding-left: 3rem !important;
+  font-size: 0.8125rem;
+}
+
 /* Collapsed sidebar styles */
 .template-default:not(.template-default--nav-open) .ra-side-nav__heading,
 .template-default:not(.template-default--nav-open) .ra-side-nav__label,
+.template-default:not(.template-default--nav-open) .ra-side-nav__label-text,
+.template-default:not(.template-default--nav-open) .ra-side-nav__label-header,
+.template-default:not(.template-default--nav-open) .ra-side-nav__link--nested,
 .template-default:not(.template-default--nav-open) .ra-side-nav__chevron,
 .template-minimal:not(.template-minimal--nav-open) .ra-side-nav__heading,
 .template-minimal:not(.template-minimal--nav-open) .ra-side-nav__label,
+.template-minimal:not(.template-minimal--nav-open) .ra-side-nav__label-text,
+.template-minimal:not(.template-minimal--nav-open) .ra-side-nav__label-header,
+.template-minimal:not(.template-minimal--nav-open) .ra-side-nav__link--nested,
 .template-minimal:not(.template-minimal--nav-open) .ra-side-nav__chevron {
   display: none;
 }

@@ -5,7 +5,7 @@
 
 .PHONY: help install dev build start stop clean test lint typecheck \
         docker-up docker-down docker-build docker-clean \
-        db-migrate db-seed db-reset \
+        db-migrate db-seed db-reset db-fresh \
         railway-provision railway-deploy \
         dev-cms dev-web dev-astro \
         build-cms build-web build-astro \
@@ -193,6 +193,41 @@ db-reset: ## Reset database (drop all tables and re-migrate)
 	@read -p "Are you sure? [y/N] " confirm && [ "$$confirm" = "y" ]
 	pnpm --filter @repo/cms migrate:reset
 	@echo "$(GREEN)Database reset!$(NC)"
+
+db-fresh: ## Fresh database with regenerated migrations (use after schema changes)
+	@echo "$(YELLOW)═══════════════════════════════════════════════════════$(NC)"
+	@echo "$(YELLOW)  Fresh Database & Migration Regeneration$(NC)"
+	@echo "$(YELLOW)  This will DELETE all data and regenerate migrations$(NC)"
+	@echo "$(YELLOW)═══════════════════════════════════════════════════════$(NC)"
+	@read -p "Are you sure? [y/N] " confirm && [ "$$confirm" = "y" ]
+	@echo ""
+	@echo "$(CYAN)[1/6] Stopping any running dev servers...$(NC)"
+	@-lsof -ti :3000 | xargs kill -9 2>/dev/null || true
+	@-lsof -ti :3001 | xargs kill -9 2>/dev/null || true
+	@-lsof -ti :4321 | xargs kill -9 2>/dev/null || true
+	@sleep 1
+	@echo "$(CYAN)[2/6] Removing database volume and recreating...$(NC)"
+	@docker compose down -v
+	@docker compose up -d postgres
+	@echo "$(CYAN)[3/6] Waiting for PostgreSQL to be ready...$(NC)"
+	@sleep 5
+	@echo "$(CYAN)[4/6] Clearing old migrations...$(NC)"
+	@rm -f apps/db/migrations/*.ts apps/db/migrations/*.json
+	@echo 'export const migrations = [];' > apps/db/migrations/index.ts
+	@echo "$(CYAN)[5/6] Generating fresh migrations from current schema...$(NC)"
+	@pnpm --filter @repo/cms migrate:create
+	@echo "$(CYAN)[6/6] Running migrations...$(NC)"
+	@pnpm --filter @repo/cms migrate
+	@echo ""
+	@echo "$(GREEN)═══════════════════════════════════════════════════════$(NC)"
+	@echo "$(GREEN)  Database refreshed successfully!$(NC)"
+	@echo "$(GREEN)═══════════════════════════════════════════════════════$(NC)"
+	@echo ""
+	@echo "Next steps:"
+	@echo "  1. Run 'make dev' to start the dev server"
+	@echo "  2. Go to http://localhost:3000/admin to create admin user"
+	@echo "  3. Run seed scripts from within the CMS"
+	@echo ""
 
 db-studio: ## Open Drizzle Studio for database management
 	@echo "$(CYAN)Opening Drizzle Studio...$(NC)"

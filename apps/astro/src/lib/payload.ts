@@ -117,13 +117,13 @@ export async function getPostBySlug(slug: string, options?: { draft?: boolean })
 }
 
 /**
- * Fetch all published artifacts
+ * Fetch all published archive items
  */
-export async function getArtifacts(options?: { limit?: number; draft?: boolean }) {
+export async function getArchiveItems(options?: { limit?: number; draft?: boolean }) {
   const payload = await getPayloadClient();
-  
+
   return payload.find({
-    collection: 'artifacts',
+    collection: 'archive-items',
     limit: options?.limit || 100,
     draft: options?.draft || false,
     where: {
@@ -136,13 +136,13 @@ export async function getArtifacts(options?: { limit?: number; draft?: boolean }
 }
 
 /**
- * Fetch a single artifact by slug
+ * Fetch a single archive item by slug
  */
-export async function getArtifactBySlug(slug: string, options?: { draft?: boolean }) {
+export async function getArchiveItemBySlug(slug: string, options?: { draft?: boolean }) {
   const payload = await getPayloadClient();
-  
+
   const result = await payload.find({
-    collection: 'artifacts',
+    collection: 'archive-items',
     where: {
       slug: {
         equals: slug,

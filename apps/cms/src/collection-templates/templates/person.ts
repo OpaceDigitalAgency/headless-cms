@@ -34,6 +34,7 @@ export const personTemplate: CollectionTemplate = {
   defaultSingular: 'Person',
   defaultPlural: 'People',
   adminGroup: 'Directory',
+  status: 'installed', // Currently installed
   hasSeedData: true,
   hasSeedMedia: true,
   seedDataCount: 6,

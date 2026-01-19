@@ -108,23 +108,23 @@ export function CollectionRenderer({ collection }: CollectionRendererProps) {
             </section>
           )}
 
-          {/* All Artifacts in Collection */}
-          {collection.artifacts?.docs && collection.artifacts.docs.length > 0 && (
+          {/* All Archive Items in Collection */}
+          {collection.archiveItems?.docs && collection.archiveItems.docs.length > 0 && (
             <section>
-              <h2 className="mb-6 text-2xl font-bold text-gray-900">All Artifacts</h2>
+              <h2 className="mb-6 text-2xl font-bold text-gray-900">All Items</h2>
               <div className="archive-items">
-                {collection.artifacts.docs.map((artifact: any) => (
+                {collection.archiveItems.docs.map((item: any) => (
                   <Link
-                    key={artifact.id}
-                    href={`/artifacts/${artifact.slug}`}
+                    key={item.id}
+                    href={`/items/${item.slug}`}
                     className="archive-item"
                   >
                     <div className="archive-item-link">
-                      {artifact.media?.[0]?.image?.url && (
+                      {item.featuredImage?.url && (
                         <div className="archive-item-image">
                           <Image
-                            src={artifact.media[0].image.url}
-                            alt={artifact.title}
+                            src={item.featuredImage.url}
+                            alt={item.title}
                             width={200}
                             height={200}
                             className="h-full w-full object-cover"
@@ -132,7 +132,7 @@ export function CollectionRenderer({ collection }: CollectionRendererProps) {
                         </div>
                       )}
                       <div className="archive-item-content">
-                        <h3 className="archive-item-title">{artifact.title}</h3>
+                        <h3 className="archive-item-title">{item.title}</h3>
                         {artifact.dateCreated && (
                           <p className="mt-1 text-sm text-gray-500">{artifact.dateCreated}</p>
                         )}

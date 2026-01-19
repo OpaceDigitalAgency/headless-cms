@@ -1,0 +1,452 @@
+# Shared Taxonomy System & Hierarchical Categories
+
+## Admin Menu Design
+
+The CMS admin navigation is organized into logical sections to improve usability and accessibility:
+
+```
+Dashboard
+├── Dashboard (overview)
+
+Content
+├── Pages
+├── Posts
+├── Events
+├── Custom Items
+
+Taxonomy (NEW - Separate Section)
+├── Categories (hierarchical, shared across content)
+├── Tags (shared across content)
+
+Collections
+├── Archive Items (flexible, customizable base collection)
+├── People
+├── Places
+├── Museum Collections (galleries/exhibitions)
+
+Shop
+├── Products
+├── Product Categories
+├── Product Collections
+
+Media
+├── Media Library
+
+Forms
+├── Forms
+├── Form Submissions
+
+Settings
+├── Settings
+├── Header
+├── Footer
+├── Redirects
+├── Search Index
+
+Admin
+├── Users
+├── Content Types (for creating custom collections)
+```
+
+### Key Design Decisions
+
+1. **Taxonomy Section Separated** - Categories and Tags are now in their own section, making them easily accessible on mobile and desktop
+2. **Archive Items as Base** - Single flexible collection that can be customized for any use case (museum artifacts, gallery pieces, portfolio items, etc.)
+3. **No Redundant Collections** - Removed "Artifacts" collection (was redundant with Archive Items)
+4. **Shared Taxonomy** - Categories and Tags are shared across Posts, Archive Items, Events, People, and Custom Items (NOT ecommerce)
+5. **Hierarchical Categories** - Categories support parent-child relationships for unlimited nesting depth
+
+---
+
+## Overview
+
+This document describes the unified taxonomy system for content collections, addressing:
+- **Nested Items Inaccessible on Mobile** (Issue: Categories/Tags hidden when sidebar collapsed)
+- **Shared Taxonomy System** (Categories/Tags across all content types)
+- **Hierarchical Category Architecture** (Parent-child category relationships)
+- **Generic Archive System** (Flexible, customizable for any collection type)
+
+---
+
+## Architecture
+
+### Collections Using Shared Taxonomy
+
+**Content Collections** (share `categories` and `tags`):
+- Posts
+- Archive Items (museum artifacts, gallery pieces, portfolio items, collectibles)
+- Events
+- People
+- Custom Items (via Custom Content Types)
+
+**Ecommerce Collections** (separate taxonomy):
+- Products → `product-categories` and `product-collections`
+
+**Grouping Collections** (no taxonomy):
+- Museum Collections (galleries/exhibitions)
+- Places
+
+---
+
+## Why Shared Taxonomy?
+
+### Use Case: Museum Website
+
+```
+Category: "Ancient Egypt"
+├── Archive Item: "Egyptian Sarcophagus"
+├── Event: "Egyptian Mummies Exhibition"
+├── Post: "Blog: Discovering Ancient Egypt"
+└── Person: "Cleopatra"
+
+Tag: "1960s"
+├── Archive Item: "1965 Ford Mustang"
+├── Archive Item: "1967 Chevrolet Camaro"
+├── Event: "60s Car Rally"
+└── Post: "The Swinging Sixties in Automotive Design"
+```
+
+### Benefits
+
+✅ **Cross-Collection Filtering** - "Show me everything about Ancient Egypt"
+✅ **Unified Content Discovery** - Users find related content across types
+✅ **Fewer Collections to Manage** - One category list, not separate ones
+✅ **Thematic Organization** - Perfect for museums, educational sites, archives
+✅ **Flexible Customization** - Custom Content Types inherit taxonomy
+
+---
+
+## Hierarchical Categories
+
+### Structure
+
+Categories support **parent-child relationships** for nested organization:
+
+```
+History
+├── Ancient History
+│   ├── Ancient Rome
+│   ├── Ancient Egypt
+│   └── Ancient Greece
+├── Medieval History
+│   ├── Early Medieval
+│   └── High Medieval
+└── Modern History
+    ├── Industrial Era
+    └── Digital Age
+
+Art
+├── Renaissance
+├── Impressionism
+└── Modern Art
+    ├── Abstract
+    └── Surrealism
+```
+
+### Admin UI Display
+
+**Categories List View:**
+```
+📁 History (12 items)
+   📁 Ancient History (8 items)
+      📄 Ancient Rome (3 items)
+      📄 Ancient Egypt (2 items)
+      📄 Ancient Greece (3 items)
+   📁 Medieval History (2 items)
+   📁 Modern History (2 items)
+
+📁 Art (8 items)
+   📄 Renaissance (2 items)
+   📄 Impressionism (1 item)
+   📁 Modern Art (5 items)
+      📄 Abstract (3 items)
+      📄 Surrealism (2 items)
+```
+
+### Benefits
+
+✅ **Cleaner Organization** - Prevents flat, overwhelming category lists
+✅ **Better Navigation** - Users drill down to specific topics
+✅ **Breadcrumb Support** - Shows path: History > Ancient History > Ancient Rome
+✅ **Flexible Depth** - No limit on nesting levels
+✅ **Prevents Duplicates** - "Ancient Rome" appears once, not in multiple places
+
+---
+
+## Mobile UX: Manage Categories/Tags Buttons
+
+### Problem
+
+When sidebar is collapsed on mobile, Categories/Tags are hidden:
+```
+❌ BEFORE (Sidebar Collapsed)
+Content
+├── Pages
+├── Posts
+└── Archive Items
+   (Categories/Tags hidden!)
+```
+
+### Solution: Quick-Access Buttons
+
+Add "Manage Categories" and "Manage Tags" buttons to collection list pages:
+
+**Posts List View:**
+```
+┌─────────────────────────────────────┐
+│ Posts                               │
+├─────────────────────────────────────┤
+│ [+ New Post] [Manage Categories] [Manage Tags] │
+├─────────────────────────────────────┤
+│ ✓ Blog Post 1                       │
+│ ✓ Blog Post 2                       │
+│ ✓ Blog Post 3                       │
+└─────────────────────────────────────┘
+```
+
+**Archive Items List View:**
+```
+┌─────────────────────────────────────┐
+│ Archive Items                       │
+├─────────────────────────────────────┤
+│ [+ New Item] [Manage Categories] [Manage Tags] │
+├─────────────────────────────────────┤
+│ ✓ Roman Vase                        │
+│ ✓ Ancient Coin                      │
+│ ✓ Medieval Sword                    │
+└─────────────────────────────────────┘
+```
+
+### Implementation
+
+Buttons appear on:
+- Posts list page
+- Archive Items list page
+- Events list page
+- People list page
+
+Clicking opens the Categories/Tags collection in a modal or new tab.
+
+---
+
+## Navigation Structure
+
+### Correct Sidebar Organization
+
+```
+Dashboard
+├── Overview
+└── Tools
+
+Content
+├── Pages
+├── Posts
+├── Archive 
+├── Events
+└── People
+
+Taxonomy (NEW SECTION)
+├── Categories
+└── Tags
+
+Collections
+├── Museum Collections
+└── Places
+
+Shop
+├── Products
+├── Product Categories
+└── Product Collections
+
+Media
+└── Media Library
+```
+
+**Key Points:**
+- ✅ Categories/Tags are **independent**, not nested under Posts
+- ✅ Clearly shows they're **shared** across content types
+- ✅ Product taxonomy is **separate** (ecommerce-specific)
+- ✅ Museum Collections is a **grouping collection**, not taxonomy
+
+---
+
+## Generic Archive System
+
+### Base: Archive Items Collection
+
+The `archive-items` collection is the flexible foundation:
+
+```typescript
+Archive Item
+├── Title, Slug, Featured Image
+├── Description (Rich Text)
+├── Media Gallery
+├── Specifications (Height, Width, Depth, Weight, Materials, Condition)
+├── Provenance (Date Created, Date Acquired, Catalog Number)
+├── Relationships (Creators, Origins, Related Items, Collections)
+├── Taxonomy (Categories, Tags)
+└── Content Blocks (Flexible sections)
+```
+
+### Customization via Custom Content Types
+
+Create specialized versions without duplicating code:
+
+**Example 1: Museum Artifacts**
+```
+Based on: Archive Items template
+Renamed to: "Artifacts"
+Added fields: Exhibition History, Conservation Notes
+Categories: "Roman Era", "Medieval", "Modern"
+```
+
+**Example 2: Classic Cars**
+```
+Based on: Archive Items template
+Renamed to: "Vehicles"
+Added fields: Engine Specs, Restoration History, Top Speed
+Categories: "American Muscle", "European Sports", "Japanese Classics"
+```
+
+**Example 3: Art Gallery**
+```
+Based: Archive Items template
+Renamed to: "Artworks"
+Added fields: Artist, Medium, Period, Dimensions
+Categories: "Renaissance", "Impressionism", "Modern Art"
+```
+
+---
+
+## Filtering Examples
+
+### Single Collection Filtering
+
+```typescript
+// Get ONLY posts tagged "ancient-rome"
+const posts = await getPosts({ tag: 'ancient-rome' })
+
+// Get ONLY archive items tagged "ancient-rome"
+const artifacts = await getArchiveItems({ tag: 'ancient-rome' })
+
+// Get ONLY events in "Ancient History" category
+const events = await getEvents({ category: 'ancient-history' })
+```
+
+### Cross-Collection Filtering
+
+```typescript
+// Get EVERYTHING tagged "ancient-rome" across all collections
+const allContent = await Promise.all([
+  getPosts({ tag: 'ancient-rome' }),
+  getArchiveItems({ tag: 'ancient-rome' }),
+  getEvents({ tag: 'ancient-rome' }),
+  getPeople({ tag: 'ancient-rome' }),
+])
+
+// Combine and sort by date
+const combined = allContent.flat().sort((a, b) => 
+  new Date(b.updatedAt) - new Date(a.updatedAt)
+)
+```
+
+### Frontend: Category Archive Page
+
+```
+Category: "Ancient Rome"
+
+📦 Archive Items (12)
+  - Roman Vase
+  - Ancient Coin Collection
+  - ...
+
+📅 Upcoming Events (3)
+  - Roman History Lecture - March 15
+  - Ancient Rome Exhibition - April 1
+  - ...
+
+📝 Related Articles (5)
+  - Blog: Life in Ancient Rome
+  - Guide: Roman Architecture
+  - ...
+
+👥 Related People (8)
+  - Julius Caesar
+  - Augustus
+  - ...
+```
+
+---
+
+## Implementation Checklist
+
+- [x] Remove `artifacts` collection (redundant with archive-items)
+- [x] Update navigation to show Taxonomy section separately
+- [ ] Add "Manage Categories/Tags" buttons to collection list pages
+- [ ] Implement hierarchical category display in admin UI
+- [ ] Add breadcrumb support for category navigation
+- [ ] Create cross-collection filtering API endpoints
+- [ ] Update frontend to support category archive pages
+- [ ] Add category/tag filtering to Archive blocks
+- [ ] Test mobile UX with sidebar collapsed
+- [ ] Document Custom Content Type creation workflow
+
+---
+
+## Related Issues
+
+- **Nested Items Inaccessible on Mobile** - Solved by "Manage Categories/Tags" buttons
+- **Shared Taxonomy System** - Implemented across Posts, Archive Items, Events, People
+- **Generic Archive Architecture** - Archive Items as flexible base for Custom Content Types
+
+---
+
+## Implementation Progress
+
+### ✅ Completed
+
+1. **Removed Artifacts Collection**
+   - Deleted `/artifacts` page routes
+   - Removed artifacts seed data
+   - Updated all references in payload.config.ts (redirects and search plugins)
+   - Updated field mappings to use archive-items instead of artifacts
+
+2. **Separated Taxonomy Section**
+   - Categories and Tags now in dedicated "Taxonomy" section in admin navigation
+   - No longer nested under Posts (fixes mobile accessibility issue)
+   - Clearly visible as shared resources across all content types
+
+3. **Updated Navigation Structure**
+   - Seed data updated to reference archive-items instead of artifacts
+   - Navigation links updated in header and footer
+   - Site descriptions updated
+
+4. **Field Mappings Updated**
+   - Archive Items: Updated to use correct field names (gallery, creators, origins)
+   - People: Updated relatedItems field mapping
+   - Places: Updated relatedItems field mapping
+   - Collections: Updated archiveItems field mapping
+
+5. **Fixed InvalidFieldRelationship Error**
+   - Removed all references to 'artifacts' collection from codebase
+   - Updated seed data to use 'archive-items' instead of 'artifacts'
+   - Updated Timeline block to use 'archive-items' relationTo
+   - Updated all API endpoints (draft, revalidate) to use 'archive-items'
+   - Updated preview page to use 'archive-items' collection
+   - Updated home page to use getArchiveItems() function
+   - Updated payload.config.ts plugins to reference 'archive-items'
+   - Updated SeedDataManager component to use 'archive-items'
+   - Updated ArchiveBlock component to use 'archive-items'
+   - Updated core seeder to remove artifacts seeding
+   - Updated resetData endpoint to use 'archive-items'
+   - **✅ Dev server now starts successfully with no InvalidFieldRelationship errors**
+   - Database migration ready to rename artifacts_id → archive_items_id
+
+### 📋 Remaining Tasks
+
+- [ ] Test Archive Items functionality
+- [ ] Test cross-collection filtering with shared taxonomy
+- [ ] Test hierarchical category display in admin UI
+- [ ] Test mobile navigation with collapsed sidebar
+- [ ] Document Custom Content Type creation workflow
+

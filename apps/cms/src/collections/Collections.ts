@@ -119,23 +119,23 @@ export const Collections: CollectionConfig = {
           ],
         },
         {
-          label: 'Artifacts',
+          label: 'Archive Items',
           fields: [
             {
-              name: 'artifacts',
+              name: 'archiveItems',
               type: 'join',
-              collection: 'artifacts',
+              collection: 'archive-items',
               on: 'collections',
-              label: 'Artifacts in Collection',
+              label: 'Archive Items in Collection',
             },
             {
-              name: 'featuredArtifacts',
+              name: 'featuredItems',
               type: 'relationship',
-              relationTo: 'artifacts',
+              relationTo: 'archive-items',
               hasMany: true,
-              label: 'Featured Artifacts',
+              label: 'Featured Items',
               admin: {
-                description: 'Select artifacts to highlight in this collection',
+                description: 'Select archive items to highlight in this collection',
               },
             },
           ],

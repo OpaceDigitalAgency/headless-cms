@@ -32,6 +32,7 @@ export const blogPostTemplate: CollectionTemplate = {
   defaultSingular: 'Post',
   defaultPlural: 'Posts',
   adminGroup: 'Content',
+  status: 'core', // Posts are a core collection
   hasSeedData: true,
   hasSeedMedia: false,
   seedDataCount: 5,

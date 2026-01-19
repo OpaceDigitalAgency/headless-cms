@@ -162,28 +162,28 @@ export const getTagBySlug = async (slug: string) => {
 }
 
 // ===========================================
-// Artifacts
+// Archive Items (replaces artifacts)
 // ===========================================
 
-export const getArtifacts = unstable_cache(
+export const getArchiveItems = unstable_cache(
   async (limit = 100) => {
     const payload = await getPayloadClient()
     return payload.find({
-      collection: 'artifacts',
+      collection: 'archive-items',
       limit,
       where: { _status: { equals: 'published' } },
       depth: 2,
     })
   },
-  ['artifacts'],
-  { tags: ['artifacts'] }
+  ['archive-items'],
+  { tags: ['archive-items'] }
 )
 
-export const getArtifactBySlug = async (slug: string, draft = false) => {
+export const getArchiveItemBySlug = async (slug: string, draft = false) => {
   const payload = await getPayloadClient()
 
   const result = await payload.find({
-    collection: 'artifacts',
+    collection: 'archive-items',
     where: { slug: { equals: slug } },
     depth: 2,
     draft,

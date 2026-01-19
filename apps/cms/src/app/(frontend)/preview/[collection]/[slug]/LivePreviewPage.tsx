@@ -56,7 +56,7 @@ export function LivePreviewPage({ initialData, collection, slug }: LivePreviewPa
             <PostRenderer post={data} />
           </div>
         )}
-        {collection === 'artifacts' && (
+        {collection === 'archive-items' && (
           <div className="container py-16">
             <ArtifactRenderer artifact={data} />
           </div>

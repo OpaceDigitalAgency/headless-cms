@@ -114,7 +114,8 @@ export const addTemplateEndpoint: Endpoint = {
         payload.logger.info(`Collection template already available: ${templateId} (${slug})`)
         return Response.json({
           success: true,
-          message: `Collection "${customName}" is now available!`,
+          alreadyInstalled: true,
+          message: `Collection "${customName}" is already installed and available!`,
           collection: {
             templateId,
             customName,
@@ -129,7 +130,7 @@ export const addTemplateEndpoint: Endpoint = {
       payload.logger.warn(`Collection template not pre-configured: ${templateId} (${slug})`)
       return Response.json({
         success: false,
-        message: `Collection "${customName}" is not yet available. Please contact your administrator to enable this collection type.`,
+        message: `Collection "${customName}" is not yet available. This collection needs to be added to the payload.config.ts file first.`,
         collection: {
           templateId,
           customName,

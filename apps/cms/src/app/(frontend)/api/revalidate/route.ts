@@ -50,11 +50,11 @@ export async function POST(request: NextRequest) {
           revalidatePath('/blog')
           break
 
-        case 'artifacts':
+        case 'archive-items':
           if (slug) {
-            revalidatePath(`/artifacts/${slug}`)
+            revalidatePath(`/items/${slug}`)
           }
-          revalidatePath('/artifacts')
+          revalidatePath('/items')
           break
 
         case 'people':
