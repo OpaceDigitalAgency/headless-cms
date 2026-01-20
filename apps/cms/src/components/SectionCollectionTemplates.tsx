@@ -142,11 +142,16 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
         text: `${slug} ${!currentlyVisible ? 'shown in' : 'hidden from'} navigation menu`,
       })
 
-      // Clear navigation cache to force refresh (in a microtask to avoid hydration issues)
-      Promise.resolve().then(() => {
+      // Broadcast cache invalidation to all tabs/windows
+      try {
+        const channel = new BroadcastChannel('nav-cache-invalidate')
+        channel.postMessage({ type: 'invalidate' })
+        channel.close()
+      } catch (error) {
+        // BroadcastChannel not supported, fallback to clearing cache
         sessionStorage.removeItem('nav-data')
         sessionStorage.removeItem('nav-cache-time')
-      })
+      }
     } catch (error) {
       console.error('Failed to toggle visibility:', error)
       setMessage({
@@ -207,7 +212,9 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
   // Categorize templates
   const coreTemplates = sectionTemplates.filter((t) => t.status === 'core')
   const installedTemplates = sectionTemplates.filter(
-    (t) => t.status === 'installed' || installedSlugs.includes(t.defaultSlug)
+    (t) =>
+      t.status !== 'core' &&
+      (t.status === 'installed' || installedSlugs.includes(t.defaultSlug))
   )
 
   const renderTemplateCard = (template: CollectionTemplate) => {
@@ -408,4 +415,3 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
     </div>
   )
 }
-

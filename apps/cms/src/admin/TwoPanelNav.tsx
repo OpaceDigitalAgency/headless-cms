@@ -536,12 +536,12 @@ export const TwoPanelNav: React.FC = () => {
 
   // Fetch dynamic navigation on mount with caching
   useEffect(() => {
-    const fetchNavigation = async () => {
+    const fetchNavigation = async (forceRefresh = false) => {
       const now = Date.now()
       const cacheTime = sessionStorage.getItem('nav-cache-time')
       const cacheAge = cacheTime ? now - parseInt(cacheTime) : null
 
-      if (cachedNavData && cacheAge !== null && cacheAge < 300000) {
+      if (!forceRefresh && cachedNavData && cacheAge !== null && cacheAge < 300000) {
         return
       }
 
@@ -562,7 +562,22 @@ export const TwoPanelNav: React.FC = () => {
         setIsLoading(false)
       }
     }
+
+    // Listen for cache invalidation events
+    const channel = new BroadcastChannel('nav-cache-invalidate')
+    const handleInvalidate = () => {
+      sessionStorage.removeItem('nav-data')
+      sessionStorage.removeItem('nav-cache-time')
+      fetchNavigation(true)
+    }
+    channel.addEventListener('message', handleInvalidate)
+
     fetchNavigation()
+
+    return () => {
+      channel.removeEventListener('message', handleInvalidate)
+      channel.close()
+    }
   }, [])
 
   useEffect(() => {
