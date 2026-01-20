@@ -16,6 +16,7 @@ import {
   UsersIcon,
   BarChartIcon,
   FolderIcon,
+  PackageIcon,
   SeedIcon
 } from '../icons'
 
