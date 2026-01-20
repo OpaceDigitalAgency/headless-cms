@@ -132,12 +132,6 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
         throw new Error(errorData.message || 'Failed to update navigation settings')
       }
 
-      // Clear navigation cache to force refresh
-      if (typeof window !== 'undefined') {
-        sessionStorage.removeItem('nav-data')
-        sessionStorage.removeItem('nav-cache-time')
-      }
-
       // Update local state
       setVisibilitySettings((prev) => ({
         ...prev,
@@ -146,6 +140,12 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
       setMessage({
         type: 'success',
         text: `${slug} ${!currentlyVisible ? 'shown in' : 'hidden from'} navigation menu`,
+      })
+
+      // Clear navigation cache to force refresh (in a microtask to avoid hydration issues)
+      Promise.resolve().then(() => {
+        sessionStorage.removeItem('nav-data')
+        sessionStorage.removeItem('nav-cache-time')
       })
     } catch (error) {
       console.error('Failed to toggle visibility:', error)
