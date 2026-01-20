@@ -1,6 +1,82 @@
 # Project Progress
 
-## Latest Update: Shared Taxonomy System Implementation
+## Latest Update: Navigation Enablement + Content Type Templates
+
+**Date:** 21 January 2026
+**Objective:** Make optional collections effectively disabled by default, wire Navigation Settings to real behavior, and add Archive-item-based custom content type templates with enable/seed flows.
+
+### Changes Implemented (Task Scope, Excluding Preset Rename Cleanup)
+
+#### 1. Effective Enable/Disable Behavior
+- Added collection enablement resolver based on Navigation Settings overrides + default-enabled slugs
+- Disabled collections are hidden from admin nav, blocked by access rules, and cannot be seeded
+- Defaults now align with Page/Post + taxonomy + archive items as enabled
+
+#### 2. Navigation Manager Integration
+- Navigation endpoint now applies enablement rules and always shows section manager links
+- Collection Manager defaults reflect enablement rules (not just admin hidden)
+- Added archive icon mapping for archive items
+
+#### 3. New Custom Content Type Templates (Archive-Item Based)
+- Added templates for Services, Courses, Case Studies, Galleries, FAQs, Testimonials
+- Enabled/Available handling shown in Collections manager without changing layout
+- New content-type seed endpoint for template seed items
+
+#### 4. Cleanup and UI Label Consistency
+- Related content blocks renamed from “Artifacts” to “Related Items”
+- People/Places admin group moved to Collections
+- Removed stray museum references from runtime UI text where applicable
+
+### Key Files Modified
+
+**Enablement + Navigation**
+- `apps/cms/src/lib/collectionVisibility.ts`
+- `apps/cms/src/lib/navigationConfig.ts`
+- `apps/cms/src/endpoints/navigation.ts`
+- `apps/cms/src/components/CollectionManagerField.tsx`
+
+**Access Rules + Seeding**
+- `apps/cms/src/collections/ArchiveItems.ts`
+- `apps/cms/src/collections/People.ts`
+- `apps/cms/src/collections/Places.ts`
+- `apps/cms/src/collections/Events.ts`
+- `apps/cms/src/collections/Products.ts`
+- `apps/cms/src/collections/ProductCategories.ts`
+- `apps/cms/src/collections/ProductCollections.ts`
+- `apps/cms/src/collections/Categories.ts`
+- `apps/cms/src/collections/Tags.ts`
+- `apps/cms/src/collections/ContentTypes.ts`
+- `apps/cms/src/collections/CustomItems.ts`
+- `apps/cms/src/endpoints/seed.ts`
+
+**Templates + UI**
+- `apps/cms/src/collection-templates/types.ts`
+- `apps/cms/src/collection-templates/templates/service.ts`
+- `apps/cms/src/collection-templates/templates/course.ts`
+- `apps/cms/src/collection-templates/templates/case-study.ts`
+- `apps/cms/src/collection-templates/templates/gallery.ts`
+- `apps/cms/src/collection-templates/templates/faq.ts`
+- `apps/cms/src/collection-templates/templates/testimonial.ts`
+- `apps/cms/src/collection-templates/templates/index.ts`
+- `apps/cms/src/components/SectionCollectionTemplates.tsx`
+- `apps/cms/src/endpoints/collectionTemplates.ts`
+
+**Label/UI Cleanups**
+- `apps/web/src/components/PersonRenderer.tsx`
+- `apps/web/src/components/PlaceRenderer.tsx`
+- `apps/cms/src/components/PersonRenderer.tsx`
+- `apps/cms/src/components/PlaceRenderer.tsx`
+- `apps/cms/src/admin/navData.ts`
+- `apps/cms/src/admin/TwoPanelNav.tsx`
+
+### Notes
+
+- No tests run during this update.
+- Preset rename cleanup (museum → archive) is tracked in a separate commit.
+
+---
+
+## Previous Update: Shared Taxonomy System Implementation
 
 **Date:** 19 January 2026
 **Objective:** Implement a comprehensive shared taxonomy system with hierarchical categories across all content collections.
