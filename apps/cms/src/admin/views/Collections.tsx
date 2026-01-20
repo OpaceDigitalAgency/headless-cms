@@ -1,5 +1,3 @@
-'use client'
-
 import React from 'react'
 import { DefaultTemplate, type DefaultTemplateProps } from '@payloadcms/next/templates'
 import type { VisibleEntities } from 'payload'
@@ -14,8 +12,15 @@ import { UnifiedCollectionTemplates } from '../../components/UnifiedCollectionTe
  * This view reuses the UnifiedCollectionTemplates component from the Dashboard
  * to avoid code duplication.
  */
-const Collections: React.FC<DefaultTemplateProps> = (props) => {
-  const { visibleEntities, ...templateProps } = props
+type CollectionsProps = Omit<DefaultTemplateProps, 'children' | 'visibleEntities'> & {
+  initPageResult?: {
+    visibleEntities?: VisibleEntities
+  }
+}
+
+export const Collections: React.FC<CollectionsProps> = (props) => {
+  const { initPageResult, ...templateProps } = props
+  const visibleEntities = initPageResult?.visibleEntities
 
   const collectionsContent = (
     <div className="ra-collections-view" style={{ padding: '24px' }}>

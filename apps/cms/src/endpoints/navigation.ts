@@ -182,9 +182,9 @@ export const navigationEndpoint: Endpoint = {
       if (sectionId === 'collections') {
         items.unshift({
           label: 'Manage Collections',
-          href: '/admin/collections',
+          href: '/admin/collection-manager',
           icon: 'settings',
-          slug: 'manage-collections',
+          slug: 'collection-manager',
           _order: -1, // Ensure it appears first
         })
       }

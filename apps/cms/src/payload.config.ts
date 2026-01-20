@@ -48,6 +48,7 @@ import { seedEndpoints } from './endpoints/seed'
 import { collectionTemplateEndpoints } from './endpoints/collectionTemplates'
 import { navigationEndpoint } from './endpoints/navigation'
 import { collectionManagerEndpoint } from './endpoints/collectionManager'
+import { toolsEndpoints } from './endpoints/tools'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -121,9 +122,9 @@ export default buildConfig({
         dashboard: {
           Component: '/admin/views/Dashboard',
         },
-        collections: {
+        'collection-manager': {
           Component: '/admin/views/Collections',
-          path: '/collections',
+          path: '/collection-manager',
         },
         tools: {
           Component: '/admin/views/Tools',
@@ -411,6 +412,8 @@ export default buildConfig({
     ...seedEndpoints,
     // Collection template endpoints for admin panel
     ...collectionTemplateEndpoints,
+    // Admin tools endpoints
+    ...toolsEndpoints,
   ],
 
   // ===========================================
