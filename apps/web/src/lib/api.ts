@@ -327,7 +327,7 @@ export async function getContentTypeById(id: string, options?: FetchOptions): Pr
 }
 
 // ===========================================
-// Archive Items (Museum)
+// Archive Items
 // ===========================================
 
 export interface ArchiveItem {
@@ -480,40 +480,6 @@ export async function getPlaceBySlug(slug: string, options?: FetchOptions): Prom
     {
       ...options,
       tags: ['places', `places:${slug}`],
-    }
-  )
-  return result.docs[0] || null
-}
-
-// ===========================================
-// Collections (Museum)
-// ===========================================
-
-export interface MuseumCollection {
-  id: string
-  title: string
-  slug: string
-  description?: any
-  featuredImage?: any
-  parent?: MuseumCollection | string
-}
-
-export async function getMuseumCollections(options?: FetchOptions): Promise<PaginatedDocs<MuseumCollection>> {
-  return fetchAPI<PaginatedDocs<MuseumCollection>>('/museum-collections', {
-    ...options,
-    tags: ['museum-collections'],
-  })
-}
-
-export async function getMuseumCollectionBySlug(
-  slug: string,
-  options?: FetchOptions
-): Promise<MuseumCollection | null> {
-  const result = await fetchAPI<PaginatedDocs<MuseumCollection>>(
-    `/museum-collections?where[slug][equals]=${encodeURIComponent(slug)}&limit=1`,
-    {
-      ...options,
-      tags: ['museum-collections', `museum-collections:${slug}`],
     }
   )
   return result.docs[0] || null

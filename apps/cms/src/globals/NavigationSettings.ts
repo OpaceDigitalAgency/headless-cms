@@ -15,11 +15,10 @@ export const NavigationSettings: GlobalConfig = {
     afterChange: [
       async ({ doc, req }) => {
         // Log the change for debugging
-        req.payload.logger.info('Navigation settings updated - cache will be refreshed on next page load')
+        req.payload.logger.info('Navigation settings updated - cache invalidated')
 
-        // Note: We can't directly clear sessionStorage from the server
-        // The cache will be refreshed automatically after 5 minutes
-        // Or users can refresh the page to see changes immediately
+        // Note: Cache invalidation happens on the client side via the CollectionManagerField component
+        // When users click "Clear Cache & Refresh", the page reloads and fetches fresh navigation data
 
         return doc
       },
@@ -34,7 +33,7 @@ export const NavigationSettings: GlobalConfig = {
         components: {
           Field: '/components/CollectionManagerField',
         },
-        description: 'Changes will take effect after refreshing the page or waiting 5 minutes for cache to expire.',
+        description: 'Changes are saved automatically. Click "Clear Cache & Refresh" to see updates immediately in the navigation menu.',
       },
     },
   ],

@@ -230,24 +230,6 @@ export const getPlaces = unstable_cache(
 )
 
 // ===========================================
-// Museum Collections
-// ===========================================
-
-export const getMuseumCollections = unstable_cache(
-  async (limit = 100) => {
-    const payload = await getPayloadClient()
-    return payload.find({
-      collection: 'museum-collections',
-      limit,
-      where: { _status: { equals: 'published' } },
-      depth: 2,
-    })
-  },
-  ['museum-collections'],
-  { tags: ['museum-collections'] }
-)
-
-// ===========================================
 // Custom Items
 // ===========================================
 

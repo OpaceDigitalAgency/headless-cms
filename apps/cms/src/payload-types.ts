@@ -9503,7 +9503,7 @@ export interface Setting {
 export interface NavigationSetting {
   id: number;
   /**
-   * Changes will take effect after refreshing the page or waiting 5 minutes for cache to expire.
+   * Changes are saved automatically. Click "Clear Cache & Refresh" to see updates immediately in the navigation menu.
    */
   collections?:
     | {

@@ -63,22 +63,25 @@ export const CollectionManagerField: React.FC<CollectionManagerFieldProps> = ({ 
     const fetchCollections = async () => {
       try {
         setErrorMessage(null)
+        // Try the correct endpoint path
         const response = await fetch('/api/admin/collection-manager', {
           credentials: 'include',
         })
         if (response.ok) {
           const data = await response.json()
+          console.log('Collection manager data:', data)
           setCollections(Array.isArray(data.collections) ? data.collections : [])
         } else {
           const payloadError = await response.json().catch(() => null)
           const message = payloadError?.error || `Failed to load collections (status ${response.status})`
+          console.error('Collection manager error:', message, response.status)
           setErrorMessage(message)
           setCollections([])
         }
       } catch (error) {
         console.error('Failed to load collections for manager:', error)
         setCollections([])
-        setErrorMessage('Failed to load collections. Please refresh and try again.')
+        setErrorMessage(`Failed to load collections: ${error instanceof Error ? error.message : 'Unknown error'}`)
       }
     }
 
@@ -123,15 +126,36 @@ export const CollectionManagerField: React.FC<CollectionManagerFieldProps> = ({ 
   }
 
   const resetToDefaults = () => {
-    const normalized = normalizeSettings(collections, [])
-    setItems(normalized)
+    if (window.confirm('Are you sure you want to reset all collections to their default settings?')) {
+      const normalized = normalizeSettings(collections, [])
+      setItems(normalized)
+    }
   }
 
-  const clearNavigationCache = () => {
+  const clearNavigationCache = async () => {
     if (typeof window !== 'undefined') {
-      sessionStorage.removeItem('nav-data')
-      sessionStorage.removeItem('nav-cache-time')
-      alert('Navigation cache cleared! Please refresh the page to see changes in the navigation menu.')
+      try {
+        // Clear session storage
+        sessionStorage.removeItem('nav-data')
+        sessionStorage.removeItem('nav-cache-time')
+
+        // Broadcast cache invalidation to all tabs/windows
+        try {
+          const channel = new BroadcastChannel('nav-cache-invalidate')
+          channel.postMessage({ type: 'invalidate' })
+          channel.close()
+        } catch (e) {
+          // BroadcastChannel not supported, will reload instead
+        }
+
+        // Reload the page to reflect changes
+        setTimeout(() => {
+          window.location.reload()
+        }, 500)
+      } catch (error) {
+        console.error('Error clearing cache:', error)
+        window.location.reload()
+      }
     }
   }
 
@@ -142,15 +166,15 @@ export const CollectionManagerField: React.FC<CollectionManagerFieldProps> = ({ 
           <div className="field-label">{label || 'Collection Navigation'}</div>
           <div className="field-description">
             Toggle visibility, choose sections, and reorder collections in the admin navigation.
-            After saving changes, click "Clear Cache & Refresh" below to see updates in the navigation menu.
+            Changes are saved automatically. Click "Clear Cache & Refresh" to see updates immediately.
           </div>
         </div>
         <div style={{ display: 'flex', gap: '8px' }}>
           <button type="button" className="ra-collection-manager__reset" onClick={clearNavigationCache}>
-            Clear Cache & Refresh
+            ✓ Clear Cache & Refresh
           </button>
           <button type="button" className="ra-collection-manager__reset" onClick={resetToDefaults}>
-            Reset to defaults
+            ↻ Reset to Defaults
           </button>
         </div>
       </div>
