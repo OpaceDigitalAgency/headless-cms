@@ -1,48 +1,44 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import type { Artifact } from '@/lib/api'
+import type { ArchiveItem } from '@/lib/api'
 import { RichText } from './RichText'
 
-interface ArtifactRendererProps {
-  artifact: Artifact
+interface ArchiveItemRendererProps {
+  item: ArchiveItem
 }
 
-export function ArtifactRenderer({ artifact }: ArtifactRendererProps) {
+export function ArchiveItemRenderer({ item }: ArchiveItemRendererProps) {
   const {
     title,
     description,
-    media,
-    people,
-    places,
-    collections,
+    richContent,
+    featuredImage,
+    gallery,
+    creators,
+    origins,
     template,
-  } = artifact
+    specifications,
+    dateCreated,
+    dateAcquired,
+    provenance,
+    catalogNumber,
+    onDisplay,
+    location,
+    relatedItems,
+  } = item
 
-  // Get primary image
-  const primaryImage = media?.[0]?.image
+  const primaryImage = featuredImage || gallery?.[0]?.image
+  const bodyContent = richContent || description
 
   return (
     <article className="detail-template">
-      {/* Header */}
       <header className="detail-header">
         <h1 className="detail-heading">{title}</h1>
-        
-        {collections && collections.length > 0 && (
-          <div className="mt-4 flex flex-wrap gap-2">
-            {collections.map((collection: any) => (
-              <Link
-                key={collection.id}
-                href={`/collections/${collection.slug}`}
-                className="rounded-full bg-primary-100 px-3 py-1 text-sm font-medium text-primary-700 hover:bg-primary-200"
-              >
-                {collection.title}
-              </Link>
-            ))}
-          </div>
+        {template && (
+          <p className="mt-2 text-sm uppercase tracking-wide text-gray-500">{template}</p>
         )}
       </header>
 
-      {/* Featured Image */}
       {primaryImage?.url && (
         <div className="detail-featured-image">
           <Image
@@ -56,110 +52,104 @@ export function ArtifactRenderer({ artifact }: ArtifactRendererProps) {
         </div>
       )}
 
-      {/* Content Layout */}
       <div className="detail-content-wrapper">
-        {/* Main Content */}
         <div className="detail-main">
-          {description && (
+          {bodyContent && (
             <div className="detail-body">
-              <RichText content={description} />
+              <RichText content={bodyContent} />
             </div>
           )}
 
-          {/* Dimensions */}
-          {artifact.dimensions && (
+          {specifications && (
             <div className="mt-8">
-              <h2 className="text-lg font-semibold text-gray-900">Dimensions</h2>
+              <h2 className="text-lg font-semibold text-gray-900">Specifications</h2>
               <dl className="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-4">
-                {artifact.dimensions.height && (
+                {specifications.height && (
                   <div>
                     <dt className="text-sm text-gray-500">Height</dt>
-                    <dd className="font-medium">{artifact.dimensions.height} cm</dd>
+                    <dd className="font-medium">{specifications.height}</dd>
                   </div>
                 )}
-                {artifact.dimensions.width && (
+                {specifications.width && (
                   <div>
                     <dt className="text-sm text-gray-500">Width</dt>
-                    <dd className="font-medium">{artifact.dimensions.width} cm</dd>
+                    <dd className="font-medium">{specifications.width}</dd>
                   </div>
                 )}
-                {artifact.dimensions.depth && (
+                {specifications.depth && (
                   <div>
                     <dt className="text-sm text-gray-500">Depth</dt>
-                    <dd className="font-medium">{artifact.dimensions.depth} cm</dd>
+                    <dd className="font-medium">{specifications.depth}</dd>
                   </div>
                 )}
-                {artifact.dimensions.weight && (
+                {specifications.weight && (
                   <div>
                     <dt className="text-sm text-gray-500">Weight</dt>
-                    <dd className="font-medium">{artifact.dimensions.weight} kg</dd>
+                    <dd className="font-medium">{specifications.weight}</dd>
                   </div>
                 )}
               </dl>
+              {specifications.materials && (
+                <div className="mt-4">
+                  <h3 className="text-sm font-semibold text-gray-700">Materials</h3>
+                  <p className="mt-1 text-sm text-gray-600">{specifications.materials}</p>
+                </div>
+              )}
+              {specifications.condition && (
+                <div className="mt-4">
+                  <h3 className="text-sm font-semibold text-gray-700">Condition</h3>
+                  <p className="mt-1 text-sm text-gray-600">{specifications.condition}</p>
+                </div>
+              )}
             </div>
           )}
 
-          {/* Materials */}
-          {artifact.materials && artifact.materials.length > 0 && (
-            <div className="mt-8">
-              <h2 className="text-lg font-semibold text-gray-900">Materials</h2>
-              <div className="mt-2 flex flex-wrap gap-2">
-                {artifact.materials.map((item: any, index: number) => (
-                  <span
-                    key={index}
-                    className="rounded-full bg-gray-100 px-3 py-1 text-sm text-gray-700"
-                  >
-                    {item.material}
-                  </span>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Provenance */}
-          {artifact.provenance && (
+          {provenance && (
             <div className="mt-8">
               <h2 className="text-lg font-semibold text-gray-900">Provenance</h2>
               <div className="mt-4 prose prose-sm">
-                <RichText content={artifact.provenance} />
+                <RichText content={provenance} />
               </div>
             </div>
           )}
         </div>
 
-        {/* Sidebar */}
         <aside className="detail-sidebar">
-          {/* Quick Facts */}
           <div className="card p-6">
             <h3 className="font-semibold text-gray-900">Quick Facts</h3>
             <dl className="mt-4 space-y-3 text-sm">
-              {artifact.dateCreated && (
+              {dateCreated && (
                 <div>
                   <dt className="text-gray-500">Date Created</dt>
-                  <dd className="font-medium">{artifact.dateCreated}</dd>
+                  <dd className="font-medium">{dateCreated}</dd>
                 </div>
               )}
-              {artifact.accessionNumber && (
+              {dateAcquired && (
                 <div>
-                  <dt className="text-gray-500">Accession Number</dt>
-                  <dd className="font-medium">{artifact.accessionNumber}</dd>
+                  <dt className="text-gray-500">Date Acquired</dt>
+                  <dd className="font-medium">{dateAcquired}</dd>
                 </div>
               )}
-              {artifact.onDisplay && (
+              {catalogNumber && (
+                <div>
+                  <dt className="text-gray-500">Catalog Number</dt>
+                  <dd className="font-medium">{catalogNumber}</dd>
+                </div>
+              )}
+              {onDisplay && (
                 <div>
                   <dt className="text-gray-500">Location</dt>
-                  <dd className="font-medium">{artifact.gallery || 'On Display'}</dd>
+                  <dd className="font-medium">{location || 'On Display'}</dd>
                 </div>
               )}
             </dl>
           </div>
 
-          {/* Related People */}
-          {people && people.length > 0 && (
+          {creators && creators.length > 0 && (
             <div className="card p-6">
-              <h3 className="font-semibold text-gray-900">Related People</h3>
+              <h3 className="font-semibold text-gray-900">Creators</h3>
               <ul className="mt-4 space-y-3">
-                {people.map((person: any) => (
+                {creators.map((person: any) => (
                   <li key={person.id}>
                     <Link
                       href={`/people/${person.slug}`}
@@ -182,12 +172,11 @@ export function ArtifactRenderer({ artifact }: ArtifactRendererProps) {
             </div>
           )}
 
-          {/* Related Places */}
-          {places && places.length > 0 && (
+          {origins && origins.length > 0 && (
             <div className="card p-6">
-              <h3 className="font-semibold text-gray-900">Related Places</h3>
+              <h3 className="font-semibold text-gray-900">Places of Origin</h3>
               <ul className="mt-4 space-y-2">
-                {places.map((place: any) => (
+                {origins.map((place: any) => (
                   <li key={place.id}>
                     <Link
                       href={`/places/${place.slug}`}
@@ -203,24 +192,23 @@ export function ArtifactRenderer({ artifact }: ArtifactRendererProps) {
         </aside>
       </div>
 
-      {/* Image Gallery */}
-      {media && media.length > 1 && (
+      {gallery && gallery.length > 1 && (
         <div className="detail-gallery">
           <h2 className="text-xl font-semibold text-gray-900">Gallery</h2>
           <div className="gallery-grid">
-            {media.slice(1).map((item: any, index: number) => (
+            {gallery.slice(1).map((entry: any, index: number) => (
               <div key={index} className="gallery-item">
-                {item.image?.url && (
+                {entry.image?.url && (
                   <Image
-                    src={item.image.url}
-                    alt={item.caption || `${title} - Image ${index + 2}`}
+                    src={entry.image.url}
+                    alt={entry.caption || `${title} - Image ${index + 2}`}
                     width={400}
                     height={300}
                     className="h-48 w-full object-cover"
                   />
                 )}
-                {item.caption && (
-                  <p className="mt-2 text-sm text-gray-500">{item.caption}</p>
+                {entry.caption && (
+                  <p className="mt-2 text-sm text-gray-500">{entry.caption}</p>
                 )}
               </div>
             ))}
@@ -228,20 +216,19 @@ export function ArtifactRenderer({ artifact }: ArtifactRendererProps) {
         </div>
       )}
 
-      {/* Related Artifacts */}
-      {artifact.relatedArtifacts && artifact.relatedArtifacts.length > 0 && (
+      {relatedItems && relatedItems.length > 0 && (
         <div className="detail-related">
-          <h2 className="text-xl font-semibold text-gray-900">Related Artifacts</h2>
+          <h2 className="text-xl font-semibold text-gray-900">Related Items</h2>
           <div className="related-grid">
-            {artifact.relatedArtifacts.map((related: any) => (
+            {relatedItems.map((related: any) => (
               <Link
                 key={related.id}
-                href={`/artifacts/${related.slug}`}
+                href={`/archive-items/${related.slug}`}
                 className="related-item"
               >
-                {related.media?.[0]?.image?.url && (
+                {related.featuredImage?.url && (
                   <Image
-                    src={related.media[0].image.url}
+                    src={related.featuredImage.url}
                     alt={related.title}
                     width={400}
                     height={200}
@@ -257,3 +244,5 @@ export function ArtifactRenderer({ artifact }: ArtifactRendererProps) {
     </article>
   )
 }
+
+export default ArchiveItemRenderer

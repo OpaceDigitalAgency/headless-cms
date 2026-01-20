@@ -335,11 +335,27 @@ export interface ArchiveItem {
   title: string
   slug: string
   description?: any
-  gallery?: any[]
+  richContent?: any
+  featuredImage?: any
+  gallery?: Array<{ image?: any; caption?: string }>
   creators?: any[]
   origins?: any[]
-  collections?: any[]
-  template: string
+  relatedItems?: any[]
+  template?: string
+  specifications?: {
+    height?: string
+    width?: string
+    depth?: string
+    weight?: string
+    materials?: string
+    condition?: string
+  }
+  dateCreated?: string
+  dateAcquired?: string
+  provenance?: any
+  catalogNumber?: string
+  onDisplay?: boolean
+  location?: string
   meta?: any
   _status: 'draft' | 'published'
   createdAt: string

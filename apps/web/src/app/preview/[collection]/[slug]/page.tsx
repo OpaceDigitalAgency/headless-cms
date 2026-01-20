@@ -3,17 +3,15 @@ import { draftMode } from 'next/headers'
 import {
   getPageBySlug,
   getPostBySlug,
-  getArtifactBySlug,
+  getArchiveItemBySlug,
   getPersonBySlug,
   getPlaceBySlug,
-  getMuseumCollectionBySlug,
 } from '@/lib/api'
 import { PageRenderer } from '@/components/PageRenderer'
 import { PostRenderer } from '@/components/PostRenderer'
-import { ArtifactRenderer } from '@/components/ArtifactRenderer'
+import { ArchiveItemRenderer } from '@/components/ArchiveItemRenderer'
 import { PersonRenderer } from '@/components/PersonRenderer'
 import { PlaceRenderer } from '@/components/PlaceRenderer'
-import { CollectionRenderer } from '@/components/CollectionRenderer'
 
 interface PreviewPageProps {
   params: Promise<{
@@ -38,9 +36,9 @@ export default async function PreviewPage({ params }: PreviewPageProps) {
   // SECURITY: Redirect to public page if draft mode is not enabled
   // This prevents unauthorized access to draft content
   if (!isDraft) {
-    const publicPath = collection === 'pages' 
-      ? `/${slug}` 
-      : `/${collection === 'museum-collections' ? 'collections' : collection}/${slug}`
+    const publicPath = collection === 'pages'
+      ? `/${slug}`
+      : `/${collection}/${slug}`
     redirect(publicPath)
   }
 
@@ -61,18 +59,14 @@ export default async function PreviewPage({ params }: PreviewPageProps) {
       case 'posts':
         document = await getPostBySlug(slug, fetchOptions)
         break
-      case 'artifacts':
-        document = await getArtifactBySlug(slug, fetchOptions)
+      case 'archive-items':
+        document = await getArchiveItemBySlug(slug, fetchOptions)
         break
       case 'people':
         document = await getPersonBySlug(slug, fetchOptions)
         break
       case 'places':
         document = await getPlaceBySlug(slug, fetchOptions)
-        break
-      case 'museum-collections':
-      case 'collections':
-        document = await getMuseumCollectionBySlug(slug, fetchOptions)
         break
       default:
         notFound()
@@ -118,9 +112,9 @@ export default async function PreviewPage({ params }: PreviewPageProps) {
             <PostRenderer post={document} />
           </div>
         )}
-        {collection === 'artifacts' && (
+        {collection === 'archive-items' && (
           <div className="container py-16">
-            <ArtifactRenderer artifact={document} />
+            <ArchiveItemRenderer item={document} />
           </div>
         )}
         {collection === 'people' && (
@@ -131,11 +125,6 @@ export default async function PreviewPage({ params }: PreviewPageProps) {
         {collection === 'places' && (
           <div className="container py-16">
             <PlaceRenderer place={document} />
-          </div>
-        )}
-        {(collection === 'museum-collections' || collection === 'collections') && (
-          <div className="container py-16">
-            <CollectionRenderer collection={document} />
           </div>
         )}
       </div>

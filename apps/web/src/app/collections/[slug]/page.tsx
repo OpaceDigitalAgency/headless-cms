@@ -1,7 +1,6 @@
-import { notFound } from 'next/navigation'
+import { notFound, redirect } from 'next/navigation'
 import { Metadata } from 'next'
-import { getMuseumCollection, getMuseumCollections } from '@/lib/api'
-import { CollectionRenderer } from '@/components/CollectionRenderer'
+import { getContentTypeBySlugOrArchiveSlug, getContentTypes } from '@/lib/api'
 
 interface CollectionPageProps {
   params: Promise<{ slug: string }>
@@ -13,10 +12,12 @@ interface CollectionPageProps {
  */
 export async function generateStaticParams() {
   try {
-    const collections = await getMuseumCollections({ limit: 1000, where: { _status: { equals: 'published' } } })
-    return collections.docs.map((collection) => ({
-      slug: collection.slug,
-    }))
+    const types = await getContentTypes({ limit: 1000 })
+    return types.docs
+      .filter((type: any) => type.hasArchive !== false && type.template === 'archive-item')
+      .map((type: any) => ({
+        slug: type.archiveSlug ? type.archiveSlug.replace(/^\\/?items\\//, '') : type.slug,
+      }))
   } catch (error) {
     console.error('Failed to generate static params for collections:', error)
     return []
@@ -25,47 +26,29 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: CollectionPageProps): Promise<Metadata> {
   const { slug } = await params
-  
-  try {
-    const collection = await getMuseumCollection(slug)
-    
-    if (!collection) {
-      return { title: 'Collection Not Found' }
-    }
 
-    return {
-      title: collection.meta?.title || collection.title,
-      description: collection.meta?.description || collection.shortDescription,
-      openGraph: {
-        title: collection.meta?.title || collection.title,
-        description: collection.meta?.description || collection.shortDescription || undefined,
-        images: collection.featuredImage?.url ? [collection.featuredImage.url] : undefined,
-      },
-    }
-  } catch (error) {
+  const contentType = await getContentTypeBySlugOrArchiveSlug(slug).catch(() => null)
+  if (!contentType) {
     return { title: 'Collection Not Found' }
+  }
+
+  return {
+    title: contentType.pluralLabel || contentType.name,
+    description: contentType.description || undefined,
   }
 }
 
 export default async function CollectionPage({ params }: CollectionPageProps) {
   const { slug } = await params
-  
-  try {
-    const collection = await getMuseumCollection(slug)
-
-    if (!collection) {
-      notFound()
-    }
-
-    return (
-      <div className="container py-16">
-        <CollectionRenderer collection={collection} />
-      </div>
-    )
-  } catch (error) {
-    console.error(`Failed to fetch collection ${slug}:`, error)
+  const contentType = await getContentTypeBySlugOrArchiveSlug(slug).catch(() => null)
+  if (!contentType || contentType.hasArchive === false) {
     notFound()
   }
+
+  const archivePath = contentType.archiveSlug
+    ? `/${contentType.archiveSlug.replace(/^\\//, '')}`
+    : `/items/${contentType.slug}`
+  redirect(archivePath)
 }
 
 // CRITICAL: Static generation only

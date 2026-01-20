@@ -161,7 +161,7 @@ export function PersonRenderer({ person }: PersonRendererProps) {
                 {person.relatedArtifacts.docs.map((artifact: any) => (
                   <Link
                     key={artifact.id}
-                    href={`/artifacts/${artifact.slug}`}
+                    href={`/archive-items/${artifact.slug}`}
                     className="related-item"
                   >
                     {artifact.media?.[0]?.image?.url && (

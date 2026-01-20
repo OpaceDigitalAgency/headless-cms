@@ -1,4 +1,4 @@
-import { getPageBySlug, getPosts, getArtifacts } from '@/lib/api'
+import { getPageBySlug, getPosts, getArchiveItems } from '@/lib/api'
 import { PageRenderer } from '@/components/PageRenderer'
 import { HomeTemplate } from '@repo/templates'
 
@@ -11,9 +11,9 @@ export default async function HomePage() {
   }
 
   // Fallback: render default home page with latest content
-  const [posts, artifacts] = await Promise.all([
+  const [posts, archiveItems] = await Promise.all([
     getPosts({ limit: 3 }).catch(() => ({ docs: [] })),
-    getArtifacts({ limit: 3 }).catch(() => ({ docs: [] })),
+    getArchiveItems({ limit: 3 }).catch(() => ({ docs: [] })),
   ])
 
   return (
@@ -45,19 +45,19 @@ export default async function HomePage() {
           cta: { label: 'View All Posts', url: '/blog' },
         },
         {
-          id: 'artifacts',
+          id: 'archive-items',
           type: 'grid',
-          heading: 'Featured Artifacts',
-          subheading: 'Explore our museum collection',
-          items: artifacts.docs.map((artifact) => ({
-            id: artifact.id,
-            title: artifact.title,
-            url: `/artifacts/${artifact.slug}`,
-            image: artifact.media?.[0]?.image?.url
-              ? { url: artifact.media[0].image.url, alt: artifact.title }
+          heading: 'Featured Archive Items',
+          subheading: 'Explore our archive items',
+          items: archiveItems.docs.map((item) => ({
+            id: item.id,
+            title: item.title,
+            url: `/archive-items/${item.slug}`,
+            image: item.gallery?.[0]?.image?.url
+              ? { url: item.gallery[0].image.url, alt: item.title }
               : undefined,
           })),
-          cta: { label: 'View All Artifacts', url: '/artifacts' },
+          cta: { label: 'View All Items', url: '/archive-items' },
         },
         {
           id: 'cta',
