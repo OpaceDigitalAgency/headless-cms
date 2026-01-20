@@ -70,9 +70,40 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
     'custom-items': '/items',
   }
 
+  // Build breadcrumb trail for hierarchical categories
+  const breadcrumbs: any[] = []
+  let currentCat = category
+  while (currentCat) {
+    breadcrumbs.unshift(currentCat)
+    currentCat = currentCat.parent && typeof currentCat.parent === 'object' ? currentCat.parent : null
+  }
+
   return (
     <div className="container py-16">
       <header className="mb-12 text-center">
+        {/* Breadcrumb navigation for hierarchical categories */}
+        {breadcrumbs.length > 1 && (
+          <nav className="mb-4 flex justify-center">
+            <ol className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
+              {breadcrumbs.map((crumb, index) => (
+                <li key={crumb.id} className="flex items-center gap-2">
+                  {index > 0 && <span>/</span>}
+                  {index < breadcrumbs.length - 1 ? (
+                    <Link
+                      href={`/categories/${crumb.slug}`}
+                      className="hover:text-gray-900 dark:hover:text-white transition-colors"
+                    >
+                      {crumb.title}
+                    </Link>
+                  ) : (
+                    <span className="font-medium text-gray-900 dark:text-white">{crumb.title}</span>
+                  )}
+                </li>
+              ))}
+            </ol>
+          </nav>
+        )}
+
         <p className="text-sm uppercase tracking-wide text-gray-500 dark:text-gray-400">Category</p>
         <h1 className="mt-2 text-4xl font-bold tracking-tight text-gray-900 dark:text-white">
           {category.title}
