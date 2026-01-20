@@ -215,6 +215,126 @@ export const addBundleEndpoint: Endpoint = {
 }
 
 /**
+ * Uninstall a collection
+ *
+ * Deletes all documents and hides the collection from navigation.
+ */
+export const uninstallCollectionEndpoint: Endpoint = {
+  path: '/collection-templates/uninstall',
+  method: 'post',
+  handler: async (req) => {
+    const { payload, user } = req
+
+    if (!user) {
+      return Response.json(
+        { success: false, message: 'Authentication required' },
+        { status: 401 }
+      )
+    }
+
+    if (user.role !== 'admin') {
+      return Response.json(
+        { success: false, message: 'Admin access required' },
+        { status: 403 }
+      )
+    }
+
+    try {
+      const body = await req.json?.() || {}
+      const { slug } = body
+
+      if (!slug || typeof slug !== 'string') {
+        return Response.json(
+          { success: false, message: 'Missing required field: slug' },
+          { status: 400 }
+        )
+      }
+
+      const template = allTemplates.find((t) => t.defaultSlug === slug)
+      if (!template) {
+        return Response.json(
+          { success: false, message: `Unknown collection: ${slug}` },
+          { status: 400 }
+        )
+      }
+
+      if (template.status === 'core') {
+        return Response.json(
+          { success: false, message: 'Core collections cannot be uninstalled' },
+          { status: 400 }
+        )
+      }
+
+      let deletedCount = 0
+      while (true) {
+        const results = await payload.find({
+          collection: slug as any,
+          limit: 100,
+          page: 1,
+        })
+
+        if (!results.docs.length) {
+          break
+        }
+
+        for (const doc of results.docs) {
+          await payload.delete({
+            collection: slug as any,
+            id: doc.id,
+          })
+          deletedCount += 1
+        }
+      }
+
+      const navigationSettings = await payload.findGlobal({ slug: 'navigation-settings', depth: 0 }).catch(() => null)
+      const currentCollections = Array.isArray(navigationSettings?.collections)
+        ? navigationSettings.collections
+        : []
+      const existingIndex = currentCollections.findIndex((item: any) => item?.slug === slug)
+
+      let updatedCollections
+      if (existingIndex >= 0) {
+        updatedCollections = [...currentCollections]
+        updatedCollections[existingIndex] = {
+          ...updatedCollections[existingIndex],
+          enabled: false,
+          uninstalled: true,
+        }
+      } else {
+        updatedCollections = [
+          ...currentCollections,
+          {
+            slug,
+            enabled: false,
+            uninstalled: true,
+          },
+        ]
+      }
+
+      await payload.updateGlobal({
+        slug: 'navigation-settings',
+        data: {
+          collections: updatedCollections,
+        },
+      })
+
+      return Response.json({
+        success: true,
+        message: `Uninstalled ${template.name} and removed ${deletedCount} items`,
+        itemsRemoved: deletedCount,
+      })
+    } catch (error) {
+      payload.logger.error('Uninstall collection failed:', error)
+      const errorMessage = error instanceof Error ? error.message : String(error)
+      return Response.json(
+        { success: false, message: `Operation failed: ${errorMessage}` },
+        { status: 500 }
+      )
+    }
+  },
+}
+
+/**
  * All collection template endpoints
  */
 export const collectionTemplateEndpoints: Endpoint[] = [
@@ -222,4 +342,5 @@ export const collectionTemplateEndpoints: Endpoint[] = [
   getInstalledEndpoint,
   addTemplateEndpoint,
   addBundleEndpoint,
+  uninstallCollectionEndpoint,
 ]

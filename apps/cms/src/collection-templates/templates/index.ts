@@ -8,6 +8,8 @@ export { pageTemplate } from './page'
 export { blogPostTemplate } from './blog-post'
 export { archiveItemTemplate } from './archive-item'
 export { productTemplate } from './product'
+export { productCategoryTemplate } from './product-category'
+export { productCollectionTemplate } from './product-collection'
 export { personTemplate } from './person'
 export { placeTemplate } from './place'
 export { eventTemplate } from './event'
@@ -18,6 +20,8 @@ import { pageTemplate } from './page'
 import { blogPostTemplate } from './blog-post'
 import { archiveItemTemplate } from './archive-item'
 import { productTemplate } from './product'
+import { productCategoryTemplate } from './product-category'
+import { productCollectionTemplate } from './product-collection'
 import { personTemplate } from './person'
 import { placeTemplate } from './place'
 import { eventTemplate } from './event'
@@ -35,6 +39,8 @@ export const allTemplates: CollectionTemplate[] = [
   tagTemplate,
   archiveItemTemplate,
   productTemplate,
+  productCategoryTemplate,
+  productCollectionTemplate,
   personTemplate,
   placeTemplate,
   eventTemplate,

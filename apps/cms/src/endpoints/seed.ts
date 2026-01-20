@@ -40,6 +40,12 @@ const COLLECTION_SEED_CONFIG: Record<string, {
   'archive-items': { label: 'Archive Items', icon: 'archive', hasSeedData: true, hasSeedMedia: true },
 }
 
+const COLLECTION_PRESET_OVERRIDES: Record<string, PresetId> = {
+  products: 'ecommerce-next',
+  'product-categories': 'ecommerce-next',
+  'product-collections': 'ecommerce-next',
+}
+
 /**
  * GET /api/seed/presets
  * Returns list of available presets with metadata
@@ -260,8 +266,8 @@ export const seedCollectionEndpoint: Endpoint = {
 
       const config = COLLECTION_SEED_CONFIG[slug]
 
-      // Use the core preset (museum-next) to cover all collections
-      const seeder = createSeeder('museum-next', payload, {
+      const presetId = COLLECTION_PRESET_OVERRIDES[slug] || 'museum-next'
+      const seeder = createSeeder(presetId, payload, {
         downloadMedia: includeMedia && config.hasSeedMedia,
         clearExisting: action === 'reseed',
       })

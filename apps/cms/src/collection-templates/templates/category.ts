@@ -18,9 +18,9 @@ export const categoryTemplate: CollectionTemplate = {
   defaultPlural: 'Categories',
   adminGroup: 'Taxonomy',
   status: 'core', // Categories are a core collection
-  hasSeedData: false,
+  hasSeedData: true,
   hasSeedMedia: false,
-  seedDataCount: 0,
+  seedDataCount: 3,
   
   fields: [
     {
@@ -60,4 +60,3 @@ export const categoryTemplate: CollectionTemplate = {
 }
 
 export default categoryTemplate
-

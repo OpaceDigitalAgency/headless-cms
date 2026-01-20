@@ -32,10 +32,15 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
   const [installedSlugs, setInstalledSlugs] = useState<string[]>([])
   const [visibilitySettings, setVisibilitySettings] = useState<Record<string, boolean>>({})
   const [toggling, setToggling] = useState<string | null>(null)
+  const [seedStatus, setSeedStatus] = useState<Record<string, { count: number; hasSeedData: boolean; hasSeedMedia: boolean }>>({})
+  const [uninstalledSlugs, setUninstalledSlugs] = useState<string[]>([])
+  const [uninstalling, setUninstalling] = useState<string | null>(null)
 
   useEffect(() => {
     fetchInstalledCollections()
     fetchVisibilitySettings()
+    fetchSeedStatus()
+    fetchCollectionOverrides()
   }, [])
 
   const fetchInstalledCollections = async () => {
@@ -77,6 +82,47 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
       }
     } catch (error) {
       console.error('Failed to fetch visibility settings:', error)
+    }
+  }
+
+  const fetchSeedStatus = async () => {
+    try {
+      const response = await fetch('/api/seed/collections')
+      if (response.ok) {
+        const data = await response.json()
+        const status: Record<string, { count: number; hasSeedData: boolean; hasSeedMedia: boolean }> = {}
+
+        ;(data.collections || []).forEach((collection: any) => {
+          if (collection?.slug) {
+            status[collection.slug] = {
+              count: collection.count || 0,
+              hasSeedData: Boolean(collection.hasSeedData),
+              hasSeedMedia: Boolean(collection.hasSeedMedia),
+            }
+          }
+        })
+
+        setSeedStatus(status)
+      }
+    } catch (error) {
+      console.error('Failed to fetch seed status:', error)
+    }
+  }
+
+  const fetchCollectionOverrides = async () => {
+    try {
+      const response = await fetch('/api/globals/navigation-settings')
+      if (response.ok) {
+        const data = await response.json()
+        const overrides = Array.isArray(data?.collections) ? data.collections : []
+        const uninstalled = overrides
+          .filter((item: any) => item?.uninstalled === true && typeof item?.slug === 'string')
+          .map((item: any) => item.slug)
+
+        setUninstalledSlugs(uninstalled)
+      }
+    } catch (error) {
+      console.error('Failed to fetch collection overrides:', error)
     }
   }
 
@@ -165,20 +211,19 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
 
 
 
-  const handleSeedData = async (slug: string, templateId: string) => {
+  const handleSeedData = async (slug: string) => {
     setSeeding(slug)
     setMessage(null)
 
     try {
-      const response = await fetch('/api/collection-templates/seed', {
+      const response = await fetch('/api/seed/collection', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           action: 'seed',
-          collectionSlug: slug,
-          templateId,
+          slug,
           includeMedia: false,
         }),
       })
@@ -190,8 +235,9 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
           type: 'success',
           text: data.message || `Successfully seeded ${slug} with sample data`,
         })
-        // Refresh installed collections to update counts
+        // Refresh installed collections and seed status to update counts
         fetchInstalledCollections()
+        fetchSeedStatus()
       } else {
         throw new Error(data.message || 'Failed to seed data')
       }
@@ -206,6 +252,86 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
     }
   }
 
+  const handleClearSeedData = async (slug: string) => {
+    setSeeding(slug)
+    setMessage(null)
+
+    try {
+      const response = await fetch('/api/seed/collection', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          action: 'clear',
+          slug,
+        }),
+      })
+
+      const data = await response.json()
+
+      if (response.ok && data.success) {
+        setMessage({
+          type: 'success',
+          text: data.message || `Successfully cleared ${slug}`,
+        })
+        fetchInstalledCollections()
+        fetchSeedStatus()
+      } else {
+        throw new Error(data.message || 'Failed to clear seed data')
+      }
+    } catch (error) {
+      console.error('Failed to clear seed data:', error)
+      setMessage({
+        type: 'error',
+        text: error instanceof Error ? error.message : 'Failed to clear seed data. Please try again.',
+      })
+    } finally {
+      setSeeding(null)
+    }
+  }
+
+  const handleUninstallCollection = async (slug: string) => {
+    if (!window.confirm('Uninstalling will delete all items and hide this collection from navigation. Continue?')) {
+      return
+    }
+
+    setUninstalling(slug)
+    setMessage(null)
+
+    try {
+      const response = await fetch('/api/collection-templates/uninstall', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ slug }),
+      })
+
+      const data = await response.json()
+
+      if (response.ok && data.success) {
+        setMessage({
+          type: 'success',
+          text: data.message || `Successfully uninstalled ${slug}`,
+        })
+        fetchInstalledCollections()
+        fetchSeedStatus()
+        fetchCollectionOverrides()
+      } else {
+        throw new Error(data.message || 'Failed to uninstall collection')
+      }
+    } catch (error) {
+      console.error('Failed to uninstall collection:', error)
+      setMessage({
+        type: 'error',
+        text: error instanceof Error ? error.message : 'Failed to uninstall collection. Please try again.',
+      })
+    } finally {
+      setUninstalling(null)
+    }
+  }
+
   // Filter templates by section
   const sectionTemplates = allTemplates.filter((template) => template.adminGroup === section)
 
@@ -214,7 +340,8 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
   const installedTemplates = sectionTemplates.filter(
     (t) =>
       t.status !== 'core' &&
-      (t.status === 'installed' || installedSlugs.includes(t.defaultSlug))
+      (t.status === 'installed' || installedSlugs.includes(t.defaultSlug)) &&
+      !uninstalledSlugs.includes(t.defaultSlug)
   )
 
   const renderTemplateCard = (template: CollectionTemplate) => {
@@ -223,6 +350,11 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
     const isVisible = visibilitySettings[template.defaultSlug] !== false
     const isTogglingThis = toggling === template.defaultSlug
     const isSeedingThis = seeding === template.defaultSlug
+    const isUninstallingThis = uninstalling === template.defaultSlug
+    const status = seedStatus[template.defaultSlug]
+    const hasSeedData = template.hasSeedData && status?.hasSeedData !== false
+    const seededCount = status?.count || 0
+    const isSeeded = seededCount > 0
 
     return (
       <div
@@ -279,14 +411,18 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
 
         {template.hasSeedData && (
           <div style={{ fontSize: '12px', color: '#666', marginBottom: '12px' }}>
-            Sample data available ({template.seedDataCount || 0} items)
+            {hasSeedData
+              ? isSeeded
+                ? `Seeded (${seededCount} items)`
+                : `Sample data available (${template.seedDataCount || 0} items)`
+              : 'Seed data not configured'}
           </div>
         )}
 
         <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
           {template.hasSeedData && (
             <button
-              onClick={() => handleSeedData(template.defaultSlug, template.id)}
+              onClick={() => handleSeedData(template.defaultSlug)}
               disabled={isSeedingThis}
               style={{
                 padding: '8px 14px',
@@ -301,6 +437,26 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
               }}
             >
               {isSeedingThis ? 'Seeding...' : 'Seed Data'}
+            </button>
+          )}
+
+          {template.hasSeedData && isSeeded && (
+            <button
+              onClick={() => handleClearSeedData(template.defaultSlug)}
+              disabled={isSeedingThis}
+              style={{
+                padding: '8px 14px',
+                fontSize: '13px',
+                fontWeight: 500,
+                borderRadius: '6px',
+                border: '1px solid #fca5a5',
+                background: '#fee2e2',
+                color: '#991b1b',
+                cursor: isSeedingThis ? 'not-allowed' : 'pointer',
+                opacity: isSeedingThis ? 0.6 : 1,
+              }}
+            >
+              {isSeedingThis ? 'Clearing...' : 'Clear Seed Data'}
             </button>
           )}
 
@@ -321,6 +477,26 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
               }}
             >
               {isTogglingThis ? 'Updating...' : isVisible ? '🚫 Hide from Menu' : '👁️ Show in Menu'}
+            </button>
+          )}
+
+          {!isCore && isInstalled && (
+            <button
+              onClick={() => handleUninstallCollection(template.defaultSlug)}
+              disabled={isUninstallingThis}
+              style={{
+                padding: '8px 14px',
+                fontSize: '13px',
+                fontWeight: 500,
+                borderRadius: '6px',
+                border: '1px solid #f87171',
+                background: '#fee2e2',
+                color: '#b91c1c',
+                cursor: isUninstallingThis ? 'not-allowed' : 'pointer',
+                opacity: isUninstallingThis ? 0.6 : 1,
+              }}
+            >
+              {isUninstallingThis ? 'Uninstalling...' : 'Uninstall'}
             </button>
           )}
 
