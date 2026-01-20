@@ -7,8 +7,8 @@ export const collectionManagerEndpoint: Endpoint = {
   handler: async (req) => {
     try {
       const { payload } = req
-      console.log('Collection manager endpoint called')
-      console.log('Total collections in config:', payload.config.collections.length)
+      console.log('[CollectionManager] Endpoint called')
+      console.log('[CollectionManager] Total collections in config:', payload.config.collections.length)
 
       // Filter out Payload's internal collections and auto-generated collections
       const internalCollections = new Set([
@@ -17,13 +17,23 @@ export const collectionManagerEndpoint: Endpoint = {
         'payload-migrations',
         'payload-locked-documents',
         'payload-jobs',
-        'payload-kvs',
+        'payload-kv', // Note: it's 'payload-kv' not 'payload-kvs'
         // Plugin-generated collections that shouldn't be in nav settings
         'search-results', // from @payloadcms/plugin-search (auto-generated, not user-facing)
       ])
 
+      // Log all collection slugs before filtering
+      console.log('[CollectionManager] All collection slugs:', payload.config.collections.map(c => c.slug))
+      console.log('[CollectionManager] Internal collections to filter:', Array.from(internalCollections))
+
       const collections = payload.config.collections
-        .filter((collection) => !internalCollections.has(collection.slug))
+        .filter((collection) => {
+          const isInternal = internalCollections.has(collection.slug)
+          if (isInternal) {
+            console.log(`[CollectionManager] Filtering out internal collection: ${collection.slug}`)
+          }
+          return !isInternal
+        })
         .map((collection) => {
           const slug = collection.slug
           const item = {
@@ -32,14 +42,15 @@ export const collectionManagerEndpoint: Endpoint = {
             hidden: Boolean(collection.admin?.hidden),
             defaultSection: getDefaultSectionForSlug(slug),
           }
-          console.log(`Collection: ${slug}`, item)
+          console.log(`[CollectionManager] Including collection: ${slug}`, item)
           return item
         })
 
-      console.log('Returning collections:', collections.length)
+      console.log('[CollectionManager] Returning collections count:', collections.length)
+      console.log('[CollectionManager] Returning collection slugs:', collections.map(c => c.slug))
       return Response.json({ collections })
     } catch (error) {
-      console.error('Collection manager endpoint error:', error)
+      console.error('[CollectionManager] Endpoint error:', error)
       return Response.json({ error: `Failed to load collections: ${error instanceof Error ? error.message : 'Unknown error'}` }, { status: 500 })
     }
   },

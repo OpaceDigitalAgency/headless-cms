@@ -27,6 +27,10 @@ import { timelineBlock } from '../blocks/Timeline'
 
 export const Places: CollectionConfig = {
   slug: 'places',
+  labels: {
+    singular: 'Place',
+    plural: 'Places',
+  },
 
   admin: {
     useAsTitle: 'name',

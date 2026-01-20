@@ -141,28 +141,51 @@ export const CollectionManagerField: React.FC<CollectionManagerFieldProps> = ({ 
     }
   }, [items, setValue])
 
-  // Listen for form submission and reload page to update navigation
+  // Listen for successful save and reload page to update navigation
   useEffect(() => {
     if (typeof window === 'undefined') return
 
-    const handleFormSubmit = (event: Event) => {
-      const form = event.target as HTMLFormElement
-      // Check if this is the navigation-settings form
-      if (form && form.action && form.action.includes('navigation-settings')) {
-        // Wait for the save to complete, then reload
+    // Listen for Payload's document update event
+    const handleDocumentUpdate = (event: CustomEvent) => {
+      console.log('[CollectionManagerField] Document update event:', event.detail)
+      // Check if this is the navigation-settings global
+      if (event.detail?.global === 'navigation-settings' || event.detail?.collection === 'navigation-settings') {
+        console.log('[CollectionManagerField] Navigation settings saved, reloading page...')
+        // Wait a bit for the save to complete, then reload
         setTimeout(() => {
           sessionStorage.removeItem('nav-data')
           sessionStorage.removeItem('nav-cache-time')
           window.location.reload()
-        }, 1000)
+        }, 500)
       }
     }
 
-    // Listen for form submissions
-    document.addEventListener('submit', handleFormSubmit)
+    // Listen for Payload's custom events
+    window.addEventListener('payload:document-updated', handleDocumentUpdate as EventListener)
+
+    // Also listen for clicks on the Save button as a fallback
+    const handleClick = (event: MouseEvent) => {
+      const target = event.target as HTMLElement
+      // Check if this is a Save button in the navigation-settings page
+      if (
+        (target.textContent?.includes('Save') || target.getAttribute('aria-label')?.includes('Save')) &&
+        window.location.pathname.includes('navigation-settings')
+      ) {
+        console.log('[CollectionManagerField] Save button clicked, will reload after save...')
+        // Set a flag and check for changes
+        setTimeout(() => {
+          sessionStorage.removeItem('nav-data')
+          sessionStorage.removeItem('nav-cache-time')
+          window.location.reload()
+        }, 1500)
+      }
+    }
+
+    document.addEventListener('click', handleClick)
 
     return () => {
-      document.removeEventListener('submit', handleFormSubmit)
+      window.removeEventListener('payload:document-updated', handleDocumentUpdate as EventListener)
+      document.removeEventListener('click', handleClick)
     }
   }, [])
 
