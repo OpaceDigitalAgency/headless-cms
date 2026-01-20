@@ -67,25 +67,18 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
 
   const fetchVisibilitySettings = async () => {
     try {
-      const response = await fetch('/api/admin/navigation')
+      // Fetch from navigation-settings global to get the actual saved state
+      const response = await fetch('/api/globals/navigation-settings')
       if (response.ok) {
         const data = await response.json()
         const settings: Record<string, boolean> = {}
 
-        // Extract visibility from navigation sections
-        data.navSections?.forEach((section: any) => {
-          section.items?.forEach((item: any) => {
-            if (item.slug) {
-              settings[item.slug] = true
-            }
-            if (item.items) {
-              item.items.forEach((nestedItem: any) => {
-                if (nestedItem.slug) {
-                  settings[nestedItem.slug] = true
-                }
-              })
-            }
-          })
+        // Extract enabled state from saved collections
+        const collections = Array.isArray(data.collections) ? data.collections : []
+        collections.forEach((item: any) => {
+          if (item.slug && typeof item.enabled === 'boolean') {
+            settings[item.slug] = item.enabled
+          }
         })
 
         setVisibilitySettings(settings)
@@ -572,7 +565,12 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
     const isUninstalled = options?.uninstalled === true
     const isCore = template.status === 'core'
     const isInstalled = installedSlugs.includes(template.defaultSlug)
-    const isVisible = visibilitySettings[template.defaultSlug] !== false
+    // Check actual saved state from navigation-settings global
+    // undefined = not explicitly set (use default: true for installed collections)
+    // true = explicitly enabled
+    // false = explicitly disabled
+    const savedState = visibilitySettings[template.defaultSlug]
+    const isVisible = savedState !== undefined ? savedState : isInstalled
     const isTogglingThis = toggling === template.defaultSlug
     const isSeedingThis = seeding === template.defaultSlug
     const isUninstallingThis = uninstalling === template.defaultSlug
