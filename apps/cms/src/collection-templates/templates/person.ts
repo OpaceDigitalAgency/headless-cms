@@ -41,7 +41,7 @@ export const personTemplate: CollectionTemplate = {
   
   fields: [
     nameField('Full Name'),
-    slugField(),
+    slugField('name', '/people'),
     {
       type: 'tabs',
       tabs: [

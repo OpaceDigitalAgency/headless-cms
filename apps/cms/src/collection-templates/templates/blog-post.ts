@@ -39,7 +39,7 @@ export const blogPostTemplate: CollectionTemplate = {
   
   fields: [
     titleField('Post Title'),
-    slugField(),
+    slugField('title', '/blog'),
     {
       type: 'tabs',
       tabs: [

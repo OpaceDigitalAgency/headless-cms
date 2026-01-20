@@ -40,7 +40,7 @@ export const eventTemplate: CollectionTemplate = {
   
   fields: [
     titleField('Event Title'),
-    slugField(),
+    slugField('title', '/events'),
     {
       type: 'tabs',
       tabs: [

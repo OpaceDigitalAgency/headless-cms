@@ -128,7 +128,7 @@ export const Posts: CollectionConfig = {
       required: true,
       label: 'Post Title',
     },
-    slugField(),
+    slugField('title', '/blog'),
     {
       type: 'tabs',
       tabs: [

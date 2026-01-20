@@ -1,4 +1,5 @@
 import { notFound } from 'next/navigation'
+import { draftMode } from 'next/headers'
 import type { Metadata } from 'next'
 import { getPeople, getPersonBySlug } from '@/lib/payload-api'
 import { RenderBlocks } from '@/components/RenderBlocks'
@@ -16,7 +17,8 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: PersonPageProps): Promise<Metadata> {
   const { slug } = await params
-  const person = await getPersonBySlug(slug)
+  const { isEnabled: isDraftMode } = await draftMode()
+  const person = await getPersonBySlug(slug, isDraftMode)
 
   if (!person) {
     return { title: 'Person Not Found' }
@@ -30,7 +32,8 @@ export async function generateMetadata({ params }: PersonPageProps): Promise<Met
 
 export default async function PersonPage({ params }: PersonPageProps) {
   const { slug } = await params
-  const person = await getPersonBySlug(slug)
+  const { isEnabled: isDraftMode } = await draftMode()
+  const person = await getPersonBySlug(slug, isDraftMode)
 
   if (!person) {
     notFound()
@@ -66,6 +69,5 @@ export default async function PersonPage({ params }: PersonPageProps) {
   )
 }
 
-export const dynamicParams = false
-export const dynamic = 'force-static'
+export const revalidate = 60
 

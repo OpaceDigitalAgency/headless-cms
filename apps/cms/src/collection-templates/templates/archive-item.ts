@@ -45,7 +45,7 @@ export const archiveItemTemplate: CollectionTemplate = {
   
   fields: [
     titleField('Item Title'),
-    slugField(),
+    slugField('title', '/archive-items'),
     {
       type: 'tabs',
       tabs: [

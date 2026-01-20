@@ -1,4 +1,5 @@
 import { notFound } from 'next/navigation'
+import { draftMode } from 'next/headers'
 import type { Metadata } from 'next'
 import { getPlaces, getPlaceBySlug } from '@/lib/payload-api'
 import { RenderBlocks } from '@/components/RenderBlocks'
@@ -16,7 +17,8 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: PlacePageProps): Promise<Metadata> {
   const { slug } = await params
-  const place = await getPlaceBySlug(slug)
+  const { isEnabled: isDraftMode } = await draftMode()
+  const place = await getPlaceBySlug(slug, isDraftMode)
 
   if (!place) {
     return { title: 'Place Not Found' }
@@ -30,7 +32,8 @@ export async function generateMetadata({ params }: PlacePageProps): Promise<Meta
 
 export default async function PlacePage({ params }: PlacePageProps) {
   const { slug } = await params
-  const place = await getPlaceBySlug(slug)
+  const { isEnabled: isDraftMode } = await draftMode()
+  const place = await getPlaceBySlug(slug, isDraftMode)
 
   if (!place) {
     notFound()
@@ -66,6 +69,5 @@ export default async function PlacePage({ params }: PlacePageProps) {
   )
 }
 
-export const dynamicParams = false
-export const dynamic = 'force-static'
+export const revalidate = 60
 

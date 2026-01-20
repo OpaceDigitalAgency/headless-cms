@@ -1,4 +1,5 @@
 import { notFound } from 'next/navigation'
+import { draftMode } from 'next/headers'
 import { getArchiveItemBySlug, getArchiveItems } from '@/lib/payload-api'
 import { ArchiveItemRenderer } from '@/components/ArchiveItemRenderer'
 
@@ -19,7 +20,8 @@ export async function generateStaticParams() {
 
 export default async function ArchiveItemPage({ params }: ArchiveItemPageProps) {
   const { slug } = await params
-  const item = await getArchiveItemBySlug(slug)
+  const { isEnabled: isDraftMode } = await draftMode()
+  const item = await getArchiveItemBySlug(slug, isDraftMode)
 
   if (!item) {
     notFound()
@@ -32,5 +34,4 @@ export default async function ArchiveItemPage({ params }: ArchiveItemPageProps) 
   )
 }
 
-export const dynamicParams = false
-export const dynamic = 'force-static'
+export const revalidate = 60

@@ -2,8 +2,15 @@ import type { Field } from 'payload'
 
 /**
  * Reusable slug field with auto-generation from a source field
+ *
+ * @param sourceField - The field to generate the slug from (default: 'title')
+ * @param urlPath - Optional URL path to display (e.g., '/blog', '/events')
  */
-export function slugField(sourceField: string = 'title'): Field {
+export function slugField(sourceField: string = 'title', urlPath?: string): Field {
+  const description = urlPath
+    ? `URL-friendly identifier. Will be published at: ${urlPath}/[slug]`
+    : 'URL-friendly identifier (auto-generated from title)'
+
   return {
     name: 'slug',
     type: 'text',
@@ -12,7 +19,7 @@ export function slugField(sourceField: string = 'title'): Field {
     index: true,
     admin: {
       position: 'sidebar',
-      description: 'URL-friendly identifier (auto-generated from title)',
+      description,
     },
     hooks: {
       beforeValidate: [
@@ -21,13 +28,13 @@ export function slugField(sourceField: string = 'title'): Field {
           if (value) {
             return slugify(value)
           }
-          
+
           // Otherwise, generate from source field
           const sourceValue = data?.[sourceField]
           if (sourceValue && typeof sourceValue === 'string') {
             return slugify(sourceValue)
           }
-          
+
           return value
         },
       ],

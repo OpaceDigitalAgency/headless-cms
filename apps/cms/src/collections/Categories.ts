@@ -11,7 +11,10 @@ export const Categories: CollectionConfig = {
     group: 'Taxonomy',
     defaultColumns: ['title', 'slug', 'parent', 'totalCount', 'updatedAt'],
     description: 'Hierarchical categories shared across Posts, Archive Items, Events, People, and Custom Items',
-    preview: (doc) => getPreviewUrl({ collection: 'categories', slug: doc.slug }),
+    preview: (doc) => {
+      const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3001'
+      return `${baseUrl}/categories/${doc.slug}`
+    },
     livePreview: {
       url: ({ data }) => {
         if (!data?.slug) return null
@@ -121,7 +124,7 @@ export const Categories: CollectionConfig = {
       required: true,
       label: 'Category Name',
     },
-    slugField(),
+    slugField('title', '/categories'),
     {
       name: 'parent',
       type: 'relationship',

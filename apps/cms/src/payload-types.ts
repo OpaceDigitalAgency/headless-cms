@@ -1071,7 +1071,7 @@ export interface Category {
   id: number;
   title: string;
   /**
-   * URL-friendly identifier (auto-generated from title)
+   * URL-friendly identifier. Will be published at: /categories/[slug]
    */
   slug: string;
   /**
@@ -1110,7 +1110,7 @@ export interface Tag {
   id: number;
   title: string;
   /**
-   * URL-friendly identifier (auto-generated from title)
+   * URL-friendly identifier. Will be published at: /tags/[slug]
    */
   slug: string;
   description?: string | null;
@@ -1136,7 +1136,7 @@ export interface Post {
   id: number;
   title: string;
   /**
-   * URL-friendly identifier (auto-generated from title)
+   * URL-friendly identifier. Will be published at: /blog/[slug]
    */
   slug: string;
   featuredImage?: (number | null) | Media;
@@ -1721,7 +1721,7 @@ export interface ArchiveItem {
   id: number;
   title: string;
   /**
-   * URL-friendly identifier (auto-generated from title)
+   * URL-friendly identifier. Will be published at: /archive-items/[slug]
    */
   slug: string;
   featuredImage?: (number | null) | Media;
@@ -4242,7 +4242,7 @@ export interface Event {
   id: number;
   title: string;
   /**
-   * URL-friendly identifier (auto-generated from title)
+   * URL-friendly identifier. Will be published at: /events/[slug]
    */
   slug: string;
   featuredImage?: (number | null) | Media;

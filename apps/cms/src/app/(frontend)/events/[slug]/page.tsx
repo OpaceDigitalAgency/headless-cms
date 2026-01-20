@@ -1,4 +1,5 @@
 import { notFound } from 'next/navigation'
+import { draftMode } from 'next/headers'
 import type { Metadata } from 'next'
 import { getEvents, getEventBySlug } from '@/lib/payload-api'
 import { RenderBlocks } from '@/components/RenderBlocks'
@@ -16,7 +17,8 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: EventPageProps): Promise<Metadata> {
   const { slug } = await params
-  const event = await getEventBySlug(slug)
+  const { isEnabled: isDraftMode } = await draftMode()
+  const event = await getEventBySlug(slug, isDraftMode)
 
   if (!event) {
     return { title: 'Event Not Found' }
@@ -30,7 +32,8 @@ export async function generateMetadata({ params }: EventPageProps): Promise<Meta
 
 export default async function EventPage({ params }: EventPageProps) {
   const { slug } = await params
-  const event = await getEventBySlug(slug)
+  const { isEnabled: isDraftMode } = await draftMode()
+  const event = await getEventBySlug(slug, isDraftMode)
 
   if (!event) {
     notFound()
@@ -75,6 +78,5 @@ export default async function EventPage({ params }: EventPageProps) {
   )
 }
 
-export const dynamicParams = false
-export const dynamic = 'force-static'
+export const revalidate = 60
 

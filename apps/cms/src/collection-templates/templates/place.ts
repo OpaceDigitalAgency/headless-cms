@@ -42,7 +42,7 @@ export const placeTemplate: CollectionTemplate = {
   
   fields: [
     nameField('Place Name'),
-    slugField(),
+    slugField('name', '/places'),
     {
       type: 'tabs',
       tabs: [

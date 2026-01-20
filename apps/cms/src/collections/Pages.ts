@@ -88,7 +88,7 @@ export const Pages: CollectionConfig = {
       required: true,
       label: 'Page Title',
     },
-    slugField(),
+    slugField('title', ''),
     {
       type: 'tabs',
       tabs: [

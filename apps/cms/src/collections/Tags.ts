@@ -11,7 +11,10 @@ export const Tags: CollectionConfig = {
     group: 'Taxonomy',
     defaultColumns: ['title', 'slug', 'totalCount', 'updatedAt'],
     description: 'Flat tags shared across Posts, Archive Items, Events, People, and Custom Items',
-    preview: (doc) => getPreviewUrl({ collection: 'tags', slug: doc.slug }),
+    preview: (doc) => {
+      const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3001'
+      return `${baseUrl}/tags/${doc.slug}`
+    },
     livePreview: {
       url: ({ data }) => {
         if (!data?.slug) return null
@@ -119,7 +122,7 @@ export const Tags: CollectionConfig = {
       required: true,
       label: 'Tag Name',
     },
-    slugField(),
+    slugField('title', '/tags'),
     {
       name: 'description',
       type: 'textarea',
