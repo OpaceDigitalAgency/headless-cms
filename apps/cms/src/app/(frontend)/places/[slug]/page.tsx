@@ -64,7 +64,9 @@ export default async function PlacePage({ params }: PlacePageProps) {
         </div>
       )}
 
-      {place.content && <RenderBlocks blocks={place.content} />}
+      {place.contentBlocks && place.contentBlocks.length > 0 && (
+        <RenderBlocks blocks={place.contentBlocks} />
+      )}
     </article>
   )
 }
