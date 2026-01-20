@@ -91,14 +91,25 @@ export const CollectionManagerField: React.FC<CollectionManagerFieldProps> = ({ 
   }, [])
 
   useEffect(() => {
-    if (initializedRef.current) return
-    console.log('[CollectionManagerField] Initializing with:', { collectionsCount: collections.length, valueType: typeof value, valueLength: Array.isArray(value) ? value.length : 'N/A' })
+    console.log('[CollectionManagerField] Initializing with:', {
+      collectionsCount: collections.length,
+      valueType: typeof value,
+      valueLength: Array.isArray(value) ? value.length : 'N/A',
+      alreadyInitialized: initializedRef.current
+    })
+
+    // Don't initialize until we have collections from the API
     if (!collections.length) {
-      console.log('[CollectionManagerField] No collections loaded yet')
-      setIsLoading(false)
-      initializedRef.current = true
+      console.log('[CollectionManagerField] Waiting for collections to load...')
       return
     }
+
+    // Only initialize once we have collections
+    if (initializedRef.current) {
+      console.log('[CollectionManagerField] Already initialized, skipping')
+      return
+    }
+
     // If value is null/undefined/empty, treat as first-time setup
     const saved = Array.isArray(value) && value.length > 0 ? value : []
     console.log('[CollectionManagerField] Saved settings count:', saved.length)
