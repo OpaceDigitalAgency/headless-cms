@@ -121,6 +121,10 @@ export default buildConfig({
         dashboard: {
           Component: '/admin/views/Dashboard',
         },
+        collections: {
+          Component: '/admin/views/Collections',
+          path: '/collections',
+        },
         tools: {
           Component: '/admin/views/Tools',
           path: '/tools',

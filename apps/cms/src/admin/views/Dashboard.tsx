@@ -1,7 +1,6 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
-import { UnifiedCollectionTemplates } from '../../components/UnifiedCollectionTemplates'
 import { ContentTypeManager } from '../../components/ContentTypeManager'
 import {
   FileTextIcon,
@@ -17,7 +16,6 @@ import {
   UsersIcon,
   BarChartIcon,
   FolderIcon,
-  PackageIcon,
   SeedIcon
 } from '../icons'
 
@@ -91,7 +89,7 @@ interface RecentItem {
  * quick-create buttons, and site configuration shortcuts.
  */
 export const Dashboard: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<'overview' | 'content-types' | 'templates'>('overview')
+  const [activeTab, setActiveTab] = useState<'overview' | 'content-types'>('overview')
   const [stats, setStats] = useState<CollectionStat[]>([])
   const [recentItems, setRecentItems] = useState<RecentItem[]>([])
   const [drafts, setDrafts] = useState<RecentItem[]>([])
@@ -104,8 +102,8 @@ export const Dashboard: React.FC = () => {
       if (typeof window !== 'undefined') {
         const params = new URLSearchParams(window.location.search)
         const tab = params.get('tab')
-        if (tab === 'templates' || tab === 'content-types') {
-          setActiveTab(tab as 'templates' | 'content-types')
+        if (tab === 'content-types') {
+          setActiveTab('content-types')
         }
       }
     }
@@ -120,7 +118,7 @@ export const Dashboard: React.FC = () => {
   }, [])
 
   // Helper function to change tab and update URL
-  const handleTabChange = (tab: 'overview' | 'content-types' | 'templates') => {
+  const handleTabChange = (tab: 'overview' | 'content-types') => {
     setActiveTab(tab)
     if (typeof window !== 'undefined') {
       const url = new URL(window.location.href)
@@ -341,12 +339,6 @@ export const Dashboard: React.FC = () => {
         >
           <FolderIcon size={16} /> Content Types
         </button>
-        <button
-          className={`ra-dashboard__tab ${activeTab === 'templates' ? 'ra-dashboard__tab--active' : ''}`}
-          onClick={() => handleTabChange('templates')}
-        >
-          <PackageIcon size={16} /> Collections
-        </button>
       </div>
 
       {/* Overview Tab */}
@@ -519,11 +511,6 @@ export const Dashboard: React.FC = () => {
       {/* Content Types Tab */}
       {activeTab === 'content-types' && (
         <ContentTypeManager />
-      )}
-
-      {/* Collection Templates Tab (Unified with Sample Data) */}
-      {activeTab === 'templates' && (
-        <UnifiedCollectionTemplates />
       )}
     </div>
   )

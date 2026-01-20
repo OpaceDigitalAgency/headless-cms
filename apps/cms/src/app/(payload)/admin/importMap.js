@@ -35,6 +35,7 @@ import { ReindexButton as ReindexButton_aead06e4cbf6b2620c5c51c9ab283634 } from 
 import { default as default_1723744e6ae59cf3653e63611d4cba7a } from '../../../components/CollectionManagerField'
 import { default as default_81e915c9ba204d29f7fc1265572ed8be } from '../../../admin/TwoPanelNav'
 import { default as default_c7d7fc284b3b0552574b75a0421f4260 } from '../../../admin/views/Dashboard'
+import { default as default_23bada0f25692cad9c66cb3206a00238 } from '../../../admin/views/Collections'
 import { default as default_a30289e25b7b0ddf21b0d6206ba3514b } from '../../../admin/views/Tools'
 import { CollectionCards as CollectionCards_ab83ff7e88da8d3530831f296ec4756a } from '@payloadcms/ui/rsc'
 
@@ -76,6 +77,7 @@ export const importMap = {
   "/components/CollectionManagerField#default": default_1723744e6ae59cf3653e63611d4cba7a,
   "/admin/TwoPanelNav#default": default_81e915c9ba204d29f7fc1265572ed8be,
   "/admin/views/Dashboard#default": default_c7d7fc284b3b0552574b75a0421f4260,
+  "/admin/views/Collections#default": default_23bada0f25692cad9c66cb3206a00238,
   "/admin/views/Tools#default": default_a30289e25b7b0ddf21b0d6206ba3514b,
   "@payloadcms/ui/rsc#CollectionCards": CollectionCards_ab83ff7e88da8d3530831f296ec4756a
 }

@@ -99,18 +99,7 @@ export const navigationEndpoint: Endpoint = {
       ],
     })
 
-    // 2. Collections Management (links to Dashboard Collections tab)
-    // This replaces the default collections section to provide a unified interface
-    navSections.push({
-      id: 'collections',
-      label: 'Collections',
-      icon: 'collection',
-      items: [
-        { label: 'Manage Collections', href: '/admin?tab=templates', icon: 'collection', slug: 'collections-manager' },
-      ],
-    })
-
-    // 3. Tools (top-level)
+    // 2. Tools (top-level)
     navSections.push({
       id: 'tools',
       label: 'Tools',
@@ -186,11 +175,20 @@ export const navigationEndpoint: Endpoint = {
     }
 
     sectionOrder.forEach((sectionId) => {
-      // Skip the 'collections' section as we've already added it above with a link to Dashboard
-      if (sectionId === 'collections') return
-
       const items = buildSectionItems(sectionId)
       if (items.length === 0) return
+
+      // For collections section, add "Manage Collections" link at the top
+      if (sectionId === 'collections') {
+        items.unshift({
+          label: 'Manage Collections',
+          href: '/admin/collections',
+          icon: 'settings',
+          slug: 'manage-collections',
+          _order: -1, // Ensure it appears first
+        })
+      }
+
       navSections.push({
         id: sectionId,
         label: sectionMeta[sectionId].label,
