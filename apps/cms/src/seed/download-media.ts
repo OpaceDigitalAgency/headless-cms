@@ -17,10 +17,10 @@ const MEDIA_DIR = path.join(__dirname, 'media')
 // Sample images from Unsplash (free to use)
 export const SAMPLE_IMAGES = {
   // Hero/Banner images
-  hero_museum: {
+  hero_archive: {
     url: 'https://images.unsplash.com/photo-1554907984-15263bfd63bd?w=1920&h=1080&fit=crop',
-    filename: 'hero-museum.jpg',
-    alt: 'Museum interior with grand architecture',
+    filename: 'hero-archive.jpg',
+    alt: 'Archive interior with grand architecture',
   },
   hero_art: {
     url: 'https://images.unsplash.com/photo-1578321272176-b7bbc0679853?w=1920&h=1080&fit=crop',
@@ -28,7 +28,7 @@ export const SAMPLE_IMAGES = {
     alt: 'Art gallery with paintings',
   },
   
-  // Artifact images
+  // Collection images
   mona_lisa: {
     url: 'https://images.unsplash.com/photo-1423742774270-6884aac775fa?w=800&h=1000&fit=crop',
     filename: 'mona-lisa.jpg',
@@ -44,10 +44,10 @@ export const SAMPLE_IMAGES = {
     filename: 'water-lilies.jpg',
     alt: 'Impressionist painting of water lilies',
   },
-  ancient_artifact: {
+  ancient_relic: {
     url: 'https://images.unsplash.com/photo-1608376630927-c1b8f5e1e8a0?w=800&h=1000&fit=crop',
-    filename: 'ancient-artifact.jpg',
-    alt: 'Ancient stone artifact',
+    filename: 'ancient-relic.jpg',
+    alt: 'Ancient stone relic',
   },
   
   // People portraits
@@ -110,7 +110,7 @@ export const SAMPLE_IMAGES = {
   blog_1: {
     url: 'https://images.unsplash.com/photo-1518998053901-5348d3961a04?w=1200&h=600&fit=crop',
     filename: 'blog-1.jpg',
-    alt: 'Museum exhibition',
+    alt: 'Archive exhibition',
   },
   blog_2: {
     url: 'https://images.unsplash.com/photo-1580060839134-75a5edca2e99?w=1200&h=600&fit=crop',
@@ -120,7 +120,7 @@ export const SAMPLE_IMAGES = {
   blog_3: {
     url: 'https://images.unsplash.com/photo-1574182245530-967d9b3831af?w=1200&h=600&fit=crop',
     filename: 'blog-3.jpg',
-    alt: 'Curator examining artifact',
+    alt: 'Curator examining a relic',
   },
 }
 

@@ -177,7 +177,7 @@ export function getPresetSeedConfig(presetId: AvailablePreset): SeedConfig {
         pages: 5,
       },
     },
-    'museum-next': {
+    'archive-next': {
       itemCounts: {
         pages: 3,
         posts: 3,

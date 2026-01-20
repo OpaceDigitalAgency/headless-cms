@@ -10,7 +10,7 @@
 # Available presets:
 #   - blog-astro      : Blog with Astro frontend
 #   - brochure-astro  : Brochure/marketing site with Astro
-#   - museum-next     : Museum/archive site with Next.js
+#   - archive-next    : Archive site with Next.js
 #   - ecommerce-next  : Ecommerce catalog with Next.js
 #
 
@@ -28,7 +28,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT_DIR="$(dirname "$SCRIPT_DIR")"
 
 # Available presets
-PRESETS=("blog-astro" "brochure-astro" "museum-next" "ecommerce-next")
+PRESETS=("blog-astro" "brochure-astro" "archive-next" "ecommerce-next")
 
 # ===========================================
 # Helper Functions
@@ -68,7 +68,7 @@ show_usage() {
     echo ""
     echo "Examples:"
     echo "  $0 blog-astro my-blog"
-    echo "  $0 museum-next art-gallery"
+    echo "  $0 archive-next art-gallery"
     echo "  $0 ecommerce-next my-shop"
     echo ""
 }

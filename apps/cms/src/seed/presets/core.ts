@@ -1,7 +1,7 @@
 /**
  * Core Preset Seeder
  *
- * Seeds sample data for the core preset (museum-next preset ID).
+ * Seeds sample data for the core preset (archive-next preset ID).
  * Used as the "kitchen sink" preset to cover the broadest set of collections.
  */
 
@@ -15,7 +15,7 @@ export class CoreSeeder extends BaseSeeder {
   }
 
   getPresetId(): string {
-    return 'museum-next'
+    return 'archive-next'
   }
 
   getCollections(): string[] {
@@ -602,7 +602,7 @@ export class CoreSeeder extends BaseSeeder {
         title: 'Ancient Roman Coin Collection',
         slug: 'ancient-roman-coin-collection',
         excerpt: 'A collection of coins from the Roman Empire period.',
-        itemType: 'artifact',
+        itemType: 'object',
         dateCreated: '100-01-01',
       },
       {

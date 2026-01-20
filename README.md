@@ -48,7 +48,7 @@ This repo is a productised platform on top of Payload CMS, not a vanilla clone:
 - **Dynamic Content Types**: WordPress-style custom post types you can create from the dashboard (Content Type Manager) with no code or restarts; items live in `custom-items` with shared blocks and media.
 - **Dual Frontends Included**: Next.js (ISR-ready, on-demand revalidation) and Astro (pure SSG) ship together, wired to the same CMS contracts and template system.
 - **Template + Block System**: Finite, shared templates and 9+ reusable blocks across CMS/Next/Astro for consistent rendering without per-collection view code.
-- **Presets & Starters**: Prebuilt starters (blog, brochure, museum, ecommerce) plus Makefile and `scripts/create.sh` workflows to scaffold quickly.
+- **Presets & Starters**: Prebuilt starters (blog, brochure, archive, ecommerce) plus Makefile and `scripts/create.sh` workflows to scaffold quickly.
 - **Enhanced Admin UX**: Two-panel nav, custom dashboard (stats, drafts, quick create, seed + collection templates + content types tabs), theme toggle, tools view.
 - **Operational Extras**: Railway-ready multi-service deploy, Makefile one-command workflows, seed/reset endpoints, search/SEO/redirects/nested docs/form-builder plugins enabled, optional S3 storage.
 
@@ -297,7 +297,7 @@ Create your admin user at http://localhost:3000/admin/create-first-user and run 
 |---------|-------------|
 | `make blog-astro` | Create a new blog project with Astro |
 | `make brochure-astro` | Create a new brochure site with Astro |
-| `make museum-next` | Create a new museum/archive site with Next.js |
+| `make archive-next` | Create a new archive site with Next.js |
 | `make ecommerce-next` | Create a new ecommerce site with Next.js |
 
 ---

@@ -13,7 +13,7 @@ export type FrontendType = 'next' | 'astro'
 /**
  * Preset categories
  */
-export type PresetCategory = 'blog' | 'brochure' | 'museum' | 'ecommerce' | 'portfolio' | 'docs'
+export type PresetCategory = 'blog' | 'brochure' | 'archive' | 'ecommerce' | 'portfolio' | 'docs'
 
 /**
  * Preset manifest - defines a complete site type preset
@@ -135,7 +135,7 @@ export interface PresetRegistryEntry {
 export const AVAILABLE_PRESETS = [
   'blog-astro',
   'brochure-astro',
-  'museum-next',
+  'archive-next',
   'ecommerce-next',
 ] as const
 

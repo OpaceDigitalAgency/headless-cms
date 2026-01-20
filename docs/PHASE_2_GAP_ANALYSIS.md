@@ -39,7 +39,7 @@
 - Create `presets/` directory structure
 - Create `blog-astro/` preset
 - Create `brochure-astro/` preset
-- Create `museum-next/` preset (formalize existing)
+- Create `archive-next/` preset (formalize existing)
 - Create `ecommerce-next/` preset
 
 ### 2. Presets & Packs System

@@ -9,8 +9,8 @@
         railway-provision railway-deploy \
         dev-cms dev-web dev-astro \
         build-cms build-web build-astro \
-        create blog-astro brochure-astro museum-next ecommerce-next \
-        seed-blog seed-museum seed-ecommerce
+        create blog-astro brochure-astro archive-next ecommerce-next \
+        seed-blog seed-archive seed-ecommerce
 
 # Default target
 .DEFAULT_GOAL := help
@@ -60,9 +60,9 @@ brochure-astro: ## Create a new brochure site with Astro frontend
 	@echo "$(CYAN)Creating brochure site with Astro...$(NC)"
 	@read -p "Enter project name: " name && ./scripts/create.sh brochure-astro $$name
 
-museum-next: ## Create a new museum/archive site with Next.js
-	@echo "$(CYAN)Creating museum site with Next.js...$(NC)"
-	@read -p "Enter project name: " name && ./scripts/create.sh museum-next $$name
+archive-next: ## Create a new archive site with Next.js
+	@echo "$(CYAN)Creating archive site with Next.js...$(NC)"
+	@read -p "Enter project name: " name && ./scripts/create.sh archive-next $$name
 
 ecommerce-next: ## Create a new ecommerce catalog with Next.js
 	@echo "$(CYAN)Creating ecommerce site with Next.js...$(NC)"
@@ -242,10 +242,10 @@ seed-blog: ## Seed blog-specific sample data
 	SEED_PRESET=blog-astro pnpm --filter @repo/cms seed
 	@echo "$(GREEN)Blog data seeded!$(NC)"
 
-seed-museum: ## Seed museum-specific sample data
-	@echo "$(CYAN)Seeding museum data...$(NC)"
-	SEED_PRESET=museum-next pnpm --filter @repo/cms seed
-	@echo "$(GREEN)Museum data seeded!$(NC)"
+seed-archive: ## Seed archive-specific sample data
+	@echo "$(CYAN)Seeding archive data...$(NC)"
+	SEED_PRESET=archive-next pnpm --filter @repo/cms seed
+	@echo "$(GREEN)Archive data seeded!$(NC)"
 
 seed-ecommerce: ## Seed ecommerce-specific sample data
 	@echo "$(CYAN)Seeding ecommerce data...$(NC)"

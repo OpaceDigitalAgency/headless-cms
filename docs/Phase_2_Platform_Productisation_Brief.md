@@ -95,7 +95,7 @@ Introduce a filesystem-based packaging system.
 presets/
 ├── blog-astro/
 ├── brochure-astro/
-├── museum-next/
+├── archive-next/
 ├── ecommerce-next/
 ```
 
@@ -143,7 +143,7 @@ Commands such as:
 - `make blog-next`
 - `make brochure-astro`
 - `make ecommerce-next`
-- `make museum-next`
+- `make archive-next`
 
 These wrap the generator for non-technical users.
 

@@ -8,7 +8,7 @@ import type { SeedOptions } from './base'
  * Seed script to populate the database with sample data
  * 
  * Environment variables:
- * - SEED_PRESET: Preset to seed (blog-astro, brochure-astro, museum-next, ecommerce-next)
+ * - SEED_PRESET: Preset to seed (blog-astro, brochure-astro, archive-next, ecommerce-next)
  * - SEED_MEDIA: Whether to download sample media (true/false)
  * - SEED_CLEAR: Whether to clear existing data before seeding (true/false)
  * 
@@ -20,7 +20,7 @@ import type { SeedOptions } from './base'
 // Configuration
 // ===========================================
 
-const SEED_PRESET = process.env.SEED_PRESET || 'museum-next'
+const SEED_PRESET = process.env.SEED_PRESET || 'archive-next'
 const SEED_MEDIA = process.env.SEED_MEDIA === 'true'
 const SEED_CLEAR = process.env.SEED_CLEAR === 'true'
 

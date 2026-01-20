@@ -1,8 +1,8 @@
 {
-  "id": "museum-next",
-  "name": "Museum/Archive (Next.js)",
+  "id": "archive-next",
+  "name": "Archive (Next.js)",
   "description": "A comprehensive archive or gallery site with archive items, people, and places. Features complex relationships, timeline views, and tag-based revalidation.",
-  "category": "museum",
+  "category": "archive",
   "frontend": "next",
   "version": "1.0.0",
   "author": "Payload CMS + Jamstack Platform",

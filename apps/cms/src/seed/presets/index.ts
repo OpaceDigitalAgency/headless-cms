@@ -24,7 +24,7 @@ import { EcommerceSeeder } from './ecommerce'
 export const PRESET_IDS = [
   'blog-astro',
   'brochure-astro',
-  'museum-next',
+  'archive-next',
   'ecommerce-next',
 ] as const
 
@@ -54,7 +54,7 @@ export const PRESET_METADATA: Record<PresetId, {
     hasSeedData: true,
     hasSampleMedia: false,
   },
-  'museum-next': {
+  'archive-next': {
     name: 'Archive (Next.js)',
     description: 'An archive-focused site with archive items, people, and places',
     collections: ['pages', 'posts', 'categories', 'archive-items', 'people', 'places', 'content-types', 'custom-items'],
@@ -83,7 +83,7 @@ export function createSeeder(
       return new BlogSeeder(payload, options)
     case 'brochure-astro':
       return new BrochureSeeder(payload, options)
-    case 'museum-next':
+    case 'archive-next':
       return new CoreSeeder(payload, options)
     case 'ecommerce-next':
       return new EcommerceSeeder(payload, options)

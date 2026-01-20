@@ -291,7 +291,7 @@ export const seedCollectionEndpoint: Endpoint = {
 
       const config = COLLECTION_SEED_CONFIG[slug]
 
-      const presetId = COLLECTION_PRESET_OVERRIDES[slug] || 'museum-next'
+      const presetId = COLLECTION_PRESET_OVERRIDES[slug] || 'archive-next'
       const seeder = createSeeder(presetId, payload, {
         downloadMedia: includeMedia && config.hasSeedMedia,
         clearExisting: action === 'reseed',
@@ -583,7 +583,7 @@ export const seedAllEndpoint: Endpoint = {
       const body = await req.json?.() || {}
       const { action } = body
 
-      // Use the core preset (museum-next) as it has the most collections
+      // Use the core preset (archive-next) as it has the most collections
       const enabledCollections: string[] = []
       for (const slug of Object.keys(COLLECTION_SEED_CONFIG)) {
         if (await isCollectionEnabled(payload, slug)) {
@@ -598,7 +598,7 @@ export const seedAllEndpoint: Endpoint = {
         )
       }
 
-      const seeder = createSeeder('museum-next', payload, {
+      const seeder = createSeeder('archive-next', payload, {
         downloadMedia: false,
         clearExisting: false,
         collections: enabledCollections,

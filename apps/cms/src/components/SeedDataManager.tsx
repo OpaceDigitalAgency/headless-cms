@@ -53,7 +53,7 @@ export const SeedDataManager: React.FC = () => {
   const [activeView, setActiveView] = useState<'collections' | 'presets'>('collections')
   const [collections, setCollections] = useState<CollectionSeedStatus[]>([])
   const [presets, setPresets] = useState<PresetInfo[]>([])
-  const [selectedPreset, setSelectedPreset] = useState<string>('museum-next')
+  const [selectedPreset, setSelectedPreset] = useState<string>('archive-next')
   const [loading, setLoading] = useState(true)
   const [actionInProgress, setActionInProgress] = useState<string | null>(null)
   const [message, setMessage] = useState<{ type: 'success' | 'error' | 'info'; text: string } | null>(null)
@@ -156,7 +156,7 @@ export const SeedDataManager: React.FC = () => {
       hasSampleMedia: false,
     },
     {
-      id: 'museum-next',
+      id: 'archive-next',
       name: 'Archive',
       description: 'An archive-focused site with archive items, people, and places',
       collections: ['pages', 'posts', 'categories', 'archive-items', 'people', 'places'],

@@ -1,6 +1,7 @@
 import type { CollectionConfig } from 'payload'
 import { slugField } from '../fields/slug'
 import { isCollectionEnabled } from '../lib/collectionVisibility'
+import { getPreviewUrl } from '../utils/preview'
 
 export const Categories: CollectionConfig = {
   slug: 'categories',
@@ -10,6 +11,14 @@ export const Categories: CollectionConfig = {
     group: 'Taxonomy',
     defaultColumns: ['title', 'slug', 'parent', 'totalCount', 'updatedAt'],
     description: 'Hierarchical categories shared across Posts, Archive Items, Events, People, and Custom Items',
+    preview: (doc) => getPreviewUrl({ collection: 'categories', slug: doc.slug }),
+    livePreview: {
+      url: ({ data }) => {
+        if (!data?.slug) return null
+        const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3001'
+        return `${baseUrl}/categories/${data.slug}`
+      },
+    },
   },
 
   // Enable versions (without drafts for taxonomy items)
