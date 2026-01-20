@@ -1,7 +1,7 @@
 /**
  * Core Preset Seeder
  *
- * Seeds sample data for the museum-next preset.
+ * Seeds sample data for the core preset (museum-next preset ID).
  * Used as the "kitchen sink" preset to cover the broadest set of collections.
  */
 
@@ -19,7 +19,7 @@ export class CoreSeeder extends BaseSeeder {
   }
 
   getCollections(): string[] {
-    return ['pages', 'posts', 'categories', 'people', 'places', 'museum-collections', 'events', 'archive-items', 'content-types', 'custom-items']
+    return ['pages', 'posts', 'categories', 'people', 'places', 'events', 'archive-items', 'content-types', 'custom-items']
   }
 
   async seed(): Promise<void> {
@@ -29,7 +29,6 @@ export class CoreSeeder extends BaseSeeder {
     const categories = await this.seedCategories()
     const places = await this.seedPlaces()
     const people = await this.seedPeople(places)
-    const collections = await this.seedMuseumCollections()
     await this.seedEvents(places)
     await this.seedArchiveItems(people, places)
     await this.seedPages()
@@ -50,7 +49,6 @@ export class CoreSeeder extends BaseSeeder {
     await this.clearCollection('pages')
     await this.clearCollection('archive-items')
     await this.clearCollection('events')
-    await this.clearCollection('museum-collections')
     await this.clearCollection('people')
     await this.clearCollection('places')
     await this.clearCollection('custom-items')
@@ -73,9 +71,6 @@ export class CoreSeeder extends BaseSeeder {
         await this.seedPeople(places)
         return
       }
-      case 'museum-collections':
-        await this.seedMuseumCollections()
-        return
       case 'posts': {
         const categories = await this.seedCategories()
         await this.seedPosts(categories)
@@ -296,50 +291,6 @@ export class CoreSeeder extends BaseSeeder {
     return people
   }
 
-  private async seedMuseumCollections(): Promise<Record<string, string>> {
-    if (!this.shouldSeedCollection('museum-collections')) {
-      return {}
-    }
-
-    this.log('Seeding collections...')
-
-    const collectionsData = [
-      {
-        title: 'Renaissance Masters',
-        slug: 'renaissance-masters',
-        description: 'A collection featuring works from the greatest artists of the Renaissance period.',
-        shortDescription: 'Masterpieces from the Renaissance era.',
-      },
-      {
-        title: 'Ancient Civilizations',
-        slug: 'ancient-civilizations',
-        description: 'Artifacts from ancient Greece, Rome, Egypt, and Mesopotamia.',
-        shortDescription: 'Treasures from the ancient world.',
-      },
-      {
-        title: 'Impressionist Gallery',
-        slug: 'impressionist-gallery',
-        description: 'Works from the Impressionist movement that revolutionized art.',
-        shortDescription: 'Light, color, and movement captured on canvas.',
-      },
-    ]
-
-    const collections: Record<string, string> = {}
-    
-    for (const data of collectionsData) {
-      const collection = await this.create('museum-collections', {
-        title: data.title,
-        slug: data.slug,
-        description: createRichText(data.description),
-        shortDescription: data.shortDescription,
-        _status: 'published',
-      })
-      collections[data.slug] = collection.id
-    }
-
-    return collections
-  }
-
   private async seedPages(): Promise<void> {
     if (!this.shouldSeedCollection('pages')) {
       return
@@ -356,7 +307,7 @@ export class CoreSeeder extends BaseSeeder {
       hero: {
         type: 'fullscreen',
         heading: 'Discover Our Collection',
-        subheading: 'Explore thousands of artifacts, artworks, and historical treasures from around the world.',
+        subheading: 'Explore thousands of archive items, artworks, and historical treasures from around the world.',
       },
       content: [
         {
@@ -388,8 +339,8 @@ export class CoreSeeder extends BaseSeeder {
           showAuthor: false,
           link: {
             show: true,
-            label: 'View All Artifacts',
-            url: '/artifacts',
+            label: 'View All Archive Items',
+            url: '/archive-items',
           },
         },
       ],
@@ -397,7 +348,7 @@ export class CoreSeeder extends BaseSeeder {
 
     // About page
     await this.create('pages', {
-      title: 'About the Museum',
+      title: 'About the Archive',
       slug: 'about',
       template: 'detail',
       _status: 'published',
@@ -416,7 +367,7 @@ export class CoreSeeder extends BaseSeeder {
             {
               size: 'full',
               richText: createRichTextParagraphs([
-                'Our museum is dedicated to preserving and sharing the world\'s cultural heritage.',
+                'Our archive is dedicated to preserving and sharing the world\'s cultural heritage.',
                 'With collections spanning thousands of years and multiple continents, we offer visitors a unique journey through human history and creativity.',
                 'Our mission is to inspire curiosity, foster learning, and connect people with the stories of our shared past.',
               ]),
@@ -428,9 +379,9 @@ export class CoreSeeder extends BaseSeeder {
           heading: 'Our History',
           layout: 'vertical',
           events: [
-            { date: '1850', title: 'Foundation', description: createRichText('The museum was founded by a group of passionate collectors.') },
+            { date: '1850', title: 'Foundation', description: createRichText('The archive was founded by a group of passionate collectors.') },
             { date: '1920', title: 'Major Expansion', description: createRichText('A new wing was added to house the growing collection.') },
-            { date: '2000', title: 'Digital Initiative', description: createRichText('The museum launched its first digital archive.') },
+            { date: '2000', title: 'Digital Initiative', description: createRichText('The archive launched its first digital collection.') },
           ],
         },
       ],
@@ -467,14 +418,14 @@ export class CoreSeeder extends BaseSeeder {
         excerpt: 'Our research team has made exciting new discoveries at the excavation site.',
         category: 'research',
         content: createRichTextParagraphs([
-          'Our archaeological team has uncovered remarkable artifacts at the Mediterranean excavation site.',
+          'Our archaeological team has uncovered remarkable archive items at the Mediterranean excavation site.',
           'These findings provide new insights into ancient trade routes and cultural exchanges.',
           'A detailed research paper will be published in the upcoming journal edition.',
         ]),
       },
       {
-        title: 'Family Day at the Museum',
-        slug: 'family-day-museum',
+        title: 'Family Day at the Archive',
+        slug: 'family-day-archive',
         excerpt: 'Bring the whole family for a day of fun, learning, and exploration.',
         category: 'events',
         content: createRichTextParagraphs([
@@ -510,7 +461,7 @@ export class CoreSeeder extends BaseSeeder {
       navItems: [
         { link: { type: 'custom', label: 'Home', url: '/' } },
         { link: { type: 'custom', label: 'Blocks Showcase', url: '/blocks-showcase' } },
-        { link: { type: 'custom', label: 'Artifacts', url: '/artifacts' } },
+        { link: { type: 'custom', label: 'Archive Items', url: '/archive-items' } },
         { link: { type: 'custom', label: 'People', url: '/people' } },
         { link: { type: 'custom', label: 'Places', url: '/places' } },
         { link: { type: 'custom', label: 'Collections', url: '/collections' } },
@@ -525,7 +476,7 @@ export class CoreSeeder extends BaseSeeder {
         {
           label: 'Explore',
           navItems: [
-            { link: { type: 'custom', label: 'Artifacts', url: '/artifacts' } },
+            { link: { type: 'custom', label: 'Archive Items', url: '/archive-items' } },
             { link: { type: 'custom', label: 'People', url: '/people' } },
             { link: { type: 'custom', label: 'Places', url: '/places' } },
           ],
@@ -544,7 +495,7 @@ export class CoreSeeder extends BaseSeeder {
     // Settings
     await this.updateGlobal('settings', {
       siteName: 'Museum Collection',
-      siteDescription: 'Explore our collection of historical artifacts, people, and places.',
+      siteDescription: 'Explore our collection of historical archive items, people, and places.',
     })
   }
 
@@ -584,8 +535,8 @@ export class CoreSeeder extends BaseSeeder {
       },
       {
         title: 'Museum Night: After Hours Tour',
-        slug: 'museum-night-after-hours-tour',
-        excerpt: 'Experience the museum in a new light with our exclusive after-hours tour.',
+        slug: 'after-hours-archive-tour',
+        excerpt: 'Experience the archive in a new light with our exclusive after-hours tour.',
         eventType: 'tour',
         startDate: new Date(Date.now() + 21 * 24 * 60 * 60 * 1000).toISOString(), // 21 days from now
         endDate: new Date(Date.now() + 21 * 24 * 60 * 60 * 1000 + 2 * 60 * 60 * 1000).toISOString(), // 2 hours later
@@ -594,7 +545,7 @@ export class CoreSeeder extends BaseSeeder {
       {
         title: 'Classical Music Performance',
         slug: 'classical-music-performance',
-        excerpt: 'An evening of classical music in the museum\'s grand hall.',
+        excerpt: 'An evening of classical music in the venue\'s grand hall.',
         eventType: 'performance',
         startDate: new Date(Date.now() + 45 * 24 * 60 * 60 * 1000).toISOString(), // 45 days from now
         endDate: new Date(Date.now() + 45 * 24 * 60 * 60 * 1000 + 2 * 60 * 60 * 1000).toISOString(), // 2 hours later

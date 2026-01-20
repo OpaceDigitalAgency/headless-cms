@@ -44,7 +44,7 @@ export const navSections: NavSection[] = [
       { label: 'Pages', href: '/admin/collections/pages', icon: 'page' },
       { label: 'Posts', href: '/admin/collections/posts', icon: 'post' },
       { label: 'Events', href: '/admin/collections/events', icon: 'post' },
-      { label: 'Archive Items', href: '/admin/collections/archive-items', icon: 'artifact' },
+      { label: 'Archive Items', href: '/admin/collections/archive-items', icon: 'archive' },
       { label: 'Categories', href: '/admin/collections/categories', icon: 'category' },
       { label: 'Tags', href: '/admin/collections/tags', icon: 'tags' },
       { label: 'Custom Items', href: '/admin/collections/custom-items', icon: 'customItem' },
@@ -56,10 +56,8 @@ export const navSections: NavSection[] = [
     label: 'Collections',
     icon: 'collection',
     items: [
-      { label: 'Artifacts', href: '/admin/collections/artifacts', icon: 'artifact' },
       { label: 'People', href: '/admin/collections/people', icon: 'person' },
       { label: 'Places', href: '/admin/collections/places', icon: 'place' },
-      { label: 'Museum Collections', href: '/admin/collections/museum-collections', icon: 'museum' },
     ],
   },
   {
@@ -131,7 +129,6 @@ export const collectionSearchConfig = [
   { slug: 'products', label: 'Products', titleField: 'title' },
   { slug: 'people', label: 'People', titleField: 'name' },
   { slug: 'places', label: 'Places', titleField: 'name' },
-  { slug: 'museum-collections', label: 'Collections', titleField: 'title' },
   { slug: 'custom-items', label: 'Custom Items', titleField: 'title' },
   { slug: 'content-types', label: 'Content Types', titleField: 'name' },
   { slug: 'categories', label: 'Categories', titleField: 'title' },

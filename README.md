@@ -195,10 +195,9 @@ These are the content types available out of the box (plus Dynamic Content Types
 - **Posts** (`posts`)
 - **Categories** (`categories`)
 - **Media** (`media`)
-- **Artifacts** (`artifacts`)
+- **Archive Items** (`archive-items`)
 - **People** (`people`)
 - **Places** (`places`)
-- **Museum Collections** (`museum-collections`)
 - **Content Types** (`content-types`) - dynamic content type definitions
 - **Custom Items** (`custom-items`) - instances of dynamic content types
 - **Users** (`users`)

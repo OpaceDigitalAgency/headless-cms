@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import Image from 'next/image'
-import { getPosts, getArchiveItems, getPeople, getPlaces, getMuseumCollections, getCustomItems } from '@/lib/payload-api'
+import { getPosts, getArchiveItems, getPeople, getPlaces, getCustomItems } from '@/lib/payload-api'
 
 interface ArchiveBlockProps {
   block: {
@@ -67,10 +67,6 @@ export async function ArchiveBlock({ block }: ArchiveBlockProps) {
           const places = await getPlaces(limit)
           items = places.docs
           break
-        case 'museum-collections':
-          const collections = await getMuseumCollections(limit)
-          items = collections.docs
-          break
         case 'custom-items':
           const contentTypeId = typeof contentType === 'object' ? contentType?.id : contentType
           const customItems = await getCustomItems(limit, contentTypeId)
@@ -87,13 +83,11 @@ export async function ArchiveBlock({ block }: ArchiveBlockProps) {
       case 'posts':
         return `/blog/${item.slug}`
       case 'archive-items':
-        return `/items/${item.slug}`
+        return `/archive-items/${item.slug}`
       case 'people':
         return `/people/${item.slug}`
       case 'places':
         return `/places/${item.slug}`
-      case 'museum-collections':
-        return `/collections/${item.slug}`
       case 'pages':
         return `/${item.slug}`
       case 'custom-items':

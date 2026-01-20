@@ -1,11 +1,11 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
-import { getPageBySlug, getPosts, getArtifacts } from '@/lib/payload';
+import { getPageBySlug, getPosts, getArchiveItems } from '@/lib/payload';
 
 // Fetch home page content at build time
 const page = await getPageBySlug('home').catch(() => null);
 const posts = await getPosts({ limit: 3 }).catch(() => ({ docs: [] }));
-const artifacts = await getArtifacts({ limit: 6 }).catch(() => ({ docs: [] }));
+const archiveItems = await getArchiveItems({ limit: 6 }).catch(() => ({ docs: [] }));
 
 const title = page?.meta?.title || 'Home';
 const description = page?.meta?.description || 'Welcome to our Payload CMS + Astro site';
@@ -24,8 +24,8 @@ const description = page?.meta?.description || 'Welcome to our Payload CMS + Ast
           Built with Payload CMS v3 and Astro for blazing-fast performance.
         </p>
         <div class="mt-8 flex flex-wrap gap-4">
-          <a href="/artifacts" class="btn-primary bg-white text-blue-600 hover:bg-blue-50">
-            Explore Artifacts
+          <a href="/archive-items" class="btn-primary bg-white text-blue-600 hover:bg-blue-50">
+            Explore Archive Items
           </a>
           <a href="/blog" class="btn-outline border-white text-white hover:bg-white/10">
             Read Blog
@@ -35,34 +35,34 @@ const description = page?.meta?.description || 'Welcome to our Payload CMS + Ast
     </div>
   </section>
 
-  <!-- Featured Artifacts -->
-  {artifacts.docs.length > 0 && (
+  <!-- Featured Archive Items -->
+  {archiveItems.docs.length > 0 && (
     <section class="py-16">
       <div class="container">
         <div class="flex items-center justify-between mb-8">
-          <h2 class="text-3xl font-bold">Featured Artifacts</h2>
-          <a href="/artifacts" class="text-blue-600 hover:text-blue-700 dark:text-blue-400">
+          <h2 class="text-3xl font-bold">Featured Archive Items</h2>
+          <a href="/archive-items" class="text-blue-600 hover:text-blue-700 dark:text-blue-400">
             View all →
           </a>
         </div>
         <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {artifacts.docs.map((artifact: any) => {
-            const image = artifact.media?.[0]?.image;
+          {archiveItems.docs.map((item: any) => {
+            const image = item.gallery?.[0]?.image;
             return (
-              <a href={`/artifacts/${artifact.slug}`} class="card overflow-hidden group">
+              <a href={`/archive-items/${item.slug}`} class="card overflow-hidden group">
                 {image?.url && (
                   <div class="relative h-48 overflow-hidden">
                     <img 
                       src={image.url} 
-                      alt={image.alt || artifact.title}
+                      alt={image.alt || item.title}
                       class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                     />
                   </div>
                 )}
                 <div class="p-4">
-                  <h3 class="font-semibold text-gray-900 dark:text-white">{artifact.title}</h3>
-                  {artifact.dateCreated && (
-                    <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">{artifact.dateCreated}</p>
+                  <h3 class="font-semibold text-gray-900 dark:text-white">{item.title}</h3>
+                  {item.dateCreated && (
+                    <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">{item.dateCreated}</p>
                   )}
                 </div>
               </a>

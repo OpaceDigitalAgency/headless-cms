@@ -1,4 +1,5 @@
 import type { CollectionConfig } from 'payload'
+import { isCollectionEnabled } from '../lib/collectionVisibility'
 
 /**
  * Content Types Collection
@@ -26,10 +27,10 @@ export const ContentTypes: CollectionConfig = {
     description: 'Define custom content types like "Classic Cars", "Recipes", or "Products"',
   },
   access: {
-    read: () => true,
-    create: ({ req: { user } }) => Boolean(user),
-    update: ({ req: { user } }) => Boolean(user),
-    delete: ({ req: { user } }) => Boolean(user),
+    read: async ({ req }) => (await isCollectionEnabled(req.payload, 'content-types')),
+    create: async ({ req }) => (await isCollectionEnabled(req.payload, 'content-types')) && Boolean(req.user),
+    update: async ({ req }) => (await isCollectionEnabled(req.payload, 'content-types')) && Boolean(req.user),
+    delete: async ({ req }) => (await isCollectionEnabled(req.payload, 'content-types')) && Boolean(req.user),
   },
   fields: [
     {

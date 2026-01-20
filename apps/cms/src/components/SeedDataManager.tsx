@@ -74,7 +74,6 @@ export const SeedDataManager: React.FC = () => {
       'archive-items': ArtifactIcon,
       'people': UserIcon,
       'places': MapPinIcon,
-      'museum-collections': FolderIcon,
       'content-types': FolderIcon,
       'custom-items': FolderIcon,
       'products': FolderIcon,
@@ -137,7 +136,6 @@ export const SeedDataManager: React.FC = () => {
     { slug: 'archive-items', label: 'Archive Items', count: 0, hasSeedData: true, hasSeedMedia: true, Icon: ArtifactIcon },
     { slug: 'people', label: 'People', count: 0, hasSeedData: true, hasSeedMedia: true, Icon: UserIcon },
     { slug: 'places', label: 'Places', count: 0, hasSeedData: true, hasSeedMedia: true, Icon: MapPinIcon },
-    { slug: 'museum-collections', label: 'Collections', count: 0, hasSeedData: true, hasSeedMedia: false, Icon: FolderIcon },
   ]
 
   const getDefaultPresets = (): PresetInfo[] => [
@@ -159,9 +157,9 @@ export const SeedDataManager: React.FC = () => {
     },
     {
       id: 'museum-next',
-      name: 'Museum/Archive',
-      description: 'A museum/archive site with archive items, people, and places',
-      collections: ['pages', 'posts', 'categories', 'archive-items', 'people', 'places', 'museum-collections'],
+      name: 'Archive',
+      description: 'An archive-focused site with archive items, people, and places',
+      collections: ['pages', 'posts', 'categories', 'archive-items', 'people', 'places'],
       hasSeedData: true,
       hasSampleMedia: true,
     },

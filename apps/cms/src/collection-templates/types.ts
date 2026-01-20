@@ -78,6 +78,25 @@ export interface CollectionTemplate {
 
   /** Sample data count hint */
   seedDataCount?: number
+
+  /** Optional template metadata for content types (custom items) */
+  contentTypeTemplate?: {
+    template: string
+    icon?: string
+    hasArchive?: boolean
+    archiveSlug?: string
+    customFields?: Array<{ name: string; label: string; type: string; required?: boolean; options?: string }>
+  }
+
+  /** Seed items for content type templates */
+  seedItems?: Array<{
+    title: string
+    slug: string
+    excerpt?: string
+    content?: any
+    status?: 'draft' | 'published' | 'archived'
+    customData?: Record<string, any>
+  }>
 }
 
 /**
@@ -162,7 +181,7 @@ export const TEMPLATE_CATEGORIES: Record<TemplateCategory, { label: string; desc
   },
   archive: {
     label: 'Archive',
-    description: 'Collections of items like museum artifacts, portfolio pieces',
+    description: 'Collections of items like archive entries or portfolio pieces',
     icon: 'archive',
   },
   commerce: {

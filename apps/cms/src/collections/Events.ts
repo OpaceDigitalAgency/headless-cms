@@ -1,6 +1,7 @@
 import type { CollectionConfig } from 'payload'
 import { getPreviewUrl } from '../utils/preview'
 import { eventTemplate } from '../collection-templates/templates/event'
+import { isCollectionEnabled } from '../lib/collectionVisibility'
 
 export const Events: CollectionConfig = {
   slug: 'events',
@@ -28,13 +29,14 @@ export const Events: CollectionConfig = {
   },
 
   access: {
-    read: ({ req: { user } }) => {
-      if (!user) return { _status: { equals: 'published' } }
+    read: async ({ req }) => {
+      if (!(await isCollectionEnabled(req.payload, 'events'))) return false
+      if (!req.user) return { _status: { equals: 'published' } }
       return true
     },
-    create: ({ req: { user } }) => Boolean(user),
-    update: ({ req: { user } }) => Boolean(user),
-    delete: ({ req: { user } }) => user?.role === 'admin',
+    create: async ({ req }) => (await isCollectionEnabled(req.payload, 'events')) && Boolean(req.user),
+    update: async ({ req }) => (await isCollectionEnabled(req.payload, 'events')) && Boolean(req.user),
+    delete: async ({ req }) => (await isCollectionEnabled(req.payload, 'events')) && req.user?.role === 'admin',
   },
 
   fields: eventTemplate.fields,
@@ -100,4 +102,3 @@ export const Events: CollectionConfig = {
     ],
   },
 }
-

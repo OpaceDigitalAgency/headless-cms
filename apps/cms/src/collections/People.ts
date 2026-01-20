@@ -1,6 +1,7 @@
 import type { CollectionConfig } from 'payload'
 import { slugField } from '../fields/slug'
 import { getPreviewUrl } from '../utils/preview'
+import { isCollectionEnabled } from '../lib/collectionVisibility'
 
 // Import all blocks for flexible content
 import { heroBlock } from '../blocks/Hero'
@@ -29,7 +30,7 @@ export const People: CollectionConfig = {
 
   admin: {
     useAsTitle: 'name',
-    group: 'Museum',
+    group: 'Collections',
     defaultColumns: ['name', 'role', 'categories', '_status', 'updatedAt'],
     description: 'Historical figures, artists, team members, and notable people',
     preview: (doc) => getPreviewUrl({ collection: 'people', slug: doc.slug }),
@@ -51,21 +52,20 @@ export const People: CollectionConfig = {
 
   // Access control
   access: {
-    read: ({ req: { user } }) => {
-      // Published items are public
-      if (!user) {
+    read: async ({ req }) => {
+      if (!(await isCollectionEnabled(req.payload, 'people'))) return false
+      if (!req.user) {
         return {
           _status: {
             equals: 'published',
           },
         }
       }
-      // Logged in users can see all
       return true
     },
-    create: ({ req: { user } }) => Boolean(user),
-    update: ({ req: { user } }) => Boolean(user),
-    delete: ({ req: { user } }) => user?.role === 'admin',
+    create: async ({ req }) => (await isCollectionEnabled(req.payload, 'people')) && Boolean(req.user),
+    update: async ({ req }) => (await isCollectionEnabled(req.payload, 'people')) && Boolean(req.user),
+    delete: async ({ req }) => (await isCollectionEnabled(req.payload, 'people')) && req.user?.role === 'admin',
   },
 
   // Hooks for revalidation

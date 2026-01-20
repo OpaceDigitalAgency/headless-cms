@@ -41,7 +41,6 @@ export const archiveBlock: Block = {
         { label: 'Archive Items', value: 'archive-items' },
         { label: 'People', value: 'people' },
         { label: 'Places', value: 'places' },
-        { label: 'Collections', value: 'museum-collections' },
         { label: 'Custom Items', value: 'custom-items' },
       ],
       admin: {
@@ -67,9 +66,21 @@ export const archiveBlock: Block = {
       hasMany: true,
       label: 'Filter by Categories',
       admin: {
-        condition: (_, siblingData) => 
-          siblingData?.populateBy === 'collection' && 
-          ['posts'].includes(siblingData?.relationTo),
+        condition: (_, siblingData) =>
+          siblingData?.populateBy === 'collection' &&
+          ['posts', 'archive-items', 'events', 'people', 'custom-items'].includes(siblingData?.relationTo),
+      },
+    },
+    {
+      name: 'tags',
+      type: 'relationship',
+      relationTo: 'tags',
+      hasMany: true,
+      label: 'Filter by Tags',
+      admin: {
+        condition: (_, siblingData) =>
+          siblingData?.populateBy === 'collection' &&
+          ['posts', 'archive-items', 'events', 'people', 'custom-items'].includes(siblingData?.relationTo),
       },
     },
     {

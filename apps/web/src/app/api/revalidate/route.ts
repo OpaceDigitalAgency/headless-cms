@@ -83,12 +83,12 @@ export async function POST(request: NextRequest) {
         paths.push('/')
         break
         
-      case 'artifacts':
-        paths.push('/artifacts')
+      case 'archive-items':
+        paths.push('/archive-items')
         if (slug) {
-          paths.push(`/artifacts/${slug}`)
+          paths.push(`/archive-items/${slug}`)
         }
-        // Also revalidate home page as it may show featured artifacts
+        // Also revalidate home page as it may show featured items
         paths.push('/')
         break
         
@@ -106,12 +106,6 @@ export async function POST(request: NextRequest) {
         }
         break
         
-      case 'museum-collections':
-        paths.push('/collections')
-        if (slug) {
-          paths.push(`/collections/${slug}`)
-        }
-        break
         
       case 'categories':
         // Category changes affect blog listing

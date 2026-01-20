@@ -39,7 +39,6 @@ export const resetDataHandler: PayloadHandler = async (req) => {
         'archive-items',
         'people',
         'places',
-        'museum-collections',
         'media',
         'forms',
         'form-submissions',
@@ -85,7 +84,6 @@ export const resetDataHandler: PayloadHandler = async (req) => {
         'archive-items',
         'people',
         'places',
-        'museum-collections',
         'media',
       ]
 

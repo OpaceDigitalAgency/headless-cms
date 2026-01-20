@@ -1,6 +1,9 @@
 import type { Endpoint } from 'payload'
 import { createSeeder, isValidPresetId, PRESET_IDS, PRESET_METADATA, type PresetId } from '../seed/presets'
 import { ensureShowcasePage } from '../seed/showcase'
+import { isCollectionEnabled } from '../lib/collectionVisibility'
+import { getTemplateById } from '../collection-templates'
+import { createRichText } from '../seed/base'
 
 /**
  * Seed API Endpoints
@@ -30,7 +33,6 @@ const COLLECTION_SEED_CONFIG: Record<string, {
   'archive-items': { label: 'Archive Items', icon: 'archive', hasSeedData: true, hasSeedMedia: true },
   people: { label: 'People', icon: 'user', hasSeedData: true, hasSeedMedia: true },
   places: { label: 'Places', icon: 'map-pin', hasSeedData: true, hasSeedMedia: true },
-  'museum-collections': { label: 'Collections', icon: 'archive', hasSeedData: true, hasSeedMedia: false },
   'content-types': { label: 'Content Types', icon: 'archive', hasSeedData: true, hasSeedMedia: false },
   'custom-items': { label: 'Custom Items', icon: 'box', hasSeedData: true, hasSeedMedia: false },
   products: { label: 'Products', icon: 'shopping-bag', hasSeedData: true, hasSeedMedia: true },
@@ -181,9 +183,25 @@ export const seedActionEndpoint: Endpoint = {
       }
 
       const presetId = preset as PresetId
+      const presetCollections = PRESET_METADATA[presetId].collections || []
+      const enabledCollections: string[] = []
+      for (const collection of presetCollections) {
+        if (await isCollectionEnabled(payload, collection)) {
+          enabledCollections.push(collection)
+        }
+      }
+
+      if (enabledCollections.length === 0) {
+        return Response.json(
+          { success: false, message: 'No enabled collections found for this preset.' },
+          { status: 400 }
+        )
+      }
+
       const seeder = createSeeder(presetId, payload, {
         downloadMedia: includeMedia,
         clearExisting: clearExisting,
+        collections: enabledCollections,
       })
 
       switch (action) {
@@ -264,6 +282,13 @@ export const seedCollectionEndpoint: Endpoint = {
         )
       }
 
+      if (!(await isCollectionEnabled(payload, slug))) {
+        return Response.json(
+          { success: false, message: `Collection "${slug}" is disabled. Enable it before seeding.` },
+          { status: 400 }
+        )
+      }
+
       const config = COLLECTION_SEED_CONFIG[slug]
 
       const presetId = COLLECTION_PRESET_OVERRIDES[slug] || 'museum-next'
@@ -326,6 +351,152 @@ export const seedCollectionEndpoint: Endpoint = {
       } catch {
         payload.logger.error('Could not stringify error')
       }
+      const errorMessage = error instanceof Error ? error.message : String(error)
+      return Response.json(
+        { success: false, message: `Operation failed: ${errorMessage}` },
+        { status: 500 }
+      )
+    }
+  },
+}
+
+/**
+ * POST /api/seed/content-type
+ * Seed or clear items for a custom content type template
+ */
+export const seedContentTypeEndpoint: Endpoint = {
+  path: '/seed/content-type',
+  method: 'post',
+  handler: async (req) => {
+    const { payload, user } = req
+
+    if (!user) {
+      return Response.json(
+        { success: false, message: 'Authentication required' },
+        { status: 401 }
+      )
+    }
+
+    if (user.role !== 'admin') {
+      return Response.json(
+        { success: false, message: 'Admin access required' },
+        { status: 403 }
+      )
+    }
+
+    try {
+      const body = await req.json?.() || {}
+      const { templateId, action } = body
+
+      if (!templateId || typeof templateId !== 'string') {
+        return Response.json(
+          { success: false, message: 'Missing required field: templateId' },
+          { status: 400 }
+        )
+      }
+
+      const template = getTemplateById(templateId)
+      if (!template || !template.contentTypeTemplate) {
+        return Response.json(
+          { success: false, message: `Template not found or not a content type: ${templateId}` },
+          { status: 404 }
+        )
+      }
+
+      const contentTypeSlug = template.defaultSlug
+      const contentType = await payload.find({
+        collection: 'content-types',
+        where: {
+          slug: { equals: contentTypeSlug },
+        },
+        limit: 1,
+        depth: 0,
+      })
+
+      const contentTypeDoc = contentType.docs[0]
+      if (!contentTypeDoc) {
+        return Response.json(
+          { success: false, message: `Content type "${contentTypeSlug}" is not enabled yet.` },
+          { status: 400 }
+        )
+      }
+
+      const seedItems = Array.isArray(template.seedItems) ? template.seedItems : []
+
+      switch (action) {
+        case 'seed': {
+          if (!seedItems.length) {
+            return Response.json({
+              success: true,
+              message: `No seed data configured for ${template.name}`,
+              itemsAffected: 0,
+            })
+          }
+
+          let createdCount = 0
+          for (const item of seedItems) {
+            await payload.create({
+              collection: 'custom-items',
+              data: {
+                title: item.title,
+                slug: item.slug,
+                excerpt: item.excerpt,
+                content: typeof item.content === 'string' ? createRichText(item.content) : item.content,
+                contentType: contentTypeDoc.id,
+                status: item.status || 'published',
+                customData: item.customData || {},
+              },
+              overrideAccess: true,
+            })
+            createdCount += 1
+          }
+
+          return Response.json({
+            success: true,
+            message: `Seeded ${template.name}`,
+            itemsAffected: createdCount,
+          })
+        }
+
+        case 'clear': {
+          let deletedCount = 0
+          while (true) {
+            const results = await payload.find({
+              collection: 'custom-items',
+              where: {
+                contentType: { equals: contentTypeDoc.id },
+              },
+              limit: 100,
+              depth: 0,
+            })
+
+            if (!results.docs.length) break
+
+            for (const doc of results.docs) {
+              await payload.delete({
+                collection: 'custom-items',
+                id: doc.id,
+                overrideAccess: true,
+              })
+              deletedCount += 1
+            }
+          }
+
+          return Response.json({
+            success: true,
+            message: `Cleared ${template.name}`,
+            itemsAffected: deletedCount,
+          })
+        }
+
+        default:
+          return Response.json(
+            { success: false, message: `Invalid action: ${action}. Use: seed or clear` },
+            { status: 400 }
+          )
+      }
+    } catch (error) {
+      payload.logger.error('Content type seed action failed:', error)
       const errorMessage = error instanceof Error ? error.message : String(error)
       return Response.json(
         { success: false, message: `Operation failed: ${errorMessage}` },
@@ -413,9 +584,24 @@ export const seedAllEndpoint: Endpoint = {
       const { action } = body
 
       // Use the core preset (museum-next) as it has the most collections
+      const enabledCollections: string[] = []
+      for (const slug of Object.keys(COLLECTION_SEED_CONFIG)) {
+        if (await isCollectionEnabled(payload, slug)) {
+          enabledCollections.push(slug)
+        }
+      }
+
+      if (enabledCollections.length === 0) {
+        return Response.json(
+          { success: false, message: 'No enabled collections found to seed.' },
+          { status: 400 }
+        )
+      }
+
       const seeder = createSeeder('museum-next', payload, {
         downloadMedia: false,
         clearExisting: false,
+        collections: enabledCollections,
       })
 
       switch (action) {
@@ -459,6 +645,7 @@ export const seedEndpoints: Endpoint[] = [
   getCollectionsStatusEndpoint,
   seedActionEndpoint,
   seedCollectionEndpoint,
+  seedContentTypeEndpoint,
   seedShowcaseEndpoint,
   seedAllEndpoint,
 ]

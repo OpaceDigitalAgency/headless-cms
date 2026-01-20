@@ -22,6 +22,7 @@ import {
   htmlBlock,
 } from '../blocks'
 import { getPreviewUrl } from '../utils/preview'
+import { isCollectionEnabled } from '../lib/collectionVisibility'
 
 /**
  * Custom Items Collection
@@ -79,9 +80,9 @@ export const CustomItems: CollectionConfig = {
     },
   },
   access: {
-    read: ({ req: { user } }) => {
-      // Guests see published only; authenticated users see all
-      if (!user) {
+    read: async ({ req }) => {
+      if (!(await isCollectionEnabled(req.payload, 'custom-items'))) return false
+      if (!req.user) {
         return {
           status: {
             equals: 'published',
@@ -90,9 +91,9 @@ export const CustomItems: CollectionConfig = {
       }
       return true
     },
-    create: ({ req: { user } }) => Boolean(user),
-    update: ({ req: { user } }) => Boolean(user),
-    delete: ({ req: { user } }) => Boolean(user),
+    create: async ({ req }) => (await isCollectionEnabled(req.payload, 'custom-items')) && Boolean(req.user),
+    update: async ({ req }) => (await isCollectionEnabled(req.payload, 'custom-items')) && Boolean(req.user),
+    delete: async ({ req }) => (await isCollectionEnabled(req.payload, 'custom-items')) && Boolean(req.user),
   },
   versions: {
     drafts: {

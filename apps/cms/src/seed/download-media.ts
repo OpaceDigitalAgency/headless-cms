@@ -88,7 +88,7 @@ export const SAMPLE_IMAGES = {
   collection_ancient: {
     url: 'https://images.unsplash.com/photo-1594322436404-5a0526db4d13?w=1200&h=600&fit=crop',
     filename: 'collection-ancient.jpg',
-    alt: 'Ancient artifacts collection',
+    alt: 'Ancient archive items collection',
   },
   collection_medieval: {
     url: 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=1200&h=600&fit=crop',

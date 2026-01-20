@@ -1,7 +1,7 @@
 {
   "id": "museum-next",
   "name": "Museum/Archive (Next.js)",
-  "description": "A comprehensive museum, archive, or gallery site with artifacts, people, places, and collections. Features complex relationships, timeline views, and tag-based revalidation.",
+  "description": "A comprehensive archive or gallery site with archive items, people, and places. Features complex relationships, timeline views, and tag-based revalidation.",
   "category": "museum",
   "frontend": "next",
   "version": "1.0.0",
@@ -12,10 +12,9 @@
     "pages",
     "posts",
     "categories",
-    "artifacts",
+    "archive-items",
     "people",
     "places",
-    "museum-collections",
     "content-types",
     "custom-items"
   ],

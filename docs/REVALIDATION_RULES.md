@@ -52,15 +52,14 @@ taxonomy:category:{category-slug}
 taxonomy:author:{author-slug}
 ```
 
-#### Artifacts
+#### Archive Items
 ```
-collection:artifacts
-artifacts:{id}
-artifacts:slug:{slug}
-archive:artifacts
-taxonomy:collection:{collection-slug}
-taxonomy:person:{person-slug}
-taxonomy:place:{place-slug}
+collection:archive-items
+archive-items:{id}
+archive-items:slug:{slug}
+archive:archive-items
+taxonomy:category:{category-slug}
+taxonomy:tag:{tag-slug}
 ```
 
 #### People
@@ -77,14 +76,6 @@ collection:places
 places:{id}
 places:slug:{slug}
 archive:places
-```
-
-#### Museum Collections
-```
-collection:museum-collections
-museum-collections:{id}
-museum-collections:slug:{slug}
-archive:museum-collections
 ```
 
 #### Products (Ecommerce)
@@ -109,10 +100,9 @@ This matrix shows which tags should be invalidated when specific content changes
 |-------------------|----------------------|
 | Page published | `pages:{id}`, `page:{slug}`, `collection:pages` |
 | Post published | `posts:{id}`, `posts:slug:{slug}`, `archive:posts`, `taxonomy:category:{cat}` for each category |
-| Artifact published | `artifacts:{id}`, `archive:artifacts`, `taxonomy:collection:{col}`, `taxonomy:person:{person}`, `taxonomy:place:{place}` |
-| Person published | `people:{id}`, `archive:people`, `collection:artifacts` (related artifacts) |
-| Place published | `places:{id}`, `archive:places`, `collection:artifacts` (related artifacts) |
-| Museum Collection published | `museum-collections:{id}`, `archive:museum-collections`, `collection:artifacts` |
+| Archive Item published | `archive-items:{id}`, `archive:archive-items`, `taxonomy:category:{cat}`, `taxonomy:tag:{tag}` |
+| Person published | `people:{id}`, `archive:people`, `archive:archive-items` (related items) |
+| Place published | `places:{id}`, `archive:places`, `archive:archive-items` (related items) |
 | Category updated | `categories:{id}`, `taxonomy:category:{slug}`, `archive:posts` |
 | Product published | `products:{id}`, `archive:products`, `taxonomy:product-category:{cat}`, `taxonomy:product-collection:{col}` |
 
@@ -283,14 +273,14 @@ tags: ['collection:posts', 'collection:categories']
 When content has relationships, invalidate related content:
 
 ```typescript
-// When a person is updated, also invalidate their artifacts
-const relatedArtifacts = await payload.find({
-  collection: 'artifacts',
-  where: { people: { contains: personId } },
+// When a person is updated, also invalidate their archive items
+const relatedItems = await payload.find({
+  collection: 'archive-items',
+  where: { creators: { contains: personId } },
 })
 
-for (const artifact of relatedArtifacts.docs) {
-  tags.push(`artifacts:${artifact.id}`)
+for (const item of relatedItems.docs) {
+  tags.push(`archive-items:${item.id}`)
 }
 ```
 

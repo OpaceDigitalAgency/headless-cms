@@ -129,7 +129,7 @@ export async function seedBasicData(payload: Payload): Promise<void> {
             {
               size: 'full',
               richText: createRichText(
-                'We are dedicated to preserving and sharing cultural heritage through our museum collection.',
+                'We are dedicated to preserving and sharing cultural heritage through our archive collection.',
               ),
             },
           ],
@@ -471,7 +471,7 @@ export async function seedBasicData(payload: Payload): Promise<void> {
     data: {
       title: 'Welcome to Our Blog',
       slug: 'welcome-to-our-blog',
-      excerpt: 'An introduction to our museum blog where we share stories and insights.',
+      excerpt: 'An introduction to our archive blog where we share stories and insights.',
       _status: 'published',
       categories: [techCategory.id],
       content: {
@@ -527,28 +527,17 @@ export async function seedBasicData(payload: Payload): Promise<void> {
     },
   })
 
-  // Create sample museum collection
-  await payload.create({
-    collection: 'museum-collections',
-    data: {
-      name: 'Renaissance Masters',
-      slug: 'renaissance-masters',
-      description: 'A collection featuring works from the greatest artists of the Renaissance period.',
-      _status: 'published',
-    },
-  })
-
   // Update header global
   await payload.updateGlobal({
     slug: 'header',
     data: {
       logo: {
-        text: 'Museum Collection',
+        text: 'Archive Collection',
       },
       navItems: [
         { link: { type: 'custom', label: 'Home', url: '/' } },
         { link: { type: 'custom', label: 'Blocks Showcase', url: '/blocks-showcase' } },
-        { link: { type: 'custom', label: 'Archive Items', url: '/items' } },
+        { link: { type: 'custom', label: 'Archive Items', url: '/archive-items' } },
         { link: { type: 'custom', label: 'People', url: '/people' } },
         { link: { type: 'custom', label: 'Places', url: '/places' } },
         { link: { type: 'custom', label: 'Collections', url: '/collections' } },

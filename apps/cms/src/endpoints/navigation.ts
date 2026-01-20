@@ -1,5 +1,6 @@
 import type { Endpoint } from 'payload'
 import { getDefaultSectionForSlug, nestedCollections, sectionOrder } from '../lib/navigationConfig'
+import { getCollectionOverrides, resolveCollectionEnabled } from '../lib/collectionVisibility'
 import type { SectionId } from '../lib/navigationConfig'
 
 /**
@@ -25,15 +26,13 @@ export const navigationEndpoint: Endpoint = {
       tags: 'tags',
 
       // Collections
-      'archive-items': 'artifact',
+      'archive-items': 'archive',
       people: 'person',
       places: 'place',
       events: 'post',
       products: 'collection',
       'product-categories': 'category',
       'product-collections': 'collection',
-      'museum-collections': 'collection',
-      artifacts: 'artifact',
       'custom-items': 'customItem',
       'content-types': 'contentType',
 
@@ -51,10 +50,10 @@ export const navigationEndpoint: Endpoint = {
       users: 'users',
     }
 
-    const navigationSettings = await payload.findGlobal({ slug: 'navigation-settings', depth: 0 }).catch(() => null)
-    const collectionOverrides = Array.isArray(navigationSettings?.collections) ? navigationSettings.collections : []
-    const overridesBySlug = new Map(collectionOverrides.map((item: any) => [item.slug, item]))
-    const orderBySlug = new Map(collectionOverrides.map((item: any, index: number) => [item.slug, index]))
+    const collectionOverrides = await getCollectionOverrides(payload)
+    const overrideList = Array.from(collectionOverrides.values())
+    const overridesBySlug = new Map(overrideList.map((item) => [item.slug, item]))
+    const orderBySlug = new Map(overrideList.map((item, index) => [item.slug, index]))
 
     // Build collection items map
     const collectionItems: Record<string, any> = {}
@@ -67,7 +66,7 @@ export const navigationEndpoint: Endpoint = {
       if (collection.admin?.hidden) return
 
       const override = overridesBySlug.get(slug)
-      if (override?.enabled === false) return
+      if (!resolveCollectionEnabled(slug, overridesBySlug)) return
 
       const labelOverride = typeof override?.label === 'string' ? override.label.trim() : ''
       const label = labelOverride || collection.labels?.plural || collection.slug
@@ -166,7 +165,6 @@ export const navigationEndpoint: Endpoint = {
 
     sectionOrder.forEach((sectionId) => {
       const items = buildSectionItems(sectionId)
-      if (items.length === 0) return
 
       // Add manager links at the top of each section
       if (sectionId === 'content') {
@@ -202,6 +200,8 @@ export const navigationEndpoint: Endpoint = {
           _order: -1,
         })
       }
+
+      if (items.length === 0) return
 
       navSections.push({
         id: sectionId,

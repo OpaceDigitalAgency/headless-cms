@@ -24,9 +24,9 @@ export default async function PreviewPage({ params }: PreviewPageProps) {
 
   // SECURITY: Redirect to public page if draft mode is not enabled
   if (!isDraft) {
-    const publicPath = collection === 'pages' 
-      ? `/${slug}` 
-      : `/${collection === 'museum-collections' ? 'collections' : collection}/${slug}`
+    const publicPath = collection === 'pages'
+      ? `/${slug}`
+      : `/${collection}/${slug}`
     redirect(publicPath)
   }
 
@@ -65,4 +65,3 @@ export default async function PreviewPage({ params }: PreviewPageProps) {
 
 // Preview routes are always dynamic (SSR)
 export const dynamic = 'force-dynamic'
-

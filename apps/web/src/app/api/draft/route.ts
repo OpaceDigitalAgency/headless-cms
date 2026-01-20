@@ -13,7 +13,7 @@ const REVALIDATION_SECRET = process.env.REVALIDATION_SECRET || 'revalidation-sec
  * 
  * Query params:
  * - secret: Must match REVALIDATION_SECRET
- * - collection: The collection slug (pages, posts, artifacts, etc.)
+ * - collection: The collection slug (pages, posts, archive-items, etc.)
  * - slug: The document slug
  */
 export async function GET(request: NextRequest) {

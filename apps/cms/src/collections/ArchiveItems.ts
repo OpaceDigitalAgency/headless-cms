@@ -1,6 +1,7 @@
 import type { CollectionConfig } from 'payload'
 import { getPreviewUrl } from '../utils/preview'
 import { archiveItemTemplate } from '../collection-templates/templates/archive-item'
+import { isCollectionEnabled } from '../lib/collectionVisibility'
 
 export const ArchiveItems: CollectionConfig = {
   slug: 'archive-items',
@@ -12,7 +13,7 @@ export const ArchiveItems: CollectionConfig = {
     useAsTitle: 'title',
     group: 'Archive',
     defaultColumns: ['title', '_status', 'updatedAt'],
-    description: 'Museum artifacts, gallery pieces, portfolio items, or collectibles',
+    description: 'Archive items such as gallery pieces, portfolio items, or collectibles',
     preview: (doc) => getPreviewUrl({ collection: 'archive-items', slug: doc.slug }),
     livePreview: {
       url: ({ data }) => getPreviewUrl({ collection: 'archive-items', slug: data?.slug }),
@@ -28,13 +29,14 @@ export const ArchiveItems: CollectionConfig = {
   },
 
   access: {
-    read: ({ req: { user } }) => {
-      if (!user) return { _status: { equals: 'published' } }
+    read: async ({ req }) => {
+      if (!(await isCollectionEnabled(req.payload, 'archive-items'))) return false
+      if (!req.user) return { _status: { equals: 'published' } }
       return true
     },
-    create: ({ req: { user } }) => Boolean(user),
-    update: ({ req: { user } }) => Boolean(user),
-    delete: ({ req: { user } }) => user?.role === 'admin',
+    create: async ({ req }) => (await isCollectionEnabled(req.payload, 'archive-items')) && Boolean(req.user),
+    update: async ({ req }) => (await isCollectionEnabled(req.payload, 'archive-items')) && Boolean(req.user),
+    delete: async ({ req }) => (await isCollectionEnabled(req.payload, 'archive-items')) && req.user?.role === 'admin',
   },
 
   fields: archiveItemTemplate.fields,
@@ -100,4 +102,3 @@ export const ArchiveItems: CollectionConfig = {
     ],
   },
 }
-

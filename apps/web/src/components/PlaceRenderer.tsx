@@ -168,12 +168,12 @@ export function PlaceRenderer({ place }: PlaceRendererProps) {
         </div>
       )}
 
-      {/* Related Artifacts */}
-      {place.relatedArtifacts?.docs && place.relatedArtifacts.docs.length > 0 && (
+      {/* Related Items */}
+      {place.relatedItems?.docs && place.relatedItems.docs.length > 0 && (
         <div className="detail-related">
-          <h2 className="text-xl font-semibold text-gray-900">Related Artifacts</h2>
+          <h2 className="text-xl font-semibold text-gray-900">Related Items</h2>
           <div className="related-grid">
-            {place.relatedArtifacts.docs.map((artifact: any) => (
+            {place.relatedItems.docs.map((artifact: any) => (
               <Link
                 key={artifact.id}
                 href={`/archive-items/${artifact.slug}`}

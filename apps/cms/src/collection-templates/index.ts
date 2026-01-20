@@ -168,7 +168,7 @@ export const COLLECTION_BUNDLES = {
     icon: 'edit',
   },
   museum: {
-    name: 'Museum/Archive',
+    name: 'Archive',
     description: 'Archive items with people and places',
     templates: ['archive-item', 'person', 'place'],
     icon: 'archive',

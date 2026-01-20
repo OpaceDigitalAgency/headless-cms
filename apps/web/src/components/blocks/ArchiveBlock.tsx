@@ -32,6 +32,8 @@ export async function ArchiveBlock({ block }: ArchiveBlockProps) {
     description,
     populateBy = 'collection',
     relationTo = 'posts',
+    categories,
+    tags,
     limit = 6,
     selectedDocs,
     contentType,
@@ -48,28 +50,38 @@ export async function ArchiveBlock({ block }: ArchiveBlockProps) {
   if (populateBy === 'selection' && selectedDocs) {
     items = selectedDocs
   } else {
-    // Fetch from collection
+    // Fetch from collection with optional category/tag filtering
     try {
+      // Extract category and tag IDs
+      const categoryIds = categories?.map((cat: any) => typeof cat === 'object' ? cat.id : cat).filter(Boolean)
+      const tagIds = tags?.map((tag: any) => typeof tag === 'object' ? tag.id : tag).filter(Boolean)
+
+      const filterOptions = {
+        limit,
+        ...(categoryIds && categoryIds.length > 0 && { category: categoryIds[0] }),
+        ...(tagIds && tagIds.length > 0 && { tag: tagIds[0] }),
+      }
+
       switch (relationTo) {
         case 'posts':
-          const posts = await getPosts({ limit })
+          const posts = await getPosts(filterOptions)
           items = posts.docs
           break
         case 'archive-items':
-          const archiveItems = await getArchiveItems({ limit })
+          const archiveItems = await getArchiveItems(filterOptions)
           items = archiveItems.docs
           break
         case 'people':
-          const people = await getPeople({ limit })
+          const people = await getPeople(filterOptions)
           items = people.docs
           break
         case 'places':
-          const places = await getPlaces({ limit })
+          const places = await getPlaces(filterOptions)
           items = places.docs
           break
         case 'custom-items':
           const contentTypeId = typeof contentType === 'object' ? contentType?.id : contentType
-          const customItems = await getCustomItems({ limit, contentTypeId, status: 'published' })
+          const customItems = await getCustomItems({ ...filterOptions, contentTypeId, status: 'published' })
           items = customItems.docs
           break
       }

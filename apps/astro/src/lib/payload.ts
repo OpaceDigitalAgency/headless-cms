@@ -340,47 +340,6 @@ export async function getPlaceBySlug(slug: string, options?: { draft?: boolean }
 }
 
 /**
- * Fetch all published museum collections
- */
-export async function getMuseumCollections(options?: { limit?: number; draft?: boolean }) {
-  const payload = await getPayloadClient();
-  
-  return payload.find({
-    collection: 'museum-collections',
-    limit: options?.limit || 100,
-    draft: options?.draft || false,
-    where: {
-      _status: {
-        equals: 'published',
-      },
-    },
-    depth: 2,
-  });
-}
-
-/**
- * Fetch a single museum collection by slug
- */
-export async function getMuseumCollectionBySlug(slug: string, options?: { draft?: boolean }) {
-  const payload = await getPayloadClient();
-  
-  const result = await payload.find({
-    collection: 'museum-collections',
-    where: {
-      slug: {
-        equals: slug,
-      },
-      ...(options?.draft ? {} : { _status: { equals: 'published' } }),
-    },
-    draft: options?.draft || false,
-    depth: 2,
-    limit: 1,
-  });
-
-  return result.docs[0] || null;
-}
-
-/**
  * Fetch global settings
  */
 export async function getSettings() {
@@ -409,10 +368,242 @@ export async function getFooter() {
  */
 export async function getCategories(options?: { limit?: number }) {
   const payload = await getPayloadClient();
-  
+
   return payload.find({
     collection: 'categories',
     limit: options?.limit || 100,
     depth: 1,
   });
+}
+
+/**
+ * Fetch a single category by slug
+ */
+export async function getCategoryBySlug(slug: string) {
+  const payload = await getPayloadClient();
+
+  const result = await payload.find({
+    collection: 'categories',
+    where: {
+      slug: {
+        equals: slug,
+      },
+    },
+    limit: 1,
+  });
+
+  return result.docs[0] || null;
+}
+
+/**
+ * Fetch tags
+ */
+export async function getTags(options?: { limit?: number }) {
+  const payload = await getPayloadClient();
+
+  return payload.find({
+    collection: 'tags',
+    limit: options?.limit || 100,
+  });
+}
+
+/**
+ * Fetch a single tag by slug
+ */
+export async function getTagBySlug(slug: string) {
+  const payload = await getPayloadClient();
+
+  const result = await payload.find({
+    collection: 'tags',
+    where: {
+      slug: {
+        equals: slug,
+      },
+    },
+    limit: 1,
+  });
+
+  return result.docs[0] || null;
+}
+
+/**
+ * Fetch all content across collections for a specific category
+ */
+export async function getCategoryContent(slug: string) {
+  const payload = await getPayloadClient();
+
+  // Find the category first
+  const category = await getCategoryBySlug(slug);
+  if (!category) {
+    return null;
+  }
+
+  // Fetch content from all collections that use categories
+  const [posts, archiveItems, events, people, customItems] = await Promise.all([
+    payload.find({
+      collection: 'posts',
+      where: {
+        categories: { in: [category.id] },
+        _status: { equals: 'published' },
+      },
+      limit: 100,
+      sort: '-publishedAt',
+    }),
+    payload.find({
+      collection: 'archive-items',
+      where: {
+        categories: { in: [category.id] },
+        _status: { equals: 'published' },
+      },
+      limit: 100,
+      sort: '-publishedAt',
+    }),
+    payload.find({
+      collection: 'events',
+      where: {
+        categories: { in: [category.id] },
+        _status: { equals: 'published' },
+      },
+      limit: 100,
+      sort: '-publishedAt',
+    }),
+    payload.find({
+      collection: 'people',
+      where: {
+        categories: { in: [category.id] },
+        _status: { equals: 'published' },
+      },
+      limit: 100,
+      sort: '-updatedAt',
+    }),
+    payload.find({
+      collection: 'custom-items',
+      where: {
+        categories: { in: [category.id] },
+        _status: { equals: 'published' },
+      },
+      limit: 100,
+      sort: '-publishedAt',
+    }),
+  ]);
+
+  // Combine and format content
+  const allContent = [
+    ...posts.docs.map((doc: any) => ({ ...doc, collection: 'posts' })),
+    ...archiveItems.docs.map((doc: any) => ({ ...doc, collection: 'archive-items' })),
+    ...events.docs.map((doc: any) => ({ ...doc, collection: 'events' })),
+    ...people.docs.map((doc: any) => ({ ...doc, collection: 'people' })),
+    ...customItems.docs.map((doc: any) => ({ ...doc, collection: 'custom-items' })),
+  ];
+
+  // Sort by date
+  allContent.sort((a, b) => {
+    const dateA = new Date(a.publishedAt || a.updatedAt).getTime();
+    const dateB = new Date(b.publishedAt || b.updatedAt).getTime();
+    return dateB - dateA;
+  });
+
+  return {
+    category,
+    content: allContent,
+    counts: {
+      total: allContent.length,
+      posts: posts.docs.length,
+      archiveItems: archiveItems.docs.length,
+      events: events.docs.length,
+      people: people.docs.length,
+      customItems: customItems.docs.length,
+    },
+  };
+}
+
+/**
+ * Fetch all content across collections for a specific tag
+ */
+export async function getTagContent(slug: string) {
+  const payload = await getPayloadClient();
+
+  // Find the tag first
+  const tag = await getTagBySlug(slug);
+  if (!tag) {
+    return null;
+  }
+
+  // Fetch content from all collections that use tags
+  const [posts, archiveItems, events, people, customItems] = await Promise.all([
+    payload.find({
+      collection: 'posts',
+      where: {
+        tags: { in: [tag.id] },
+        _status: { equals: 'published' },
+      },
+      limit: 100,
+      sort: '-publishedAt',
+    }),
+    payload.find({
+      collection: 'archive-items',
+      where: {
+        tags: { in: [tag.id] },
+        _status: { equals: 'published' },
+      },
+      limit: 100,
+      sort: '-publishedAt',
+    }),
+    payload.find({
+      collection: 'events',
+      where: {
+        tags: { in: [tag.id] },
+        _status: { equals: 'published' },
+      },
+      limit: 100,
+      sort: '-publishedAt',
+    }),
+    payload.find({
+      collection: 'people',
+      where: {
+        tags: { in: [tag.id] },
+        _status: { equals: 'published' },
+      },
+      limit: 100,
+      sort: '-updatedAt',
+    }),
+    payload.find({
+      collection: 'custom-items',
+      where: {
+        tags: { in: [tag.id] },
+        _status: { equals: 'published' },
+      },
+      limit: 100,
+      sort: '-publishedAt',
+    }),
+  ]);
+
+  // Combine and format content
+  const allContent = [
+    ...posts.docs.map((doc: any) => ({ ...doc, collection: 'posts' })),
+    ...archiveItems.docs.map((doc: any) => ({ ...doc, collection: 'archive-items' })),
+    ...events.docs.map((doc: any) => ({ ...doc, collection: 'events' })),
+    ...people.docs.map((doc: any) => ({ ...doc, collection: 'people' })),
+    ...customItems.docs.map((doc: any) => ({ ...doc, collection: 'custom-items' })),
+  ];
+
+  // Sort by date
+  allContent.sort((a, b) => {
+    const dateA = new Date(a.publishedAt || a.updatedAt).getTime();
+    const dateB = new Date(b.publishedAt || b.updatedAt).getTime();
+    return dateB - dateA;
+  });
+
+  return {
+    tag,
+    content: allContent,
+    counts: {
+      total: allContent.length,
+      posts: posts.docs.length,
+      archiveItems: archiveItems.docs.length,
+      events: events.docs.length,
+      people: people.docs.length,
+      customItems: customItems.docs.length,
+    },
+  };
 }

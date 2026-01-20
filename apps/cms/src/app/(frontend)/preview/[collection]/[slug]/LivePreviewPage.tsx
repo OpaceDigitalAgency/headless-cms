@@ -3,7 +3,7 @@
 import { useLivePreview } from '@payloadcms/live-preview-react'
 import { PageRenderer } from '@/components/PageRenderer'
 import { PostRenderer } from '@/components/PostRenderer'
-import { ArtifactRenderer } from '@/components/ArtifactRenderer'
+import { ArchiveItemRenderer } from '@/components/ArchiveItemRenderer'
 
 interface LivePreviewPageProps {
   initialData: any
@@ -58,11 +58,10 @@ export function LivePreviewPage({ initialData, collection, slug }: LivePreviewPa
         )}
         {collection === 'archive-items' && (
           <div className="container py-16">
-            <ArtifactRenderer artifact={data} />
+            <ArchiveItemRenderer item={data} />
           </div>
         )}
       </div>
     </>
   )
 }
-

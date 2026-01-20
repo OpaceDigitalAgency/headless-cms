@@ -1,5 +1,6 @@
 import type { CollectionConfig } from 'payload'
 import { slugField } from '../fields/slug'
+import { isCollectionEnabled } from '../lib/collectionVisibility'
 
 export const Tags: CollectionConfig = {
   slug: 'tags',
@@ -16,10 +17,10 @@ export const Tags: CollectionConfig = {
   },
 
   access: {
-    read: () => true,
-    create: ({ req: { user } }) => Boolean(user),
-    update: ({ req: { user } }) => Boolean(user),
-    delete: ({ req: { user } }) => user?.role === 'admin',
+    read: async ({ req }) => (await isCollectionEnabled(req.payload, 'tags')),
+    create: async ({ req }) => (await isCollectionEnabled(req.payload, 'tags')) && Boolean(req.user),
+    update: async ({ req }) => (await isCollectionEnabled(req.payload, 'tags')) && Boolean(req.user),
+    delete: async ({ req }) => (await isCollectionEnabled(req.payload, 'tags')) && req.user?.role === 'admin',
   },
 
   hooks: {

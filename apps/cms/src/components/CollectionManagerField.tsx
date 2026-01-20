@@ -3,7 +3,7 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { useField } from '@payloadcms/ui'
 import type { SectionId } from '../lib/navigationConfig'
-import { sectionLabels, sectionOrder } from '../lib/navigationConfig'
+import { isDefaultEnabled, sectionLabels, sectionOrder } from '../lib/navigationConfig'
 
 interface CollectionInfo {
   slug: string
@@ -36,9 +36,10 @@ const normalizeSettings = (
   return mergedOrder.map((slug) => {
     const collection = collections.find((item) => item.slug === slug)
     const savedItem = savedMap.get(slug)
+    const defaultEnabled = collection?.hidden ? false : isDefaultEnabled(slug)
     return {
       slug,
-      enabled: savedItem?.enabled ?? !collection?.hidden ?? true,
+      enabled: savedItem?.enabled ?? defaultEnabled,
       section: savedItem?.section || collection?.defaultSection || 'content',
       label: savedItem?.label || '',
     }

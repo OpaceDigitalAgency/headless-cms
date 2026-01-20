@@ -49,6 +49,7 @@ import { collectionTemplateEndpoints } from './endpoints/collectionTemplates'
 import { navigationEndpoint } from './endpoints/navigation'
 import { collectionManagerEndpoint } from './endpoints/collectionManager'
 import { toolsEndpoints } from './endpoints/tools'
+import { taxonomyEndpoints } from './endpoints/taxonomy'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -482,6 +483,8 @@ export default buildConfig({
     ...collectionTemplateEndpoints,
     // Admin tools endpoints
     ...toolsEndpoints,
+    // Taxonomy filtering endpoints
+    ...taxonomyEndpoints,
   ],
 
   // ===========================================

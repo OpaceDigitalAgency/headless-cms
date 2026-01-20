@@ -61,15 +61,65 @@ export const getInstalledEndpoint: Endpoint = {
       allTemplates.some(t => slug.includes(t.defaultSlug))
     )
 
+    const contentTypeTemplates = allTemplates.filter((template) => template.contentTypeTemplate)
+    if (contentTypeTemplates.length > 0) {
+      const contentTypes = await payload.find({
+        collection: 'content-types',
+        limit: 200,
+        depth: 0,
+        overrideAccess: true,
+      })
+
+      contentTypeTemplates.forEach((template) => {
+        if (contentTypes.docs.some((doc: any) => doc.slug === template.defaultSlug)) {
+          installedSlugs.push(template.defaultSlug)
+        }
+      })
+    }
+    const uniqueInstalledSlugs = Array.from(new Set(installedSlugs))
+
     return Response.json({
-      slugs: installedSlugs,
-      collections: installedSlugs.map(slug => {
+      slugs: uniqueInstalledSlugs,
+      collections: uniqueInstalledSlugs.map(slug => {
         const collection = payload.config.collections.find(c => c.slug === slug)
         return {
           slug,
           label: collection?.labels?.plural || slug,
         }
       }),
+    })
+  },
+}
+
+/**
+ * Get content types for template manager (override access)
+ */
+export const getContentTypesEndpoint: Endpoint = {
+  path: '/collection-templates/content-types',
+  method: 'get',
+  handler: async (req) => {
+    const { payload, user } = req
+
+    if (!user) {
+      return Response.json(
+        { success: false, message: 'Authentication required' },
+        { status: 401 }
+      )
+    }
+
+    const contentTypes = await payload.find({
+      collection: 'content-types',
+      limit: 200,
+      depth: 0,
+      overrideAccess: true,
+    })
+
+    return Response.json({
+      success: true,
+      docs: contentTypes.docs.map((doc: any) => ({
+        id: doc.id,
+        slug: doc.slug,
+      })),
     })
   },
 }
@@ -90,10 +140,11 @@ export const addTemplateEndpoint: Endpoint = {
     try {
       const body = await req.json?.() || {}
       const { templateId, customName, slug, singular, plural } = body
+      const { payload } = req
 
-      if (!templateId || !customName || !slug) {
+      if (!templateId) {
         return Response.json(
-          { success: false, message: 'Missing required fields: templateId, customName, slug' },
+          { success: false, message: 'Missing required field: templateId' },
           { status: 400 }
         )
       }
@@ -106,37 +157,122 @@ export const addTemplateEndpoint: Endpoint = {
         )
       }
 
+      const resolvedName = customName || template.defaultPlural || template.name
+      const resolvedSlug = slug || template.defaultSlug
+      const resolvedSingular = singular || template.defaultSingular || resolvedName.replace(/s$/, '')
+      const resolvedPlural = plural || template.defaultPlural || resolvedName
+
+      if (template.contentTypeTemplate) {
+        const existingType = await payload.find({
+          collection: 'content-types',
+          where: { slug: { equals: resolvedSlug } },
+          limit: 1,
+          depth: 0,
+        })
+
+        if (existingType.docs[0]) {
+          payload.logger.info(`Content type already available: ${templateId} (${resolvedSlug})`)
+          return Response.json({
+            success: true,
+            alreadyInstalled: true,
+            message: `Content type "${resolvedName}" is already enabled!`,
+            collection: {
+              templateId,
+              customName: resolvedName,
+              slug: resolvedSlug,
+              singular: resolvedSingular,
+              plural: resolvedPlural,
+            },
+          })
+        }
+
+        const archiveSlug = template.contentTypeTemplate.archiveSlug || `items/${resolvedSlug}`
+
+        await payload.create({
+          collection: 'content-types',
+          data: {
+            name: resolvedName,
+            slug: resolvedSlug,
+            singularLabel: resolvedSingular,
+            pluralLabel: resolvedPlural,
+            icon: template.contentTypeTemplate.icon || 'box',
+            template: template.contentTypeTemplate.template,
+            description: template.description,
+            hasArchive: template.contentTypeTemplate.hasArchive ?? true,
+            archiveSlug,
+            customFields: template.contentTypeTemplate.customFields || [],
+          },
+          overrideAccess: true,
+        })
+
+        const navigationSettings = await payload.findGlobal({ slug: 'navigation-settings', depth: 0 }).catch(() => null)
+        const currentCollections = Array.isArray(navigationSettings?.collections)
+          ? navigationSettings.collections
+          : []
+        const ensureEnabled = (slugToEnable: string) => {
+          const existingIndex = currentCollections.findIndex((item: any) => item?.slug === slugToEnable)
+          if (existingIndex >= 0) {
+            currentCollections[existingIndex] = {
+              ...currentCollections[existingIndex],
+              enabled: true,
+              uninstalled: false,
+            }
+          } else {
+            currentCollections.push({ slug: slugToEnable, enabled: true })
+          }
+        }
+
+        ensureEnabled('content-types')
+        ensureEnabled('custom-items')
+
+        await payload.updateGlobal({
+          slug: 'navigation-settings',
+          data: { collections: currentCollections },
+        })
+
+        return Response.json({
+          success: true,
+          message: `Content type "${resolvedName}" enabled`,
+          collection: {
+            templateId,
+            customName: resolvedName,
+            slug: resolvedSlug,
+            singular: resolvedSingular,
+            plural: resolvedPlural,
+          },
+        })
+      }
+
       // Check if collection already exists
-      const { payload } = req
-      const existingCollection = payload.config.collections.find(c => c.slug === slug)
+      const existingCollection = payload.config.collections.find(c => c.slug === resolvedSlug)
       if (existingCollection) {
         // Collection already exists - this is expected for pre-configured templates
-        payload.logger.info(`Collection template already available: ${templateId} (${slug})`)
+        payload.logger.info(`Collection template already available: ${templateId} (${resolvedSlug})`)
         return Response.json({
           success: true,
           alreadyInstalled: true,
-          message: `Collection "${customName}" is already installed and available!`,
+          message: `Collection "${resolvedName}" is already installed and available!`,
           collection: {
             templateId,
-            customName,
-            slug,
-            singular: singular || customName.replace(/s$/, ''),
-            plural: plural || customName,
+            customName: resolvedName,
+            slug: resolvedSlug,
+            singular: resolvedSingular,
+            plural: resolvedPlural,
           },
         })
       }
 
       // If collection doesn't exist, it means it's a custom template that needs to be pre-configured
-      payload.logger.warn(`Collection template not pre-configured: ${templateId} (${slug})`)
+      payload.logger.warn(`Collection template not pre-configured: ${templateId} (${resolvedSlug})`)
       return Response.json({
         success: false,
-        message: `Collection "${customName}" is not yet available. This collection needs to be added to the payload.config.ts file first.`,
+        message: `Collection "${resolvedName}" is not yet available. This collection needs to be added to the payload.config.ts file first.`,
         collection: {
           templateId,
-          customName,
-          slug,
-          singular: singular || customName.replace(/s$/, ''),
-          plural: plural || customName,
+          customName: resolvedName,
+          slug: resolvedSlug,
+          singular: resolvedSingular,
+          plural: resolvedPlural,
         },
       }, { status: 400 })
     } catch (error) {
@@ -438,6 +574,7 @@ export const reinstallCollectionEndpoint: Endpoint = {
 export const collectionTemplateEndpoints: Endpoint[] = [
   getTemplatesEndpoint,
   getInstalledEndpoint,
+  getContentTypesEndpoint,
   addTemplateEndpoint,
   addBundleEndpoint,
   uninstallCollectionEndpoint,

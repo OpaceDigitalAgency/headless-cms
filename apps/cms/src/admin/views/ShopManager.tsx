@@ -30,6 +30,21 @@ export const ShopManager: React.FC<ShopManagerProps> = (props) => {
         </p>
       </div>
 
+      <div style={{ marginBottom: '24px', display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
+        <a
+          href="/admin/collections/product-categories"
+          className="btn btn--style-primary"
+        >
+          Manage Product Categories
+        </a>
+        <a
+          href="/admin/collections/product-collections"
+          className="btn btn--style-secondary"
+        >
+          Manage Product Collections
+        </a>
+      </div>
+
       <SectionCollectionTemplates section="Shop" />
     </div>
   )
@@ -46,4 +61,3 @@ export const ShopManager: React.FC<ShopManagerProps> = (props) => {
 }
 
 export default ShopManager
-

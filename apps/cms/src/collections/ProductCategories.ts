@@ -1,5 +1,6 @@
 import type { CollectionConfig } from 'payload'
 import { slugField } from '../fields/slug'
+import { isCollectionEnabled } from '../lib/collectionVisibility'
 
 /**
  * Product Categories Collection
@@ -23,10 +24,10 @@ export const ProductCategories: CollectionConfig = {
   },
 
   access: {
-    read: () => true,
-    create: ({ req: { user } }) => Boolean(user),
-    update: ({ req: { user } }) => Boolean(user),
-    delete: ({ req: { user } }) => user?.role === 'admin',
+    read: async ({ req }) => (await isCollectionEnabled(req.payload, 'product-categories')),
+    create: async ({ req }) => (await isCollectionEnabled(req.payload, 'product-categories')) && Boolean(req.user),
+    update: async ({ req }) => (await isCollectionEnabled(req.payload, 'product-categories')) && Boolean(req.user),
+    delete: async ({ req }) => (await isCollectionEnabled(req.payload, 'product-categories')) && req.user?.role === 'admin',
   },
 
   // Hooks for revalidation
@@ -125,4 +126,3 @@ export const ProductCategories: CollectionConfig = {
 }
 
 export default ProductCategories
-

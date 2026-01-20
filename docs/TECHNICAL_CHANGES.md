@@ -16,16 +16,16 @@ This document tracks technical implementation details, outstanding issues, code 
 **Status:** ✅ Complete
 
 **Files Modified:**
-- Deleted: `apps/web/src/app/artifacts/page.tsx` and `apps/web/src/app/artifacts/[slug]/page.tsx`
-- Updated: `apps/web/src/lib/api.ts` - Replaced Artifact interface with ArchiveItem
-- Updated: `apps/astro/src/lib/payload.ts` - Replaced getArtifacts with getArchiveItems
+- Added: `apps/web/src/app/archive-items/page.tsx` and `apps/web/src/app/archive-items/[slug]/page.tsx`
+- Added: `apps/cms/src/app/(frontend)/archive-items/page.tsx` and `apps/cms/src/app/(frontend)/archive-items/[slug]/page.tsx`
+- Updated: `apps/web/src/lib/api.ts` - Archive Item types and routes
+- Updated: `apps/astro/src/lib/payload.ts` - Use getArchiveItems/getArchiveItemBySlug only
 - Updated: `apps/cms/src/blocks/Archive.ts` - Changed relationTo from 'artifacts' to 'archive-items'
 - Updated: `apps/web/src/components/blocks/ArchiveBlock.tsx` - Updated switch case
 - Updated: `apps/cms/src/components/blocks/ArchiveBlock.tsx` - Updated switch case
 - Updated: `apps/astro/src/components/blocks/ArchiveBlock.astro` - Updated paths
-- Updated: `apps/web/src/components/CollectionRenderer.tsx` - Updated field references
-- Updated: `apps/cms/src/components/CollectionRenderer.tsx` - Updated field references
-- Updated: `apps/astro/src/pages/collections/[slug].astro` - Updated field references
+- Updated: `apps/astro/src/pages/artifacts/*` - Redirects to `/archive-items`
+- Updated: `apps/web/next.config.mjs` - Redirects `/artifacts` to `/archive-items`
 
 ### 2. Navigation Endpoint Updated
 **Status:** ✅ Complete
@@ -87,7 +87,7 @@ Pros: Quick fix, no code complexity
 Cons: Might look cluttered on mobile
 
 **Option B: Add Buttons to Collection Pages (BETTER UX - 1-2 hours)**
-Add "Manage Categories" and "Manage Tags" buttons to Posts/Products list views
+Add "Manage Product Categories" and "Manage Product Collections" buttons to the Shop Manager view
 ```typescript
 // apps/cms/src/collections/Posts.ts
 admin: {
@@ -119,17 +119,9 @@ Cons: Takes up screen space on mobile
 
 **Future Enhancement:** Adding/removing collections still requires code changes. Navigation ordering/visibility is now handled via the Collection Manager UI.
 
-### 4. Museum Collections Should Be Renamed to Galleries
-**Current:** `museum-collections`
-**Desired:** `galleries`
-
-**Why Not Done Yet:** Requires:
-1. Renaming collection file
-2. Updating slug in collection config
-3. Updating all code references
-4. Migrating existing data in database
-
-**Impact:** Breaking change - requires careful data migration planning
+### 4. Museum Collections Removed
+**Current:** Removed
+**Replacement:** Archive Items + Custom Content Types
 
 ---
 
@@ -256,10 +248,10 @@ A: Partial. You can now reorder or hide collections in the navigation UI, but ad
 A: Payload's routing causes the navigation component to unmount/remount. Caching helps but doesn't eliminate the flash. This is a Payload limitation that could be addressed with React Router integration.
 
 **Q: Where is the artifacts collection? I can't see it in the CMS.**
-A: It's been completely removed. Use `archive-items` instead - they're the same thing but more flexible.
+A: It's been removed. Use `archive-items` instead.
 
 **Q: Where is museum-collections? I can't see it to rename it.**
-A: It exists as `museum-collections` in the code. Renaming to `galleries` requires renaming the collection file, updating the slug, updating all code references, and migrating database data. This is a breaking change that needs careful planning.
+A: It has been removed in favor of Archive Items + custom content types (e.g., “Galleries”).
 
 **Q: How do I create a custom collection type?**
 A: Use the Archive Items template as a base and create a Custom Content Type. This allows you to add custom fields without duplicating code. See SHARED_TAXONOMY_SYSTEM.md for examples.

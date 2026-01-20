@@ -1,5 +1,6 @@
 import type { CollectionConfig } from 'payload'
 import { slugField } from '../fields/slug'
+import { isCollectionEnabled } from '../lib/collectionVisibility'
 
 export const Categories: CollectionConfig = {
   slug: 'categories',
@@ -17,10 +18,10 @@ export const Categories: CollectionConfig = {
   },
 
   access: {
-    read: () => true,
-    create: ({ req: { user } }) => Boolean(user),
-    update: ({ req: { user } }) => Boolean(user),
-    delete: ({ req: { user } }) => user?.role === 'admin',
+    read: async ({ req }) => (await isCollectionEnabled(req.payload, 'categories')),
+    create: async ({ req }) => (await isCollectionEnabled(req.payload, 'categories')) && Boolean(req.user),
+    update: async ({ req }) => (await isCollectionEnabled(req.payload, 'categories')) && Boolean(req.user),
+    delete: async ({ req }) => (await isCollectionEnabled(req.payload, 'categories')) && req.user?.role === 'admin',
   },
 
   // Hooks for revalidation and counting

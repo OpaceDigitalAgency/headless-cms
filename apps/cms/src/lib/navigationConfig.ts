@@ -35,6 +35,21 @@ export const collectionsSectionSlugs = [
   'events',
 ]
 
+export const defaultEnabledSlugs = new Set<string>([
+  'pages',
+  'posts',
+  'categories',
+  'tags',
+  'archive-items',
+  'media',
+  'forms',
+  'form-submissions',
+  'users',
+  'redirects',
+])
+
+export const isDefaultEnabled = (slug: string): boolean => defaultEnabledSlugs.has(slug)
+
 const mediaSlugs = ['media']
 const formsSlugs = ['forms', 'form-submissions']
 const settingsSlugs = ['redirects']

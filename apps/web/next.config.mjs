@@ -99,7 +99,18 @@ const nextConfig = {
 
   // Redirects
   async redirects() {
-    return []
+    return [
+      {
+        source: '/artifacts',
+        destination: '/archive-items',
+        permanent: true,
+      },
+      {
+        source: '/artifacts/:slug',
+        destination: '/archive-items/:slug',
+        permanent: true,
+      },
+    ]
   },
 
   // Rewrites for preview mode

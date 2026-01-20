@@ -182,10 +182,9 @@ export function getPresetSeedConfig(presetId: AvailablePreset): SeedConfig {
         pages: 3,
         posts: 3,
         categories: 3,
-        artifacts: 10,
+        'archive-items': 10,
         people: 5,
         places: 5,
-        'museum-collections': 3,
       },
     },
     'ecommerce-next': {

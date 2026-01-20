@@ -148,27 +148,29 @@ export interface User extends BaseDocument {
 }
 
 // ===========================================
-// Museum Example Types (PoC)
+// Archive Example Types (PoC)
 // ===========================================
 
 /**
- * Artifact document (museum example)
+ * Archive item document (example)
  */
-export interface Artifact extends BaseDocument {
+export interface ArchiveItem extends BaseDocument {
   title: string;
   slug: string;
-  description?: any; // Rich text
-  media?: Media[] | string[];
-  people?: Person[] | string[];
-  places?: Place[] | string[];
-  collections?: Collection[] | string[];
-  template: TemplateType;
+  description?: any;
+  richContent?: any;
+  featuredImage?: Media | string;
+  gallery?: Media[] | string[];
+  creators?: Person[] | string[];
+  origins?: Place[] | string[];
+  relatedItems?: ArchiveItem[] | string[];
+  template?: TemplateType;
   meta?: SEOMeta;
   _status?: 'draft' | 'published';
 }
 
 /**
- * Person document (museum example)
+ * Person document (example)
  */
 export interface Person extends BaseDocument {
   name: string;
@@ -177,11 +179,11 @@ export interface Person extends BaseDocument {
   birthDate?: string;
   deathDate?: string;
   portrait?: Media | string;
-  relatedArtifacts?: Artifact[] | string[];
+  relatedItems?: ArchiveItem[] | string[];
 }
 
 /**
- * Place document (museum example)
+ * Place document (example)
  */
 export interface Place extends BaseDocument {
   name: string;
@@ -192,20 +194,7 @@ export interface Place extends BaseDocument {
     longitude: number;
   };
   featuredImage?: Media | string;
-  relatedArtifacts?: Artifact[] | string[];
-}
-
-/**
- * Collection document (museum example - hierarchical)
- */
-export interface Collection extends BaseDocument {
-  title: string;
-  slug: string;
-  description?: any; // Rich text
-  featuredImage?: Media | string;
-  parent?: Collection | string;
-  children?: Collection[] | string[];
-  artifacts?: Artifact[] | string[];
+  relatedItems?: ArchiveItem[] | string[];
 }
 
 // ===========================================

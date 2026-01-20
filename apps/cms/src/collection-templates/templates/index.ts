@@ -15,6 +15,12 @@ export { placeTemplate } from './place'
 export { eventTemplate } from './event'
 export { categoryTemplate } from './category'
 export { tagTemplate } from './tag'
+export { serviceTemplate } from './service'
+export { courseTemplate } from './course'
+export { caseStudyTemplate } from './case-study'
+export { galleryTemplate } from './gallery'
+export { faqTemplate } from './faq'
+export { testimonialTemplate } from './testimonial'
 
 import { pageTemplate } from './page'
 import { blogPostTemplate } from './blog-post'
@@ -27,6 +33,12 @@ import { placeTemplate } from './place'
 import { eventTemplate } from './event'
 import { categoryTemplate } from './category'
 import { tagTemplate } from './tag'
+import { serviceTemplate } from './service'
+import { courseTemplate } from './course'
+import { caseStudyTemplate } from './case-study'
+import { galleryTemplate } from './gallery'
+import { faqTemplate } from './faq'
+import { testimonialTemplate } from './testimonial'
 import type { CollectionTemplate, TemplateCategory } from '../types'
 
 /**
@@ -44,6 +56,12 @@ export const allTemplates: CollectionTemplate[] = [
   personTemplate,
   placeTemplate,
   eventTemplate,
+  serviceTemplate,
+  courseTemplate,
+  caseStudyTemplate,
+  galleryTemplate,
+  faqTemplate,
+  testimonialTemplate,
 ]
 
 /**

@@ -1,5 +1,6 @@
 import type { CollectionConfig } from 'payload'
 import { slugField } from '../fields/slug'
+import { isCollectionEnabled } from '../lib/collectionVisibility'
 
 /**
  * Product Collections
@@ -39,8 +40,9 @@ export const ProductCollections: CollectionConfig = {
   },
 
   access: {
-    read: ({ req: { user } }) => {
-      if (!user) {
+    read: async ({ req }) => {
+      if (!(await isCollectionEnabled(req.payload, 'product-collections'))) return false
+      if (!req.user) {
         return {
           _status: {
             equals: 'published',
@@ -49,9 +51,9 @@ export const ProductCollections: CollectionConfig = {
       }
       return true
     },
-    create: ({ req: { user } }) => Boolean(user),
-    update: ({ req: { user } }) => Boolean(user),
-    delete: ({ req: { user } }) => user?.role === 'admin',
+    create: async ({ req }) => (await isCollectionEnabled(req.payload, 'product-collections')) && Boolean(req.user),
+    update: async ({ req }) => (await isCollectionEnabled(req.payload, 'product-collections')) && Boolean(req.user),
+    delete: async ({ req }) => (await isCollectionEnabled(req.payload, 'product-collections')) && req.user?.role === 'admin',
   },
 
   // Hooks for revalidation
@@ -245,4 +247,3 @@ export const ProductCollections: CollectionConfig = {
 }
 
 export default ProductCollections
-

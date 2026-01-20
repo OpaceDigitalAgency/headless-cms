@@ -13,6 +13,7 @@
  */
 
 const CMS_URL = process.env.CMS_URL || process.env.NEXT_PUBLIC_CMS_URL || 'http://localhost:3000'
+const API_URL = process.env.API_URL || process.env.NEXT_PUBLIC_API_URL || CMS_URL
 const isDevelopment = process.env.NODE_ENV === 'development'
 
 // Time-based revalidation interval in seconds (fallback if webhooks fail)
@@ -564,4 +565,78 @@ export async function search(
     `/search?where[title][contains]=${encodeURIComponent(query)}`,
     options
   )
+}
+
+// ===========================================
+// Taxonomy Cross-Collection Filtering
+// ===========================================
+
+export interface TaxonomyContent {
+  id: string
+  title: string
+  slug: string
+  collection: string
+  publishedAt?: string
+  updatedAt: string
+  excerpt?: string
+  featuredImage?: any
+  _status: string
+}
+
+export interface CategoryContentResponse {
+  category: {
+    id: string
+    title: string
+    slug: string
+    description?: string
+    featuredImage?: any
+    parent?: any
+  }
+  content: TaxonomyContent[]
+  counts: {
+    total: number
+    posts: number
+    archiveItems: number
+    events: number
+    people: number
+    customItems: number
+  }
+}
+
+export interface TagContentResponse {
+  tag: {
+    id: string
+    title: string
+    slug: string
+    description?: string
+  }
+  content: TaxonomyContent[]
+  counts: {
+    total: number
+    posts: number
+    archiveItems: number
+    events: number
+    people: number
+    customItems: number
+  }
+}
+
+/**
+ * Get all content across collections for a specific category
+ */
+export async function getCategoryContent(slug: string, options?: FetchOptions): Promise<CategoryContentResponse> {
+  return fetchAPI<CategoryContentResponse>(`/taxonomy/category/${slug}`, {
+    ...options,
+    tags: [`taxonomy:category:${slug}`, ...(options?.tags || [])],
+  })
+}
+
+/**
+ * Get all content across collections for a specific tag
+ */
+export async function getTagContent(slug: string, options?: FetchOptions): Promise<TagContentResponse> {
+  return fetchAPI<TagContentResponse>(`/taxonomy/tag/${slug}`, {
+    ...options,
+    tags: [`taxonomy:tag:${slug}`, ...(options?.tags || [])],
+  })
 }

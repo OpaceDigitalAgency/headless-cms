@@ -37,16 +37,13 @@ export async function GET(request: NextRequest) {
       redirectUrl = `/blog/${slug}`
       break
     case 'archive-items':
-      redirectUrl = `/items/${slug}`
+      redirectUrl = `/archive-items/${slug}`
       break
     case 'people':
       redirectUrl = `/people/${slug}`
       break
     case 'places':
       redirectUrl = `/places/${slug}`
-      break
-    case 'museum-collections':
-      redirectUrl = `/collections/${slug}`
       break
     case 'custom-items':
       // For custom items, slug is already in format "type/slug" from the preview URL
@@ -124,4 +121,3 @@ export async function GET(request: NextRequest) {
   // Redirect to the preview page
   redirect(redirectUrl)
 }
-

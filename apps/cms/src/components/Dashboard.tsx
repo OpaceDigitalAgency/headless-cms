@@ -132,9 +132,9 @@ export const Dashboard: React.FC = () => {
               icon={<ImageIcon size={24} />}
             />
             <DashboardCard
-              title="Artifacts"
-              description="Museum collection items"
-              href="/admin/collections/artifacts"
+              title="Archive Items"
+              description="Structured archive entries"
+              href="/admin/collections/archive-items"
               icon={<ArtifactIcon size={24} />}
             />
             <DashboardCard

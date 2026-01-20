@@ -52,9 +52,9 @@ export async function POST(request: NextRequest) {
 
         case 'archive-items':
           if (slug) {
-            revalidatePath(`/items/${slug}`)
+            revalidatePath(`/archive-items/${slug}`)
           }
-          revalidatePath('/items')
+          revalidatePath('/archive-items')
           break
 
         case 'people':
@@ -69,13 +69,6 @@ export async function POST(request: NextRequest) {
             revalidatePath(`/places/${slug}`)
           }
           revalidatePath('/places')
-          break
-
-        case 'museum-collections':
-          if (slug) {
-            revalidatePath(`/collections/${slug}`)
-          }
-          revalidatePath('/collections')
           break
 
         case 'custom-items':
@@ -108,4 +101,3 @@ export async function POST(request: NextRequest) {
     )
   }
 }
-

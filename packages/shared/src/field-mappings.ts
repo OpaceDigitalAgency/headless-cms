@@ -46,7 +46,7 @@ export const postsTemplateConfig: CollectionTemplateConfig = {
 };
 
 /**
- * Archive Items collection field mapping (museum example)
+ * Archive Items collection field mapping
  */
 export const archiveItemsFieldMapping: FieldMapping = {
   title: 'heading',
@@ -65,7 +65,7 @@ export const archiveItemsTemplateConfig: CollectionTemplateConfig = {
 };
 
 /**
- * People collection field mapping (museum example)
+ * People collection field mapping
  */
 export const peopleFieldMapping: FieldMapping = {
   name: 'heading',
@@ -82,7 +82,7 @@ export const peopleTemplateConfig: CollectionTemplateConfig = {
 };
 
 /**
- * Places collection field mapping (museum example)
+ * Places collection field mapping
  */
 export const placesFieldMapping: FieldMapping = {
   name: 'heading',
@@ -99,7 +99,7 @@ export const placesTemplateConfig: CollectionTemplateConfig = {
 };
 
 /**
- * Collections collection field mapping (museum example - hierarchical)
+ * Collections collection field mapping (hierarchical)
  */
 export const collectionsFieldMapping: FieldMapping = {
   title: 'heading',
@@ -123,10 +123,9 @@ export const collectionsTemplateConfig: CollectionTemplateConfig = {
 export const templateConfigs: Record<string, CollectionTemplateConfig> = {
   pages: pagesTemplateConfig,
   posts: postsTemplateConfig,
-  artifacts: artifactsTemplateConfig,
+  'archive-items': archiveItemsTemplateConfig,
   people: peopleTemplateConfig,
   places: placesTemplateConfig,
-  collections: collectionsTemplateConfig,
 };
 
 /**

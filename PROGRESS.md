@@ -151,17 +151,17 @@ headless-cms/
 
 3. **Created revalidation utilities** - `apps/cms/src/lib/revalidate.ts` with direct cache invalidation functions
 
-4. **Updated collection hooks** - Modified `Pages.ts`, `Posts.ts`, `Artifacts.ts` to use direct revalidation instead of webhook calls
+4. **Updated collection hooks** - Modified `Pages.ts`, `Posts.ts`, `ArchiveItems.ts` to use direct revalidation instead of webhook calls
 
 5. **Updated global hooks** - Modified `Header.ts`, `Footer.ts`, `Settings.ts` for direct revalidation
 
-6. **Copied frontend components** - All renderers (Page, Post, Artifact, etc.) and block components
+6. **Copied frontend components** - All renderers (Page, Post, Archive Item, etc.) and block components
 
 7. **Created frontend pages**:
    - `/` - Home page
    - `/[slug]` - Dynamic pages
    - `/blog` and `/blog/[slug]` - Blog listing and detail
-   - `/artifacts` and `/artifacts/[slug]` - Artifacts listing and detail
+   - `/archive-items` and `/archive-items/[slug]` - Archive items listing and detail
 
 8. **Created API routes**:
    - `/api/draft` - Draft mode for preview
@@ -251,8 +251,8 @@ The live preview iframe is now showing content, but there are still issues to re
 - `apps/cms/src/app/(frontend)/[slug]/page.tsx`
 - `apps/cms/src/app/(frontend)/blog/page.tsx`
 - `apps/cms/src/app/(frontend)/blog/[slug]/page.tsx`
-- `apps/cms/src/app/(frontend)/artifacts/page.tsx`
-- `apps/cms/src/app/(frontend)/artifacts/[slug]/page.tsx`
+- `apps/cms/src/app/(frontend)/archive-items/page.tsx`
+- `apps/cms/src/app/(frontend)/archive-items/[slug]/page.tsx`
 - `apps/cms/src/app/(frontend)/not-found.tsx`
 - `apps/cms/src/app/(frontend)/error.tsx`
 - `apps/cms/src/app/(frontend)/api/draft/route.ts`
@@ -329,4 +329,3 @@ await fetch(`${SITE_URL}/api/revalidate`, {
 import { revalidatePage } from '../lib/revalidate'
 revalidatePage(slug)
 ```
-

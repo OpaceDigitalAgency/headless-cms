@@ -1,0 +1,49 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { getArchiveItems } from '@/lib/payload';
+
+const items = await getArchiveItems({ limit: 500 });
+---
+
+<BaseLayout title="Archive Items" description="Explore our archive items">
+  <div class="container py-16">
+    <header class="mb-12 text-center">
+      <h1 class="text-4xl font-bold tracking-tight">Archive Items</h1>
+      <p class="mt-4 text-lg text-gray-600 dark:text-gray-300">
+        Explore our curated archive items
+      </p>
+    </header>
+
+    <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      {items.docs.map((item: any) => {
+        const primaryImage = item.gallery?.[0]?.image;
+        
+        return (
+          <a href={`/archive-items/${item.slug}`} class="card overflow-hidden group">
+            {primaryImage?.url && (
+              <div class="relative h-48 overflow-hidden">
+                <img 
+                  src={primaryImage.url} 
+                  alt={primaryImage.alt || item.title}
+                  class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                />
+              </div>
+            )}
+            <div class="p-4">
+              <h2 class="font-semibold text-gray-900 dark:text-white">{item.title}</h2>
+              {item.dateCreated && (
+                <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">{item.dateCreated}</p>
+              )}
+            </div>
+          </a>
+        );
+      })}
+    </div>
+
+    {items.docs.length === 0 && (
+      <div class="text-center text-gray-500 dark:text-gray-400">
+        <p>No archive items found.</p>
+      </div>
+    )}
+  </div>
+</BaseLayout>

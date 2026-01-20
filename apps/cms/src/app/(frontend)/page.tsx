@@ -55,12 +55,12 @@ export default async function HomePage() {
           items: archiveItems.docs.map((item: any) => ({
             id: item.id,
             title: item.title,
-            url: `/items/${item.slug}`,
+            url: `/archive-items/${item.slug}`,
             image: item.gallery?.[0]?.image?.url
               ? { url: item.gallery[0].image.url, alt: item.title }
               : undefined,
           })),
-          cta: { label: 'View All Items', url: '/items' },
+          cta: { label: 'View All Items', url: '/archive-items' },
         },
         {
           id: 'cta',
@@ -76,4 +76,3 @@ export default async function HomePage() {
 
 // Static generation with ISR
 export const revalidate = 60
-

@@ -153,15 +153,15 @@ export function PersonRenderer({ person }: PersonRendererProps) {
             </div>
           )}
 
-          {/* Related Artifacts */}
-          {person.relatedArtifacts?.docs && person.relatedArtifacts.docs.length > 0 && (
+          {/* Related Items */}
+          {person.relatedItems?.docs && person.relatedItems.docs.length > 0 && (
             <div className="mt-12">
-              <h2 className="text-xl font-semibold text-gray-900">Related Artifacts</h2>
+              <h2 className="text-xl font-semibold text-gray-900">Related Items</h2>
               <div className="related-grid">
-                {person.relatedArtifacts.docs.map((artifact: any) => (
+                {person.relatedItems.docs.map((artifact: any) => (
                   <Link
                     key={artifact.id}
-                    href={`/artifacts/${artifact.slug}`}
+                    href={`/archive-items/${artifact.slug}`}
                     className="related-item"
                   >
                     {artifact.media?.[0]?.image?.url && (

@@ -2,12 +2,14 @@
 /**
  * Archive Block Component
  * 
- * Displays a list of items from a collection (posts, artifacts, etc.)
+ * Displays a list of items from a collection (posts, archive items, etc.)
  */
 
 interface Props {
   heading?: string;
-  collection: 'posts' | 'artifacts' | 'pages' | 'people' | 'places' | 'custom-items';
+  collection: 'posts' | 'archive-items' | 'pages' | 'people' | 'places' | 'custom-items';
+  categories?: any[];
+  tags?: any[];
   limit?: number;
   layout?: 'grid' | 'list' | 'cards';
   showExcerpt?: boolean;
@@ -17,10 +19,12 @@ interface Props {
   contentType?: any;
 }
 
-const { 
-  heading, 
-  collection = 'posts', 
-  limit = 6, 
+const {
+  heading,
+  collection = 'posts',
+  categories,
+  tags,
+  limit = 6,
   layout = 'grid',
   showExcerpt = true,
   showImage = true,
@@ -36,7 +40,14 @@ try {
   const statusQuery = collection === 'custom-items' ? '&where[status][equals]=published' : '';
   const contentTypeId = collection === 'custom-items' && contentType ? (typeof contentType === 'object' ? contentType.id : contentType) : null;
   const contentTypeQuery = contentTypeId ? `&where[contentType][equals]=${contentTypeId}` : '';
-  const response = await fetch(`${cmsUrl}/api/${collection}?limit=${limit}&sort=-createdAt&depth=1${statusQuery}${contentTypeQuery}`);
+
+  // Add category/tag filtering
+  const categoryIds = categories?.map((cat: any) => typeof cat === 'object' ? cat.id : cat).filter(Boolean);
+  const tagIds = tags?.map((tag: any) => typeof tag === 'object' ? tag.id : tag).filter(Boolean);
+  const categoryQuery = categoryIds && categoryIds.length > 0 ? `&where[categories][in]=${categoryIds.join(',')}` : '';
+  const tagQuery = tagIds && tagIds.length > 0 ? `&where[tags][in]=${tagIds.join(',')}` : '';
+
+  const response = await fetch(`${cmsUrl}/api/${collection}?limit=${limit}&sort=-createdAt&depth=1${statusQuery}${contentTypeQuery}${categoryQuery}${tagQuery}`);
   if (response.ok) {
     const data = await response.json();
     items = data.docs || [];
@@ -49,7 +60,7 @@ try {
 const getItemUrl = (item: any) => {
   const paths: Record<string, string> = {
     posts: '/blog',
-    'archive-items': '/items',
+    'archive-items': '/archive-items',
     pages: '',
     people: '/people',
     places: '/places',

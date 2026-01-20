@@ -1,6 +1,6 @@
 /**
  * DetailTemplate - For displaying single items with full details
- * Used for: Artifacts, People, Places, individual pages
+ * Used for: Archive items, people, places, individual pages
  */
 
 import React from 'react';

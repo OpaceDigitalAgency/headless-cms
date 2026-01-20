@@ -2,7 +2,7 @@
  * Archive Item Collection Template
  * 
  * A flexible archive item template suitable for:
- * - Museum artifacts
+ * - Archive items
  * - Gallery pieces
  * - Portfolio projects
  * - Classic cars
@@ -30,7 +30,7 @@ import {
 export const archiveItemTemplate: CollectionTemplate = {
   id: 'archive-item',
   name: 'Archive Item',
-  description: 'Catalogued items like museum artifacts, portfolio pieces, or collectibles',
+  description: 'Catalogued items like archive entries, portfolio pieces, or collectibles',
   category: 'archive',
   icon: 'archive',
   defaultSlug: 'archive-items',

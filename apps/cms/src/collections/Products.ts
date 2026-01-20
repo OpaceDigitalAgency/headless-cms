@@ -2,6 +2,7 @@ import type { CollectionConfig } from 'payload'
 import { getPreviewUrl } from '../utils/preview'
 import { slugField } from '../fields/slug'
 import { productTemplate } from '../collection-templates/templates/product'
+import { isCollectionEnabled } from '../lib/collectionVisibility'
 
 export const Products: CollectionConfig = {
   slug: 'products',
@@ -29,13 +30,14 @@ export const Products: CollectionConfig = {
   },
 
   access: {
-    read: ({ req: { user } }) => {
-      if (!user) return { _status: { equals: 'published' } }
+    read: async ({ req }) => {
+      if (!(await isCollectionEnabled(req.payload, 'products'))) return false
+      if (!req.user) return { _status: { equals: 'published' } }
       return true
     },
-    create: ({ req: { user } }) => Boolean(user),
-    update: ({ req: { user } }) => Boolean(user),
-    delete: ({ req: { user } }) => user?.role === 'admin',
+    create: async ({ req }) => (await isCollectionEnabled(req.payload, 'products')) && Boolean(req.user),
+    update: async ({ req }) => (await isCollectionEnabled(req.payload, 'products')) && Boolean(req.user),
+    delete: async ({ req }) => (await isCollectionEnabled(req.payload, 'products')) && req.user?.role === 'admin',
   },
 
   fields: productTemplate.fields,
@@ -64,4 +66,3 @@ export const Products: CollectionConfig = {
     ],
   },
 }
-

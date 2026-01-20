@@ -95,6 +95,14 @@ const NavIcon: Record<string, React.FC<{ size?: number }>> = {
       <path d="M2 12l10 5 10-5" />
     </svg>
   ),
+  archive: ({ size = 20 }) => (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <polyline points="21 8 21 21 3 21 3 8" />
+      <line x1="1" y1="3" x2="23" y2="3" />
+      <path d="M10 12v5" />
+      <path d="M14 12v5" />
+    </svg>
+  ),
   person: ({ size = 20 }) => (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
       <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />

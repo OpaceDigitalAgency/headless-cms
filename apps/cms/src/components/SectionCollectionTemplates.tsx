@@ -36,13 +36,22 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
   const [uninstalledSlugs, setUninstalledSlugs] = useState<string[]>([])
   const [uninstalling, setUninstalling] = useState<string | null>(null)
   const [reinstalling, setReinstalling] = useState<string | null>(null)
+  const [contentTypes, setContentTypes] = useState<Array<{ id: string; slug: string }>>([])
+  const [enabling, setEnabling] = useState<string | null>(null)
 
   useEffect(() => {
     fetchInstalledCollections()
     fetchVisibilitySettings()
     fetchSeedStatus()
     fetchCollectionOverrides()
+    fetchContentTypes()
   }, [])
+
+  useEffect(() => {
+    if (contentTypes.length) {
+      fetchContentTypeSeedStatus()
+    }
+  }, [contentTypes])
 
   const fetchInstalledCollections = async () => {
     try {
@@ -124,6 +133,50 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
       }
     } catch (error) {
       console.error('Failed to fetch collection overrides:', error)
+    }
+  }
+
+  const fetchContentTypes = async () => {
+    try {
+      const response = await fetch('/api/collection-templates/content-types')
+      if (response.ok) {
+        const data = await response.json()
+        const docs = Array.isArray(data?.docs) ? data.docs : []
+        setContentTypes(docs.map((doc: any) => ({ id: doc.id, slug: doc.slug })))
+      }
+    } catch (error) {
+      console.error('Failed to fetch content types:', error)
+      setContentTypes([])
+    }
+  }
+
+  const fetchContentTypeSeedStatus = async () => {
+    const contentTypeTemplates = allTemplates.filter((template) => template.contentTypeTemplate)
+    if (!contentTypeTemplates.length) return
+
+    try {
+      const updates: Record<string, { count: number; hasSeedData: boolean; hasSeedMedia: boolean }> = {}
+      await Promise.all(
+        contentTypeTemplates.map(async (template) => {
+          const contentType = contentTypes.find((type) => type.slug === template.defaultSlug)
+          if (!contentType) return
+
+          const response = await fetch(`/api/custom-items?where[contentType][equals]=${contentType.id}&limit=0`)
+          if (!response.ok) return
+          const data = await response.json()
+          updates[template.defaultSlug] = {
+            count: data.totalDocs || 0,
+            hasSeedData: template.hasSeedData,
+            hasSeedMedia: false,
+          }
+        })
+      )
+
+      if (Object.keys(updates).length > 0) {
+        setSeedStatus((prev) => ({ ...prev, ...updates }))
+      }
+    } catch (error) {
+      console.error('Failed to fetch content type seed status:', error)
     }
   }
 
@@ -253,6 +306,125 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
     }
   }
 
+  const handleEnableContentType = async (template: CollectionTemplate) => {
+    setEnabling(template.id)
+    setMessage(null)
+
+    try {
+      const response = await fetch('/api/collection-templates/add', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          templateId: template.id,
+          customName: template.defaultPlural,
+          slug: template.defaultSlug,
+          singular: template.defaultSingular,
+          plural: template.defaultPlural,
+        }),
+      })
+
+      const data = await response.json()
+
+      if (response.ok && data.success) {
+        setMessage({
+          type: 'success',
+          text: data.message || `Enabled ${template.name}`,
+        })
+        fetchContentTypes()
+        fetchInstalledCollections()
+        fetchSeedStatus()
+      } else {
+        throw new Error(data.message || 'Failed to enable content type')
+      }
+    } catch (error) {
+      console.error('Failed to enable content type:', error)
+      setMessage({
+        type: 'error',
+        text: error instanceof Error ? error.message : 'Failed to enable content type. Please try again.',
+      })
+    } finally {
+      setEnabling(null)
+    }
+  }
+
+  const handleSeedContentTypeData = async (template: CollectionTemplate) => {
+    setSeeding(template.defaultSlug)
+    setMessage(null)
+
+    try {
+      const response = await fetch('/api/seed/content-type', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          templateId: template.id,
+          action: 'seed',
+        }),
+      })
+
+      const data = await response.json()
+
+      if (response.ok && data.success) {
+        setMessage({
+          type: 'success',
+          text: data.message || `Successfully seeded ${template.name}`,
+        })
+        fetchContentTypeSeedStatus()
+      } else {
+        throw new Error(data.message || 'Failed to seed content type')
+      }
+    } catch (error) {
+      console.error('Failed to seed content type:', error)
+      setMessage({
+        type: 'error',
+        text: error instanceof Error ? error.message : 'Failed to seed content type. Please try again.',
+      })
+    } finally {
+      setSeeding(null)
+    }
+  }
+
+  const handleClearContentTypeSeedData = async (template: CollectionTemplate) => {
+    setSeeding(template.defaultSlug)
+    setMessage(null)
+
+    try {
+      const response = await fetch('/api/seed/content-type', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          templateId: template.id,
+          action: 'clear',
+        }),
+      })
+
+      const data = await response.json()
+
+      if (response.ok && data.success) {
+        setMessage({
+          type: 'success',
+          text: data.message || `Successfully cleared ${template.name}`,
+        })
+        fetchContentTypeSeedStatus()
+      } else {
+        throw new Error(data.message || 'Failed to clear content type seed data')
+      }
+    } catch (error) {
+      console.error('Failed to clear content type seed data:', error)
+      setMessage({
+        type: 'error',
+        text: error instanceof Error ? error.message : 'Failed to clear seed data. Please try again.',
+      })
+    } finally {
+      setSeeding(null)
+    }
+  }
+
   const handleClearSeedData = async (slug: string) => {
     setSeeding(slug)
     setMessage(null)
@@ -370,19 +542,30 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
     }
   }
 
+  const contentTypeBySlug = new Map(contentTypes.map((type) => [type.slug, type]))
+
   // Filter templates by section
   const sectionTemplates = allTemplates.filter((template) => template.adminGroup === section)
+  const contentTypeTemplates = sectionTemplates.filter((template) => template.contentTypeTemplate)
+  const collectionTemplates = sectionTemplates.filter((template) => !template.contentTypeTemplate)
 
   // Categorize templates
-  const coreTemplates = sectionTemplates.filter((t) => t.status === 'core')
-  const installedTemplates = sectionTemplates.filter(
+  const coreTemplates = collectionTemplates.filter((t) => t.status === 'core')
+  const installedTemplates = collectionTemplates.filter(
     (t) =>
       t.status !== 'core' &&
       (t.status === 'installed' || installedSlugs.includes(t.defaultSlug)) &&
       !uninstalledSlugs.includes(t.defaultSlug)
   )
-  const uninstalledTemplates = sectionTemplates.filter(
+  const uninstalledTemplates = collectionTemplates.filter(
     (t) => t.status !== 'core' && uninstalledSlugs.includes(t.defaultSlug)
+  )
+
+  const enabledContentTypeTemplates = contentTypeTemplates.filter((template) =>
+    contentTypeBySlug.has(template.defaultSlug)
+  )
+  const availableContentTypeTemplates = contentTypeTemplates.filter((template) =>
+    !contentTypeBySlug.has(template.defaultSlug)
   )
 
   const renderTemplateCard = (template: CollectionTemplate, options?: { uninstalled?: boolean }) => {
@@ -584,6 +767,148 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
     )
   }
 
+  const renderContentTypeCard = (template: CollectionTemplate) => {
+    const contentType = contentTypeBySlug.get(template.defaultSlug)
+    const isEnabled = Boolean(contentType)
+    const isEnablingThis = enabling === template.id
+    const isSeedingThis = seeding === template.defaultSlug
+    const status = seedStatus[template.defaultSlug]
+    const seededCount = status?.count || 0
+    const isSeeded = seededCount > 0
+
+    return (
+      <div
+        key={template.id}
+        style={{
+          border: '1px solid var(--theme-elevation-150)',
+          borderRadius: '8px',
+          padding: '20px',
+          background: 'var(--theme-elevation-50)',
+        }}
+      >
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '12px' }}>
+          <h4 style={{ fontSize: '16px', fontWeight: 600, margin: 0, color: '#333' }}>
+            {template.name}
+          </h4>
+          <div style={{ display: 'flex', gap: '6px' }}>
+            <span
+              style={{
+                fontSize: '11px',
+                padding: '3px 8px',
+                borderRadius: '4px',
+                background: isEnabled ? '#10b981' : '#9ca3af',
+                color: 'white',
+                fontWeight: 500,
+              }}
+            >
+              {isEnabled ? 'Enabled' : 'Available'}
+            </span>
+          </div>
+        </div>
+
+        <p style={{ fontSize: '13px', color: '#666', marginBottom: '12px', lineHeight: '1.5' }}>
+          {template.description}
+        </p>
+
+        <div style={{ fontSize: '12px', color: '#888', marginBottom: '16px' }}>
+          <span style={{ fontWeight: 500 }}>Slug: </span>
+          <code style={{ background: 'var(--theme-elevation-100)', padding: '2px 6px', borderRadius: '3px' }}>
+            {template.defaultSlug}
+          </code>
+        </div>
+
+        {template.hasSeedData && isEnabled && (
+          <div style={{ fontSize: '12px', color: '#666', marginBottom: '12px' }}>
+            {isSeeded
+              ? `Seeded (${seededCount} items)`
+              : `Sample data available (${template.seedDataCount || 0} items)`}
+          </div>
+        )}
+
+        <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+          {!isEnabled && (
+            <button
+              onClick={() => handleEnableContentType(template)}
+              disabled={isEnablingThis}
+              style={{
+                padding: '8px 14px',
+                fontSize: '13px',
+                fontWeight: 500,
+                borderRadius: '6px',
+                border: 'none',
+                background: '#10b981',
+                color: 'white',
+                cursor: isEnablingThis ? 'not-allowed' : 'pointer',
+                opacity: isEnablingThis ? 0.6 : 1,
+              }}
+            >
+              {isEnablingThis ? 'Enabling...' : 'Enable'}
+            </button>
+          )}
+
+          {template.hasSeedData && isEnabled && (
+            <button
+              onClick={() => handleSeedContentTypeData(template)}
+              disabled={isSeedingThis}
+              style={{
+                padding: '8px 14px',
+                fontSize: '13px',
+                fontWeight: 500,
+                borderRadius: '6px',
+                border: 'none',
+                background: '#3b82f6',
+                color: 'white',
+                cursor: isSeedingThis ? 'not-allowed' : 'pointer',
+                opacity: isSeedingThis ? 0.6 : 1,
+              }}
+            >
+              {isSeedingThis ? 'Seeding...' : 'Seed Data'}
+            </button>
+          )}
+
+          {template.hasSeedData && isEnabled && isSeeded && (
+            <button
+              onClick={() => handleClearContentTypeSeedData(template)}
+              disabled={isSeedingThis}
+              style={{
+                padding: '8px 14px',
+                fontSize: '13px',
+                fontWeight: 500,
+                borderRadius: '6px',
+                border: '1px solid #fca5a5',
+                background: '#fee2e2',
+                color: '#991b1b',
+                cursor: isSeedingThis ? 'not-allowed' : 'pointer',
+                opacity: isSeedingThis ? 0.6 : 1,
+              }}
+            >
+              {isSeedingThis ? 'Clearing...' : 'Clear Seed Data'}
+            </button>
+          )}
+
+          {isEnabled && contentType && (
+            <a
+              href={`/admin/collections/content-types/${contentType.id}`}
+              style={{
+                padding: '8px 14px',
+                fontSize: '13px',
+                fontWeight: 500,
+                borderRadius: '6px',
+                border: '1px solid var(--theme-elevation-200)',
+                background: 'var(--theme-elevation-0)',
+                color: '#3b82f6',
+                textDecoration: 'none',
+                display: 'inline-block',
+              }}
+            >
+              View Content Type
+            </a>
+          )}
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className="ra-section-collections">
       {message && (
@@ -636,6 +961,34 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
         </div>
       )}
 
+      {enabledContentTypeTemplates.length > 0 && (
+        <div style={{ marginBottom: '32px' }}>
+          <h3 style={{ fontSize: '18px', fontWeight: 600, marginBottom: '8px', color: '#333' }}>
+            Enabled Content Types
+          </h3>
+          <p style={{ fontSize: '13px', color: '#666', marginBottom: '16px' }}>
+            Custom content types enabled from templates. Seed data is optional.
+          </p>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '16px' }}>
+            {enabledContentTypeTemplates.map(renderContentTypeCard)}
+          </div>
+        </div>
+      )}
+
+      {availableContentTypeTemplates.length > 0 && (
+        <div style={{ marginBottom: '32px' }}>
+          <h3 style={{ fontSize: '18px', fontWeight: 600, marginBottom: '8px', color: '#333' }}>
+            Available Content Types
+          </h3>
+          <p style={{ fontSize: '13px', color: '#666', marginBottom: '16px' }}>
+            Optional content types based on Archive Items. Enable what you need and seed sample data.
+          </p>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '16px' }}>
+            {availableContentTypeTemplates.map(renderContentTypeCard)}
+          </div>
+        </div>
+      )}
+
       {uninstalledTemplates.length > 0 && (
         <div style={{ marginBottom: '32px' }}>
           <h3 style={{ fontSize: '18px', fontWeight: 600, marginBottom: '8px', color: '#333' }}>
@@ -650,7 +1003,10 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
         </div>
       )}
 
-      {coreTemplates.length === 0 && installedTemplates.length === 0 && (
+      {coreTemplates.length === 0 &&
+        installedTemplates.length === 0 &&
+        enabledContentTypeTemplates.length === 0 &&
+        availableContentTypeTemplates.length === 0 && (
         <div
           style={{
             padding: '40px',

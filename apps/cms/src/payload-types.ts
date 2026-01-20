@@ -678,14 +678,13 @@ export interface Page {
             heading?: string | null;
             description?: string | null;
             populateBy?: ('collection' | 'selection') | null;
-            relationTo?:
-              | ('posts' | 'pages' | 'archive-items' | 'people' | 'places' | 'museum-collections' | 'custom-items')
-              | null;
+            relationTo?: ('posts' | 'pages' | 'archive-items' | 'people' | 'places' | 'custom-items') | null;
             /**
              * Filter custom items by content type
              */
             contentType?: (number | null) | ContentType;
             categories?: (number | Category)[] | null;
+            tags?: (number | Tag)[] | null;
             limit?: number | null;
             selectedDocs?:
               | (
@@ -1102,6 +1101,32 @@ export interface Category {
   createdAt: string;
 }
 /**
+ * Flat tags shared across Posts, Archive Items, Events, People, and Custom Items
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "tags".
+ */
+export interface Tag {
+  id: number;
+  title: string;
+  /**
+   * URL-friendly identifier (auto-generated from title)
+   */
+  slug: string;
+  description?: string | null;
+  /**
+   * Total items across all collections
+   */
+  totalCount?: number | null;
+  postsCount?: number | null;
+  archiveItemsCount?: number | null;
+  eventsCount?: number | null;
+  peopleCount?: number | null;
+  customItemsCount?: number | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
  * Create and manage blog posts with flexible content sections
  *
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1394,14 +1419,13 @@ export interface Post {
             heading?: string | null;
             description?: string | null;
             populateBy?: ('collection' | 'selection') | null;
-            relationTo?:
-              | ('posts' | 'pages' | 'archive-items' | 'people' | 'places' | 'museum-collections' | 'custom-items')
-              | null;
+            relationTo?: ('posts' | 'pages' | 'archive-items' | 'people' | 'places' | 'custom-items') | null;
             /**
              * Filter custom items by content type
              */
             contentType?: (number | null) | ContentType;
             categories?: (number | Category)[] | null;
+            tags?: (number | Tag)[] | null;
             limit?: number | null;
             selectedDocs?:
               | (
@@ -1688,7 +1712,7 @@ export interface Post {
   _status?: ('draft' | 'published') | null;
 }
 /**
- * Museum artifacts, gallery pieces, portfolio items, or collectibles
+ * Archive items such as gallery pieces, portfolio items, or collectibles
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "archive-items".
@@ -1878,14 +1902,13 @@ export interface ArchiveItem {
             heading?: string | null;
             description?: string | null;
             populateBy?: ('collection' | 'selection') | null;
-            relationTo?:
-              | ('posts' | 'pages' | 'archive-items' | 'people' | 'places' | 'museum-collections' | 'custom-items')
-              | null;
+            relationTo?: ('posts' | 'pages' | 'archive-items' | 'people' | 'places' | 'custom-items') | null;
             /**
              * Filter custom items by content type
              */
             contentType?: (number | null) | ContentType;
             categories?: (number | Category)[] | null;
+            tags?: (number | Tag)[] | null;
             limit?: number | null;
             selectedDocs?:
               | (
@@ -2495,14 +2518,13 @@ export interface Person {
             heading?: string | null;
             description?: string | null;
             populateBy?: ('collection' | 'selection') | null;
-            relationTo?:
-              | ('posts' | 'pages' | 'archive-items' | 'people' | 'places' | 'museum-collections' | 'custom-items')
-              | null;
+            relationTo?: ('posts' | 'pages' | 'archive-items' | 'people' | 'places' | 'custom-items') | null;
             /**
              * Filter custom items by content type
              */
             contentType?: (number | null) | ContentType;
             categories?: (number | Category)[] | null;
+            tags?: (number | Tag)[] | null;
             limit?: number | null;
             selectedDocs?:
               | (
@@ -3143,14 +3165,13 @@ export interface Place {
             heading?: string | null;
             description?: string | null;
             populateBy?: ('collection' | 'selection') | null;
-            relationTo?:
-              | ('posts' | 'pages' | 'archive-items' | 'people' | 'places' | 'museum-collections' | 'custom-items')
-              | null;
+            relationTo?: ('posts' | 'pages' | 'archive-items' | 'people' | 'places' | 'custom-items') | null;
             /**
              * Filter custom items by content type
              */
             contentType?: (number | null) | ContentType;
             categories?: (number | Category)[] | null;
+            tags?: (number | Tag)[] | null;
             limit?: number | null;
             selectedDocs?:
               | (
@@ -3424,32 +3445,6 @@ export interface Place {
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
-}
-/**
- * Flat tags shared across Posts, Archive Items, Events, People, and Custom Items
- *
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "tags".
- */
-export interface Tag {
-  id: number;
-  title: string;
-  /**
-   * URL-friendly identifier (auto-generated from title)
-   */
-  slug: string;
-  description?: string | null;
-  /**
-   * Total items across all collections
-   */
-  totalCount?: number | null;
-  postsCount?: number | null;
-  archiveItemsCount?: number | null;
-  eventsCount?: number | null;
-  peopleCount?: number | null;
-  customItemsCount?: number | null;
-  updatedAt: string;
-  createdAt: string;
 }
 /**
  * Items belonging to your custom content types
@@ -3917,14 +3912,13 @@ export interface CustomItem {
             heading?: string | null;
             description?: string | null;
             populateBy?: ('collection' | 'selection') | null;
-            relationTo?:
-              | ('posts' | 'pages' | 'archive-items' | 'people' | 'places' | 'museum-collections' | 'custom-items')
-              | null;
+            relationTo?: ('posts' | 'pages' | 'archive-items' | 'people' | 'places' | 'custom-items') | null;
             /**
              * Filter custom items by content type
              */
             contentType?: (number | null) | ContentType;
             categories?: (number | Category)[] | null;
+            tags?: (number | Tag)[] | null;
             limit?: number | null;
             selectedDocs?:
               | (
@@ -4413,14 +4407,13 @@ export interface Event {
             heading?: string | null;
             description?: string | null;
             populateBy?: ('collection' | 'selection') | null;
-            relationTo?:
-              | ('posts' | 'pages' | 'archive-items' | 'people' | 'places' | 'museum-collections' | 'custom-items')
-              | null;
+            relationTo?: ('posts' | 'pages' | 'archive-items' | 'people' | 'places' | 'custom-items') | null;
             /**
              * Filter custom items by content type
              */
             contentType?: (number | null) | ContentType;
             categories?: (number | Category)[] | null;
+            tags?: (number | Tag)[] | null;
             limit?: number | null;
             selectedDocs?:
               | (
@@ -4874,14 +4867,13 @@ export interface Product {
             heading?: string | null;
             description?: string | null;
             populateBy?: ('collection' | 'selection') | null;
-            relationTo?:
-              | ('posts' | 'pages' | 'archive-items' | 'people' | 'places' | 'museum-collections' | 'custom-items')
-              | null;
+            relationTo?: ('posts' | 'pages' | 'archive-items' | 'people' | 'places' | 'custom-items') | null;
             /**
              * Filter custom items by content type
              */
             contentType?: (number | null) | ContentType;
             categories?: (number | Category)[] | null;
+            tags?: (number | Tag)[] | null;
             limit?: number | null;
             selectedDocs?:
               | (
@@ -6062,6 +6054,7 @@ export interface PagesSelect<T extends boolean = true> {
               relationTo?: T;
               contentType?: T;
               categories?: T;
+              tags?: T;
               limit?: T;
               selectedDocs?: T;
               layout?: T;
@@ -6490,6 +6483,7 @@ export interface PostsSelect<T extends boolean = true> {
               relationTo?: T;
               contentType?: T;
               categories?: T;
+              tags?: T;
               limit?: T;
               selectedDocs?: T;
               layout?: T;
@@ -6843,6 +6837,7 @@ export interface ArchiveItemsSelect<T extends boolean = true> {
               relationTo?: T;
               contentType?: T;
               categories?: T;
+              tags?: T;
               limit?: T;
               selectedDocs?: T;
               layout?: T;
@@ -7284,6 +7279,7 @@ export interface PeopleSelect<T extends boolean = true> {
               relationTo?: T;
               contentType?: T;
               categories?: T;
+              tags?: T;
               limit?: T;
               selectedDocs?: T;
               layout?: T;
@@ -7755,6 +7751,7 @@ export interface PlacesSelect<T extends boolean = true> {
               relationTo?: T;
               contentType?: T;
               categories?: T;
+              tags?: T;
               limit?: T;
               selectedDocs?: T;
               layout?: T;
@@ -8064,6 +8061,7 @@ export interface EventsSelect<T extends boolean = true> {
               relationTo?: T;
               contentType?: T;
               categories?: T;
+              tags?: T;
               limit?: T;
               selectedDocs?: T;
               layout?: T;
@@ -8363,6 +8361,7 @@ export interface ProductsSelect<T extends boolean = true> {
               relationTo?: T;
               contentType?: T;
               categories?: T;
+              tags?: T;
               limit?: T;
               selectedDocs?: T;
               layout?: T;
@@ -8974,6 +8973,7 @@ export interface CustomItemsSelect<T extends boolean = true> {
               relationTo?: T;
               contentType?: T;
               categories?: T;
+              tags?: T;
               limit?: T;
               selectedDocs?: T;
               layout?: T;

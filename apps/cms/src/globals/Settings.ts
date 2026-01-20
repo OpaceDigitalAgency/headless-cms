@@ -97,7 +97,7 @@ export const Settings: GlobalConfig = {
                   options: [
                     { label: 'Brochure / Marketing Site', value: 'brochure' },
                     { label: 'Blog / Content Site', value: 'blog' },
-                    { label: 'Museum / Archive / Gallery', value: 'museum' },
+                    { label: 'Archive / Gallery', value: 'museum' },
                     { label: 'Ecommerce / Product Catalog', value: 'ecommerce' },
                     { label: 'Portfolio / Showcase', value: 'portfolio' },
                     { label: 'Custom', value: 'custom' },
