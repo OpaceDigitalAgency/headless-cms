@@ -35,6 +35,7 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
   const [seedStatus, setSeedStatus] = useState<Record<string, { count: number; hasSeedData: boolean; hasSeedMedia: boolean }>>({})
   const [uninstalledSlugs, setUninstalledSlugs] = useState<string[]>([])
   const [uninstalling, setUninstalling] = useState<string | null>(null)
+  const [reinstalling, setReinstalling] = useState<string | null>(null)
 
   useEffect(() => {
     fetchInstalledCollections()
@@ -332,6 +333,43 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
     }
   }
 
+  const handleReinstallCollection = async (slug: string) => {
+    setReinstalling(slug)
+    setMessage(null)
+
+    try {
+      const response = await fetch('/api/collection-templates/reinstall', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ slug }),
+      })
+
+      const data = await response.json()
+
+      if (response.ok && data.success) {
+        setMessage({
+          type: 'success',
+          text: data.message || `Successfully reinstalled ${slug}`,
+        })
+        fetchInstalledCollections()
+        fetchSeedStatus()
+        fetchCollectionOverrides()
+      } else {
+        throw new Error(data.message || 'Failed to reinstall collection')
+      }
+    } catch (error) {
+      console.error('Failed to reinstall collection:', error)
+      setMessage({
+        type: 'error',
+        text: error instanceof Error ? error.message : 'Failed to reinstall collection. Please try again.',
+      })
+    } finally {
+      setReinstalling(null)
+    }
+  }
+
   // Filter templates by section
   const sectionTemplates = allTemplates.filter((template) => template.adminGroup === section)
 
@@ -343,14 +381,19 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
       (t.status === 'installed' || installedSlugs.includes(t.defaultSlug)) &&
       !uninstalledSlugs.includes(t.defaultSlug)
   )
+  const uninstalledTemplates = sectionTemplates.filter(
+    (t) => t.status !== 'core' && uninstalledSlugs.includes(t.defaultSlug)
+  )
 
-  const renderTemplateCard = (template: CollectionTemplate) => {
+  const renderTemplateCard = (template: CollectionTemplate, options?: { uninstalled?: boolean }) => {
+    const isUninstalled = options?.uninstalled === true
     const isCore = template.status === 'core'
     const isInstalled = installedSlugs.includes(template.defaultSlug)
     const isVisible = visibilitySettings[template.defaultSlug] !== false
     const isTogglingThis = toggling === template.defaultSlug
     const isSeedingThis = seeding === template.defaultSlug
     const isUninstallingThis = uninstalling === template.defaultSlug
+    const isReinstallingThis = reinstalling === template.defaultSlug
     const status = seedStatus[template.defaultSlug]
     const hasSeedData = template.hasSeedData && status?.hasSeedData !== false
     const seededCount = status?.count || 0
@@ -376,12 +419,12 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
                 fontSize: '11px',
                 padding: '3px 8px',
                 borderRadius: '4px',
-                background: isCore ? '#3b82f6' : '#10b981',
+                background: isCore ? '#3b82f6' : isUninstalled ? '#9ca3af' : '#10b981',
                 color: 'white',
                 fontWeight: 500,
               }}
             >
-              {isCore ? 'Core' : 'Installed'}
+              {isCore ? 'Core' : isUninstalled ? 'Uninstalled' : 'Installed'}
             </span>
             <span
               style={{
@@ -423,27 +466,27 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
           {template.hasSeedData && (
             <button
               onClick={() => handleSeedData(template.defaultSlug)}
-              disabled={isSeedingThis}
+              disabled={isSeedingThis || isUninstalled}
               style={{
                 padding: '8px 14px',
                 fontSize: '13px',
                 fontWeight: 500,
                 borderRadius: '6px',
                 border: 'none',
-                background: '#3b82f6',
-                color: 'white',
-                cursor: isSeedingThis ? 'not-allowed' : 'pointer',
-                opacity: isSeedingThis ? 0.6 : 1,
+                background: isUninstalled ? '#cbd5f5' : '#3b82f6',
+                color: isUninstalled ? '#475569' : 'white',
+                cursor: isSeedingThis || isUninstalled ? 'not-allowed' : 'pointer',
+                opacity: isSeedingThis || isUninstalled ? 0.6 : 1,
               }}
             >
-              {isSeedingThis ? 'Seeding...' : 'Seed Data'}
+              {isSeedingThis ? 'Seeding...' : isUninstalled ? 'Reinstall to Seed' : 'Seed Data'}
             </button>
           )}
 
           {template.hasSeedData && isSeeded && (
             <button
               onClick={() => handleClearSeedData(template.defaultSlug)}
-              disabled={isSeedingThis}
+              disabled={isSeedingThis || isUninstalled}
               style={{
                 padding: '8px 14px',
                 fontSize: '13px',
@@ -452,15 +495,15 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
                 border: '1px solid #fca5a5',
                 background: '#fee2e2',
                 color: '#991b1b',
-                cursor: isSeedingThis ? 'not-allowed' : 'pointer',
-                opacity: isSeedingThis ? 0.6 : 1,
+                cursor: isSeedingThis || isUninstalled ? 'not-allowed' : 'pointer',
+                opacity: isSeedingThis || isUninstalled ? 0.6 : 1,
               }}
             >
               {isSeedingThis ? 'Clearing...' : 'Clear Seed Data'}
             </button>
           )}
 
-          {!isCore && (
+          {!isCore && !isUninstalled && (
             <button
               onClick={() => handleToggleVisibility(template.defaultSlug, isVisible)}
               disabled={isTogglingThis}
@@ -480,7 +523,7 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
             </button>
           )}
 
-          {!isCore && isInstalled && (
+          {!isCore && isInstalled && !isUninstalled && (
             <button
               onClick={() => handleUninstallCollection(template.defaultSlug)}
               disabled={isUninstallingThis}
@@ -497,6 +540,26 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
               }}
             >
               {isUninstallingThis ? 'Uninstalling...' : 'Uninstall'}
+            </button>
+          )}
+
+          {!isCore && isUninstalled && (
+            <button
+              onClick={() => handleReinstallCollection(template.defaultSlug)}
+              disabled={isReinstallingThis}
+              style={{
+                padding: '8px 14px',
+                fontSize: '13px',
+                fontWeight: 500,
+                borderRadius: '6px',
+                border: '1px solid #86efac',
+                background: '#dcfce7',
+                color: '#166534',
+                cursor: isReinstallingThis ? 'not-allowed' : 'pointer',
+                opacity: isReinstallingThis ? 0.6 : 1,
+              }}
+            >
+              {isReinstallingThis ? 'Reinstalling...' : 'Reinstall'}
             </button>
           )}
 
@@ -569,6 +632,20 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '16px' }}>
             {installedTemplates.map(renderTemplateCard)}
+          </div>
+        </div>
+      )}
+
+      {uninstalledTemplates.length > 0 && (
+        <div style={{ marginBottom: '32px' }}>
+          <h3 style={{ fontSize: '18px', fontWeight: 600, marginBottom: '8px', color: '#333' }}>
+            Uninstalled Collections
+          </h3>
+          <p style={{ fontSize: '13px', color: '#666', marginBottom: '16px' }}>
+            These collections were uninstalled. Reinstall to restore access and seed sample data.
+          </p>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '16px' }}>
+            {uninstalledTemplates.map((template) => renderTemplateCard(template, { uninstalled: true }))}
           </div>
         </div>
       )}

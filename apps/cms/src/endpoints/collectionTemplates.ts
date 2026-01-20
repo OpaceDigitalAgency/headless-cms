@@ -335,6 +335,104 @@ export const uninstallCollectionEndpoint: Endpoint = {
 }
 
 /**
+ * Reinstall a collection
+ *
+ * Restores collection visibility and clears uninstall flag.
+ */
+export const reinstallCollectionEndpoint: Endpoint = {
+  path: '/collection-templates/reinstall',
+  method: 'post',
+  handler: async (req) => {
+    const { payload, user } = req
+
+    if (!user) {
+      return Response.json(
+        { success: false, message: 'Authentication required' },
+        { status: 401 }
+      )
+    }
+
+    if (user.role !== 'admin') {
+      return Response.json(
+        { success: false, message: 'Admin access required' },
+        { status: 403 }
+      )
+    }
+
+    try {
+      const body = await req.json?.() || {}
+      const { slug } = body
+
+      if (!slug || typeof slug !== 'string') {
+        return Response.json(
+          { success: false, message: 'Missing required field: slug' },
+          { status: 400 }
+        )
+      }
+
+      const template = allTemplates.find((t) => t.defaultSlug === slug)
+      if (!template) {
+        return Response.json(
+          { success: false, message: `Unknown collection: ${slug}` },
+          { status: 400 }
+        )
+      }
+
+      if (template.status === 'core') {
+        return Response.json(
+          { success: false, message: 'Core collections cannot be reinstalled' },
+          { status: 400 }
+        )
+      }
+
+      const navigationSettings = await payload.findGlobal({ slug: 'navigation-settings', depth: 0 }).catch(() => null)
+      const currentCollections = Array.isArray(navigationSettings?.collections)
+        ? navigationSettings.collections
+        : []
+      const existingIndex = currentCollections.findIndex((item: any) => item?.slug === slug)
+
+      let updatedCollections
+      if (existingIndex >= 0) {
+        updatedCollections = [...currentCollections]
+        updatedCollections[existingIndex] = {
+          ...updatedCollections[existingIndex],
+          enabled: true,
+          uninstalled: false,
+        }
+      } else {
+        updatedCollections = [
+          ...currentCollections,
+          {
+            slug,
+            enabled: true,
+            uninstalled: false,
+          },
+        ]
+      }
+
+      await payload.updateGlobal({
+        slug: 'navigation-settings',
+        data: {
+          collections: updatedCollections,
+        },
+      })
+
+      return Response.json({
+        success: true,
+        message: `Reinstalled ${template.name}`,
+      })
+    } catch (error) {
+      payload.logger.error('Reinstall collection failed:', error)
+      const errorMessage = error instanceof Error ? error.message : String(error)
+      return Response.json(
+        { success: false, message: `Operation failed: ${errorMessage}` },
+        { status: 500 }
+      )
+    }
+  },
+}
+
+/**
  * All collection template endpoints
  */
 export const collectionTemplateEndpoints: Endpoint[] = [
@@ -343,4 +441,5 @@ export const collectionTemplateEndpoints: Endpoint[] = [
   addTemplateEndpoint,
   addBundleEndpoint,
   uninstallCollectionEndpoint,
+  reinstallCollectionEndpoint,
 ]
