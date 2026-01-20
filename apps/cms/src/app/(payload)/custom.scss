@@ -578,6 +578,29 @@
   cursor: pointer;
 }
 
+.ra-collection-manager__sections {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.ra-collection-manager__section-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.ra-collection-manager__section-header {
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: var(--theme-elevation-700);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.25rem 0.5rem;
+  border-bottom: 2px solid var(--theme-elevation-200);
+  margin-bottom: 0.25rem;
+}
+
 .ra-collection-manager__list {
   display: flex;
   flex-direction: column;

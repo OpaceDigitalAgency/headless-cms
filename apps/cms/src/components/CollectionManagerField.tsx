@@ -177,6 +177,26 @@ export const CollectionManagerField: React.FC<CollectionManagerFieldProps> = ({ 
     }
   }
 
+  // Group items by section
+  const itemsBySection = useMemo(() => {
+    const grouped = new Map<SectionId, CollectionSetting[]>()
+
+    // Initialize all sections
+    sectionOrder.forEach(sectionId => {
+      grouped.set(sectionId, [])
+    })
+
+    // Group items by their section
+    items.forEach(item => {
+      const section = item.section || 'content'
+      const sectionItems = grouped.get(section) || []
+      sectionItems.push(item)
+      grouped.set(section, sectionItems)
+    })
+
+    return grouped
+  }, [items])
+
   return (
     <div className="ra-collection-manager">
       <div className="ra-collection-manager__header">
@@ -204,8 +224,19 @@ export const CollectionManagerField: React.FC<CollectionManagerFieldProps> = ({ 
       ) : items.length === 0 ? (
         <div className="ra-collection-manager__loading">No collections available.</div>
       ) : (
-        <div className="ra-collection-manager__list">
-          {items.map((item, index) => {
+        <div className="ra-collection-manager__sections">
+          {sectionOrder.map(sectionId => {
+            const sectionItems = itemsBySection.get(sectionId) || []
+            if (sectionItems.length === 0) return null
+
+            return (
+              <div key={sectionId} className="ra-collection-manager__section-group">
+                <div className="ra-collection-manager__section-header">
+                  {sectionLabels[sectionId]}
+                </div>
+                <div className="ra-collection-manager__list">
+                  {sectionItems.map((item) => {
+                    const index = items.indexOf(item)
             const collection = collectionsBySlug.get(item.slug)
             return (
               <div key={item.slug} className="ra-collection-manager__row">
@@ -261,8 +292,12 @@ export const CollectionManagerField: React.FC<CollectionManagerFieldProps> = ({ 
                   onChange={(event) => updateItem(index, { label: event.target.value })}
                 />
               </div>
-            )}
-          )}
+            )
+          })}
+                </div>
+              </div>
+            )
+          })}
         </div>
       )}
     </div>
