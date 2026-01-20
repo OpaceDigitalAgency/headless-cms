@@ -1,5 +1,5 @@
 import type { CollectionConfig } from 'payload'
-import { getPreviewUrl } from '../utils/preview'
+import { withLivePreview } from '../utils/livePreviewConfig'
 import { eventTemplate } from '../collection-templates/templates/event'
 import { isCollectionEnabled } from '../lib/collectionVisibility'
 
@@ -14,10 +14,7 @@ export const Events: CollectionConfig = {
     group: 'Content',
     defaultColumns: ['title', 'startDate', '_status', 'updatedAt'],
     description: 'Events, exhibitions, workshops, or performances with dates and venues',
-    preview: (doc) => getPreviewUrl({ collection: 'events', slug: doc.slug }),
-    livePreview: {
-      url: ({ data }) => getPreviewUrl({ collection: 'events', slug: data?.slug }),
-    },
+    ...withLivePreview('events'),
   },
 
   versions: {

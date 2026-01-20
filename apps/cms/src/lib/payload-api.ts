@@ -194,6 +194,39 @@ export const getArchiveItemBySlug = async (slug: string, draft = false) => {
 }
 
 // ===========================================
+// Events
+// ===========================================
+
+export const getEvents = unstable_cache(
+  async (limit = 100) => {
+    const payload = await getPayloadClient()
+    return payload.find({
+      collection: 'events',
+      limit,
+      where: { _status: { equals: 'published' } },
+      depth: 2,
+      sort: '-startDate',
+    })
+  },
+  ['events'],
+  { tags: ['events'] }
+)
+
+export const getEventBySlug = async (slug: string, draft = false) => {
+  const payload = await getPayloadClient()
+
+  const result = await payload.find({
+    collection: 'events',
+    where: { slug: { equals: slug } },
+    depth: 2,
+    draft,
+    limit: 1,
+  })
+
+  return result.docs[0] || null
+}
+
+// ===========================================
 // People
 // ===========================================
 
@@ -210,6 +243,20 @@ export const getPeople = unstable_cache(
   ['people'],
   { tags: ['people'] }
 )
+
+export const getPersonBySlug = async (slug: string, draft = false) => {
+  const payload = await getPayloadClient()
+
+  const result = await payload.find({
+    collection: 'people',
+    where: { slug: { equals: slug } },
+    depth: 2,
+    draft,
+    limit: 1,
+  })
+
+  return result.docs[0] || null
+}
 
 // ===========================================
 // Places
@@ -228,6 +275,20 @@ export const getPlaces = unstable_cache(
   ['places'],
   { tags: ['places'] }
 )
+
+export const getPlaceBySlug = async (slug: string, draft = false) => {
+  const payload = await getPayloadClient()
+
+  const result = await payload.find({
+    collection: 'places',
+    where: { slug: { equals: slug } },
+    depth: 2,
+    draft,
+    limit: 1,
+  })
+
+  return result.docs[0] || null
+}
 
 // ===========================================
 // Custom Items
