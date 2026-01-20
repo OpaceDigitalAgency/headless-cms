@@ -116,9 +116,9 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
         ]
       }
 
-      // Update navigation settings using PUT method (Payload globals use PUT, not PATCH)
+      // Update navigation settings using POST method (Payload globals use POST for updates)
       const updateResponse = await fetch('/api/globals/navigation-settings', {
-        method: 'PUT',
+        method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
