@@ -123,6 +123,22 @@ export const CollectionManagerField: React.FC<CollectionManagerFieldProps> = ({ 
   useEffect(() => {
     if (!initializedRef.current) return
     setValue(items)
+
+    // Clear cache when items change (after initialization)
+    // This ensures navigation updates immediately when user makes changes
+    if (typeof window !== 'undefined') {
+      sessionStorage.removeItem('nav-data')
+      sessionStorage.removeItem('nav-cache-time')
+
+      // Broadcast to other tabs
+      try {
+        const channel = new BroadcastChannel('nav-cache-invalidate')
+        channel.postMessage({ type: 'invalidate' })
+        channel.close()
+      } catch (e) {
+        // BroadcastChannel not supported
+      }
+    }
   }, [items, setValue])
 
   const updateItem = (index: number, updates: Partial<CollectionSetting>) => {
@@ -204,12 +220,12 @@ export const CollectionManagerField: React.FC<CollectionManagerFieldProps> = ({ 
           <div className="field-label">{label || 'Collection Navigation'}</div>
           <div className="field-description">
             Toggle visibility, choose sections, and reorder collections in the admin navigation.
-            Changes are saved automatically. Click "Clear Cache & Refresh" to see updates immediately.
+            Click "Save" below to persist changes, then refresh the page to see updates in the menu.
           </div>
         </div>
         <div style={{ display: 'flex', gap: '8px' }}>
           <button type="button" className="ra-collection-manager__reset" onClick={clearNavigationCache}>
-            ✓ Clear Cache & Refresh
+            🔄 Refresh Navigation
           </button>
           <button type="button" className="ra-collection-manager__reset" onClick={resetToDefaults}>
             ↻ Reset to Defaults

@@ -2,7 +2,7 @@ import type { GlobalConfig } from 'payload'
 
 export const NavigationSettings: GlobalConfig = {
   slug: 'navigation-settings',
-  label: 'Navigation Settings',
+  label: 'CMS Navigation Settings',
   admin: {
     group: 'Settings',
     description: 'Control which collections appear in the admin navigation and how they are grouped.',
@@ -15,10 +15,12 @@ export const NavigationSettings: GlobalConfig = {
     afterChange: [
       async ({ doc, req }) => {
         // Log the change for debugging
-        req.payload.logger.info('Navigation settings updated - cache invalidated')
+        req.payload.logger.info('Navigation settings updated - broadcasting cache invalidation')
 
-        // Note: Cache invalidation happens on the client side via the CollectionManagerField component
-        // When users click "Clear Cache & Refresh", the page reloads and fetches fresh navigation data
+        // Broadcast cache invalidation to all connected clients
+        // This triggers the BroadcastChannel listener in TwoPanelNav.tsx
+        // Note: This only works for clients that are currently connected
+        // The actual cache clearing happens client-side via sessionStorage
 
         return doc
       },

@@ -10,13 +10,16 @@ export const collectionManagerEndpoint: Endpoint = {
       console.log('Collection manager endpoint called')
       console.log('Total collections in config:', payload.config.collections.length)
 
-      // Filter out Payload's internal collections
+      // Filter out Payload's internal collections and auto-generated collections
       const internalCollections = new Set([
+        // Payload core internal collections
         'payload-preferences',
         'payload-migrations',
         'payload-locked-documents',
         'payload-jobs',
         'payload-kvs',
+        // Plugin-generated collections that shouldn't be in nav settings
+        'search-results', // from @payloadcms/plugin-search (auto-generated, not user-facing)
       ])
 
       const collections = payload.config.collections

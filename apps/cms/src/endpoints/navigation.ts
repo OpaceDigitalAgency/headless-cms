@@ -166,7 +166,10 @@ export const navigationEndpoint: Endpoint = {
     sectionOrder.forEach((sectionId) => {
       const items = buildSectionItems(sectionId)
 
-      // Add manager links at the top of each section
+      // Skip empty sections (no collections enabled)
+      if (items.length === 0) return
+
+      // Add manager links at the top of each section (only if section has items)
       if (sectionId === 'content') {
         items.unshift({
           label: 'Manage Content',
@@ -200,8 +203,6 @@ export const navigationEndpoint: Endpoint = {
           _order: -1,
         })
       }
-
-      if (items.length === 0) return
 
       navSections.push({
         id: sectionId,
