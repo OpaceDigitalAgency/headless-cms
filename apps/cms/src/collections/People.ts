@@ -27,6 +27,10 @@ import { timelineBlock } from '../blocks/Timeline'
 
 export const People: CollectionConfig = {
   slug: 'people',
+  labels: {
+    singular: 'Person',
+    plural: 'People',
+  },
 
   admin: {
     useAsTitle: 'name',

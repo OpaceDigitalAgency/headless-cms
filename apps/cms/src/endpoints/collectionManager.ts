@@ -10,17 +10,28 @@ export const collectionManagerEndpoint: Endpoint = {
       console.log('Collection manager endpoint called')
       console.log('Total collections in config:', payload.config.collections.length)
 
-      const collections = payload.config.collections.map((collection) => {
-        const slug = collection.slug
-        const item = {
-          slug,
-          label: collection.labels?.plural || slug,
-          hidden: Boolean(collection.admin?.hidden),
-          defaultSection: getDefaultSectionForSlug(slug),
-        }
-        console.log(`Collection: ${slug}`, item)
-        return item
-      })
+      // Filter out Payload's internal collections
+      const internalCollections = new Set([
+        'payload-preferences',
+        'payload-migrations',
+        'payload-locked-documents',
+        'payload-jobs',
+        'payload-kvs',
+      ])
+
+      const collections = payload.config.collections
+        .filter((collection) => !internalCollections.has(collection.slug))
+        .map((collection) => {
+          const slug = collection.slug
+          const item = {
+            slug,
+            label: collection.labels?.plural || collection.labels?.singular || slug,
+            hidden: Boolean(collection.admin?.hidden),
+            defaultSection: getDefaultSectionForSlug(slug),
+          }
+          console.log(`Collection: ${slug}`, item)
+          return item
+        })
 
       console.log('Returning collections:', collections.length)
       return Response.json({ collections })
