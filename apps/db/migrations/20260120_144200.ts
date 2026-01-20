@@ -22,7 +22,7 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   CREATE TYPE "public"."enum_pages_blocks_features_layout" AS ENUM('grid', 'list');
   CREATE TYPE "public"."enum_pages_blocks_embed_aspect_ratio" AS ENUM('16:9', '4:3', '1:1', '21:9');
   CREATE TYPE "public"."enum_pages_blocks_archive_populate_by" AS ENUM('collection', 'selection');
-  CREATE TYPE "public"."enum_pages_blocks_archive_relation_to" AS ENUM('posts', 'pages', 'archive-items', 'people', 'places', 'museum-collections', 'custom-items');
+  CREATE TYPE "public"."enum_pages_blocks_archive_relation_to" AS ENUM('posts', 'pages', 'archive-items', 'people', 'places', 'custom-items');
   CREATE TYPE "public"."enum_pages_blocks_archive_layout" AS ENUM('grid', 'list', 'cards', 'carousel');
   CREATE TYPE "public"."enum_pages_blocks_archive_columns" AS ENUM('2', '3', '4');
   CREATE TYPE "public"."enum_pages_blocks_form_style" AS ENUM('default', 'card', 'inline', 'fullWidth');
@@ -65,7 +65,7 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   CREATE TYPE "public"."enum__pages_v_blocks_features_layout" AS ENUM('grid', 'list');
   CREATE TYPE "public"."enum__pages_v_blocks_embed_aspect_ratio" AS ENUM('16:9', '4:3', '1:1', '21:9');
   CREATE TYPE "public"."enum__pages_v_blocks_archive_populate_by" AS ENUM('collection', 'selection');
-  CREATE TYPE "public"."enum__pages_v_blocks_archive_relation_to" AS ENUM('posts', 'pages', 'archive-items', 'people', 'places', 'museum-collections', 'custom-items');
+  CREATE TYPE "public"."enum__pages_v_blocks_archive_relation_to" AS ENUM('posts', 'pages', 'archive-items', 'people', 'places', 'custom-items');
   CREATE TYPE "public"."enum__pages_v_blocks_archive_layout" AS ENUM('grid', 'list', 'cards', 'carousel');
   CREATE TYPE "public"."enum__pages_v_blocks_archive_columns" AS ENUM('2', '3', '4');
   CREATE TYPE "public"."enum__pages_v_blocks_form_style" AS ENUM('default', 'card', 'inline', 'fullWidth');
@@ -107,7 +107,7 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   CREATE TYPE "public"."enum_posts_blocks_features_layout" AS ENUM('grid', 'list');
   CREATE TYPE "public"."enum_posts_blocks_embed_aspect_ratio" AS ENUM('16:9', '4:3', '1:1', '21:9');
   CREATE TYPE "public"."enum_posts_blocks_archive_populate_by" AS ENUM('collection', 'selection');
-  CREATE TYPE "public"."enum_posts_blocks_archive_relation_to" AS ENUM('posts', 'pages', 'archive-items', 'people', 'places', 'museum-collections', 'custom-items');
+  CREATE TYPE "public"."enum_posts_blocks_archive_relation_to" AS ENUM('posts', 'pages', 'archive-items', 'people', 'places', 'custom-items');
   CREATE TYPE "public"."enum_posts_blocks_archive_layout" AS ENUM('grid', 'list', 'cards', 'carousel');
   CREATE TYPE "public"."enum_posts_blocks_archive_columns" AS ENUM('2', '3', '4');
   CREATE TYPE "public"."enum_posts_blocks_form_style" AS ENUM('default', 'card', 'inline', 'fullWidth');
@@ -148,7 +148,7 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   CREATE TYPE "public"."enum__posts_v_blocks_features_layout" AS ENUM('grid', 'list');
   CREATE TYPE "public"."enum__posts_v_blocks_embed_aspect_ratio" AS ENUM('16:9', '4:3', '1:1', '21:9');
   CREATE TYPE "public"."enum__posts_v_blocks_archive_populate_by" AS ENUM('collection', 'selection');
-  CREATE TYPE "public"."enum__posts_v_blocks_archive_relation_to" AS ENUM('posts', 'pages', 'archive-items', 'people', 'places', 'museum-collections', 'custom-items');
+  CREATE TYPE "public"."enum__posts_v_blocks_archive_relation_to" AS ENUM('posts', 'pages', 'archive-items', 'people', 'places', 'custom-items');
   CREATE TYPE "public"."enum__posts_v_blocks_archive_layout" AS ENUM('grid', 'list', 'cards', 'carousel');
   CREATE TYPE "public"."enum__posts_v_blocks_archive_columns" AS ENUM('2', '3', '4');
   CREATE TYPE "public"."enum__posts_v_blocks_form_style" AS ENUM('default', 'card', 'inline', 'fullWidth');
@@ -186,7 +186,7 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   CREATE TYPE "public"."enum_archive_items_blocks_cta_style" AS ENUM('standard', 'banner', 'card', 'inline');
   CREATE TYPE "public"."enum_archive_items_blocks_cta_background_color" AS ENUM('none', 'light', 'dark', 'primary', 'secondary');
   CREATE TYPE "public"."enum_archive_items_blocks_archive_populate_by" AS ENUM('collection', 'selection');
-  CREATE TYPE "public"."enum_archive_items_blocks_archive_relation_to" AS ENUM('posts', 'pages', 'archive-items', 'people', 'places', 'museum-collections', 'custom-items');
+  CREATE TYPE "public"."enum_archive_items_blocks_archive_relation_to" AS ENUM('posts', 'pages', 'archive-items', 'people', 'places', 'custom-items');
   CREATE TYPE "public"."enum_archive_items_blocks_archive_layout" AS ENUM('grid', 'list', 'cards', 'carousel');
   CREATE TYPE "public"."enum_archive_items_blocks_archive_columns" AS ENUM('2', '3', '4');
   CREATE TYPE "public"."enum_archive_items_blocks_form_style" AS ENUM('default', 'card', 'inline', 'fullWidth');
@@ -221,7 +221,7 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   CREATE TYPE "public"."enum__archive_items_v_blocks_cta_style" AS ENUM('standard', 'banner', 'card', 'inline');
   CREATE TYPE "public"."enum__archive_items_v_blocks_cta_background_color" AS ENUM('none', 'light', 'dark', 'primary', 'secondary');
   CREATE TYPE "public"."enum__archive_items_v_blocks_archive_populate_by" AS ENUM('collection', 'selection');
-  CREATE TYPE "public"."enum__archive_items_v_blocks_archive_relation_to" AS ENUM('posts', 'pages', 'archive-items', 'people', 'places', 'museum-collections', 'custom-items');
+  CREATE TYPE "public"."enum__archive_items_v_blocks_archive_relation_to" AS ENUM('posts', 'pages', 'archive-items', 'people', 'places', 'custom-items');
   CREATE TYPE "public"."enum__archive_items_v_blocks_archive_layout" AS ENUM('grid', 'list', 'cards', 'carousel');
   CREATE TYPE "public"."enum__archive_items_v_blocks_archive_columns" AS ENUM('2', '3', '4');
   CREATE TYPE "public"."enum__archive_items_v_blocks_form_style" AS ENUM('default', 'card', 'inline', 'fullWidth');
@@ -261,7 +261,7 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   CREATE TYPE "public"."enum_people_blocks_features_layout" AS ENUM('grid', 'list');
   CREATE TYPE "public"."enum_people_blocks_embed_aspect_ratio" AS ENUM('16:9', '4:3', '1:1', '21:9');
   CREATE TYPE "public"."enum_people_blocks_archive_populate_by" AS ENUM('collection', 'selection');
-  CREATE TYPE "public"."enum_people_blocks_archive_relation_to" AS ENUM('posts', 'pages', 'archive-items', 'people', 'places', 'museum-collections', 'custom-items');
+  CREATE TYPE "public"."enum_people_blocks_archive_relation_to" AS ENUM('posts', 'pages', 'archive-items', 'people', 'places', 'custom-items');
   CREATE TYPE "public"."enum_people_blocks_archive_layout" AS ENUM('grid', 'list', 'cards', 'carousel');
   CREATE TYPE "public"."enum_people_blocks_archive_columns" AS ENUM('2', '3', '4');
   CREATE TYPE "public"."enum_people_blocks_form_style" AS ENUM('default', 'card', 'inline', 'fullWidth');
@@ -304,7 +304,7 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   CREATE TYPE "public"."enum__people_v_blocks_features_layout" AS ENUM('grid', 'list');
   CREATE TYPE "public"."enum__people_v_blocks_embed_aspect_ratio" AS ENUM('16:9', '4:3', '1:1', '21:9');
   CREATE TYPE "public"."enum__people_v_blocks_archive_populate_by" AS ENUM('collection', 'selection');
-  CREATE TYPE "public"."enum__people_v_blocks_archive_relation_to" AS ENUM('posts', 'pages', 'archive-items', 'people', 'places', 'museum-collections', 'custom-items');
+  CREATE TYPE "public"."enum__people_v_blocks_archive_relation_to" AS ENUM('posts', 'pages', 'archive-items', 'people', 'places', 'custom-items');
   CREATE TYPE "public"."enum__people_v_blocks_archive_layout" AS ENUM('grid', 'list', 'cards', 'carousel');
   CREATE TYPE "public"."enum__people_v_blocks_archive_columns" AS ENUM('2', '3', '4');
   CREATE TYPE "public"."enum__people_v_blocks_form_style" AS ENUM('default', 'card', 'inline', 'fullWidth');
@@ -346,7 +346,7 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   CREATE TYPE "public"."enum_places_blocks_features_layout" AS ENUM('grid', 'list');
   CREATE TYPE "public"."enum_places_blocks_embed_aspect_ratio" AS ENUM('16:9', '4:3', '1:1', '21:9');
   CREATE TYPE "public"."enum_places_blocks_archive_populate_by" AS ENUM('collection', 'selection');
-  CREATE TYPE "public"."enum_places_blocks_archive_relation_to" AS ENUM('posts', 'pages', 'archive-items', 'people', 'places', 'museum-collections', 'custom-items');
+  CREATE TYPE "public"."enum_places_blocks_archive_relation_to" AS ENUM('posts', 'pages', 'archive-items', 'people', 'places', 'custom-items');
   CREATE TYPE "public"."enum_places_blocks_archive_layout" AS ENUM('grid', 'list', 'cards', 'carousel');
   CREATE TYPE "public"."enum_places_blocks_archive_columns" AS ENUM('2', '3', '4');
   CREATE TYPE "public"."enum_places_blocks_form_style" AS ENUM('default', 'card', 'inline', 'fullWidth');
@@ -389,7 +389,7 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   CREATE TYPE "public"."enum__places_v_blocks_features_layout" AS ENUM('grid', 'list');
   CREATE TYPE "public"."enum__places_v_blocks_embed_aspect_ratio" AS ENUM('16:9', '4:3', '1:1', '21:9');
   CREATE TYPE "public"."enum__places_v_blocks_archive_populate_by" AS ENUM('collection', 'selection');
-  CREATE TYPE "public"."enum__places_v_blocks_archive_relation_to" AS ENUM('posts', 'pages', 'archive-items', 'people', 'places', 'museum-collections', 'custom-items');
+  CREATE TYPE "public"."enum__places_v_blocks_archive_relation_to" AS ENUM('posts', 'pages', 'archive-items', 'people', 'places', 'custom-items');
   CREATE TYPE "public"."enum__places_v_blocks_archive_layout" AS ENUM('grid', 'list', 'cards', 'carousel');
   CREATE TYPE "public"."enum__places_v_blocks_archive_columns" AS ENUM('2', '3', '4');
   CREATE TYPE "public"."enum__places_v_blocks_form_style" AS ENUM('default', 'card', 'inline', 'fullWidth');
@@ -428,7 +428,7 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   CREATE TYPE "public"."enum_events_blocks_cta_style" AS ENUM('standard', 'banner', 'card', 'inline');
   CREATE TYPE "public"."enum_events_blocks_cta_background_color" AS ENUM('none', 'light', 'dark', 'primary', 'secondary');
   CREATE TYPE "public"."enum_events_blocks_archive_populate_by" AS ENUM('collection', 'selection');
-  CREATE TYPE "public"."enum_events_blocks_archive_relation_to" AS ENUM('posts', 'pages', 'archive-items', 'people', 'places', 'museum-collections', 'custom-items');
+  CREATE TYPE "public"."enum_events_blocks_archive_relation_to" AS ENUM('posts', 'pages', 'archive-items', 'people', 'places', 'custom-items');
   CREATE TYPE "public"."enum_events_blocks_archive_layout" AS ENUM('grid', 'list', 'cards', 'carousel');
   CREATE TYPE "public"."enum_events_blocks_archive_columns" AS ENUM('2', '3', '4');
   CREATE TYPE "public"."enum_events_blocks_form_style" AS ENUM('default', 'card', 'inline', 'fullWidth');
@@ -467,7 +467,7 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   CREATE TYPE "public"."enum__events_v_blocks_cta_style" AS ENUM('standard', 'banner', 'card', 'inline');
   CREATE TYPE "public"."enum__events_v_blocks_cta_background_color" AS ENUM('none', 'light', 'dark', 'primary', 'secondary');
   CREATE TYPE "public"."enum__events_v_blocks_archive_populate_by" AS ENUM('collection', 'selection');
-  CREATE TYPE "public"."enum__events_v_blocks_archive_relation_to" AS ENUM('posts', 'pages', 'archive-items', 'people', 'places', 'museum-collections', 'custom-items');
+  CREATE TYPE "public"."enum__events_v_blocks_archive_relation_to" AS ENUM('posts', 'pages', 'archive-items', 'people', 'places', 'custom-items');
   CREATE TYPE "public"."enum__events_v_blocks_archive_layout" AS ENUM('grid', 'list', 'cards', 'carousel');
   CREATE TYPE "public"."enum__events_v_blocks_archive_columns" AS ENUM('2', '3', '4');
   CREATE TYPE "public"."enum__events_v_blocks_form_style" AS ENUM('default', 'card', 'inline', 'fullWidth');
@@ -506,7 +506,7 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   CREATE TYPE "public"."enum_products_blocks_cta_style" AS ENUM('standard', 'banner', 'card', 'inline');
   CREATE TYPE "public"."enum_products_blocks_cta_background_color" AS ENUM('none', 'light', 'dark', 'primary', 'secondary');
   CREATE TYPE "public"."enum_products_blocks_archive_populate_by" AS ENUM('collection', 'selection');
-  CREATE TYPE "public"."enum_products_blocks_archive_relation_to" AS ENUM('posts', 'pages', 'archive-items', 'people', 'places', 'museum-collections', 'custom-items');
+  CREATE TYPE "public"."enum_products_blocks_archive_relation_to" AS ENUM('posts', 'pages', 'archive-items', 'people', 'places', 'custom-items');
   CREATE TYPE "public"."enum_products_blocks_archive_layout" AS ENUM('grid', 'list', 'cards', 'carousel');
   CREATE TYPE "public"."enum_products_blocks_archive_columns" AS ENUM('2', '3', '4');
   CREATE TYPE "public"."enum_products_blocks_form_style" AS ENUM('default', 'card', 'inline', 'fullWidth');
@@ -544,7 +544,7 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   CREATE TYPE "public"."enum__products_v_blocks_cta_style" AS ENUM('standard', 'banner', 'card', 'inline');
   CREATE TYPE "public"."enum__products_v_blocks_cta_background_color" AS ENUM('none', 'light', 'dark', 'primary', 'secondary');
   CREATE TYPE "public"."enum__products_v_blocks_archive_populate_by" AS ENUM('collection', 'selection');
-  CREATE TYPE "public"."enum__products_v_blocks_archive_relation_to" AS ENUM('posts', 'pages', 'archive-items', 'people', 'places', 'museum-collections', 'custom-items');
+  CREATE TYPE "public"."enum__products_v_blocks_archive_relation_to" AS ENUM('posts', 'pages', 'archive-items', 'people', 'places', 'custom-items');
   CREATE TYPE "public"."enum__products_v_blocks_archive_layout" AS ENUM('grid', 'list', 'cards', 'carousel');
   CREATE TYPE "public"."enum__products_v_blocks_archive_columns" AS ENUM('2', '3', '4');
   CREATE TYPE "public"."enum__products_v_blocks_form_style" AS ENUM('default', 'card', 'inline', 'fullWidth');
@@ -606,7 +606,7 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   CREATE TYPE "public"."enum_custom_items_blocks_timeline_sort_order" AS ENUM('chronological', 'reverse', 'manual');
   CREATE TYPE "public"."enum_custom_items_blocks_timeline_background_color" AS ENUM('transparent', 'light', 'dark', 'primary');
   CREATE TYPE "public"."enum_custom_items_blocks_archive_populate_by" AS ENUM('collection', 'selection');
-  CREATE TYPE "public"."enum_custom_items_blocks_archive_relation_to" AS ENUM('posts', 'pages', 'archive-items', 'people', 'places', 'museum-collections', 'custom-items');
+  CREATE TYPE "public"."enum_custom_items_blocks_archive_relation_to" AS ENUM('posts', 'pages', 'archive-items', 'people', 'places', 'custom-items');
   CREATE TYPE "public"."enum_custom_items_blocks_archive_layout" AS ENUM('grid', 'list', 'cards', 'carousel');
   CREATE TYPE "public"."enum_custom_items_blocks_archive_columns" AS ENUM('2', '3', '4');
   CREATE TYPE "public"."enum_custom_items_blocks_form_style" AS ENUM('default', 'card', 'inline', 'fullWidth');
@@ -646,7 +646,7 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   CREATE TYPE "public"."enum__custom_items_v_blocks_timeline_sort_order" AS ENUM('chronological', 'reverse', 'manual');
   CREATE TYPE "public"."enum__custom_items_v_blocks_timeline_background_color" AS ENUM('transparent', 'light', 'dark', 'primary');
   CREATE TYPE "public"."enum__custom_items_v_blocks_archive_populate_by" AS ENUM('collection', 'selection');
-  CREATE TYPE "public"."enum__custom_items_v_blocks_archive_relation_to" AS ENUM('posts', 'pages', 'archive-items', 'people', 'places', 'museum-collections', 'custom-items');
+  CREATE TYPE "public"."enum__custom_items_v_blocks_archive_relation_to" AS ENUM('posts', 'pages', 'archive-items', 'people', 'places', 'custom-items');
   CREATE TYPE "public"."enum__custom_items_v_blocks_archive_layout" AS ENUM('grid', 'list', 'cards', 'carousel');
   CREATE TYPE "public"."enum__custom_items_v_blocks_archive_columns" AS ENUM('2', '3', '4');
   CREATE TYPE "public"."enum__custom_items_v_blocks_form_style" AS ENUM('default', 'card', 'inline', 'fullWidth');
@@ -1274,6 +1274,7 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	"parent_id" integer NOT NULL,
   	"path" varchar NOT NULL,
   	"categories_id" integer,
+  	"tags_id" integer,
   	"posts_id" integer,
   	"pages_id" integer,
   	"archive_items_id" integer,
@@ -1784,6 +1785,7 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	"parent_id" integer NOT NULL,
   	"path" varchar NOT NULL,
   	"categories_id" integer,
+  	"tags_id" integer,
   	"posts_id" integer,
   	"pages_id" integer,
   	"archive_items_id" integer,
@@ -2243,13 +2245,13 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	"parent_id" integer NOT NULL,
   	"path" varchar NOT NULL,
   	"categories_id" integer,
+  	"tags_id" integer,
   	"posts_id" integer,
   	"pages_id" integer,
   	"archive_items_id" integer,
   	"people_id" integer,
   	"places_id" integer,
-  	"custom_items_id" integer,
-  	"tags_id" integer
+  	"custom_items_id" integer
   );
   
   CREATE TABLE "_posts_v_blocks_hero_links" (
@@ -2743,13 +2745,13 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	"parent_id" integer NOT NULL,
   	"path" varchar NOT NULL,
   	"categories_id" integer,
+  	"tags_id" integer,
   	"posts_id" integer,
   	"pages_id" integer,
   	"archive_items_id" integer,
   	"people_id" integer,
   	"places_id" integer,
-  	"custom_items_id" integer,
-  	"tags_id" integer
+  	"custom_items_id" integer
   );
   
   CREATE TABLE "categories_breadcrumbs" (
@@ -7277,13 +7279,13 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	"parent_id" integer NOT NULL,
   	"path" varchar NOT NULL,
   	"categories_id" integer,
+  	"tags_id" integer,
   	"posts_id" integer,
   	"pages_id" integer,
   	"archive_items_id" integer,
   	"people_id" integer,
   	"places_id" integer,
-  	"custom_items_id" integer,
-  	"tags_id" integer
+  	"custom_items_id" integer
   );
   
   CREATE TABLE "_custom_items_v_blocks_hero_links" (
@@ -7787,13 +7789,13 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	"parent_id" integer NOT NULL,
   	"path" varchar NOT NULL,
   	"categories_id" integer,
+  	"tags_id" integer,
   	"posts_id" integer,
   	"pages_id" integer,
   	"archive_items_id" integer,
   	"people_id" integer,
   	"places_id" integer,
-  	"custom_items_id" integer,
-  	"tags_id" integer
+  	"custom_items_id" integer
   );
   
   CREATE TABLE "forms_blocks_checkbox" (
@@ -8290,6 +8292,7 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   ALTER TABLE "pages" ADD CONSTRAINT "pages_meta_image_id_media_id_fk" FOREIGN KEY ("meta_image_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
   ALTER TABLE "pages_rels" ADD CONSTRAINT "pages_rels_parent_fk" FOREIGN KEY ("parent_id") REFERENCES "public"."pages"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "pages_rels" ADD CONSTRAINT "pages_rels_categories_fk" FOREIGN KEY ("categories_id") REFERENCES "public"."categories"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "pages_rels" ADD CONSTRAINT "pages_rels_tags_fk" FOREIGN KEY ("tags_id") REFERENCES "public"."tags"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "pages_rels" ADD CONSTRAINT "pages_rels_posts_fk" FOREIGN KEY ("posts_id") REFERENCES "public"."posts"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "pages_rels" ADD CONSTRAINT "pages_rels_pages_fk" FOREIGN KEY ("pages_id") REFERENCES "public"."pages"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "pages_rels" ADD CONSTRAINT "pages_rels_archive_items_fk" FOREIGN KEY ("archive_items_id") REFERENCES "public"."archive_items"("id") ON DELETE cascade ON UPDATE no action;
@@ -8360,6 +8363,7 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   ALTER TABLE "_pages_v" ADD CONSTRAINT "_pages_v_version_meta_image_id_media_id_fk" FOREIGN KEY ("version_meta_image_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
   ALTER TABLE "_pages_v_rels" ADD CONSTRAINT "_pages_v_rels_parent_fk" FOREIGN KEY ("parent_id") REFERENCES "public"."_pages_v"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "_pages_v_rels" ADD CONSTRAINT "_pages_v_rels_categories_fk" FOREIGN KEY ("categories_id") REFERENCES "public"."categories"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "_pages_v_rels" ADD CONSTRAINT "_pages_v_rels_tags_fk" FOREIGN KEY ("tags_id") REFERENCES "public"."tags"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "_pages_v_rels" ADD CONSTRAINT "_pages_v_rels_posts_fk" FOREIGN KEY ("posts_id") REFERENCES "public"."posts"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "_pages_v_rels" ADD CONSTRAINT "_pages_v_rels_pages_fk" FOREIGN KEY ("pages_id") REFERENCES "public"."pages"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "_pages_v_rels" ADD CONSTRAINT "_pages_v_rels_archive_items_fk" FOREIGN KEY ("archive_items_id") REFERENCES "public"."archive_items"("id") ON DELETE cascade ON UPDATE no action;
@@ -8428,13 +8432,13 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   ALTER TABLE "posts" ADD CONSTRAINT "posts_meta_image_id_media_id_fk" FOREIGN KEY ("meta_image_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
   ALTER TABLE "posts_rels" ADD CONSTRAINT "posts_rels_parent_fk" FOREIGN KEY ("parent_id") REFERENCES "public"."posts"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "posts_rels" ADD CONSTRAINT "posts_rels_categories_fk" FOREIGN KEY ("categories_id") REFERENCES "public"."categories"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "posts_rels" ADD CONSTRAINT "posts_rels_tags_fk" FOREIGN KEY ("tags_id") REFERENCES "public"."tags"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "posts_rels" ADD CONSTRAINT "posts_rels_posts_fk" FOREIGN KEY ("posts_id") REFERENCES "public"."posts"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "posts_rels" ADD CONSTRAINT "posts_rels_pages_fk" FOREIGN KEY ("pages_id") REFERENCES "public"."pages"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "posts_rels" ADD CONSTRAINT "posts_rels_archive_items_fk" FOREIGN KEY ("archive_items_id") REFERENCES "public"."archive_items"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "posts_rels" ADD CONSTRAINT "posts_rels_people_fk" FOREIGN KEY ("people_id") REFERENCES "public"."people"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "posts_rels" ADD CONSTRAINT "posts_rels_places_fk" FOREIGN KEY ("places_id") REFERENCES "public"."places"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "posts_rels" ADD CONSTRAINT "posts_rels_custom_items_fk" FOREIGN KEY ("custom_items_id") REFERENCES "public"."custom_items"("id") ON DELETE cascade ON UPDATE no action;
-  ALTER TABLE "posts_rels" ADD CONSTRAINT "posts_rels_tags_fk" FOREIGN KEY ("tags_id") REFERENCES "public"."tags"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "_posts_v_blocks_hero_links" ADD CONSTRAINT "_posts_v_blocks_hero_links_page_id_pages_id_fk" FOREIGN KEY ("page_id") REFERENCES "public"."pages"("id") ON DELETE set null ON UPDATE no action;
   ALTER TABLE "_posts_v_blocks_hero_links" ADD CONSTRAINT "_posts_v_blocks_hero_links_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."_posts_v_blocks_hero"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "_posts_v_blocks_hero" ADD CONSTRAINT "_posts_v_blocks_hero_image_id_media_id_fk" FOREIGN KEY ("image_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
@@ -8498,13 +8502,13 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   ALTER TABLE "_posts_v" ADD CONSTRAINT "_posts_v_version_meta_image_id_media_id_fk" FOREIGN KEY ("version_meta_image_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
   ALTER TABLE "_posts_v_rels" ADD CONSTRAINT "_posts_v_rels_parent_fk" FOREIGN KEY ("parent_id") REFERENCES "public"."_posts_v"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "_posts_v_rels" ADD CONSTRAINT "_posts_v_rels_categories_fk" FOREIGN KEY ("categories_id") REFERENCES "public"."categories"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "_posts_v_rels" ADD CONSTRAINT "_posts_v_rels_tags_fk" FOREIGN KEY ("tags_id") REFERENCES "public"."tags"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "_posts_v_rels" ADD CONSTRAINT "_posts_v_rels_posts_fk" FOREIGN KEY ("posts_id") REFERENCES "public"."posts"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "_posts_v_rels" ADD CONSTRAINT "_posts_v_rels_pages_fk" FOREIGN KEY ("pages_id") REFERENCES "public"."pages"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "_posts_v_rels" ADD CONSTRAINT "_posts_v_rels_archive_items_fk" FOREIGN KEY ("archive_items_id") REFERENCES "public"."archive_items"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "_posts_v_rels" ADD CONSTRAINT "_posts_v_rels_people_fk" FOREIGN KEY ("people_id") REFERENCES "public"."people"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "_posts_v_rels" ADD CONSTRAINT "_posts_v_rels_places_fk" FOREIGN KEY ("places_id") REFERENCES "public"."places"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "_posts_v_rels" ADD CONSTRAINT "_posts_v_rels_custom_items_fk" FOREIGN KEY ("custom_items_id") REFERENCES "public"."custom_items"("id") ON DELETE cascade ON UPDATE no action;
-  ALTER TABLE "_posts_v_rels" ADD CONSTRAINT "_posts_v_rels_tags_fk" FOREIGN KEY ("tags_id") REFERENCES "public"."tags"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "categories_breadcrumbs" ADD CONSTRAINT "categories_breadcrumbs_doc_id_categories_id_fk" FOREIGN KEY ("doc_id") REFERENCES "public"."categories"("id") ON DELETE set null ON UPDATE no action;
   ALTER TABLE "categories_breadcrumbs" ADD CONSTRAINT "categories_breadcrumbs_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."categories"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "categories" ADD CONSTRAINT "categories_parent_id_categories_id_fk" FOREIGN KEY ("parent_id") REFERENCES "public"."categories"("id") ON DELETE set null ON UPDATE no action;
@@ -9179,13 +9183,13 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   ALTER TABLE "custom_items" ADD CONSTRAINT "custom_items_meta_image_id_media_id_fk" FOREIGN KEY ("meta_image_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
   ALTER TABLE "custom_items_rels" ADD CONSTRAINT "custom_items_rels_parent_fk" FOREIGN KEY ("parent_id") REFERENCES "public"."custom_items"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "custom_items_rels" ADD CONSTRAINT "custom_items_rels_categories_fk" FOREIGN KEY ("categories_id") REFERENCES "public"."categories"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "custom_items_rels" ADD CONSTRAINT "custom_items_rels_tags_fk" FOREIGN KEY ("tags_id") REFERENCES "public"."tags"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "custom_items_rels" ADD CONSTRAINT "custom_items_rels_posts_fk" FOREIGN KEY ("posts_id") REFERENCES "public"."posts"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "custom_items_rels" ADD CONSTRAINT "custom_items_rels_pages_fk" FOREIGN KEY ("pages_id") REFERENCES "public"."pages"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "custom_items_rels" ADD CONSTRAINT "custom_items_rels_archive_items_fk" FOREIGN KEY ("archive_items_id") REFERENCES "public"."archive_items"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "custom_items_rels" ADD CONSTRAINT "custom_items_rels_people_fk" FOREIGN KEY ("people_id") REFERENCES "public"."people"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "custom_items_rels" ADD CONSTRAINT "custom_items_rels_places_fk" FOREIGN KEY ("places_id") REFERENCES "public"."places"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "custom_items_rels" ADD CONSTRAINT "custom_items_rels_custom_items_fk" FOREIGN KEY ("custom_items_id") REFERENCES "public"."custom_items"("id") ON DELETE cascade ON UPDATE no action;
-  ALTER TABLE "custom_items_rels" ADD CONSTRAINT "custom_items_rels_tags_fk" FOREIGN KEY ("tags_id") REFERENCES "public"."tags"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "_custom_items_v_blocks_hero_links" ADD CONSTRAINT "_custom_items_v_blocks_hero_links_page_id_pages_id_fk" FOREIGN KEY ("page_id") REFERENCES "public"."pages"("id") ON DELETE set null ON UPDATE no action;
   ALTER TABLE "_custom_items_v_blocks_hero_links" ADD CONSTRAINT "_custom_items_v_blocks_hero_links_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."_custom_items_v_blocks_hero"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "_custom_items_v_blocks_hero" ADD CONSTRAINT "_custom_items_v_blocks_hero_image_id_media_id_fk" FOREIGN KEY ("image_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
@@ -9252,13 +9256,13 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   ALTER TABLE "_custom_items_v" ADD CONSTRAINT "_custom_items_v_version_meta_image_id_media_id_fk" FOREIGN KEY ("version_meta_image_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
   ALTER TABLE "_custom_items_v_rels" ADD CONSTRAINT "_custom_items_v_rels_parent_fk" FOREIGN KEY ("parent_id") REFERENCES "public"."_custom_items_v"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "_custom_items_v_rels" ADD CONSTRAINT "_custom_items_v_rels_categories_fk" FOREIGN KEY ("categories_id") REFERENCES "public"."categories"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "_custom_items_v_rels" ADD CONSTRAINT "_custom_items_v_rels_tags_fk" FOREIGN KEY ("tags_id") REFERENCES "public"."tags"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "_custom_items_v_rels" ADD CONSTRAINT "_custom_items_v_rels_posts_fk" FOREIGN KEY ("posts_id") REFERENCES "public"."posts"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "_custom_items_v_rels" ADD CONSTRAINT "_custom_items_v_rels_pages_fk" FOREIGN KEY ("pages_id") REFERENCES "public"."pages"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "_custom_items_v_rels" ADD CONSTRAINT "_custom_items_v_rels_archive_items_fk" FOREIGN KEY ("archive_items_id") REFERENCES "public"."archive_items"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "_custom_items_v_rels" ADD CONSTRAINT "_custom_items_v_rels_people_fk" FOREIGN KEY ("people_id") REFERENCES "public"."people"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "_custom_items_v_rels" ADD CONSTRAINT "_custom_items_v_rels_places_fk" FOREIGN KEY ("places_id") REFERENCES "public"."places"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "_custom_items_v_rels" ADD CONSTRAINT "_custom_items_v_rels_custom_items_fk" FOREIGN KEY ("custom_items_id") REFERENCES "public"."custom_items"("id") ON DELETE cascade ON UPDATE no action;
-  ALTER TABLE "_custom_items_v_rels" ADD CONSTRAINT "_custom_items_v_rels_tags_fk" FOREIGN KEY ("tags_id") REFERENCES "public"."tags"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "forms_blocks_checkbox" ADD CONSTRAINT "forms_blocks_checkbox_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."forms"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "forms_blocks_country" ADD CONSTRAINT "forms_blocks_country_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."forms"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "forms_blocks_email" ADD CONSTRAINT "forms_blocks_email_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."forms"("id") ON DELETE cascade ON UPDATE no action;
@@ -9478,6 +9482,7 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   CREATE INDEX "pages_rels_parent_idx" ON "pages_rels" USING btree ("parent_id");
   CREATE INDEX "pages_rels_path_idx" ON "pages_rels" USING btree ("path");
   CREATE INDEX "pages_rels_categories_id_idx" ON "pages_rels" USING btree ("categories_id");
+  CREATE INDEX "pages_rels_tags_id_idx" ON "pages_rels" USING btree ("tags_id");
   CREATE INDEX "pages_rels_posts_id_idx" ON "pages_rels" USING btree ("posts_id");
   CREATE INDEX "pages_rels_pages_id_idx" ON "pages_rels" USING btree ("pages_id");
   CREATE INDEX "pages_rels_archive_items_id_idx" ON "pages_rels" USING btree ("archive_items_id");
@@ -9614,6 +9619,7 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   CREATE INDEX "_pages_v_rels_parent_idx" ON "_pages_v_rels" USING btree ("parent_id");
   CREATE INDEX "_pages_v_rels_path_idx" ON "_pages_v_rels" USING btree ("path");
   CREATE INDEX "_pages_v_rels_categories_id_idx" ON "_pages_v_rels" USING btree ("categories_id");
+  CREATE INDEX "_pages_v_rels_tags_id_idx" ON "_pages_v_rels" USING btree ("tags_id");
   CREATE INDEX "_pages_v_rels_posts_id_idx" ON "_pages_v_rels" USING btree ("posts_id");
   CREATE INDEX "_pages_v_rels_pages_id_idx" ON "_pages_v_rels" USING btree ("pages_id");
   CREATE INDEX "_pages_v_rels_archive_items_id_idx" ON "_pages_v_rels" USING btree ("archive_items_id");
@@ -9743,13 +9749,13 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   CREATE INDEX "posts_rels_parent_idx" ON "posts_rels" USING btree ("parent_id");
   CREATE INDEX "posts_rels_path_idx" ON "posts_rels" USING btree ("path");
   CREATE INDEX "posts_rels_categories_id_idx" ON "posts_rels" USING btree ("categories_id");
+  CREATE INDEX "posts_rels_tags_id_idx" ON "posts_rels" USING btree ("tags_id");
   CREATE INDEX "posts_rels_posts_id_idx" ON "posts_rels" USING btree ("posts_id");
   CREATE INDEX "posts_rels_pages_id_idx" ON "posts_rels" USING btree ("pages_id");
   CREATE INDEX "posts_rels_archive_items_id_idx" ON "posts_rels" USING btree ("archive_items_id");
   CREATE INDEX "posts_rels_people_id_idx" ON "posts_rels" USING btree ("people_id");
   CREATE INDEX "posts_rels_places_id_idx" ON "posts_rels" USING btree ("places_id");
   CREATE INDEX "posts_rels_custom_items_id_idx" ON "posts_rels" USING btree ("custom_items_id");
-  CREATE INDEX "posts_rels_tags_id_idx" ON "posts_rels" USING btree ("tags_id");
   CREATE INDEX "_posts_v_blocks_hero_links_order_idx" ON "_posts_v_blocks_hero_links" USING btree ("_order");
   CREATE INDEX "_posts_v_blocks_hero_links_parent_id_idx" ON "_posts_v_blocks_hero_links" USING btree ("_parent_id");
   CREATE INDEX "_posts_v_blocks_hero_links_page_idx" ON "_posts_v_blocks_hero_links" USING btree ("page_id");
@@ -9878,13 +9884,13 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   CREATE INDEX "_posts_v_rels_parent_idx" ON "_posts_v_rels" USING btree ("parent_id");
   CREATE INDEX "_posts_v_rels_path_idx" ON "_posts_v_rels" USING btree ("path");
   CREATE INDEX "_posts_v_rels_categories_id_idx" ON "_posts_v_rels" USING btree ("categories_id");
+  CREATE INDEX "_posts_v_rels_tags_id_idx" ON "_posts_v_rels" USING btree ("tags_id");
   CREATE INDEX "_posts_v_rels_posts_id_idx" ON "_posts_v_rels" USING btree ("posts_id");
   CREATE INDEX "_posts_v_rels_pages_id_idx" ON "_posts_v_rels" USING btree ("pages_id");
   CREATE INDEX "_posts_v_rels_archive_items_id_idx" ON "_posts_v_rels" USING btree ("archive_items_id");
   CREATE INDEX "_posts_v_rels_people_id_idx" ON "_posts_v_rels" USING btree ("people_id");
   CREATE INDEX "_posts_v_rels_places_id_idx" ON "_posts_v_rels" USING btree ("places_id");
   CREATE INDEX "_posts_v_rels_custom_items_id_idx" ON "_posts_v_rels" USING btree ("custom_items_id");
-  CREATE INDEX "_posts_v_rels_tags_id_idx" ON "_posts_v_rels" USING btree ("tags_id");
   CREATE INDEX "categories_breadcrumbs_order_idx" ON "categories_breadcrumbs" USING btree ("_order");
   CREATE INDEX "categories_breadcrumbs_parent_id_idx" ON "categories_breadcrumbs" USING btree ("_parent_id");
   CREATE INDEX "categories_breadcrumbs_doc_idx" ON "categories_breadcrumbs" USING btree ("doc_id");
@@ -11135,13 +11141,13 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   CREATE INDEX "custom_items_rels_parent_idx" ON "custom_items_rels" USING btree ("parent_id");
   CREATE INDEX "custom_items_rels_path_idx" ON "custom_items_rels" USING btree ("path");
   CREATE INDEX "custom_items_rels_categories_id_idx" ON "custom_items_rels" USING btree ("categories_id");
+  CREATE INDEX "custom_items_rels_tags_id_idx" ON "custom_items_rels" USING btree ("tags_id");
   CREATE INDEX "custom_items_rels_posts_id_idx" ON "custom_items_rels" USING btree ("posts_id");
   CREATE INDEX "custom_items_rels_pages_id_idx" ON "custom_items_rels" USING btree ("pages_id");
   CREATE INDEX "custom_items_rels_archive_items_id_idx" ON "custom_items_rels" USING btree ("archive_items_id");
   CREATE INDEX "custom_items_rels_people_id_idx" ON "custom_items_rels" USING btree ("people_id");
   CREATE INDEX "custom_items_rels_places_id_idx" ON "custom_items_rels" USING btree ("places_id");
   CREATE INDEX "custom_items_rels_custom_items_id_idx" ON "custom_items_rels" USING btree ("custom_items_id");
-  CREATE INDEX "custom_items_rels_tags_id_idx" ON "custom_items_rels" USING btree ("tags_id");
   CREATE INDEX "_custom_items_v_blocks_hero_links_order_idx" ON "_custom_items_v_blocks_hero_links" USING btree ("_order");
   CREATE INDEX "_custom_items_v_blocks_hero_links_parent_id_idx" ON "_custom_items_v_blocks_hero_links" USING btree ("_parent_id");
   CREATE INDEX "_custom_items_v_blocks_hero_links_page_idx" ON "_custom_items_v_blocks_hero_links" USING btree ("page_id");
@@ -11274,13 +11280,13 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   CREATE INDEX "_custom_items_v_rels_parent_idx" ON "_custom_items_v_rels" USING btree ("parent_id");
   CREATE INDEX "_custom_items_v_rels_path_idx" ON "_custom_items_v_rels" USING btree ("path");
   CREATE INDEX "_custom_items_v_rels_categories_id_idx" ON "_custom_items_v_rels" USING btree ("categories_id");
+  CREATE INDEX "_custom_items_v_rels_tags_id_idx" ON "_custom_items_v_rels" USING btree ("tags_id");
   CREATE INDEX "_custom_items_v_rels_posts_id_idx" ON "_custom_items_v_rels" USING btree ("posts_id");
   CREATE INDEX "_custom_items_v_rels_pages_id_idx" ON "_custom_items_v_rels" USING btree ("pages_id");
   CREATE INDEX "_custom_items_v_rels_archive_items_id_idx" ON "_custom_items_v_rels" USING btree ("archive_items_id");
   CREATE INDEX "_custom_items_v_rels_people_id_idx" ON "_custom_items_v_rels" USING btree ("people_id");
   CREATE INDEX "_custom_items_v_rels_places_id_idx" ON "_custom_items_v_rels" USING btree ("places_id");
   CREATE INDEX "_custom_items_v_rels_custom_items_id_idx" ON "_custom_items_v_rels" USING btree ("custom_items_id");
-  CREATE INDEX "_custom_items_v_rels_tags_id_idx" ON "_custom_items_v_rels" USING btree ("tags_id");
   CREATE INDEX "forms_blocks_checkbox_order_idx" ON "forms_blocks_checkbox" USING btree ("_order");
   CREATE INDEX "forms_blocks_checkbox_parent_id_idx" ON "forms_blocks_checkbox" USING btree ("_parent_id");
   CREATE INDEX "forms_blocks_checkbox_path_idx" ON "forms_blocks_checkbox" USING btree ("_path");

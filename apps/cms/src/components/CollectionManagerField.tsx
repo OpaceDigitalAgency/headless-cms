@@ -70,17 +70,18 @@ export const CollectionManagerField: React.FC<CollectionManagerFieldProps> = ({ 
         })
         if (response.ok) {
           const data = await response.json()
-          console.log('Collection manager data:', data)
+          console.log('[CollectionManagerField] API response:', data)
+          console.log('[CollectionManagerField] Collections count:', data.collections?.length)
           setCollections(Array.isArray(data.collections) ? data.collections : [])
         } else {
           const payloadError = await response.json().catch(() => null)
           const message = payloadError?.error || `Failed to load collections (status ${response.status})`
-          console.error('Collection manager error:', message, response.status)
+          console.error('[CollectionManagerField] API error:', message, response.status)
           setErrorMessage(message)
           setCollections([])
         }
       } catch (error) {
-        console.error('Failed to load collections for manager:', error)
+        console.error('[CollectionManagerField] Fetch error:', error)
         setCollections([])
         setErrorMessage(`Failed to load collections: ${error instanceof Error ? error.message : 'Unknown error'}`)
       }
@@ -91,13 +92,18 @@ export const CollectionManagerField: React.FC<CollectionManagerFieldProps> = ({ 
 
   useEffect(() => {
     if (initializedRef.current) return
+    console.log('[CollectionManagerField] Initializing with:', { collectionsCount: collections.length, valueType: typeof value, valueLength: Array.isArray(value) ? value.length : 'N/A' })
     if (!collections.length) {
+      console.log('[CollectionManagerField] No collections loaded yet')
       setIsLoading(false)
       initializedRef.current = true
       return
     }
-    const saved = Array.isArray(value) ? value : []
+    // If value is null/undefined/empty, treat as first-time setup
+    const saved = Array.isArray(value) && value.length > 0 ? value : []
+    console.log('[CollectionManagerField] Saved settings count:', saved.length)
     const normalized = normalizeSettings(collections, saved)
+    console.log('[CollectionManagerField] Normalized items count:', normalized.length)
     setItems(normalized)
     setIsLoading(false)
     initializedRef.current = true

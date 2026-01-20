@@ -6705,6 +6705,12 @@
           "primaryKey": false,
           "notNull": false
         },
+        "tags_id": {
+          "name": "tags_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
         "posts_id": {
           "name": "posts_id",
           "type": "integer",
@@ -6793,6 +6799,21 @@
           "columns": [
             {
               "expression": "categories_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "pages_rels_tags_id_idx": {
+          "name": "pages_rels_tags_id_idx",
+          "columns": [
+            {
+              "expression": "tags_id",
               "isExpression": false,
               "asc": true,
               "nulls": "last"
@@ -6914,6 +6935,19 @@
           "tableTo": "categories",
           "columnsFrom": [
             "categories_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "pages_rels_tags_fk": {
+          "name": "pages_rels_tags_fk",
+          "tableFrom": "pages_rels",
+          "tableTo": "tags",
+          "columnsFrom": [
+            "tags_id"
           ],
           "columnsTo": [
             "id"
@@ -12706,6 +12740,12 @@
           "primaryKey": false,
           "notNull": false
         },
+        "tags_id": {
+          "name": "tags_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
         "posts_id": {
           "name": "posts_id",
           "type": "integer",
@@ -12794,6 +12834,21 @@
           "columns": [
             {
               "expression": "categories_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "_pages_v_rels_tags_id_idx": {
+          "name": "_pages_v_rels_tags_id_idx",
+          "columns": [
+            {
+              "expression": "tags_id",
               "isExpression": false,
               "asc": true,
               "nulls": "last"
@@ -12915,6 +12970,19 @@
           "tableTo": "categories",
           "columnsFrom": [
             "categories_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "_pages_v_rels_tags_fk": {
+          "name": "_pages_v_rels_tags_fk",
+          "tableFrom": "_pages_v_rels",
+          "tableTo": "tags",
+          "columnsFrom": [
+            "tags_id"
           ],
           "columnsTo": [
             "id"
@@ -18269,6 +18337,12 @@
           "primaryKey": false,
           "notNull": false
         },
+        "tags_id": {
+          "name": "tags_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
         "posts_id": {
           "name": "posts_id",
           "type": "integer",
@@ -18301,12 +18375,6 @@
         },
         "custom_items_id": {
           "name": "custom_items_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "tags_id": {
-          "name": "tags_id",
           "type": "integer",
           "primaryKey": false,
           "notNull": false
@@ -18363,6 +18431,21 @@
           "columns": [
             {
               "expression": "categories_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "posts_rels_tags_id_idx": {
+          "name": "posts_rels_tags_id_idx",
+          "columns": [
+            {
+              "expression": "tags_id",
               "isExpression": false,
               "asc": true,
               "nulls": "last"
@@ -18462,21 +18545,6 @@
           "concurrently": false,
           "method": "btree",
           "with": {}
-        },
-        "posts_rels_tags_id_idx": {
-          "name": "posts_rels_tags_id_idx",
-          "columns": [
-            {
-              "expression": "tags_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
         }
       },
       "foreignKeys": {
@@ -18499,6 +18567,19 @@
           "tableTo": "categories",
           "columnsFrom": [
             "categories_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "posts_rels_tags_fk": {
+          "name": "posts_rels_tags_fk",
+          "tableFrom": "posts_rels",
+          "tableTo": "tags",
+          "columnsFrom": [
+            "tags_id"
           ],
           "columnsTo": [
             "id"
@@ -18577,19 +18658,6 @@
           "tableTo": "custom_items",
           "columnsFrom": [
             "custom_items_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        },
-        "posts_rels_tags_fk": {
-          "name": "posts_rels_tags_fk",
-          "tableFrom": "posts_rels",
-          "tableTo": "tags",
-          "columnsFrom": [
-            "tags_id"
           ],
           "columnsTo": [
             "id"
@@ -24194,6 +24262,12 @@
           "primaryKey": false,
           "notNull": false
         },
+        "tags_id": {
+          "name": "tags_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
         "posts_id": {
           "name": "posts_id",
           "type": "integer",
@@ -24226,12 +24300,6 @@
         },
         "custom_items_id": {
           "name": "custom_items_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "tags_id": {
-          "name": "tags_id",
           "type": "integer",
           "primaryKey": false,
           "notNull": false
@@ -24288,6 +24356,21 @@
           "columns": [
             {
               "expression": "categories_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "_posts_v_rels_tags_id_idx": {
+          "name": "_posts_v_rels_tags_id_idx",
+          "columns": [
+            {
+              "expression": "tags_id",
               "isExpression": false,
               "asc": true,
               "nulls": "last"
@@ -24387,21 +24470,6 @@
           "concurrently": false,
           "method": "btree",
           "with": {}
-        },
-        "_posts_v_rels_tags_id_idx": {
-          "name": "_posts_v_rels_tags_id_idx",
-          "columns": [
-            {
-              "expression": "tags_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
         }
       },
       "foreignKeys": {
@@ -24424,6 +24492,19 @@
           "tableTo": "categories",
           "columnsFrom": [
             "categories_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "_posts_v_rels_tags_fk": {
+          "name": "_posts_v_rels_tags_fk",
+          "tableFrom": "_posts_v_rels",
+          "tableTo": "tags",
+          "columnsFrom": [
+            "tags_id"
           ],
           "columnsTo": [
             "id"
@@ -24502,19 +24583,6 @@
           "tableTo": "custom_items",
           "columnsFrom": [
             "custom_items_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        },
-        "_posts_v_rels_tags_fk": {
-          "name": "_posts_v_rels_tags_fk",
-          "tableFrom": "_posts_v_rels",
-          "tableTo": "tags",
-          "columnsFrom": [
-            "tags_id"
           ],
           "columnsTo": [
             "id"
@@ -79258,6 +79326,12 @@
           "primaryKey": false,
           "notNull": false
         },
+        "tags_id": {
+          "name": "tags_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
         "posts_id": {
           "name": "posts_id",
           "type": "integer",
@@ -79290,12 +79364,6 @@
         },
         "custom_items_id": {
           "name": "custom_items_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "tags_id": {
-          "name": "tags_id",
           "type": "integer",
           "primaryKey": false,
           "notNull": false
@@ -79352,6 +79420,21 @@
           "columns": [
             {
               "expression": "categories_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "custom_items_rels_tags_id_idx": {
+          "name": "custom_items_rels_tags_id_idx",
+          "columns": [
+            {
+              "expression": "tags_id",
               "isExpression": false,
               "asc": true,
               "nulls": "last"
@@ -79451,21 +79534,6 @@
           "concurrently": false,
           "method": "btree",
           "with": {}
-        },
-        "custom_items_rels_tags_id_idx": {
-          "name": "custom_items_rels_tags_id_idx",
-          "columns": [
-            {
-              "expression": "tags_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
         }
       },
       "foreignKeys": {
@@ -79488,6 +79556,19 @@
           "tableTo": "categories",
           "columnsFrom": [
             "categories_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "custom_items_rels_tags_fk": {
+          "name": "custom_items_rels_tags_fk",
+          "tableFrom": "custom_items_rels",
+          "tableTo": "tags",
+          "columnsFrom": [
+            "tags_id"
           ],
           "columnsTo": [
             "id"
@@ -79566,19 +79647,6 @@
           "tableTo": "custom_items",
           "columnsFrom": [
             "custom_items_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        },
-        "custom_items_rels_tags_fk": {
-          "name": "custom_items_rels_tags_fk",
-          "tableFrom": "custom_items_rels",
-          "tableTo": "tags",
-          "columnsFrom": [
-            "tags_id"
           ],
           "columnsTo": [
             "id"
@@ -85345,6 +85413,12 @@
           "primaryKey": false,
           "notNull": false
         },
+        "tags_id": {
+          "name": "tags_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
         "posts_id": {
           "name": "posts_id",
           "type": "integer",
@@ -85377,12 +85451,6 @@
         },
         "custom_items_id": {
           "name": "custom_items_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "tags_id": {
-          "name": "tags_id",
           "type": "integer",
           "primaryKey": false,
           "notNull": false
@@ -85439,6 +85507,21 @@
           "columns": [
             {
               "expression": "categories_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "_custom_items_v_rels_tags_id_idx": {
+          "name": "_custom_items_v_rels_tags_id_idx",
+          "columns": [
+            {
+              "expression": "tags_id",
               "isExpression": false,
               "asc": true,
               "nulls": "last"
@@ -85538,21 +85621,6 @@
           "concurrently": false,
           "method": "btree",
           "with": {}
-        },
-        "_custom_items_v_rels_tags_id_idx": {
-          "name": "_custom_items_v_rels_tags_id_idx",
-          "columns": [
-            {
-              "expression": "tags_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
         }
       },
       "foreignKeys": {
@@ -85575,6 +85643,19 @@
           "tableTo": "categories",
           "columnsFrom": [
             "categories_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "_custom_items_v_rels_tags_fk": {
+          "name": "_custom_items_v_rels_tags_fk",
+          "tableFrom": "_custom_items_v_rels",
+          "tableTo": "tags",
+          "columnsFrom": [
+            "tags_id"
           ],
           "columnsTo": [
             "id"
@@ -85653,19 +85734,6 @@
           "tableTo": "custom_items",
           "columnsFrom": [
             "custom_items_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        },
-        "_custom_items_v_rels_tags_fk": {
-          "name": "_custom_items_v_rels_tags_fk",
-          "tableFrom": "_custom_items_v_rels",
-          "tableTo": "tags",
-          "columnsFrom": [
-            "tags_id"
           ],
           "columnsTo": [
             "id"
@@ -91202,7 +91270,6 @@
         "archive-items",
         "people",
         "places",
-        "museum-collections",
         "custom-items"
       ]
     },
@@ -91631,7 +91698,6 @@
         "archive-items",
         "people",
         "places",
-        "museum-collections",
         "custom-items"
       ]
     },
@@ -92052,7 +92118,6 @@
         "archive-items",
         "people",
         "places",
-        "museum-collections",
         "custom-items"
       ]
     },
@@ -92461,7 +92526,6 @@
         "archive-items",
         "people",
         "places",
-        "museum-collections",
         "custom-items"
       ]
     },
@@ -92843,7 +92907,6 @@
         "archive-items",
         "people",
         "places",
-        "museum-collections",
         "custom-items"
       ]
     },
@@ -93196,7 +93259,6 @@
         "archive-items",
         "people",
         "places",
-        "museum-collections",
         "custom-items"
       ]
     },
@@ -93606,7 +93668,6 @@
         "archive-items",
         "people",
         "places",
-        "museum-collections",
         "custom-items"
       ]
     },
@@ -94044,7 +94105,6 @@
         "archive-items",
         "people",
         "places",
-        "museum-collections",
         "custom-items"
       ]
     },
@@ -94465,7 +94525,6 @@
         "archive-items",
         "people",
         "places",
-        "museum-collections",
         "custom-items"
       ]
     },
@@ -94901,7 +94960,6 @@
         "archive-items",
         "people",
         "places",
-        "museum-collections",
         "custom-items"
       ]
     },
@@ -95297,7 +95355,6 @@
         "archive-items",
         "people",
         "places",
-        "museum-collections",
         "custom-items"
       ]
     },
@@ -95694,7 +95751,6 @@
         "archive-items",
         "people",
         "places",
-        "museum-collections",
         "custom-items"
       ]
     },
@@ -96091,7 +96147,6 @@
         "archive-items",
         "people",
         "places",
-        "museum-collections",
         "custom-items"
       ]
     },
@@ -96472,7 +96527,6 @@
         "archive-items",
         "people",
         "places",
-        "museum-collections",
         "custom-items"
       ]
     },
@@ -97106,7 +97160,6 @@
         "archive-items",
         "people",
         "places",
-        "museum-collections",
         "custom-items"
       ]
     },
@@ -97505,7 +97558,6 @@
         "archive-items",
         "people",
         "places",
-        "museum-collections",
         "custom-items"
       ]
     },
@@ -97689,6 +97741,6 @@
     "tables": {},
     "columns": {}
   },
-  "id": "f98c4011-0194-48e0-a7d5-4b75b6ec78ae",
+  "id": "8e51af97-2bbb-4532-9cad-2dab91eb869e",
   "prevId": "00000000-0000-0000-0000-000000000000"
 }
