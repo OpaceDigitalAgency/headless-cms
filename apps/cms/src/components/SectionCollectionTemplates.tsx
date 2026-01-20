@@ -132,6 +132,12 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
         throw new Error(errorData.message || 'Failed to update navigation settings')
       }
 
+      // Clear navigation cache to force refresh
+      if (typeof window !== 'undefined') {
+        sessionStorage.removeItem('nav-data')
+        sessionStorage.removeItem('nav-cache-time')
+      }
+
       // Update local state
       setVisibilitySettings((prev) => ({
         ...prev,
