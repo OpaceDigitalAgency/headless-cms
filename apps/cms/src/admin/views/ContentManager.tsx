@@ -4,46 +4,46 @@ import type { VisibleEntities } from 'payload'
 import { SectionCollectionTemplates } from '../../components/SectionCollectionTemplates'
 
 /**
- * Collections Management View
+ * Content Manager View
  *
- * Dedicated page for managing collections in the Collections section
- * (Archive Items, Events, People, Places).
+ * Dedicated page for managing content collections - Pages, Posts, Custom Content Types.
+ * Shows collections with seed/hide/view options.
  */
-type CollectionsProps = Omit<DefaultTemplateProps, 'children' | 'visibleEntities'> & {
+type ContentManagerProps = Omit<DefaultTemplateProps, 'children' | 'visibleEntities'> & {
   initPageResult?: {
     visibleEntities?: VisibleEntities
   }
 }
 
-export const Collections: React.FC<CollectionsProps> = (props) => {
+export const ContentManager: React.FC<ContentManagerProps> = (props) => {
   const { initPageResult, ...templateProps } = props
   const visibleEntities = initPageResult?.visibleEntities
 
-  const collectionsContent = (
-    <div className="ra-collections-view" style={{ padding: '24px' }}>
+  const contentManagerContent = (
+    <div className="ra-content-manager-view" style={{ padding: '24px' }}>
       <div style={{ marginBottom: '24px' }}>
         <h1 style={{ fontSize: '28px', fontWeight: 700, marginBottom: '8px', color: '#333' }}>
-          Collections
+          Content
         </h1>
         <p style={{ fontSize: '14px', color: '#666' }}>
-          Manage your collections including archive items, events, people, and places.
+          Manage your content collections including pages, posts, and custom content types.
         </p>
       </div>
 
-      <SectionCollectionTemplates section="Collections" />
+      <SectionCollectionTemplates section="Content" />
     </div>
   )
 
   if (!visibleEntities) {
-    return collectionsContent
+    return contentManagerContent
   }
 
   return (
     <DefaultTemplate {...templateProps} visibleEntities={visibleEntities}>
-      {collectionsContent}
+      {contentManagerContent}
     </DefaultTemplate>
   )
 }
 
-export default Collections
+export default ContentManager
 

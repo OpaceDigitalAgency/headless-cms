@@ -4,46 +4,46 @@ import type { VisibleEntities } from 'payload'
 import { SectionCollectionTemplates } from '../../components/SectionCollectionTemplates'
 
 /**
- * Collections Management View
+ * Taxonomy Manager View
  *
- * Dedicated page for managing collections in the Collections section
- * (Archive Items, Events, People, Places).
+ * Dedicated page for managing taxonomy collections - Categories, Tags.
+ * Shows collections with seed/hide/view options.
  */
-type CollectionsProps = Omit<DefaultTemplateProps, 'children' | 'visibleEntities'> & {
+type TaxonomyManagerProps = Omit<DefaultTemplateProps, 'children' | 'visibleEntities'> & {
   initPageResult?: {
     visibleEntities?: VisibleEntities
   }
 }
 
-export const Collections: React.FC<CollectionsProps> = (props) => {
+export const TaxonomyManager: React.FC<TaxonomyManagerProps> = (props) => {
   const { initPageResult, ...templateProps } = props
   const visibleEntities = initPageResult?.visibleEntities
 
-  const collectionsContent = (
-    <div className="ra-collections-view" style={{ padding: '24px' }}>
+  const taxonomyManagerContent = (
+    <div className="ra-taxonomy-manager-view" style={{ padding: '24px' }}>
       <div style={{ marginBottom: '24px' }}>
         <h1 style={{ fontSize: '28px', fontWeight: 700, marginBottom: '8px', color: '#333' }}>
-          Collections
+          Taxonomy
         </h1>
         <p style={{ fontSize: '14px', color: '#666' }}>
-          Manage your collections including archive items, events, people, and places.
+          Manage your taxonomy collections including categories and tags.
         </p>
       </div>
 
-      <SectionCollectionTemplates section="Collections" />
+      <SectionCollectionTemplates section="Taxonomy" />
     </div>
   )
 
   if (!visibleEntities) {
-    return collectionsContent
+    return taxonomyManagerContent
   }
 
   return (
     <DefaultTemplate {...templateProps} visibleEntities={visibleEntities}>
-      {collectionsContent}
+      {taxonomyManagerContent}
     </DefaultTemplate>
   )
 }
 
-export default Collections
+export default TaxonomyManager
 

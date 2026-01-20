@@ -123,7 +123,7 @@ const FormSubmissionsClient: React.FC = () => {
         </button>
       </div>
 
-      {isLoading && <p className="ra-tool-muted">Loading submissions…</p>}
+      {isLoading && <p className="ra-tool-muted">Loading submissions...</p>}
       {error && <p className="ra-tool-error">{error}</p>}
 
       {!isLoading && (
@@ -142,7 +142,7 @@ const FormSubmissionsClient: React.FC = () => {
                 {(submission.submissionData || [])
                   .slice(0, 2)
                   .map((item) => `${item.field}: ${item.value}`)
-                  .join(' · ') || 'No data'}
+                  .join(' - ') || 'No data'}
               </span>
               <span>
                 <a className="ra-tool-link" href={`/admin/collections/form-submissions/${submission.id}`}>

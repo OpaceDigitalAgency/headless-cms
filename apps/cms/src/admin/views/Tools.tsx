@@ -28,21 +28,21 @@ const toolsConfig = [
         title: 'Publishing Calendar',
         description: 'View and manage scheduled content',
         Icon: CalendarIcon,
-        href: '/admin/collections/posts?sort=-publishedAt',
+        href: '/admin/tools/publishing-calendar',
         color: '#3b82f6',
       },
       {
         title: 'Draft Review',
         description: 'Review all unpublished drafts',
         Icon: EditIcon,
-        href: '/admin/collections/pages?where[_status][equals]=draft',
+        href: '/admin/tools/draft-review',
         color: '#f59e0b',
       },
       {
         title: 'SEO Audit',
         description: 'Check pages missing meta descriptions',
         Icon: SearchIcon,
-        href: '/admin/collections/pages',
+        href: '/admin/tools/seo-audit',
         color: '#10b981',
       },
     ],
@@ -54,21 +54,21 @@ const toolsConfig = [
         title: 'Media Library',
         description: 'Browse and manage all media files',
         Icon: ImageIcon,
-        href: '/admin/collections/media',
+        href: '/admin/tools/media-library',
         color: '#8b5cf6',
       },
       {
         title: 'Unused Media',
         description: 'Find media not used in content',
         Icon: TrashIcon,
-        href: '/admin/collections/media?sort=-createdAt',
+        href: '/admin/tools/unused-media',
         color: '#ef4444',
       },
       {
         title: 'Large Files',
         description: 'Identify large media files',
         Icon: PackageIcon,
-        href: '/admin/collections/media?sort=-filesize',
+        href: '/admin/tools/large-files',
         color: '#06b6d4',
       },
     ],
@@ -87,21 +87,21 @@ const toolsConfig = [
         title: 'Redirects',
         description: 'Manage URL redirects',
         Icon: CornerDownRightIcon,
-        href: '/admin/collections/redirects',
+        href: '/admin/tools/redirects',
         color: '#ec4899',
       },
       {
         title: 'Forms',
         description: 'View and manage forms',
         Icon: ClipboardIcon,
-        href: '/admin/collections/forms',
+        href: '/admin/tools/forms',
         color: '#14b8a6',
       },
       {
         title: 'Form Submissions',
         description: 'Review form submissions',
         Icon: InboxIcon,
-        href: '/admin/collections/form-submissions',
+        href: '/admin/tools/form-submissions',
         color: '#f97316',
       },
     ],
@@ -113,14 +113,14 @@ const toolsConfig = [
         title: 'User Management',
         description: 'Manage admin users and roles',
         Icon: UsersIcon,
-        href: '/admin/collections/users',
+        href: '/admin/tools/user-management',
         color: '#6366f1',
       },
       {
         title: 'Search Index',
         description: 'View search index status',
         Icon: SearchIcon,
-        href: '/admin/collections/search',
+        href: '/admin/tools/search-index',
         color: '#84cc16',
       },
       {
@@ -141,15 +141,15 @@ const toolsConfig = [
  * A lightweight landing page with quick links for QA, publishing calendar,
  * media audit, and other administrative tools.
  */
-type ToolsProps = Omit<DefaultTemplateProps, 'children' | 'visibleEntities'> & {
+type ToolsProps = Omit<DefaultTemplateProps, 'children'> & {
   initPageResult?: {
     visibleEntities?: VisibleEntities
   }
 }
 
 export const Tools: React.FC<ToolsProps> = (props) => {
-  const { initPageResult, ...templateProps } = props
-  const visibleEntities = initPageResult?.visibleEntities
+  const { initPageResult, visibleEntities: propsVisibleEntities, ...templateProps } = props
+  const visibleEntities = initPageResult?.visibleEntities ?? propsVisibleEntities
 
   const toolsContent = (
     <div className="ra-tools">

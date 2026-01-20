@@ -55,7 +55,7 @@ const FormsClient: React.FC = () => {
         </button>
       </div>
 
-      {isLoading && <p className="ra-tool-muted">Loading forms…</p>}
+      {isLoading && <p className="ra-tool-muted">Loading forms...</p>}
       {error && <p className="ra-tool-error">{error}</p>}
 
       {!isLoading && data && (

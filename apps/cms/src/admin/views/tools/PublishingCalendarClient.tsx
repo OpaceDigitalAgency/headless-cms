@@ -83,7 +83,7 @@ const PublishingCalendarClient: React.FC = () => {
         </button>
       </div>
 
-      {isLoading && <p className="ra-tool-muted">Loading scheduled items…</p>}
+      {isLoading && <p className="ra-tool-muted">Loading scheduled items...</p>}
       {error && <p className="ra-tool-error">{error}</p>}
 
       {!isLoading && data && (

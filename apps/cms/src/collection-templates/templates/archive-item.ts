@@ -36,7 +36,7 @@ export const archiveItemTemplate: CollectionTemplate = {
   defaultSlug: 'archive-items',
   defaultSingular: 'Archive Item',
   defaultPlural: 'Archive Items',
-  adminGroup: 'Archive',
+  adminGroup: 'Collections',
   status: 'installed', // Currently installed
   includesRelated: ['person', 'place'],
   hasSeedData: true,

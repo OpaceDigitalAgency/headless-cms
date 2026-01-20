@@ -1,7 +1,7 @@
 export const formatDateTime = (value?: string | null) => {
-  if (!value) return '—'
+  if (!value) return 'N/A'
   const date = new Date(value)
-  if (Number.isNaN(date.getTime())) return '—'
+  if (Number.isNaN(date.getTime())) return 'N/A'
   return new Intl.DateTimeFormat('en-GB', {
     dateStyle: 'medium',
     timeStyle: 'short',
@@ -9,16 +9,16 @@ export const formatDateTime = (value?: string | null) => {
 }
 
 export const formatDate = (value?: string | null) => {
-  if (!value) return '—'
+  if (!value) return 'N/A'
   const date = new Date(value)
-  if (Number.isNaN(date.getTime())) return '—'
+  if (Number.isNaN(date.getTime())) return 'N/A'
   return new Intl.DateTimeFormat('en-GB', {
     dateStyle: 'medium',
   }).format(date)
 }
 
 export const formatBytes = (value?: number | null) => {
-  if (!value && value !== 0) return '—'
+  if (!value && value !== 0) return 'N/A'
   const units = ['B', 'KB', 'MB', 'GB']
   let size = value
   let unitIndex = 0

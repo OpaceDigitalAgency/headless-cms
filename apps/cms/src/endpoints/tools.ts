@@ -138,6 +138,11 @@ const collectionsWithSeoMeta = ['pages', 'posts', 'people', 'places', 'custom-it
 
 const searchCollections = ['pages', 'posts', 'archive-items', 'people', 'places', 'events', 'products', 'custom-items', 'content-types']
 
+const filterExistingCollections = (payload: Payload, slugs: string[]) => {
+  const available = new Set(payload.config.collections.map((collection) => collection.slug))
+  return slugs.filter((slug) => available.has(slug))
+}
+
 export const toolsEndpoints: Endpoint[] = [
   {
     path: '/admin/tools/drafts',
@@ -184,7 +189,7 @@ export const toolsEndpoints: Endpoint[] = [
       if (unauthorized) return unauthorized
 
       const { payload } = req
-      const url = new URL(req.url)
+      const url = new URL(req.url, 'http://localhost')
       const start = url.searchParams.get('start')
       const end = url.searchParams.get('end')
 
@@ -193,7 +198,9 @@ export const toolsEndpoints: Endpoint[] = [
 
       const items: any[] = []
 
-      for (const slug of collectionsWithPublishedAt) {
+      const collectionSlugs = filterExistingCollections(payload, collectionsWithPublishedAt)
+
+      for (const slug of collectionSlugs) {
         const docs = await fetchAllDocs(payload, slug, {
           publishedAt: {
             greater_than_equal: startDate.toISOString(),
@@ -235,7 +242,9 @@ export const toolsEndpoints: Endpoint[] = [
       const { payload } = req
       const items: any[] = []
 
-      for (const slug of collectionsWithSeoMeta) {
+      const collectionSlugs = filterExistingCollections(payload, collectionsWithSeoMeta)
+
+      for (const slug of collectionSlugs) {
         const docs = await fetchAllDocs(payload, slug)
 
         docs.forEach((doc: any) => {
@@ -314,7 +323,7 @@ export const toolsEndpoints: Endpoint[] = [
       if (unauthorized) return unauthorized
 
       const { payload } = req
-      const url = new URL(req.url)
+      const url = new URL(req.url, 'http://localhost')
       const minSize = Number(url.searchParams.get('minSize') || 5 * 1024 * 1024)
 
       const docs = await fetchAllDocs<any>(payload, 'media', {
@@ -352,7 +361,7 @@ export const toolsEndpoints: Endpoint[] = [
         const submissions = await payload.find({
           collection: 'form-submissions',
           where: { form: { equals: form.id } },
-          limit: 0,
+          limit: 1,
         })
 
         results.push({
@@ -380,7 +389,7 @@ export const toolsEndpoints: Endpoint[] = [
       if (unauthorized) return unauthorized
 
       const { payload } = req
-      const url = new URL(req.url)
+      const url = new URL(req.url, 'http://localhost')
       const formId = url.searchParams.get('form')
 
       const where = formId ? { form: { equals: formId } } : undefined
@@ -432,7 +441,7 @@ export const toolsEndpoints: Endpoint[] = [
       return Response.json({
         total: summary.totalDocs || 0,
         latestUpdatedAt: latest?.updatedAt || null,
-        searchCollections,
+        searchCollections: filterExistingCollections(payload, searchCollections),
         reindexEndpoint: '/api/search/reindex',
       })
     },

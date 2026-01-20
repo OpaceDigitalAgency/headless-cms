@@ -57,7 +57,7 @@ const UnusedMediaClient: React.FC = () => {
         </button>
       </div>
 
-      {isLoading && <p className="ra-tool-muted">Scanning media usage…</p>}
+      {isLoading && <p className="ra-tool-muted">Scanning media usage...</p>}
       {error && <p className="ra-tool-error">{error}</p>}
 
       {!isLoading && data && (

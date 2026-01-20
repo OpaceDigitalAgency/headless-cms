@@ -99,16 +99,6 @@ export const navigationEndpoint: Endpoint = {
       ],
     })
 
-    // 2. Tools (top-level)
-    navSections.push({
-      id: 'tools',
-      label: 'Tools',
-      icon: 'tools',
-      items: [
-        { label: 'Tools', href: '/admin/tools', icon: 'tools', slug: 'tools' },
-      ],
-    })
-
     const sectionItemsMap: Record<SectionId, any[]> = {
       content: [],
       taxonomy: [],
@@ -178,14 +168,38 @@ export const navigationEndpoint: Endpoint = {
       const items = buildSectionItems(sectionId)
       if (items.length === 0) return
 
-      // For collections section, add "Manage Collections" link at the top
-      if (sectionId === 'collections') {
+      // Add manager links at the top of each section
+      if (sectionId === 'content') {
+        items.unshift({
+          label: 'Manage Content',
+          href: '/admin/content-manager',
+          icon: 'settings',
+          slug: 'content-manager',
+          _order: -1,
+        })
+      } else if (sectionId === 'collections') {
         items.unshift({
           label: 'Manage Collections',
           href: '/admin/collection-manager',
           icon: 'settings',
           slug: 'collection-manager',
-          _order: -1, // Ensure it appears first
+          _order: -1,
+        })
+      } else if (sectionId === 'shop') {
+        items.unshift({
+          label: 'Manage Shop',
+          href: '/admin/shop-manager',
+          icon: 'settings',
+          slug: 'shop-manager',
+          _order: -1,
+        })
+      } else if (sectionId === 'taxonomy') {
+        items.unshift({
+          label: 'Manage Taxonomy',
+          href: '/admin/taxonomy-manager',
+          icon: 'settings',
+          slug: 'taxonomy-manager',
+          _order: -1,
         })
       }
 
@@ -196,6 +210,21 @@ export const navigationEndpoint: Endpoint = {
         items,
       })
     })
+
+    const toolsSection = {
+      id: 'tools',
+      label: 'Tools',
+      icon: 'tools',
+      items: [
+        { label: 'Tools', href: '/admin/tools', icon: 'tools', slug: 'tools' },
+      ],
+    }
+    const settingsIndex = navSections.findIndex((section) => section.id === 'settings')
+    if (settingsIndex >= 0) {
+      navSections.splice(settingsIndex, 0, toolsSection)
+    } else {
+      navSections.push(toolsSection)
+    }
 
     // Build globals list for search + navigation
     const globals = payload.config.globals.map((global) => ({

@@ -34,7 +34,7 @@ export const placeTemplate: CollectionTemplate = {
   defaultSlug: 'places',
   defaultSingular: 'Place',
   defaultPlural: 'Places',
-  adminGroup: 'Directory',
+  adminGroup: 'Collections',
   status: 'installed', // Currently installed
   hasSeedData: true,
   hasSeedMedia: true,

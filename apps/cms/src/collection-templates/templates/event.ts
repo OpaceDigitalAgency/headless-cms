@@ -32,7 +32,7 @@ export const eventTemplate: CollectionTemplate = {
   defaultSlug: 'events',
   defaultSingular: 'Event',
   defaultPlural: 'Events',
-  adminGroup: 'Content',
+  adminGroup: 'Collections',
   status: 'installed', // Currently installed
   hasSeedData: true,
   hasSeedMedia: false,

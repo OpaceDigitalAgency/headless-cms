@@ -4,26 +4,35 @@
  * Exports all available collection templates.
  */
 
+export { pageTemplate } from './page'
 export { blogPostTemplate } from './blog-post'
 export { archiveItemTemplate } from './archive-item'
 export { productTemplate } from './product'
 export { personTemplate } from './person'
 export { placeTemplate } from './place'
 export { eventTemplate } from './event'
+export { categoryTemplate } from './category'
+export { tagTemplate } from './tag'
 
+import { pageTemplate } from './page'
 import { blogPostTemplate } from './blog-post'
 import { archiveItemTemplate } from './archive-item'
 import { productTemplate } from './product'
 import { personTemplate } from './person'
 import { placeTemplate } from './place'
 import { eventTemplate } from './event'
+import { categoryTemplate } from './category'
+import { tagTemplate } from './tag'
 import type { CollectionTemplate, TemplateCategory } from '../types'
 
 /**
  * All available collection templates
  */
 export const allTemplates: CollectionTemplate[] = [
+  pageTemplate,
   blogPostTemplate,
+  categoryTemplate,
+  tagTemplate,
   archiveItemTemplate,
   productTemplate,
   personTemplate,

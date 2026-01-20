@@ -4,46 +4,46 @@ import type { VisibleEntities } from 'payload'
 import { SectionCollectionTemplates } from '../../components/SectionCollectionTemplates'
 
 /**
- * Collections Management View
+ * Shop Manager View
  *
- * Dedicated page for managing collections in the Collections section
- * (Archive Items, Events, People, Places).
+ * Dedicated page for managing shop collections - Products, Product Categories, etc.
+ * Shows collections with seed/hide/view options.
  */
-type CollectionsProps = Omit<DefaultTemplateProps, 'children' | 'visibleEntities'> & {
+type ShopManagerProps = Omit<DefaultTemplateProps, 'children' | 'visibleEntities'> & {
   initPageResult?: {
     visibleEntities?: VisibleEntities
   }
 }
 
-export const Collections: React.FC<CollectionsProps> = (props) => {
+export const ShopManager: React.FC<ShopManagerProps> = (props) => {
   const { initPageResult, ...templateProps } = props
   const visibleEntities = initPageResult?.visibleEntities
 
-  const collectionsContent = (
-    <div className="ra-collections-view" style={{ padding: '24px' }}>
+  const shopManagerContent = (
+    <div className="ra-shop-manager-view" style={{ padding: '24px' }}>
       <div style={{ marginBottom: '24px' }}>
         <h1 style={{ fontSize: '28px', fontWeight: 700, marginBottom: '8px', color: '#333' }}>
-          Collections
+          Shop
         </h1>
         <p style={{ fontSize: '14px', color: '#666' }}>
-          Manage your collections including archive items, events, people, and places.
+          Manage your shop collections including products, categories, and inventory.
         </p>
       </div>
 
-      <SectionCollectionTemplates section="Collections" />
+      <SectionCollectionTemplates section="Shop" />
     </div>
   )
 
   if (!visibleEntities) {
-    return collectionsContent
+    return shopManagerContent
   }
 
   return (
     <DefaultTemplate {...templateProps} visibleEntities={visibleEntities}>
-      {collectionsContent}
+      {shopManagerContent}
     </DefaultTemplate>
   )
 }
 
-export default Collections
+export default ShopManager
 

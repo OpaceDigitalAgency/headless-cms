@@ -56,7 +56,7 @@ const SeoAuditClient: React.FC = () => {
         </button>
       </div>
 
-      {isLoading && <p className="ra-tool-muted">Loading audit…</p>}
+      {isLoading && <p className="ra-tool-muted">Loading audit...</p>}
       {error && <p className="ra-tool-error">{error}</p>}
 
       {!isLoading && data && (

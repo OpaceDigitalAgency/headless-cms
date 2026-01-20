@@ -79,7 +79,7 @@ const MediaLibraryClient: React.FC = () => {
         </button>
       </div>
 
-      {isLoading && <p className="ra-tool-muted">Loading media…</p>}
+      {isLoading && <p className="ra-tool-muted">Loading media...</p>}
       {error && <p className="ra-tool-error">{error}</p>}
 
       {!isLoading && (

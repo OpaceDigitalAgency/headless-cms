@@ -35,8 +35,22 @@ import { ReindexButton as ReindexButton_aead06e4cbf6b2620c5c51c9ab283634 } from 
 import { default as default_1723744e6ae59cf3653e63611d4cba7a } from '../../../components/CollectionManagerField'
 import { default as default_81e915c9ba204d29f7fc1265572ed8be } from '../../../admin/TwoPanelNav'
 import { default as default_c7d7fc284b3b0552574b75a0421f4260 } from '../../../admin/views/Dashboard'
+import { default as default_783614df4cac7352f73020b1bdb682ea } from '../../../admin/views/ContentManager'
 import { default as default_23bada0f25692cad9c66cb3206a00238 } from '../../../admin/views/Collections'
+import { default as default_6e7595eb3cd4ce649239c937468547b9 } from '../../../admin/views/ShopManager'
+import { default as default_45b26abec510d85d30350dfc51f64933 } from '../../../admin/views/TaxonomyManager'
 import { default as default_a30289e25b7b0ddf21b0d6206ba3514b } from '../../../admin/views/Tools'
+import { default as default_e5bd8752a00af3fd20230fe595cc35df } from '../../../admin/views/tools/PublishingCalendar'
+import { default as default_da651b1d7f0d7858931f56e85dc055ee } from '../../../admin/views/tools/DraftReview'
+import { default as default_d467428f4e766fe6d7c51340d56919b6 } from '../../../admin/views/tools/SeoAudit'
+import { default as default_5b8b21263d971f4777f64fabf4348386 } from '../../../admin/views/tools/FormSubmissions'
+import { default as default_219245e1efe87f9975b9adb524beaefc } from '../../../admin/views/tools/MediaLibrary'
+import { default as default_60d52788041f523a3afd7cce1da64641 } from '../../../admin/views/tools/UnusedMedia'
+import { default as default_f1bbff8cd869bf07138cf26a045a4092 } from '../../../admin/views/tools/LargeFiles'
+import { default as default_ff20ba5d9db32499007dc349f798b465 } from '../../../admin/views/tools/Redirects'
+import { default as default_b480197be7e98c44a03522826851780a } from '../../../admin/views/tools/Forms'
+import { default as default_0a7be85538d863e8c28b8169cf8274c7 } from '../../../admin/views/tools/UserManagement'
+import { default as default_db48d3eba7acaf851d0ae6b08c07e0d8 } from '../../../admin/views/tools/SearchIndex'
 import { CollectionCards as CollectionCards_ab83ff7e88da8d3530831f296ec4756a } from '@payloadcms/ui/rsc'
 
 export const importMap = {
@@ -77,7 +91,21 @@ export const importMap = {
   "/components/CollectionManagerField#default": default_1723744e6ae59cf3653e63611d4cba7a,
   "/admin/TwoPanelNav#default": default_81e915c9ba204d29f7fc1265572ed8be,
   "/admin/views/Dashboard#default": default_c7d7fc284b3b0552574b75a0421f4260,
+  "/admin/views/ContentManager#default": default_783614df4cac7352f73020b1bdb682ea,
   "/admin/views/Collections#default": default_23bada0f25692cad9c66cb3206a00238,
+  "/admin/views/ShopManager#default": default_6e7595eb3cd4ce649239c937468547b9,
+  "/admin/views/TaxonomyManager#default": default_45b26abec510d85d30350dfc51f64933,
   "/admin/views/Tools#default": default_a30289e25b7b0ddf21b0d6206ba3514b,
+  "/admin/views/tools/PublishingCalendar#default": default_e5bd8752a00af3fd20230fe595cc35df,
+  "/admin/views/tools/DraftReview#default": default_da651b1d7f0d7858931f56e85dc055ee,
+  "/admin/views/tools/SeoAudit#default": default_d467428f4e766fe6d7c51340d56919b6,
+  "/admin/views/tools/FormSubmissions#default": default_5b8b21263d971f4777f64fabf4348386,
+  "/admin/views/tools/MediaLibrary#default": default_219245e1efe87f9975b9adb524beaefc,
+  "/admin/views/tools/UnusedMedia#default": default_60d52788041f523a3afd7cce1da64641,
+  "/admin/views/tools/LargeFiles#default": default_f1bbff8cd869bf07138cf26a045a4092,
+  "/admin/views/tools/Redirects#default": default_ff20ba5d9db32499007dc349f798b465,
+  "/admin/views/tools/Forms#default": default_b480197be7e98c44a03522826851780a,
+  "/admin/views/tools/UserManagement#default": default_0a7be85538d863e8c28b8169cf8274c7,
+  "/admin/views/tools/SearchIndex#default": default_db48d3eba7acaf851d0ae6b08c07e0d8,
   "@payloadcms/ui/rsc#CollectionCards": CollectionCards_ab83ff7e88da8d3530831f296ec4756a
 }

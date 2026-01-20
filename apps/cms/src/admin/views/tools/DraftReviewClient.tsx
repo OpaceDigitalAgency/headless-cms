@@ -56,7 +56,7 @@ const DraftReviewClient: React.FC = () => {
         </button>
       </div>
 
-      {isLoading && <p className="ra-tool-muted">Loading drafts…</p>}
+      {isLoading && <p className="ra-tool-muted">Loading drafts...</p>}
       {error && <p className="ra-tool-error">{error}</p>}
 
       {!isLoading && data && (

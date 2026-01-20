@@ -37,14 +37,6 @@ export const navSections: NavSection[] = [
     ],
   },
   {
-    id: 'tools',
-    label: 'Tools',
-    icon: 'tools',
-    items: [
-      { label: 'Tools', href: '/admin/tools', icon: 'tools' },
-    ],
-  },
-  {
     id: 'content',
     label: 'Content',
     icon: 'content',
@@ -86,6 +78,14 @@ export const navSections: NavSection[] = [
     icon: 'media',
     items: [
       { label: 'Library', href: '/admin/collections/media', icon: 'image' },
+    ],
+  },
+  {
+    id: 'tools',
+    label: 'Tools',
+    icon: 'tools',
+    items: [
+      { label: 'Tools', href: '/admin/tools', icon: 'tools' },
     ],
   },
   {

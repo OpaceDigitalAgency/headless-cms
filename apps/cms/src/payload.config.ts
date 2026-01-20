@@ -122,13 +122,81 @@ export default buildConfig({
         dashboard: {
           Component: '/admin/views/Dashboard',
         },
+        'content-manager': {
+          Component: '/admin/views/ContentManager',
+          path: '/content-manager',
+        },
         'collection-manager': {
           Component: '/admin/views/Collections',
           path: '/collection-manager',
         },
+        'shop-manager': {
+          Component: '/admin/views/ShopManager',
+          path: '/shop-manager',
+        },
+        'taxonomy-manager': {
+          Component: '/admin/views/TaxonomyManager',
+          path: '/taxonomy-manager',
+        },
         tools: {
           Component: '/admin/views/Tools',
           path: '/tools',
+          exact: true,
+        },
+        'tools-publishing-calendar': {
+          Component: '/admin/views/tools/PublishingCalendar',
+          path: '/tools/publishing-calendar',
+          exact: true,
+        },
+        'tools-draft-review': {
+          Component: '/admin/views/tools/DraftReview',
+          path: '/tools/draft-review',
+          exact: true,
+        },
+        'tools-seo-audit': {
+          Component: '/admin/views/tools/SeoAudit',
+          path: '/tools/seo-audit',
+          exact: true,
+        },
+        'tools-form-submissions': {
+          Component: '/admin/views/tools/FormSubmissions',
+          path: '/tools/form-submissions',
+          exact: true,
+        },
+        'tools-media-library': {
+          Component: '/admin/views/tools/MediaLibrary',
+          path: '/tools/media-library',
+          exact: true,
+        },
+        'tools-unused-media': {
+          Component: '/admin/views/tools/UnusedMedia',
+          path: '/tools/unused-media',
+          exact: true,
+        },
+        'tools-large-files': {
+          Component: '/admin/views/tools/LargeFiles',
+          path: '/tools/large-files',
+          exact: true,
+        },
+        'tools-redirects': {
+          Component: '/admin/views/tools/Redirects',
+          path: '/tools/redirects',
+          exact: true,
+        },
+        'tools-forms': {
+          Component: '/admin/views/tools/Forms',
+          path: '/tools/forms',
+          exact: true,
+        },
+        'tools-user-management': {
+          Component: '/admin/views/tools/UserManagement',
+          path: '/tools/user-management',
+          exact: true,
+        },
+        'tools-search-index': {
+          Component: '/admin/views/tools/SearchIndex',
+          path: '/tools/search-index',
+          exact: true,
         },
       },
       // graphics: {

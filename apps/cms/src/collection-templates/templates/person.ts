@@ -33,7 +33,7 @@ export const personTemplate: CollectionTemplate = {
   defaultSlug: 'people',
   defaultSingular: 'Person',
   defaultPlural: 'People',
-  adminGroup: 'Directory',
+  adminGroup: 'Collections',
   status: 'installed', // Currently installed
   hasSeedData: true,
   hasSeedMedia: true,
