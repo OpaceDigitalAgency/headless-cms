@@ -9503,7 +9503,7 @@ export interface Setting {
 export interface NavigationSetting {
   id: number;
   /**
-   * Changes are saved automatically. Click "Clear Cache & Refresh" to see updates immediately in the navigation menu.
+   * Toggle collections and click "Save" below. Then refresh your browser (Cmd+R or F5) to see changes in the navigation menu.
    */
   collections?:
     | {
@@ -9513,6 +9513,26 @@ export interface NavigationSetting {
     | string
     | number
     | boolean
+    | null;
+  /**
+   * Add custom links to the top navigation bar (e.g., "Menu" linking to Header global)
+   */
+  customLinks?:
+    | {
+        /**
+         * Link text (e.g., "Menu", "Site Settings")
+         */
+        label: string;
+        /**
+         * URL path (e.g., "/admin/globals/header", "/admin/tools")
+         */
+        url: string;
+        /**
+         * Where to place this link in the top menu
+         */
+        position?: ('start' | 'end') | null;
+        id?: string | null;
+      }[]
     | null;
   updatedAt?: string | null;
   createdAt?: string | null;
@@ -9672,6 +9692,14 @@ export interface SettingsSelect<T extends boolean = true> {
  */
 export interface NavigationSettingsSelect<T extends boolean = true> {
   collections?: T;
+  customLinks?:
+    | T
+    | {
+        label?: T;
+        url?: T;
+        position?: T;
+        id?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;

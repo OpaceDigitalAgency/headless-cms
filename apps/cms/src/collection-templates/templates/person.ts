@@ -26,7 +26,7 @@ import {
 
 export const personTemplate: CollectionTemplate = {
   id: 'person',
-  name: 'Person',
+  name: 'People',
   description: 'People profiles like team members, artists, or historical figures',
   category: 'people',
   icon: 'user',

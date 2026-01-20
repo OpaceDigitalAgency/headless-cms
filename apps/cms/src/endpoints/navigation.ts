@@ -296,10 +296,28 @@ export const navigationEndpoint: Endpoint = {
         }
       })
 
+      // Get custom links from navigation-settings global
+      let customLinks: Array<{ label: string; url: string; position: 'start' | 'end' }> = []
+      try {
+        const navSettings = await payload.findGlobal({
+          slug: 'navigation-settings',
+          depth: 0,
+        })
+        if (navSettings && Array.isArray(navSettings.customLinks)) {
+          customLinks = navSettings.customLinks.filter((link: any) =>
+            link && typeof link.label === 'string' && typeof link.url === 'string'
+          )
+        }
+      } catch (error) {
+        // Navigation settings not found or error fetching - continue without custom links
+        console.log('Could not fetch custom links from navigation-settings')
+      }
+
       return Response.json({
         navSections,
         globals,
         collectionSearchConfig,
+        customLinks,
       })
     } catch (error) {
       console.error('Navigation endpoint error:', error)

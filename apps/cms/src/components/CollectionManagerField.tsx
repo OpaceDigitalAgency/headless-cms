@@ -141,6 +141,31 @@ export const CollectionManagerField: React.FC<CollectionManagerFieldProps> = ({ 
     }
   }, [items, setValue])
 
+  // Listen for form submission and reload page to update navigation
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+
+    const handleFormSubmit = (event: Event) => {
+      const form = event.target as HTMLFormElement
+      // Check if this is the navigation-settings form
+      if (form && form.action && form.action.includes('navigation-settings')) {
+        // Wait for the save to complete, then reload
+        setTimeout(() => {
+          sessionStorage.removeItem('nav-data')
+          sessionStorage.removeItem('nav-cache-time')
+          window.location.reload()
+        }, 1000)
+      }
+    }
+
+    // Listen for form submissions
+    document.addEventListener('submit', handleFormSubmit)
+
+    return () => {
+      document.removeEventListener('submit', handleFormSubmit)
+    }
+  }, [])
+
   const updateItem = (index: number, updates: Partial<CollectionSetting>) => {
     setItems((prev) => {
       const next = [...prev]

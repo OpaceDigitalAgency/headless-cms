@@ -525,6 +525,7 @@ export const TwoPanelNav: React.FC = () => {
         navSections: data.navSections || [],
         globals: data.globals || [],
         collectionSearchConfig: data.collectionSearchConfig || [],
+        customLinks: data.customLinks || [],
       }
     } catch (e) {
       return null
@@ -537,6 +538,7 @@ export const TwoPanelNav: React.FC = () => {
   const [collectionSearchConfig, setCollectionSearchConfig] = useState<Array<{ slug: string; label: string; titleField: string }>>(
     () => cachedNavData?.collectionSearchConfig || []
   )
+  const [customLinks, setCustomLinks] = useState<Array<{ label: string; url: string; position: 'start' | 'end' }>>(() => cachedNavData?.customLinks || [])
   const [isLoading, setIsLoading] = useState(!cachedNavData)
 
   const activeSection = resolveActiveSection(pathname, navSections)
@@ -560,6 +562,7 @@ export const TwoPanelNav: React.FC = () => {
           setNavSections(data.navSections || [])
           setGlobalLinks(data.globals || [])
           setCollectionSearchConfig(data.collectionSearchConfig || [])
+          setCustomLinks(data.customLinks || [])
 
           sessionStorage.setItem('nav-data', JSON.stringify(data))
           sessionStorage.setItem('nav-cache-time', now.toString())
@@ -628,29 +631,54 @@ export const TwoPanelNav: React.FC = () => {
               <div className="ra-top-nav__link ra-top-nav__link--skeleton" style={{ width: '60px', height: '20px', background: 'var(--theme-elevation-100)', borderRadius: '4px' }} />
             </>
           ) : (
-            topMenuSections.map((section) => {
-              // For sections with nested items, find the first actual href
-              let sectionHref = '#'
-              if (section.items && section.items.length > 0) {
-                // Check if first item has href directly
-                if (section.items[0].href) {
-                  sectionHref = section.items[0].href
-                } else if (section.items[0].items && section.items[0].items.length > 0) {
-                  // If first item is a label with nested items, use first nested item's href
-                  sectionHref = section.items[0].items[0]?.href || '#'
-                }
-              }
-
-              return (
+            <>
+              {/* Custom links at start */}
+              {customLinks.filter(link => link.position === 'start').map((link, index) => (
                 <Link
-                  key={section.id}
-                  href={sectionHref}
-                  className={`ra-top-nav__link ${activeSection === section.id ? 'ra-top-nav__link--active' : ''}`}
+                  key={`custom-start-${index}`}
+                  href={link.url}
+                  className={`ra-top-nav__link ${pathname === link.url ? 'ra-top-nav__link--active' : ''}`}
                 >
-                  {section.label}
+                  {link.label}
                 </Link>
-              )
-            })
+              ))}
+
+              {/* Section links */}
+              {topMenuSections.map((section) => {
+                // For sections with nested items, find the first actual href
+                let sectionHref = '#'
+                if (section.items && section.items.length > 0) {
+                  // Check if first item has href directly
+                  if (section.items[0].href) {
+                    sectionHref = section.items[0].href
+                  } else if (section.items[0].items && section.items[0].items.length > 0) {
+                    // If first item is a label with nested items, use first nested item's href
+                    sectionHref = section.items[0].items[0]?.href || '#'
+                  }
+                }
+
+                return (
+                  <Link
+                    key={section.id}
+                    href={sectionHref}
+                    className={`ra-top-nav__link ${activeSection === section.id ? 'ra-top-nav__link--active' : ''}`}
+                  >
+                    {section.label}
+                  </Link>
+                )
+              })}
+
+              {/* Custom links at end */}
+              {customLinks.filter(link => link.position === 'end').map((link, index) => (
+                <Link
+                  key={`custom-end-${index}`}
+                  href={link.url}
+                  className={`ra-top-nav__link ${pathname === link.url ? 'ra-top-nav__link--active' : ''}`}
+                >
+                  {link.label}
+                </Link>
+              ))}
+            </>
           )}
         </div>
 
