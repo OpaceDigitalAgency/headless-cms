@@ -98,16 +98,40 @@ export const Dashboard: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true)
   const [collectionSlugs, setCollectionSlugs] = useState<string[]>([])
 
-  // Check URL for tab parameter on mount
+  // Check URL for tab parameter on mount and when URL changes
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const params = new URLSearchParams(window.location.search)
-      const tab = params.get('tab')
-      if (tab === 'templates' || tab === 'content-types') {
-        setActiveTab(tab as 'templates' | 'content-types')
+    const checkUrlParams = () => {
+      if (typeof window !== 'undefined') {
+        const params = new URLSearchParams(window.location.search)
+        const tab = params.get('tab')
+        if (tab === 'templates' || tab === 'content-types') {
+          setActiveTab(tab as 'templates' | 'content-types')
+        }
       }
     }
+
+    // Check immediately
+    checkUrlParams()
+
+    // Also check after a short delay to handle async routing
+    const timer = setTimeout(checkUrlParams, 100)
+
+    return () => clearTimeout(timer)
   }, [])
+
+  // Helper function to change tab and update URL
+  const handleTabChange = (tab: 'overview' | 'content-types' | 'templates') => {
+    setActiveTab(tab)
+    if (typeof window !== 'undefined') {
+      const url = new URL(window.location.href)
+      if (tab === 'overview') {
+        url.searchParams.delete('tab')
+      } else {
+        url.searchParams.set('tab', tab)
+      }
+      window.history.replaceState({}, '', url.toString())
+    }
+  }
 
   // Fetch collection stats and recent items
   useEffect(() => {
@@ -307,19 +331,19 @@ export const Dashboard: React.FC = () => {
       <div className="ra-dashboard__tabs">
         <button
           className={`ra-dashboard__tab ${activeTab === 'overview' ? 'ra-dashboard__tab--active' : ''}`}
-          onClick={() => setActiveTab('overview')}
+          onClick={() => handleTabChange('overview')}
         >
           <BarChartIcon size={16} /> Overview
         </button>
         <button
           className={`ra-dashboard__tab ${activeTab === 'content-types' ? 'ra-dashboard__tab--active' : ''}`}
-          onClick={() => setActiveTab('content-types')}
+          onClick={() => handleTabChange('content-types')}
         >
           <FolderIcon size={16} /> Content Types
         </button>
         <button
           className={`ra-dashboard__tab ${activeTab === 'templates' ? 'ra-dashboard__tab--active' : ''}`}
-          onClick={() => setActiveTab('templates')}
+          onClick={() => handleTabChange('templates')}
         >
           <PackageIcon size={16} /> Collections
         </button>

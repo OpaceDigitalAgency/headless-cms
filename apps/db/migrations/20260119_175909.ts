@@ -414,10 +414,84 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   CREATE TYPE "public"."enum__places_v_version_template" AS ENUM('location', 'map', 'card');
   CREATE TYPE "public"."enum__places_v_version_place_type" AS ENUM('city', 'region', 'country', 'venue', 'store', 'museum', 'archaeological', 'historical', 'other');
   CREATE TYPE "public"."enum__places_v_version_status" AS ENUM('draft', 'published');
-  CREATE TYPE "public"."enum_museum_collections_template" AS ENUM('list', 'grid', 'timeline', 'gallery');
-  CREATE TYPE "public"."enum_museum_collections_status" AS ENUM('draft', 'published');
-  CREATE TYPE "public"."enum__museum_collections_v_version_template" AS ENUM('list', 'grid', 'timeline', 'gallery');
-  CREATE TYPE "public"."enum__museum_collections_v_version_status" AS ENUM('draft', 'published');
+  CREATE TYPE "public"."enum_events_blocks_hero_links_variant" AS ENUM('primary', 'secondary', 'outline');
+  CREATE TYPE "public"."enum_events_blocks_hero_type" AS ENUM('standard', 'minimal', 'fullscreen', 'split', 'video');
+  CREATE TYPE "public"."enum_events_blocks_hero_overlay" AS ENUM('none', 'light', 'dark', 'gradient');
+  CREATE TYPE "public"."enum_events_blocks_hero_text_align" AS ENUM('left', 'center', 'right');
+  CREATE TYPE "public"."enum_events_blocks_content_columns_size" AS ENUM('oneThird', 'half', 'twoThirds', 'full');
+  CREATE TYPE "public"."enum_events_blocks_content_background_color" AS ENUM('none', 'light', 'dark', 'primary', 'secondary');
+  CREATE TYPE "public"."enum_events_blocks_content_padding_top" AS ENUM('none', 'small', 'medium', 'large');
+  CREATE TYPE "public"."enum_events_blocks_content_padding_bottom" AS ENUM('none', 'small', 'medium', 'large');
+  CREATE TYPE "public"."enum_events_blocks_media_size" AS ENUM('small', 'default', 'large', 'fullWidth');
+  CREATE TYPE "public"."enum_events_blocks_media_position" AS ENUM('left', 'center', 'right');
+  CREATE TYPE "public"."enum_events_blocks_cta_links_variant" AS ENUM('primary', 'secondary', 'outline');
+  CREATE TYPE "public"."enum_events_blocks_cta_style" AS ENUM('standard', 'banner', 'card', 'inline');
+  CREATE TYPE "public"."enum_events_blocks_cta_background_color" AS ENUM('none', 'light', 'dark', 'primary', 'secondary');
+  CREATE TYPE "public"."enum_events_blocks_archive_populate_by" AS ENUM('collection', 'selection');
+  CREATE TYPE "public"."enum_events_blocks_archive_relation_to" AS ENUM('posts', 'pages', 'archive-items', 'people', 'places', 'museum-collections', 'custom-items');
+  CREATE TYPE "public"."enum_events_blocks_archive_layout" AS ENUM('grid', 'list', 'cards', 'carousel');
+  CREATE TYPE "public"."enum_events_blocks_archive_columns" AS ENUM('2', '3', '4');
+  CREATE TYPE "public"."enum_events_blocks_form_style" AS ENUM('default', 'card', 'inline', 'fullWidth');
+  CREATE TYPE "public"."enum_events_blocks_form_background_color" AS ENUM('none', 'light', 'dark');
+  CREATE TYPE "public"."enum_events_blocks_gallery_layout" AS ENUM('grid', 'masonry', 'carousel', 'lightbox', 'slider');
+  CREATE TYPE "public"."enum_events_blocks_gallery_columns" AS ENUM('2', '3', '4', '5', '6');
+  CREATE TYPE "public"."enum_events_blocks_gallery_gap" AS ENUM('none', 'small', 'medium', 'large');
+  CREATE TYPE "public"."enum_events_blocks_gallery_aspect_ratio" AS ENUM('auto', 'square', 'landscape', 'portrait', 'wide');
+  CREATE TYPE "public"."enum_events_blocks_grid_style" AS ENUM('cards', 'features', 'icons', 'stats', 'team', 'testimonials', 'logos');
+  CREATE TYPE "public"."enum_events_blocks_grid_columns" AS ENUM('1', '2', '3', '4', '5', '6');
+  CREATE TYPE "public"."enum_events_blocks_grid_gap" AS ENUM('none', 'small', 'medium', 'large');
+  CREATE TYPE "public"."enum_events_blocks_grid_alignment" AS ENUM('left', 'center', 'right');
+  CREATE TYPE "public"."enum_events_blocks_grid_hover_effect" AS ENUM('none', 'lift', 'scale', 'glow');
+  CREATE TYPE "public"."enum_events_blocks_timeline_layout" AS ENUM('vertical', 'alternating', 'horizontal', 'compact');
+  CREATE TYPE "public"."enum_events_blocks_timeline_line_style" AS ENUM('solid', 'dashed', 'dotted', 'gradient');
+  CREATE TYPE "public"."enum_events_blocks_timeline_marker_style" AS ENUM('circle', 'diamond', 'square', 'icon', 'number', 'image');
+  CREATE TYPE "public"."enum_events_blocks_timeline_sort_order" AS ENUM('chronological', 'reverse', 'manual');
+  CREATE TYPE "public"."enum_events_blocks_timeline_background_color" AS ENUM('transparent', 'light', 'dark', 'primary');
+  CREATE TYPE "public"."enum_events_event_type" AS ENUM('exhibition', 'workshop', 'conference', 'performance', 'lecture', 'tour', 'opening', 'other');
+  CREATE TYPE "public"."enum_events_recurring_frequency" AS ENUM('daily', 'weekly', 'monthly', 'yearly');
+  CREATE TYPE "public"."enum_events_price_currency" AS ENUM('GBP', 'USD', 'EUR');
+  CREATE TYPE "public"."enum_events_event_status" AS ENUM('upcoming', 'ongoing', 'completed', 'cancelled', 'postponed');
+  CREATE TYPE "public"."enum_events_template" AS ENUM('event', 'calendar', 'card');
+  CREATE TYPE "public"."enum_events_status" AS ENUM('draft', 'published');
+  CREATE TYPE "public"."enum__events_v_blocks_hero_links_variant" AS ENUM('primary', 'secondary', 'outline');
+  CREATE TYPE "public"."enum__events_v_blocks_hero_type" AS ENUM('standard', 'minimal', 'fullscreen', 'split', 'video');
+  CREATE TYPE "public"."enum__events_v_blocks_hero_overlay" AS ENUM('none', 'light', 'dark', 'gradient');
+  CREATE TYPE "public"."enum__events_v_blocks_hero_text_align" AS ENUM('left', 'center', 'right');
+  CREATE TYPE "public"."enum__events_v_blocks_content_columns_size" AS ENUM('oneThird', 'half', 'twoThirds', 'full');
+  CREATE TYPE "public"."enum__events_v_blocks_content_background_color" AS ENUM('none', 'light', 'dark', 'primary', 'secondary');
+  CREATE TYPE "public"."enum__events_v_blocks_content_padding_top" AS ENUM('none', 'small', 'medium', 'large');
+  CREATE TYPE "public"."enum__events_v_blocks_content_padding_bottom" AS ENUM('none', 'small', 'medium', 'large');
+  CREATE TYPE "public"."enum__events_v_blocks_media_size" AS ENUM('small', 'default', 'large', 'fullWidth');
+  CREATE TYPE "public"."enum__events_v_blocks_media_position" AS ENUM('left', 'center', 'right');
+  CREATE TYPE "public"."enum__events_v_blocks_cta_links_variant" AS ENUM('primary', 'secondary', 'outline');
+  CREATE TYPE "public"."enum__events_v_blocks_cta_style" AS ENUM('standard', 'banner', 'card', 'inline');
+  CREATE TYPE "public"."enum__events_v_blocks_cta_background_color" AS ENUM('none', 'light', 'dark', 'primary', 'secondary');
+  CREATE TYPE "public"."enum__events_v_blocks_archive_populate_by" AS ENUM('collection', 'selection');
+  CREATE TYPE "public"."enum__events_v_blocks_archive_relation_to" AS ENUM('posts', 'pages', 'archive-items', 'people', 'places', 'museum-collections', 'custom-items');
+  CREATE TYPE "public"."enum__events_v_blocks_archive_layout" AS ENUM('grid', 'list', 'cards', 'carousel');
+  CREATE TYPE "public"."enum__events_v_blocks_archive_columns" AS ENUM('2', '3', '4');
+  CREATE TYPE "public"."enum__events_v_blocks_form_style" AS ENUM('default', 'card', 'inline', 'fullWidth');
+  CREATE TYPE "public"."enum__events_v_blocks_form_background_color" AS ENUM('none', 'light', 'dark');
+  CREATE TYPE "public"."enum__events_v_blocks_gallery_layout" AS ENUM('grid', 'masonry', 'carousel', 'lightbox', 'slider');
+  CREATE TYPE "public"."enum__events_v_blocks_gallery_columns" AS ENUM('2', '3', '4', '5', '6');
+  CREATE TYPE "public"."enum__events_v_blocks_gallery_gap" AS ENUM('none', 'small', 'medium', 'large');
+  CREATE TYPE "public"."enum__events_v_blocks_gallery_aspect_ratio" AS ENUM('auto', 'square', 'landscape', 'portrait', 'wide');
+  CREATE TYPE "public"."enum__events_v_blocks_grid_style" AS ENUM('cards', 'features', 'icons', 'stats', 'team', 'testimonials', 'logos');
+  CREATE TYPE "public"."enum__events_v_blocks_grid_columns" AS ENUM('1', '2', '3', '4', '5', '6');
+  CREATE TYPE "public"."enum__events_v_blocks_grid_gap" AS ENUM('none', 'small', 'medium', 'large');
+  CREATE TYPE "public"."enum__events_v_blocks_grid_alignment" AS ENUM('left', 'center', 'right');
+  CREATE TYPE "public"."enum__events_v_blocks_grid_hover_effect" AS ENUM('none', 'lift', 'scale', 'glow');
+  CREATE TYPE "public"."enum__events_v_blocks_timeline_layout" AS ENUM('vertical', 'alternating', 'horizontal', 'compact');
+  CREATE TYPE "public"."enum__events_v_blocks_timeline_line_style" AS ENUM('solid', 'dashed', 'dotted', 'gradient');
+  CREATE TYPE "public"."enum__events_v_blocks_timeline_marker_style" AS ENUM('circle', 'diamond', 'square', 'icon', 'number', 'image');
+  CREATE TYPE "public"."enum__events_v_blocks_timeline_sort_order" AS ENUM('chronological', 'reverse', 'manual');
+  CREATE TYPE "public"."enum__events_v_blocks_timeline_background_color" AS ENUM('transparent', 'light', 'dark', 'primary');
+  CREATE TYPE "public"."enum__events_v_version_event_type" AS ENUM('exhibition', 'workshop', 'conference', 'performance', 'lecture', 'tour', 'opening', 'other');
+  CREATE TYPE "public"."enum__events_v_version_recurring_frequency" AS ENUM('daily', 'weekly', 'monthly', 'yearly');
+  CREATE TYPE "public"."enum__events_v_version_price_currency" AS ENUM('GBP', 'USD', 'EUR');
+  CREATE TYPE "public"."enum__events_v_version_event_status" AS ENUM('upcoming', 'ongoing', 'completed', 'cancelled', 'postponed');
+  CREATE TYPE "public"."enum__events_v_version_template" AS ENUM('event', 'calendar', 'card');
+  CREATE TYPE "public"."enum__events_v_version_status" AS ENUM('draft', 'published');
   CREATE TYPE "public"."enum_products_blocks_hero_links_variant" AS ENUM('primary', 'secondary', 'outline');
   CREATE TYPE "public"."enum_products_blocks_hero_type" AS ENUM('standard', 'minimal', 'fullscreen', 'split', 'video');
   CREATE TYPE "public"."enum_products_blocks_hero_overlay" AS ENUM('none', 'light', 'dark', 'gradient');
@@ -498,84 +572,6 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   CREATE TYPE "public"."enum_product_collections_status" AS ENUM('draft', 'published');
   CREATE TYPE "public"."enum__product_collections_v_version_template" AS ENUM('list', 'grid', 'gallery');
   CREATE TYPE "public"."enum__product_collections_v_version_status" AS ENUM('draft', 'published');
-  CREATE TYPE "public"."enum_events_blocks_hero_links_variant" AS ENUM('primary', 'secondary', 'outline');
-  CREATE TYPE "public"."enum_events_blocks_hero_type" AS ENUM('standard', 'minimal', 'fullscreen', 'split', 'video');
-  CREATE TYPE "public"."enum_events_blocks_hero_overlay" AS ENUM('none', 'light', 'dark', 'gradient');
-  CREATE TYPE "public"."enum_events_blocks_hero_text_align" AS ENUM('left', 'center', 'right');
-  CREATE TYPE "public"."enum_events_blocks_content_columns_size" AS ENUM('oneThird', 'half', 'twoThirds', 'full');
-  CREATE TYPE "public"."enum_events_blocks_content_background_color" AS ENUM('none', 'light', 'dark', 'primary', 'secondary');
-  CREATE TYPE "public"."enum_events_blocks_content_padding_top" AS ENUM('none', 'small', 'medium', 'large');
-  CREATE TYPE "public"."enum_events_blocks_content_padding_bottom" AS ENUM('none', 'small', 'medium', 'large');
-  CREATE TYPE "public"."enum_events_blocks_media_size" AS ENUM('small', 'default', 'large', 'fullWidth');
-  CREATE TYPE "public"."enum_events_blocks_media_position" AS ENUM('left', 'center', 'right');
-  CREATE TYPE "public"."enum_events_blocks_cta_links_variant" AS ENUM('primary', 'secondary', 'outline');
-  CREATE TYPE "public"."enum_events_blocks_cta_style" AS ENUM('standard', 'banner', 'card', 'inline');
-  CREATE TYPE "public"."enum_events_blocks_cta_background_color" AS ENUM('none', 'light', 'dark', 'primary', 'secondary');
-  CREATE TYPE "public"."enum_events_blocks_archive_populate_by" AS ENUM('collection', 'selection');
-  CREATE TYPE "public"."enum_events_blocks_archive_relation_to" AS ENUM('posts', 'pages', 'archive-items', 'people', 'places', 'museum-collections', 'custom-items');
-  CREATE TYPE "public"."enum_events_blocks_archive_layout" AS ENUM('grid', 'list', 'cards', 'carousel');
-  CREATE TYPE "public"."enum_events_blocks_archive_columns" AS ENUM('2', '3', '4');
-  CREATE TYPE "public"."enum_events_blocks_form_style" AS ENUM('default', 'card', 'inline', 'fullWidth');
-  CREATE TYPE "public"."enum_events_blocks_form_background_color" AS ENUM('none', 'light', 'dark');
-  CREATE TYPE "public"."enum_events_blocks_gallery_layout" AS ENUM('grid', 'masonry', 'carousel', 'lightbox', 'slider');
-  CREATE TYPE "public"."enum_events_blocks_gallery_columns" AS ENUM('2', '3', '4', '5', '6');
-  CREATE TYPE "public"."enum_events_blocks_gallery_gap" AS ENUM('none', 'small', 'medium', 'large');
-  CREATE TYPE "public"."enum_events_blocks_gallery_aspect_ratio" AS ENUM('auto', 'square', 'landscape', 'portrait', 'wide');
-  CREATE TYPE "public"."enum_events_blocks_grid_style" AS ENUM('cards', 'features', 'icons', 'stats', 'team', 'testimonials', 'logos');
-  CREATE TYPE "public"."enum_events_blocks_grid_columns" AS ENUM('1', '2', '3', '4', '5', '6');
-  CREATE TYPE "public"."enum_events_blocks_grid_gap" AS ENUM('none', 'small', 'medium', 'large');
-  CREATE TYPE "public"."enum_events_blocks_grid_alignment" AS ENUM('left', 'center', 'right');
-  CREATE TYPE "public"."enum_events_blocks_grid_hover_effect" AS ENUM('none', 'lift', 'scale', 'glow');
-  CREATE TYPE "public"."enum_events_blocks_timeline_layout" AS ENUM('vertical', 'alternating', 'horizontal', 'compact');
-  CREATE TYPE "public"."enum_events_blocks_timeline_line_style" AS ENUM('solid', 'dashed', 'dotted', 'gradient');
-  CREATE TYPE "public"."enum_events_blocks_timeline_marker_style" AS ENUM('circle', 'diamond', 'square', 'icon', 'number', 'image');
-  CREATE TYPE "public"."enum_events_blocks_timeline_sort_order" AS ENUM('chronological', 'reverse', 'manual');
-  CREATE TYPE "public"."enum_events_blocks_timeline_background_color" AS ENUM('transparent', 'light', 'dark', 'primary');
-  CREATE TYPE "public"."enum_events_event_type" AS ENUM('exhibition', 'workshop', 'conference', 'performance', 'lecture', 'tour', 'opening', 'other');
-  CREATE TYPE "public"."enum_events_recurring_frequency" AS ENUM('daily', 'weekly', 'monthly', 'yearly');
-  CREATE TYPE "public"."enum_events_price_currency" AS ENUM('GBP', 'USD', 'EUR');
-  CREATE TYPE "public"."enum_events_event_status" AS ENUM('upcoming', 'ongoing', 'completed', 'cancelled', 'postponed');
-  CREATE TYPE "public"."enum_events_template" AS ENUM('event', 'calendar', 'card');
-  CREATE TYPE "public"."enum_events_status" AS ENUM('draft', 'published');
-  CREATE TYPE "public"."enum__events_v_blocks_hero_links_variant" AS ENUM('primary', 'secondary', 'outline');
-  CREATE TYPE "public"."enum__events_v_blocks_hero_type" AS ENUM('standard', 'minimal', 'fullscreen', 'split', 'video');
-  CREATE TYPE "public"."enum__events_v_blocks_hero_overlay" AS ENUM('none', 'light', 'dark', 'gradient');
-  CREATE TYPE "public"."enum__events_v_blocks_hero_text_align" AS ENUM('left', 'center', 'right');
-  CREATE TYPE "public"."enum__events_v_blocks_content_columns_size" AS ENUM('oneThird', 'half', 'twoThirds', 'full');
-  CREATE TYPE "public"."enum__events_v_blocks_content_background_color" AS ENUM('none', 'light', 'dark', 'primary', 'secondary');
-  CREATE TYPE "public"."enum__events_v_blocks_content_padding_top" AS ENUM('none', 'small', 'medium', 'large');
-  CREATE TYPE "public"."enum__events_v_blocks_content_padding_bottom" AS ENUM('none', 'small', 'medium', 'large');
-  CREATE TYPE "public"."enum__events_v_blocks_media_size" AS ENUM('small', 'default', 'large', 'fullWidth');
-  CREATE TYPE "public"."enum__events_v_blocks_media_position" AS ENUM('left', 'center', 'right');
-  CREATE TYPE "public"."enum__events_v_blocks_cta_links_variant" AS ENUM('primary', 'secondary', 'outline');
-  CREATE TYPE "public"."enum__events_v_blocks_cta_style" AS ENUM('standard', 'banner', 'card', 'inline');
-  CREATE TYPE "public"."enum__events_v_blocks_cta_background_color" AS ENUM('none', 'light', 'dark', 'primary', 'secondary');
-  CREATE TYPE "public"."enum__events_v_blocks_archive_populate_by" AS ENUM('collection', 'selection');
-  CREATE TYPE "public"."enum__events_v_blocks_archive_relation_to" AS ENUM('posts', 'pages', 'archive-items', 'people', 'places', 'museum-collections', 'custom-items');
-  CREATE TYPE "public"."enum__events_v_blocks_archive_layout" AS ENUM('grid', 'list', 'cards', 'carousel');
-  CREATE TYPE "public"."enum__events_v_blocks_archive_columns" AS ENUM('2', '3', '4');
-  CREATE TYPE "public"."enum__events_v_blocks_form_style" AS ENUM('default', 'card', 'inline', 'fullWidth');
-  CREATE TYPE "public"."enum__events_v_blocks_form_background_color" AS ENUM('none', 'light', 'dark');
-  CREATE TYPE "public"."enum__events_v_blocks_gallery_layout" AS ENUM('grid', 'masonry', 'carousel', 'lightbox', 'slider');
-  CREATE TYPE "public"."enum__events_v_blocks_gallery_columns" AS ENUM('2', '3', '4', '5', '6');
-  CREATE TYPE "public"."enum__events_v_blocks_gallery_gap" AS ENUM('none', 'small', 'medium', 'large');
-  CREATE TYPE "public"."enum__events_v_blocks_gallery_aspect_ratio" AS ENUM('auto', 'square', 'landscape', 'portrait', 'wide');
-  CREATE TYPE "public"."enum__events_v_blocks_grid_style" AS ENUM('cards', 'features', 'icons', 'stats', 'team', 'testimonials', 'logos');
-  CREATE TYPE "public"."enum__events_v_blocks_grid_columns" AS ENUM('1', '2', '3', '4', '5', '6');
-  CREATE TYPE "public"."enum__events_v_blocks_grid_gap" AS ENUM('none', 'small', 'medium', 'large');
-  CREATE TYPE "public"."enum__events_v_blocks_grid_alignment" AS ENUM('left', 'center', 'right');
-  CREATE TYPE "public"."enum__events_v_blocks_grid_hover_effect" AS ENUM('none', 'lift', 'scale', 'glow');
-  CREATE TYPE "public"."enum__events_v_blocks_timeline_layout" AS ENUM('vertical', 'alternating', 'horizontal', 'compact');
-  CREATE TYPE "public"."enum__events_v_blocks_timeline_line_style" AS ENUM('solid', 'dashed', 'dotted', 'gradient');
-  CREATE TYPE "public"."enum__events_v_blocks_timeline_marker_style" AS ENUM('circle', 'diamond', 'square', 'icon', 'number', 'image');
-  CREATE TYPE "public"."enum__events_v_blocks_timeline_sort_order" AS ENUM('chronological', 'reverse', 'manual');
-  CREATE TYPE "public"."enum__events_v_blocks_timeline_background_color" AS ENUM('transparent', 'light', 'dark', 'primary');
-  CREATE TYPE "public"."enum__events_v_version_event_type" AS ENUM('exhibition', 'workshop', 'conference', 'performance', 'lecture', 'tour', 'opening', 'other');
-  CREATE TYPE "public"."enum__events_v_version_recurring_frequency" AS ENUM('daily', 'weekly', 'monthly', 'yearly');
-  CREATE TYPE "public"."enum__events_v_version_price_currency" AS ENUM('GBP', 'USD', 'EUR');
-  CREATE TYPE "public"."enum__events_v_version_event_status" AS ENUM('upcoming', 'ongoing', 'completed', 'cancelled', 'postponed');
-  CREATE TYPE "public"."enum__events_v_version_template" AS ENUM('event', 'calendar', 'card');
-  CREATE TYPE "public"."enum__events_v_version_status" AS ENUM('draft', 'published');
   CREATE TYPE "public"."enum_content_types_custom_fields_type" AS ENUM('text', 'textarea', 'number', 'date', 'checkbox', 'select', 'url', 'email');
   CREATE TYPE "public"."enum_content_types_icon" AS ENUM('box', 'product', 'archive', 'shopping-bag', 'person', 'location', 'event', 'document', 'archive-item', 'image', 'settings', 'users');
   CREATE TYPE "public"."enum_content_types_template" AS ENUM('archive-item', 'product', 'person', 'place', 'event', 'article');
@@ -2769,10 +2765,15 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	"id" serial PRIMARY KEY NOT NULL,
   	"title" varchar NOT NULL,
   	"slug" varchar NOT NULL,
+  	"parent_id" integer,
   	"description" varchar,
   	"featured_image_id" integer,
+  	"total_count" numeric,
   	"posts_count" numeric,
-  	"parent_id" integer,
+  	"archive_items_count" numeric,
+  	"events_count" numeric,
+  	"people_count" numeric,
+  	"custom_items_count" numeric,
   	"updated_at" timestamp(3) with time zone DEFAULT now() NOT NULL,
   	"created_at" timestamp(3) with time zone DEFAULT now() NOT NULL
   );
@@ -2792,10 +2793,15 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	"parent_id" integer,
   	"version_title" varchar NOT NULL,
   	"version_slug" varchar NOT NULL,
+  	"version_parent_id" integer,
   	"version_description" varchar,
   	"version_featured_image_id" integer,
+  	"version_total_count" numeric,
   	"version_posts_count" numeric,
-  	"version_parent_id" integer,
+  	"version_archive_items_count" numeric,
+  	"version_events_count" numeric,
+  	"version_people_count" numeric,
+  	"version_custom_items_count" numeric,
   	"version_updated_at" timestamp(3) with time zone,
   	"version_created_at" timestamp(3) with time zone,
   	"created_at" timestamp(3) with time zone DEFAULT now() NOT NULL,
@@ -2807,7 +2813,12 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	"title" varchar NOT NULL,
   	"slug" varchar NOT NULL,
   	"description" varchar,
+  	"total_count" numeric,
   	"posts_count" numeric,
+  	"archive_items_count" numeric,
+  	"events_count" numeric,
+  	"people_count" numeric,
+  	"custom_items_count" numeric,
   	"updated_at" timestamp(3) with time zone DEFAULT now() NOT NULL,
   	"created_at" timestamp(3) with time zone DEFAULT now() NOT NULL
   );
@@ -2818,7 +2829,12 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	"version_title" varchar NOT NULL,
   	"version_slug" varchar NOT NULL,
   	"version_description" varchar,
+  	"version_total_count" numeric,
   	"version_posts_count" numeric,
+  	"version_archive_items_count" numeric,
+  	"version_events_count" numeric,
+  	"version_people_count" numeric,
+  	"version_custom_items_count" numeric,
   	"version_updated_at" timestamp(3) with time zone,
   	"version_created_at" timestamp(3) with time zone,
   	"created_at" timestamp(3) with time zone DEFAULT now() NOT NULL,
@@ -3099,7 +3115,6 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	"people_id" integer,
   	"places_id" integer,
   	"archive_items_id" integer,
-  	"museum_collections_id" integer,
   	"categories_id" integer,
   	"tags_id" integer,
   	"posts_id" integer,
@@ -3402,7 +3417,6 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	"people_id" integer,
   	"places_id" integer,
   	"archive_items_id" integer,
-  	"museum_collections_id" integer,
   	"categories_id" integer,
   	"tags_id" integer,
   	"posts_id" integer,
@@ -5463,88 +5477,586 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	"custom_items_id" integer
   );
   
-  CREATE TABLE "museum_collections_breadcrumbs" (
+  CREATE TABLE "events_blocks_hero_links" (
   	"_order" integer NOT NULL,
-  	"_parent_id" integer NOT NULL,
+  	"_parent_id" varchar NOT NULL,
   	"id" varchar PRIMARY KEY NOT NULL,
-  	"doc_id" integer,
+  	"label" varchar,
   	"url" varchar,
-  	"label" varchar
+  	"page_id" integer,
+  	"variant" "enum_events_blocks_hero_links_variant" DEFAULT 'primary',
+  	"new_tab" boolean
   );
   
-  CREATE TABLE "museum_collections" (
+  CREATE TABLE "events_blocks_hero" (
+  	"_order" integer NOT NULL,
+  	"_parent_id" integer NOT NULL,
+  	"_path" text NOT NULL,
+  	"id" varchar PRIMARY KEY NOT NULL,
+  	"type" "enum_events_blocks_hero_type" DEFAULT 'standard',
+  	"heading" varchar,
+  	"subheading" varchar,
+  	"image_id" integer,
+  	"video_url" varchar,
+  	"overlay" "enum_events_blocks_hero_overlay" DEFAULT 'dark',
+  	"text_align" "enum_events_blocks_hero_text_align" DEFAULT 'center',
+  	"block_name" varchar
+  );
+  
+  CREATE TABLE "events_blocks_content_columns" (
+  	"_order" integer NOT NULL,
+  	"_parent_id" varchar NOT NULL,
+  	"id" varchar PRIMARY KEY NOT NULL,
+  	"size" "enum_events_blocks_content_columns_size" DEFAULT 'full',
+  	"rich_text" jsonb,
+  	"enable_link" boolean,
+  	"link_label" varchar,
+  	"link_url" varchar,
+  	"link_page_id" integer,
+  	"link_new_tab" boolean
+  );
+  
+  CREATE TABLE "events_blocks_content" (
+  	"_order" integer NOT NULL,
+  	"_parent_id" integer NOT NULL,
+  	"_path" text NOT NULL,
+  	"id" varchar PRIMARY KEY NOT NULL,
+  	"background_color" "enum_events_blocks_content_background_color" DEFAULT 'none',
+  	"padding_top" "enum_events_blocks_content_padding_top" DEFAULT 'medium',
+  	"padding_bottom" "enum_events_blocks_content_padding_bottom" DEFAULT 'medium',
+  	"block_name" varchar
+  );
+  
+  CREATE TABLE "events_blocks_media" (
+  	"_order" integer NOT NULL,
+  	"_parent_id" integer NOT NULL,
+  	"_path" text NOT NULL,
+  	"id" varchar PRIMARY KEY NOT NULL,
+  	"media_id" integer,
+  	"caption" varchar,
+  	"size" "enum_events_blocks_media_size" DEFAULT 'default',
+  	"position" "enum_events_blocks_media_position" DEFAULT 'center',
+  	"enable_link" boolean,
+  	"link_url" varchar,
+  	"link_page_id" integer,
+  	"link_new_tab" boolean,
+  	"block_name" varchar
+  );
+  
+  CREATE TABLE "events_blocks_cta_links" (
+  	"_order" integer NOT NULL,
+  	"_parent_id" varchar NOT NULL,
+  	"id" varchar PRIMARY KEY NOT NULL,
+  	"label" varchar,
+  	"url" varchar,
+  	"page_id" integer,
+  	"variant" "enum_events_blocks_cta_links_variant" DEFAULT 'primary',
+  	"new_tab" boolean
+  );
+  
+  CREATE TABLE "events_blocks_cta" (
+  	"_order" integer NOT NULL,
+  	"_parent_id" integer NOT NULL,
+  	"_path" text NOT NULL,
+  	"id" varchar PRIMARY KEY NOT NULL,
+  	"style" "enum_events_blocks_cta_style" DEFAULT 'standard',
+  	"heading" varchar,
+  	"description" varchar,
+  	"image_id" integer,
+  	"background_color" "enum_events_blocks_cta_background_color" DEFAULT 'primary',
+  	"block_name" varchar
+  );
+  
+  CREATE TABLE "events_blocks_archive" (
+  	"_order" integer NOT NULL,
+  	"_parent_id" integer NOT NULL,
+  	"_path" text NOT NULL,
+  	"id" varchar PRIMARY KEY NOT NULL,
+  	"heading" varchar,
+  	"description" varchar,
+  	"populate_by" "enum_events_blocks_archive_populate_by" DEFAULT 'collection',
+  	"relation_to" "enum_events_blocks_archive_relation_to" DEFAULT 'posts',
+  	"content_type_id" integer,
+  	"limit" numeric DEFAULT 6,
+  	"layout" "enum_events_blocks_archive_layout" DEFAULT 'grid',
+  	"columns" "enum_events_blocks_archive_columns" DEFAULT '3',
+  	"show_image" boolean DEFAULT true,
+  	"show_excerpt" boolean DEFAULT true,
+  	"show_date" boolean DEFAULT true,
+  	"show_author" boolean DEFAULT false,
+  	"link_show" boolean,
+  	"link_label" varchar DEFAULT 'View All',
+  	"link_url" varchar,
+  	"block_name" varchar
+  );
+  
+  CREATE TABLE "events_blocks_form" (
+  	"_order" integer NOT NULL,
+  	"_parent_id" integer NOT NULL,
+  	"_path" text NOT NULL,
+  	"id" varchar PRIMARY KEY NOT NULL,
+  	"form_id" integer,
+  	"enable_intro" boolean,
+  	"intro_content" jsonb,
+  	"style" "enum_events_blocks_form_style" DEFAULT 'default',
+  	"background_color" "enum_events_blocks_form_background_color" DEFAULT 'none',
+  	"block_name" varchar
+  );
+  
+  CREATE TABLE "events_blocks_gallery_images" (
+  	"_order" integer NOT NULL,
+  	"_parent_id" varchar NOT NULL,
+  	"id" varchar PRIMARY KEY NOT NULL,
+  	"image_id" integer,
+  	"caption" varchar,
+  	"link_url" varchar,
+  	"link_page_id" integer,
+  	"link_new_tab" boolean
+  );
+  
+  CREATE TABLE "events_blocks_gallery" (
+  	"_order" integer NOT NULL,
+  	"_parent_id" integer NOT NULL,
+  	"_path" text NOT NULL,
+  	"id" varchar PRIMARY KEY NOT NULL,
+  	"heading" varchar,
+  	"description" varchar,
+  	"layout" "enum_events_blocks_gallery_layout" DEFAULT 'grid',
+  	"columns" "enum_events_blocks_gallery_columns" DEFAULT '3',
+  	"gap" "enum_events_blocks_gallery_gap" DEFAULT 'medium',
+  	"aspect_ratio" "enum_events_blocks_gallery_aspect_ratio" DEFAULT 'auto',
+  	"show_captions" boolean DEFAULT true,
+  	"enable_lightbox" boolean DEFAULT true,
+  	"autoplay" boolean DEFAULT false,
+  	"autoplay_speed" numeric DEFAULT 5000,
+  	"block_name" varchar
+  );
+  
+  CREATE TABLE "events_blocks_grid_items" (
+  	"_order" integer NOT NULL,
+  	"_parent_id" varchar NOT NULL,
+  	"id" varchar PRIMARY KEY NOT NULL,
+  	"image_id" integer,
+  	"icon" varchar,
+  	"title" varchar,
+  	"subtitle" varchar,
+  	"description" varchar,
+  	"stat" varchar,
+  	"link_url" varchar,
+  	"link_page_id" integer,
+  	"link_label" varchar,
+  	"link_new_tab" boolean
+  );
+  
+  CREATE TABLE "events_blocks_grid" (
+  	"_order" integer NOT NULL,
+  	"_parent_id" integer NOT NULL,
+  	"_path" text NOT NULL,
+  	"id" varchar PRIMARY KEY NOT NULL,
+  	"heading" varchar,
+  	"description" varchar,
+  	"style" "enum_events_blocks_grid_style" DEFAULT 'cards',
+  	"columns" "enum_events_blocks_grid_columns" DEFAULT '3',
+  	"gap" "enum_events_blocks_grid_gap" DEFAULT 'medium',
+  	"alignment" "enum_events_blocks_grid_alignment" DEFAULT 'left',
+  	"show_border" boolean DEFAULT true,
+  	"show_shadow" boolean DEFAULT true,
+  	"hover_effect" "enum_events_blocks_grid_hover_effect" DEFAULT 'none',
+  	"cta_show" boolean,
+  	"cta_label" varchar,
+  	"cta_url" varchar,
+  	"cta_page_id" integer,
+  	"block_name" varchar
+  );
+  
+  CREATE TABLE "events_blocks_timeline_events" (
+  	"_order" integer NOT NULL,
+  	"_parent_id" varchar NOT NULL,
+  	"id" varchar PRIMARY KEY NOT NULL,
+  	"date" varchar,
+  	"title" varchar,
+  	"description" jsonb,
+  	"image_id" integer,
+  	"icon" varchar,
+  	"color" varchar,
+  	"link_url" varchar,
+  	"link_page_id" integer,
+  	"link_archive_item_id" integer,
+  	"link_person_id" integer,
+  	"link_label" varchar DEFAULT 'Learn More',
+  	"link_new_tab" boolean,
+  	"featured" boolean
+  );
+  
+  CREATE TABLE "events_blocks_timeline" (
+  	"_order" integer NOT NULL,
+  	"_parent_id" integer NOT NULL,
+  	"_path" text NOT NULL,
+  	"id" varchar PRIMARY KEY NOT NULL,
+  	"heading" varchar,
+  	"description" varchar,
+  	"layout" "enum_events_blocks_timeline_layout" DEFAULT 'vertical',
+  	"line_style" "enum_events_blocks_timeline_line_style" DEFAULT 'solid',
+  	"marker_style" "enum_events_blocks_timeline_marker_style" DEFAULT 'circle',
+  	"show_connectors" boolean DEFAULT true,
+  	"show_dates" boolean DEFAULT true,
+  	"animate_on_scroll" boolean DEFAULT true,
+  	"sort_order" "enum_events_blocks_timeline_sort_order" DEFAULT 'chronological',
+  	"background_color" "enum_events_blocks_timeline_background_color" DEFAULT 'transparent',
+  	"block_name" varchar
+  );
+  
+  CREATE TABLE "events" (
   	"id" serial PRIMARY KEY NOT NULL,
   	"title" varchar,
   	"slug" varchar,
   	"featured_image_id" integer,
-  	"description" jsonb,
-  	"short_description" varchar,
-  	"curator_id" integer,
-  	"display_order" numeric,
-  	"template" "enum_museum_collections_template" DEFAULT 'list',
-  	"color" varchar,
+  	"excerpt" varchar,
+  	"rich_content" jsonb,
+  	"event_type" "enum_events_event_type",
+  	"start_date" timestamp(3) with time zone,
+  	"end_date" timestamp(3) with time zone,
+  	"all_day" boolean,
+  	"recurring_is_recurring" boolean,
+  	"recurring_frequency" "enum_events_recurring_frequency",
+  	"recurring_recurrence_end" timestamp(3) with time zone,
+  	"venue_id" integer,
+  	"online_event" boolean,
+  	"online_url" varchar,
+  	"custom_location" varchar,
+  	"requires_registration" boolean,
+  	"registration_url" varchar,
+  	"capacity" numeric,
+  	"registered" numeric DEFAULT 0,
+  	"price_is_free" boolean DEFAULT true,
+  	"price_amount" numeric,
+  	"price_currency" "enum_events_price_currency" DEFAULT 'GBP',
   	"featured" boolean,
-  	"artifact_count" numeric,
+  	"event_status" "enum_events_event_status" DEFAULT 'upcoming',
+  	"template" "enum_events_template" DEFAULT 'event',
   	"meta_title" varchar,
   	"meta_description" varchar,
   	"meta_image_id" integer,
-  	"parent_id" integer,
   	"updated_at" timestamp(3) with time zone DEFAULT now() NOT NULL,
   	"created_at" timestamp(3) with time zone DEFAULT now() NOT NULL,
-  	"_status" "enum_museum_collections_status" DEFAULT 'draft'
+  	"_status" "enum_events_status" DEFAULT 'draft'
   );
   
-  CREATE TABLE "museum_collections_rels" (
+  CREATE TABLE "events_rels" (
   	"id" serial PRIMARY KEY NOT NULL,
   	"order" integer,
   	"parent_id" integer NOT NULL,
   	"path" varchar NOT NULL,
-  	"archive_items_id" integer
+  	"categories_id" integer,
+  	"tags_id" integer,
+  	"people_id" integer,
+  	"events_id" integer,
+  	"posts_id" integer,
+  	"pages_id" integer,
+  	"archive_items_id" integer,
+  	"places_id" integer,
+  	"custom_items_id" integer
   );
   
-  CREATE TABLE "_museum_collections_v_version_breadcrumbs" (
+  CREATE TABLE "_events_v_blocks_hero_links" (
   	"_order" integer NOT NULL,
   	"_parent_id" integer NOT NULL,
   	"id" serial PRIMARY KEY NOT NULL,
-  	"doc_id" integer,
-  	"url" varchar,
   	"label" varchar,
+  	"url" varchar,
+  	"page_id" integer,
+  	"variant" "enum__events_v_blocks_hero_links_variant" DEFAULT 'primary',
+  	"new_tab" boolean,
   	"_uuid" varchar
   );
   
-  CREATE TABLE "_museum_collections_v" (
+  CREATE TABLE "_events_v_blocks_hero" (
+  	"_order" integer NOT NULL,
+  	"_parent_id" integer NOT NULL,
+  	"_path" text NOT NULL,
+  	"id" serial PRIMARY KEY NOT NULL,
+  	"type" "enum__events_v_blocks_hero_type" DEFAULT 'standard',
+  	"heading" varchar,
+  	"subheading" varchar,
+  	"image_id" integer,
+  	"video_url" varchar,
+  	"overlay" "enum__events_v_blocks_hero_overlay" DEFAULT 'dark',
+  	"text_align" "enum__events_v_blocks_hero_text_align" DEFAULT 'center',
+  	"_uuid" varchar,
+  	"block_name" varchar
+  );
+  
+  CREATE TABLE "_events_v_blocks_content_columns" (
+  	"_order" integer NOT NULL,
+  	"_parent_id" integer NOT NULL,
+  	"id" serial PRIMARY KEY NOT NULL,
+  	"size" "enum__events_v_blocks_content_columns_size" DEFAULT 'full',
+  	"rich_text" jsonb,
+  	"enable_link" boolean,
+  	"link_label" varchar,
+  	"link_url" varchar,
+  	"link_page_id" integer,
+  	"link_new_tab" boolean,
+  	"_uuid" varchar
+  );
+  
+  CREATE TABLE "_events_v_blocks_content" (
+  	"_order" integer NOT NULL,
+  	"_parent_id" integer NOT NULL,
+  	"_path" text NOT NULL,
+  	"id" serial PRIMARY KEY NOT NULL,
+  	"background_color" "enum__events_v_blocks_content_background_color" DEFAULT 'none',
+  	"padding_top" "enum__events_v_blocks_content_padding_top" DEFAULT 'medium',
+  	"padding_bottom" "enum__events_v_blocks_content_padding_bottom" DEFAULT 'medium',
+  	"_uuid" varchar,
+  	"block_name" varchar
+  );
+  
+  CREATE TABLE "_events_v_blocks_media" (
+  	"_order" integer NOT NULL,
+  	"_parent_id" integer NOT NULL,
+  	"_path" text NOT NULL,
+  	"id" serial PRIMARY KEY NOT NULL,
+  	"media_id" integer,
+  	"caption" varchar,
+  	"size" "enum__events_v_blocks_media_size" DEFAULT 'default',
+  	"position" "enum__events_v_blocks_media_position" DEFAULT 'center',
+  	"enable_link" boolean,
+  	"link_url" varchar,
+  	"link_page_id" integer,
+  	"link_new_tab" boolean,
+  	"_uuid" varchar,
+  	"block_name" varchar
+  );
+  
+  CREATE TABLE "_events_v_blocks_cta_links" (
+  	"_order" integer NOT NULL,
+  	"_parent_id" integer NOT NULL,
+  	"id" serial PRIMARY KEY NOT NULL,
+  	"label" varchar,
+  	"url" varchar,
+  	"page_id" integer,
+  	"variant" "enum__events_v_blocks_cta_links_variant" DEFAULT 'primary',
+  	"new_tab" boolean,
+  	"_uuid" varchar
+  );
+  
+  CREATE TABLE "_events_v_blocks_cta" (
+  	"_order" integer NOT NULL,
+  	"_parent_id" integer NOT NULL,
+  	"_path" text NOT NULL,
+  	"id" serial PRIMARY KEY NOT NULL,
+  	"style" "enum__events_v_blocks_cta_style" DEFAULT 'standard',
+  	"heading" varchar,
+  	"description" varchar,
+  	"image_id" integer,
+  	"background_color" "enum__events_v_blocks_cta_background_color" DEFAULT 'primary',
+  	"_uuid" varchar,
+  	"block_name" varchar
+  );
+  
+  CREATE TABLE "_events_v_blocks_archive" (
+  	"_order" integer NOT NULL,
+  	"_parent_id" integer NOT NULL,
+  	"_path" text NOT NULL,
+  	"id" serial PRIMARY KEY NOT NULL,
+  	"heading" varchar,
+  	"description" varchar,
+  	"populate_by" "enum__events_v_blocks_archive_populate_by" DEFAULT 'collection',
+  	"relation_to" "enum__events_v_blocks_archive_relation_to" DEFAULT 'posts',
+  	"content_type_id" integer,
+  	"limit" numeric DEFAULT 6,
+  	"layout" "enum__events_v_blocks_archive_layout" DEFAULT 'grid',
+  	"columns" "enum__events_v_blocks_archive_columns" DEFAULT '3',
+  	"show_image" boolean DEFAULT true,
+  	"show_excerpt" boolean DEFAULT true,
+  	"show_date" boolean DEFAULT true,
+  	"show_author" boolean DEFAULT false,
+  	"link_show" boolean,
+  	"link_label" varchar DEFAULT 'View All',
+  	"link_url" varchar,
+  	"_uuid" varchar,
+  	"block_name" varchar
+  );
+  
+  CREATE TABLE "_events_v_blocks_form" (
+  	"_order" integer NOT NULL,
+  	"_parent_id" integer NOT NULL,
+  	"_path" text NOT NULL,
+  	"id" serial PRIMARY KEY NOT NULL,
+  	"form_id" integer,
+  	"enable_intro" boolean,
+  	"intro_content" jsonb,
+  	"style" "enum__events_v_blocks_form_style" DEFAULT 'default',
+  	"background_color" "enum__events_v_blocks_form_background_color" DEFAULT 'none',
+  	"_uuid" varchar,
+  	"block_name" varchar
+  );
+  
+  CREATE TABLE "_events_v_blocks_gallery_images" (
+  	"_order" integer NOT NULL,
+  	"_parent_id" integer NOT NULL,
+  	"id" serial PRIMARY KEY NOT NULL,
+  	"image_id" integer,
+  	"caption" varchar,
+  	"link_url" varchar,
+  	"link_page_id" integer,
+  	"link_new_tab" boolean,
+  	"_uuid" varchar
+  );
+  
+  CREATE TABLE "_events_v_blocks_gallery" (
+  	"_order" integer NOT NULL,
+  	"_parent_id" integer NOT NULL,
+  	"_path" text NOT NULL,
+  	"id" serial PRIMARY KEY NOT NULL,
+  	"heading" varchar,
+  	"description" varchar,
+  	"layout" "enum__events_v_blocks_gallery_layout" DEFAULT 'grid',
+  	"columns" "enum__events_v_blocks_gallery_columns" DEFAULT '3',
+  	"gap" "enum__events_v_blocks_gallery_gap" DEFAULT 'medium',
+  	"aspect_ratio" "enum__events_v_blocks_gallery_aspect_ratio" DEFAULT 'auto',
+  	"show_captions" boolean DEFAULT true,
+  	"enable_lightbox" boolean DEFAULT true,
+  	"autoplay" boolean DEFAULT false,
+  	"autoplay_speed" numeric DEFAULT 5000,
+  	"_uuid" varchar,
+  	"block_name" varchar
+  );
+  
+  CREATE TABLE "_events_v_blocks_grid_items" (
+  	"_order" integer NOT NULL,
+  	"_parent_id" integer NOT NULL,
+  	"id" serial PRIMARY KEY NOT NULL,
+  	"image_id" integer,
+  	"icon" varchar,
+  	"title" varchar,
+  	"subtitle" varchar,
+  	"description" varchar,
+  	"stat" varchar,
+  	"link_url" varchar,
+  	"link_page_id" integer,
+  	"link_label" varchar,
+  	"link_new_tab" boolean,
+  	"_uuid" varchar
+  );
+  
+  CREATE TABLE "_events_v_blocks_grid" (
+  	"_order" integer NOT NULL,
+  	"_parent_id" integer NOT NULL,
+  	"_path" text NOT NULL,
+  	"id" serial PRIMARY KEY NOT NULL,
+  	"heading" varchar,
+  	"description" varchar,
+  	"style" "enum__events_v_blocks_grid_style" DEFAULT 'cards',
+  	"columns" "enum__events_v_blocks_grid_columns" DEFAULT '3',
+  	"gap" "enum__events_v_blocks_grid_gap" DEFAULT 'medium',
+  	"alignment" "enum__events_v_blocks_grid_alignment" DEFAULT 'left',
+  	"show_border" boolean DEFAULT true,
+  	"show_shadow" boolean DEFAULT true,
+  	"hover_effect" "enum__events_v_blocks_grid_hover_effect" DEFAULT 'none',
+  	"cta_show" boolean,
+  	"cta_label" varchar,
+  	"cta_url" varchar,
+  	"cta_page_id" integer,
+  	"_uuid" varchar,
+  	"block_name" varchar
+  );
+  
+  CREATE TABLE "_events_v_blocks_timeline_events" (
+  	"_order" integer NOT NULL,
+  	"_parent_id" integer NOT NULL,
+  	"id" serial PRIMARY KEY NOT NULL,
+  	"date" varchar,
+  	"title" varchar,
+  	"description" jsonb,
+  	"image_id" integer,
+  	"icon" varchar,
+  	"color" varchar,
+  	"link_url" varchar,
+  	"link_page_id" integer,
+  	"link_archive_item_id" integer,
+  	"link_person_id" integer,
+  	"link_label" varchar DEFAULT 'Learn More',
+  	"link_new_tab" boolean,
+  	"featured" boolean,
+  	"_uuid" varchar
+  );
+  
+  CREATE TABLE "_events_v_blocks_timeline" (
+  	"_order" integer NOT NULL,
+  	"_parent_id" integer NOT NULL,
+  	"_path" text NOT NULL,
+  	"id" serial PRIMARY KEY NOT NULL,
+  	"heading" varchar,
+  	"description" varchar,
+  	"layout" "enum__events_v_blocks_timeline_layout" DEFAULT 'vertical',
+  	"line_style" "enum__events_v_blocks_timeline_line_style" DEFAULT 'solid',
+  	"marker_style" "enum__events_v_blocks_timeline_marker_style" DEFAULT 'circle',
+  	"show_connectors" boolean DEFAULT true,
+  	"show_dates" boolean DEFAULT true,
+  	"animate_on_scroll" boolean DEFAULT true,
+  	"sort_order" "enum__events_v_blocks_timeline_sort_order" DEFAULT 'chronological',
+  	"background_color" "enum__events_v_blocks_timeline_background_color" DEFAULT 'transparent',
+  	"_uuid" varchar,
+  	"block_name" varchar
+  );
+  
+  CREATE TABLE "_events_v" (
   	"id" serial PRIMARY KEY NOT NULL,
   	"parent_id" integer,
   	"version_title" varchar,
   	"version_slug" varchar,
   	"version_featured_image_id" integer,
-  	"version_description" jsonb,
-  	"version_short_description" varchar,
-  	"version_curator_id" integer,
-  	"version_display_order" numeric,
-  	"version_template" "enum__museum_collections_v_version_template" DEFAULT 'list',
-  	"version_color" varchar,
+  	"version_excerpt" varchar,
+  	"version_rich_content" jsonb,
+  	"version_event_type" "enum__events_v_version_event_type",
+  	"version_start_date" timestamp(3) with time zone,
+  	"version_end_date" timestamp(3) with time zone,
+  	"version_all_day" boolean,
+  	"version_recurring_is_recurring" boolean,
+  	"version_recurring_frequency" "enum__events_v_version_recurring_frequency",
+  	"version_recurring_recurrence_end" timestamp(3) with time zone,
+  	"version_venue_id" integer,
+  	"version_online_event" boolean,
+  	"version_online_url" varchar,
+  	"version_custom_location" varchar,
+  	"version_requires_registration" boolean,
+  	"version_registration_url" varchar,
+  	"version_capacity" numeric,
+  	"version_registered" numeric DEFAULT 0,
+  	"version_price_is_free" boolean DEFAULT true,
+  	"version_price_amount" numeric,
+  	"version_price_currency" "enum__events_v_version_price_currency" DEFAULT 'GBP',
   	"version_featured" boolean,
-  	"version_artifact_count" numeric,
+  	"version_event_status" "enum__events_v_version_event_status" DEFAULT 'upcoming',
+  	"version_template" "enum__events_v_version_template" DEFAULT 'event',
   	"version_meta_title" varchar,
   	"version_meta_description" varchar,
   	"version_meta_image_id" integer,
-  	"version_parent_id" integer,
   	"version_updated_at" timestamp(3) with time zone,
   	"version_created_at" timestamp(3) with time zone,
-  	"version__status" "enum__museum_collections_v_version_status" DEFAULT 'draft',
+  	"version__status" "enum__events_v_version_status" DEFAULT 'draft',
   	"created_at" timestamp(3) with time zone DEFAULT now() NOT NULL,
   	"updated_at" timestamp(3) with time zone DEFAULT now() NOT NULL,
   	"latest" boolean,
   	"autosave" boolean
   );
   
-  CREATE TABLE "_museum_collections_v_rels" (
+  CREATE TABLE "_events_v_rels" (
   	"id" serial PRIMARY KEY NOT NULL,
   	"order" integer,
   	"parent_id" integer NOT NULL,
   	"path" varchar NOT NULL,
-  	"archive_items_id" integer
+  	"categories_id" integer,
+  	"tags_id" integer,
+  	"people_id" integer,
+  	"events_id" integer,
+  	"posts_id" integer,
+  	"pages_id" integer,
+  	"archive_items_id" integer,
+  	"places_id" integer,
+  	"custom_items_id" integer
   );
   
   CREATE TABLE "products_gallery" (
@@ -5820,6 +6332,9 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	"featured" boolean,
   	"availability" "enum_products_availability" DEFAULT 'active',
   	"template" "enum_products_template" DEFAULT 'standard',
+  	"meta_title" varchar,
+  	"meta_description" varchar,
+  	"meta_image_id" integer,
   	"updated_at" timestamp(3) with time zone DEFAULT now() NOT NULL,
   	"created_at" timestamp(3) with time zone DEFAULT now() NOT NULL,
   	"_status" "enum_products_status" DEFAULT 'draft'
@@ -6133,6 +6648,9 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	"version_featured" boolean,
   	"version_availability" "enum__products_v_version_availability" DEFAULT 'active',
   	"version_template" "enum__products_v_version_template" DEFAULT 'standard',
+  	"version_meta_title" varchar,
+  	"version_meta_description" varchar,
+  	"version_meta_image_id" integer,
   	"version_updated_at" timestamp(3) with time zone,
   	"version_created_at" timestamp(3) with time zone,
   	"version__status" "enum__products_v_version_status" DEFAULT 'draft',
@@ -6266,582 +6784,6 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	"parent_id" integer NOT NULL,
   	"path" varchar NOT NULL,
   	"products_id" integer
-  );
-  
-  CREATE TABLE "events_blocks_hero_links" (
-  	"_order" integer NOT NULL,
-  	"_parent_id" varchar NOT NULL,
-  	"id" varchar PRIMARY KEY NOT NULL,
-  	"label" varchar,
-  	"url" varchar,
-  	"page_id" integer,
-  	"variant" "enum_events_blocks_hero_links_variant" DEFAULT 'primary',
-  	"new_tab" boolean
-  );
-  
-  CREATE TABLE "events_blocks_hero" (
-  	"_order" integer NOT NULL,
-  	"_parent_id" integer NOT NULL,
-  	"_path" text NOT NULL,
-  	"id" varchar PRIMARY KEY NOT NULL,
-  	"type" "enum_events_blocks_hero_type" DEFAULT 'standard',
-  	"heading" varchar,
-  	"subheading" varchar,
-  	"image_id" integer,
-  	"video_url" varchar,
-  	"overlay" "enum_events_blocks_hero_overlay" DEFAULT 'dark',
-  	"text_align" "enum_events_blocks_hero_text_align" DEFAULT 'center',
-  	"block_name" varchar
-  );
-  
-  CREATE TABLE "events_blocks_content_columns" (
-  	"_order" integer NOT NULL,
-  	"_parent_id" varchar NOT NULL,
-  	"id" varchar PRIMARY KEY NOT NULL,
-  	"size" "enum_events_blocks_content_columns_size" DEFAULT 'full',
-  	"rich_text" jsonb,
-  	"enable_link" boolean,
-  	"link_label" varchar,
-  	"link_url" varchar,
-  	"link_page_id" integer,
-  	"link_new_tab" boolean
-  );
-  
-  CREATE TABLE "events_blocks_content" (
-  	"_order" integer NOT NULL,
-  	"_parent_id" integer NOT NULL,
-  	"_path" text NOT NULL,
-  	"id" varchar PRIMARY KEY NOT NULL,
-  	"background_color" "enum_events_blocks_content_background_color" DEFAULT 'none',
-  	"padding_top" "enum_events_blocks_content_padding_top" DEFAULT 'medium',
-  	"padding_bottom" "enum_events_blocks_content_padding_bottom" DEFAULT 'medium',
-  	"block_name" varchar
-  );
-  
-  CREATE TABLE "events_blocks_media" (
-  	"_order" integer NOT NULL,
-  	"_parent_id" integer NOT NULL,
-  	"_path" text NOT NULL,
-  	"id" varchar PRIMARY KEY NOT NULL,
-  	"media_id" integer,
-  	"caption" varchar,
-  	"size" "enum_events_blocks_media_size" DEFAULT 'default',
-  	"position" "enum_events_blocks_media_position" DEFAULT 'center',
-  	"enable_link" boolean,
-  	"link_url" varchar,
-  	"link_page_id" integer,
-  	"link_new_tab" boolean,
-  	"block_name" varchar
-  );
-  
-  CREATE TABLE "events_blocks_cta_links" (
-  	"_order" integer NOT NULL,
-  	"_parent_id" varchar NOT NULL,
-  	"id" varchar PRIMARY KEY NOT NULL,
-  	"label" varchar,
-  	"url" varchar,
-  	"page_id" integer,
-  	"variant" "enum_events_blocks_cta_links_variant" DEFAULT 'primary',
-  	"new_tab" boolean
-  );
-  
-  CREATE TABLE "events_blocks_cta" (
-  	"_order" integer NOT NULL,
-  	"_parent_id" integer NOT NULL,
-  	"_path" text NOT NULL,
-  	"id" varchar PRIMARY KEY NOT NULL,
-  	"style" "enum_events_blocks_cta_style" DEFAULT 'standard',
-  	"heading" varchar,
-  	"description" varchar,
-  	"image_id" integer,
-  	"background_color" "enum_events_blocks_cta_background_color" DEFAULT 'primary',
-  	"block_name" varchar
-  );
-  
-  CREATE TABLE "events_blocks_archive" (
-  	"_order" integer NOT NULL,
-  	"_parent_id" integer NOT NULL,
-  	"_path" text NOT NULL,
-  	"id" varchar PRIMARY KEY NOT NULL,
-  	"heading" varchar,
-  	"description" varchar,
-  	"populate_by" "enum_events_blocks_archive_populate_by" DEFAULT 'collection',
-  	"relation_to" "enum_events_blocks_archive_relation_to" DEFAULT 'posts',
-  	"content_type_id" integer,
-  	"limit" numeric DEFAULT 6,
-  	"layout" "enum_events_blocks_archive_layout" DEFAULT 'grid',
-  	"columns" "enum_events_blocks_archive_columns" DEFAULT '3',
-  	"show_image" boolean DEFAULT true,
-  	"show_excerpt" boolean DEFAULT true,
-  	"show_date" boolean DEFAULT true,
-  	"show_author" boolean DEFAULT false,
-  	"link_show" boolean,
-  	"link_label" varchar DEFAULT 'View All',
-  	"link_url" varchar,
-  	"block_name" varchar
-  );
-  
-  CREATE TABLE "events_blocks_form" (
-  	"_order" integer NOT NULL,
-  	"_parent_id" integer NOT NULL,
-  	"_path" text NOT NULL,
-  	"id" varchar PRIMARY KEY NOT NULL,
-  	"form_id" integer,
-  	"enable_intro" boolean,
-  	"intro_content" jsonb,
-  	"style" "enum_events_blocks_form_style" DEFAULT 'default',
-  	"background_color" "enum_events_blocks_form_background_color" DEFAULT 'none',
-  	"block_name" varchar
-  );
-  
-  CREATE TABLE "events_blocks_gallery_images" (
-  	"_order" integer NOT NULL,
-  	"_parent_id" varchar NOT NULL,
-  	"id" varchar PRIMARY KEY NOT NULL,
-  	"image_id" integer,
-  	"caption" varchar,
-  	"link_url" varchar,
-  	"link_page_id" integer,
-  	"link_new_tab" boolean
-  );
-  
-  CREATE TABLE "events_blocks_gallery" (
-  	"_order" integer NOT NULL,
-  	"_parent_id" integer NOT NULL,
-  	"_path" text NOT NULL,
-  	"id" varchar PRIMARY KEY NOT NULL,
-  	"heading" varchar,
-  	"description" varchar,
-  	"layout" "enum_events_blocks_gallery_layout" DEFAULT 'grid',
-  	"columns" "enum_events_blocks_gallery_columns" DEFAULT '3',
-  	"gap" "enum_events_blocks_gallery_gap" DEFAULT 'medium',
-  	"aspect_ratio" "enum_events_blocks_gallery_aspect_ratio" DEFAULT 'auto',
-  	"show_captions" boolean DEFAULT true,
-  	"enable_lightbox" boolean DEFAULT true,
-  	"autoplay" boolean DEFAULT false,
-  	"autoplay_speed" numeric DEFAULT 5000,
-  	"block_name" varchar
-  );
-  
-  CREATE TABLE "events_blocks_grid_items" (
-  	"_order" integer NOT NULL,
-  	"_parent_id" varchar NOT NULL,
-  	"id" varchar PRIMARY KEY NOT NULL,
-  	"image_id" integer,
-  	"icon" varchar,
-  	"title" varchar,
-  	"subtitle" varchar,
-  	"description" varchar,
-  	"stat" varchar,
-  	"link_url" varchar,
-  	"link_page_id" integer,
-  	"link_label" varchar,
-  	"link_new_tab" boolean
-  );
-  
-  CREATE TABLE "events_blocks_grid" (
-  	"_order" integer NOT NULL,
-  	"_parent_id" integer NOT NULL,
-  	"_path" text NOT NULL,
-  	"id" varchar PRIMARY KEY NOT NULL,
-  	"heading" varchar,
-  	"description" varchar,
-  	"style" "enum_events_blocks_grid_style" DEFAULT 'cards',
-  	"columns" "enum_events_blocks_grid_columns" DEFAULT '3',
-  	"gap" "enum_events_blocks_grid_gap" DEFAULT 'medium',
-  	"alignment" "enum_events_blocks_grid_alignment" DEFAULT 'left',
-  	"show_border" boolean DEFAULT true,
-  	"show_shadow" boolean DEFAULT true,
-  	"hover_effect" "enum_events_blocks_grid_hover_effect" DEFAULT 'none',
-  	"cta_show" boolean,
-  	"cta_label" varchar,
-  	"cta_url" varchar,
-  	"cta_page_id" integer,
-  	"block_name" varchar
-  );
-  
-  CREATE TABLE "events_blocks_timeline_events" (
-  	"_order" integer NOT NULL,
-  	"_parent_id" varchar NOT NULL,
-  	"id" varchar PRIMARY KEY NOT NULL,
-  	"date" varchar,
-  	"title" varchar,
-  	"description" jsonb,
-  	"image_id" integer,
-  	"icon" varchar,
-  	"color" varchar,
-  	"link_url" varchar,
-  	"link_page_id" integer,
-  	"link_archive_item_id" integer,
-  	"link_person_id" integer,
-  	"link_label" varchar DEFAULT 'Learn More',
-  	"link_new_tab" boolean,
-  	"featured" boolean
-  );
-  
-  CREATE TABLE "events_blocks_timeline" (
-  	"_order" integer NOT NULL,
-  	"_parent_id" integer NOT NULL,
-  	"_path" text NOT NULL,
-  	"id" varchar PRIMARY KEY NOT NULL,
-  	"heading" varchar,
-  	"description" varchar,
-  	"layout" "enum_events_blocks_timeline_layout" DEFAULT 'vertical',
-  	"line_style" "enum_events_blocks_timeline_line_style" DEFAULT 'solid',
-  	"marker_style" "enum_events_blocks_timeline_marker_style" DEFAULT 'circle',
-  	"show_connectors" boolean DEFAULT true,
-  	"show_dates" boolean DEFAULT true,
-  	"animate_on_scroll" boolean DEFAULT true,
-  	"sort_order" "enum_events_blocks_timeline_sort_order" DEFAULT 'chronological',
-  	"background_color" "enum_events_blocks_timeline_background_color" DEFAULT 'transparent',
-  	"block_name" varchar
-  );
-  
-  CREATE TABLE "events" (
-  	"id" serial PRIMARY KEY NOT NULL,
-  	"title" varchar,
-  	"slug" varchar,
-  	"featured_image_id" integer,
-  	"excerpt" varchar,
-  	"rich_content" jsonb,
-  	"event_type" "enum_events_event_type",
-  	"start_date" timestamp(3) with time zone,
-  	"end_date" timestamp(3) with time zone,
-  	"all_day" boolean,
-  	"recurring_is_recurring" boolean,
-  	"recurring_frequency" "enum_events_recurring_frequency",
-  	"recurring_recurrence_end" timestamp(3) with time zone,
-  	"venue_id" integer,
-  	"online_event" boolean,
-  	"online_url" varchar,
-  	"custom_location" varchar,
-  	"requires_registration" boolean,
-  	"registration_url" varchar,
-  	"capacity" numeric,
-  	"registered" numeric DEFAULT 0,
-  	"price_is_free" boolean DEFAULT true,
-  	"price_amount" numeric,
-  	"price_currency" "enum_events_price_currency" DEFAULT 'GBP',
-  	"featured" boolean,
-  	"event_status" "enum_events_event_status" DEFAULT 'upcoming',
-  	"template" "enum_events_template" DEFAULT 'event',
-  	"updated_at" timestamp(3) with time zone DEFAULT now() NOT NULL,
-  	"created_at" timestamp(3) with time zone DEFAULT now() NOT NULL,
-  	"_status" "enum_events_status" DEFAULT 'draft'
-  );
-  
-  CREATE TABLE "events_rels" (
-  	"id" serial PRIMARY KEY NOT NULL,
-  	"order" integer,
-  	"parent_id" integer NOT NULL,
-  	"path" varchar NOT NULL,
-  	"categories_id" integer,
-  	"tags_id" integer,
-  	"people_id" integer,
-  	"events_id" integer,
-  	"posts_id" integer,
-  	"pages_id" integer,
-  	"archive_items_id" integer,
-  	"places_id" integer,
-  	"custom_items_id" integer
-  );
-  
-  CREATE TABLE "_events_v_blocks_hero_links" (
-  	"_order" integer NOT NULL,
-  	"_parent_id" integer NOT NULL,
-  	"id" serial PRIMARY KEY NOT NULL,
-  	"label" varchar,
-  	"url" varchar,
-  	"page_id" integer,
-  	"variant" "enum__events_v_blocks_hero_links_variant" DEFAULT 'primary',
-  	"new_tab" boolean,
-  	"_uuid" varchar
-  );
-  
-  CREATE TABLE "_events_v_blocks_hero" (
-  	"_order" integer NOT NULL,
-  	"_parent_id" integer NOT NULL,
-  	"_path" text NOT NULL,
-  	"id" serial PRIMARY KEY NOT NULL,
-  	"type" "enum__events_v_blocks_hero_type" DEFAULT 'standard',
-  	"heading" varchar,
-  	"subheading" varchar,
-  	"image_id" integer,
-  	"video_url" varchar,
-  	"overlay" "enum__events_v_blocks_hero_overlay" DEFAULT 'dark',
-  	"text_align" "enum__events_v_blocks_hero_text_align" DEFAULT 'center',
-  	"_uuid" varchar,
-  	"block_name" varchar
-  );
-  
-  CREATE TABLE "_events_v_blocks_content_columns" (
-  	"_order" integer NOT NULL,
-  	"_parent_id" integer NOT NULL,
-  	"id" serial PRIMARY KEY NOT NULL,
-  	"size" "enum__events_v_blocks_content_columns_size" DEFAULT 'full',
-  	"rich_text" jsonb,
-  	"enable_link" boolean,
-  	"link_label" varchar,
-  	"link_url" varchar,
-  	"link_page_id" integer,
-  	"link_new_tab" boolean,
-  	"_uuid" varchar
-  );
-  
-  CREATE TABLE "_events_v_blocks_content" (
-  	"_order" integer NOT NULL,
-  	"_parent_id" integer NOT NULL,
-  	"_path" text NOT NULL,
-  	"id" serial PRIMARY KEY NOT NULL,
-  	"background_color" "enum__events_v_blocks_content_background_color" DEFAULT 'none',
-  	"padding_top" "enum__events_v_blocks_content_padding_top" DEFAULT 'medium',
-  	"padding_bottom" "enum__events_v_blocks_content_padding_bottom" DEFAULT 'medium',
-  	"_uuid" varchar,
-  	"block_name" varchar
-  );
-  
-  CREATE TABLE "_events_v_blocks_media" (
-  	"_order" integer NOT NULL,
-  	"_parent_id" integer NOT NULL,
-  	"_path" text NOT NULL,
-  	"id" serial PRIMARY KEY NOT NULL,
-  	"media_id" integer,
-  	"caption" varchar,
-  	"size" "enum__events_v_blocks_media_size" DEFAULT 'default',
-  	"position" "enum__events_v_blocks_media_position" DEFAULT 'center',
-  	"enable_link" boolean,
-  	"link_url" varchar,
-  	"link_page_id" integer,
-  	"link_new_tab" boolean,
-  	"_uuid" varchar,
-  	"block_name" varchar
-  );
-  
-  CREATE TABLE "_events_v_blocks_cta_links" (
-  	"_order" integer NOT NULL,
-  	"_parent_id" integer NOT NULL,
-  	"id" serial PRIMARY KEY NOT NULL,
-  	"label" varchar,
-  	"url" varchar,
-  	"page_id" integer,
-  	"variant" "enum__events_v_blocks_cta_links_variant" DEFAULT 'primary',
-  	"new_tab" boolean,
-  	"_uuid" varchar
-  );
-  
-  CREATE TABLE "_events_v_blocks_cta" (
-  	"_order" integer NOT NULL,
-  	"_parent_id" integer NOT NULL,
-  	"_path" text NOT NULL,
-  	"id" serial PRIMARY KEY NOT NULL,
-  	"style" "enum__events_v_blocks_cta_style" DEFAULT 'standard',
-  	"heading" varchar,
-  	"description" varchar,
-  	"image_id" integer,
-  	"background_color" "enum__events_v_blocks_cta_background_color" DEFAULT 'primary',
-  	"_uuid" varchar,
-  	"block_name" varchar
-  );
-  
-  CREATE TABLE "_events_v_blocks_archive" (
-  	"_order" integer NOT NULL,
-  	"_parent_id" integer NOT NULL,
-  	"_path" text NOT NULL,
-  	"id" serial PRIMARY KEY NOT NULL,
-  	"heading" varchar,
-  	"description" varchar,
-  	"populate_by" "enum__events_v_blocks_archive_populate_by" DEFAULT 'collection',
-  	"relation_to" "enum__events_v_blocks_archive_relation_to" DEFAULT 'posts',
-  	"content_type_id" integer,
-  	"limit" numeric DEFAULT 6,
-  	"layout" "enum__events_v_blocks_archive_layout" DEFAULT 'grid',
-  	"columns" "enum__events_v_blocks_archive_columns" DEFAULT '3',
-  	"show_image" boolean DEFAULT true,
-  	"show_excerpt" boolean DEFAULT true,
-  	"show_date" boolean DEFAULT true,
-  	"show_author" boolean DEFAULT false,
-  	"link_show" boolean,
-  	"link_label" varchar DEFAULT 'View All',
-  	"link_url" varchar,
-  	"_uuid" varchar,
-  	"block_name" varchar
-  );
-  
-  CREATE TABLE "_events_v_blocks_form" (
-  	"_order" integer NOT NULL,
-  	"_parent_id" integer NOT NULL,
-  	"_path" text NOT NULL,
-  	"id" serial PRIMARY KEY NOT NULL,
-  	"form_id" integer,
-  	"enable_intro" boolean,
-  	"intro_content" jsonb,
-  	"style" "enum__events_v_blocks_form_style" DEFAULT 'default',
-  	"background_color" "enum__events_v_blocks_form_background_color" DEFAULT 'none',
-  	"_uuid" varchar,
-  	"block_name" varchar
-  );
-  
-  CREATE TABLE "_events_v_blocks_gallery_images" (
-  	"_order" integer NOT NULL,
-  	"_parent_id" integer NOT NULL,
-  	"id" serial PRIMARY KEY NOT NULL,
-  	"image_id" integer,
-  	"caption" varchar,
-  	"link_url" varchar,
-  	"link_page_id" integer,
-  	"link_new_tab" boolean,
-  	"_uuid" varchar
-  );
-  
-  CREATE TABLE "_events_v_blocks_gallery" (
-  	"_order" integer NOT NULL,
-  	"_parent_id" integer NOT NULL,
-  	"_path" text NOT NULL,
-  	"id" serial PRIMARY KEY NOT NULL,
-  	"heading" varchar,
-  	"description" varchar,
-  	"layout" "enum__events_v_blocks_gallery_layout" DEFAULT 'grid',
-  	"columns" "enum__events_v_blocks_gallery_columns" DEFAULT '3',
-  	"gap" "enum__events_v_blocks_gallery_gap" DEFAULT 'medium',
-  	"aspect_ratio" "enum__events_v_blocks_gallery_aspect_ratio" DEFAULT 'auto',
-  	"show_captions" boolean DEFAULT true,
-  	"enable_lightbox" boolean DEFAULT true,
-  	"autoplay" boolean DEFAULT false,
-  	"autoplay_speed" numeric DEFAULT 5000,
-  	"_uuid" varchar,
-  	"block_name" varchar
-  );
-  
-  CREATE TABLE "_events_v_blocks_grid_items" (
-  	"_order" integer NOT NULL,
-  	"_parent_id" integer NOT NULL,
-  	"id" serial PRIMARY KEY NOT NULL,
-  	"image_id" integer,
-  	"icon" varchar,
-  	"title" varchar,
-  	"subtitle" varchar,
-  	"description" varchar,
-  	"stat" varchar,
-  	"link_url" varchar,
-  	"link_page_id" integer,
-  	"link_label" varchar,
-  	"link_new_tab" boolean,
-  	"_uuid" varchar
-  );
-  
-  CREATE TABLE "_events_v_blocks_grid" (
-  	"_order" integer NOT NULL,
-  	"_parent_id" integer NOT NULL,
-  	"_path" text NOT NULL,
-  	"id" serial PRIMARY KEY NOT NULL,
-  	"heading" varchar,
-  	"description" varchar,
-  	"style" "enum__events_v_blocks_grid_style" DEFAULT 'cards',
-  	"columns" "enum__events_v_blocks_grid_columns" DEFAULT '3',
-  	"gap" "enum__events_v_blocks_grid_gap" DEFAULT 'medium',
-  	"alignment" "enum__events_v_blocks_grid_alignment" DEFAULT 'left',
-  	"show_border" boolean DEFAULT true,
-  	"show_shadow" boolean DEFAULT true,
-  	"hover_effect" "enum__events_v_blocks_grid_hover_effect" DEFAULT 'none',
-  	"cta_show" boolean,
-  	"cta_label" varchar,
-  	"cta_url" varchar,
-  	"cta_page_id" integer,
-  	"_uuid" varchar,
-  	"block_name" varchar
-  );
-  
-  CREATE TABLE "_events_v_blocks_timeline_events" (
-  	"_order" integer NOT NULL,
-  	"_parent_id" integer NOT NULL,
-  	"id" serial PRIMARY KEY NOT NULL,
-  	"date" varchar,
-  	"title" varchar,
-  	"description" jsonb,
-  	"image_id" integer,
-  	"icon" varchar,
-  	"color" varchar,
-  	"link_url" varchar,
-  	"link_page_id" integer,
-  	"link_archive_item_id" integer,
-  	"link_person_id" integer,
-  	"link_label" varchar DEFAULT 'Learn More',
-  	"link_new_tab" boolean,
-  	"featured" boolean,
-  	"_uuid" varchar
-  );
-  
-  CREATE TABLE "_events_v_blocks_timeline" (
-  	"_order" integer NOT NULL,
-  	"_parent_id" integer NOT NULL,
-  	"_path" text NOT NULL,
-  	"id" serial PRIMARY KEY NOT NULL,
-  	"heading" varchar,
-  	"description" varchar,
-  	"layout" "enum__events_v_blocks_timeline_layout" DEFAULT 'vertical',
-  	"line_style" "enum__events_v_blocks_timeline_line_style" DEFAULT 'solid',
-  	"marker_style" "enum__events_v_blocks_timeline_marker_style" DEFAULT 'circle',
-  	"show_connectors" boolean DEFAULT true,
-  	"show_dates" boolean DEFAULT true,
-  	"animate_on_scroll" boolean DEFAULT true,
-  	"sort_order" "enum__events_v_blocks_timeline_sort_order" DEFAULT 'chronological',
-  	"background_color" "enum__events_v_blocks_timeline_background_color" DEFAULT 'transparent',
-  	"_uuid" varchar,
-  	"block_name" varchar
-  );
-  
-  CREATE TABLE "_events_v" (
-  	"id" serial PRIMARY KEY NOT NULL,
-  	"parent_id" integer,
-  	"version_title" varchar,
-  	"version_slug" varchar,
-  	"version_featured_image_id" integer,
-  	"version_excerpt" varchar,
-  	"version_rich_content" jsonb,
-  	"version_event_type" "enum__events_v_version_event_type",
-  	"version_start_date" timestamp(3) with time zone,
-  	"version_end_date" timestamp(3) with time zone,
-  	"version_all_day" boolean,
-  	"version_recurring_is_recurring" boolean,
-  	"version_recurring_frequency" "enum__events_v_version_recurring_frequency",
-  	"version_recurring_recurrence_end" timestamp(3) with time zone,
-  	"version_venue_id" integer,
-  	"version_online_event" boolean,
-  	"version_online_url" varchar,
-  	"version_custom_location" varchar,
-  	"version_requires_registration" boolean,
-  	"version_registration_url" varchar,
-  	"version_capacity" numeric,
-  	"version_registered" numeric DEFAULT 0,
-  	"version_price_is_free" boolean DEFAULT true,
-  	"version_price_amount" numeric,
-  	"version_price_currency" "enum__events_v_version_price_currency" DEFAULT 'GBP',
-  	"version_featured" boolean,
-  	"version_event_status" "enum__events_v_version_event_status" DEFAULT 'upcoming',
-  	"version_template" "enum__events_v_version_template" DEFAULT 'event',
-  	"version_updated_at" timestamp(3) with time zone,
-  	"version_created_at" timestamp(3) with time zone,
-  	"version__status" "enum__events_v_version_status" DEFAULT 'draft',
-  	"created_at" timestamp(3) with time zone DEFAULT now() NOT NULL,
-  	"updated_at" timestamp(3) with time zone DEFAULT now() NOT NULL,
-  	"latest" boolean,
-  	"autosave" boolean
-  );
-  
-  CREATE TABLE "_events_v_rels" (
-  	"id" serial PRIMARY KEY NOT NULL,
-  	"order" integer,
-  	"parent_id" integer NOT NULL,
-  	"path" varchar NOT NULL,
-  	"categories_id" integer,
-  	"tags_id" integer,
-  	"people_id" integer,
-  	"events_id" integer,
-  	"posts_id" integer,
-  	"pages_id" integer,
-  	"archive_items_id" integer,
-  	"places_id" integer,
-  	"custom_items_id" integer
   );
   
   CREATE TABLE "content_types_custom_fields" (
@@ -8049,7 +7991,8 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	"archive_items_id" integer,
   	"people_id" integer,
   	"places_id" integer,
-  	"museum_collections_id" integer,
+  	"events_id" integer,
+  	"products_id" integer,
   	"custom_items_id" integer,
   	"content_types_id" integer
   );
@@ -8110,11 +8053,10 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	"archive_items_id" integer,
   	"people_id" integer,
   	"places_id" integer,
-  	"museum_collections_id" integer,
+  	"events_id" integer,
   	"products_id" integer,
   	"product_categories_id" integer,
   	"product_collections_id" integer,
-  	"events_id" integer,
   	"content_types_id" integer,
   	"custom_items_id" integer,
   	"forms_id" integer,
@@ -8270,6 +8212,13 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	"body_scripts" varchar,
   	"maintenance_mode" boolean,
   	"maintenance_message" varchar,
+  	"updated_at" timestamp(3) with time zone,
+  	"created_at" timestamp(3) with time zone
+  );
+  
+  CREATE TABLE "navigation_settings" (
+  	"id" serial PRIMARY KEY NOT NULL,
+  	"collections" jsonb,
   	"updated_at" timestamp(3) with time zone,
   	"created_at" timestamp(3) with time zone
   );
@@ -8558,13 +8507,13 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   ALTER TABLE "_posts_v_rels" ADD CONSTRAINT "_posts_v_rels_tags_fk" FOREIGN KEY ("tags_id") REFERENCES "public"."tags"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "categories_breadcrumbs" ADD CONSTRAINT "categories_breadcrumbs_doc_id_categories_id_fk" FOREIGN KEY ("doc_id") REFERENCES "public"."categories"("id") ON DELETE set null ON UPDATE no action;
   ALTER TABLE "categories_breadcrumbs" ADD CONSTRAINT "categories_breadcrumbs_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."categories"("id") ON DELETE cascade ON UPDATE no action;
-  ALTER TABLE "categories" ADD CONSTRAINT "categories_featured_image_id_media_id_fk" FOREIGN KEY ("featured_image_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
   ALTER TABLE "categories" ADD CONSTRAINT "categories_parent_id_categories_id_fk" FOREIGN KEY ("parent_id") REFERENCES "public"."categories"("id") ON DELETE set null ON UPDATE no action;
+  ALTER TABLE "categories" ADD CONSTRAINT "categories_featured_image_id_media_id_fk" FOREIGN KEY ("featured_image_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
   ALTER TABLE "_categories_v_version_breadcrumbs" ADD CONSTRAINT "_categories_v_version_breadcrumbs_doc_id_categories_id_fk" FOREIGN KEY ("doc_id") REFERENCES "public"."categories"("id") ON DELETE set null ON UPDATE no action;
   ALTER TABLE "_categories_v_version_breadcrumbs" ADD CONSTRAINT "_categories_v_version_breadcrumbs_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."_categories_v"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "_categories_v" ADD CONSTRAINT "_categories_v_parent_id_categories_id_fk" FOREIGN KEY ("parent_id") REFERENCES "public"."categories"("id") ON DELETE set null ON UPDATE no action;
-  ALTER TABLE "_categories_v" ADD CONSTRAINT "_categories_v_version_featured_image_id_media_id_fk" FOREIGN KEY ("version_featured_image_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
   ALTER TABLE "_categories_v" ADD CONSTRAINT "_categories_v_version_parent_id_categories_id_fk" FOREIGN KEY ("version_parent_id") REFERENCES "public"."categories"("id") ON DELETE set null ON UPDATE no action;
+  ALTER TABLE "_categories_v" ADD CONSTRAINT "_categories_v_version_featured_image_id_media_id_fk" FOREIGN KEY ("version_featured_image_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
   ALTER TABLE "_tags_v" ADD CONSTRAINT "_tags_v_parent_id_tags_id_fk" FOREIGN KEY ("parent_id") REFERENCES "public"."tags"("id") ON DELETE set null ON UPDATE no action;
   ALTER TABLE "archive_items_gallery" ADD CONSTRAINT "archive_items_gallery_image_id_media_id_fk" FOREIGN KEY ("image_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
   ALTER TABLE "archive_items_gallery" ADD CONSTRAINT "archive_items_gallery_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."archive_items"("id") ON DELETE cascade ON UPDATE no action;
@@ -8607,7 +8556,6 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   ALTER TABLE "archive_items_rels" ADD CONSTRAINT "archive_items_rels_people_fk" FOREIGN KEY ("people_id") REFERENCES "public"."people"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "archive_items_rels" ADD CONSTRAINT "archive_items_rels_places_fk" FOREIGN KEY ("places_id") REFERENCES "public"."places"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "archive_items_rels" ADD CONSTRAINT "archive_items_rels_archive_items_fk" FOREIGN KEY ("archive_items_id") REFERENCES "public"."archive_items"("id") ON DELETE cascade ON UPDATE no action;
-  ALTER TABLE "archive_items_rels" ADD CONSTRAINT "archive_items_rels_museum_collections_fk" FOREIGN KEY ("museum_collections_id") REFERENCES "public"."museum_collections"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "archive_items_rels" ADD CONSTRAINT "archive_items_rels_categories_fk" FOREIGN KEY ("categories_id") REFERENCES "public"."categories"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "archive_items_rels" ADD CONSTRAINT "archive_items_rels_tags_fk" FOREIGN KEY ("tags_id") REFERENCES "public"."tags"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "archive_items_rels" ADD CONSTRAINT "archive_items_rels_posts_fk" FOREIGN KEY ("posts_id") REFERENCES "public"."posts"("id") ON DELETE cascade ON UPDATE no action;
@@ -8655,7 +8603,6 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   ALTER TABLE "_archive_items_v_rels" ADD CONSTRAINT "_archive_items_v_rels_people_fk" FOREIGN KEY ("people_id") REFERENCES "public"."people"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "_archive_items_v_rels" ADD CONSTRAINT "_archive_items_v_rels_places_fk" FOREIGN KEY ("places_id") REFERENCES "public"."places"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "_archive_items_v_rels" ADD CONSTRAINT "_archive_items_v_rels_archive_items_fk" FOREIGN KEY ("archive_items_id") REFERENCES "public"."archive_items"("id") ON DELETE cascade ON UPDATE no action;
-  ALTER TABLE "_archive_items_v_rels" ADD CONSTRAINT "_archive_items_v_rels_museum_collections_fk" FOREIGN KEY ("museum_collections_id") REFERENCES "public"."museum_collections"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "_archive_items_v_rels" ADD CONSTRAINT "_archive_items_v_rels_categories_fk" FOREIGN KEY ("categories_id") REFERENCES "public"."categories"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "_archive_items_v_rels" ADD CONSTRAINT "_archive_items_v_rels_tags_fk" FOREIGN KEY ("tags_id") REFERENCES "public"."tags"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "_archive_items_v_rels" ADD CONSTRAINT "_archive_items_v_rels_posts_fk" FOREIGN KEY ("posts_id") REFERENCES "public"."posts"("id") ON DELETE cascade ON UPDATE no action;
@@ -8953,23 +8900,99 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   ALTER TABLE "_places_v_rels" ADD CONSTRAINT "_places_v_rels_archive_items_fk" FOREIGN KEY ("archive_items_id") REFERENCES "public"."archive_items"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "_places_v_rels" ADD CONSTRAINT "_places_v_rels_people_fk" FOREIGN KEY ("people_id") REFERENCES "public"."people"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "_places_v_rels" ADD CONSTRAINT "_places_v_rels_custom_items_fk" FOREIGN KEY ("custom_items_id") REFERENCES "public"."custom_items"("id") ON DELETE cascade ON UPDATE no action;
-  ALTER TABLE "museum_collections_breadcrumbs" ADD CONSTRAINT "museum_collections_breadcrumbs_doc_id_museum_collections_id_fk" FOREIGN KEY ("doc_id") REFERENCES "public"."museum_collections"("id") ON DELETE set null ON UPDATE no action;
-  ALTER TABLE "museum_collections_breadcrumbs" ADD CONSTRAINT "museum_collections_breadcrumbs_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."museum_collections"("id") ON DELETE cascade ON UPDATE no action;
-  ALTER TABLE "museum_collections" ADD CONSTRAINT "museum_collections_featured_image_id_media_id_fk" FOREIGN KEY ("featured_image_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
-  ALTER TABLE "museum_collections" ADD CONSTRAINT "museum_collections_curator_id_users_id_fk" FOREIGN KEY ("curator_id") REFERENCES "public"."users"("id") ON DELETE set null ON UPDATE no action;
-  ALTER TABLE "museum_collections" ADD CONSTRAINT "museum_collections_meta_image_id_media_id_fk" FOREIGN KEY ("meta_image_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
-  ALTER TABLE "museum_collections" ADD CONSTRAINT "museum_collections_parent_id_museum_collections_id_fk" FOREIGN KEY ("parent_id") REFERENCES "public"."museum_collections"("id") ON DELETE set null ON UPDATE no action;
-  ALTER TABLE "museum_collections_rels" ADD CONSTRAINT "museum_collections_rels_parent_fk" FOREIGN KEY ("parent_id") REFERENCES "public"."museum_collections"("id") ON DELETE cascade ON UPDATE no action;
-  ALTER TABLE "museum_collections_rels" ADD CONSTRAINT "museum_collections_rels_archive_items_fk" FOREIGN KEY ("archive_items_id") REFERENCES "public"."archive_items"("id") ON DELETE cascade ON UPDATE no action;
-  ALTER TABLE "_museum_collections_v_version_breadcrumbs" ADD CONSTRAINT "_museum_collections_v_version_breadcrumbs_doc_id_museum_collections_id_fk" FOREIGN KEY ("doc_id") REFERENCES "public"."museum_collections"("id") ON DELETE set null ON UPDATE no action;
-  ALTER TABLE "_museum_collections_v_version_breadcrumbs" ADD CONSTRAINT "_museum_collections_v_version_breadcrumbs_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."_museum_collections_v"("id") ON DELETE cascade ON UPDATE no action;
-  ALTER TABLE "_museum_collections_v" ADD CONSTRAINT "_museum_collections_v_parent_id_museum_collections_id_fk" FOREIGN KEY ("parent_id") REFERENCES "public"."museum_collections"("id") ON DELETE set null ON UPDATE no action;
-  ALTER TABLE "_museum_collections_v" ADD CONSTRAINT "_museum_collections_v_version_featured_image_id_media_id_fk" FOREIGN KEY ("version_featured_image_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
-  ALTER TABLE "_museum_collections_v" ADD CONSTRAINT "_museum_collections_v_version_curator_id_users_id_fk" FOREIGN KEY ("version_curator_id") REFERENCES "public"."users"("id") ON DELETE set null ON UPDATE no action;
-  ALTER TABLE "_museum_collections_v" ADD CONSTRAINT "_museum_collections_v_version_meta_image_id_media_id_fk" FOREIGN KEY ("version_meta_image_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
-  ALTER TABLE "_museum_collections_v" ADD CONSTRAINT "_museum_collections_v_version_parent_id_museum_collections_id_fk" FOREIGN KEY ("version_parent_id") REFERENCES "public"."museum_collections"("id") ON DELETE set null ON UPDATE no action;
-  ALTER TABLE "_museum_collections_v_rels" ADD CONSTRAINT "_museum_collections_v_rels_parent_fk" FOREIGN KEY ("parent_id") REFERENCES "public"."_museum_collections_v"("id") ON DELETE cascade ON UPDATE no action;
-  ALTER TABLE "_museum_collections_v_rels" ADD CONSTRAINT "_museum_collections_v_rels_archive_items_fk" FOREIGN KEY ("archive_items_id") REFERENCES "public"."archive_items"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "events_blocks_hero_links" ADD CONSTRAINT "events_blocks_hero_links_page_id_pages_id_fk" FOREIGN KEY ("page_id") REFERENCES "public"."pages"("id") ON DELETE set null ON UPDATE no action;
+  ALTER TABLE "events_blocks_hero_links" ADD CONSTRAINT "events_blocks_hero_links_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."events_blocks_hero"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "events_blocks_hero" ADD CONSTRAINT "events_blocks_hero_image_id_media_id_fk" FOREIGN KEY ("image_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
+  ALTER TABLE "events_blocks_hero" ADD CONSTRAINT "events_blocks_hero_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."events"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "events_blocks_content_columns" ADD CONSTRAINT "events_blocks_content_columns_link_page_id_pages_id_fk" FOREIGN KEY ("link_page_id") REFERENCES "public"."pages"("id") ON DELETE set null ON UPDATE no action;
+  ALTER TABLE "events_blocks_content_columns" ADD CONSTRAINT "events_blocks_content_columns_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."events_blocks_content"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "events_blocks_content" ADD CONSTRAINT "events_blocks_content_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."events"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "events_blocks_media" ADD CONSTRAINT "events_blocks_media_media_id_media_id_fk" FOREIGN KEY ("media_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
+  ALTER TABLE "events_blocks_media" ADD CONSTRAINT "events_blocks_media_link_page_id_pages_id_fk" FOREIGN KEY ("link_page_id") REFERENCES "public"."pages"("id") ON DELETE set null ON UPDATE no action;
+  ALTER TABLE "events_blocks_media" ADD CONSTRAINT "events_blocks_media_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."events"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "events_blocks_cta_links" ADD CONSTRAINT "events_blocks_cta_links_page_id_pages_id_fk" FOREIGN KEY ("page_id") REFERENCES "public"."pages"("id") ON DELETE set null ON UPDATE no action;
+  ALTER TABLE "events_blocks_cta_links" ADD CONSTRAINT "events_blocks_cta_links_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."events_blocks_cta"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "events_blocks_cta" ADD CONSTRAINT "events_blocks_cta_image_id_media_id_fk" FOREIGN KEY ("image_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
+  ALTER TABLE "events_blocks_cta" ADD CONSTRAINT "events_blocks_cta_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."events"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "events_blocks_archive" ADD CONSTRAINT "events_blocks_archive_content_type_id_content_types_id_fk" FOREIGN KEY ("content_type_id") REFERENCES "public"."content_types"("id") ON DELETE set null ON UPDATE no action;
+  ALTER TABLE "events_blocks_archive" ADD CONSTRAINT "events_blocks_archive_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."events"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "events_blocks_form" ADD CONSTRAINT "events_blocks_form_form_id_forms_id_fk" FOREIGN KEY ("form_id") REFERENCES "public"."forms"("id") ON DELETE set null ON UPDATE no action;
+  ALTER TABLE "events_blocks_form" ADD CONSTRAINT "events_blocks_form_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."events"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "events_blocks_gallery_images" ADD CONSTRAINT "events_blocks_gallery_images_image_id_media_id_fk" FOREIGN KEY ("image_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
+  ALTER TABLE "events_blocks_gallery_images" ADD CONSTRAINT "events_blocks_gallery_images_link_page_id_pages_id_fk" FOREIGN KEY ("link_page_id") REFERENCES "public"."pages"("id") ON DELETE set null ON UPDATE no action;
+  ALTER TABLE "events_blocks_gallery_images" ADD CONSTRAINT "events_blocks_gallery_images_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."events_blocks_gallery"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "events_blocks_gallery" ADD CONSTRAINT "events_blocks_gallery_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."events"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "events_blocks_grid_items" ADD CONSTRAINT "events_blocks_grid_items_image_id_media_id_fk" FOREIGN KEY ("image_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
+  ALTER TABLE "events_blocks_grid_items" ADD CONSTRAINT "events_blocks_grid_items_link_page_id_pages_id_fk" FOREIGN KEY ("link_page_id") REFERENCES "public"."pages"("id") ON DELETE set null ON UPDATE no action;
+  ALTER TABLE "events_blocks_grid_items" ADD CONSTRAINT "events_blocks_grid_items_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."events_blocks_grid"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "events_blocks_grid" ADD CONSTRAINT "events_blocks_grid_cta_page_id_pages_id_fk" FOREIGN KEY ("cta_page_id") REFERENCES "public"."pages"("id") ON DELETE set null ON UPDATE no action;
+  ALTER TABLE "events_blocks_grid" ADD CONSTRAINT "events_blocks_grid_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."events"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "events_blocks_timeline_events" ADD CONSTRAINT "events_blocks_timeline_events_image_id_media_id_fk" FOREIGN KEY ("image_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
+  ALTER TABLE "events_blocks_timeline_events" ADD CONSTRAINT "events_blocks_timeline_events_link_page_id_pages_id_fk" FOREIGN KEY ("link_page_id") REFERENCES "public"."pages"("id") ON DELETE set null ON UPDATE no action;
+  ALTER TABLE "events_blocks_timeline_events" ADD CONSTRAINT "events_blocks_timeline_events_link_archive_item_id_archive_items_id_fk" FOREIGN KEY ("link_archive_item_id") REFERENCES "public"."archive_items"("id") ON DELETE set null ON UPDATE no action;
+  ALTER TABLE "events_blocks_timeline_events" ADD CONSTRAINT "events_blocks_timeline_events_link_person_id_people_id_fk" FOREIGN KEY ("link_person_id") REFERENCES "public"."people"("id") ON DELETE set null ON UPDATE no action;
+  ALTER TABLE "events_blocks_timeline_events" ADD CONSTRAINT "events_blocks_timeline_events_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."events_blocks_timeline"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "events_blocks_timeline" ADD CONSTRAINT "events_blocks_timeline_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."events"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "events" ADD CONSTRAINT "events_featured_image_id_media_id_fk" FOREIGN KEY ("featured_image_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
+  ALTER TABLE "events" ADD CONSTRAINT "events_venue_id_places_id_fk" FOREIGN KEY ("venue_id") REFERENCES "public"."places"("id") ON DELETE set null ON UPDATE no action;
+  ALTER TABLE "events" ADD CONSTRAINT "events_meta_image_id_media_id_fk" FOREIGN KEY ("meta_image_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
+  ALTER TABLE "events_rels" ADD CONSTRAINT "events_rels_parent_fk" FOREIGN KEY ("parent_id") REFERENCES "public"."events"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "events_rels" ADD CONSTRAINT "events_rels_categories_fk" FOREIGN KEY ("categories_id") REFERENCES "public"."categories"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "events_rels" ADD CONSTRAINT "events_rels_tags_fk" FOREIGN KEY ("tags_id") REFERENCES "public"."tags"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "events_rels" ADD CONSTRAINT "events_rels_people_fk" FOREIGN KEY ("people_id") REFERENCES "public"."people"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "events_rels" ADD CONSTRAINT "events_rels_events_fk" FOREIGN KEY ("events_id") REFERENCES "public"."events"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "events_rels" ADD CONSTRAINT "events_rels_posts_fk" FOREIGN KEY ("posts_id") REFERENCES "public"."posts"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "events_rels" ADD CONSTRAINT "events_rels_pages_fk" FOREIGN KEY ("pages_id") REFERENCES "public"."pages"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "events_rels" ADD CONSTRAINT "events_rels_archive_items_fk" FOREIGN KEY ("archive_items_id") REFERENCES "public"."archive_items"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "events_rels" ADD CONSTRAINT "events_rels_places_fk" FOREIGN KEY ("places_id") REFERENCES "public"."places"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "events_rels" ADD CONSTRAINT "events_rels_custom_items_fk" FOREIGN KEY ("custom_items_id") REFERENCES "public"."custom_items"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "_events_v_blocks_hero_links" ADD CONSTRAINT "_events_v_blocks_hero_links_page_id_pages_id_fk" FOREIGN KEY ("page_id") REFERENCES "public"."pages"("id") ON DELETE set null ON UPDATE no action;
+  ALTER TABLE "_events_v_blocks_hero_links" ADD CONSTRAINT "_events_v_blocks_hero_links_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."_events_v_blocks_hero"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "_events_v_blocks_hero" ADD CONSTRAINT "_events_v_blocks_hero_image_id_media_id_fk" FOREIGN KEY ("image_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
+  ALTER TABLE "_events_v_blocks_hero" ADD CONSTRAINT "_events_v_blocks_hero_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."_events_v"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "_events_v_blocks_content_columns" ADD CONSTRAINT "_events_v_blocks_content_columns_link_page_id_pages_id_fk" FOREIGN KEY ("link_page_id") REFERENCES "public"."pages"("id") ON DELETE set null ON UPDATE no action;
+  ALTER TABLE "_events_v_blocks_content_columns" ADD CONSTRAINT "_events_v_blocks_content_columns_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."_events_v_blocks_content"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "_events_v_blocks_content" ADD CONSTRAINT "_events_v_blocks_content_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."_events_v"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "_events_v_blocks_media" ADD CONSTRAINT "_events_v_blocks_media_media_id_media_id_fk" FOREIGN KEY ("media_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
+  ALTER TABLE "_events_v_blocks_media" ADD CONSTRAINT "_events_v_blocks_media_link_page_id_pages_id_fk" FOREIGN KEY ("link_page_id") REFERENCES "public"."pages"("id") ON DELETE set null ON UPDATE no action;
+  ALTER TABLE "_events_v_blocks_media" ADD CONSTRAINT "_events_v_blocks_media_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."_events_v"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "_events_v_blocks_cta_links" ADD CONSTRAINT "_events_v_blocks_cta_links_page_id_pages_id_fk" FOREIGN KEY ("page_id") REFERENCES "public"."pages"("id") ON DELETE set null ON UPDATE no action;
+  ALTER TABLE "_events_v_blocks_cta_links" ADD CONSTRAINT "_events_v_blocks_cta_links_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."_events_v_blocks_cta"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "_events_v_blocks_cta" ADD CONSTRAINT "_events_v_blocks_cta_image_id_media_id_fk" FOREIGN KEY ("image_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
+  ALTER TABLE "_events_v_blocks_cta" ADD CONSTRAINT "_events_v_blocks_cta_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."_events_v"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "_events_v_blocks_archive" ADD CONSTRAINT "_events_v_blocks_archive_content_type_id_content_types_id_fk" FOREIGN KEY ("content_type_id") REFERENCES "public"."content_types"("id") ON DELETE set null ON UPDATE no action;
+  ALTER TABLE "_events_v_blocks_archive" ADD CONSTRAINT "_events_v_blocks_archive_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."_events_v"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "_events_v_blocks_form" ADD CONSTRAINT "_events_v_blocks_form_form_id_forms_id_fk" FOREIGN KEY ("form_id") REFERENCES "public"."forms"("id") ON DELETE set null ON UPDATE no action;
+  ALTER TABLE "_events_v_blocks_form" ADD CONSTRAINT "_events_v_blocks_form_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."_events_v"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "_events_v_blocks_gallery_images" ADD CONSTRAINT "_events_v_blocks_gallery_images_image_id_media_id_fk" FOREIGN KEY ("image_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
+  ALTER TABLE "_events_v_blocks_gallery_images" ADD CONSTRAINT "_events_v_blocks_gallery_images_link_page_id_pages_id_fk" FOREIGN KEY ("link_page_id") REFERENCES "public"."pages"("id") ON DELETE set null ON UPDATE no action;
+  ALTER TABLE "_events_v_blocks_gallery_images" ADD CONSTRAINT "_events_v_blocks_gallery_images_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."_events_v_blocks_gallery"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "_events_v_blocks_gallery" ADD CONSTRAINT "_events_v_blocks_gallery_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."_events_v"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "_events_v_blocks_grid_items" ADD CONSTRAINT "_events_v_blocks_grid_items_image_id_media_id_fk" FOREIGN KEY ("image_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
+  ALTER TABLE "_events_v_blocks_grid_items" ADD CONSTRAINT "_events_v_blocks_grid_items_link_page_id_pages_id_fk" FOREIGN KEY ("link_page_id") REFERENCES "public"."pages"("id") ON DELETE set null ON UPDATE no action;
+  ALTER TABLE "_events_v_blocks_grid_items" ADD CONSTRAINT "_events_v_blocks_grid_items_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."_events_v_blocks_grid"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "_events_v_blocks_grid" ADD CONSTRAINT "_events_v_blocks_grid_cta_page_id_pages_id_fk" FOREIGN KEY ("cta_page_id") REFERENCES "public"."pages"("id") ON DELETE set null ON UPDATE no action;
+  ALTER TABLE "_events_v_blocks_grid" ADD CONSTRAINT "_events_v_blocks_grid_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."_events_v"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "_events_v_blocks_timeline_events" ADD CONSTRAINT "_events_v_blocks_timeline_events_image_id_media_id_fk" FOREIGN KEY ("image_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
+  ALTER TABLE "_events_v_blocks_timeline_events" ADD CONSTRAINT "_events_v_blocks_timeline_events_link_page_id_pages_id_fk" FOREIGN KEY ("link_page_id") REFERENCES "public"."pages"("id") ON DELETE set null ON UPDATE no action;
+  ALTER TABLE "_events_v_blocks_timeline_events" ADD CONSTRAINT "_events_v_blocks_timeline_events_link_archive_item_id_archive_items_id_fk" FOREIGN KEY ("link_archive_item_id") REFERENCES "public"."archive_items"("id") ON DELETE set null ON UPDATE no action;
+  ALTER TABLE "_events_v_blocks_timeline_events" ADD CONSTRAINT "_events_v_blocks_timeline_events_link_person_id_people_id_fk" FOREIGN KEY ("link_person_id") REFERENCES "public"."people"("id") ON DELETE set null ON UPDATE no action;
+  ALTER TABLE "_events_v_blocks_timeline_events" ADD CONSTRAINT "_events_v_blocks_timeline_events_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."_events_v_blocks_timeline"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "_events_v_blocks_timeline" ADD CONSTRAINT "_events_v_blocks_timeline_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."_events_v"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "_events_v" ADD CONSTRAINT "_events_v_parent_id_events_id_fk" FOREIGN KEY ("parent_id") REFERENCES "public"."events"("id") ON DELETE set null ON UPDATE no action;
+  ALTER TABLE "_events_v" ADD CONSTRAINT "_events_v_version_featured_image_id_media_id_fk" FOREIGN KEY ("version_featured_image_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
+  ALTER TABLE "_events_v" ADD CONSTRAINT "_events_v_version_venue_id_places_id_fk" FOREIGN KEY ("version_venue_id") REFERENCES "public"."places"("id") ON DELETE set null ON UPDATE no action;
+  ALTER TABLE "_events_v" ADD CONSTRAINT "_events_v_version_meta_image_id_media_id_fk" FOREIGN KEY ("version_meta_image_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
+  ALTER TABLE "_events_v_rels" ADD CONSTRAINT "_events_v_rels_parent_fk" FOREIGN KEY ("parent_id") REFERENCES "public"."_events_v"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "_events_v_rels" ADD CONSTRAINT "_events_v_rels_categories_fk" FOREIGN KEY ("categories_id") REFERENCES "public"."categories"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "_events_v_rels" ADD CONSTRAINT "_events_v_rels_tags_fk" FOREIGN KEY ("tags_id") REFERENCES "public"."tags"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "_events_v_rels" ADD CONSTRAINT "_events_v_rels_people_fk" FOREIGN KEY ("people_id") REFERENCES "public"."people"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "_events_v_rels" ADD CONSTRAINT "_events_v_rels_events_fk" FOREIGN KEY ("events_id") REFERENCES "public"."events"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "_events_v_rels" ADD CONSTRAINT "_events_v_rels_posts_fk" FOREIGN KEY ("posts_id") REFERENCES "public"."posts"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "_events_v_rels" ADD CONSTRAINT "_events_v_rels_pages_fk" FOREIGN KEY ("pages_id") REFERENCES "public"."pages"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "_events_v_rels" ADD CONSTRAINT "_events_v_rels_archive_items_fk" FOREIGN KEY ("archive_items_id") REFERENCES "public"."archive_items"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "_events_v_rels" ADD CONSTRAINT "_events_v_rels_places_fk" FOREIGN KEY ("places_id") REFERENCES "public"."places"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "_events_v_rels" ADD CONSTRAINT "_events_v_rels_custom_items_fk" FOREIGN KEY ("custom_items_id") REFERENCES "public"."custom_items"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "products_gallery" ADD CONSTRAINT "products_gallery_image_id_media_id_fk" FOREIGN KEY ("image_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
   ALTER TABLE "products_gallery" ADD CONSTRAINT "products_gallery_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."products"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "products_variants" ADD CONSTRAINT "products_variants_image_id_media_id_fk" FOREIGN KEY ("image_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
@@ -9008,6 +9031,7 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   ALTER TABLE "products_blocks_timeline_events" ADD CONSTRAINT "products_blocks_timeline_events_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."products_blocks_timeline"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "products_blocks_timeline" ADD CONSTRAINT "products_blocks_timeline_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."products"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "products" ADD CONSTRAINT "products_featured_image_id_media_id_fk" FOREIGN KEY ("featured_image_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
+  ALTER TABLE "products" ADD CONSTRAINT "products_meta_image_id_media_id_fk" FOREIGN KEY ("meta_image_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
   ALTER TABLE "products_rels" ADD CONSTRAINT "products_rels_parent_fk" FOREIGN KEY ("parent_id") REFERENCES "public"."products"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "products_rels" ADD CONSTRAINT "products_rels_categories_fk" FOREIGN KEY ("categories_id") REFERENCES "public"."categories"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "products_rels" ADD CONSTRAINT "products_rels_product_collections_fk" FOREIGN KEY ("product_collections_id") REFERENCES "public"."product_collections"("id") ON DELETE cascade ON UPDATE no action;
@@ -9058,6 +9082,7 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   ALTER TABLE "_products_v_blocks_timeline" ADD CONSTRAINT "_products_v_blocks_timeline_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."_products_v"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "_products_v" ADD CONSTRAINT "_products_v_parent_id_products_id_fk" FOREIGN KEY ("parent_id") REFERENCES "public"."products"("id") ON DELETE set null ON UPDATE no action;
   ALTER TABLE "_products_v" ADD CONSTRAINT "_products_v_version_featured_image_id_media_id_fk" FOREIGN KEY ("version_featured_image_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
+  ALTER TABLE "_products_v" ADD CONSTRAINT "_products_v_version_meta_image_id_media_id_fk" FOREIGN KEY ("version_meta_image_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
   ALTER TABLE "_products_v_rels" ADD CONSTRAINT "_products_v_rels_parent_fk" FOREIGN KEY ("parent_id") REFERENCES "public"."_products_v"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "_products_v_rels" ADD CONSTRAINT "_products_v_rels_categories_fk" FOREIGN KEY ("categories_id") REFERENCES "public"."categories"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "_products_v_rels" ADD CONSTRAINT "_products_v_rels_product_collections_fk" FOREIGN KEY ("product_collections_id") REFERENCES "public"."product_collections"("id") ON DELETE cascade ON UPDATE no action;
@@ -9087,97 +9112,6 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   ALTER TABLE "_product_collections_v" ADD CONSTRAINT "_product_collections_v_version_banner_image_id_media_id_fk" FOREIGN KEY ("version_banner_image_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
   ALTER TABLE "_product_collections_v_rels" ADD CONSTRAINT "_product_collections_v_rels_parent_fk" FOREIGN KEY ("parent_id") REFERENCES "public"."_product_collections_v"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "_product_collections_v_rels" ADD CONSTRAINT "_product_collections_v_rels_products_fk" FOREIGN KEY ("products_id") REFERENCES "public"."products"("id") ON DELETE cascade ON UPDATE no action;
-  ALTER TABLE "events_blocks_hero_links" ADD CONSTRAINT "events_blocks_hero_links_page_id_pages_id_fk" FOREIGN KEY ("page_id") REFERENCES "public"."pages"("id") ON DELETE set null ON UPDATE no action;
-  ALTER TABLE "events_blocks_hero_links" ADD CONSTRAINT "events_blocks_hero_links_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."events_blocks_hero"("id") ON DELETE cascade ON UPDATE no action;
-  ALTER TABLE "events_blocks_hero" ADD CONSTRAINT "events_blocks_hero_image_id_media_id_fk" FOREIGN KEY ("image_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
-  ALTER TABLE "events_blocks_hero" ADD CONSTRAINT "events_blocks_hero_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."events"("id") ON DELETE cascade ON UPDATE no action;
-  ALTER TABLE "events_blocks_content_columns" ADD CONSTRAINT "events_blocks_content_columns_link_page_id_pages_id_fk" FOREIGN KEY ("link_page_id") REFERENCES "public"."pages"("id") ON DELETE set null ON UPDATE no action;
-  ALTER TABLE "events_blocks_content_columns" ADD CONSTRAINT "events_blocks_content_columns_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."events_blocks_content"("id") ON DELETE cascade ON UPDATE no action;
-  ALTER TABLE "events_blocks_content" ADD CONSTRAINT "events_blocks_content_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."events"("id") ON DELETE cascade ON UPDATE no action;
-  ALTER TABLE "events_blocks_media" ADD CONSTRAINT "events_blocks_media_media_id_media_id_fk" FOREIGN KEY ("media_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
-  ALTER TABLE "events_blocks_media" ADD CONSTRAINT "events_blocks_media_link_page_id_pages_id_fk" FOREIGN KEY ("link_page_id") REFERENCES "public"."pages"("id") ON DELETE set null ON UPDATE no action;
-  ALTER TABLE "events_blocks_media" ADD CONSTRAINT "events_blocks_media_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."events"("id") ON DELETE cascade ON UPDATE no action;
-  ALTER TABLE "events_blocks_cta_links" ADD CONSTRAINT "events_blocks_cta_links_page_id_pages_id_fk" FOREIGN KEY ("page_id") REFERENCES "public"."pages"("id") ON DELETE set null ON UPDATE no action;
-  ALTER TABLE "events_blocks_cta_links" ADD CONSTRAINT "events_blocks_cta_links_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."events_blocks_cta"("id") ON DELETE cascade ON UPDATE no action;
-  ALTER TABLE "events_blocks_cta" ADD CONSTRAINT "events_blocks_cta_image_id_media_id_fk" FOREIGN KEY ("image_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
-  ALTER TABLE "events_blocks_cta" ADD CONSTRAINT "events_blocks_cta_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."events"("id") ON DELETE cascade ON UPDATE no action;
-  ALTER TABLE "events_blocks_archive" ADD CONSTRAINT "events_blocks_archive_content_type_id_content_types_id_fk" FOREIGN KEY ("content_type_id") REFERENCES "public"."content_types"("id") ON DELETE set null ON UPDATE no action;
-  ALTER TABLE "events_blocks_archive" ADD CONSTRAINT "events_blocks_archive_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."events"("id") ON DELETE cascade ON UPDATE no action;
-  ALTER TABLE "events_blocks_form" ADD CONSTRAINT "events_blocks_form_form_id_forms_id_fk" FOREIGN KEY ("form_id") REFERENCES "public"."forms"("id") ON DELETE set null ON UPDATE no action;
-  ALTER TABLE "events_blocks_form" ADD CONSTRAINT "events_blocks_form_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."events"("id") ON DELETE cascade ON UPDATE no action;
-  ALTER TABLE "events_blocks_gallery_images" ADD CONSTRAINT "events_blocks_gallery_images_image_id_media_id_fk" FOREIGN KEY ("image_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
-  ALTER TABLE "events_blocks_gallery_images" ADD CONSTRAINT "events_blocks_gallery_images_link_page_id_pages_id_fk" FOREIGN KEY ("link_page_id") REFERENCES "public"."pages"("id") ON DELETE set null ON UPDATE no action;
-  ALTER TABLE "events_blocks_gallery_images" ADD CONSTRAINT "events_blocks_gallery_images_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."events_blocks_gallery"("id") ON DELETE cascade ON UPDATE no action;
-  ALTER TABLE "events_blocks_gallery" ADD CONSTRAINT "events_blocks_gallery_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."events"("id") ON DELETE cascade ON UPDATE no action;
-  ALTER TABLE "events_blocks_grid_items" ADD CONSTRAINT "events_blocks_grid_items_image_id_media_id_fk" FOREIGN KEY ("image_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
-  ALTER TABLE "events_blocks_grid_items" ADD CONSTRAINT "events_blocks_grid_items_link_page_id_pages_id_fk" FOREIGN KEY ("link_page_id") REFERENCES "public"."pages"("id") ON DELETE set null ON UPDATE no action;
-  ALTER TABLE "events_blocks_grid_items" ADD CONSTRAINT "events_blocks_grid_items_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."events_blocks_grid"("id") ON DELETE cascade ON UPDATE no action;
-  ALTER TABLE "events_blocks_grid" ADD CONSTRAINT "events_blocks_grid_cta_page_id_pages_id_fk" FOREIGN KEY ("cta_page_id") REFERENCES "public"."pages"("id") ON DELETE set null ON UPDATE no action;
-  ALTER TABLE "events_blocks_grid" ADD CONSTRAINT "events_blocks_grid_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."events"("id") ON DELETE cascade ON UPDATE no action;
-  ALTER TABLE "events_blocks_timeline_events" ADD CONSTRAINT "events_blocks_timeline_events_image_id_media_id_fk" FOREIGN KEY ("image_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
-  ALTER TABLE "events_blocks_timeline_events" ADD CONSTRAINT "events_blocks_timeline_events_link_page_id_pages_id_fk" FOREIGN KEY ("link_page_id") REFERENCES "public"."pages"("id") ON DELETE set null ON UPDATE no action;
-  ALTER TABLE "events_blocks_timeline_events" ADD CONSTRAINT "events_blocks_timeline_events_link_archive_item_id_archive_items_id_fk" FOREIGN KEY ("link_archive_item_id") REFERENCES "public"."archive_items"("id") ON DELETE set null ON UPDATE no action;
-  ALTER TABLE "events_blocks_timeline_events" ADD CONSTRAINT "events_blocks_timeline_events_link_person_id_people_id_fk" FOREIGN KEY ("link_person_id") REFERENCES "public"."people"("id") ON DELETE set null ON UPDATE no action;
-  ALTER TABLE "events_blocks_timeline_events" ADD CONSTRAINT "events_blocks_timeline_events_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."events_blocks_timeline"("id") ON DELETE cascade ON UPDATE no action;
-  ALTER TABLE "events_blocks_timeline" ADD CONSTRAINT "events_blocks_timeline_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."events"("id") ON DELETE cascade ON UPDATE no action;
-  ALTER TABLE "events" ADD CONSTRAINT "events_featured_image_id_media_id_fk" FOREIGN KEY ("featured_image_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
-  ALTER TABLE "events" ADD CONSTRAINT "events_venue_id_places_id_fk" FOREIGN KEY ("venue_id") REFERENCES "public"."places"("id") ON DELETE set null ON UPDATE no action;
-  ALTER TABLE "events_rels" ADD CONSTRAINT "events_rels_parent_fk" FOREIGN KEY ("parent_id") REFERENCES "public"."events"("id") ON DELETE cascade ON UPDATE no action;
-  ALTER TABLE "events_rels" ADD CONSTRAINT "events_rels_categories_fk" FOREIGN KEY ("categories_id") REFERENCES "public"."categories"("id") ON DELETE cascade ON UPDATE no action;
-  ALTER TABLE "events_rels" ADD CONSTRAINT "events_rels_tags_fk" FOREIGN KEY ("tags_id") REFERENCES "public"."tags"("id") ON DELETE cascade ON UPDATE no action;
-  ALTER TABLE "events_rels" ADD CONSTRAINT "events_rels_people_fk" FOREIGN KEY ("people_id") REFERENCES "public"."people"("id") ON DELETE cascade ON UPDATE no action;
-  ALTER TABLE "events_rels" ADD CONSTRAINT "events_rels_events_fk" FOREIGN KEY ("events_id") REFERENCES "public"."events"("id") ON DELETE cascade ON UPDATE no action;
-  ALTER TABLE "events_rels" ADD CONSTRAINT "events_rels_posts_fk" FOREIGN KEY ("posts_id") REFERENCES "public"."posts"("id") ON DELETE cascade ON UPDATE no action;
-  ALTER TABLE "events_rels" ADD CONSTRAINT "events_rels_pages_fk" FOREIGN KEY ("pages_id") REFERENCES "public"."pages"("id") ON DELETE cascade ON UPDATE no action;
-  ALTER TABLE "events_rels" ADD CONSTRAINT "events_rels_archive_items_fk" FOREIGN KEY ("archive_items_id") REFERENCES "public"."archive_items"("id") ON DELETE cascade ON UPDATE no action;
-  ALTER TABLE "events_rels" ADD CONSTRAINT "events_rels_places_fk" FOREIGN KEY ("places_id") REFERENCES "public"."places"("id") ON DELETE cascade ON UPDATE no action;
-  ALTER TABLE "events_rels" ADD CONSTRAINT "events_rels_custom_items_fk" FOREIGN KEY ("custom_items_id") REFERENCES "public"."custom_items"("id") ON DELETE cascade ON UPDATE no action;
-  ALTER TABLE "_events_v_blocks_hero_links" ADD CONSTRAINT "_events_v_blocks_hero_links_page_id_pages_id_fk" FOREIGN KEY ("page_id") REFERENCES "public"."pages"("id") ON DELETE set null ON UPDATE no action;
-  ALTER TABLE "_events_v_blocks_hero_links" ADD CONSTRAINT "_events_v_blocks_hero_links_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."_events_v_blocks_hero"("id") ON DELETE cascade ON UPDATE no action;
-  ALTER TABLE "_events_v_blocks_hero" ADD CONSTRAINT "_events_v_blocks_hero_image_id_media_id_fk" FOREIGN KEY ("image_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
-  ALTER TABLE "_events_v_blocks_hero" ADD CONSTRAINT "_events_v_blocks_hero_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."_events_v"("id") ON DELETE cascade ON UPDATE no action;
-  ALTER TABLE "_events_v_blocks_content_columns" ADD CONSTRAINT "_events_v_blocks_content_columns_link_page_id_pages_id_fk" FOREIGN KEY ("link_page_id") REFERENCES "public"."pages"("id") ON DELETE set null ON UPDATE no action;
-  ALTER TABLE "_events_v_blocks_content_columns" ADD CONSTRAINT "_events_v_blocks_content_columns_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."_events_v_blocks_content"("id") ON DELETE cascade ON UPDATE no action;
-  ALTER TABLE "_events_v_blocks_content" ADD CONSTRAINT "_events_v_blocks_content_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."_events_v"("id") ON DELETE cascade ON UPDATE no action;
-  ALTER TABLE "_events_v_blocks_media" ADD CONSTRAINT "_events_v_blocks_media_media_id_media_id_fk" FOREIGN KEY ("media_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
-  ALTER TABLE "_events_v_blocks_media" ADD CONSTRAINT "_events_v_blocks_media_link_page_id_pages_id_fk" FOREIGN KEY ("link_page_id") REFERENCES "public"."pages"("id") ON DELETE set null ON UPDATE no action;
-  ALTER TABLE "_events_v_blocks_media" ADD CONSTRAINT "_events_v_blocks_media_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."_events_v"("id") ON DELETE cascade ON UPDATE no action;
-  ALTER TABLE "_events_v_blocks_cta_links" ADD CONSTRAINT "_events_v_blocks_cta_links_page_id_pages_id_fk" FOREIGN KEY ("page_id") REFERENCES "public"."pages"("id") ON DELETE set null ON UPDATE no action;
-  ALTER TABLE "_events_v_blocks_cta_links" ADD CONSTRAINT "_events_v_blocks_cta_links_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."_events_v_blocks_cta"("id") ON DELETE cascade ON UPDATE no action;
-  ALTER TABLE "_events_v_blocks_cta" ADD CONSTRAINT "_events_v_blocks_cta_image_id_media_id_fk" FOREIGN KEY ("image_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
-  ALTER TABLE "_events_v_blocks_cta" ADD CONSTRAINT "_events_v_blocks_cta_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."_events_v"("id") ON DELETE cascade ON UPDATE no action;
-  ALTER TABLE "_events_v_blocks_archive" ADD CONSTRAINT "_events_v_blocks_archive_content_type_id_content_types_id_fk" FOREIGN KEY ("content_type_id") REFERENCES "public"."content_types"("id") ON DELETE set null ON UPDATE no action;
-  ALTER TABLE "_events_v_blocks_archive" ADD CONSTRAINT "_events_v_blocks_archive_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."_events_v"("id") ON DELETE cascade ON UPDATE no action;
-  ALTER TABLE "_events_v_blocks_form" ADD CONSTRAINT "_events_v_blocks_form_form_id_forms_id_fk" FOREIGN KEY ("form_id") REFERENCES "public"."forms"("id") ON DELETE set null ON UPDATE no action;
-  ALTER TABLE "_events_v_blocks_form" ADD CONSTRAINT "_events_v_blocks_form_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."_events_v"("id") ON DELETE cascade ON UPDATE no action;
-  ALTER TABLE "_events_v_blocks_gallery_images" ADD CONSTRAINT "_events_v_blocks_gallery_images_image_id_media_id_fk" FOREIGN KEY ("image_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
-  ALTER TABLE "_events_v_blocks_gallery_images" ADD CONSTRAINT "_events_v_blocks_gallery_images_link_page_id_pages_id_fk" FOREIGN KEY ("link_page_id") REFERENCES "public"."pages"("id") ON DELETE set null ON UPDATE no action;
-  ALTER TABLE "_events_v_blocks_gallery_images" ADD CONSTRAINT "_events_v_blocks_gallery_images_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."_events_v_blocks_gallery"("id") ON DELETE cascade ON UPDATE no action;
-  ALTER TABLE "_events_v_blocks_gallery" ADD CONSTRAINT "_events_v_blocks_gallery_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."_events_v"("id") ON DELETE cascade ON UPDATE no action;
-  ALTER TABLE "_events_v_blocks_grid_items" ADD CONSTRAINT "_events_v_blocks_grid_items_image_id_media_id_fk" FOREIGN KEY ("image_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
-  ALTER TABLE "_events_v_blocks_grid_items" ADD CONSTRAINT "_events_v_blocks_grid_items_link_page_id_pages_id_fk" FOREIGN KEY ("link_page_id") REFERENCES "public"."pages"("id") ON DELETE set null ON UPDATE no action;
-  ALTER TABLE "_events_v_blocks_grid_items" ADD CONSTRAINT "_events_v_blocks_grid_items_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."_events_v_blocks_grid"("id") ON DELETE cascade ON UPDATE no action;
-  ALTER TABLE "_events_v_blocks_grid" ADD CONSTRAINT "_events_v_blocks_grid_cta_page_id_pages_id_fk" FOREIGN KEY ("cta_page_id") REFERENCES "public"."pages"("id") ON DELETE set null ON UPDATE no action;
-  ALTER TABLE "_events_v_blocks_grid" ADD CONSTRAINT "_events_v_blocks_grid_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."_events_v"("id") ON DELETE cascade ON UPDATE no action;
-  ALTER TABLE "_events_v_blocks_timeline_events" ADD CONSTRAINT "_events_v_blocks_timeline_events_image_id_media_id_fk" FOREIGN KEY ("image_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
-  ALTER TABLE "_events_v_blocks_timeline_events" ADD CONSTRAINT "_events_v_blocks_timeline_events_link_page_id_pages_id_fk" FOREIGN KEY ("link_page_id") REFERENCES "public"."pages"("id") ON DELETE set null ON UPDATE no action;
-  ALTER TABLE "_events_v_blocks_timeline_events" ADD CONSTRAINT "_events_v_blocks_timeline_events_link_archive_item_id_archive_items_id_fk" FOREIGN KEY ("link_archive_item_id") REFERENCES "public"."archive_items"("id") ON DELETE set null ON UPDATE no action;
-  ALTER TABLE "_events_v_blocks_timeline_events" ADD CONSTRAINT "_events_v_blocks_timeline_events_link_person_id_people_id_fk" FOREIGN KEY ("link_person_id") REFERENCES "public"."people"("id") ON DELETE set null ON UPDATE no action;
-  ALTER TABLE "_events_v_blocks_timeline_events" ADD CONSTRAINT "_events_v_blocks_timeline_events_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."_events_v_blocks_timeline"("id") ON DELETE cascade ON UPDATE no action;
-  ALTER TABLE "_events_v_blocks_timeline" ADD CONSTRAINT "_events_v_blocks_timeline_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."_events_v"("id") ON DELETE cascade ON UPDATE no action;
-  ALTER TABLE "_events_v" ADD CONSTRAINT "_events_v_parent_id_events_id_fk" FOREIGN KEY ("parent_id") REFERENCES "public"."events"("id") ON DELETE set null ON UPDATE no action;
-  ALTER TABLE "_events_v" ADD CONSTRAINT "_events_v_version_featured_image_id_media_id_fk" FOREIGN KEY ("version_featured_image_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
-  ALTER TABLE "_events_v" ADD CONSTRAINT "_events_v_version_venue_id_places_id_fk" FOREIGN KEY ("version_venue_id") REFERENCES "public"."places"("id") ON DELETE set null ON UPDATE no action;
-  ALTER TABLE "_events_v_rels" ADD CONSTRAINT "_events_v_rels_parent_fk" FOREIGN KEY ("parent_id") REFERENCES "public"."_events_v"("id") ON DELETE cascade ON UPDATE no action;
-  ALTER TABLE "_events_v_rels" ADD CONSTRAINT "_events_v_rels_categories_fk" FOREIGN KEY ("categories_id") REFERENCES "public"."categories"("id") ON DELETE cascade ON UPDATE no action;
-  ALTER TABLE "_events_v_rels" ADD CONSTRAINT "_events_v_rels_tags_fk" FOREIGN KEY ("tags_id") REFERENCES "public"."tags"("id") ON DELETE cascade ON UPDATE no action;
-  ALTER TABLE "_events_v_rels" ADD CONSTRAINT "_events_v_rels_people_fk" FOREIGN KEY ("people_id") REFERENCES "public"."people"("id") ON DELETE cascade ON UPDATE no action;
-  ALTER TABLE "_events_v_rels" ADD CONSTRAINT "_events_v_rels_events_fk" FOREIGN KEY ("events_id") REFERENCES "public"."events"("id") ON DELETE cascade ON UPDATE no action;
-  ALTER TABLE "_events_v_rels" ADD CONSTRAINT "_events_v_rels_posts_fk" FOREIGN KEY ("posts_id") REFERENCES "public"."posts"("id") ON DELETE cascade ON UPDATE no action;
-  ALTER TABLE "_events_v_rels" ADD CONSTRAINT "_events_v_rels_pages_fk" FOREIGN KEY ("pages_id") REFERENCES "public"."pages"("id") ON DELETE cascade ON UPDATE no action;
-  ALTER TABLE "_events_v_rels" ADD CONSTRAINT "_events_v_rels_archive_items_fk" FOREIGN KEY ("archive_items_id") REFERENCES "public"."archive_items"("id") ON DELETE cascade ON UPDATE no action;
-  ALTER TABLE "_events_v_rels" ADD CONSTRAINT "_events_v_rels_places_fk" FOREIGN KEY ("places_id") REFERENCES "public"."places"("id") ON DELETE cascade ON UPDATE no action;
-  ALTER TABLE "_events_v_rels" ADD CONSTRAINT "_events_v_rels_custom_items_fk" FOREIGN KEY ("custom_items_id") REFERENCES "public"."custom_items"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "content_types_custom_fields" ADD CONSTRAINT "content_types_custom_fields_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."content_types"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "content_types" ADD CONSTRAINT "content_types_meta_image_id_media_id_fk" FOREIGN KEY ("meta_image_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
   ALTER TABLE "custom_items_blocks_hero_links" ADD CONSTRAINT "custom_items_blocks_hero_links_page_id_pages_id_fk" FOREIGN KEY ("page_id") REFERENCES "public"."pages"("id") ON DELETE set null ON UPDATE no action;
@@ -9348,7 +9282,8 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   ALTER TABLE "search_rels" ADD CONSTRAINT "search_rels_archive_items_fk" FOREIGN KEY ("archive_items_id") REFERENCES "public"."archive_items"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "search_rels" ADD CONSTRAINT "search_rels_people_fk" FOREIGN KEY ("people_id") REFERENCES "public"."people"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "search_rels" ADD CONSTRAINT "search_rels_places_fk" FOREIGN KEY ("places_id") REFERENCES "public"."places"("id") ON DELETE cascade ON UPDATE no action;
-  ALTER TABLE "search_rels" ADD CONSTRAINT "search_rels_museum_collections_fk" FOREIGN KEY ("museum_collections_id") REFERENCES "public"."museum_collections"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "search_rels" ADD CONSTRAINT "search_rels_events_fk" FOREIGN KEY ("events_id") REFERENCES "public"."events"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "search_rels" ADD CONSTRAINT "search_rels_products_fk" FOREIGN KEY ("products_id") REFERENCES "public"."products"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "search_rels" ADD CONSTRAINT "search_rels_custom_items_fk" FOREIGN KEY ("custom_items_id") REFERENCES "public"."custom_items"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "search_rels" ADD CONSTRAINT "search_rels_content_types_fk" FOREIGN KEY ("content_types_id") REFERENCES "public"."content_types"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "payload_jobs_log" ADD CONSTRAINT "payload_jobs_log_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."payload_jobs"("id") ON DELETE cascade ON UPDATE no action;
@@ -9362,11 +9297,10 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   ALTER TABLE "payload_locked_documents_rels" ADD CONSTRAINT "payload_locked_documents_rels_archive_items_fk" FOREIGN KEY ("archive_items_id") REFERENCES "public"."archive_items"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "payload_locked_documents_rels" ADD CONSTRAINT "payload_locked_documents_rels_people_fk" FOREIGN KEY ("people_id") REFERENCES "public"."people"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "payload_locked_documents_rels" ADD CONSTRAINT "payload_locked_documents_rels_places_fk" FOREIGN KEY ("places_id") REFERENCES "public"."places"("id") ON DELETE cascade ON UPDATE no action;
-  ALTER TABLE "payload_locked_documents_rels" ADD CONSTRAINT "payload_locked_documents_rels_museum_collections_fk" FOREIGN KEY ("museum_collections_id") REFERENCES "public"."museum_collections"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "payload_locked_documents_rels" ADD CONSTRAINT "payload_locked_documents_rels_events_fk" FOREIGN KEY ("events_id") REFERENCES "public"."events"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "payload_locked_documents_rels" ADD CONSTRAINT "payload_locked_documents_rels_products_fk" FOREIGN KEY ("products_id") REFERENCES "public"."products"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "payload_locked_documents_rels" ADD CONSTRAINT "payload_locked_documents_rels_product_categories_fk" FOREIGN KEY ("product_categories_id") REFERENCES "public"."product_categories"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "payload_locked_documents_rels" ADD CONSTRAINT "payload_locked_documents_rels_product_collections_fk" FOREIGN KEY ("product_collections_id") REFERENCES "public"."product_collections"("id") ON DELETE cascade ON UPDATE no action;
-  ALTER TABLE "payload_locked_documents_rels" ADD CONSTRAINT "payload_locked_documents_rels_events_fk" FOREIGN KEY ("events_id") REFERENCES "public"."events"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "payload_locked_documents_rels" ADD CONSTRAINT "payload_locked_documents_rels_content_types_fk" FOREIGN KEY ("content_types_id") REFERENCES "public"."content_types"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "payload_locked_documents_rels" ADD CONSTRAINT "payload_locked_documents_rels_custom_items_fk" FOREIGN KEY ("custom_items_id") REFERENCES "public"."custom_items"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "payload_locked_documents_rels" ADD CONSTRAINT "payload_locked_documents_rels_forms_fk" FOREIGN KEY ("forms_id") REFERENCES "public"."forms"("id") ON DELETE cascade ON UPDATE no action;
@@ -9955,8 +9889,8 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   CREATE INDEX "categories_breadcrumbs_parent_id_idx" ON "categories_breadcrumbs" USING btree ("_parent_id");
   CREATE INDEX "categories_breadcrumbs_doc_idx" ON "categories_breadcrumbs" USING btree ("doc_id");
   CREATE UNIQUE INDEX "categories_slug_idx" ON "categories" USING btree ("slug");
-  CREATE INDEX "categories_featured_image_idx" ON "categories" USING btree ("featured_image_id");
   CREATE INDEX "categories_parent_idx" ON "categories" USING btree ("parent_id");
+  CREATE INDEX "categories_featured_image_idx" ON "categories" USING btree ("featured_image_id");
   CREATE INDEX "categories_updated_at_idx" ON "categories" USING btree ("updated_at");
   CREATE INDEX "categories_created_at_idx" ON "categories" USING btree ("created_at");
   CREATE INDEX "_categories_v_version_breadcrumbs_order_idx" ON "_categories_v_version_breadcrumbs" USING btree ("_order");
@@ -9964,8 +9898,8 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   CREATE INDEX "_categories_v_version_breadcrumbs_doc_idx" ON "_categories_v_version_breadcrumbs" USING btree ("doc_id");
   CREATE INDEX "_categories_v_parent_idx" ON "_categories_v" USING btree ("parent_id");
   CREATE INDEX "_categories_v_version_version_slug_idx" ON "_categories_v" USING btree ("version_slug");
-  CREATE INDEX "_categories_v_version_version_featured_image_idx" ON "_categories_v" USING btree ("version_featured_image_id");
   CREATE INDEX "_categories_v_version_version_parent_idx" ON "_categories_v" USING btree ("version_parent_id");
+  CREATE INDEX "_categories_v_version_version_featured_image_idx" ON "_categories_v" USING btree ("version_featured_image_id");
   CREATE INDEX "_categories_v_version_version_updated_at_idx" ON "_categories_v" USING btree ("version_updated_at");
   CREATE INDEX "_categories_v_version_version_created_at_idx" ON "_categories_v" USING btree ("version_created_at");
   CREATE INDEX "_categories_v_created_at_idx" ON "_categories_v" USING btree ("created_at");
@@ -10052,7 +9986,6 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   CREATE INDEX "archive_items_rels_people_id_idx" ON "archive_items_rels" USING btree ("people_id");
   CREATE INDEX "archive_items_rels_places_id_idx" ON "archive_items_rels" USING btree ("places_id");
   CREATE INDEX "archive_items_rels_archive_items_id_idx" ON "archive_items_rels" USING btree ("archive_items_id");
-  CREATE INDEX "archive_items_rels_museum_collections_id_idx" ON "archive_items_rels" USING btree ("museum_collections_id");
   CREATE INDEX "archive_items_rels_categories_id_idx" ON "archive_items_rels" USING btree ("categories_id");
   CREATE INDEX "archive_items_rels_tags_id_idx" ON "archive_items_rels" USING btree ("tags_id");
   CREATE INDEX "archive_items_rels_posts_id_idx" ON "archive_items_rels" USING btree ("posts_id");
@@ -10136,7 +10069,6 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   CREATE INDEX "_archive_items_v_rels_people_id_idx" ON "_archive_items_v_rels" USING btree ("people_id");
   CREATE INDEX "_archive_items_v_rels_places_id_idx" ON "_archive_items_v_rels" USING btree ("places_id");
   CREATE INDEX "_archive_items_v_rels_archive_items_id_idx" ON "_archive_items_v_rels" USING btree ("archive_items_id");
-  CREATE INDEX "_archive_items_v_rels_museum_collections_id_idx" ON "_archive_items_v_rels" USING btree ("museum_collections_id");
   CREATE INDEX "_archive_items_v_rels_categories_id_idx" ON "_archive_items_v_rels" USING btree ("categories_id");
   CREATE INDEX "_archive_items_v_rels_tags_id_idx" ON "_archive_items_v_rels" USING btree ("tags_id");
   CREATE INDEX "_archive_items_v_rels_posts_id_idx" ON "_archive_items_v_rels" USING btree ("posts_id");
@@ -10698,41 +10630,163 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   CREATE INDEX "_places_v_rels_archive_items_id_idx" ON "_places_v_rels" USING btree ("archive_items_id");
   CREATE INDEX "_places_v_rels_people_id_idx" ON "_places_v_rels" USING btree ("people_id");
   CREATE INDEX "_places_v_rels_custom_items_id_idx" ON "_places_v_rels" USING btree ("custom_items_id");
-  CREATE INDEX "museum_collections_breadcrumbs_order_idx" ON "museum_collections_breadcrumbs" USING btree ("_order");
-  CREATE INDEX "museum_collections_breadcrumbs_parent_id_idx" ON "museum_collections_breadcrumbs" USING btree ("_parent_id");
-  CREATE INDEX "museum_collections_breadcrumbs_doc_idx" ON "museum_collections_breadcrumbs" USING btree ("doc_id");
-  CREATE UNIQUE INDEX "museum_collections_slug_idx" ON "museum_collections" USING btree ("slug");
-  CREATE INDEX "museum_collections_featured_image_idx" ON "museum_collections" USING btree ("featured_image_id");
-  CREATE INDEX "museum_collections_curator_idx" ON "museum_collections" USING btree ("curator_id");
-  CREATE INDEX "museum_collections_meta_meta_image_idx" ON "museum_collections" USING btree ("meta_image_id");
-  CREATE INDEX "museum_collections_parent_idx" ON "museum_collections" USING btree ("parent_id");
-  CREATE INDEX "museum_collections_updated_at_idx" ON "museum_collections" USING btree ("updated_at");
-  CREATE INDEX "museum_collections_created_at_idx" ON "museum_collections" USING btree ("created_at");
-  CREATE INDEX "museum_collections__status_idx" ON "museum_collections" USING btree ("_status");
-  CREATE INDEX "museum_collections_rels_order_idx" ON "museum_collections_rels" USING btree ("order");
-  CREATE INDEX "museum_collections_rels_parent_idx" ON "museum_collections_rels" USING btree ("parent_id");
-  CREATE INDEX "museum_collections_rels_path_idx" ON "museum_collections_rels" USING btree ("path");
-  CREATE INDEX "museum_collections_rels_archive_items_id_idx" ON "museum_collections_rels" USING btree ("archive_items_id");
-  CREATE INDEX "_museum_collections_v_version_breadcrumbs_order_idx" ON "_museum_collections_v_version_breadcrumbs" USING btree ("_order");
-  CREATE INDEX "_museum_collections_v_version_breadcrumbs_parent_id_idx" ON "_museum_collections_v_version_breadcrumbs" USING btree ("_parent_id");
-  CREATE INDEX "_museum_collections_v_version_breadcrumbs_doc_idx" ON "_museum_collections_v_version_breadcrumbs" USING btree ("doc_id");
-  CREATE INDEX "_museum_collections_v_parent_idx" ON "_museum_collections_v" USING btree ("parent_id");
-  CREATE INDEX "_museum_collections_v_version_version_slug_idx" ON "_museum_collections_v" USING btree ("version_slug");
-  CREATE INDEX "_museum_collections_v_version_version_featured_image_idx" ON "_museum_collections_v" USING btree ("version_featured_image_id");
-  CREATE INDEX "_museum_collections_v_version_version_curator_idx" ON "_museum_collections_v" USING btree ("version_curator_id");
-  CREATE INDEX "_museum_collections_v_version_meta_version_meta_image_idx" ON "_museum_collections_v" USING btree ("version_meta_image_id");
-  CREATE INDEX "_museum_collections_v_version_version_parent_idx" ON "_museum_collections_v" USING btree ("version_parent_id");
-  CREATE INDEX "_museum_collections_v_version_version_updated_at_idx" ON "_museum_collections_v" USING btree ("version_updated_at");
-  CREATE INDEX "_museum_collections_v_version_version_created_at_idx" ON "_museum_collections_v" USING btree ("version_created_at");
-  CREATE INDEX "_museum_collections_v_version_version__status_idx" ON "_museum_collections_v" USING btree ("version__status");
-  CREATE INDEX "_museum_collections_v_created_at_idx" ON "_museum_collections_v" USING btree ("created_at");
-  CREATE INDEX "_museum_collections_v_updated_at_idx" ON "_museum_collections_v" USING btree ("updated_at");
-  CREATE INDEX "_museum_collections_v_latest_idx" ON "_museum_collections_v" USING btree ("latest");
-  CREATE INDEX "_museum_collections_v_autosave_idx" ON "_museum_collections_v" USING btree ("autosave");
-  CREATE INDEX "_museum_collections_v_rels_order_idx" ON "_museum_collections_v_rels" USING btree ("order");
-  CREATE INDEX "_museum_collections_v_rels_parent_idx" ON "_museum_collections_v_rels" USING btree ("parent_id");
-  CREATE INDEX "_museum_collections_v_rels_path_idx" ON "_museum_collections_v_rels" USING btree ("path");
-  CREATE INDEX "_museum_collections_v_rels_archive_items_id_idx" ON "_museum_collections_v_rels" USING btree ("archive_items_id");
+  CREATE INDEX "events_blocks_hero_links_order_idx" ON "events_blocks_hero_links" USING btree ("_order");
+  CREATE INDEX "events_blocks_hero_links_parent_id_idx" ON "events_blocks_hero_links" USING btree ("_parent_id");
+  CREATE INDEX "events_blocks_hero_links_page_idx" ON "events_blocks_hero_links" USING btree ("page_id");
+  CREATE INDEX "events_blocks_hero_order_idx" ON "events_blocks_hero" USING btree ("_order");
+  CREATE INDEX "events_blocks_hero_parent_id_idx" ON "events_blocks_hero" USING btree ("_parent_id");
+  CREATE INDEX "events_blocks_hero_path_idx" ON "events_blocks_hero" USING btree ("_path");
+  CREATE INDEX "events_blocks_hero_image_idx" ON "events_blocks_hero" USING btree ("image_id");
+  CREATE INDEX "events_blocks_content_columns_order_idx" ON "events_blocks_content_columns" USING btree ("_order");
+  CREATE INDEX "events_blocks_content_columns_parent_id_idx" ON "events_blocks_content_columns" USING btree ("_parent_id");
+  CREATE INDEX "events_blocks_content_columns_link_link_page_idx" ON "events_blocks_content_columns" USING btree ("link_page_id");
+  CREATE INDEX "events_blocks_content_order_idx" ON "events_blocks_content" USING btree ("_order");
+  CREATE INDEX "events_blocks_content_parent_id_idx" ON "events_blocks_content" USING btree ("_parent_id");
+  CREATE INDEX "events_blocks_content_path_idx" ON "events_blocks_content" USING btree ("_path");
+  CREATE INDEX "events_blocks_media_order_idx" ON "events_blocks_media" USING btree ("_order");
+  CREATE INDEX "events_blocks_media_parent_id_idx" ON "events_blocks_media" USING btree ("_parent_id");
+  CREATE INDEX "events_blocks_media_path_idx" ON "events_blocks_media" USING btree ("_path");
+  CREATE INDEX "events_blocks_media_media_idx" ON "events_blocks_media" USING btree ("media_id");
+  CREATE INDEX "events_blocks_media_link_link_page_idx" ON "events_blocks_media" USING btree ("link_page_id");
+  CREATE INDEX "events_blocks_cta_links_order_idx" ON "events_blocks_cta_links" USING btree ("_order");
+  CREATE INDEX "events_blocks_cta_links_parent_id_idx" ON "events_blocks_cta_links" USING btree ("_parent_id");
+  CREATE INDEX "events_blocks_cta_links_page_idx" ON "events_blocks_cta_links" USING btree ("page_id");
+  CREATE INDEX "events_blocks_cta_order_idx" ON "events_blocks_cta" USING btree ("_order");
+  CREATE INDEX "events_blocks_cta_parent_id_idx" ON "events_blocks_cta" USING btree ("_parent_id");
+  CREATE INDEX "events_blocks_cta_path_idx" ON "events_blocks_cta" USING btree ("_path");
+  CREATE INDEX "events_blocks_cta_image_idx" ON "events_blocks_cta" USING btree ("image_id");
+  CREATE INDEX "events_blocks_archive_order_idx" ON "events_blocks_archive" USING btree ("_order");
+  CREATE INDEX "events_blocks_archive_parent_id_idx" ON "events_blocks_archive" USING btree ("_parent_id");
+  CREATE INDEX "events_blocks_archive_path_idx" ON "events_blocks_archive" USING btree ("_path");
+  CREATE INDEX "events_blocks_archive_content_type_idx" ON "events_blocks_archive" USING btree ("content_type_id");
+  CREATE INDEX "events_blocks_form_order_idx" ON "events_blocks_form" USING btree ("_order");
+  CREATE INDEX "events_blocks_form_parent_id_idx" ON "events_blocks_form" USING btree ("_parent_id");
+  CREATE INDEX "events_blocks_form_path_idx" ON "events_blocks_form" USING btree ("_path");
+  CREATE INDEX "events_blocks_form_form_idx" ON "events_blocks_form" USING btree ("form_id");
+  CREATE INDEX "events_blocks_gallery_images_order_idx" ON "events_blocks_gallery_images" USING btree ("_order");
+  CREATE INDEX "events_blocks_gallery_images_parent_id_idx" ON "events_blocks_gallery_images" USING btree ("_parent_id");
+  CREATE INDEX "events_blocks_gallery_images_image_idx" ON "events_blocks_gallery_images" USING btree ("image_id");
+  CREATE INDEX "events_blocks_gallery_images_link_link_page_idx" ON "events_blocks_gallery_images" USING btree ("link_page_id");
+  CREATE INDEX "events_blocks_gallery_order_idx" ON "events_blocks_gallery" USING btree ("_order");
+  CREATE INDEX "events_blocks_gallery_parent_id_idx" ON "events_blocks_gallery" USING btree ("_parent_id");
+  CREATE INDEX "events_blocks_gallery_path_idx" ON "events_blocks_gallery" USING btree ("_path");
+  CREATE INDEX "events_blocks_grid_items_order_idx" ON "events_blocks_grid_items" USING btree ("_order");
+  CREATE INDEX "events_blocks_grid_items_parent_id_idx" ON "events_blocks_grid_items" USING btree ("_parent_id");
+  CREATE INDEX "events_blocks_grid_items_image_idx" ON "events_blocks_grid_items" USING btree ("image_id");
+  CREATE INDEX "events_blocks_grid_items_link_link_page_idx" ON "events_blocks_grid_items" USING btree ("link_page_id");
+  CREATE INDEX "events_blocks_grid_order_idx" ON "events_blocks_grid" USING btree ("_order");
+  CREATE INDEX "events_blocks_grid_parent_id_idx" ON "events_blocks_grid" USING btree ("_parent_id");
+  CREATE INDEX "events_blocks_grid_path_idx" ON "events_blocks_grid" USING btree ("_path");
+  CREATE INDEX "events_blocks_grid_cta_cta_page_idx" ON "events_blocks_grid" USING btree ("cta_page_id");
+  CREATE INDEX "events_blocks_timeline_events_order_idx" ON "events_blocks_timeline_events" USING btree ("_order");
+  CREATE INDEX "events_blocks_timeline_events_parent_id_idx" ON "events_blocks_timeline_events" USING btree ("_parent_id");
+  CREATE INDEX "events_blocks_timeline_events_image_idx" ON "events_blocks_timeline_events" USING btree ("image_id");
+  CREATE INDEX "events_blocks_timeline_events_link_link_page_idx" ON "events_blocks_timeline_events" USING btree ("link_page_id");
+  CREATE INDEX "events_blocks_timeline_events_link_link_archive_item_idx" ON "events_blocks_timeline_events" USING btree ("link_archive_item_id");
+  CREATE INDEX "events_blocks_timeline_events_link_link_person_idx" ON "events_blocks_timeline_events" USING btree ("link_person_id");
+  CREATE INDEX "events_blocks_timeline_order_idx" ON "events_blocks_timeline" USING btree ("_order");
+  CREATE INDEX "events_blocks_timeline_parent_id_idx" ON "events_blocks_timeline" USING btree ("_parent_id");
+  CREATE INDEX "events_blocks_timeline_path_idx" ON "events_blocks_timeline" USING btree ("_path");
+  CREATE UNIQUE INDEX "events_slug_idx" ON "events" USING btree ("slug");
+  CREATE INDEX "events_featured_image_idx" ON "events" USING btree ("featured_image_id");
+  CREATE INDEX "events_venue_idx" ON "events" USING btree ("venue_id");
+  CREATE INDEX "events_meta_meta_image_idx" ON "events" USING btree ("meta_image_id");
+  CREATE INDEX "events_updated_at_idx" ON "events" USING btree ("updated_at");
+  CREATE INDEX "events_created_at_idx" ON "events" USING btree ("created_at");
+  CREATE INDEX "events__status_idx" ON "events" USING btree ("_status");
+  CREATE INDEX "events_rels_order_idx" ON "events_rels" USING btree ("order");
+  CREATE INDEX "events_rels_parent_idx" ON "events_rels" USING btree ("parent_id");
+  CREATE INDEX "events_rels_path_idx" ON "events_rels" USING btree ("path");
+  CREATE INDEX "events_rels_categories_id_idx" ON "events_rels" USING btree ("categories_id");
+  CREATE INDEX "events_rels_tags_id_idx" ON "events_rels" USING btree ("tags_id");
+  CREATE INDEX "events_rels_people_id_idx" ON "events_rels" USING btree ("people_id");
+  CREATE INDEX "events_rels_events_id_idx" ON "events_rels" USING btree ("events_id");
+  CREATE INDEX "events_rels_posts_id_idx" ON "events_rels" USING btree ("posts_id");
+  CREATE INDEX "events_rels_pages_id_idx" ON "events_rels" USING btree ("pages_id");
+  CREATE INDEX "events_rels_archive_items_id_idx" ON "events_rels" USING btree ("archive_items_id");
+  CREATE INDEX "events_rels_places_id_idx" ON "events_rels" USING btree ("places_id");
+  CREATE INDEX "events_rels_custom_items_id_idx" ON "events_rels" USING btree ("custom_items_id");
+  CREATE INDEX "_events_v_blocks_hero_links_order_idx" ON "_events_v_blocks_hero_links" USING btree ("_order");
+  CREATE INDEX "_events_v_blocks_hero_links_parent_id_idx" ON "_events_v_blocks_hero_links" USING btree ("_parent_id");
+  CREATE INDEX "_events_v_blocks_hero_links_page_idx" ON "_events_v_blocks_hero_links" USING btree ("page_id");
+  CREATE INDEX "_events_v_blocks_hero_order_idx" ON "_events_v_blocks_hero" USING btree ("_order");
+  CREATE INDEX "_events_v_blocks_hero_parent_id_idx" ON "_events_v_blocks_hero" USING btree ("_parent_id");
+  CREATE INDEX "_events_v_blocks_hero_path_idx" ON "_events_v_blocks_hero" USING btree ("_path");
+  CREATE INDEX "_events_v_blocks_hero_image_idx" ON "_events_v_blocks_hero" USING btree ("image_id");
+  CREATE INDEX "_events_v_blocks_content_columns_order_idx" ON "_events_v_blocks_content_columns" USING btree ("_order");
+  CREATE INDEX "_events_v_blocks_content_columns_parent_id_idx" ON "_events_v_blocks_content_columns" USING btree ("_parent_id");
+  CREATE INDEX "_events_v_blocks_content_columns_link_link_page_idx" ON "_events_v_blocks_content_columns" USING btree ("link_page_id");
+  CREATE INDEX "_events_v_blocks_content_order_idx" ON "_events_v_blocks_content" USING btree ("_order");
+  CREATE INDEX "_events_v_blocks_content_parent_id_idx" ON "_events_v_blocks_content" USING btree ("_parent_id");
+  CREATE INDEX "_events_v_blocks_content_path_idx" ON "_events_v_blocks_content" USING btree ("_path");
+  CREATE INDEX "_events_v_blocks_media_order_idx" ON "_events_v_blocks_media" USING btree ("_order");
+  CREATE INDEX "_events_v_blocks_media_parent_id_idx" ON "_events_v_blocks_media" USING btree ("_parent_id");
+  CREATE INDEX "_events_v_blocks_media_path_idx" ON "_events_v_blocks_media" USING btree ("_path");
+  CREATE INDEX "_events_v_blocks_media_media_idx" ON "_events_v_blocks_media" USING btree ("media_id");
+  CREATE INDEX "_events_v_blocks_media_link_link_page_idx" ON "_events_v_blocks_media" USING btree ("link_page_id");
+  CREATE INDEX "_events_v_blocks_cta_links_order_idx" ON "_events_v_blocks_cta_links" USING btree ("_order");
+  CREATE INDEX "_events_v_blocks_cta_links_parent_id_idx" ON "_events_v_blocks_cta_links" USING btree ("_parent_id");
+  CREATE INDEX "_events_v_blocks_cta_links_page_idx" ON "_events_v_blocks_cta_links" USING btree ("page_id");
+  CREATE INDEX "_events_v_blocks_cta_order_idx" ON "_events_v_blocks_cta" USING btree ("_order");
+  CREATE INDEX "_events_v_blocks_cta_parent_id_idx" ON "_events_v_blocks_cta" USING btree ("_parent_id");
+  CREATE INDEX "_events_v_blocks_cta_path_idx" ON "_events_v_blocks_cta" USING btree ("_path");
+  CREATE INDEX "_events_v_blocks_cta_image_idx" ON "_events_v_blocks_cta" USING btree ("image_id");
+  CREATE INDEX "_events_v_blocks_archive_order_idx" ON "_events_v_blocks_archive" USING btree ("_order");
+  CREATE INDEX "_events_v_blocks_archive_parent_id_idx" ON "_events_v_blocks_archive" USING btree ("_parent_id");
+  CREATE INDEX "_events_v_blocks_archive_path_idx" ON "_events_v_blocks_archive" USING btree ("_path");
+  CREATE INDEX "_events_v_blocks_archive_content_type_idx" ON "_events_v_blocks_archive" USING btree ("content_type_id");
+  CREATE INDEX "_events_v_blocks_form_order_idx" ON "_events_v_blocks_form" USING btree ("_order");
+  CREATE INDEX "_events_v_blocks_form_parent_id_idx" ON "_events_v_blocks_form" USING btree ("_parent_id");
+  CREATE INDEX "_events_v_blocks_form_path_idx" ON "_events_v_blocks_form" USING btree ("_path");
+  CREATE INDEX "_events_v_blocks_form_form_idx" ON "_events_v_blocks_form" USING btree ("form_id");
+  CREATE INDEX "_events_v_blocks_gallery_images_order_idx" ON "_events_v_blocks_gallery_images" USING btree ("_order");
+  CREATE INDEX "_events_v_blocks_gallery_images_parent_id_idx" ON "_events_v_blocks_gallery_images" USING btree ("_parent_id");
+  CREATE INDEX "_events_v_blocks_gallery_images_image_idx" ON "_events_v_blocks_gallery_images" USING btree ("image_id");
+  CREATE INDEX "_events_v_blocks_gallery_images_link_link_page_idx" ON "_events_v_blocks_gallery_images" USING btree ("link_page_id");
+  CREATE INDEX "_events_v_blocks_gallery_order_idx" ON "_events_v_blocks_gallery" USING btree ("_order");
+  CREATE INDEX "_events_v_blocks_gallery_parent_id_idx" ON "_events_v_blocks_gallery" USING btree ("_parent_id");
+  CREATE INDEX "_events_v_blocks_gallery_path_idx" ON "_events_v_blocks_gallery" USING btree ("_path");
+  CREATE INDEX "_events_v_blocks_grid_items_order_idx" ON "_events_v_blocks_grid_items" USING btree ("_order");
+  CREATE INDEX "_events_v_blocks_grid_items_parent_id_idx" ON "_events_v_blocks_grid_items" USING btree ("_parent_id");
+  CREATE INDEX "_events_v_blocks_grid_items_image_idx" ON "_events_v_blocks_grid_items" USING btree ("image_id");
+  CREATE INDEX "_events_v_blocks_grid_items_link_link_page_idx" ON "_events_v_blocks_grid_items" USING btree ("link_page_id");
+  CREATE INDEX "_events_v_blocks_grid_order_idx" ON "_events_v_blocks_grid" USING btree ("_order");
+  CREATE INDEX "_events_v_blocks_grid_parent_id_idx" ON "_events_v_blocks_grid" USING btree ("_parent_id");
+  CREATE INDEX "_events_v_blocks_grid_path_idx" ON "_events_v_blocks_grid" USING btree ("_path");
+  CREATE INDEX "_events_v_blocks_grid_cta_cta_page_idx" ON "_events_v_blocks_grid" USING btree ("cta_page_id");
+  CREATE INDEX "_events_v_blocks_timeline_events_order_idx" ON "_events_v_blocks_timeline_events" USING btree ("_order");
+  CREATE INDEX "_events_v_blocks_timeline_events_parent_id_idx" ON "_events_v_blocks_timeline_events" USING btree ("_parent_id");
+  CREATE INDEX "_events_v_blocks_timeline_events_image_idx" ON "_events_v_blocks_timeline_events" USING btree ("image_id");
+  CREATE INDEX "_events_v_blocks_timeline_events_link_link_page_idx" ON "_events_v_blocks_timeline_events" USING btree ("link_page_id");
+  CREATE INDEX "_events_v_blocks_timeline_events_link_link_archive_item_idx" ON "_events_v_blocks_timeline_events" USING btree ("link_archive_item_id");
+  CREATE INDEX "_events_v_blocks_timeline_events_link_link_person_idx" ON "_events_v_blocks_timeline_events" USING btree ("link_person_id");
+  CREATE INDEX "_events_v_blocks_timeline_order_idx" ON "_events_v_blocks_timeline" USING btree ("_order");
+  CREATE INDEX "_events_v_blocks_timeline_parent_id_idx" ON "_events_v_blocks_timeline" USING btree ("_parent_id");
+  CREATE INDEX "_events_v_blocks_timeline_path_idx" ON "_events_v_blocks_timeline" USING btree ("_path");
+  CREATE INDEX "_events_v_parent_idx" ON "_events_v" USING btree ("parent_id");
+  CREATE INDEX "_events_v_version_version_slug_idx" ON "_events_v" USING btree ("version_slug");
+  CREATE INDEX "_events_v_version_version_featured_image_idx" ON "_events_v" USING btree ("version_featured_image_id");
+  CREATE INDEX "_events_v_version_version_venue_idx" ON "_events_v" USING btree ("version_venue_id");
+  CREATE INDEX "_events_v_version_meta_version_meta_image_idx" ON "_events_v" USING btree ("version_meta_image_id");
+  CREATE INDEX "_events_v_version_version_updated_at_idx" ON "_events_v" USING btree ("version_updated_at");
+  CREATE INDEX "_events_v_version_version_created_at_idx" ON "_events_v" USING btree ("version_created_at");
+  CREATE INDEX "_events_v_version_version__status_idx" ON "_events_v" USING btree ("version__status");
+  CREATE INDEX "_events_v_created_at_idx" ON "_events_v" USING btree ("created_at");
+  CREATE INDEX "_events_v_updated_at_idx" ON "_events_v" USING btree ("updated_at");
+  CREATE INDEX "_events_v_latest_idx" ON "_events_v" USING btree ("latest");
+  CREATE INDEX "_events_v_autosave_idx" ON "_events_v" USING btree ("autosave");
+  CREATE INDEX "_events_v_rels_order_idx" ON "_events_v_rels" USING btree ("order");
+  CREATE INDEX "_events_v_rels_parent_idx" ON "_events_v_rels" USING btree ("parent_id");
+  CREATE INDEX "_events_v_rels_path_idx" ON "_events_v_rels" USING btree ("path");
+  CREATE INDEX "_events_v_rels_categories_id_idx" ON "_events_v_rels" USING btree ("categories_id");
+  CREATE INDEX "_events_v_rels_tags_id_idx" ON "_events_v_rels" USING btree ("tags_id");
+  CREATE INDEX "_events_v_rels_people_id_idx" ON "_events_v_rels" USING btree ("people_id");
+  CREATE INDEX "_events_v_rels_events_id_idx" ON "_events_v_rels" USING btree ("events_id");
+  CREATE INDEX "_events_v_rels_posts_id_idx" ON "_events_v_rels" USING btree ("posts_id");
+  CREATE INDEX "_events_v_rels_pages_id_idx" ON "_events_v_rels" USING btree ("pages_id");
+  CREATE INDEX "_events_v_rels_archive_items_id_idx" ON "_events_v_rels" USING btree ("archive_items_id");
+  CREATE INDEX "_events_v_rels_places_id_idx" ON "_events_v_rels" USING btree ("places_id");
+  CREATE INDEX "_events_v_rels_custom_items_id_idx" ON "_events_v_rels" USING btree ("custom_items_id");
   CREATE INDEX "products_gallery_order_idx" ON "products_gallery" USING btree ("_order");
   CREATE INDEX "products_gallery_parent_id_idx" ON "products_gallery" USING btree ("_parent_id");
   CREATE INDEX "products_gallery_image_idx" ON "products_gallery" USING btree ("image_id");
@@ -10799,6 +10853,7 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   CREATE UNIQUE INDEX "products_slug_idx" ON "products" USING btree ("slug");
   CREATE INDEX "products_featured_image_idx" ON "products" USING btree ("featured_image_id");
   CREATE UNIQUE INDEX "products_sku_idx" ON "products" USING btree ("sku");
+  CREATE INDEX "products_meta_meta_image_idx" ON "products" USING btree ("meta_image_id");
   CREATE INDEX "products_updated_at_idx" ON "products" USING btree ("updated_at");
   CREATE INDEX "products_created_at_idx" ON "products" USING btree ("created_at");
   CREATE INDEX "products__status_idx" ON "products" USING btree ("_status");
@@ -10882,6 +10937,7 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   CREATE INDEX "_products_v_version_version_slug_idx" ON "_products_v" USING btree ("version_slug");
   CREATE INDEX "_products_v_version_version_featured_image_idx" ON "_products_v" USING btree ("version_featured_image_id");
   CREATE INDEX "_products_v_version_version_sku_idx" ON "_products_v" USING btree ("version_sku");
+  CREATE INDEX "_products_v_version_meta_version_meta_image_idx" ON "_products_v" USING btree ("version_meta_image_id");
   CREATE INDEX "_products_v_version_version_updated_at_idx" ON "_products_v" USING btree ("version_updated_at");
   CREATE INDEX "_products_v_version_version_created_at_idx" ON "_products_v" USING btree ("version_created_at");
   CREATE INDEX "_products_v_version_version__status_idx" ON "_products_v" USING btree ("version__status");
@@ -10946,161 +11002,6 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   CREATE INDEX "_product_collections_v_rels_parent_idx" ON "_product_collections_v_rels" USING btree ("parent_id");
   CREATE INDEX "_product_collections_v_rels_path_idx" ON "_product_collections_v_rels" USING btree ("path");
   CREATE INDEX "_product_collections_v_rels_products_id_idx" ON "_product_collections_v_rels" USING btree ("products_id");
-  CREATE INDEX "events_blocks_hero_links_order_idx" ON "events_blocks_hero_links" USING btree ("_order");
-  CREATE INDEX "events_blocks_hero_links_parent_id_idx" ON "events_blocks_hero_links" USING btree ("_parent_id");
-  CREATE INDEX "events_blocks_hero_links_page_idx" ON "events_blocks_hero_links" USING btree ("page_id");
-  CREATE INDEX "events_blocks_hero_order_idx" ON "events_blocks_hero" USING btree ("_order");
-  CREATE INDEX "events_blocks_hero_parent_id_idx" ON "events_blocks_hero" USING btree ("_parent_id");
-  CREATE INDEX "events_blocks_hero_path_idx" ON "events_blocks_hero" USING btree ("_path");
-  CREATE INDEX "events_blocks_hero_image_idx" ON "events_blocks_hero" USING btree ("image_id");
-  CREATE INDEX "events_blocks_content_columns_order_idx" ON "events_blocks_content_columns" USING btree ("_order");
-  CREATE INDEX "events_blocks_content_columns_parent_id_idx" ON "events_blocks_content_columns" USING btree ("_parent_id");
-  CREATE INDEX "events_blocks_content_columns_link_link_page_idx" ON "events_blocks_content_columns" USING btree ("link_page_id");
-  CREATE INDEX "events_blocks_content_order_idx" ON "events_blocks_content" USING btree ("_order");
-  CREATE INDEX "events_blocks_content_parent_id_idx" ON "events_blocks_content" USING btree ("_parent_id");
-  CREATE INDEX "events_blocks_content_path_idx" ON "events_blocks_content" USING btree ("_path");
-  CREATE INDEX "events_blocks_media_order_idx" ON "events_blocks_media" USING btree ("_order");
-  CREATE INDEX "events_blocks_media_parent_id_idx" ON "events_blocks_media" USING btree ("_parent_id");
-  CREATE INDEX "events_blocks_media_path_idx" ON "events_blocks_media" USING btree ("_path");
-  CREATE INDEX "events_blocks_media_media_idx" ON "events_blocks_media" USING btree ("media_id");
-  CREATE INDEX "events_blocks_media_link_link_page_idx" ON "events_blocks_media" USING btree ("link_page_id");
-  CREATE INDEX "events_blocks_cta_links_order_idx" ON "events_blocks_cta_links" USING btree ("_order");
-  CREATE INDEX "events_blocks_cta_links_parent_id_idx" ON "events_blocks_cta_links" USING btree ("_parent_id");
-  CREATE INDEX "events_blocks_cta_links_page_idx" ON "events_blocks_cta_links" USING btree ("page_id");
-  CREATE INDEX "events_blocks_cta_order_idx" ON "events_blocks_cta" USING btree ("_order");
-  CREATE INDEX "events_blocks_cta_parent_id_idx" ON "events_blocks_cta" USING btree ("_parent_id");
-  CREATE INDEX "events_blocks_cta_path_idx" ON "events_blocks_cta" USING btree ("_path");
-  CREATE INDEX "events_blocks_cta_image_idx" ON "events_blocks_cta" USING btree ("image_id");
-  CREATE INDEX "events_blocks_archive_order_idx" ON "events_blocks_archive" USING btree ("_order");
-  CREATE INDEX "events_blocks_archive_parent_id_idx" ON "events_blocks_archive" USING btree ("_parent_id");
-  CREATE INDEX "events_blocks_archive_path_idx" ON "events_blocks_archive" USING btree ("_path");
-  CREATE INDEX "events_blocks_archive_content_type_idx" ON "events_blocks_archive" USING btree ("content_type_id");
-  CREATE INDEX "events_blocks_form_order_idx" ON "events_blocks_form" USING btree ("_order");
-  CREATE INDEX "events_blocks_form_parent_id_idx" ON "events_blocks_form" USING btree ("_parent_id");
-  CREATE INDEX "events_blocks_form_path_idx" ON "events_blocks_form" USING btree ("_path");
-  CREATE INDEX "events_blocks_form_form_idx" ON "events_blocks_form" USING btree ("form_id");
-  CREATE INDEX "events_blocks_gallery_images_order_idx" ON "events_blocks_gallery_images" USING btree ("_order");
-  CREATE INDEX "events_blocks_gallery_images_parent_id_idx" ON "events_blocks_gallery_images" USING btree ("_parent_id");
-  CREATE INDEX "events_blocks_gallery_images_image_idx" ON "events_blocks_gallery_images" USING btree ("image_id");
-  CREATE INDEX "events_blocks_gallery_images_link_link_page_idx" ON "events_blocks_gallery_images" USING btree ("link_page_id");
-  CREATE INDEX "events_blocks_gallery_order_idx" ON "events_blocks_gallery" USING btree ("_order");
-  CREATE INDEX "events_blocks_gallery_parent_id_idx" ON "events_blocks_gallery" USING btree ("_parent_id");
-  CREATE INDEX "events_blocks_gallery_path_idx" ON "events_blocks_gallery" USING btree ("_path");
-  CREATE INDEX "events_blocks_grid_items_order_idx" ON "events_blocks_grid_items" USING btree ("_order");
-  CREATE INDEX "events_blocks_grid_items_parent_id_idx" ON "events_blocks_grid_items" USING btree ("_parent_id");
-  CREATE INDEX "events_blocks_grid_items_image_idx" ON "events_blocks_grid_items" USING btree ("image_id");
-  CREATE INDEX "events_blocks_grid_items_link_link_page_idx" ON "events_blocks_grid_items" USING btree ("link_page_id");
-  CREATE INDEX "events_blocks_grid_order_idx" ON "events_blocks_grid" USING btree ("_order");
-  CREATE INDEX "events_blocks_grid_parent_id_idx" ON "events_blocks_grid" USING btree ("_parent_id");
-  CREATE INDEX "events_blocks_grid_path_idx" ON "events_blocks_grid" USING btree ("_path");
-  CREATE INDEX "events_blocks_grid_cta_cta_page_idx" ON "events_blocks_grid" USING btree ("cta_page_id");
-  CREATE INDEX "events_blocks_timeline_events_order_idx" ON "events_blocks_timeline_events" USING btree ("_order");
-  CREATE INDEX "events_blocks_timeline_events_parent_id_idx" ON "events_blocks_timeline_events" USING btree ("_parent_id");
-  CREATE INDEX "events_blocks_timeline_events_image_idx" ON "events_blocks_timeline_events" USING btree ("image_id");
-  CREATE INDEX "events_blocks_timeline_events_link_link_page_idx" ON "events_blocks_timeline_events" USING btree ("link_page_id");
-  CREATE INDEX "events_blocks_timeline_events_link_link_archive_item_idx" ON "events_blocks_timeline_events" USING btree ("link_archive_item_id");
-  CREATE INDEX "events_blocks_timeline_events_link_link_person_idx" ON "events_blocks_timeline_events" USING btree ("link_person_id");
-  CREATE INDEX "events_blocks_timeline_order_idx" ON "events_blocks_timeline" USING btree ("_order");
-  CREATE INDEX "events_blocks_timeline_parent_id_idx" ON "events_blocks_timeline" USING btree ("_parent_id");
-  CREATE INDEX "events_blocks_timeline_path_idx" ON "events_blocks_timeline" USING btree ("_path");
-  CREATE UNIQUE INDEX "events_slug_idx" ON "events" USING btree ("slug");
-  CREATE INDEX "events_featured_image_idx" ON "events" USING btree ("featured_image_id");
-  CREATE INDEX "events_venue_idx" ON "events" USING btree ("venue_id");
-  CREATE INDEX "events_updated_at_idx" ON "events" USING btree ("updated_at");
-  CREATE INDEX "events_created_at_idx" ON "events" USING btree ("created_at");
-  CREATE INDEX "events__status_idx" ON "events" USING btree ("_status");
-  CREATE INDEX "events_rels_order_idx" ON "events_rels" USING btree ("order");
-  CREATE INDEX "events_rels_parent_idx" ON "events_rels" USING btree ("parent_id");
-  CREATE INDEX "events_rels_path_idx" ON "events_rels" USING btree ("path");
-  CREATE INDEX "events_rels_categories_id_idx" ON "events_rels" USING btree ("categories_id");
-  CREATE INDEX "events_rels_tags_id_idx" ON "events_rels" USING btree ("tags_id");
-  CREATE INDEX "events_rels_people_id_idx" ON "events_rels" USING btree ("people_id");
-  CREATE INDEX "events_rels_events_id_idx" ON "events_rels" USING btree ("events_id");
-  CREATE INDEX "events_rels_posts_id_idx" ON "events_rels" USING btree ("posts_id");
-  CREATE INDEX "events_rels_pages_id_idx" ON "events_rels" USING btree ("pages_id");
-  CREATE INDEX "events_rels_archive_items_id_idx" ON "events_rels" USING btree ("archive_items_id");
-  CREATE INDEX "events_rels_places_id_idx" ON "events_rels" USING btree ("places_id");
-  CREATE INDEX "events_rels_custom_items_id_idx" ON "events_rels" USING btree ("custom_items_id");
-  CREATE INDEX "_events_v_blocks_hero_links_order_idx" ON "_events_v_blocks_hero_links" USING btree ("_order");
-  CREATE INDEX "_events_v_blocks_hero_links_parent_id_idx" ON "_events_v_blocks_hero_links" USING btree ("_parent_id");
-  CREATE INDEX "_events_v_blocks_hero_links_page_idx" ON "_events_v_blocks_hero_links" USING btree ("page_id");
-  CREATE INDEX "_events_v_blocks_hero_order_idx" ON "_events_v_blocks_hero" USING btree ("_order");
-  CREATE INDEX "_events_v_blocks_hero_parent_id_idx" ON "_events_v_blocks_hero" USING btree ("_parent_id");
-  CREATE INDEX "_events_v_blocks_hero_path_idx" ON "_events_v_blocks_hero" USING btree ("_path");
-  CREATE INDEX "_events_v_blocks_hero_image_idx" ON "_events_v_blocks_hero" USING btree ("image_id");
-  CREATE INDEX "_events_v_blocks_content_columns_order_idx" ON "_events_v_blocks_content_columns" USING btree ("_order");
-  CREATE INDEX "_events_v_blocks_content_columns_parent_id_idx" ON "_events_v_blocks_content_columns" USING btree ("_parent_id");
-  CREATE INDEX "_events_v_blocks_content_columns_link_link_page_idx" ON "_events_v_blocks_content_columns" USING btree ("link_page_id");
-  CREATE INDEX "_events_v_blocks_content_order_idx" ON "_events_v_blocks_content" USING btree ("_order");
-  CREATE INDEX "_events_v_blocks_content_parent_id_idx" ON "_events_v_blocks_content" USING btree ("_parent_id");
-  CREATE INDEX "_events_v_blocks_content_path_idx" ON "_events_v_blocks_content" USING btree ("_path");
-  CREATE INDEX "_events_v_blocks_media_order_idx" ON "_events_v_blocks_media" USING btree ("_order");
-  CREATE INDEX "_events_v_blocks_media_parent_id_idx" ON "_events_v_blocks_media" USING btree ("_parent_id");
-  CREATE INDEX "_events_v_blocks_media_path_idx" ON "_events_v_blocks_media" USING btree ("_path");
-  CREATE INDEX "_events_v_blocks_media_media_idx" ON "_events_v_blocks_media" USING btree ("media_id");
-  CREATE INDEX "_events_v_blocks_media_link_link_page_idx" ON "_events_v_blocks_media" USING btree ("link_page_id");
-  CREATE INDEX "_events_v_blocks_cta_links_order_idx" ON "_events_v_blocks_cta_links" USING btree ("_order");
-  CREATE INDEX "_events_v_blocks_cta_links_parent_id_idx" ON "_events_v_blocks_cta_links" USING btree ("_parent_id");
-  CREATE INDEX "_events_v_blocks_cta_links_page_idx" ON "_events_v_blocks_cta_links" USING btree ("page_id");
-  CREATE INDEX "_events_v_blocks_cta_order_idx" ON "_events_v_blocks_cta" USING btree ("_order");
-  CREATE INDEX "_events_v_blocks_cta_parent_id_idx" ON "_events_v_blocks_cta" USING btree ("_parent_id");
-  CREATE INDEX "_events_v_blocks_cta_path_idx" ON "_events_v_blocks_cta" USING btree ("_path");
-  CREATE INDEX "_events_v_blocks_cta_image_idx" ON "_events_v_blocks_cta" USING btree ("image_id");
-  CREATE INDEX "_events_v_blocks_archive_order_idx" ON "_events_v_blocks_archive" USING btree ("_order");
-  CREATE INDEX "_events_v_blocks_archive_parent_id_idx" ON "_events_v_blocks_archive" USING btree ("_parent_id");
-  CREATE INDEX "_events_v_blocks_archive_path_idx" ON "_events_v_blocks_archive" USING btree ("_path");
-  CREATE INDEX "_events_v_blocks_archive_content_type_idx" ON "_events_v_blocks_archive" USING btree ("content_type_id");
-  CREATE INDEX "_events_v_blocks_form_order_idx" ON "_events_v_blocks_form" USING btree ("_order");
-  CREATE INDEX "_events_v_blocks_form_parent_id_idx" ON "_events_v_blocks_form" USING btree ("_parent_id");
-  CREATE INDEX "_events_v_blocks_form_path_idx" ON "_events_v_blocks_form" USING btree ("_path");
-  CREATE INDEX "_events_v_blocks_form_form_idx" ON "_events_v_blocks_form" USING btree ("form_id");
-  CREATE INDEX "_events_v_blocks_gallery_images_order_idx" ON "_events_v_blocks_gallery_images" USING btree ("_order");
-  CREATE INDEX "_events_v_blocks_gallery_images_parent_id_idx" ON "_events_v_blocks_gallery_images" USING btree ("_parent_id");
-  CREATE INDEX "_events_v_blocks_gallery_images_image_idx" ON "_events_v_blocks_gallery_images" USING btree ("image_id");
-  CREATE INDEX "_events_v_blocks_gallery_images_link_link_page_idx" ON "_events_v_blocks_gallery_images" USING btree ("link_page_id");
-  CREATE INDEX "_events_v_blocks_gallery_order_idx" ON "_events_v_blocks_gallery" USING btree ("_order");
-  CREATE INDEX "_events_v_blocks_gallery_parent_id_idx" ON "_events_v_blocks_gallery" USING btree ("_parent_id");
-  CREATE INDEX "_events_v_blocks_gallery_path_idx" ON "_events_v_blocks_gallery" USING btree ("_path");
-  CREATE INDEX "_events_v_blocks_grid_items_order_idx" ON "_events_v_blocks_grid_items" USING btree ("_order");
-  CREATE INDEX "_events_v_blocks_grid_items_parent_id_idx" ON "_events_v_blocks_grid_items" USING btree ("_parent_id");
-  CREATE INDEX "_events_v_blocks_grid_items_image_idx" ON "_events_v_blocks_grid_items" USING btree ("image_id");
-  CREATE INDEX "_events_v_blocks_grid_items_link_link_page_idx" ON "_events_v_blocks_grid_items" USING btree ("link_page_id");
-  CREATE INDEX "_events_v_blocks_grid_order_idx" ON "_events_v_blocks_grid" USING btree ("_order");
-  CREATE INDEX "_events_v_blocks_grid_parent_id_idx" ON "_events_v_blocks_grid" USING btree ("_parent_id");
-  CREATE INDEX "_events_v_blocks_grid_path_idx" ON "_events_v_blocks_grid" USING btree ("_path");
-  CREATE INDEX "_events_v_blocks_grid_cta_cta_page_idx" ON "_events_v_blocks_grid" USING btree ("cta_page_id");
-  CREATE INDEX "_events_v_blocks_timeline_events_order_idx" ON "_events_v_blocks_timeline_events" USING btree ("_order");
-  CREATE INDEX "_events_v_blocks_timeline_events_parent_id_idx" ON "_events_v_blocks_timeline_events" USING btree ("_parent_id");
-  CREATE INDEX "_events_v_blocks_timeline_events_image_idx" ON "_events_v_blocks_timeline_events" USING btree ("image_id");
-  CREATE INDEX "_events_v_blocks_timeline_events_link_link_page_idx" ON "_events_v_blocks_timeline_events" USING btree ("link_page_id");
-  CREATE INDEX "_events_v_blocks_timeline_events_link_link_archive_item_idx" ON "_events_v_blocks_timeline_events" USING btree ("link_archive_item_id");
-  CREATE INDEX "_events_v_blocks_timeline_events_link_link_person_idx" ON "_events_v_blocks_timeline_events" USING btree ("link_person_id");
-  CREATE INDEX "_events_v_blocks_timeline_order_idx" ON "_events_v_blocks_timeline" USING btree ("_order");
-  CREATE INDEX "_events_v_blocks_timeline_parent_id_idx" ON "_events_v_blocks_timeline" USING btree ("_parent_id");
-  CREATE INDEX "_events_v_blocks_timeline_path_idx" ON "_events_v_blocks_timeline" USING btree ("_path");
-  CREATE INDEX "_events_v_parent_idx" ON "_events_v" USING btree ("parent_id");
-  CREATE INDEX "_events_v_version_version_slug_idx" ON "_events_v" USING btree ("version_slug");
-  CREATE INDEX "_events_v_version_version_featured_image_idx" ON "_events_v" USING btree ("version_featured_image_id");
-  CREATE INDEX "_events_v_version_version_venue_idx" ON "_events_v" USING btree ("version_venue_id");
-  CREATE INDEX "_events_v_version_version_updated_at_idx" ON "_events_v" USING btree ("version_updated_at");
-  CREATE INDEX "_events_v_version_version_created_at_idx" ON "_events_v" USING btree ("version_created_at");
-  CREATE INDEX "_events_v_version_version__status_idx" ON "_events_v" USING btree ("version__status");
-  CREATE INDEX "_events_v_created_at_idx" ON "_events_v" USING btree ("created_at");
-  CREATE INDEX "_events_v_updated_at_idx" ON "_events_v" USING btree ("updated_at");
-  CREATE INDEX "_events_v_latest_idx" ON "_events_v" USING btree ("latest");
-  CREATE INDEX "_events_v_autosave_idx" ON "_events_v" USING btree ("autosave");
-  CREATE INDEX "_events_v_rels_order_idx" ON "_events_v_rels" USING btree ("order");
-  CREATE INDEX "_events_v_rels_parent_idx" ON "_events_v_rels" USING btree ("parent_id");
-  CREATE INDEX "_events_v_rels_path_idx" ON "_events_v_rels" USING btree ("path");
-  CREATE INDEX "_events_v_rels_categories_id_idx" ON "_events_v_rels" USING btree ("categories_id");
-  CREATE INDEX "_events_v_rels_tags_id_idx" ON "_events_v_rels" USING btree ("tags_id");
-  CREATE INDEX "_events_v_rels_people_id_idx" ON "_events_v_rels" USING btree ("people_id");
-  CREATE INDEX "_events_v_rels_events_id_idx" ON "_events_v_rels" USING btree ("events_id");
-  CREATE INDEX "_events_v_rels_posts_id_idx" ON "_events_v_rels" USING btree ("posts_id");
-  CREATE INDEX "_events_v_rels_pages_id_idx" ON "_events_v_rels" USING btree ("pages_id");
-  CREATE INDEX "_events_v_rels_archive_items_id_idx" ON "_events_v_rels" USING btree ("archive_items_id");
-  CREATE INDEX "_events_v_rels_places_id_idx" ON "_events_v_rels" USING btree ("places_id");
-  CREATE INDEX "_events_v_rels_custom_items_id_idx" ON "_events_v_rels" USING btree ("custom_items_id");
   CREATE INDEX "content_types_custom_fields_order_idx" ON "content_types_custom_fields" USING btree ("_order");
   CREATE INDEX "content_types_custom_fields_parent_id_idx" ON "content_types_custom_fields" USING btree ("_parent_id");
   CREATE UNIQUE INDEX "content_types_slug_idx" ON "content_types" USING btree ("slug");
@@ -11437,7 +11338,8 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   CREATE INDEX "search_rels_archive_items_id_idx" ON "search_rels" USING btree ("archive_items_id");
   CREATE INDEX "search_rels_people_id_idx" ON "search_rels" USING btree ("people_id");
   CREATE INDEX "search_rels_places_id_idx" ON "search_rels" USING btree ("places_id");
-  CREATE INDEX "search_rels_museum_collections_id_idx" ON "search_rels" USING btree ("museum_collections_id");
+  CREATE INDEX "search_rels_events_id_idx" ON "search_rels" USING btree ("events_id");
+  CREATE INDEX "search_rels_products_id_idx" ON "search_rels" USING btree ("products_id");
   CREATE INDEX "search_rels_custom_items_id_idx" ON "search_rels" USING btree ("custom_items_id");
   CREATE INDEX "search_rels_content_types_id_idx" ON "search_rels" USING btree ("content_types_id");
   CREATE UNIQUE INDEX "payload_kv_key_idx" ON "payload_kv" USING btree ("key");
@@ -11467,11 +11369,10 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   CREATE INDEX "payload_locked_documents_rels_archive_items_id_idx" ON "payload_locked_documents_rels" USING btree ("archive_items_id");
   CREATE INDEX "payload_locked_documents_rels_people_id_idx" ON "payload_locked_documents_rels" USING btree ("people_id");
   CREATE INDEX "payload_locked_documents_rels_places_id_idx" ON "payload_locked_documents_rels" USING btree ("places_id");
-  CREATE INDEX "payload_locked_documents_rels_museum_collections_id_idx" ON "payload_locked_documents_rels" USING btree ("museum_collections_id");
+  CREATE INDEX "payload_locked_documents_rels_events_id_idx" ON "payload_locked_documents_rels" USING btree ("events_id");
   CREATE INDEX "payload_locked_documents_rels_products_id_idx" ON "payload_locked_documents_rels" USING btree ("products_id");
   CREATE INDEX "payload_locked_documents_rels_product_categories_id_idx" ON "payload_locked_documents_rels" USING btree ("product_categories_id");
   CREATE INDEX "payload_locked_documents_rels_product_collections_id_idx" ON "payload_locked_documents_rels" USING btree ("product_collections_id");
-  CREATE INDEX "payload_locked_documents_rels_events_id_idx" ON "payload_locked_documents_rels" USING btree ("events_id");
   CREATE INDEX "payload_locked_documents_rels_content_types_id_idx" ON "payload_locked_documents_rels" USING btree ("content_types_id");
   CREATE INDEX "payload_locked_documents_rels_custom_items_id_idx" ON "payload_locked_documents_rels" USING btree ("custom_items_id");
   CREATE INDEX "payload_locked_documents_rels_forms_id_idx" ON "payload_locked_documents_rels" USING btree ("forms_id");
@@ -11872,12 +11773,40 @@ export async function down({ db, payload, req }: MigrateDownArgs): Promise<void>
   DROP TABLE "_places_v_blocks_html" CASCADE;
   DROP TABLE "_places_v" CASCADE;
   DROP TABLE "_places_v_rels" CASCADE;
-  DROP TABLE "museum_collections_breadcrumbs" CASCADE;
-  DROP TABLE "museum_collections" CASCADE;
-  DROP TABLE "museum_collections_rels" CASCADE;
-  DROP TABLE "_museum_collections_v_version_breadcrumbs" CASCADE;
-  DROP TABLE "_museum_collections_v" CASCADE;
-  DROP TABLE "_museum_collections_v_rels" CASCADE;
+  DROP TABLE "events_blocks_hero_links" CASCADE;
+  DROP TABLE "events_blocks_hero" CASCADE;
+  DROP TABLE "events_blocks_content_columns" CASCADE;
+  DROP TABLE "events_blocks_content" CASCADE;
+  DROP TABLE "events_blocks_media" CASCADE;
+  DROP TABLE "events_blocks_cta_links" CASCADE;
+  DROP TABLE "events_blocks_cta" CASCADE;
+  DROP TABLE "events_blocks_archive" CASCADE;
+  DROP TABLE "events_blocks_form" CASCADE;
+  DROP TABLE "events_blocks_gallery_images" CASCADE;
+  DROP TABLE "events_blocks_gallery" CASCADE;
+  DROP TABLE "events_blocks_grid_items" CASCADE;
+  DROP TABLE "events_blocks_grid" CASCADE;
+  DROP TABLE "events_blocks_timeline_events" CASCADE;
+  DROP TABLE "events_blocks_timeline" CASCADE;
+  DROP TABLE "events" CASCADE;
+  DROP TABLE "events_rels" CASCADE;
+  DROP TABLE "_events_v_blocks_hero_links" CASCADE;
+  DROP TABLE "_events_v_blocks_hero" CASCADE;
+  DROP TABLE "_events_v_blocks_content_columns" CASCADE;
+  DROP TABLE "_events_v_blocks_content" CASCADE;
+  DROP TABLE "_events_v_blocks_media" CASCADE;
+  DROP TABLE "_events_v_blocks_cta_links" CASCADE;
+  DROP TABLE "_events_v_blocks_cta" CASCADE;
+  DROP TABLE "_events_v_blocks_archive" CASCADE;
+  DROP TABLE "_events_v_blocks_form" CASCADE;
+  DROP TABLE "_events_v_blocks_gallery_images" CASCADE;
+  DROP TABLE "_events_v_blocks_gallery" CASCADE;
+  DROP TABLE "_events_v_blocks_grid_items" CASCADE;
+  DROP TABLE "_events_v_blocks_grid" CASCADE;
+  DROP TABLE "_events_v_blocks_timeline_events" CASCADE;
+  DROP TABLE "_events_v_blocks_timeline" CASCADE;
+  DROP TABLE "_events_v" CASCADE;
+  DROP TABLE "_events_v_rels" CASCADE;
   DROP TABLE "products_gallery" CASCADE;
   DROP TABLE "products_variants" CASCADE;
   DROP TABLE "products_blocks_hero_links" CASCADE;
@@ -11924,40 +11853,6 @@ export async function down({ db, payload, req }: MigrateDownArgs): Promise<void>
   DROP TABLE "product_collections_rels" CASCADE;
   DROP TABLE "_product_collections_v" CASCADE;
   DROP TABLE "_product_collections_v_rels" CASCADE;
-  DROP TABLE "events_blocks_hero_links" CASCADE;
-  DROP TABLE "events_blocks_hero" CASCADE;
-  DROP TABLE "events_blocks_content_columns" CASCADE;
-  DROP TABLE "events_blocks_content" CASCADE;
-  DROP TABLE "events_blocks_media" CASCADE;
-  DROP TABLE "events_blocks_cta_links" CASCADE;
-  DROP TABLE "events_blocks_cta" CASCADE;
-  DROP TABLE "events_blocks_archive" CASCADE;
-  DROP TABLE "events_blocks_form" CASCADE;
-  DROP TABLE "events_blocks_gallery_images" CASCADE;
-  DROP TABLE "events_blocks_gallery" CASCADE;
-  DROP TABLE "events_blocks_grid_items" CASCADE;
-  DROP TABLE "events_blocks_grid" CASCADE;
-  DROP TABLE "events_blocks_timeline_events" CASCADE;
-  DROP TABLE "events_blocks_timeline" CASCADE;
-  DROP TABLE "events" CASCADE;
-  DROP TABLE "events_rels" CASCADE;
-  DROP TABLE "_events_v_blocks_hero_links" CASCADE;
-  DROP TABLE "_events_v_blocks_hero" CASCADE;
-  DROP TABLE "_events_v_blocks_content_columns" CASCADE;
-  DROP TABLE "_events_v_blocks_content" CASCADE;
-  DROP TABLE "_events_v_blocks_media" CASCADE;
-  DROP TABLE "_events_v_blocks_cta_links" CASCADE;
-  DROP TABLE "_events_v_blocks_cta" CASCADE;
-  DROP TABLE "_events_v_blocks_archive" CASCADE;
-  DROP TABLE "_events_v_blocks_form" CASCADE;
-  DROP TABLE "_events_v_blocks_gallery_images" CASCADE;
-  DROP TABLE "_events_v_blocks_gallery" CASCADE;
-  DROP TABLE "_events_v_blocks_grid_items" CASCADE;
-  DROP TABLE "_events_v_blocks_grid" CASCADE;
-  DROP TABLE "_events_v_blocks_timeline_events" CASCADE;
-  DROP TABLE "_events_v_blocks_timeline" CASCADE;
-  DROP TABLE "_events_v" CASCADE;
-  DROP TABLE "_events_v_rels" CASCADE;
   DROP TABLE "content_types_custom_fields" CASCADE;
   DROP TABLE "content_types" CASCADE;
   DROP TABLE "custom_items_blocks_hero_links" CASCADE;
@@ -12072,6 +11967,7 @@ export async function down({ db, payload, req }: MigrateDownArgs): Promise<void>
   DROP TABLE "footer" CASCADE;
   DROP TABLE "settings_social_profiles" CASCADE;
   DROP TABLE "settings" CASCADE;
+  DROP TABLE "navigation_settings" CASCADE;
   DROP TYPE "public"."enum_users_social_links_platform";
   DROP TYPE "public"."enum_users_role";
   DROP TYPE "public"."enum_pages_hero_links_variant";
@@ -12484,10 +12380,84 @@ export async function down({ db, payload, req }: MigrateDownArgs): Promise<void>
   DROP TYPE "public"."enum__places_v_version_template";
   DROP TYPE "public"."enum__places_v_version_place_type";
   DROP TYPE "public"."enum__places_v_version_status";
-  DROP TYPE "public"."enum_museum_collections_template";
-  DROP TYPE "public"."enum_museum_collections_status";
-  DROP TYPE "public"."enum__museum_collections_v_version_template";
-  DROP TYPE "public"."enum__museum_collections_v_version_status";
+  DROP TYPE "public"."enum_events_blocks_hero_links_variant";
+  DROP TYPE "public"."enum_events_blocks_hero_type";
+  DROP TYPE "public"."enum_events_blocks_hero_overlay";
+  DROP TYPE "public"."enum_events_blocks_hero_text_align";
+  DROP TYPE "public"."enum_events_blocks_content_columns_size";
+  DROP TYPE "public"."enum_events_blocks_content_background_color";
+  DROP TYPE "public"."enum_events_blocks_content_padding_top";
+  DROP TYPE "public"."enum_events_blocks_content_padding_bottom";
+  DROP TYPE "public"."enum_events_blocks_media_size";
+  DROP TYPE "public"."enum_events_blocks_media_position";
+  DROP TYPE "public"."enum_events_blocks_cta_links_variant";
+  DROP TYPE "public"."enum_events_blocks_cta_style";
+  DROP TYPE "public"."enum_events_blocks_cta_background_color";
+  DROP TYPE "public"."enum_events_blocks_archive_populate_by";
+  DROP TYPE "public"."enum_events_blocks_archive_relation_to";
+  DROP TYPE "public"."enum_events_blocks_archive_layout";
+  DROP TYPE "public"."enum_events_blocks_archive_columns";
+  DROP TYPE "public"."enum_events_blocks_form_style";
+  DROP TYPE "public"."enum_events_blocks_form_background_color";
+  DROP TYPE "public"."enum_events_blocks_gallery_layout";
+  DROP TYPE "public"."enum_events_blocks_gallery_columns";
+  DROP TYPE "public"."enum_events_blocks_gallery_gap";
+  DROP TYPE "public"."enum_events_blocks_gallery_aspect_ratio";
+  DROP TYPE "public"."enum_events_blocks_grid_style";
+  DROP TYPE "public"."enum_events_blocks_grid_columns";
+  DROP TYPE "public"."enum_events_blocks_grid_gap";
+  DROP TYPE "public"."enum_events_blocks_grid_alignment";
+  DROP TYPE "public"."enum_events_blocks_grid_hover_effect";
+  DROP TYPE "public"."enum_events_blocks_timeline_layout";
+  DROP TYPE "public"."enum_events_blocks_timeline_line_style";
+  DROP TYPE "public"."enum_events_blocks_timeline_marker_style";
+  DROP TYPE "public"."enum_events_blocks_timeline_sort_order";
+  DROP TYPE "public"."enum_events_blocks_timeline_background_color";
+  DROP TYPE "public"."enum_events_event_type";
+  DROP TYPE "public"."enum_events_recurring_frequency";
+  DROP TYPE "public"."enum_events_price_currency";
+  DROP TYPE "public"."enum_events_event_status";
+  DROP TYPE "public"."enum_events_template";
+  DROP TYPE "public"."enum_events_status";
+  DROP TYPE "public"."enum__events_v_blocks_hero_links_variant";
+  DROP TYPE "public"."enum__events_v_blocks_hero_type";
+  DROP TYPE "public"."enum__events_v_blocks_hero_overlay";
+  DROP TYPE "public"."enum__events_v_blocks_hero_text_align";
+  DROP TYPE "public"."enum__events_v_blocks_content_columns_size";
+  DROP TYPE "public"."enum__events_v_blocks_content_background_color";
+  DROP TYPE "public"."enum__events_v_blocks_content_padding_top";
+  DROP TYPE "public"."enum__events_v_blocks_content_padding_bottom";
+  DROP TYPE "public"."enum__events_v_blocks_media_size";
+  DROP TYPE "public"."enum__events_v_blocks_media_position";
+  DROP TYPE "public"."enum__events_v_blocks_cta_links_variant";
+  DROP TYPE "public"."enum__events_v_blocks_cta_style";
+  DROP TYPE "public"."enum__events_v_blocks_cta_background_color";
+  DROP TYPE "public"."enum__events_v_blocks_archive_populate_by";
+  DROP TYPE "public"."enum__events_v_blocks_archive_relation_to";
+  DROP TYPE "public"."enum__events_v_blocks_archive_layout";
+  DROP TYPE "public"."enum__events_v_blocks_archive_columns";
+  DROP TYPE "public"."enum__events_v_blocks_form_style";
+  DROP TYPE "public"."enum__events_v_blocks_form_background_color";
+  DROP TYPE "public"."enum__events_v_blocks_gallery_layout";
+  DROP TYPE "public"."enum__events_v_blocks_gallery_columns";
+  DROP TYPE "public"."enum__events_v_blocks_gallery_gap";
+  DROP TYPE "public"."enum__events_v_blocks_gallery_aspect_ratio";
+  DROP TYPE "public"."enum__events_v_blocks_grid_style";
+  DROP TYPE "public"."enum__events_v_blocks_grid_columns";
+  DROP TYPE "public"."enum__events_v_blocks_grid_gap";
+  DROP TYPE "public"."enum__events_v_blocks_grid_alignment";
+  DROP TYPE "public"."enum__events_v_blocks_grid_hover_effect";
+  DROP TYPE "public"."enum__events_v_blocks_timeline_layout";
+  DROP TYPE "public"."enum__events_v_blocks_timeline_line_style";
+  DROP TYPE "public"."enum__events_v_blocks_timeline_marker_style";
+  DROP TYPE "public"."enum__events_v_blocks_timeline_sort_order";
+  DROP TYPE "public"."enum__events_v_blocks_timeline_background_color";
+  DROP TYPE "public"."enum__events_v_version_event_type";
+  DROP TYPE "public"."enum__events_v_version_recurring_frequency";
+  DROP TYPE "public"."enum__events_v_version_price_currency";
+  DROP TYPE "public"."enum__events_v_version_event_status";
+  DROP TYPE "public"."enum__events_v_version_template";
+  DROP TYPE "public"."enum__events_v_version_status";
   DROP TYPE "public"."enum_products_blocks_hero_links_variant";
   DROP TYPE "public"."enum_products_blocks_hero_type";
   DROP TYPE "public"."enum_products_blocks_hero_overlay";
@@ -12568,84 +12538,6 @@ export async function down({ db, payload, req }: MigrateDownArgs): Promise<void>
   DROP TYPE "public"."enum_product_collections_status";
   DROP TYPE "public"."enum__product_collections_v_version_template";
   DROP TYPE "public"."enum__product_collections_v_version_status";
-  DROP TYPE "public"."enum_events_blocks_hero_links_variant";
-  DROP TYPE "public"."enum_events_blocks_hero_type";
-  DROP TYPE "public"."enum_events_blocks_hero_overlay";
-  DROP TYPE "public"."enum_events_blocks_hero_text_align";
-  DROP TYPE "public"."enum_events_blocks_content_columns_size";
-  DROP TYPE "public"."enum_events_blocks_content_background_color";
-  DROP TYPE "public"."enum_events_blocks_content_padding_top";
-  DROP TYPE "public"."enum_events_blocks_content_padding_bottom";
-  DROP TYPE "public"."enum_events_blocks_media_size";
-  DROP TYPE "public"."enum_events_blocks_media_position";
-  DROP TYPE "public"."enum_events_blocks_cta_links_variant";
-  DROP TYPE "public"."enum_events_blocks_cta_style";
-  DROP TYPE "public"."enum_events_blocks_cta_background_color";
-  DROP TYPE "public"."enum_events_blocks_archive_populate_by";
-  DROP TYPE "public"."enum_events_blocks_archive_relation_to";
-  DROP TYPE "public"."enum_events_blocks_archive_layout";
-  DROP TYPE "public"."enum_events_blocks_archive_columns";
-  DROP TYPE "public"."enum_events_blocks_form_style";
-  DROP TYPE "public"."enum_events_blocks_form_background_color";
-  DROP TYPE "public"."enum_events_blocks_gallery_layout";
-  DROP TYPE "public"."enum_events_blocks_gallery_columns";
-  DROP TYPE "public"."enum_events_blocks_gallery_gap";
-  DROP TYPE "public"."enum_events_blocks_gallery_aspect_ratio";
-  DROP TYPE "public"."enum_events_blocks_grid_style";
-  DROP TYPE "public"."enum_events_blocks_grid_columns";
-  DROP TYPE "public"."enum_events_blocks_grid_gap";
-  DROP TYPE "public"."enum_events_blocks_grid_alignment";
-  DROP TYPE "public"."enum_events_blocks_grid_hover_effect";
-  DROP TYPE "public"."enum_events_blocks_timeline_layout";
-  DROP TYPE "public"."enum_events_blocks_timeline_line_style";
-  DROP TYPE "public"."enum_events_blocks_timeline_marker_style";
-  DROP TYPE "public"."enum_events_blocks_timeline_sort_order";
-  DROP TYPE "public"."enum_events_blocks_timeline_background_color";
-  DROP TYPE "public"."enum_events_event_type";
-  DROP TYPE "public"."enum_events_recurring_frequency";
-  DROP TYPE "public"."enum_events_price_currency";
-  DROP TYPE "public"."enum_events_event_status";
-  DROP TYPE "public"."enum_events_template";
-  DROP TYPE "public"."enum_events_status";
-  DROP TYPE "public"."enum__events_v_blocks_hero_links_variant";
-  DROP TYPE "public"."enum__events_v_blocks_hero_type";
-  DROP TYPE "public"."enum__events_v_blocks_hero_overlay";
-  DROP TYPE "public"."enum__events_v_blocks_hero_text_align";
-  DROP TYPE "public"."enum__events_v_blocks_content_columns_size";
-  DROP TYPE "public"."enum__events_v_blocks_content_background_color";
-  DROP TYPE "public"."enum__events_v_blocks_content_padding_top";
-  DROP TYPE "public"."enum__events_v_blocks_content_padding_bottom";
-  DROP TYPE "public"."enum__events_v_blocks_media_size";
-  DROP TYPE "public"."enum__events_v_blocks_media_position";
-  DROP TYPE "public"."enum__events_v_blocks_cta_links_variant";
-  DROP TYPE "public"."enum__events_v_blocks_cta_style";
-  DROP TYPE "public"."enum__events_v_blocks_cta_background_color";
-  DROP TYPE "public"."enum__events_v_blocks_archive_populate_by";
-  DROP TYPE "public"."enum__events_v_blocks_archive_relation_to";
-  DROP TYPE "public"."enum__events_v_blocks_archive_layout";
-  DROP TYPE "public"."enum__events_v_blocks_archive_columns";
-  DROP TYPE "public"."enum__events_v_blocks_form_style";
-  DROP TYPE "public"."enum__events_v_blocks_form_background_color";
-  DROP TYPE "public"."enum__events_v_blocks_gallery_layout";
-  DROP TYPE "public"."enum__events_v_blocks_gallery_columns";
-  DROP TYPE "public"."enum__events_v_blocks_gallery_gap";
-  DROP TYPE "public"."enum__events_v_blocks_gallery_aspect_ratio";
-  DROP TYPE "public"."enum__events_v_blocks_grid_style";
-  DROP TYPE "public"."enum__events_v_blocks_grid_columns";
-  DROP TYPE "public"."enum__events_v_blocks_grid_gap";
-  DROP TYPE "public"."enum__events_v_blocks_grid_alignment";
-  DROP TYPE "public"."enum__events_v_blocks_grid_hover_effect";
-  DROP TYPE "public"."enum__events_v_blocks_timeline_layout";
-  DROP TYPE "public"."enum__events_v_blocks_timeline_line_style";
-  DROP TYPE "public"."enum__events_v_blocks_timeline_marker_style";
-  DROP TYPE "public"."enum__events_v_blocks_timeline_sort_order";
-  DROP TYPE "public"."enum__events_v_blocks_timeline_background_color";
-  DROP TYPE "public"."enum__events_v_version_event_type";
-  DROP TYPE "public"."enum__events_v_version_recurring_frequency";
-  DROP TYPE "public"."enum__events_v_version_price_currency";
-  DROP TYPE "public"."enum__events_v_version_event_status";
-  DROP TYPE "public"."enum__events_v_version_template";
-  DROP TYPE "public"."enum__events_v_version_status";
   DROP TYPE "public"."enum_content_types_custom_fields_type";
   DROP TYPE "public"."enum_content_types_icon";
   DROP TYPE "public"."enum_content_types_template";
