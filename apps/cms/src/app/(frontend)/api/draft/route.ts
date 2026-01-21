@@ -9,6 +9,8 @@ import configPromise from '@payload-config'
  *
  * Enables Next.js draft mode for previewing unpublished content from Payload CMS.
  * This allows the CMS live preview feature to work within the same Next.js app.
+ *
+ * Handles both content type slugs and IDs in preview URLs for custom items.
  */
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams
