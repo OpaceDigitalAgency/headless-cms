@@ -35,7 +35,7 @@ export const Places: CollectionConfig = {
   admin: {
     useAsTitle: 'name',
     group: 'Collections',
-    defaultColumns: ['name', 'placeType', 'categories', '_status', 'updatedAt'],
+    defaultColumns: ['name', 'placeType', 'categories', '_status', 'updatedAt', 'preview'],
     description: 'Geographic locations, venues, and historical sites',
     preview: (doc) => getPreviewUrl({ collection: 'places', slug: doc.slug }),
     livePreview: {
@@ -416,6 +416,16 @@ export const Places: CollectionConfig = {
       label: 'Featured Place',
       admin: {
         position: 'sidebar',
+      },
+    },
+    {
+      name: 'preview',
+      type: 'ui',
+      admin: {
+        components: {
+          Cell: '/components/PreviewButtonCell',
+        },
+        condition: () => false, // Hide from form, only show in list
       },
     },
   ],

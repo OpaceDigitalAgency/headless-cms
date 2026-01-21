@@ -4,6 +4,8 @@ import { useLivePreview } from '@payloadcms/live-preview-react'
 import { PageRenderer } from '@/components/PageRenderer'
 import { PostRenderer } from '@/components/PostRenderer'
 import { ArchiveItemRenderer } from '@/components/ArchiveItemRenderer'
+import { PreviewLoadingSkeleton } from '@/components/PreviewLoadingSkeleton'
+import { Suspense } from 'react'
 
 interface LivePreviewPageProps {
   initialData: any
@@ -50,17 +52,19 @@ export function LivePreviewPage({ initialData, collection, slug }: LivePreviewPa
     <>
       <PreviewBanner />
       <div className="pt-12">
-        {collection === 'pages' && <PageRenderer page={data} />}
-        {collection === 'posts' && (
-          <div className="container py-16">
-            <PostRenderer post={data} />
-          </div>
-        )}
-        {collection === 'archive-items' && (
-          <div className="container py-16">
-            <ArchiveItemRenderer item={data} />
-          </div>
-        )}
+        <Suspense fallback={<PreviewLoadingSkeleton />}>
+          {collection === 'pages' && <PageRenderer page={data} />}
+          {collection === 'posts' && (
+            <div className="container py-16">
+              <PostRenderer post={data} />
+            </div>
+          )}
+          {collection === 'archive-items' && (
+            <div className="container py-16">
+              <ArchiveItemRenderer item={data} />
+            </div>
+          )}
+        </Suspense>
       </div>
     </>
   )

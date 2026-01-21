@@ -586,6 +586,51 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
     }
   }
 
+  const handleSeedContentTypeItem = async (template: CollectionTemplate, contentTypeId: string, itemSlug: string) => {
+    setSeedingItems(prev => new Set([...prev, itemSlug]))
+    setMessage(null)
+
+    try {
+      const response = await fetch('/api/seed/content-type', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          templateId: template.id,
+          contentTypeId,
+          action: 'seed',
+          itemSlug,
+        }),
+      })
+
+      const data = await response.json()
+
+      if (response.ok && data.success) {
+        setMessage({
+          type: 'success',
+          text: data.message || `Successfully seeded ${template.name}`,
+        })
+        fetchSeedStatus()
+        fetchCustomCollectionCounts()
+      } else {
+        throw new Error(data.message || 'Failed to seed item')
+      }
+    } catch (error) {
+      console.error('Failed to seed content type item:', error)
+      setMessage({
+        type: 'error',
+        text: error instanceof Error ? error.message : 'Failed to seed item. Please try again.',
+      })
+    } finally {
+      setSeedingItems(prev => {
+        const updated = new Set(prev)
+        updated.delete(itemSlug)
+        return updated
+      })
+    }
+  }
+
   const handleClearContentTypeSeedData = async (template: CollectionTemplate, contentTypeId?: string) => {
     setSeeding(contentTypeId || template.defaultSlug)
     setMessage(null)
@@ -953,30 +998,6 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
         )}
 
         <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-          {section === 'Collections' && cloneableBaseTemplates[template.defaultSlug] && (
-            <button
-              onClick={() => {
-                const cloneConfig = cloneableBaseTemplates[template.defaultSlug]
-                openCreateModal({
-                  mode: 'base',
-                  baseTemplate: cloneConfig.baseTemplate,
-                  name: `${template.name} Copy`,
-                })
-              }}
-              style={{
-                padding: '8px 14px',
-                fontSize: '13px',
-                fontWeight: 500,
-                borderRadius: '6px',
-                border: '1px solid var(--theme-elevation-200)',
-                background: 'var(--theme-elevation-0)',
-                color: '#2563eb',
-                cursor: 'pointer',
-              }}
-            >
-              Clone Collection
-            </button>
-          )}
           {template.hasSeedData && !isSeeded && (
             <button
               onClick={() => setExpandedSeedList(expandedSeedList === template.defaultSlug ? null : template.defaultSlug)}
@@ -1008,6 +1029,54 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
                 ▼
               </span>
               {isSeedingThis ? 'Seeding...' : isUninstalled ? 'Reinstall to Seed' : `Seed sample ${template.defaultPlural?.toLowerCase() || 'items'}`}
+            </button>
+          )}
+          {section === 'Collections' && cloneableBaseTemplates[template.defaultSlug] && expandedSeedList === template.defaultSlug && (
+            <button
+              onClick={() => {
+                const cloneConfig = cloneableBaseTemplates[template.defaultSlug]
+                openCreateModal({
+                  mode: 'base',
+                  baseTemplate: cloneConfig.baseTemplate,
+                  name: `${template.name} Copy`,
+                })
+              }}
+              style={{
+                padding: '8px 14px',
+                fontSize: '13px',
+                fontWeight: 500,
+                borderRadius: '6px',
+                border: '1px solid var(--theme-elevation-200)',
+                background: 'var(--theme-elevation-0)',
+                color: '#2563eb',
+                cursor: 'pointer',
+              }}
+            >
+              Clone Collection
+            </button>
+          )}
+          {section === 'Collections' && cloneableBaseTemplates[template.defaultSlug] && expandedSeedList !== template.defaultSlug && (
+            <button
+              onClick={() => {
+                const cloneConfig = cloneableBaseTemplates[template.defaultSlug]
+                openCreateModal({
+                  mode: 'base',
+                  baseTemplate: cloneConfig.baseTemplate,
+                  name: `${template.name} Copy`,
+                })
+              }}
+              style={{
+                padding: '8px 14px',
+                fontSize: '13px',
+                fontWeight: 500,
+                borderRadius: '6px',
+                border: '1px solid var(--theme-elevation-200)',
+                background: 'var(--theme-elevation-0)',
+                color: '#2563eb',
+                cursor: 'pointer',
+              }}
+            >
+              Clone Collection
             </button>
           )}
 
@@ -1117,6 +1186,9 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
     const template = contentType.templateId ? templateById.get(contentType.templateId) : undefined
     const isSeedingThis = seeding === contentType.id
     const hasSeedData = Boolean(template?.hasSeedData)
+    const isSeeded = itemCount > 0
+    const seedListKey = `custom:${contentType.id}`
+    const isSeedListExpanded = expandedSeedList === seedListKey
     const navSlug = `custom:${contentType.slug}`
     const savedState = visibilitySettings[navSlug]
     const isVisible = savedState !== undefined ? savedState : true
@@ -1183,6 +1255,27 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
           {itemCount} item{itemCount === 1 ? '' : 's'}
         </div>
 
+        {hasSeedData && template && (
+          <div style={{ marginBottom: '12px' }}>
+            <div style={{ fontSize: '12px', color: '#666', marginBottom: '8px' }}>
+              {isSeeded
+                ? `Seeded (${itemCount} items)`
+                : `Sample data available (${template.seedDataCount || 0} items)`}
+            </div>
+            {!isSeeded && (
+              <SeedItemsList
+                template={template}
+                onSeedItem={(itemSlug) => handleSeedContentTypeItem(template, contentType.id, itemSlug)}
+                onSeedAll={() => handleSeedContentTypeData(template, contentType.id)}
+                isSeeding={isSeedingThis}
+                seedingItems={seedingItems}
+                expanded={isSeedListExpanded}
+                onExpandedChange={(expanded) => setExpandedSeedList(expanded ? seedListKey : null)}
+              />
+            )}
+          </div>
+        )}
+
         <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
           <a
             href={`/admin/collections/custom-items?where[contentType][equals]=${contentType.id}`}
@@ -1245,6 +1338,39 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
           >
             Clone
           </button>
+          {hasSeedData && template && !isSeeded && (
+            <button
+              onClick={() => setExpandedSeedList(isSeedListExpanded ? null : seedListKey)}
+              disabled={isSeedingThis || isUninstalled}
+              style={{
+                padding: '8px 14px',
+                fontSize: '13px',
+                fontWeight: 500,
+                borderRadius: '6px',
+                border: 'none',
+                background: isUninstalled ? '#cbd5f5' : '#3b82f6',
+                color: isUninstalled ? '#475569' : 'white',
+                cursor: isSeedingThis || isUninstalled ? 'not-allowed' : 'pointer',
+                opacity: isSeedingThis || isUninstalled ? 0.6 : 1,
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px',
+              }}
+            >
+              <span style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                width: '16px',
+                height: '16px',
+                transition: 'transform 0.2s ease',
+                transform: isSeedListExpanded ? 'rotate(180deg)' : 'rotate(0deg)',
+              }}>
+                ▼
+              </span>
+              {isSeedingThis ? 'Seeding...' : isUninstalled ? 'Reinstall to Seed' : `Seed sample ${contentType.pluralLabel?.toLowerCase() || 'items'}`}
+            </button>
+          )}
           {!isUninstalled && (
             <button
               onClick={() => handleToggleVisibility(navSlug, isVisible)}
@@ -1302,43 +1428,24 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
               {isReinstallingThis ? 'Reinstalling...' : 'Reinstall'}
             </button>
           )}
-          {hasSeedData && template && (
-            <>
-              <button
-                onClick={() => handleSeedContentTypeData(template, contentType.id)}
-                disabled={isSeedingThis || isUninstalled}
-                style={{
-                  padding: '8px 14px',
-                  fontSize: '13px',
-                  fontWeight: 500,
-                  borderRadius: '6px',
-                  border: 'none',
-                  background: '#3b82f6',
-                  color: 'white',
-                  cursor: isSeedingThis || isUninstalled ? 'not-allowed' : 'pointer',
-                  opacity: isSeedingThis || isUninstalled ? 0.6 : 1,
-                }}
-              >
-                {isSeedingThis ? 'Seeding...' : 'Seed Data'}
-              </button>
-              <button
-                onClick={() => handleClearContentTypeSeedData(template, contentType.id)}
-                disabled={isSeedingThis || isUninstalled}
-                style={{
-                  padding: '8px 14px',
-                  fontSize: '13px',
-                  fontWeight: 500,
-                  borderRadius: '6px',
-                  border: '1px solid #fca5a5',
-                  background: '#fee2e2',
-                  color: '#991b1b',
-                  cursor: isSeedingThis || isUninstalled ? 'not-allowed' : 'pointer',
-                  opacity: isSeedingThis || isUninstalled ? 0.6 : 1,
-                }}
-              >
-                {isSeedingThis ? 'Clearing...' : 'Clear Seed Data'}
-              </button>
-            </>
+          {hasSeedData && template && isSeeded && (
+            <button
+              onClick={() => handleClearContentTypeSeedData(template, contentType.id)}
+              disabled={isSeedingThis || isUninstalled}
+              style={{
+                padding: '8px 14px',
+                fontSize: '13px',
+                fontWeight: 500,
+                borderRadius: '6px',
+                border: '1px solid #fca5a5',
+                background: '#fee2e2',
+                color: '#991b1b',
+                cursor: isSeedingThis || isUninstalled ? 'not-allowed' : 'pointer',
+                opacity: isSeedingThis || isUninstalled ? 0.6 : 1,
+              }}
+            >
+              {isSeedingThis ? 'Clearing...' : 'Clear Seed Data'}
+            </button>
           )}
         </div>
       </div>

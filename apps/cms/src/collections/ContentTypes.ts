@@ -23,7 +23,7 @@ export const ContentTypes: CollectionConfig = {
   admin: {
     group: 'Collections',
     useAsTitle: 'name',
-    defaultColumns: ['name', 'slug', 'template', 'itemCount', 'updatedAt'],
+    defaultColumns: ['name', 'slug', 'template', 'itemCount', 'updatedAt', 'preview'],
     description: 'Define custom collections like "Services", "FAQs", or "Galleries"',
   },
   access: {
@@ -273,6 +273,16 @@ export const ContentTypes: CollectionConfig = {
           },
         },
       ],
+    },
+    {
+      name: 'preview',
+      type: 'ui',
+      admin: {
+        components: {
+          Cell: '/components/PreviewButtonCell',
+        },
+        condition: () => false, // Hide from form, only show in list
+      },
     },
   ],
   hooks: {

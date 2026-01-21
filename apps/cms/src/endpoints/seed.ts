@@ -386,7 +386,7 @@ export const seedContentTypeEndpoint: Endpoint = {
 
     try {
       const body = await req.json?.() || {}
-      const { templateId, action, contentTypeId } = body
+      const { templateId, action, contentTypeId, itemSlug } = body
 
       let template = typeof templateId === 'string' ? getTemplateById(templateId) : undefined
 
@@ -441,6 +441,56 @@ export const seedContentTypeEndpoint: Endpoint = {
               success: true,
               message: `No seed data configured for ${template.name}`,
               itemsAffected: 0,
+            })
+          }
+
+          if (itemSlug) {
+            const seedItem = seedItems.find(item => item.slug === itemSlug)
+            if (!seedItem) {
+              return Response.json(
+                { success: false, message: `Seed item "${itemSlug}" not found` },
+                { status: 404 }
+              )
+            }
+
+            const existing = await payload.find({
+              collection: 'custom-items',
+              where: {
+                slug: { equals: itemSlug },
+                contentType: { equals: contentTypeDoc.id },
+              },
+              limit: 1,
+              depth: 0,
+            })
+
+            if (existing.docs.length > 0) {
+              return Response.json(
+                { success: false, message: `"${seedItem.title}" already exists. Delete it first to reseed.` },
+                { status: 409 }
+              )
+            }
+
+            await payload.create({
+              collection: 'custom-items',
+              data: {
+                title: seedItem.title,
+                slug: seedItem.slug,
+                excerpt: seedItem.excerpt,
+                content: typeof seedItem.content === 'string' ? createRichText(seedItem.content) : seedItem.content,
+                blocks: seedItem.blocks || [],
+                featuredImage: seedItem.featuredImage,
+                gallery: seedItem.gallery || [],
+                contentType: contentTypeDoc.id,
+                status: seedItem.status || 'published',
+                customData: seedItem.customData || {},
+              },
+              overrideAccess: true,
+            })
+
+            return Response.json({
+              success: true,
+              message: `Seeded "${seedItem.title}"`,
+              itemsAffected: 1,
             })
           }
 
@@ -733,7 +783,7 @@ export const seedItemEndpoint: Endpoint = {
       }
 
       // Seed only this specific item
-      const presetToUse = presetId || COLLECTION_PRESET_OVERRIDES[collectionSlug] || 'blog-astro'
+      const presetToUse = presetId || COLLECTION_PRESET_OVERRIDES[collectionSlug] || 'archive-next'
 
       if (!isValidPresetId(presetToUse)) {
         return Response.json(

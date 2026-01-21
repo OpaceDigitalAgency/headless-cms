@@ -46,7 +46,7 @@ export const CustomItems: CollectionConfig = {
   admin: {
     group: 'Collections',
     useAsTitle: 'title',
-    defaultColumns: ['title', 'contentType', 'status', 'updatedAt'],
+    defaultColumns: ['title', 'contentType', 'status', 'updatedAt', 'preview'],
     description: 'Items belonging to your custom collections',
     listSearchableFields: ['title', 'slug'],
     preview: (doc) => {
@@ -314,6 +314,16 @@ export const CustomItems: CollectionConfig = {
       relationTo: 'users',
       admin: {
         position: 'sidebar',
+      },
+    },
+    {
+      name: 'preview',
+      type: 'ui',
+      admin: {
+        components: {
+          Cell: '/components/PreviewButtonCell',
+        },
+        condition: () => false, // Hide from form, only show in list
       },
     },
   ],

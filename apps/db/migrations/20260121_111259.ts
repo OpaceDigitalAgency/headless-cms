@@ -6808,6 +6808,8 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	"plural_label" varchar NOT NULL,
   	"icon" "enum_content_types_icon" DEFAULT 'box',
   	"template" "enum_content_types_template" DEFAULT 'archive-item' NOT NULL,
+  	"template_id" varchar,
+  	"uninstalled" boolean DEFAULT false,
   	"description" varchar,
   	"has_archive" boolean DEFAULT true,
   	"archive_slug" varchar,
@@ -8231,6 +8233,7 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   CREATE TABLE "navigation_settings" (
   	"id" serial PRIMARY KEY NOT NULL,
   	"collections" jsonb,
+  	"globals" jsonb,
   	"updated_at" timestamp(3) with time zone,
   	"created_at" timestamp(3) with time zone
   );

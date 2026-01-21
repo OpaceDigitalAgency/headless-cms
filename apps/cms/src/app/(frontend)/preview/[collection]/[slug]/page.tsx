@@ -36,10 +36,11 @@ export default async function PreviewPage({ params }: PreviewPageProps) {
   let document: any = null
 
   try {
+    // Use depth: 1 for faster initial load, depth: 2 will be fetched by useLivePreview
     const result = await payload.find({
       collection: collection as any,
       where: { slug: { equals: slug } },
-      depth: 2,
+      depth: 1,
       draft: true,
       limit: 1,
     })

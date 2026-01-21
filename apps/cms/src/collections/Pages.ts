@@ -29,7 +29,7 @@ export const Pages: CollectionConfig = {
   admin: {
     useAsTitle: 'title',
     group: 'Content',
-    defaultColumns: ['title', 'slug', 'template', '_status', 'updatedAt'],
+    defaultColumns: ['title', 'slug', 'template', '_status', 'updatedAt', 'preview'],
     description: 'Create and manage website pages',
     preview: (doc) => getPreviewUrl({ collection: 'pages', slug: doc.slug }),
     livePreview: {
@@ -240,6 +240,16 @@ export const Pages: CollectionConfig = {
         date: {
           pickerAppearance: 'dayAndTime',
         },
+      },
+    },
+    {
+      name: 'preview',
+      type: 'ui',
+      admin: {
+        components: {
+          Cell: '/components/PreviewButtonCell',
+        },
+        condition: () => false, // Hide from form, only show in list
       },
     },
   ],

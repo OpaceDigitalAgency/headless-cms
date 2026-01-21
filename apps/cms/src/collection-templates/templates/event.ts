@@ -324,6 +324,16 @@ export const eventTemplate: CollectionTemplate = {
       { label: 'Calendar View', value: 'calendar' },
       { label: 'Card View', value: 'card' },
     ]),
+    {
+      name: 'preview',
+      type: 'ui',
+      admin: {
+        components: {
+          Cell: '/components/PreviewButtonCell',
+        },
+        condition: () => false, // Hide from form, only show in list
+      },
+    },
   ],
 }
 

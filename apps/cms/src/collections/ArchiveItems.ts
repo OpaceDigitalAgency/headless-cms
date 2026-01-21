@@ -12,7 +12,7 @@ export const ArchiveItems: CollectionConfig = {
   admin: {
     useAsTitle: 'title',
     group: 'Archive',
-    defaultColumns: ['title', '_status', 'updatedAt'],
+    defaultColumns: ['title', '_status', 'updatedAt', 'preview'],
     description: 'Archive items such as gallery pieces, portfolio items, or collectibles',
     preview: (doc) => getPreviewUrl({ collection: 'archive-items', slug: doc.slug }),
     livePreview: {

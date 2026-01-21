@@ -12,7 +12,7 @@ export const Events: CollectionConfig = {
   admin: {
     useAsTitle: 'title',
     group: 'Content',
-    defaultColumns: ['title', 'startDate', '_status', 'updatedAt'],
+    defaultColumns: ['title', 'startDate', '_status', 'updatedAt', 'preview'],
     description: 'Events, exhibitions, workshops, or performances with dates and venues',
     ...withLivePreview('events'),
   },

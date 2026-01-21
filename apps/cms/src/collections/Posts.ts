@@ -30,7 +30,7 @@ export const Posts: CollectionConfig = {
   admin: {
     useAsTitle: 'title',
     group: 'Content',
-    defaultColumns: ['title', 'author', 'categories', '_status', 'publishedAt'],
+    defaultColumns: ['title', 'author', 'categories', '_status', 'publishedAt', 'preview'],
     description: 'Create and manage blog posts with flexible content sections',
     preview: (doc) => getPreviewUrl({ collection: 'posts', slug: doc.slug }),
     livePreview: {
@@ -291,6 +291,16 @@ export const Posts: CollectionConfig = {
       admin: {
         position: 'sidebar',
         description: 'Show in featured sections',
+      },
+    },
+    {
+      name: 'preview',
+      type: 'ui',
+      admin: {
+        components: {
+          Cell: '/components/PreviewButtonCell',
+        },
+        condition: () => false, // Hide from form, only show in list
       },
     },
   ],

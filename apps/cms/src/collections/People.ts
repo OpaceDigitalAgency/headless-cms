@@ -35,7 +35,7 @@ export const People: CollectionConfig = {
   admin: {
     useAsTitle: 'name',
     group: 'Collections',
-    defaultColumns: ['name', 'role', 'categories', '_status', 'updatedAt'],
+    defaultColumns: ['name', 'role', 'categories', '_status', 'updatedAt', 'preview'],
     description: 'Historical figures, artists, team members, and notable people',
     preview: (doc) => getPreviewUrl({ collection: 'people', slug: doc.slug }),
     livePreview: {
@@ -420,6 +420,16 @@ export const People: CollectionConfig = {
       label: 'Featured Person',
       admin: {
         position: 'sidebar',
+      },
+    },
+    {
+      name: 'preview',
+      type: 'ui',
+      admin: {
+        components: {
+          Cell: '/components/PreviewButtonCell',
+        },
+        condition: () => false, // Hide from form, only show in list
       },
     },
   ],

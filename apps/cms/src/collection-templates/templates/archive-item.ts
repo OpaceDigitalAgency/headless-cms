@@ -206,6 +206,16 @@ export const archiveItemTemplate: CollectionTemplate = {
       { label: 'Gallery View', value: 'gallery' },
       { label: 'Timeline View', value: 'timeline' },
     ]),
+    {
+      name: 'preview',
+      type: 'ui',
+      admin: {
+        components: {
+          Cell: '/components/PreviewButtonCell',
+        },
+        condition: () => false, // Hide from form, only show in list
+      },
+    },
   ],
 }
 

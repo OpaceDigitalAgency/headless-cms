@@ -73759,6 +73759,19 @@
           "notNull": true,
           "default": "'archive-item'"
         },
+        "template_id": {
+          "name": "template_id",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "uninstalled": {
+          "name": "uninstalled",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "default": false
+        },
         "description": {
           "name": "description",
           "type": "varchar",
@@ -91143,6 +91156,12 @@
           "primaryKey": false,
           "notNull": false
         },
+        "globals": {
+          "name": "globals",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
         "updated_at": {
           "name": "updated_at",
           "type": "timestamp(3) with time zone",
@@ -97854,6 +97873,6 @@
     "tables": {},
     "columns": {}
   },
-  "id": "1c3fab47-d6ec-415e-b9a8-59b73763052e",
+  "id": "bf0554ad-851a-4686-9cad-98fb4ce6dd16",
   "prevId": "00000000-0000-0000-0000-000000000000"
 }
