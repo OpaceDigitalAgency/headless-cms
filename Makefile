@@ -127,9 +127,9 @@ docker-up: ## Start all services with Docker Compose
 	docker compose up -d
 	@echo "$(GREEN)Services started!$(NC)"
 	@echo ""
-	@echo "$(CYAN)CMS:$(NC)      http://localhost:3000/admin"
-	@echo "$(CYAN)Next.js:$(NC)  http://localhost:3001"
-	@echo "$(CYAN)Astro:$(NC)    http://localhost:4321"
+	@echo "$(CYAN)CMS & Frontend:$(NC) http://localhost:3000"
+	@echo "$(CYAN)CMS Admin:$(NC)      http://localhost:3000/admin"
+	@echo "$(CYAN)Astro:$(NC)          http://localhost:4321"
 
 docker-down: ## Stop all Docker services
 	@echo "$(CYAN)Stopping Docker services...$(NC)"

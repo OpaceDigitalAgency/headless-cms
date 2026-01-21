@@ -313,56 +313,57 @@
 
   /* Cards - vary by skin */
   .card {
-    background-color: rgb(var(--color-card));
-    border: var(--border-width) solid rgb(var(--color-border));
-    border-radius: var(--radius);
-    box-shadow: var(--shadow);
+    background-color: rgb(var(--color-card)) !important;
+    border: var(--border-width) solid rgb(var(--color-border)) !important;
+    border-radius: var(--radius) !important;
+    box-shadow: var(--shadow) !important;
   }
 
   .card:hover {
-    box-shadow: var(--shadow-lg);
+    box-shadow: var(--shadow-lg) !important;
   }
 
   /* Buttons - vary by skin */
   .btn-primary {
-    background-color: rgb(var(--color-accent));
-    border-radius: var(--radius);
-    border: var(--border-width) solid rgb(var(--color-accent));
-    letter-spacing: var(--letter-spacing);
+    background-color: rgb(var(--color-accent)) !important;
+    border-radius: var(--radius) !important;
+    border: var(--border-width) solid rgb(var(--color-accent)) !important;
+    letter-spacing: var(--letter-spacing) !important;
+    color: rgb(var(--color-background)) !important;
   }
 
   .btn-primary:hover {
-    background-color: rgb(var(--color-accent-light));
-    border-color: rgb(var(--color-accent-light));
+    background-color: rgb(var(--color-accent-light)) !important;
+    border-color: rgb(var(--color-accent-light)) !important;
   }
 
   /* Links - vary by skin */
   a {
-    color: rgb(var(--color-accent));
+    color: rgb(var(--color-accent)) !important;
     text-decoration: none;
   }
 
   a:hover {
-    color: rgb(var(--color-accent-light));
+    color: rgb(var(--color-accent-light)) !important;
   }
 
   /* Borders - vary by skin */
   hr {
-    border-color: rgb(var(--color-border));
-    border-width: var(--border-width);
+    border-color: rgb(var(--color-border)) !important;
+    border-width: var(--border-width) !important;
   }
 
   /* Glass effect for glass skin */
   [data-skin="glass"] .card,
   [data-skin="glass"] .btn-secondary {
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px) !important;
+    -webkit-backdrop-filter: blur(10px) !important;
   }
 
   /* Bold skin - strong borders */
   [data-skin="bold"] .card,
   [data-skin="bold"] button {
-    border-width: 2px;
+    border-width: 2px !important;
   }
 
   /* High contrast - maximum visibility */
@@ -372,21 +373,54 @@
   }
 
   [data-skin="high-contrast"] .card {
-    border-width: 3px;
+    border-width: 3px !important;
   }
 
   /* Soft skin - no borders */
   [data-skin="soft"] .card {
-    border: none;
-    box-shadow: 0 2px 8px 0 rgb(0 0 0 / 0.08);
+    border: none !important;
+    box-shadow: 0 2px 8px 0 rgb(0 0 0 / 0.08) !important;
   }
 
   /* Editorial skin - serif typography */
   [data-skin="editorial"] h1,
   [data-skin="editorial"] h2,
-  [data-skin="editorial"] h3 {
-    font-family: var(--font-serif);
-    letter-spacing: 0.025em;
+  [data-skin="editorial"] h3,
+  [data-skin="editorial"] h4,
+  [data-skin="editorial"] h5,
+  [data-skin="editorial"] h6 {
+    font-family: var(--font-serif) !important;
+    letter-spacing: 0.025em !important;
+  }
+
+  [data-skin="editorial"] body,
+  [data-skin="editorial"] p,
+  [data-skin="editorial"] span {
+    font-family: var(--font-serif) !important;
+  }
+
+  /* SaaS skin - modern rounded corners */
+  [data-skin="saas"] .card,
+  [data-skin="saas"] button,
+  [data-skin="saas"] input,
+  [data-skin="saas"] select {
+    border-radius: var(--radius) !important;
+  }
+
+  /* Monochrome skin - no color variation */
+  [data-skin="monochrome"] {
+    --color-accent-light: var(--color-accent);
+  }
+
+  /* Bold skin - maximum contrast */
+  [data-skin="bold"] h1,
+  [data-skin="bold"] h2,
+  [data-skin="bold"] h3,
+  [data-skin="bold"] h4,
+  [data-skin="bold"] h5,
+  [data-skin="bold"] h6 {
+    font-weight: 900 !important;
+    letter-spacing: 0.05em !important;
   }
 }
 
@@ -406,25 +440,51 @@
   }
 
   .btn-primary {
-    @apply inline-flex items-center justify-center rounded-lg px-4 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary-600 text-white hover:bg-primary-700 focus-visible:ring-primary-500;
+    @apply inline-flex items-center justify-center px-4 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50;
+    background-color: rgb(var(--color-accent)) !important;
+    color: rgb(var(--color-background)) !important;
+    border-radius: var(--radius) !important;
+    border: var(--border-width) solid rgb(var(--color-accent)) !important;
+  }
+
+  .btn-primary:hover {
+    background-color: rgb(var(--color-accent-light)) !important;
+    border-color: rgb(var(--color-accent-light)) !important;
   }
 
   .btn-secondary {
-    @apply inline-flex items-center justify-center rounded-lg px-4 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-gray-100 text-gray-900 hover:bg-gray-200 focus-visible:ring-gray-500 dark:bg-slate-700 dark:text-slate-100 dark:hover:bg-slate-600;
+    @apply inline-flex items-center justify-center px-4 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50;
+    background-color: rgb(var(--color-card)) !important;
+    color: rgb(var(--color-foreground)) !important;
+    border: var(--border-width) solid rgb(var(--color-border)) !important;
+    border-radius: var(--radius) !important;
   }
 
   .btn-outline {
-    @apply inline-flex items-center justify-center rounded-lg px-4 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-gray-300 bg-transparent hover:bg-gray-50 focus-visible:ring-gray-500 dark:border-slate-600 dark:hover:bg-slate-800;
+    @apply inline-flex items-center justify-center px-4 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50;
+    background-color: transparent !important;
+    color: rgb(var(--color-foreground)) !important;
+    border: var(--border-width) solid rgb(var(--color-border)) !important;
+    border-radius: var(--radius) !important;
   }
 
   /* Cards */
   .card {
-    @apply rounded-xl bg-white shadow-sm ring-1 ring-gray-200 dark:bg-slate-800 dark:ring-slate-700;
+    background-color: rgb(var(--color-card)) !important;
+    border: var(--border-width) solid rgb(var(--color-border)) !important;
+    border-radius: var(--radius) !important;
+    box-shadow: var(--shadow) !important;
   }
 
   /* Links */
   .link {
-    @apply text-primary-600 hover:text-primary-700 underline underline-offset-2 dark:text-primary-400 dark:hover:text-primary-300;
+    color: rgb(var(--color-accent)) !important;
+    text-decoration: underline;
+    text-decoration-offset: 0.25em;
+  }
+
+  .link:hover {
+    color: rgb(var(--color-accent-light)) !important;
   }
 
   /* Prose/Rich Text with Dark Mode */

@@ -58,8 +58,7 @@ This command will:
 6.  Start the CMS and frontend development servers.
 
 Once complete, you can access the services at:
-*   **CMS Admin:** `http://localhost:3000/admin`
-*   **Next.js Frontend:** `http://localhost:3001`
+*   **CMS Admin & Frontend:** `http://localhost:3000`
 *   **Astro Frontend:** `http://localhost:4321`
 
 ## 3. Core Architecture
