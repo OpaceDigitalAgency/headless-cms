@@ -3,7 +3,8 @@ import { draftMode } from 'next/headers'
 import type { Metadata } from 'next'
 import { getPlaces, getPlaceBySlug } from '@/lib/payload-api'
 import { RenderBlocks } from '@/components/RenderBlocks'
-import { Container, Section, Prose } from '@repo/ui/primitives'
+import { RichText } from '@/components/RichText'
+import { Container, Section } from '@repo/ui/primitives'
 
 interface PlacePageProps {
   params: Promise<{ slug: string }>
@@ -70,9 +71,9 @@ export default async function PlacePage({ params }: PlacePageProps) {
             )}
 
             {place.description && (
-              <Prose className="mb-12">
-                <p>{place.description}</p>
-              </Prose>
+              <div className="mb-12">
+                <RichText content={place.description} />
+              </div>
             )}
 
             {place.contentBlocks && place.contentBlocks.length > 0 && (

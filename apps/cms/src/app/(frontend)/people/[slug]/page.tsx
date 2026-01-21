@@ -3,9 +3,10 @@ import { draftMode } from 'next/headers'
 import type { Metadata } from 'next'
 import { getPeople, getPersonBySlug, getSettings } from '@/lib/payload-api'
 import { RenderBlocks } from '@/components/RenderBlocks'
+import { RichText } from '@/components/RichText'
 import { generateEnhancedMetadata } from '@/lib/seo/metadata'
 import { generatePersonSchema, generateOrganizationSchema, generateBreadcrumbSchema, renderJsonLd } from '@/lib/seo/schema'
-import { Container, Section, Prose } from '@repo/ui/primitives'
+import { Container, Section } from '@repo/ui/primitives'
 
 interface PersonPageProps {
   params: Promise<{ slug: string }>
@@ -117,9 +118,9 @@ export default async function PersonPage({ params }: PersonPageProps) {
               )}
 
               {person.bio && (
-                <Prose className="mb-12">
-                  <p>{person.bio}</p>
-                </Prose>
+                <div className="mb-12">
+                  <RichText content={person.bio} />
+                </div>
               )}
 
               {person.content && <RenderBlocks blocks={person.content} />}

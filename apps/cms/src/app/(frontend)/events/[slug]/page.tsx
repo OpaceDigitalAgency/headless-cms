@@ -5,7 +5,7 @@ import { getEvents, getEventBySlug, getSettings } from '@/lib/payload-api'
 import { RenderBlocks } from '@/components/RenderBlocks'
 import { generateEnhancedMetadata } from '@/lib/seo/metadata'
 import { generateEventSchema, generateOrganizationSchema, generateBreadcrumbSchema, renderJsonLd } from '@/lib/seo/schema'
-import { Container, Section, Prose } from '@repo/ui/primitives'
+import { Container, Section } from '@repo/ui/primitives'
 
 interface EventPageProps {
   params: Promise<{ slug: string }>

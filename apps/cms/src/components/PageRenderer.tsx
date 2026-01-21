@@ -20,6 +20,7 @@ import { TeamBlock } from './blocks/TeamBlock'
 import { EmbedBlock } from './blocks/EmbedBlock'
 import { SpacerBlock } from './blocks/SpacerBlock'
 import { HtmlBlock } from './blocks/HtmlBlock'
+import { Container, Section } from '@repo/ui/primitives'
 import { generateWebsiteSchema, generateOrganizationSchema, generateBreadcrumbSchema, renderJsonLd } from '@/lib/seo/schema'
 import { getSettings } from '@/lib/payload-api'
 
@@ -139,10 +140,14 @@ export async function PageRenderer({ page }: PageRendererProps) {
               dangerouslySetInnerHTML={{ __html: renderJsonLd(schemas) }}
             />
           )}
-          <DetailTemplate
-            heading={page.title}
-            content={content ? <RenderBlocks blocks={content} /> : null}
-          />
+          <Section spacing="lg" background="default">
+            <Container>
+              <DetailTemplate
+                heading={page.title}
+                content={content ? <RenderBlocks blocks={content} /> : null}
+              />
+            </Container>
+          </Section>
         </>
       )
 
@@ -155,10 +160,14 @@ export async function PageRenderer({ page }: PageRendererProps) {
               dangerouslySetInnerHTML={{ __html: renderJsonLd(schemas) }}
             />
           )}
-          <ListTemplate
-            heading={page.title}
-            content={content ? <RenderBlocks blocks={content} /> : null}
-          />
+          <Section spacing="lg" background="default">
+            <Container>
+              <ListTemplate
+                heading={page.title}
+                content={content ? <RenderBlocks blocks={content} /> : null}
+              />
+            </Container>
+          </Section>
         </>
       )
 
@@ -171,10 +180,14 @@ export async function PageRenderer({ page }: PageRendererProps) {
               dangerouslySetInnerHTML={{ __html: renderJsonLd(schemas) }}
             />
           )}
-          <ArticleTemplate
-            heading={page.title}
-            content={content ? <RenderBlocks blocks={content} /> : null}
-          />
+          <Section spacing="lg" background="default">
+            <Container>
+              <ArticleTemplate
+                heading={page.title}
+                content={content ? <RenderBlocks blocks={content} /> : null}
+              />
+            </Container>
+          </Section>
         </>
       )
 
@@ -233,9 +246,11 @@ export async function PageRenderer({ page }: PageRendererProps) {
               </section>
             )}
             {content && (
-              <div className="py-12">
-                <RenderBlocks blocks={content} />
-              </div>
+              <Section spacing="lg" background="default">
+                <Container>
+                  <RenderBlocks blocks={content} />
+                </Container>
+              </Section>
             )}
           </div>
         </>
