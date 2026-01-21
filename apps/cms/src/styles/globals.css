@@ -127,6 +127,9 @@
      Skin: SaaS
      =========================================== */
   [data-skin="saas"] {
+    --font-sans: 'Space Grotesk', 'Inter', system-ui, sans-serif;
+    --font-serif: 'Space Grotesk', 'Inter', system-ui, sans-serif;
+
     /* Light mode */
     --color-background: 255 255 255;
     --color-foreground: 15 23 42;
@@ -171,6 +174,9 @@
      Skin: Soft
      =========================================== */
   [data-skin="soft"] {
+    --font-sans: 'Plus Jakarta Sans', 'Inter', system-ui, sans-serif;
+    --font-serif: 'Plus Jakarta Sans', 'Inter', system-ui, sans-serif;
+
     /* Light mode */
     --color-background: 253 242 248;
     --color-foreground: 63 63 70;
@@ -211,6 +217,9 @@
      Skin: Bold
      =========================================== */
   [data-skin="bold"] {
+    --font-sans: 'Impact', 'Arial Black', 'Franklin Gothic Medium', system-ui, sans-serif;
+    --font-serif: 'Impact', 'Arial Black', 'Franklin Gothic Medium', system-ui, sans-serif;
+
     /* Light mode */
     --color-background: 255 255 255;
     --color-foreground: 0 0 0;
@@ -253,6 +262,9 @@
      Skin: Monochrome
      =========================================== */
   [data-skin="monochrome"] {
+    --font-sans: 'IBM Plex Mono', 'SFMono-Regular', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    --font-serif: 'IBM Plex Mono', 'SFMono-Regular', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
     /* Light mode */
     --color-background: 255 255 255;
     --color-foreground: 23 23 23;
@@ -291,6 +303,9 @@
      Skin: Glass
      =========================================== */
   [data-skin="glass"] {
+    --font-sans: 'Manrope', 'Inter', system-ui, sans-serif;
+    --font-serif: 'Manrope', 'Inter', system-ui, sans-serif;
+
     /* Light mode */
     --color-background: 248 250 252;
     --color-foreground: 15 23 42;
@@ -330,9 +345,63 @@
   }
 
   /* ===========================================
+     Skin: Neon Grid
+     =========================================== */
+  [data-skin="neon-grid"] {
+    --font-sans: 'Space Grotesk', 'Inter', system-ui, sans-serif;
+    --font-serif: 'Space Grotesk', 'Inter', system-ui, sans-serif;
+
+    /* Light mode (intentionally dark for this skin) */
+    --color-background: 5 8 10;
+    --color-foreground: 236 255 248;
+    --color-muted: 148 170 164;
+    --color-border: 28 38 42;
+    --color-card: 10 16 20;
+    --color-accent: 16 185 129;
+    --color-accent-light: 45 212 191;
+
+    --radius: 1.5rem;
+    --shadow: 0 20px 60px -40px rgb(16 185 129 / 0.65);
+    --shadow-lg: 0 30px 70px -35px rgb(45 212 191 / 0.6);
+    --border-width: 1px;
+    --letter-spacing: -0.01em;
+    --skin-bg-image:
+      radial-gradient(circle at 15% -10%, rgb(16 185 129 / 0.25), transparent 45%),
+      radial-gradient(circle at 85% 0%, rgb(45 212 191 / 0.12), transparent 40%),
+      linear-gradient(to right, rgb(31 41 55 / 0.55) 1px, transparent 1px),
+      linear-gradient(to bottom, rgb(31 41 55 / 0.55) 1px, transparent 1px);
+    --skin-bg-size: auto, auto, 4rem 4rem, 4rem 4rem;
+    --skin-bg-position: top left;
+    --skin-bg-repeat: no-repeat, no-repeat, repeat, repeat;
+    --skin-bg-attachment: fixed;
+  }
+
+  [data-skin="neon-grid"].dark {
+    --color-background: 2 6 10;
+    --color-foreground: 241 255 250;
+    --color-muted: 148 170 164;
+    --color-border: 18 26 30;
+    --color-card: 8 12 16;
+    --color-accent: 16 185 129;
+    --color-accent-light: 45 212 191;
+    --skin-bg-image:
+      radial-gradient(circle at 15% -10%, rgb(16 185 129 / 0.3), transparent 45%),
+      radial-gradient(circle at 85% 0%, rgb(45 212 191 / 0.18), transparent 40%),
+      linear-gradient(to right, rgb(17 24 39 / 0.75) 1px, transparent 1px),
+      linear-gradient(to bottom, rgb(17 24 39 / 0.75) 1px, transparent 1px);
+    --skin-bg-size: auto, auto, 4rem 4rem, 4rem 4rem;
+    --skin-bg-position: top left;
+    --skin-bg-repeat: no-repeat, no-repeat, repeat, repeat;
+    --skin-bg-attachment: fixed;
+  }
+
+  /* ===========================================
      Skin: High Contrast
      =========================================== */
   [data-skin="high-contrast"] {
+    --font-sans: 'Atkinson Hyperlegible', 'Arial', system-ui, sans-serif;
+    --font-serif: 'Atkinson Hyperlegible', 'Arial', system-ui, sans-serif;
+
     /* Light mode */
     --color-background: 255 255 255;
     --color-foreground: 0 0 0;
@@ -376,6 +445,7 @@
     background-color: rgb(var(--color-background));
     color: rgb(var(--color-foreground));
     letter-spacing: var(--letter-spacing);
+    font-family: var(--font-sans);
     background-image: var(--skin-bg-image);
     background-size: var(--skin-bg-size);
     background-position: var(--skin-bg-position);
@@ -483,6 +553,13 @@
     border-color: transparent !important;
   }
 
+  [data-skin="soft"] h1,
+  [data-skin="soft"] h2,
+  [data-skin="soft"] h3 {
+    font-family: var(--font-sans) !important;
+    letter-spacing: -0.01em !important;
+  }
+
   /* Editorial skin - serif typography */
   [data-skin="editorial"] h1,
   [data-skin="editorial"] h2,
@@ -511,6 +588,17 @@
     border-color: rgb(var(--color-border)) !important;
   }
 
+  [data-skin="editorial"] a {
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 0.2em;
+  }
+
+  [data-skin="editorial"] .prose-custom {
+    font-size: 1.125rem;
+    line-height: 1.9;
+  }
+
   /* SaaS skin - modern rounded corners */
   [data-skin="saas"] .card,
   [data-skin="saas"] button,
@@ -525,6 +613,17 @@
     box-shadow: var(--shadow-lg) !important;
   }
 
+  [data-skin="saas"] .card {
+    background: linear-gradient(180deg, rgb(248 250 252), rgb(255 255 255)) !important;
+  }
+
+  [data-skin="saas"] h1,
+  [data-skin="saas"] h2,
+  [data-skin="saas"] h3 {
+    font-family: var(--font-sans) !important;
+    letter-spacing: -0.02em !important;
+  }
+
   /* Monochrome skin - no color variation */
   [data-skin="monochrome"] {
     --color-accent-light: var(--color-accent);
@@ -534,6 +633,86 @@
     background-color: rgb(var(--color-foreground)) !important;
     color: rgb(var(--color-background)) !important;
     border-color: rgb(var(--color-foreground)) !important;
+  }
+
+  [data-skin="monochrome"] h1,
+  [data-skin="monochrome"] h2,
+  [data-skin="monochrome"] h3,
+  [data-skin="monochrome"] h4,
+  [data-skin="monochrome"] h5,
+  [data-skin="monochrome"] h6 {
+    font-family: var(--font-mono) !important;
+    letter-spacing: 0.08em !important;
+    text-transform: uppercase;
+  }
+
+  [data-skin="monochrome"] .card {
+    box-shadow: none !important;
+  }
+
+  [data-skin="bold"] .btn {
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  [data-skin="glass"] h1,
+  [data-skin="glass"] h2,
+  [data-skin="glass"] h3 {
+    font-family: var(--font-sans) !important;
+    letter-spacing: -0.015em !important;
+  }
+
+  [data-skin="glass"] .card {
+    border-color: rgb(var(--color-border)) !important;
+    box-shadow: var(--shadow-lg) !important;
+  }
+
+  [data-skin="high-contrast"] body {
+    font-size: 1.1rem;
+    line-height: 1.7;
+  }
+
+  [data-skin="high-contrast"] h1,
+  [data-skin="high-contrast"] h2,
+  [data-skin="high-contrast"] h3 {
+    text-transform: uppercase;
+  }
+
+  [data-skin="high-contrast"] a {
+    text-decoration: underline;
+    text-decoration-thickness: 3px;
+    text-underline-offset: 0.2em;
+  }
+
+  [data-skin="neon-grid"] h1,
+  [data-skin="neon-grid"] h2,
+  [data-skin="neon-grid"] h3 {
+    font-family: var(--font-sans) !important;
+    letter-spacing: -0.03em !important;
+  }
+
+  [data-skin="neon-grid"] .card {
+    background: linear-gradient(145deg, rgb(10 16 20), rgb(5 10 12)) !important;
+    border-color: rgb(32 48 52) !important;
+    box-shadow: 0 25px 80px -50px rgb(16 185 129 / 0.8) !important;
+  }
+
+  [data-skin="neon-grid"] .btn-primary {
+    background-image: linear-gradient(120deg, rgb(16 185 129), rgb(20 184 166)) !important;
+    border-color: transparent !important;
+    color: rgb(3 7 10) !important;
+    box-shadow: 0 0 25px rgb(16 185 129 / 0.45) !important;
+  }
+
+  [data-skin="neon-grid"] .btn-secondary,
+  [data-skin="neon-grid"] .btn-outline {
+    border-color: rgb(32 48 52) !important;
+    background-color: rgb(7 12 14 / 0.75) !important;
+    color: rgb(236 255 248) !important;
+  }
+
+  [data-skin="neon-grid"] a {
+    color: rgb(var(--color-accent)) !important;
   }
 
   /* Bold skin - maximum contrast */
@@ -556,6 +735,26 @@
   /* Container */
   .container {
     @apply mx-auto max-w-7xl px-4 sm:px-6 lg:px-8;
+  }
+
+  [data-skin="editorial"] .container {
+    max-width: 64rem;
+  }
+
+  [data-skin="saas"] .container {
+    max-width: 80rem;
+  }
+
+  [data-skin="bold"] .container {
+    max-width: 88rem;
+  }
+
+  [data-skin="monochrome"] .container {
+    max-width: 60rem;
+  }
+
+  [data-skin="high-contrast"] .container {
+    max-width: 72rem;
   }
 
   /* Buttons */

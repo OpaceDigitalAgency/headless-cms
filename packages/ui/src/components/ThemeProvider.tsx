@@ -12,6 +12,7 @@ const SKINS = [
   'monochrome',
   'glass',
   'high-contrast',
+  'neon-grid',
 ] as const
 
 type Skin = typeof SKINS[number]
@@ -87,4 +88,3 @@ export function useSkin() {
 
 export { SKINS }
 export type { Skin }
-

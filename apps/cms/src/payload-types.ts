@@ -9412,7 +9412,9 @@ export interface Setting {
   /**
    * Choose the default visual theme for your site. Users can override this preference.
    */
-  defaultSkin?: ('minimal' | 'editorial' | 'saas' | 'soft' | 'bold' | 'monochrome' | 'glass' | 'high-contrast') | null;
+  defaultSkin?:
+    | ('minimal' | 'editorial' | 'saas' | 'soft' | 'bold' | 'monochrome' | 'glass' | 'high-contrast' | 'neon-grid')
+    | null;
   /**
    * Choose the default colour mode. Users can override this preference.
    */

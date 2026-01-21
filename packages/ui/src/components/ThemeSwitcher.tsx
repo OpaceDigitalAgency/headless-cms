@@ -13,6 +13,7 @@ const SKIN_LABELS: Record<Skin, string> = {
   monochrome: 'Monochrome',
   glass: 'Glass',
   'high-contrast': 'High Contrast',
+  'neon-grid': 'Neon Grid',
 }
 
 const MODES = [
@@ -99,4 +100,3 @@ export function ThemeSwitcher({ className = '' }: ThemeSwitcherProps) {
     </div>
   )
 }
-

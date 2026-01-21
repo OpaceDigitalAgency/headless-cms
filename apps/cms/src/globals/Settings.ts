@@ -85,6 +85,7 @@ export const Settings: GlobalConfig = {
                 { label: 'Monochrome', value: 'monochrome' },
                 { label: 'Glass', value: 'glass' },
                 { label: 'High Contrast', value: 'high-contrast' },
+                { label: 'Neon Grid', value: 'neon-grid' },
               ],
               admin: {
                 description: 'Choose the default visual theme for your site. Users can override this preference.',

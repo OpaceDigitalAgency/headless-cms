@@ -12,9 +12,12 @@ Follow this contract exactly:
 - Props-only, no data fetching.
 - No `useEffect` for data.
 - No `next/navigation` or routing logic.
-- Tailwind classes only. No CSS files or `<style>` tags.
+- Tailwind classes only. No CSS files, no `<style jsx>`, no `<style>` tags.
+- Avoid inline `style` unless you are setting CSS variables from props.
 - No new dependencies.
 - Use accessible HTML (headings, button types, alt text).
+- Do not add `use client` unless hooks are unavoidable (prefer no hooks).
+- If you need custom animations, apply class names and add a short `// Required global CSS:` comment at the end of the file listing keyframes/class names to add to `apps/cms/src/styles/globals.css`.
 
 Target location:
 - Blocks: `packages/ui/src/blocks/<Name>Block.tsx`
