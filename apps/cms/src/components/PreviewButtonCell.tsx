@@ -1,20 +1,23 @@
 'use client'
 
-import React from 'react'
+import React, { useMemo } from 'react'
+import { useListInfo } from '@payloadcms/ui'
 import { getPreviewUrl } from '../utils/preview'
 
 interface PreviewButtonCellProps {
   rowData: any
-  collection: string
+  cellData?: any
 }
 
 /**
  * Preview Button Cell Component
- * 
+ *
  * Renders a preview button in table rows that opens the preview in a new tab.
  * Used across all collections (pages, posts, custom items, etc.)
  */
-const PreviewButtonCell: React.FC<PreviewButtonCellProps> = ({ rowData, collection }) => {
+const PreviewButtonCell: React.FC<PreviewButtonCellProps> = ({ rowData, cellData }) => {
+  const { collection } = useListInfo()
+
   if (!rowData?.slug) {
     return (
       <span style={{ color: '#999', fontSize: '13px' }}>
@@ -25,7 +28,7 @@ const PreviewButtonCell: React.FC<PreviewButtonCellProps> = ({ rowData, collecti
 
   // Handle custom items with content type
   let previewSlug = rowData.slug
-  if (collection === 'custom-items' && rowData.contentType) {
+  if (collection?.slug === 'custom-items' && rowData.contentType) {
     const contentType = rowData.contentType
     const typeSlug = typeof contentType === 'object' && contentType.archiveSlug
       ? contentType.archiveSlug.replace(/^\/?items\//, '')
@@ -35,7 +38,10 @@ const PreviewButtonCell: React.FC<PreviewButtonCellProps> = ({ rowData, collecti
     previewSlug = `${typeSlug}/${rowData.slug}`
   }
 
-  const previewUrl = getPreviewUrl({ collection, slug: previewSlug })
+  const previewUrl = useMemo(() =>
+    getPreviewUrl({ collection: collection?.slug || '', slug: previewSlug }),
+    [collection?.slug, previewSlug]
+  )
 
   const handlePreview = (e: React.MouseEvent) => {
     e.preventDefault()
