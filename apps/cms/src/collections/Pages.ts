@@ -205,14 +205,8 @@ export const Pages: CollectionConfig = {
             },
           ],
         },
-        {
-          label: 'SEO',
-          description: 'Search engine optimization settings',
-          fields: [
-            // SEO plugin will inject fields here automatically
-            // Fields include: title, description, image, noindex, canonical
-          ],
-        },
+        // SEO tab is automatically added by @payloadcms/plugin-seo
+        // Do not define it manually when using tabbedUI: true
       ],
     },
     {

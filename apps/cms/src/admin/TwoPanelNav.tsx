@@ -658,11 +658,12 @@ export const TwoPanelNav: React.FC = () => {
               {/* Build menu with custom links inserted at specified positions */}
               {(() => {
                 const menuItems: React.ReactNode[] = []
+                let customLinkCounter = 0
 
-                // Helper to render custom link
-                const renderCustomLink = (link: typeof customLinks[0], index: number) => (
+                // Helper to render custom link with unique key
+                const renderCustomLink = (link: typeof customLinks[0], uniqueId: string) => (
                   <Link
-                    key={`custom-${index}`}
+                    key={uniqueId}
                     href={link.url}
                     className={`ra-top-nav__link ${pathname === link.url ? 'ra-top-nav__link--active' : ''}`}
                   >
@@ -683,7 +684,7 @@ export const TwoPanelNav: React.FC = () => {
 
                   return (
                     <Link
-                      key={section.id}
+                      key={`section-${section.id}`}
                       href={sectionHref}
                       className={`ra-top-nav__link ${activeSection === section.id ? 'ra-top-nav__link--active' : ''}`}
                     >
@@ -696,7 +697,7 @@ export const TwoPanelNav: React.FC = () => {
                 customLinks.forEach((link, index) => {
                   const position = link.insertPosition || link.position
                   if (position === 'before-dashboard' || position === 'start') {
-                    menuItems.push(renderCustomLink(link, index))
+                    menuItems.push(renderCustomLink(link, `custom-before-${customLinkCounter++}`))
                   }
                 })
 
@@ -708,7 +709,7 @@ export const TwoPanelNav: React.FC = () => {
                   customLinks.forEach((link, index) => {
                     const position = link.insertPosition || (link.position === 'end' ? 'after-admin' : '')
                     if (position === `after-${section.id}`) {
-                      menuItems.push(renderCustomLink(link, index))
+                      menuItems.push(renderCustomLink(link, `custom-after-${section.id}-${customLinkCounter++}`))
                     }
                   })
                 })
