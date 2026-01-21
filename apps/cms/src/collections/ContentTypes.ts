@@ -17,14 +17,14 @@ import { isCollectionEnabled } from '../lib/collectionVisibility'
 export const ContentTypes: CollectionConfig = {
   slug: 'content-types',
   labels: {
-    singular: 'Content Type',
-    plural: 'Content Types',
+    singular: 'Custom Collection',
+    plural: 'Custom Collections',
   },
   admin: {
-    group: 'Settings',
+    group: 'Collections',
     useAsTitle: 'name',
     defaultColumns: ['name', 'slug', 'template', 'itemCount', 'updatedAt'],
-    description: 'Define custom content types like "Classic Cars", "Recipes", or "Products"',
+    description: 'Define custom collections like "Services", "FAQs", or "Galleries"',
   },
   access: {
     read: async ({ req }) => (await isCollectionEnabled(req.payload, 'content-types')),

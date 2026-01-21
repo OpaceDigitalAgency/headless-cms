@@ -119,8 +119,225 @@ export const getContentTypesEndpoint: Endpoint = {
       docs: contentTypes.docs.map((doc: any) => ({
         id: doc.id,
         slug: doc.slug,
+        name: doc.name,
+        singularLabel: doc.singularLabel,
+        pluralLabel: doc.pluralLabel,
+        template: doc.template,
+        icon: doc.icon,
+        description: doc.description,
+        hasArchive: doc.hasArchive,
+        archiveSlug: doc.archiveSlug,
+        customFields: Array.isArray(doc.customFields) ? doc.customFields : [],
       })),
     })
+  },
+}
+
+const slugify = (value: string) =>
+  value
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/(^-|-$)/g, '')
+
+/**
+ * Create a custom collection (content type) from a base template or existing type.
+ */
+export const createCustomCollectionEndpoint: Endpoint = {
+  path: '/collection-templates/create-custom',
+  method: 'post',
+  handler: async (req) => {
+    const { payload, user } = req
+
+    if (!user) {
+      return Response.json(
+        { success: false, message: 'Authentication required' },
+        { status: 401 }
+      )
+    }
+
+    if (user.role !== 'admin') {
+      return Response.json(
+        { success: false, message: 'Admin access required' },
+        { status: 403 }
+      )
+    }
+
+    try {
+      const body = await req.json?.() || {}
+      const {
+        name,
+        slug,
+        singularLabel,
+        pluralLabel,
+        templateId,
+        baseTemplate,
+        sourceContentTypeId,
+        icon,
+        description,
+        hasArchive,
+        archiveSlug,
+      } = body
+
+      let resolvedName = typeof name === 'string' ? name.trim() : ''
+      let resolvedSlug = typeof slug === 'string' ? slug.trim() : ''
+      let resolvedTemplate = typeof baseTemplate === 'string' ? baseTemplate : ''
+      let resolvedIcon = typeof icon === 'string' ? icon : ''
+      let resolvedDescription = typeof description === 'string' ? description : ''
+      let resolvedHasArchive = typeof hasArchive === 'boolean' ? hasArchive : undefined
+      let resolvedArchiveSlug = typeof archiveSlug === 'string' ? archiveSlug.trim() : ''
+      let resolvedCustomFields: any[] = []
+
+      if (sourceContentTypeId) {
+        const source = await payload.findByID({
+          collection: 'content-types',
+          id: sourceContentTypeId,
+          depth: 0,
+          overrideAccess: true,
+        })
+
+        resolvedTemplate = resolvedTemplate || source?.template
+        resolvedIcon = resolvedIcon || source?.icon
+        resolvedDescription = resolvedDescription || source?.description
+        resolvedHasArchive = typeof resolvedHasArchive === 'boolean' ? resolvedHasArchive : source?.hasArchive
+        resolvedArchiveSlug = resolvedArchiveSlug || source?.archiveSlug
+        resolvedCustomFields = Array.isArray(source?.customFields) ? source.customFields : []
+
+        if (!resolvedName) {
+          resolvedName = `${source?.name || 'Custom Collection'} Copy`
+        }
+      } else if (templateId) {
+        const template = getTemplateById(templateId)
+        if (!template || !template.contentTypeTemplate) {
+          return Response.json(
+            { success: false, message: `Template not found or not a content type: ${templateId}` },
+            { status: 404 }
+          )
+        }
+
+        resolvedTemplate = resolvedTemplate || template.contentTypeTemplate.template
+        resolvedIcon = resolvedIcon || template.contentTypeTemplate.icon || 'box'
+        resolvedDescription = resolvedDescription || template.description || ''
+        resolvedHasArchive =
+          typeof resolvedHasArchive === 'boolean'
+            ? resolvedHasArchive
+            : template.contentTypeTemplate.hasArchive ?? true
+        resolvedArchiveSlug =
+          resolvedArchiveSlug ||
+          template.contentTypeTemplate.archiveSlug ||
+          (resolvedSlug ? `items/${resolvedSlug}` : '')
+        resolvedCustomFields = Array.isArray(template.contentTypeTemplate.customFields)
+          ? template.contentTypeTemplate.customFields
+          : []
+
+        if (!resolvedName) {
+          resolvedName = template.defaultPlural || template.name
+        }
+      }
+
+      if (!resolvedTemplate) {
+        if (typeof baseTemplate !== 'string' || !baseTemplate.trim()) {
+          return Response.json(
+            { success: false, message: 'Missing required field: baseTemplate' },
+            { status: 400 }
+          )
+        }
+        resolvedTemplate = baseTemplate.trim()
+      }
+
+      if (!resolvedName) {
+        return Response.json(
+          { success: false, message: 'Missing required field: name' },
+          { status: 400 }
+        )
+      }
+
+      if (!resolvedSlug) {
+        resolvedSlug = slugify(resolvedName)
+      } else {
+        resolvedSlug = slugify(resolvedSlug)
+      }
+
+      if (!resolvedSlug) {
+        return Response.json(
+          { success: false, message: 'Invalid slug' },
+          { status: 400 }
+        )
+      }
+
+      const resolvedSingular =
+        typeof singularLabel === 'string' && singularLabel.trim()
+          ? singularLabel.trim()
+          : resolvedName.replace(/s$/, '')
+      const resolvedPlural =
+        typeof pluralLabel === 'string' && pluralLabel.trim()
+          ? pluralLabel.trim()
+          : resolvedName
+
+      if (typeof resolvedHasArchive !== 'boolean') {
+        resolvedHasArchive = true
+      }
+
+      if (resolvedHasArchive && !resolvedArchiveSlug) {
+        resolvedArchiveSlug = `items/${resolvedSlug}`
+      }
+
+      const created = await payload.create({
+        collection: 'content-types',
+        data: {
+          name: resolvedName,
+          slug: resolvedSlug,
+          singularLabel: resolvedSingular,
+          pluralLabel: resolvedPlural,
+          icon: resolvedIcon || 'box',
+          template: resolvedTemplate,
+          description: resolvedDescription || undefined,
+          hasArchive: resolvedHasArchive,
+          archiveSlug: resolvedHasArchive ? resolvedArchiveSlug : undefined,
+          customFields: resolvedCustomFields,
+        },
+        overrideAccess: true,
+      })
+
+      const navigationSettings = await payload.findGlobal({ slug: 'navigation-settings', depth: 0 }).catch(() => null)
+      const currentCollections = Array.isArray(navigationSettings?.collections)
+        ? navigationSettings.collections
+        : []
+
+      const ensureEnabled = (slugToEnable: string) => {
+        const existingIndex = currentCollections.findIndex((item: any) => item?.slug === slugToEnable)
+        if (existingIndex >= 0) {
+          currentCollections[existingIndex] = {
+            ...currentCollections[existingIndex],
+            enabled: true,
+            uninstalled: false,
+          }
+        } else {
+          currentCollections.push({ slug: slugToEnable, enabled: true })
+        }
+      }
+
+      ensureEnabled('content-types')
+      ensureEnabled('custom-items')
+
+      await payload.updateGlobal({
+        slug: 'navigation-settings',
+        data: { collections: currentCollections },
+      })
+
+      return Response.json({
+        success: true,
+        message: `Custom collection "${created.name}" created`,
+        doc: created,
+      })
+    } catch (error) {
+      payload.logger.error('Create custom collection failed:', error)
+      const errorMessage = error instanceof Error ? error.message : String(error)
+      return Response.json(
+        { success: false, message: `Operation failed: ${errorMessage}` },
+        { status: 500 }
+      )
+    }
   },
 }
 
@@ -575,6 +792,7 @@ export const collectionTemplateEndpoints: Endpoint[] = [
   getTemplatesEndpoint,
   getInstalledEndpoint,
   getContentTypesEndpoint,
+  createCustomCollectionEndpoint,
   addTemplateEndpoint,
   addBundleEndpoint,
   uninstallCollectionEndpoint,

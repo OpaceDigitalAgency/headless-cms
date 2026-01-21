@@ -7,6 +7,8 @@ interface SeedItemsListProps {
   onSeedAll?: () => void
   isSeeding?: boolean
   seedingItems?: Set<string>
+  expanded?: boolean
+  onExpandedChange?: (expanded: boolean) => void
 }
 
 /**
@@ -14,6 +16,7 @@ interface SeedItemsListProps {
  *
  * Displays individual seed items with individual seed buttons and a "Seed All" option.
  * Clean, scannable list with meaningful descriptions for each item.
+ * Can be controlled externally via expanded and onExpandedChange props.
  */
 export const SeedItemsList: React.FC<SeedItemsListProps> = ({
   template,
@@ -21,46 +24,66 @@ export const SeedItemsList: React.FC<SeedItemsListProps> = ({
   onSeedAll,
   isSeeding = false,
   seedingItems = new Set(),
+  expanded: controlledExpanded,
+  onExpandedChange,
 }) => {
-  const [expanded, setExpanded] = useState(false)
+  const [internalExpanded, setInternalExpanded] = useState(false)
+  const isControlled = controlledExpanded !== undefined
+  const expanded = isControlled ? controlledExpanded : internalExpanded
+
+  const handleToggle = (newState: boolean) => {
+    if (isControlled) {
+      onExpandedChange?.(newState)
+    } else {
+      setInternalExpanded(newState)
+    }
+  }
+
   const seedItems = template.seedItems || []
 
   if (!seedItems || seedItems.length === 0) {
     return null
   }
 
+  // Only show the toggle button if not controlled externally
+  if (isControlled && !expanded) {
+    return null
+  }
+
   return (
     <div style={{ marginBottom: '12px' }}>
-      <button
-        onClick={() => setExpanded(!expanded)}
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: '8px',
-          width: '100%',
-          padding: '8px 0',
-          background: 'none',
-          border: 'none',
-          cursor: 'pointer',
-          fontSize: '12px',
-          fontWeight: 500,
-          color: 'var(--theme-elevation-600)',
-          textAlign: 'left',
-        }}
-      >
-        <span style={{
-          display: 'inline-flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          width: '16px',
-          height: '16px',
-          transition: 'transform 0.2s ease',
-          transform: expanded ? 'rotate(90deg)' : 'rotate(0deg)',
-        }}>
-          ▶
-        </span>
-        <span>Sample items ({seedItems.length})</span>
-      </button>
+      {!isControlled && (
+        <button
+          onClick={() => handleToggle(!expanded)}
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px',
+            width: '100%',
+            padding: '8px 0',
+            background: 'none',
+            border: 'none',
+            cursor: 'pointer',
+            fontSize: '12px',
+            fontWeight: 500,
+            color: 'var(--theme-elevation-600)',
+            textAlign: 'left',
+          }}
+        >
+          <span style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            width: '16px',
+            height: '16px',
+            transition: 'transform 0.2s ease',
+            transform: expanded ? 'rotate(90deg)' : 'rotate(0deg)',
+          }}>
+            ▶
+          </span>
+          <span>Sample items ({seedItems.length})</span>
+        </button>
+      )}
 
       {expanded && (
         <div style={{

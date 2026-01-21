@@ -957,7 +957,7 @@ export interface Page {
   _status?: ('draft' | 'published') | null;
 }
 /**
- * Define custom content types like "Classic Cars", "Recipes", or "Products"
+ * Define custom collections like "Services", "FAQs", or "Galleries"
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "content-types".

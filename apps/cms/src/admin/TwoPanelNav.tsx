@@ -232,21 +232,23 @@ const getIcon = (name: string, size = 20) => {
 function resolveActiveSection(pathname: string, navSections: NavSection[]): string | null {
   for (const section of navSections) {
     for (const item of section.items) {
+      const itemHref = item.href?.split('?')[0] || item.href
       // Check direct item
-      if (item.href === '/admin' && pathname === '/admin') {
+      if (itemHref === '/admin' && pathname === '/admin') {
         return section.id
       }
-      if (item.href && item.href !== '/admin' && pathname.startsWith(item.href)) {
+      if (itemHref && itemHref !== '/admin' && pathname.startsWith(itemHref)) {
         return section.id
       }
 
       // Check nested items
       if (item.items) {
         for (const nestedItem of item.items) {
-          if (nestedItem.href === '/admin' && pathname === '/admin') {
+          const nestedHref = nestedItem.href?.split('?')[0] || nestedItem.href
+          if (nestedHref === '/admin' && pathname === '/admin') {
             return section.id
           }
-          if (nestedItem.href && nestedItem.href !== '/admin' && pathname.startsWith(nestedItem.href)) {
+          if (nestedHref && nestedHref !== '/admin' && pathname.startsWith(nestedHref)) {
             return section.id
           }
         }
@@ -262,21 +264,23 @@ function resolveActiveSection(pathname: string, navSections: NavSection[]): stri
 function resolveActiveItem(pathname: string, navSections: NavSection[]): string | null {
   for (const section of navSections) {
     for (const item of section.items) {
+      const itemHref = item.href?.split('?')[0] || item.href
       // Check direct item
-      if (item.href === '/admin' && pathname === '/admin') {
+      if (itemHref === '/admin' && pathname === '/admin') {
         return item.href
       }
-      if (item.href && item.href !== '/admin' && pathname.startsWith(item.href)) {
+      if (itemHref && itemHref !== '/admin' && pathname.startsWith(itemHref)) {
         return item.href
       }
 
       // Check nested items
       if (item.items) {
         for (const nestedItem of item.items) {
-          if (nestedItem.href === '/admin' && pathname === '/admin') {
+          const nestedHref = nestedItem.href?.split('?')[0] || nestedItem.href
+          if (nestedHref === '/admin' && pathname === '/admin') {
             return nestedItem.href
           }
-          if (nestedItem.href && nestedItem.href !== '/admin' && pathname.startsWith(nestedItem.href)) {
+          if (nestedHref && nestedHref !== '/admin' && pathname.startsWith(nestedHref)) {
             return nestedItem.href
           }
         }

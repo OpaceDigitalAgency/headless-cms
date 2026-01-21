@@ -40,6 +40,7 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
   const [reinstalling, setReinstalling] = useState<string | null>(null)
   const [contentTypes, setContentTypes] = useState<Array<{ id: string; slug: string }>>([])
   const [enabling, setEnabling] = useState<string | null>(null)
+  const [expandedSeedList, setExpandedSeedList] = useState<string | null>(null)
 
   useEffect(() => {
     fetchInstalledCollections()
@@ -734,15 +735,17 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
                 onSeedAll={() => handleSeedAllItems(template.defaultSlug)}
                 isSeeding={isSeedingThis}
                 seedingItems={seedingItems}
+                expanded={expandedSeedList === template.defaultSlug}
+                onExpandedChange={(expanded) => setExpandedSeedList(expanded ? template.defaultSlug : null)}
               />
             )}
           </div>
         )}
 
         <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-          {template.hasSeedData && (
+          {template.hasSeedData && !isSeeded && (
             <button
-              onClick={() => handleSeedData(template.defaultSlug)}
+              onClick={() => setExpandedSeedList(expandedSeedList === template.defaultSlug ? null : template.defaultSlug)}
               disabled={isSeedingThis || isUninstalled}
               style={{
                 padding: '8px 14px',
@@ -756,7 +759,7 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
                 opacity: isSeedingThis || isUninstalled ? 0.6 : 1,
               }}
             >
-              {isSeedingThis ? 'Seeding...' : isUninstalled ? 'Reinstall to Seed' : 'Seed Data'}
+              {isSeedingThis ? 'Seeding...' : isUninstalled ? 'Reinstall to Seed' : `Seed sample ${template.defaultPlural?.toLowerCase() || 'items'}`}
             </button>
           )}
 
