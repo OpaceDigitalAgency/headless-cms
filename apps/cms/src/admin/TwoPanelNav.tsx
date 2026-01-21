@@ -563,9 +563,16 @@ export const TwoPanelNav: React.FC = () => {
   )
   const [customLinks, setCustomLinks] = useState<Array<{ label: string; url: string; insertPosition?: string; position?: 'start' | 'end' }>>(() => cachedNavData?.customLinks || [])
   const [isLoading, setIsLoading] = useState(!cachedNavData)
+  const [isMounted, setIsMounted] = useState(false)
 
-  const activeSection = resolveActiveSection(pathname, navSections)
-  const activeItem = resolveActiveItem(pathname, navSections, currentHref)
+  // Only calculate active section/item after mount to avoid hydration mismatch
+  const activeSection = isMounted ? resolveActiveSection(pathname, navSections) : null
+  const activeItem = isMounted ? resolveActiveItem(pathname, navSections, currentHref) : null
+
+  // Set mounted state to avoid hydration mismatch
+  useEffect(() => {
+    setIsMounted(true)
+  }, [])
 
   // Fetch dynamic navigation on mount with caching
   useEffect(() => {

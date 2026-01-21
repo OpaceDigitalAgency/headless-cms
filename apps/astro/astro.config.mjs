@@ -44,9 +44,11 @@ export default defineConfig({
     optimizeDeps: {
       exclude: ['@payloadcms/db-postgres'],
     },
-    // SSR configuration for Payload
+    define: {
+      __dirname: JSON.stringify(process.cwd()),
+    },
     ssr: {
-      noExternal: ['payload'],
+      external: ['payload', '@opentelemetry/api'],
     },
   },
   
