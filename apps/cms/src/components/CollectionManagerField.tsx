@@ -20,6 +20,7 @@ interface CollectionSetting {
   enabled: boolean
   section: SectionId
   label?: string
+  uninstalled?: boolean
 }
 
 interface NavigationItem extends CollectionSetting {
@@ -90,6 +91,7 @@ const normalizeSettings = (
         enabled: savedItem?.enabled ?? defaultEnabled,
         section: managerType === 'globals' ? 'settings' : savedItem?.section || collection?.defaultSection || fallbackSection,
         label: savedItem?.label || '',
+        uninstalled: savedItem?.uninstalled,
       }
     })
 }
@@ -245,6 +247,7 @@ export const CollectionManagerField: React.FC<CollectionManagerFieldProps> = ({ 
       enabled: item.enabled,
       section: item.section,
       label: item.label,
+      uninstalled: item.uninstalled,
     })
 
     if (isCombined) {
@@ -453,7 +456,10 @@ export const CollectionManagerField: React.FC<CollectionManagerFieldProps> = ({ 
                   <input
                     type="checkbox"
                     checked={Boolean(item.enabled)}
-                    onChange={(event) => updateItem(index, { enabled: event.target.checked })}
+                    onChange={(event) => {
+                      const nextEnabled = event.target.checked
+                      updateItem(index, { enabled: nextEnabled, uninstalled: nextEnabled ? false : item.uninstalled })
+                    }}
                   />
                   <span>{displayLabel}</span>
                 </label>

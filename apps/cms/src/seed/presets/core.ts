@@ -76,6 +76,17 @@ export class CoreSeeder extends BaseSeeder {
         await this.seedPeople(places)
         return
       }
+      case 'events': {
+        const places = await this.seedPlaces()
+        await this.seedEvents(places)
+        return
+      }
+      case 'archive-items': {
+        const places = await this.seedPlaces()
+        const people = await this.seedPeople(places)
+        await this.seedArchiveItems(people, places)
+        return
+      }
       case 'posts': {
         const categories = await this.seedCategories()
         await this.seedPosts(categories)
@@ -291,6 +302,9 @@ export class CoreSeeder extends BaseSeeder {
     const places: Record<string, string> = {}
     
     for (const data of placesData.slice(0, this.getItemCount('places', 5))) {
+      if (!this.shouldSeedItem(data.slug)) {
+        continue
+      }
       const place = await this.create('places', {
         name: data.name,
         slug: data.slug,
@@ -627,6 +641,9 @@ export class CoreSeeder extends BaseSeeder {
     const people: Record<string, string> = {}
     
     for (const data of peopleData.slice(0, this.getItemCount('people', 5))) {
+      if (!this.shouldSeedItem(data.slug)) {
+        continue
+      }
       const person = await this.create('people', {
         name: data.name,
         slug: data.slug,
@@ -1107,6 +1124,9 @@ export class CoreSeeder extends BaseSeeder {
     ]
 
     for (const event of eventsData.slice(0, this.getItemCount('events', 5))) {
+      if (!this.shouldSeedItem(event.slug)) {
+        continue
+      }
       await this.create('events', {
         title: event.title,
         slug: event.slug,
@@ -1311,9 +1331,173 @@ export class CoreSeeder extends BaseSeeder {
           },
         ],
       },
+      {
+        title: 'Egyptian Funerary Mask',
+        slug: 'egyptian-funerary-mask',
+        excerpt: 'Gilded funerary mask from an Egyptian burial chamber.',
+        richContent: createRichTextParagraphs([
+          'A ceremonial mask crafted to honor the passage into the afterlife.',
+          'Intricate inlay and pigment traces offer clues about workshop techniques.',
+        ]),
+        dateCreated: 'circa 1100 BCE',
+        dateAcquired: new Date(Date.now() - 680 * 24 * 60 * 60 * 1000).toISOString(),
+        provenance: createRichText('Recovered during a documented excavation in 1952.'),
+        catalogNumber: 'ARC-1100-EGY',
+        origins: [places['cairo-egypt']].filter(Boolean),
+        specifications: {
+          height: '38 cm',
+          width: '24 cm',
+          materials: 'Gold leaf, wood, pigment',
+          condition: 'Good',
+        },
+        template: 'detail',
+        contentBlocks: [
+          {
+            blockType: 'features',
+            heading: 'Mask Details',
+            layout: 'grid',
+            items: [
+              { title: 'Craftsmanship', description: 'Layered gilding with carved detailing.' },
+              { title: 'Symbolism', description: 'Protective motifs and dynastic markings.' },
+              { title: 'Preservation', description: 'Stable despite minor pigment loss.' },
+            ],
+          },
+        ],
+      },
+      {
+        title: 'Byzantine Mosaic Panel',
+        slug: 'byzantine-mosaic-panel',
+        excerpt: 'Mosaic panel depicting a ceremonial procession.',
+        richContent: createRichTextParagraphs([
+          'A fragment from a larger architectural mosaic cycle.',
+          'Glass tesserae and gold leaf create vibrant depth and texture.',
+        ]),
+        dateCreated: 'circa 950',
+        dateAcquired: new Date(Date.now() - 940 * 24 * 60 * 60 * 1000).toISOString(),
+        provenance: createRichText('Transferred from a private monastery collection.'),
+        catalogNumber: 'ARC-0950-BYZ',
+        origins: [places['rome-italy']].filter(Boolean),
+        specifications: {
+          height: '52 cm',
+          width: '40 cm',
+          materials: 'Glass tesserae, stone, gold leaf',
+          condition: 'Very good',
+        },
+        template: 'detail',
+        contentBlocks: [
+          {
+            blockType: 'stats',
+            heading: 'Panel Summary',
+            stats: [
+              { value: '2', label: 'Restoration Passes' },
+              { value: '18k', label: 'Tesserae' },
+              { value: '1', label: 'Fragment' },
+            ],
+          },
+        ],
+      },
+      {
+        title: 'Islamic Astronomical Chart',
+        slug: 'islamic-astronomical-chart',
+        excerpt: 'Hand-inked star chart from a medieval observatory.',
+        richContent: createRichTextParagraphs([
+          'Annotated chart mapping constellations and seasonal movements.',
+          'Marginal notes reflect early mathematical instruments and calculations.',
+        ]),
+        dateCreated: 'circa 1420',
+        dateAcquired: new Date(Date.now() - 510 * 24 * 60 * 60 * 1000).toISOString(),
+        provenance: createRichText('Acquired through a scholarly exchange in 2004.'),
+        catalogNumber: 'ARC-1420-AST',
+        origins: [places['cairo-egypt']].filter(Boolean),
+        specifications: {
+          height: '42 cm',
+          width: '32 cm',
+          materials: 'Ink on parchment',
+          condition: 'Excellent',
+        },
+        template: 'detail',
+        contentBlocks: [
+          {
+            blockType: 'grid',
+            heading: 'Chart Features',
+            style: 'cards',
+            columns: '3',
+            items: [
+              { title: 'Constellations', description: 'Named star groupings with annotations.' },
+              { title: 'Instruments', description: 'Referenced astrolabe markings.' },
+              { title: 'Margins', description: 'Notes on seasonal observations.' },
+            ],
+          },
+        ],
+      },
+      {
+        title: 'Japanese Woodblock Prints',
+        slug: 'japanese-woodblock-prints',
+        excerpt: 'Series of Edo-period woodblock prints.',
+        richContent: createRichTextParagraphs([
+          'A curated set of ukiyo-e prints depicting landscapes and daily life.',
+          'Color layering showcases masterful printmaking techniques.',
+        ]),
+        dateCreated: 'circa 1780',
+        dateAcquired: new Date(Date.now() - 460 * 24 * 60 * 60 * 1000).toISOString(),
+        provenance: createRichText('Donated by the Nakamura Collection in 1996.'),
+        catalogNumber: 'ARC-1780-JPN',
+        origins: [places['paris-france']].filter(Boolean),
+        specifications: {
+          height: '30 cm',
+          width: '22 cm',
+          materials: 'Ink on paper',
+          condition: 'Good',
+        },
+        template: 'gallery',
+        contentBlocks: [
+          {
+            blockType: 'features',
+            heading: 'Print Highlights',
+            layout: 'list',
+            items: [
+              { title: 'Landscape', description: 'Seasonal scenes with atmospheric color.' },
+              { title: 'Portraiture', description: 'Depictions of theater and city life.' },
+              { title: 'Technique', description: 'Multiple blocks for layered pigment.' },
+            ],
+          },
+        ],
+      },
+      {
+        title: 'Aztec Ceremonial Knife',
+        slug: 'aztec-ceremonial-knife',
+        excerpt: 'Obsidian-bladed ceremonial knife with carved handle.',
+        richContent: createRichTextParagraphs([
+          'Ritual knife featuring intricate carving and symbolic motifs.',
+          'Obsidian edge remains remarkably sharp.',
+        ]),
+        dateCreated: 'circa 1480',
+        dateAcquired: new Date(Date.now() - 370 * 24 * 60 * 60 * 1000).toISOString(),
+        provenance: createRichText('Catalogued during a museum exchange in 1981.'),
+        catalogNumber: 'ARC-1480-AZT',
+        origins: [places['athens-greece']].filter(Boolean),
+        specifications: {
+          height: '24 cm',
+          width: '6 cm',
+          materials: 'Obsidian, carved wood',
+          condition: 'Good',
+        },
+        template: 'detail',
+        contentBlocks: [
+          {
+            blockType: 'quote',
+            quote: 'Ceremonial tools carried both practical and symbolic meaning.',
+            author: 'Archive Curator',
+            align: 'left',
+          },
+        ],
+      },
     ]
 
-    for (const item of archiveItemsData.slice(0, this.getItemCount('archive-items', 5))) {
+    for (const item of archiveItemsData.slice(0, this.getItemCount('archive-items', 10))) {
+      if (!this.shouldSeedItem(item.slug)) {
+        continue
+      }
       await this.create('archive-items', {
         title: item.title,
         slug: item.slug,

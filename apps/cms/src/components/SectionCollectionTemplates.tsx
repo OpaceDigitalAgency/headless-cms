@@ -45,6 +45,7 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null)
   const [seeding, setSeeding] = useState<string | null>(null)
   const [seedingItems, setSeedingItems] = useState<Set<string>>(new Set())
+  const [seededItemsByCollection, setSeededItemsByCollection] = useState<Record<string, Set<string>>>({})
   const [installedSlugs, setInstalledSlugs] = useState<string[]>([])
   const [visibilitySettings, setVisibilitySettings] = useState<Record<string, boolean>>({})
   const [toggling, setToggling] = useState<string | null>(null)
@@ -81,6 +82,94 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
       setCustomCollectionCounts({})
     }
   }, [contentTypes])
+
+  const invalidateNavCache = () => {
+    try {
+      const channel = new BroadcastChannel('nav-cache-invalidate')
+      channel.postMessage({ type: 'invalidate' })
+      channel.close()
+    } catch (error) {
+      sessionStorage.removeItem('nav-data')
+      sessionStorage.removeItem('nav-cache-time')
+    }
+  }
+
+  const getSeedItemSlugs = (template: CollectionTemplate) =>
+    (template.seedItems || []).map((item) => item.slug).filter(Boolean)
+
+  const updateSeededItemsForKey = (key: string, slugs: string[]) => {
+    setSeededItemsByCollection((prev) => ({
+      ...prev,
+      [key]: new Set(slugs),
+    }))
+  }
+
+  const markSeededItemForKey = (key: string, slug: string) => {
+    setSeededItemsByCollection((prev) => {
+      const next = new Set(prev[key] || [])
+      next.add(slug)
+      return {
+        ...prev,
+        [key]: next,
+      }
+    })
+  }
+
+  const clearSeededItemsForKey = (key: string) => {
+    setSeededItemsByCollection((prev) => ({
+      ...prev,
+      [key]: new Set(),
+    }))
+  }
+
+  const fetchSeededItemsForKey = async (
+    key: string,
+    template: CollectionTemplate,
+    options?: { contentTypeId?: string; collectionSlug?: string }
+  ) => {
+    const seedItemSlugs = getSeedItemSlugs(template)
+    if (!seedItemSlugs.length) return
+
+    const collectionSlug = options?.collectionSlug || template.defaultSlug
+    const contentTypeId = options?.contentTypeId
+    const seeded = new Set<string>()
+
+    await Promise.all(
+      seedItemSlugs.map(async (slug) => {
+        try {
+          const params = new URLSearchParams()
+          params.set('where[slug][equals]', slug)
+          params.set('limit', '1')
+          params.set('depth', '0')
+          if (contentTypeId) {
+            params.set('where[contentType][equals]', contentTypeId)
+          }
+          const response = await fetch(`/api/${collectionSlug}?${params.toString()}`)
+          if (!response.ok) return
+          const data = await response.json()
+          if (data?.totalDocs > 0) {
+            seeded.add(slug)
+          }
+        } catch (error) {
+          console.error('Failed to check seeded item:', error)
+        }
+      })
+    )
+
+    updateSeededItemsForKey(key, Array.from(seeded))
+  }
+
+  const toggleSeedList = (
+    key: string,
+    template: CollectionTemplate,
+    options?: { contentTypeId?: string; collectionSlug?: string }
+  ) => {
+    const next = expandedSeedList === key ? null : key
+    setExpandedSeedList(next)
+    if (next) {
+      void fetchSeededItemsForKey(key, template, options)
+    }
+  }
 
   const fetchInstalledCollections = async () => {
     try {
@@ -303,15 +392,7 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
         fetchContentTypes()
         fetchInstalledCollections()
         fetchSeedStatus()
-
-        try {
-          const channel = new BroadcastChannel('nav-cache-invalidate')
-          channel.postMessage({ type: 'invalidate' })
-          channel.close()
-        } catch {
-          sessionStorage.removeItem('nav-data')
-          sessionStorage.removeItem('nav-cache-time')
-        }
+        invalidateNavCache()
       } else {
         throw new Error(data.message || 'Failed to create custom collection')
       }
@@ -342,6 +423,7 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
 
       // Find or create the collection setting
       const existingIndex = currentCollections.findIndex((c: any) => c.slug === slug)
+      const nextEnabled = !currentlyVisible
 
       let updatedCollections
       if (existingIndex >= 0) {
@@ -349,7 +431,8 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
         updatedCollections = [...currentCollections]
         updatedCollections[existingIndex] = {
           ...updatedCollections[existingIndex],
-          enabled: !currentlyVisible,
+          enabled: nextEnabled,
+          uninstalled: nextEnabled ? false : updatedCollections[existingIndex]?.uninstalled,
         }
       } else {
         // Add new setting
@@ -357,7 +440,8 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
           ...currentCollections,
           {
             slug,
-            enabled: !currentlyVisible,
+            enabled: nextEnabled,
+            uninstalled: false,
           },
         ]
       }
@@ -381,23 +465,15 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
       // Update local state
       setVisibilitySettings((prev) => ({
         ...prev,
-        [slug]: !currentlyVisible,
+        [slug]: nextEnabled,
       }))
       setMessage({
         type: 'success',
-        text: `${slug} ${!currentlyVisible ? 'shown in' : 'hidden from'} navigation menu`,
+        text: `${slug} ${nextEnabled ? 'shown in' : 'hidden from'} navigation menu`,
       })
 
       // Broadcast cache invalidation to all tabs/windows
-      try {
-        const channel = new BroadcastChannel('nav-cache-invalidate')
-        channel.postMessage({ type: 'invalidate' })
-        channel.close()
-      } catch (error) {
-        // BroadcastChannel not supported, fallback to clearing cache
-        sessionStorage.removeItem('nav-data')
-        sessionStorage.removeItem('nav-cache-time')
-      }
+      invalidateNavCache()
     } catch (error) {
       console.error('Failed to toggle visibility:', error)
       setMessage({
@@ -476,6 +552,7 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
           type: 'success',
           text: data.message || `Successfully seeded ${itemSlug}`,
         })
+        markSeededItemForKey(collectionSlug, itemSlug)
         fetchSeedStatus()
       } else {
         throw new Error(data.message || 'Failed to seed item')
@@ -521,6 +598,10 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
         })
         fetchInstalledCollections()
         fetchSeedStatus()
+        const template = allTemplates.find((item) => item.defaultSlug === collectionSlug)
+        if (template) {
+          updateSeededItemsForKey(collectionSlug, getSeedItemSlugs(template))
+        }
       } else {
         throw new Error(data.message || 'Failed to seed all items')
       }
@@ -549,6 +630,7 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
   const handleSeedContentTypeData = async (template: CollectionTemplate, contentTypeId?: string) => {
     setSeeding(contentTypeId || template.defaultSlug)
     setMessage(null)
+    const seededKey = contentTypeId ? `custom:${contentTypeId}` : template.defaultSlug
 
     try {
       const response = await fetch('/api/seed/content-type', {
@@ -572,6 +654,7 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
         })
         fetchSeedStatus()
         fetchCustomCollectionCounts()
+        updateSeededItemsForKey(seededKey, getSeedItemSlugs(template))
       } else {
         throw new Error(data.message || 'Failed to seed content type')
       }
@@ -613,6 +696,7 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
         })
         fetchSeedStatus()
         fetchCustomCollectionCounts()
+        markSeededItemForKey(`custom:${contentTypeId}`, itemSlug)
       } else {
         throw new Error(data.message || 'Failed to seed item')
       }
@@ -634,6 +718,7 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
   const handleClearContentTypeSeedData = async (template: CollectionTemplate, contentTypeId?: string) => {
     setSeeding(contentTypeId || template.defaultSlug)
     setMessage(null)
+    const seededKey = contentTypeId ? `custom:${contentTypeId}` : template.defaultSlug
 
     try {
       const response = await fetch('/api/seed/content-type', {
@@ -657,6 +742,7 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
         })
         fetchSeedStatus()
         fetchCustomCollectionCounts()
+        clearSeededItemsForKey(seededKey)
       } else {
         throw new Error(data.message || 'Failed to clear content type seed data')
       }
@@ -696,6 +782,7 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
         })
         fetchInstalledCollections()
         fetchSeedStatus()
+        clearSeededItemsForKey(slug)
       } else {
         throw new Error(data.message || 'Failed to clear seed data')
       }
@@ -737,6 +824,7 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
         fetchInstalledCollections()
         fetchSeedStatus()
         fetchCollectionOverrides()
+        invalidateNavCache()
       } else {
         throw new Error(data.message || 'Failed to uninstall collection')
       }
@@ -774,6 +862,7 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
         fetchInstalledCollections()
         fetchSeedStatus()
         fetchCollectionOverrides()
+        invalidateNavCache()
       } else {
         throw new Error(data.message || 'Failed to reinstall collection')
       }
@@ -826,6 +915,7 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
         })
         fetchContentTypes()
         fetchCustomCollectionCounts()
+        invalidateNavCache()
       } else {
         throw new Error(data.message || 'Failed to uninstall custom collection')
       }
@@ -869,6 +959,7 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
           text: data.message || `Successfully reinstalled ${contentType.name}`,
         })
         fetchContentTypes()
+        invalidateNavCache()
       } else {
         throw new Error(data.message || 'Failed to reinstall custom collection')
       }
@@ -940,6 +1031,9 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
     const hasSeedData = template.hasSeedData && status?.hasSeedData !== false
     const seededCount = status?.count || 0
     const isSeeded = seededCount > 0
+    const seedListKey = template.defaultSlug
+    const isSeedListExpanded = expandedSeedList === seedListKey
+    const seededItems = seededItemsByCollection[seedListKey] || new Set()
 
     return (
       <div
@@ -1003,24 +1097,30 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
                   : `Sample data available (${template.seedDataCount || 0} items)`
                 : 'Seed data not configured'}
             </div>
-            {!isSeeded && (
+            {!isUninstalled && (
               <SeedItemsList
                 template={template}
                 onSeedItem={(itemSlug) => handleSeedItem(template.defaultSlug, itemSlug)}
                 onSeedAll={() => handleSeedAllItems(template.defaultSlug)}
                 isSeeding={isSeedingThis}
                 seedingItems={seedingItems}
-                expanded={expandedSeedList === template.defaultSlug}
-                onExpandedChange={(expanded) => setExpandedSeedList(expanded ? template.defaultSlug : null)}
+                disabledItems={seededItems}
+                expanded={isSeedListExpanded}
+                onExpandedChange={(expanded) => {
+                  setExpandedSeedList(expanded ? seedListKey : null)
+                  if (expanded) {
+                    void fetchSeededItemsForKey(seedListKey, template)
+                  }
+                }}
               />
             )}
           </div>
         )}
 
-        {template.hasSeedData && !isSeeded && (
+        {template.hasSeedData && (
           <div style={{ marginBottom: '12px' }}>
             <button
-              onClick={() => setExpandedSeedList(expandedSeedList === template.defaultSlug ? null : template.defaultSlug)}
+              onClick={() => toggleSeedList(seedListKey, template)}
               disabled={isSeedingThis || isUninstalled}
               style={{
                 padding: '8px 14px',
@@ -1044,7 +1144,7 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
                 width: '16px',
                 height: '16px',
                 transition: 'transform 0.2s ease',
-                transform: expandedSeedList === template.defaultSlug ? 'rotate(180deg)' : 'rotate(0deg)',
+                transform: isSeedListExpanded ? 'rotate(180deg)' : 'rotate(0deg)',
               }}>
                 ▼
               </span>
@@ -1212,6 +1312,7 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
     const isSeeded = itemCount > 0
     const seedListKey = `custom:${contentType.id}`
     const isSeedListExpanded = expandedSeedList === seedListKey
+    const seededItems = seededItemsByCollection[seedListKey] || new Set()
     const navSlug = `custom:${contentType.slug}`
     const savedState = visibilitySettings[navSlug]
     const isVisible = savedState !== undefined ? savedState : true
@@ -1285,24 +1386,33 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
                 ? `Seeded (${itemCount} items)`
                 : `Sample data available (${template.seedDataCount || 0} items)`}
             </div>
-            {!isSeeded && (
+            {!isUninstalled && (
               <SeedItemsList
                 template={template}
                 onSeedItem={(itemSlug) => handleSeedContentTypeItem(template, contentType.id, itemSlug)}
                 onSeedAll={() => handleSeedContentTypeData(template, contentType.id)}
                 isSeeding={isSeedingThis}
                 seedingItems={seedingItems}
+                disabledItems={seededItems}
                 expanded={isSeedListExpanded}
-                onExpandedChange={(expanded) => setExpandedSeedList(expanded ? seedListKey : null)}
+                onExpandedChange={(expanded) => {
+                  setExpandedSeedList(expanded ? seedListKey : null)
+                  if (expanded) {
+                    void fetchSeededItemsForKey(seedListKey, template, {
+                      contentTypeId: contentType.id,
+                      collectionSlug: 'custom-items',
+                    })
+                  }
+                }}
               />
             )}
           </div>
         )}
 
-        {hasSeedData && template && !isSeeded && (
+        {hasSeedData && template && (
           <div style={{ marginBottom: '12px' }}>
             <button
-              onClick={() => setExpandedSeedList(isSeedListExpanded ? null : seedListKey)}
+              onClick={() => toggleSeedList(seedListKey, template, { contentTypeId: contentType.id, collectionSlug: 'custom-items' })}
               disabled={isSeedingThis || isUninstalled}
               style={{
                 padding: '8px 14px',

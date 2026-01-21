@@ -7,6 +7,7 @@ interface SeedItemsListProps {
   onSeedAll?: () => void
   isSeeding?: boolean
   seedingItems?: Set<string>
+  disabledItems?: Set<string>
   expanded?: boolean
   onExpandedChange?: (expanded: boolean) => void
 }
@@ -24,6 +25,7 @@ export const SeedItemsList: React.FC<SeedItemsListProps> = ({
   onSeedAll,
   isSeeding = false,
   seedingItems = new Set(),
+  disabledItems = new Set(),
   expanded: controlledExpanded,
   onExpandedChange,
 }) => {
@@ -90,9 +92,13 @@ export const SeedItemsList: React.FC<SeedItemsListProps> = ({
           marginTop: '12px',
           paddingLeft: '24px',
           borderLeft: '2px solid var(--theme-elevation-200)',
+          maxHeight: seedItems.length > 4 ? '280px' : 'none',
+          overflowY: seedItems.length > 4 ? 'auto' : 'visible',
+          paddingRight: seedItems.length > 4 ? '8px' : '0',
         }}>
           {seedItems.map((item, index) => {
             const isSeedingThis = seedingItems.has(item.slug)
+            const isDisabled = disabledItems.has(item.slug)
             return (
               <div
                 key={`${item.slug}-${index}`}
@@ -130,22 +136,22 @@ export const SeedItemsList: React.FC<SeedItemsListProps> = ({
                   {onSeedItem && (
                     <button
                       onClick={() => onSeedItem(item.slug)}
-                      disabled={isSeeding || isSeedingThis}
+                      disabled={isSeeding || isSeedingThis || isDisabled}
                       style={{
                         padding: '4px 10px',
                         fontSize: '11px',
                         fontWeight: 500,
                         borderRadius: '4px',
                         border: 'none',
-                        background: '#3b82f6',
+                        background: isDisabled ? '#e2e8f0' : '#3b82f6',
                         color: 'white',
-                        cursor: isSeeding || isSeedingThis ? 'not-allowed' : 'pointer',
-                        opacity: isSeeding || isSeedingThis ? 0.6 : 1,
+                        cursor: isSeeding || isSeedingThis || isDisabled ? 'not-allowed' : 'pointer',
+                        opacity: isSeeding || isSeedingThis || isDisabled ? 0.6 : 1,
                         whiteSpace: 'nowrap',
                         flexShrink: 0,
                       }}
                     >
-                      {isSeedingThis ? 'Seeding...' : 'Seed'}
+                      {isSeedingThis ? 'Seeding...' : isDisabled ? 'Seeded' : 'Seed'}
                     </button>
                   )}
                 </div>
@@ -185,4 +191,3 @@ export const SeedItemsList: React.FC<SeedItemsListProps> = ({
 }
 
 export default SeedItemsList
-
