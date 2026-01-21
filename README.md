@@ -90,6 +90,17 @@ This will:
 
 **See [QUICK_START.md](QUICK_START.md) for detailed setup instructions.**
 
+### Astro Frontend (SSG via REST API)
+
+The Astro app now fetches content from the CMS REST API (no direct DB access).
+This keeps builds portable and avoids DB driver issues in build environments.
+
+Required env vars for Astro builds:
+- `PUBLIC_CMS_URL` (e.g. `http://localhost:3000`)
+- `PUBLIC_SITE_URL` (e.g. `http://localhost:4321`)
+
+If you want sitemap generation, set `ENABLE_SITEMAP=true` before building.
+
 ---
 
 ## Core Features
