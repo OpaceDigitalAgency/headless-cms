@@ -556,22 +556,29 @@ export const TwoPanelNav: React.FC = () => {
   }
 
   const cachedNavData = getCachedNavData()
-  const [navSections, setNavSections] = useState<NavSection[]>(() => cachedNavData?.navSections || [])
-  const [globalLinks, setGlobalLinks] = useState<Array<{ label: string; href: string; slug: string }>>(() => cachedNavData?.globals || [])
-  const [collectionSearchConfig, setCollectionSearchConfig] = useState<Array<{ slug: string; label: string; titleField: string }>>(
-    () => cachedNavData?.collectionSearchConfig || []
-  )
-  const [customLinks, setCustomLinks] = useState<Array<{ label: string; url: string; insertPosition?: string; position?: 'start' | 'end' }>>(() => cachedNavData?.customLinks || [])
-  const [isLoading, setIsLoading] = useState(!cachedNavData)
+  const [navSections, setNavSections] = useState<NavSection[]>([])
+  const [globalLinks, setGlobalLinks] = useState<Array<{ label: string; href: string; slug: string }>>([])
+  const [collectionSearchConfig, setCollectionSearchConfig] = useState<Array<{ slug: string; label: string; titleField: string }>>([])
+  const [customLinks, setCustomLinks] = useState<Array<{ label: string; url: string; insertPosition?: string; position?: 'start' | 'end' }>>([])
+  const [isLoading, setIsLoading] = useState(true)
   const [isMounted, setIsMounted] = useState(false)
 
   // Only calculate active section/item after mount to avoid hydration mismatch
   const activeSection = isMounted ? resolveActiveSection(pathname, navSections) : null
   const activeItem = isMounted ? resolveActiveItem(pathname, navSections, currentHref) : null
 
-  // Set mounted state to avoid hydration mismatch
+  // Set mounted state and load cached data to avoid hydration mismatch
   useEffect(() => {
     setIsMounted(true)
+
+    // Load cached data immediately after mount
+    if (cachedNavData) {
+      setNavSections(cachedNavData.navSections || [])
+      setGlobalLinks(cachedNavData.globals || [])
+      setCollectionSearchConfig(cachedNavData.collectionSearchConfig || [])
+      setCustomLinks(cachedNavData.customLinks || [])
+      setIsLoading(false)
+    }
   }, [])
 
   // Fetch dynamic navigation on mount with caching

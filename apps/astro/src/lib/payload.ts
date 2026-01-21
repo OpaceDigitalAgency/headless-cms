@@ -1,46 +1,108 @@
 /**
- * Payload Local Loader for Astro
- * 
- * This module provides access to Payload CMS data at build time using the Local API.
- * The Local API bypasses HTTP and directly accesses the database, making it ideal
- * for static site generation.
- * 
- * Usage:
- * - Import getPayloadClient() to get a configured Payload instance
- * - Use the Local API methods (find, findByID, etc.) to fetch content
- * - All data is fetched at build time for static generation
+ * Payload REST Loader for Astro (SSG)
+ *
+ * Fetches data from the CMS REST API to avoid local DB access during builds.
  */
 
-import { getPayload as getPayloadInstance, type Payload } from 'payload';
-import config from '../../../cms/src/payload.config';
+const CMS_URL =
+  process.env.PUBLIC_CMS_URL ||
+  process.env.CMS_URL ||
+  process.env.PAYLOAD_PUBLIC_SERVER_URL ||
+  'http://localhost:3000';
 
-// Cache the Payload instance
-let cachedPayload: Payload | null = null;
+type FindOptions = {
+  limit?: number;
+  depth?: number;
+  draft?: boolean;
+  sort?: string;
+  where?: Record<string, unknown>;
+};
 
-/**
- * Get a configured Payload client instance
- * Uses the Local API for direct database access
- */
-export async function getPayloadClient(): Promise<Payload> {
-  if (cachedPayload) {
-    return cachedPayload;
+function appendParams(
+  params: URLSearchParams,
+  prefix: string,
+  value: unknown
+) {
+  if (value === null || value === undefined) {
+    return;
   }
 
-  cachedPayload = await getPayloadInstance({
-    config,
-  });
+  if (Array.isArray(value)) {
+    value.forEach((entry, index) => {
+      appendParams(params, `${prefix}[${index}]`, entry);
+    });
+    return;
+  }
 
-  return cachedPayload;
+  if (typeof value === 'object') {
+    Object.entries(value).forEach(([key, entry]) => {
+      appendParams(params, `${prefix}[${key}]`, entry);
+    });
+    return;
+  }
+
+  params.append(prefix, String(value));
+}
+
+function buildQuery(options?: FindOptions) {
+  const params = new URLSearchParams();
+
+  if (!options) {
+    return params;
+  }
+
+  if (typeof options.limit === 'number') {
+    params.set('limit', String(options.limit));
+  }
+
+  if (typeof options.depth === 'number') {
+    params.set('depth', String(options.depth));
+  }
+
+  if (typeof options.draft === 'boolean') {
+    params.set('draft', String(options.draft));
+  }
+
+  if (options.sort) {
+    params.set('sort', options.sort);
+  }
+
+  if (options.where) {
+    appendParams(params, 'where', options.where);
+  }
+
+  return params;
+}
+
+async function fetchJson(path: string, params?: URLSearchParams) {
+  const url = new URL(path, CMS_URL);
+  if (params && params.toString()) {
+    url.search = params.toString();
+  }
+
+  const response = await fetch(url);
+  if (!response.ok) {
+    const text = await response.text();
+    throw new Error(`Payload API error ${response.status}: ${text}`);
+  }
+
+  return response.json();
+}
+
+async function fetchCollection(collection: string, options?: FindOptions) {
+  const params = buildQuery(options);
+  return fetchJson(`/api/${collection}`, params);
+}
+
+async function fetchGlobal(slug: string) {
+  return fetchJson(`/api/globals/${slug}`);
 }
 
 /**
  * Fetch all published pages
  */
 export async function getPages(options?: { limit?: number; draft?: boolean }) {
-  const payload = await getPayloadClient();
-  
-  return payload.find({
-    collection: 'pages',
+  return fetchCollection('pages', {
     limit: options?.limit || 100,
     draft: options?.draft || false,
     where: {
@@ -56,10 +118,7 @@ export async function getPages(options?: { limit?: number; draft?: boolean }) {
  * Fetch a single page by slug
  */
 export async function getPageBySlug(slug: string, options?: { draft?: boolean }) {
-  const payload = await getPayloadClient();
-  
-  const result = await payload.find({
-    collection: 'pages',
+  const result = await fetchCollection('pages', {
     where: {
       slug: {
         equals: slug,
@@ -78,10 +137,7 @@ export async function getPageBySlug(slug: string, options?: { draft?: boolean })
  * Fetch all published posts
  */
 export async function getPosts(options?: { limit?: number; draft?: boolean }) {
-  const payload = await getPayloadClient();
-  
-  return payload.find({
-    collection: 'posts',
+  return fetchCollection('posts', {
     limit: options?.limit || 100,
     draft: options?.draft || false,
     where: {
@@ -98,10 +154,7 @@ export async function getPosts(options?: { limit?: number; draft?: boolean }) {
  * Fetch a single post by slug
  */
 export async function getPostBySlug(slug: string, options?: { draft?: boolean }) {
-  const payload = await getPayloadClient();
-  
-  const result = await payload.find({
-    collection: 'posts',
+  const result = await fetchCollection('posts', {
     where: {
       slug: {
         equals: slug,
@@ -120,10 +173,7 @@ export async function getPostBySlug(slug: string, options?: { draft?: boolean })
  * Fetch all published archive items
  */
 export async function getArchiveItems(options?: { limit?: number; draft?: boolean }) {
-  const payload = await getPayloadClient();
-
-  return payload.find({
-    collection: 'archive-items',
+  return fetchCollection('archive-items', {
     limit: options?.limit || 100,
     draft: options?.draft || false,
     where: {
@@ -139,10 +189,7 @@ export async function getArchiveItems(options?: { limit?: number; draft?: boolea
  * Fetch a single archive item by slug
  */
 export async function getArchiveItemBySlug(slug: string, options?: { draft?: boolean }) {
-  const payload = await getPayloadClient();
-
-  const result = await payload.find({
-    collection: 'archive-items',
+  const result = await fetchCollection('archive-items', {
     where: {
       slug: {
         equals: slug,
@@ -161,10 +208,7 @@ export async function getArchiveItemBySlug(slug: string, options?: { draft?: boo
  * Fetch all published people
  */
 export async function getPeople(options?: { limit?: number; draft?: boolean }) {
-  const payload = await getPayloadClient();
-  
-  return payload.find({
-    collection: 'people',
+  return fetchCollection('people', {
     limit: options?.limit || 100,
     draft: options?.draft || false,
     where: {
@@ -180,10 +224,7 @@ export async function getPeople(options?: { limit?: number; draft?: boolean }) {
  * Fetch a single person by slug
  */
 export async function getPersonBySlug(slug: string, options?: { draft?: boolean }) {
-  const payload = await getPayloadClient();
-  
-  const result = await payload.find({
-    collection: 'people',
+  const result = await fetchCollection('people', {
     where: {
       slug: {
         equals: slug,
@@ -202,10 +243,7 @@ export async function getPersonBySlug(slug: string, options?: { draft?: boolean 
  * Fetch all content types
  */
 export async function getContentTypes() {
-  const payload = await getPayloadClient();
-
-  return payload.find({
-    collection: 'content-types',
+  return fetchCollection('content-types', {
     limit: 100,
     depth: 1,
   });
@@ -215,10 +253,7 @@ export async function getContentTypes() {
  * Fetch content type by slug
  */
 export async function getContentTypeBySlug(slug: string) {
-  const payload = await getPayloadClient();
-
-  const result = await payload.find({
-    collection: 'content-types',
+  const result = await fetchCollection('content-types', {
     where: {
       slug: {
         equals: slug,
@@ -232,11 +267,9 @@ export async function getContentTypeBySlug(slug: string) {
 }
 
 export async function getContentTypeBySlugOrArchiveSlug(slug: string) {
-  const payload = await getPayloadClient();
   const archiveSlug = slug.startsWith('items/') ? slug : `items/${slug}`;
 
-  const result = await payload.find({
-    collection: 'content-types',
+  const result = await fetchCollection('content-types', {
     where: {
       or: [
         { slug: { equals: slug } },
@@ -254,10 +287,7 @@ export async function getContentTypeBySlugOrArchiveSlug(slug: string) {
  * Fetch custom items by content type id
  */
 export async function getCustomItemsByType(contentTypeId: string, options?: { limit?: number }) {
-  const payload = await getPayloadClient();
-
-  return payload.find({
-    collection: 'custom-items',
+  return fetchCollection('custom-items', {
     limit: options?.limit || 100,
     where: {
       contentType: {
@@ -276,10 +306,7 @@ export async function getCustomItemsByType(contentTypeId: string, options?: { li
  * Fetch custom item by slug and content type id
  */
 export async function getCustomItemBySlug(slug: string, contentTypeId: string) {
-  const payload = await getPayloadClient();
-
-  const result = await payload.find({
-    collection: 'custom-items',
+  const result = await fetchCollection('custom-items', {
     where: {
       slug: {
         equals: slug,
@@ -302,10 +329,7 @@ export async function getCustomItemBySlug(slug: string, contentTypeId: string) {
  * Fetch all published places
  */
 export async function getPlaces(options?: { limit?: number; draft?: boolean }) {
-  const payload = await getPayloadClient();
-  
-  return payload.find({
-    collection: 'places',
+  return fetchCollection('places', {
     limit: options?.limit || 100,
     draft: options?.draft || false,
     where: {
@@ -321,10 +345,7 @@ export async function getPlaces(options?: { limit?: number; draft?: boolean }) {
  * Fetch a single place by slug
  */
 export async function getPlaceBySlug(slug: string, options?: { draft?: boolean }) {
-  const payload = await getPayloadClient();
-  
-  const result = await payload.find({
-    collection: 'places',
+  const result = await fetchCollection('places', {
     where: {
       slug: {
         equals: slug,
@@ -343,34 +364,28 @@ export async function getPlaceBySlug(slug: string, options?: { draft?: boolean }
  * Fetch global settings
  */
 export async function getSettings() {
-  const payload = await getPayloadClient();
-  return payload.findGlobal({ slug: 'settings' });
+  return fetchGlobal('settings');
 }
 
 /**
  * Fetch header global
  */
 export async function getHeader() {
-  const payload = await getPayloadClient();
-  return payload.findGlobal({ slug: 'header' });
+  return fetchGlobal('header');
 }
 
 /**
  * Fetch footer global
  */
 export async function getFooter() {
-  const payload = await getPayloadClient();
-  return payload.findGlobal({ slug: 'footer' });
+  return fetchGlobal('footer');
 }
 
 /**
  * Fetch categories
  */
 export async function getCategories(options?: { limit?: number }) {
-  const payload = await getPayloadClient();
-
-  return payload.find({
-    collection: 'categories',
+  return fetchCollection('categories', {
     limit: options?.limit || 100,
     depth: 1,
   });
@@ -380,10 +395,7 @@ export async function getCategories(options?: { limit?: number }) {
  * Fetch a single category by slug
  */
 export async function getCategoryBySlug(slug: string) {
-  const payload = await getPayloadClient();
-
-  const result = await payload.find({
-    collection: 'categories',
+  const result = await fetchCollection('categories', {
     where: {
       slug: {
         equals: slug,
@@ -399,10 +411,7 @@ export async function getCategoryBySlug(slug: string) {
  * Fetch tags
  */
 export async function getTags(options?: { limit?: number }) {
-  const payload = await getPayloadClient();
-
-  return payload.find({
-    collection: 'tags',
+  return fetchCollection('tags', {
     limit: options?.limit || 100,
   });
 }
@@ -411,10 +420,7 @@ export async function getTags(options?: { limit?: number }) {
  * Fetch a single tag by slug
  */
 export async function getTagBySlug(slug: string) {
-  const payload = await getPayloadClient();
-
-  const result = await payload.find({
-    collection: 'tags',
+  const result = await fetchCollection('tags', {
     where: {
       slug: {
         equals: slug,
@@ -430,18 +436,13 @@ export async function getTagBySlug(slug: string) {
  * Fetch all content across collections for a specific category
  */
 export async function getCategoryContent(slug: string) {
-  const payload = await getPayloadClient();
-
-  // Find the category first
   const category = await getCategoryBySlug(slug);
   if (!category) {
     return null;
   }
 
-  // Fetch content from all collections that use categories
   const [posts, archiveItems, events, people, customItems] = await Promise.all([
-    payload.find({
-      collection: 'posts',
+    fetchCollection('posts', {
       where: {
         categories: { in: [category.id] },
         _status: { equals: 'published' },
@@ -449,8 +450,7 @@ export async function getCategoryContent(slug: string) {
       limit: 100,
       sort: '-publishedAt',
     }),
-    payload.find({
-      collection: 'archive-items',
+    fetchCollection('archive-items', {
       where: {
         categories: { in: [category.id] },
         _status: { equals: 'published' },
@@ -458,8 +458,7 @@ export async function getCategoryContent(slug: string) {
       limit: 100,
       sort: '-publishedAt',
     }),
-    payload.find({
-      collection: 'events',
+    fetchCollection('events', {
       where: {
         categories: { in: [category.id] },
         _status: { equals: 'published' },
@@ -467,8 +466,7 @@ export async function getCategoryContent(slug: string) {
       limit: 100,
       sort: '-publishedAt',
     }),
-    payload.find({
-      collection: 'people',
+    fetchCollection('people', {
       where: {
         categories: { in: [category.id] },
         _status: { equals: 'published' },
@@ -476,8 +474,7 @@ export async function getCategoryContent(slug: string) {
       limit: 100,
       sort: '-updatedAt',
     }),
-    payload.find({
-      collection: 'custom-items',
+    fetchCollection('custom-items', {
       where: {
         categories: { in: [category.id] },
         _status: { equals: 'published' },
@@ -487,7 +484,6 @@ export async function getCategoryContent(slug: string) {
     }),
   ]);
 
-  // Combine and format content
   const allContent = [
     ...posts.docs.map((doc: any) => ({ ...doc, collection: 'posts' })),
     ...archiveItems.docs.map((doc: any) => ({ ...doc, collection: 'archive-items' })),
@@ -496,7 +492,6 @@ export async function getCategoryContent(slug: string) {
     ...customItems.docs.map((doc: any) => ({ ...doc, collection: 'custom-items' })),
   ];
 
-  // Sort by date
   allContent.sort((a, b) => {
     const dateA = new Date(a.publishedAt || a.updatedAt).getTime();
     const dateB = new Date(b.publishedAt || b.updatedAt).getTime();
@@ -521,18 +516,13 @@ export async function getCategoryContent(slug: string) {
  * Fetch all content across collections for a specific tag
  */
 export async function getTagContent(slug: string) {
-  const payload = await getPayloadClient();
-
-  // Find the tag first
   const tag = await getTagBySlug(slug);
   if (!tag) {
     return null;
   }
 
-  // Fetch content from all collections that use tags
   const [posts, archiveItems, events, people, customItems] = await Promise.all([
-    payload.find({
-      collection: 'posts',
+    fetchCollection('posts', {
       where: {
         tags: { in: [tag.id] },
         _status: { equals: 'published' },
@@ -540,8 +530,7 @@ export async function getTagContent(slug: string) {
       limit: 100,
       sort: '-publishedAt',
     }),
-    payload.find({
-      collection: 'archive-items',
+    fetchCollection('archive-items', {
       where: {
         tags: { in: [tag.id] },
         _status: { equals: 'published' },
@@ -549,8 +538,7 @@ export async function getTagContent(slug: string) {
       limit: 100,
       sort: '-publishedAt',
     }),
-    payload.find({
-      collection: 'events',
+    fetchCollection('events', {
       where: {
         tags: { in: [tag.id] },
         _status: { equals: 'published' },
@@ -558,8 +546,7 @@ export async function getTagContent(slug: string) {
       limit: 100,
       sort: '-publishedAt',
     }),
-    payload.find({
-      collection: 'people',
+    fetchCollection('people', {
       where: {
         tags: { in: [tag.id] },
         _status: { equals: 'published' },
@@ -567,8 +554,7 @@ export async function getTagContent(slug: string) {
       limit: 100,
       sort: '-updatedAt',
     }),
-    payload.find({
-      collection: 'custom-items',
+    fetchCollection('custom-items', {
       where: {
         tags: { in: [tag.id] },
         _status: { equals: 'published' },
@@ -578,7 +564,6 @@ export async function getTagContent(slug: string) {
     }),
   ]);
 
-  // Combine and format content
   const allContent = [
     ...posts.docs.map((doc: any) => ({ ...doc, collection: 'posts' })),
     ...archiveItems.docs.map((doc: any) => ({ ...doc, collection: 'archive-items' })),
@@ -587,7 +572,6 @@ export async function getTagContent(slug: string) {
     ...customItems.docs.map((doc: any) => ({ ...doc, collection: 'custom-items' })),
   ];
 
-  // Sort by date
   allContent.sort((a, b) => {
     const dateA = new Date(a.publishedAt || a.updatedAt).getTime();
     const dateB = new Date(b.publishedAt || b.updatedAt).getTime();

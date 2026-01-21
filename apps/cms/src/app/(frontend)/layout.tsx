@@ -4,7 +4,7 @@ import { getSettings, getHeader, getFooter } from '@/lib/payload-api'
 import { Header } from '@/components/Header'
 import { Footer } from '@/components/Footer'
 import { LivePreviewListener } from '@/components/LivePreviewListener'
-import { ThemeScript } from '@repo/ui'
+import { ThemeProvider } from '@repo/ui'
 import '@/styles/globals.css'
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -59,17 +59,16 @@ export default async function FrontendLayout({
 
   return (
     <html lang="en" suppressHydrationWarning={true}>
-      <head>
-        <ThemeScript defaultSkin={defaultSkin} defaultMode={defaultMode} />
-      </head>
       <body className="flex min-h-screen flex-col transition-colors" suppressHydrationWarning={true} style={{
         backgroundColor: 'rgb(var(--color-background))',
         color: 'rgb(var(--color-foreground))'
       }}>
-        <LivePreviewListener serverURL={serverURL} />
-        {header && <Header data={header} />}
-        <main className="flex-1">{children}</main>
-        {footer && <Footer data={footer} />}
+        <ThemeProvider defaultSkin={defaultSkin} defaultMode={defaultMode}>
+          <LivePreviewListener serverURL={serverURL} />
+          {header && <Header data={header} />}
+          <main className="flex-1">{children}</main>
+          {footer && <Footer data={footer} />}
+        </ThemeProvider>
       </body>
     </html>
   )

@@ -1,17 +1,19 @@
 'use client'
 
+import { useTheme } from 'next-themes'
 import { useEffect, useState } from 'react'
+import { useSkin, SKINS, type Skin } from './ThemeProvider'
 
-const SKINS = [
-  { label: 'Minimal', value: 'minimal' },
-  { label: 'Editorial', value: 'editorial' },
-  { label: 'SaaS', value: 'saas' },
-  { label: 'Soft', value: 'soft' },
-  { label: 'Bold', value: 'bold' },
-  { label: 'Monochrome', value: 'monochrome' },
-  { label: 'Glass', value: 'glass' },
-  { label: 'High Contrast', value: 'high-contrast' },
-] as const
+const SKIN_LABELS: Record<Skin, string> = {
+  minimal: 'Minimal',
+  editorial: 'Editorial',
+  saas: 'SaaS',
+  soft: 'Soft',
+  bold: 'Bold',
+  monochrome: 'Monochrome',
+  glass: 'Glass',
+  'high-contrast': 'High Contrast',
+}
 
 const MODES = [
   { label: 'Light', value: 'light' },
@@ -19,67 +21,23 @@ const MODES = [
   { label: 'System', value: 'system' },
 ] as const
 
-type Skin = typeof SKINS[number]['value']
-type Mode = typeof MODES[number]['value']
-
 interface ThemeSwitcherProps {
-  defaultSkin?: Skin
-  defaultMode?: Mode
   className?: string
 }
 
-export function ThemeSwitcher({ 
-  defaultSkin = 'minimal', 
-  defaultMode = 'light',
-  className = '' 
-}: ThemeSwitcherProps) {
-  const [skin, setSkin] = useState<Skin>(defaultSkin)
-  const [mode, setMode] = useState<Mode>(defaultMode)
+/**
+ * ThemeSwitcher - UI component for switching themes and skins
+ *
+ * Uses next-themes for mode (light/dark/system) and custom skin context
+ */
+export function ThemeSwitcher({ className = '' }: ThemeSwitcherProps) {
   const [mounted, setMounted] = useState(false)
+  const { theme, setTheme } = useTheme()
+  const { skin, setSkin } = useSkin()
 
-  // Load saved preferences on mount
   useEffect(() => {
     setMounted(true)
-    const savedSkin = localStorage.getItem('theme-skin') as Skin | null
-    const savedMode = localStorage.getItem('theme-mode') as Mode | null
-    
-    if (savedSkin) setSkin(savedSkin)
-    if (savedMode) setMode(savedMode)
   }, [])
-
-  // Apply theme changes
-  useEffect(() => {
-    if (!mounted) return
-
-    const root = document.documentElement
-    
-    // Apply skin
-    root.setAttribute('data-skin', skin)
-    localStorage.setItem('theme-skin', skin)
-
-    // Apply mode
-    if (mode === 'system') {
-      const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
-      root.classList.toggle('dark', systemPrefersDark)
-      localStorage.setItem('theme-mode', 'system')
-    } else {
-      root.classList.toggle('dark', mode === 'dark')
-      localStorage.setItem('theme-mode', mode)
-    }
-  }, [skin, mode, mounted])
-
-  // Listen for system preference changes when mode is 'system'
-  useEffect(() => {
-    if (!mounted || mode !== 'system') return
-
-    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
-    const handleChange = (e: MediaQueryListEvent) => {
-      document.documentElement.classList.toggle('dark', e.matches)
-    }
-
-    mediaQuery.addEventListener('change', handleChange)
-    return () => mediaQuery.removeEventListener('change', handleChange)
-  }, [mode, mounted])
 
   if (!mounted) {
     return null // Prevent hydration mismatch
@@ -103,8 +61,8 @@ export function ThemeSwitcher({
           }}
         >
           {SKINS.map((s) => (
-            <option key={s.value} value={s.value}>
-              {s.label}
+            <option key={s} value={s}>
+              {SKIN_LABELS[s]}
             </option>
           ))}
         </select>
@@ -116,8 +74,8 @@ export function ThemeSwitcher({
         </label>
         <select
           id="mode-select"
-          value={mode}
-          onChange={(e) => setMode(e.target.value as Mode)}
+          value={theme}
+          onChange={(e) => setTheme(e.target.value)}
           className="w-full rounded-lg border px-3 py-2 text-sm"
           style={{
             borderColor: `rgb(var(--color-border))`,
@@ -134,7 +92,7 @@ export function ThemeSwitcher({
       </div>
 
       <div className="text-xs" style={{ color: `rgb(var(--color-muted))` }}>
-        Current: {SKINS.find(s => s.value === skin)?.label} • {MODES.find(m => m.value === mode)?.label}
+        Current: {SKIN_LABELS[skin]} • {MODES.find(m => m.value === theme)?.label || 'System'}
       </div>
     </div>
   )

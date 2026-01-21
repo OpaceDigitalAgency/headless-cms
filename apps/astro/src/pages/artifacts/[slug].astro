@@ -1,4 +1,13 @@
 ---
+import { getArchiveItems } from '@/lib/payload';
+
+export async function getStaticPaths() {
+  const result = await getArchiveItems();
+  return result.docs.map((item) => ({
+    params: { slug: item.slug },
+  }));
+}
+
 const { slug } = Astro.params;
 return Astro.redirect(`/archive-items/${slug}`, 301);
 ---
