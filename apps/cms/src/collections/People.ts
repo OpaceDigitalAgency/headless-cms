@@ -2,6 +2,7 @@ import type { CollectionConfig } from 'payload'
 import { slugField } from '../fields/slug'
 import { getPreviewUrl } from '../utils/preview'
 import { isCollectionEnabled } from '../lib/collectionVisibility'
+import { revalidatePerson } from '../lib/revalidate'
 
 // Import all blocks for flexible content
 import { heroBlock } from '../blocks/Hero'
@@ -72,62 +73,14 @@ export const People: CollectionConfig = {
     delete: async ({ req }) => (await isCollectionEnabled(req.payload, 'people')) && req.user?.role === 'admin',
   },
 
-  // Hooks for revalidation
+  // Hooks for revalidation - direct calls since we're in the same Next.js app
   hooks: {
     afterChange: [
-      async ({ doc, req }) => {
+      async ({ doc, previousDoc, req }) => {
         if (doc._status === 'published') {
-          const revalidateUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3001'
-          const revalidateTags = ['people', `people:${doc.slug}`, 'archive:people']
-
-          // Helper function to resolve category/tag slugs
-          const resolveSlug = async (value: any, collection: 'categories' | 'tags') => {
-            if (!value) return null
-            if (typeof value === 'object' && 'slug' in value) {
-              return value.slug as string
-            }
-            if (typeof value === 'string' || typeof value === 'number') {
-              try {
-                const result = await req.payload.findByID({ collection, id: value })
-                return result?.slug || null
-              } catch {
-                return null
-              }
-            }
-            return null
-          }
-
-          try {
-            // Add category tags
-            if (Array.isArray(doc.categories)) {
-              for (const category of doc.categories) {
-                const slug = await resolveSlug(category, 'categories')
-                if (slug) revalidateTags.push(`taxonomy:category:${slug}`)
-              }
-            }
-
-            // Add tag tags
-            if (Array.isArray(doc.tags)) {
-              for (const tag of doc.tags) {
-                const slug = await resolveSlug(tag, 'tags')
-                if (slug) revalidateTags.push(`taxonomy:tag:${slug}`)
-              }
-            }
-
-            await fetch(`${revalidateUrl}/api/revalidate`, {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({
-                secret: process.env.REVALIDATION_SECRET,
-                collection: 'people',
-                slug: doc.slug,
-                tags: revalidateTags,
-              }),
-            })
-            req.payload.logger.info(`Revalidated person: ${doc.slug}`)
-          } catch (error) {
-            req.payload.logger.error(`Failed to revalidate person: ${doc.slug}`)
-          }
+          // Direct revalidation - no webhook needed
+          revalidatePerson(doc.slug, previousDoc?.slug)
+          req.payload.logger.info(`Revalidated person: ${doc.slug}`)
         }
         return doc
       },

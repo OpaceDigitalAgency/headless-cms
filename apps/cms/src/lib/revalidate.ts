@@ -53,18 +53,72 @@ export async function revalidatePost(slug: string, previousSlug?: string) {
  * Revalidate an archive item by its slug
  */
 export async function revalidateArchiveItem(slug: string, previousSlug?: string) {
-  const path = `/items/${slug}`
+  const path = `/archive-items/${slug}`
 
   revalidatePath(path)
-  revalidatePath('/items') // Items listing page
+  revalidatePath('/archive-items') // Archive items listing page
   revalidateTag('archive-items')
 
   // If slug changed, also revalidate the old path
   if (previousSlug && previousSlug !== slug) {
-    revalidatePath(`/items/${previousSlug}`)
+    revalidatePath(`/archive-items/${previousSlug}`)
   }
 
   console.log(`[Revalidate] Archive Item: ${path}`)
+}
+
+/**
+ * Revalidate a person by their slug
+ */
+export async function revalidatePerson(slug: string, previousSlug?: string) {
+  const path = `/people/${slug}`
+
+  revalidatePath(path)
+  revalidatePath('/people') // People listing page
+  revalidateTag('people')
+
+  // If slug changed, also revalidate the old path
+  if (previousSlug && previousSlug !== slug) {
+    revalidatePath(`/people/${previousSlug}`)
+  }
+
+  console.log(`[Revalidate] Person: ${path}`)
+}
+
+/**
+ * Revalidate a place by its slug
+ */
+export async function revalidatePlace(slug: string, previousSlug?: string) {
+  const path = `/places/${slug}`
+
+  revalidatePath(path)
+  revalidatePath('/places') // Places listing page
+  revalidateTag('places')
+
+  // If slug changed, also revalidate the old path
+  if (previousSlug && previousSlug !== slug) {
+    revalidatePath(`/places/${previousSlug}`)
+  }
+
+  console.log(`[Revalidate] Place: ${path}`)
+}
+
+/**
+ * Revalidate an event by its slug
+ */
+export async function revalidateEvent(slug: string, previousSlug?: string) {
+  const path = `/events/${slug}`
+
+  revalidatePath(path)
+  revalidatePath('/events') // Events listing page
+  revalidateTag('events')
+
+  // If slug changed, also revalidate the old path
+  if (previousSlug && previousSlug !== slug) {
+    revalidatePath(`/events/${previousSlug}`)
+  }
+
+  console.log(`[Revalidate] Event: ${path}`)
 }
 
 /**

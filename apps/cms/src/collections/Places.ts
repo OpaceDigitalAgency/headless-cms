@@ -2,6 +2,7 @@ import type { CollectionConfig } from 'payload'
 import { slugField } from '../fields/slug'
 import { getPreviewUrl } from '../utils/preview'
 import { isCollectionEnabled } from '../lib/collectionVisibility'
+import { revalidatePlace } from '../lib/revalidate'
 
 // Import all blocks for flexible content
 import { heroBlock } from '../blocks/Hero'
@@ -72,26 +73,14 @@ export const Places: CollectionConfig = {
     delete: async ({ req }) => (await isCollectionEnabled(req.payload, 'places')) && req.user?.role === 'admin',
   },
 
-  // Hooks for revalidation
+  // Hooks for revalidation - direct calls since we're in the same Next.js app
   hooks: {
     afterChange: [
-      async ({ doc, req }) => {
+      async ({ doc, previousDoc, req }) => {
         if (doc._status === 'published') {
-          const revalidateUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3001'
-          try {
-            await fetch(`${revalidateUrl}/api/revalidate`, {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({
-                secret: process.env.REVALIDATION_SECRET,
-                collection: 'places',
-                slug: doc.slug,
-              }),
-            })
-            req.payload.logger.info(`Revalidated place: ${doc.slug}`)
-          } catch (error) {
-            req.payload.logger.error(`Failed to revalidate place: ${doc.slug}`)
-          }
+          // Direct revalidation - no webhook needed
+          revalidatePlace(doc.slug, previousDoc?.slug)
+          req.payload.logger.info(`Revalidated place: ${doc.slug}`)
         }
         return doc
       },
