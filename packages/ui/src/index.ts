@@ -13,3 +13,5 @@ export * from './primitives'
 // Components (to be implemented in Phase 1)
 export * from './components'
 
+// Bolt component contract types
+export * from './bolt-contract'

@@ -6,6 +6,7 @@ import configPromise from '@payload-config'
 import { PostRenderer } from '@/components/PostRenderer'
 import { getSettings } from '@/lib/payload-api'
 import { generateArticleMetadata } from '@/lib/seo/metadata'
+import { Container, Section } from '@repo/ui/primitives'
 
 interface PostPageProps {
   params: Promise<{ slug: string }>
@@ -89,9 +90,11 @@ export default async function PostPage({ params }: PostPageProps) {
     }
 
     return (
-      <div className="container py-16">
-        <PostRenderer post={post} />
-      </div>
+      <Section spacing="lg" background="default">
+        <Container>
+          <PostRenderer post={post} />
+        </Container>
+      </Section>
     )
   } catch (error) {
     console.error(`Failed to fetch post ${slug}:`, error)

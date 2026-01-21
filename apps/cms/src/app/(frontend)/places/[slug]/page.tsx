@@ -3,6 +3,7 @@ import { draftMode } from 'next/headers'
 import type { Metadata } from 'next'
 import { getPlaces, getPlaceBySlug } from '@/lib/payload-api'
 import { RenderBlocks } from '@/components/RenderBlocks'
+import { Container, Section, Prose } from '@repo/ui/primitives'
 
 interface PlacePageProps {
   params: Promise<{ slug: string }>
@@ -18,57 +19,73 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: PlacePageProps): Promise<Metadata> {
   const { slug } = await params
   const { isEnabled: isDraftMode } = await draftMode()
-  const place = await getPlaceBySlug(slug, isDraftMode)
 
-  if (!place) {
+  try {
+    const place = await getPlaceBySlug(slug, isDraftMode)
+
+    if (!place) {
+      return { title: 'Place Not Found' }
+    }
+
+    return {
+      title: place.name,
+      description: place.description || `Information about ${place.name}`,
+    }
+  } catch (error) {
+    console.error(`Error generating metadata for place ${slug}:`, error)
     return { title: 'Place Not Found' }
-  }
-
-  return {
-    title: place.name,
-    description: place.description || `Information about ${place.name}`,
   }
 }
 
 export default async function PlacePage({ params }: PlacePageProps) {
   const { slug } = await params
   const { isEnabled: isDraftMode } = await draftMode()
-  const place = await getPlaceBySlug(slug, isDraftMode)
 
-  if (!place) {
+  try {
+    const place = await getPlaceBySlug(slug, isDraftMode)
+
+    if (!place) {
+      notFound()
+    }
+
+    return (
+      <Section spacing="lg" background="default">
+        <Container>
+          <article>
+            <header className="mb-12">
+              <h1 className="text-4xl font-bold">{place.name}</h1>
+              {place.placeType && (
+                <p className="mt-4 text-lg text-gray-600">{place.placeType}</p>
+              )}
+            </header>
+
+            {place.featuredImage?.url && (
+              <div className="mb-12">
+                <img
+                  src={place.featuredImage.url}
+                  alt={place.featuredImage.alt || place.name}
+                  className="w-full rounded-lg"
+                />
+              </div>
+            )}
+
+            {place.description && (
+              <Prose className="mb-12">
+                <p>{place.description}</p>
+              </Prose>
+            )}
+
+            {place.contentBlocks && place.contentBlocks.length > 0 && (
+              <RenderBlocks blocks={place.contentBlocks} />
+            )}
+          </article>
+        </Container>
+      </Section>
+    )
+  } catch (error) {
+    console.error(`Error loading place ${slug}:`, error)
     notFound()
   }
-
-  return (
-    <article className="container py-16">
-      <header className="mb-12">
-        <h1 className="text-4xl font-bold">{place.name}</h1>
-        {place.placeType && (
-          <p className="mt-4 text-lg text-gray-600">{place.placeType}</p>
-        )}
-      </header>
-
-      {place.featuredImage?.url && (
-        <div className="mb-12">
-          <img
-            src={place.featuredImage.url}
-            alt={place.featuredImage.alt || place.name}
-            className="w-full rounded-lg"
-          />
-        </div>
-      )}
-
-      {place.description && (
-        <div className="prose prose-lg mb-12">
-          <p>{place.description}</p>
-        </div>
-      )}
-
-      {place.contentBlocks && place.contentBlocks.length > 0 && (
-        <RenderBlocks blocks={place.contentBlocks} />
-      )}
-    </article>
-  )
 }
 
 export const revalidate = 60

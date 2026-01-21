@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect } from 'react'
+import { Container, Section } from '@repo/ui/primitives'
 
 export default function Error({
   error,
@@ -14,18 +15,22 @@ export default function Error({
   }, [error])
 
   return (
-    <div className="flex min-h-[60vh] flex-col items-centre justify-centre text-centre">
-      <h1 className="text-4xl font-bold text-gray-900 dark:text-white">Something went wrong</h1>
-      <p className="mt-4 text-gray-500 dark:text-gray-400">
-        An error occurred while loading this page.
-      </p>
-      <button
-        onClick={reset}
-        className="mt-8 rounded-lg bg-primary-600 px-6 py-3 font-medium text-white transition-colors hover:bg-primary-700"
-      >
-        Try again
-      </button>
-    </div>
+    <Section spacing="lg" background="default">
+      <Container>
+        <div className="flex min-h-[60vh] flex-col items-center justify-center text-center">
+          <h1 className="text-4xl font-bold text-gray-900 dark:text-white">Something went wrong</h1>
+          <p className="mt-4 text-gray-500 dark:text-gray-400">
+            An error occurred while loading this page.
+          </p>
+          <button
+            onClick={reset}
+            className="mt-8 rounded-lg bg-blue-600 px-6 py-3 font-medium text-white transition-colors hover:bg-blue-700"
+          >
+            Try again
+          </button>
+        </div>
+      </Container>
+    </Section>
   )
 }
 

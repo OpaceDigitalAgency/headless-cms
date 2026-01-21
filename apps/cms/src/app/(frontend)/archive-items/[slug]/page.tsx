@@ -4,6 +4,7 @@ import type { Metadata } from 'next'
 import { getArchiveItemBySlug, getArchiveItems, getSettings } from '@/lib/payload-api'
 import { ArchiveItemRenderer } from '@/components/ArchiveItemRenderer'
 import { generateEnhancedMetadata } from '@/lib/seo/metadata'
+import { Container, Section } from '@repo/ui/primitives'
 
 interface ArchiveItemPageProps {
   params: Promise<{ slug: string }>
@@ -51,17 +52,25 @@ export async function generateMetadata({ params }: ArchiveItemPageProps): Promis
 export default async function ArchiveItemPage({ params }: ArchiveItemPageProps) {
   const { slug } = await params
   const { isEnabled: isDraftMode } = await draftMode()
-  const item = await getArchiveItemBySlug(slug, isDraftMode)
 
-  if (!item) {
+  try {
+    const item = await getArchiveItemBySlug(slug, isDraftMode)
+
+    if (!item) {
+      notFound()
+    }
+
+    return (
+      <Section spacing="lg" background="default">
+        <Container>
+          <ArchiveItemRenderer item={item} />
+        </Container>
+      </Section>
+    )
+  } catch (error) {
+    console.error(`Error loading archive item ${slug}:`, error)
     notFound()
   }
-
-  return (
-    <div className="container py-16">
-      <ArchiveItemRenderer item={item} />
-    </div>
-  )
 }
 
 export const revalidate = 60
