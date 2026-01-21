@@ -131,7 +131,7 @@ export async function ArchiveBlock({ block }: ArchiveBlockProps) {
   }
 
   return (
-    <section className="container py-16">
+    <section className="w-full py-16">
       {(heading || description) && (
         <div className="mb-8 text-center">
           {heading && (

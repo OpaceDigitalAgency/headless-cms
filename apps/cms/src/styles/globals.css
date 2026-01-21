@@ -60,6 +60,13 @@
     --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
     --border-width: 1px;
     --letter-spacing: 0;
+
+    /* Skin background */
+    --skin-bg-image: none;
+    --skin-bg-size: auto;
+    --skin-bg-position: center;
+    --skin-bg-repeat: no-repeat;
+    --skin-bg-attachment: scroll;
   }
 
   .dark {
@@ -69,6 +76,10 @@
     --color-border: 51 65 85;
     --color-card: 30 41 59;
     --color-accent: 56 189 248; /* sky-400 */
+    --skin-bg-image: radial-gradient(circle at 15% -10%, rgb(56 189 248 / 0.15), transparent 45%);
+    --skin-bg-size: auto;
+    --skin-bg-position: top left;
+    --skin-bg-repeat: no-repeat;
   }
 
   /* ===========================================
@@ -88,9 +99,14 @@
     --color-accent-light: 251 191 36; /* amber-400 */
 
     --radius: 0.25rem;
-    --shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --shadow: 0 1px 0 rgb(0 0 0 / 0.08);
+    --shadow-lg: 0 2px 0 rgb(0 0 0 / 0.08);
     --border-width: 1px;
     --letter-spacing: 0.025em;
+    --skin-bg-image: linear-gradient(180deg, rgb(255 247 237), rgb(255 255 255));
+    --skin-bg-size: auto;
+    --skin-bg-position: top center;
+    --skin-bg-repeat: no-repeat;
   }
 
   [data-skin="editorial"].dark {
@@ -101,6 +117,10 @@
     --color-card: 41 37 36;
     --color-accent: 251 191 36; /* amber-400 */
     --color-accent-light: 217 119 6; /* amber-600 */
+    --skin-bg-image: radial-gradient(circle at 20% -10%, rgb(251 191 36 / 0.12), transparent 45%);
+    --skin-bg-size: auto;
+    --skin-bg-position: top left;
+    --skin-bg-repeat: no-repeat;
   }
 
   /* ===========================================
@@ -116,11 +136,18 @@
     --color-accent: 99 102 241; /* indigo-500 */
     --color-accent-light: 129 140 248; /* indigo-400 */
 
-    --radius: 0.75rem;
-    --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
-    --shadow-lg: 0 20px 25px -5px rgb(0 0 0 / 0.1);
+    --radius: 1rem;
+    --shadow: 0 12px 24px -12px rgb(15 23 42 / 0.25);
+    --shadow-lg: 0 30px 50px -25px rgb(15 23 42 / 0.35);
     --border-width: 1px;
     --letter-spacing: 0;
+    --skin-bg-image:
+      linear-gradient(120deg, rgb(99 102 241 / 0.08), transparent 45%),
+      linear-gradient(to right, rgb(148 163 184 / 0.25) 1px, transparent 1px),
+      linear-gradient(to bottom, rgb(148 163 184 / 0.25) 1px, transparent 1px);
+    --skin-bg-size: 100% 100%, 32px 32px, 32px 32px;
+    --skin-bg-position: top left;
+    --skin-bg-repeat: no-repeat, repeat, repeat;
   }
 
   [data-skin="saas"].dark {
@@ -131,6 +158,13 @@
     --color-card: 30 41 59;
     --color-accent: 129 140 248; /* indigo-400 */
     --color-accent-light: 99 102 241; /* indigo-500 */
+    --skin-bg-image:
+      radial-gradient(circle at 10% -10%, rgb(129 140 248 / 0.2), transparent 45%),
+      linear-gradient(to right, rgb(51 65 85 / 0.6) 1px, transparent 1px),
+      linear-gradient(to bottom, rgb(51 65 85 / 0.6) 1px, transparent 1px);
+    --skin-bg-size: 100% 100%, 36px 36px, 36px 36px;
+    --skin-bg-position: top left;
+    --skin-bg-repeat: no-repeat, repeat, repeat;
   }
 
   /* ===========================================
@@ -146,11 +180,17 @@
     --color-accent: 236 72 153; /* pink-500 */
     --color-accent-light: 244 114 182; /* pink-400 */
 
-    --radius: 1rem;
-    --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.05);
-    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.05);
+    --radius: 1.5rem;
+    --shadow: 0 10px 30px -20px rgb(236 72 153 / 0.35);
+    --shadow-lg: 0 30px 60px -30px rgb(236 72 153 / 0.35);
     --border-width: 0px;
     --letter-spacing: 0;
+    --skin-bg-image:
+      radial-gradient(circle at 20% 10%, rgb(244 114 182 / 0.2), transparent 45%),
+      linear-gradient(180deg, rgb(253 242 248), rgb(255 255 255));
+    --skin-bg-size: auto;
+    --skin-bg-position: top left;
+    --skin-bg-repeat: no-repeat;
   }
 
   [data-skin="soft"].dark {
@@ -161,6 +201,10 @@
     --color-card: 52 52 56;
     --color-accent: 244 114 182; /* pink-400 */
     --color-accent-light: 236 72 153; /* pink-500 */
+    --skin-bg-image: radial-gradient(circle at 20% -10%, rgb(244 114 182 / 0.2), transparent 45%);
+    --skin-bg-size: auto;
+    --skin-bg-position: top left;
+    --skin-bg-repeat: no-repeat;
   }
 
   /* ===========================================
@@ -177,10 +221,16 @@
     --color-accent-light: 248 113 113; /* red-400 */
 
     --radius: 0rem;
-    --shadow: 0 2px 4px 0 rgb(0 0 0 / 0.2);
-    --shadow-lg: 0 12px 20px -4px rgb(0 0 0 / 0.2);
-    --border-width: 2px;
+    --shadow: 6px 6px 0 rgb(0 0 0 / 0.9);
+    --shadow-lg: 10px 10px 0 rgb(0 0 0 / 0.9);
+    --border-width: 3px;
     --letter-spacing: 0.05em;
+    --skin-bg-image:
+      linear-gradient(180deg, rgb(255 255 255), rgb(245 245 245)),
+      repeating-linear-gradient(90deg, rgb(0 0 0 / 0.06) 0 2px, transparent 2px 28px);
+    --skin-bg-size: auto, 28px 28px;
+    --skin-bg-position: top left;
+    --skin-bg-repeat: no-repeat, repeat;
   }
 
   [data-skin="bold"].dark {
@@ -191,6 +241,12 @@
     --color-card: 24 24 27;
     --color-accent: 248 113 113; /* red-400 */
     --color-accent-light: 239 68 68; /* red-500 */
+    --skin-bg-image:
+      linear-gradient(180deg, rgb(0 0 0), rgb(12 12 14)),
+      repeating-linear-gradient(90deg, rgb(255 255 255 / 0.08) 0 2px, transparent 2px 28px);
+    --skin-bg-size: auto, 28px 28px;
+    --skin-bg-position: top left;
+    --skin-bg-repeat: no-repeat, repeat;
   }
 
   /* ===========================================
@@ -206,11 +262,15 @@
     --color-accent: 64 64 64;
     --color-accent-light: 115 115 115;
 
-    --radius: 0rem;
-    --shadow: 0 0 0 1px rgb(0 0 0 / 0.1);
-    --shadow-lg: 0 0 0 2px rgb(0 0 0 / 0.1);
+    --radius: 0.125rem;
+    --shadow: 0 0 0 1px rgb(0 0 0 / 0.12);
+    --shadow-lg: 0 0 0 2px rgb(0 0 0 / 0.12);
     --border-width: 1px;
     --letter-spacing: 0;
+    --skin-bg-image: repeating-linear-gradient(45deg, rgb(0 0 0 / 0.05) 0 1px, transparent 1px 18px);
+    --skin-bg-size: 18px 18px;
+    --skin-bg-position: top left;
+    --skin-bg-repeat: repeat;
   }
 
   [data-skin="monochrome"].dark {
@@ -221,6 +281,10 @@
     --color-card: 38 38 38;
     --color-accent: 212 212 212;
     --color-accent-light: 163 163 163;
+    --skin-bg-image: repeating-linear-gradient(45deg, rgb(255 255 255 / 0.07) 0 1px, transparent 1px 18px);
+    --skin-bg-size: 18px 18px;
+    --skin-bg-position: top left;
+    --skin-bg-repeat: repeat;
   }
 
   /* ===========================================
@@ -237,10 +301,16 @@
     --color-accent-light: 56 189 248;
 
     --radius: 1rem;
-    --shadow: 0 8px 32px 0 rgb(31 38 135 / 0.15);
-    --shadow-lg: 0 8px 32px 0 rgb(31 38 135 / 0.37);
+    --shadow: 0 10px 30px 0 rgb(31 38 135 / 0.2);
+    --shadow-lg: 0 20px 50px 0 rgb(31 38 135 / 0.35);
     --border-width: 1px;
     --letter-spacing: 0;
+    --skin-bg-image:
+      radial-gradient(circle at 20% 10%, rgb(14 165 233 / 0.2), transparent 50%),
+      linear-gradient(180deg, rgb(248 250 252), rgb(241 245 249));
+    --skin-bg-size: auto;
+    --skin-bg-position: top left;
+    --skin-bg-repeat: no-repeat;
   }
 
   [data-skin="glass"].dark {
@@ -251,6 +321,12 @@
     --color-card: 30 41 59 / 0.7;
     --color-accent: 56 189 248;
     --color-accent-light: 14 165 233;
+    --skin-bg-image:
+      radial-gradient(circle at 20% 10%, rgb(56 189 248 / 0.2), transparent 50%),
+      linear-gradient(180deg, rgb(15 23 42), rgb(2 6 23));
+    --skin-bg-size: auto;
+    --skin-bg-position: top left;
+    --skin-bg-repeat: no-repeat;
   }
 
   /* ===========================================
@@ -267,10 +343,14 @@
     --color-accent-light: 255 0 0;
 
     --radius: 0.25rem;
-    --shadow: 0 0 0 2px rgb(0 0 0);
-    --shadow-lg: 0 0 0 4px rgb(0 0 0);
-    --border-width: 3px;
+    --shadow: 0 0 0 3px rgb(0 0 0);
+    --shadow-lg: 0 0 0 6px rgb(0 0 0);
+    --border-width: 4px;
     --letter-spacing: 0.1em;
+    --skin-bg-image: repeating-linear-gradient(0deg, rgb(0 0 0 / 0.08) 0 2px, transparent 2px 24px);
+    --skin-bg-size: 24px 24px;
+    --skin-bg-position: top left;
+    --skin-bg-repeat: repeat;
   }
 
   [data-skin="high-contrast"].dark {
@@ -281,6 +361,10 @@
     --color-card: 0 0 0;
     --color-accent: 255 255 0;
     --color-accent-light: 0 255 255;
+    --skin-bg-image: repeating-linear-gradient(0deg, rgb(255 255 255 / 0.08) 0 2px, transparent 2px 24px);
+    --skin-bg-size: 24px 24px;
+    --skin-bg-position: top left;
+    --skin-bg-repeat: repeat;
   }
 
   html {
@@ -292,6 +376,11 @@
     background-color: rgb(var(--color-background));
     color: rgb(var(--color-foreground));
     letter-spacing: var(--letter-spacing);
+    background-image: var(--skin-bg-image);
+    background-size: var(--skin-bg-size);
+    background-position: var(--skin-bg-position);
+    background-repeat: var(--skin-bg-repeat);
+    background-attachment: var(--skin-bg-attachment);
     @apply antialiased;
   }
 
@@ -366,6 +455,13 @@
     border-width: 2px !important;
   }
 
+  [data-skin="bold"] .btn-primary {
+    background-color: rgb(var(--color-accent)) !important;
+    color: rgb(var(--color-background)) !important;
+    box-shadow: var(--shadow-lg) !important;
+    text-transform: uppercase;
+  }
+
   /* High contrast - maximum visibility */
   [data-skin="high-contrast"] {
     --shadow: 0 0 0 3px rgb(0 0 0);
@@ -380,6 +476,11 @@
   [data-skin="soft"] .card {
     border: none !important;
     box-shadow: 0 2px 8px 0 rgb(0 0 0 / 0.08) !important;
+  }
+
+  [data-skin="soft"] .btn-primary {
+    background-image: linear-gradient(120deg, rgb(236 72 153), rgb(244 114 182)) !important;
+    border-color: transparent !important;
   }
 
   /* Editorial skin - serif typography */
@@ -399,6 +500,17 @@
     font-family: var(--font-serif) !important;
   }
 
+  [data-skin="editorial"] .btn-primary {
+    background-color: rgb(var(--color-accent)) !important;
+    border-color: rgb(var(--color-accent)) !important;
+    box-shadow: none !important;
+  }
+
+  [data-skin="editorial"] .card {
+    box-shadow: none !important;
+    border-color: rgb(var(--color-border)) !important;
+  }
+
   /* SaaS skin - modern rounded corners */
   [data-skin="saas"] .card,
   [data-skin="saas"] button,
@@ -407,9 +519,21 @@
     border-radius: var(--radius) !important;
   }
 
+  [data-skin="saas"] .btn-primary {
+    background-image: linear-gradient(120deg, rgb(99 102 241), rgb(129 140 248)) !important;
+    border-color: transparent !important;
+    box-shadow: var(--shadow-lg) !important;
+  }
+
   /* Monochrome skin - no color variation */
   [data-skin="monochrome"] {
     --color-accent-light: var(--color-accent);
+  }
+
+  [data-skin="monochrome"] .btn-primary {
+    background-color: rgb(var(--color-foreground)) !important;
+    color: rgb(var(--color-background)) !important;
+    border-color: rgb(var(--color-foreground)) !important;
   }
 
   /* Bold skin - maximum contrast */

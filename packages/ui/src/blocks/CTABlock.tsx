@@ -56,7 +56,7 @@ export function CTABlock({ block }: CTABlockProps) {
             <div className="absolute inset-0 bg-black/60" />
           </div>
         )}
-        <div className="container relative z-10 text-center text-white">
+        <div className="w-full relative z-10 text-center text-white">
           <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
             {heading}
           </h2>
@@ -140,7 +140,7 @@ export function CTABlock({ block }: CTABlockProps) {
   // Standard CTA
   return (
     <section className={`${bgClasses[backgroundColor as keyof typeof bgClasses]} py-16`}>
-      <div className="container text-center">
+      <div className="w-full text-center">
         <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
           {heading}
         </h2>

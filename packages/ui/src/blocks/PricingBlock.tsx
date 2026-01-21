@@ -22,7 +22,7 @@ export function PricingBlock({ block }: PricingBlockProps) {
 
   return (
     <section className="bg-gray-50 py-16">
-      <div className="container">
+      <div className="w-full">
         {(block.heading || block.subheading) && (
           <div className="mb-10 max-w-2xl">
             {block.heading && (

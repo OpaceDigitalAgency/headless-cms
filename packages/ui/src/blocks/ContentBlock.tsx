@@ -67,7 +67,7 @@ export function ContentBlock({ block }: ContentBlockProps) {
     <section
       className={`${bgClasses[backgroundColor as keyof typeof bgClasses]} ${paddingTopClasses[paddingTop as keyof typeof paddingTopClasses]} ${paddingBottomClasses[paddingBottom as keyof typeof paddingBottomClasses]}`}
     >
-      <div className="container">
+      <div className="w-full">
         <div className="grid grid-cols-12 gap-8">
           {columns.map((column, index) => (
             <div

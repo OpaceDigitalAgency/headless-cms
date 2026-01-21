@@ -17,7 +17,7 @@ export function QuoteBlock({ block }: QuoteBlockProps) {
 
   return (
     <section className="bg-white py-12">
-      <div className="container">
+      <div className="w-full">
         <div className={`flex flex-col gap-4 ${alignClasses[align]}`}>
           <blockquote className="max-w-3xl text-2xl font-medium text-gray-900">
             “{block.quote}”

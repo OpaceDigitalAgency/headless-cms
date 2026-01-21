@@ -20,7 +20,7 @@ export function SpacerBlock({ block }: SpacerBlockProps) {
   const lineStyle = block.lineStyle || 'solid'
 
   return (
-    <div className={`container ${sizeClasses[size]}`}>
+    <div className={`w-full ${sizeClasses[size]}`}>
       {style === 'divider' && <hr className={`border-t border-gray-200 ${lineStyle}`} />}
     </div>
   )

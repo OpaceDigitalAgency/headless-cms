@@ -17,7 +17,7 @@ export function LogoCloudBlock({ block }: LogoCloudBlockProps) {
 
   return (
     <section className="bg-white py-14">
-      <div className="container">
+      <div className="w-full">
         {block.heading && (
           <h2 className="mb-8 text-center text-2xl font-semibold text-gray-800">
             {block.heading}
