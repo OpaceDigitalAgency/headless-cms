@@ -25,7 +25,7 @@ This single command will:
 3. ✅ Start PostgreSQL via Docker
 4. ✅ Run database migrations
 5. ✅ Seed sample data
-6. ✅ Start the CMS on http://localhost:3000
+6. ✅ Start the CMS and integrated frontend on http://localhost:3000
 
 **Then:**
 1. Open your browser to: `http://localhost:3000/admin/create-first-user`

@@ -11,9 +11,8 @@ This file is designed to be used **alongside** the main Agent Build Brief.
 
 To avoid conflicts and ambiguity, all services use fixed ports:
 
-- **CMS**: http://localhost:3000  
-- **Web**: http://localhost:3001  
-- **PostgreSQL**: localhost:5432  
+- **CMS** (with integrated frontend): http://localhost:3000
+- **PostgreSQL**: localhost:5432
 
 These ports must be hard‑coded in Docker Compose and documented in `.env.example`.
 
@@ -114,11 +113,7 @@ cms:
 	@echo "Starting CMS + Postgres only..."
 	docker compose up -d postgres cms
 	@echo "CMS → http://localhost:3000/admin"
-
-web:
-	@echo "Starting Web only (CMS must already be running)..."
-	docker compose up -d web
-	@echo "WEB → http://localhost:3001"
+	@echo "Frontend → http://localhost:3000"
 
 logs:
 	docker compose logs -f
