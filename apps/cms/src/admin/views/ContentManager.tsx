@@ -26,7 +26,7 @@ export const ContentManager: React.FC<ContentManagerProps> = (props) => {
           Content
         </h1>
         <p style={{ fontSize: '14px', color: '#666' }}>
-          Manage your content collections including pages, posts, and custom content types.
+          Manage your content collections including pages and posts.
         </p>
       </div>
 
@@ -46,4 +46,3 @@ export const ContentManager: React.FC<ContentManagerProps> = (props) => {
 }
 
 export default ContentManager
-

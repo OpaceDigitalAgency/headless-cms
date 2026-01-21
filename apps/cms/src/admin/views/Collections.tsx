@@ -26,7 +26,7 @@ export const Collections: React.FC<CollectionsProps> = (props) => {
           Collections
         </h1>
         <p style={{ fontSize: '14px', color: '#666' }}>
-          Manage your collections including archive items, events, people, and places.
+          Manage core and custom collections including archive items, events, people, and places.
         </p>
       </div>
 
@@ -46,4 +46,3 @@ export const Collections: React.FC<CollectionsProps> = (props) => {
 }
 
 export default Collections
-

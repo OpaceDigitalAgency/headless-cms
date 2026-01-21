@@ -1004,6 +1004,10 @@ export interface ContentType {
    */
   template: 'archive-item' | 'product' | 'person' | 'place' | 'event' | 'article';
   /**
+   * Internal reference for template-based collections
+   */
+  templateId?: string | null;
+  /**
    * Optional description shown in the admin
    */
   description?: string | null;
@@ -3447,7 +3451,7 @@ export interface Place {
   _status?: ('draft' | 'published') | null;
 }
 /**
- * Items belonging to your custom content types
+ * Items belonging to your custom collections
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "custom-items".
@@ -8575,6 +8579,7 @@ export interface ContentTypesSelect<T extends boolean = true> {
   pluralLabel?: T;
   icon?: T;
   template?: T;
+  templateId?: T;
   description?: T;
   hasArchive?: T;
   archiveSlug?: T;

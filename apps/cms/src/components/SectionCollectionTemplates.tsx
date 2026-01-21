@@ -4,7 +4,6 @@ import React, { useState, useEffect } from 'react'
 import {
   allTemplates,
   type CollectionTemplate,
-  type CollectionStatus,
 } from '../collection-templates'
 import { SeedItemsList } from './SeedItemsList'
 
@@ -23,6 +22,20 @@ interface SectionCollectionTemplatesProps {
   description?: string
 }
 
+interface CustomCollection {
+  id: string
+  slug: string
+  name: string
+  singularLabel?: string
+  pluralLabel?: string
+  template?: string
+  templateId?: string
+  icon?: string
+  description?: string
+  hasArchive?: boolean
+  archiveSlug?: string
+}
+
 export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProps> = ({
   section,
   title,
@@ -38,9 +51,19 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
   const [uninstalledSlugs, setUninstalledSlugs] = useState<string[]>([])
   const [uninstalling, setUninstalling] = useState<string | null>(null)
   const [reinstalling, setReinstalling] = useState<string | null>(null)
-  const [contentTypes, setContentTypes] = useState<Array<{ id: string; slug: string }>>([])
-  const [enabling, setEnabling] = useState<string | null>(null)
+  const [contentTypes, setContentTypes] = useState<CustomCollection[]>([])
+  const [customCollectionCounts, setCustomCollectionCounts] = useState<Record<string, number>>({})
   const [expandedSeedList, setExpandedSeedList] = useState<string | null>(null)
+  const [createModalOpen, setCreateModalOpen] = useState(false)
+  const [createMode, setCreateMode] = useState<'base' | 'template' | 'clone'>('base')
+  const [createTemplateId, setCreateTemplateId] = useState<string | null>(null)
+  const [createSourceContentTypeId, setCreateSourceContentTypeId] = useState<string | null>(null)
+  const [createBaseTemplate, setCreateBaseTemplate] = useState('archive-item')
+  const [createName, setCreateName] = useState('')
+  const [createSlug, setCreateSlug] = useState('')
+  const [createHasArchive, setCreateHasArchive] = useState(true)
+  const [createSlugDirty, setCreateSlugDirty] = useState(false)
+  const [creating, setCreating] = useState(false)
 
   useEffect(() => {
     fetchInstalledCollections()
@@ -52,7 +75,9 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
 
   useEffect(() => {
     if (contentTypes.length) {
-      fetchContentTypeSeedStatus()
+      fetchCustomCollectionCounts()
+    } else {
+      setCustomCollectionCounts({})
     }
   }, [contentTypes])
 
@@ -138,7 +163,21 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
       if (response.ok) {
         const data = await response.json()
         const docs = Array.isArray(data?.docs) ? data.docs : []
-        setContentTypes(docs.map((doc: any) => ({ id: doc.id, slug: doc.slug })))
+        setContentTypes(
+          docs.map((doc: any) => ({
+            id: doc.id,
+            slug: doc.slug,
+            name: doc.name,
+            singularLabel: doc.singularLabel,
+            pluralLabel: doc.pluralLabel,
+            template: doc.template,
+            templateId: doc.templateId,
+            icon: doc.icon,
+            description: doc.description,
+            hasArchive: doc.hasArchive,
+            archiveSlug: doc.archiveSlug,
+          }))
+        )
       }
     } catch (error) {
       console.error('Failed to fetch content types:', error)
@@ -146,33 +185,142 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
     }
   }
 
-  const fetchContentTypeSeedStatus = async () => {
-    const contentTypeTemplates = allTemplates.filter((template) => template.contentTypeTemplate)
-    if (!contentTypeTemplates.length) return
-
+  const fetchCustomCollectionCounts = async () => {
     try {
-      const updates: Record<string, { count: number; hasSeedData: boolean; hasSeedMedia: boolean }> = {}
+      const updates: Record<string, number> = {}
       await Promise.all(
-        contentTypeTemplates.map(async (template) => {
-          const contentType = contentTypes.find((type) => type.slug === template.defaultSlug)
-          if (!contentType) return
-
+        contentTypes.map(async (contentType) => {
           const response = await fetch(`/api/custom-items?where[contentType][equals]=${contentType.id}&limit=0`)
           if (!response.ok) return
           const data = await response.json()
-          updates[template.defaultSlug] = {
-            count: data.totalDocs || 0,
-            hasSeedData: template.hasSeedData,
-            hasSeedMedia: false,
-          }
+          updates[contentType.id] = data.totalDocs || 0
         })
       )
 
-      if (Object.keys(updates).length > 0) {
-        setSeedStatus((prev) => ({ ...prev, ...updates }))
+      setCustomCollectionCounts(updates)
+    } catch (error) {
+      console.error('Failed to fetch custom collection counts:', error)
+    }
+  }
+
+  const slugify = (value: string) =>
+    value
+      .toLowerCase()
+      .trim()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/(^-|-$)/g, '')
+
+  const resetCreateModal = () => {
+    setCreateMode('base')
+    setCreateTemplateId(null)
+    setCreateSourceContentTypeId(null)
+    setCreateBaseTemplate('archive-item')
+    setCreateName('')
+    setCreateSlug('')
+    setCreateHasArchive(true)
+    setCreateSlugDirty(false)
+  }
+
+  const openCreateModal = (options?: {
+    mode?: 'base' | 'template' | 'clone'
+    templateId?: string | null
+    sourceContentTypeId?: string | null
+    baseTemplate?: string
+    name?: string
+    slug?: string
+    hasArchive?: boolean
+  }) => {
+    const baseTemplate = options?.baseTemplate || 'archive-item'
+    const name = options?.name || ''
+    const slug = options?.slug || ''
+
+    setCreateMode(options?.mode || 'base')
+    setCreateTemplateId(options?.templateId || null)
+    setCreateSourceContentTypeId(options?.sourceContentTypeId || null)
+    setCreateBaseTemplate(baseTemplate)
+    setCreateName(name)
+    setCreateSlug(slug)
+    setCreateHasArchive(options?.hasArchive ?? true)
+    setCreateSlugDirty(false)
+    setCreateModalOpen(true)
+  }
+
+  const closeCreateModal = () => {
+    setCreateModalOpen(false)
+    resetCreateModal()
+  }
+
+  const handleCreateCustomCollection = async () => {
+    const trimmedName = createName.trim()
+    const derivedSlug = createSlug.trim() || slugify(trimmedName)
+
+    if (!trimmedName) {
+      setMessage({ type: 'error', text: 'Name is required to create a custom collection.' })
+      return
+    }
+
+    if (!derivedSlug) {
+      setMessage({ type: 'error', text: 'Slug is required to create a custom collection.' })
+      return
+    }
+
+    setCreating(true)
+    setMessage(null)
+
+    const payload: Record<string, any> = {
+      name: trimmedName,
+      slug: derivedSlug,
+      hasArchive: createHasArchive,
+    }
+
+    if (createMode === 'template' && createTemplateId) {
+      payload.templateId = createTemplateId
+    } else if (createMode === 'clone' && createSourceContentTypeId) {
+      payload.sourceContentTypeId = createSourceContentTypeId
+    } else {
+      payload.baseTemplate = createBaseTemplate
+    }
+
+    try {
+      const response = await fetch('/api/collection-templates/create-custom', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      })
+
+      const data = await response.json()
+
+      if (response.ok && data.success) {
+        setMessage({
+          type: 'success',
+          text: data.message || `Created ${trimmedName}`,
+        })
+        closeCreateModal()
+        fetchContentTypes()
+        fetchInstalledCollections()
+        fetchSeedStatus()
+
+        try {
+          const channel = new BroadcastChannel('nav-cache-invalidate')
+          channel.postMessage({ type: 'invalidate' })
+          channel.close()
+        } catch {
+          sessionStorage.removeItem('nav-data')
+          sessionStorage.removeItem('nav-cache-time')
+        }
+      } else {
+        throw new Error(data.message || 'Failed to create custom collection')
       }
     } catch (error) {
-      console.error('Failed to fetch content type seed status:', error)
+      console.error('Failed to create custom collection:', error)
+      setMessage({
+        type: 'error',
+        text: error instanceof Error ? error.message : 'Failed to create custom collection. Please try again.',
+      })
+    } finally {
+      setCreating(false)
     }
   }
 
@@ -385,51 +533,19 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
     }
   }
 
-  const handleEnableContentType = async (template: CollectionTemplate) => {
-    setEnabling(template.id)
-    setMessage(null)
-
-    try {
-      const response = await fetch('/api/collection-templates/add', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          templateId: template.id,
-          customName: template.defaultPlural,
-          slug: template.defaultSlug,
-          singular: template.defaultSingular,
-          plural: template.defaultPlural,
-        }),
-      })
-
-      const data = await response.json()
-
-      if (response.ok && data.success) {
-        setMessage({
-          type: 'success',
-          text: data.message || `Enabled ${template.name}`,
-        })
-        fetchContentTypes()
-        fetchInstalledCollections()
-        fetchSeedStatus()
-      } else {
-        throw new Error(data.message || 'Failed to enable content type')
-      }
-    } catch (error) {
-      console.error('Failed to enable content type:', error)
-      setMessage({
-        type: 'error',
-        text: error instanceof Error ? error.message : 'Failed to enable content type. Please try again.',
-      })
-    } finally {
-      setEnabling(null)
-    }
+  const handleEnableContentType = (template: CollectionTemplate) => {
+    openCreateModal({
+      mode: 'template',
+      templateId: template.id,
+      baseTemplate: template.contentTypeTemplate?.template || 'archive-item',
+      name: template.defaultPlural,
+      slug: template.defaultSlug,
+      hasArchive: template.contentTypeTemplate?.hasArchive ?? true,
+    })
   }
 
-  const handleSeedContentTypeData = async (template: CollectionTemplate) => {
-    setSeeding(template.defaultSlug)
+  const handleSeedContentTypeData = async (template: CollectionTemplate, contentTypeId?: string) => {
+    setSeeding(contentTypeId || template.defaultSlug)
     setMessage(null)
 
     try {
@@ -440,6 +556,7 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
         },
         body: JSON.stringify({
           templateId: template.id,
+          contentTypeId,
           action: 'seed',
         }),
       })
@@ -451,7 +568,8 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
           type: 'success',
           text: data.message || `Successfully seeded ${template.name}`,
         })
-        fetchContentTypeSeedStatus()
+        fetchSeedStatus()
+        fetchCustomCollectionCounts()
       } else {
         throw new Error(data.message || 'Failed to seed content type')
       }
@@ -466,8 +584,8 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
     }
   }
 
-  const handleClearContentTypeSeedData = async (template: CollectionTemplate) => {
-    setSeeding(template.defaultSlug)
+  const handleClearContentTypeSeedData = async (template: CollectionTemplate, contentTypeId?: string) => {
+    setSeeding(contentTypeId || template.defaultSlug)
     setMessage(null)
 
     try {
@@ -478,6 +596,7 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
         },
         body: JSON.stringify({
           templateId: template.id,
+          contentTypeId,
           action: 'clear',
         }),
       })
@@ -489,7 +608,8 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
           type: 'success',
           text: data.message || `Successfully cleared ${template.name}`,
         })
-        fetchContentTypeSeedStatus()
+        fetchSeedStatus()
+        fetchCustomCollectionCounts()
       } else {
         throw new Error(data.message || 'Failed to clear content type seed data')
       }
@@ -621,12 +741,28 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
     }
   }
 
-  const contentTypeBySlug = new Map(contentTypes.map((type) => [type.slug, type]))
+  const templateById = new Map(allTemplates.map((template) => [template.id, template]))
 
   // Filter templates by section
   const sectionTemplates = allTemplates.filter((template) => template.adminGroup === section)
   const contentTypeTemplates = sectionTemplates.filter((template) => template.contentTypeTemplate)
   const collectionTemplates = sectionTemplates.filter((template) => !template.contentTypeTemplate)
+
+  const baseTemplateOptions = [
+    { value: 'archive-item', label: 'Archive Items' },
+    { value: 'event', label: 'Events' },
+    { value: 'person', label: 'People' },
+    { value: 'place', label: 'Places' },
+    { value: 'product', label: 'Products' },
+    { value: 'article', label: 'Article' },
+  ]
+
+  const cloneableBaseTemplates: Record<string, { baseTemplate: string; label: string }> = {
+    'archive-items': { baseTemplate: 'archive-item', label: 'Archive Items' },
+    events: { baseTemplate: 'event', label: 'Events' },
+    people: { baseTemplate: 'person', label: 'People' },
+    places: { baseTemplate: 'place', label: 'Places' },
+  }
 
   // Categorize templates
   const coreTemplates = collectionTemplates.filter((t) => t.status === 'core')
@@ -640,12 +776,6 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
     (t) => t.status !== 'core' && uninstalledSlugs.includes(t.defaultSlug)
   )
 
-  const enabledContentTypeTemplates = contentTypeTemplates.filter((template) =>
-    contentTypeBySlug.has(template.defaultSlug)
-  )
-  const availableContentTypeTemplates = contentTypeTemplates.filter((template) =>
-    !contentTypeBySlug.has(template.defaultSlug)
-  )
 
   const renderTemplateCard = (template: CollectionTemplate, options?: { uninstalled?: boolean }) => {
     const isUninstalled = options?.uninstalled === true
@@ -743,6 +873,30 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
         )}
 
         <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+          {section === 'Collections' && cloneableBaseTemplates[template.defaultSlug] && (
+            <button
+              onClick={() => {
+                const cloneConfig = cloneableBaseTemplates[template.defaultSlug]
+                openCreateModal({
+                  mode: 'base',
+                  baseTemplate: cloneConfig.baseTemplate,
+                  name: `${template.name} Copy`,
+                })
+              }}
+              style={{
+                padding: '8px 14px',
+                fontSize: '13px',
+                fontWeight: 500,
+                borderRadius: '6px',
+                border: '1px solid var(--theme-elevation-200)',
+                background: 'var(--theme-elevation-0)',
+                color: '#2563eb',
+                cursor: 'pointer',
+              }}
+            >
+              Clone Collection
+            </button>
+          )}
           {template.hasSeedData && !isSeeded && (
             <button
               onClick={() => setExpandedSeedList(expandedSeedList === template.defaultSlug ? null : template.defaultSlug)}
@@ -757,8 +911,22 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
                 color: isUninstalled ? '#475569' : 'white',
                 cursor: isSeedingThis || isUninstalled ? 'not-allowed' : 'pointer',
                 opacity: isSeedingThis || isUninstalled ? 0.6 : 1,
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px',
               }}
             >
+              <span style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                width: '16px',
+                height: '16px',
+                transition: 'transform 0.2s ease',
+                transform: expandedSeedList === template.defaultSlug ? 'rotate(180deg)' : 'rotate(0deg)',
+              }}>
+                ▼
+              </span>
               {isSeedingThis ? 'Seeding...' : isUninstalled ? 'Reinstall to Seed' : `Seed sample ${template.defaultPlural?.toLowerCase() || 'items'}`}
             </button>
           )}
@@ -864,15 +1032,170 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
     )
   }
 
-  const renderContentTypeCard = (template: CollectionTemplate) => {
-    const contentType = contentTypeBySlug.get(template.defaultSlug)
-    const isEnabled = Boolean(contentType)
-    const isEnablingThis = enabling === template.id
-    const isSeedingThis = seeding === template.defaultSlug
-    const status = seedStatus[template.defaultSlug]
-    const seededCount = status?.count || 0
-    const isSeeded = seededCount > 0
+  const renderCustomCollectionCard = (contentType: CustomCollection) => {
+    const itemCount = customCollectionCounts[contentType.id] || 0
+    const template = contentType.templateId ? templateById.get(contentType.templateId) : undefined
+    const isSeedingThis = seeding === contentType.id
+    const hasSeedData = Boolean(template?.hasSeedData)
 
+    return (
+      <div
+        key={contentType.id}
+        style={{
+          border: '1px solid var(--theme-elevation-150)',
+          borderRadius: '8px',
+          padding: '20px',
+          background: 'var(--theme-elevation-50)',
+        }}
+      >
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '12px' }}>
+          <h4 style={{ fontSize: '16px', fontWeight: 600, margin: 0, color: '#333' }}>
+            {contentType.pluralLabel || contentType.name}
+          </h4>
+          <div style={{ display: 'flex', gap: '6px' }}>
+            <span
+              style={{
+                fontSize: '11px',
+                padding: '3px 8px',
+                borderRadius: '4px',
+                background: '#10b981',
+                color: 'white',
+                fontWeight: 500,
+              }}
+            >
+              Custom
+            </span>
+            {contentType.template && (
+              <span
+                style={{
+                  fontSize: '11px',
+                  padding: '3px 8px',
+                  borderRadius: '4px',
+                  background: '#6366f1',
+                  color: 'white',
+                  fontWeight: 500,
+                }}
+              >
+                {contentType.template}
+              </span>
+            )}
+          </div>
+        </div>
+
+        <p style={{ fontSize: '13px', color: '#666', marginBottom: '12px', lineHeight: '1.5' }}>
+          {contentType.description || 'Custom collection managed from the Collections manager.'}
+        </p>
+
+        <div style={{ fontSize: '12px', color: '#888', marginBottom: '12px' }}>
+          <span style={{ fontWeight: 500 }}>Slug: </span>
+          <code style={{ background: 'var(--theme-elevation-100)', padding: '2px 6px', borderRadius: '3px' }}>
+            {contentType.slug}
+          </code>
+        </div>
+
+        <div style={{ fontSize: '12px', color: '#666', marginBottom: '16px' }}>
+          {itemCount} item{itemCount === 1 ? '' : 's'}
+        </div>
+
+        <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+          <a
+            href={`/admin/collections/custom-items?where[contentType][equals]=${contentType.id}`}
+            style={{
+              padding: '8px 14px',
+              fontSize: '13px',
+              fontWeight: 500,
+              borderRadius: '6px',
+              border: '1px solid var(--theme-elevation-200)',
+              background: 'var(--theme-elevation-0)',
+              color: '#3b82f6',
+              textDecoration: 'none',
+              display: 'inline-block',
+            }}
+          >
+            View Items
+          </a>
+          <a
+            href={`/admin/collections/content-types/${contentType.id}`}
+            style={{
+              padding: '8px 14px',
+              fontSize: '13px',
+              fontWeight: 500,
+              borderRadius: '6px',
+              border: '1px solid var(--theme-elevation-200)',
+              background: 'var(--theme-elevation-0)',
+              color: '#2563eb',
+              textDecoration: 'none',
+              display: 'inline-block',
+            }}
+          >
+            Edit Definition
+          </a>
+          <button
+            onClick={() =>
+              openCreateModal({
+                mode: 'clone',
+                sourceContentTypeId: contentType.id,
+                baseTemplate: contentType.template || 'archive-item',
+                name: `${contentType.name} Copy`,
+              })
+            }
+            style={{
+              padding: '8px 14px',
+              fontSize: '13px',
+              fontWeight: 500,
+              borderRadius: '6px',
+              border: '1px solid var(--theme-elevation-200)',
+              background: 'var(--theme-elevation-0)',
+              color: '#2563eb',
+              cursor: 'pointer',
+            }}
+          >
+            Clone
+          </button>
+          {hasSeedData && template && (
+            <>
+              <button
+                onClick={() => handleSeedContentTypeData(template, contentType.id)}
+                disabled={isSeedingThis}
+                style={{
+                  padding: '8px 14px',
+                  fontSize: '13px',
+                  fontWeight: 500,
+                  borderRadius: '6px',
+                  border: 'none',
+                  background: '#3b82f6',
+                  color: 'white',
+                  cursor: isSeedingThis ? 'not-allowed' : 'pointer',
+                  opacity: isSeedingThis ? 0.6 : 1,
+                }}
+              >
+                {isSeedingThis ? 'Seeding...' : 'Seed Data'}
+              </button>
+              <button
+                onClick={() => handleClearContentTypeSeedData(template, contentType.id)}
+                disabled={isSeedingThis}
+                style={{
+                  padding: '8px 14px',
+                  fontSize: '13px',
+                  fontWeight: 500,
+                  borderRadius: '6px',
+                  border: '1px solid #fca5a5',
+                  background: '#fee2e2',
+                  color: '#991b1b',
+                  cursor: isSeedingThis ? 'not-allowed' : 'pointer',
+                  opacity: isSeedingThis ? 0.6 : 1,
+                }}
+              >
+                {isSeedingThis ? 'Clearing...' : 'Clear Seed Data'}
+              </button>
+            </>
+          )}
+        </div>
+      </div>
+    )
+  }
+
+  const renderContentTypeCard = (template: CollectionTemplate) => {
     return (
       <div
         key={template.id}
@@ -887,20 +1210,18 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
           <h4 style={{ fontSize: '16px', fontWeight: 600, margin: 0, color: '#333' }}>
             {template.name}
           </h4>
-          <div style={{ display: 'flex', gap: '6px' }}>
-            <span
-              style={{
-                fontSize: '11px',
-                padding: '3px 8px',
-                borderRadius: '4px',
-                background: isEnabled ? '#10b981' : '#9ca3af',
-                color: 'white',
-                fontWeight: 500,
-              }}
-            >
-              {isEnabled ? 'Enabled' : 'Available'}
-            </span>
-          </div>
+          <span
+            style={{
+              fontSize: '11px',
+              padding: '3px 8px',
+              borderRadius: '4px',
+              background: '#6366f1',
+              color: 'white',
+              fontWeight: 500,
+            }}
+          >
+            Template
+          </span>
         </div>
 
         <p style={{ fontSize: '13px', color: '#666', marginBottom: '12px', lineHeight: '1.5' }}>
@@ -908,99 +1229,34 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
         </p>
 
         <div style={{ fontSize: '12px', color: '#888', marginBottom: '16px' }}>
-          <span style={{ fontWeight: 500 }}>Slug: </span>
+          <span style={{ fontWeight: 500 }}>Suggested slug: </span>
           <code style={{ background: 'var(--theme-elevation-100)', padding: '2px 6px', borderRadius: '3px' }}>
             {template.defaultSlug}
           </code>
         </div>
 
-        {template.hasSeedData && isEnabled && (
+        {template.hasSeedData && (
           <div style={{ fontSize: '12px', color: '#666', marginBottom: '12px' }}>
-            {isSeeded
-              ? `Seeded (${seededCount} items)`
-              : `Sample data available (${template.seedDataCount || 0} items)`}
+            Sample data available ({template.seedDataCount || 0} items)
           </div>
         )}
 
         <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-          {!isEnabled && (
-            <button
-              onClick={() => handleEnableContentType(template)}
-              disabled={isEnablingThis}
-              style={{
-                padding: '8px 14px',
-                fontSize: '13px',
-                fontWeight: 500,
-                borderRadius: '6px',
-                border: 'none',
-                background: '#10b981',
-                color: 'white',
-                cursor: isEnablingThis ? 'not-allowed' : 'pointer',
-                opacity: isEnablingThis ? 0.6 : 1,
-              }}
-            >
-              {isEnablingThis ? 'Enabling...' : 'Enable'}
-            </button>
-          )}
-
-          {template.hasSeedData && isEnabled && (
-            <button
-              onClick={() => handleSeedContentTypeData(template)}
-              disabled={isSeedingThis}
-              style={{
-                padding: '8px 14px',
-                fontSize: '13px',
-                fontWeight: 500,
-                borderRadius: '6px',
-                border: 'none',
-                background: '#3b82f6',
-                color: 'white',
-                cursor: isSeedingThis ? 'not-allowed' : 'pointer',
-                opacity: isSeedingThis ? 0.6 : 1,
-              }}
-            >
-              {isSeedingThis ? 'Seeding...' : 'Seed Data'}
-            </button>
-          )}
-
-          {template.hasSeedData && isEnabled && isSeeded && (
-            <button
-              onClick={() => handleClearContentTypeSeedData(template)}
-              disabled={isSeedingThis}
-              style={{
-                padding: '8px 14px',
-                fontSize: '13px',
-                fontWeight: 500,
-                borderRadius: '6px',
-                border: '1px solid #fca5a5',
-                background: '#fee2e2',
-                color: '#991b1b',
-                cursor: isSeedingThis ? 'not-allowed' : 'pointer',
-                opacity: isSeedingThis ? 0.6 : 1,
-              }}
-            >
-              {isSeedingThis ? 'Clearing...' : 'Clear Seed Data'}
-            </button>
-          )}
-
-          {isEnabled && contentType && (
-            <a
-              href={`/admin/collections/content-types/${contentType.id}`}
-              style={{
-                padding: '8px 14px',
-                fontSize: '13px',
-                fontWeight: 500,
-                borderRadius: '6px',
-                border: '1px solid var(--theme-elevation-200)',
-                background: 'var(--theme-elevation-0)',
-                color: '#3b82f6',
-                textDecoration: 'none',
-                display: 'inline-block',
-              }}
-            >
-              View Content Type
-            </a>
-          )}
+          <button
+            onClick={() => handleEnableContentType(template)}
+            style={{
+              padding: '8px 14px',
+              fontSize: '13px',
+              fontWeight: 500,
+              borderRadius: '6px',
+              border: 'none',
+              background: '#10b981',
+              color: 'white',
+              cursor: 'pointer',
+            }}
+          >
+            Use Template
+          </button>
         </div>
       </div>
     )
@@ -1058,30 +1314,63 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
         </div>
       )}
 
-      {enabledContentTypeTemplates.length > 0 && (
+      {section === 'Collections' && (
         <div style={{ marginBottom: '32px' }}>
-          <h3 style={{ fontSize: '18px', fontWeight: 600, marginBottom: '8px', color: '#333' }}>
-            Enabled Content Types
-          </h3>
-          <p style={{ fontSize: '13px', color: '#666', marginBottom: '16px' }}>
-            Custom content types enabled from templates. Seed data is optional.
-          </p>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '16px' }}>
-            {enabledContentTypeTemplates.map(renderContentTypeCard)}
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+            <h3 style={{ fontSize: '18px', fontWeight: 600, marginBottom: 0, color: '#333' }}>
+              Custom Collections
+            </h3>
+            <button
+              onClick={() => openCreateModal({ mode: 'base', baseTemplate: 'archive-item' })}
+              style={{
+                padding: '8px 14px',
+                fontSize: '13px',
+                fontWeight: 600,
+                borderRadius: '6px',
+                border: 'none',
+                background: '#10b981',
+                color: 'white',
+                cursor: 'pointer',
+              }}
+            >
+              Add Custom Collection
+            </button>
           </div>
+          <p style={{ fontSize: '13px', color: '#666', marginBottom: '16px' }}>
+            Create and manage custom collections from base templates. Items appear in the Collections menu immediately.
+          </p>
+          {contentTypes.length > 0 ? (
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '16px' }}>
+              {contentTypes.map(renderCustomCollectionCard)}
+            </div>
+          ) : (
+            <div
+              style={{
+                padding: '32px',
+                textAlign: 'center',
+                background: 'var(--theme-elevation-50)',
+                borderRadius: '8px',
+                border: '1px dashed var(--theme-elevation-200)',
+              }}
+            >
+              <p style={{ fontSize: '14px', color: '#666' }}>
+                No custom collections yet. Create one to get started.
+              </p>
+            </div>
+          )}
         </div>
       )}
 
-      {availableContentTypeTemplates.length > 0 && (
+      {section === 'Collections' && contentTypeTemplates.length > 0 && (
         <div style={{ marginBottom: '32px' }}>
           <h3 style={{ fontSize: '18px', fontWeight: 600, marginBottom: '8px', color: '#333' }}>
-            Available Content Types
+            Template Library
           </h3>
           <p style={{ fontSize: '13px', color: '#666', marginBottom: '16px' }}>
-            Optional content types based on Archive Items. Enable what you need and seed sample data.
+            Optional add-ons you can use as a starting point for custom collections.
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '16px' }}>
-            {availableContentTypeTemplates.map(renderContentTypeCard)}
+            {contentTypeTemplates.map(renderContentTypeCard)}
           </div>
         </div>
       )}
@@ -1102,8 +1391,10 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
 
       {coreTemplates.length === 0 &&
         installedTemplates.length === 0 &&
-        enabledContentTypeTemplates.length === 0 &&
-        availableContentTypeTemplates.length === 0 && (
+        uninstalledTemplates.length === 0 &&
+        (section !== 'Collections'
+          ? true
+          : contentTypes.length === 0 && contentTypeTemplates.length === 0) && (
         <div
           style={{
             padding: '40px',
@@ -1116,6 +1407,148 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
           <p style={{ fontSize: '14px', color: '#666' }}>
             No collections found in the {section} section.
           </p>
+        </div>
+      )}
+
+      {createModalOpen && (
+        <div
+          style={{
+            position: 'fixed',
+            inset: 0,
+            background: 'rgba(15, 23, 42, 0.45)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 1000,
+            padding: '20px',
+          }}
+        >
+          <div
+            style={{
+              width: '100%',
+              maxWidth: '520px',
+              background: 'white',
+              borderRadius: '12px',
+              padding: '24px',
+              boxShadow: '0 20px 60px rgba(15, 23, 42, 0.2)',
+            }}
+          >
+            <div style={{ marginBottom: '16px' }}>
+              <h3 style={{ margin: 0, fontSize: '20px', fontWeight: 700 }}>Create Custom Collection</h3>
+              <p style={{ margin: '6px 0 0', fontSize: '13px', color: '#64748b' }}>
+                Choose a base template, then refine fields in the definition editor.
+              </p>
+            </div>
+
+            <div style={{ display: 'grid', gap: '12px' }}>
+              <label style={{ display: 'grid', gap: '6px', fontSize: '13px', color: '#334155' }}>
+                Name
+                <input
+                  type="text"
+                  value={createName}
+                  onChange={(event) => {
+                    const nextName = event.target.value
+                    setCreateName(nextName)
+                    if (!createSlugDirty) {
+                      setCreateSlug(slugify(nextName))
+                    }
+                  }}
+                  style={{
+                    padding: '10px 12px',
+                    borderRadius: '6px',
+                    border: '1px solid #cbd5f5',
+                    fontSize: '14px',
+                  }}
+                />
+              </label>
+
+              <label style={{ display: 'grid', gap: '6px', fontSize: '13px', color: '#334155' }}>
+                Slug
+                <input
+                  type="text"
+                  value={createSlug}
+                  onChange={(event) => {
+                    setCreateSlug(event.target.value)
+                    setCreateSlugDirty(true)
+                  }}
+                  style={{
+                    padding: '10px 12px',
+                    borderRadius: '6px',
+                    border: '1px solid #cbd5f5',
+                    fontSize: '14px',
+                  }}
+                />
+              </label>
+
+              <label style={{ display: 'grid', gap: '6px', fontSize: '13px', color: '#334155' }}>
+                Base Template
+                <select
+                  value={createBaseTemplate}
+                  disabled={createMode !== 'base'}
+                  onChange={(event) => setCreateBaseTemplate(event.target.value)}
+                  style={{
+                    padding: '10px 12px',
+                    borderRadius: '6px',
+                    border: '1px solid #cbd5f5',
+                    fontSize: '14px',
+                    background: createMode !== 'base' ? '#f8fafc' : 'white',
+                  }}
+                >
+                  {baseTemplateOptions.map((option) => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </select>
+              </label>
+
+              <label style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13px', color: '#334155' }}>
+                <input
+                  type="checkbox"
+                  checked={createHasArchive}
+                  onChange={(event) => setCreateHasArchive(event.target.checked)}
+                />
+                Create archive page
+              </label>
+            </div>
+
+            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px', marginTop: '20px' }}>
+              <button
+                type="button"
+                onClick={closeCreateModal}
+                style={{
+                  padding: '8px 14px',
+                  fontSize: '13px',
+                  fontWeight: 600,
+                  borderRadius: '6px',
+                  border: '1px solid #cbd5f5',
+                  background: 'white',
+                  color: '#475569',
+                  cursor: 'pointer',
+                }}
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={handleCreateCustomCollection}
+                disabled={creating}
+                style={{
+                  padding: '8px 14px',
+                  fontSize: '13px',
+                  fontWeight: 600,
+                  borderRadius: '6px',
+                  border: 'none',
+                  background: '#10b981',
+                  color: 'white',
+                  cursor: creating ? 'not-allowed' : 'pointer',
+                  opacity: creating ? 0.7 : 1,
+                }}
+              >
+                {creating ? 'Creating...' : 'Create Collection'}
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </div>

@@ -1,7 +1,6 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
-import { ContentTypeManager } from '../../components/ContentTypeManager'
 import {
   FileTextIcon,
   EditIcon,
@@ -14,10 +13,8 @@ import {
   ChevronUpIcon,
   ChevronDownIcon,
   UsersIcon,
-  BarChartIcon,
   FolderIcon,
   PackageIcon,
-  SeedIcon
 } from '../icons'
 
 /**
@@ -88,47 +85,11 @@ interface RecentItem {
  * quick-create buttons, and site configuration shortcuts.
  */
 export const Dashboard: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<'overview' | 'content-types'>('overview')
   const [stats, setStats] = useState<CollectionStat[]>([])
   const [recentItems, setRecentItems] = useState<RecentItem[]>([])
   const [drafts, setDrafts] = useState<RecentItem[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [collectionSlugs, setCollectionSlugs] = useState<string[]>([])
-
-  // Check URL for tab parameter on mount and when URL changes
-  useEffect(() => {
-    const checkUrlParams = () => {
-      if (typeof window !== 'undefined') {
-        const params = new URLSearchParams(window.location.search)
-        const tab = params.get('tab')
-        if (tab === 'content-types') {
-          setActiveTab('content-types')
-        }
-      }
-    }
-
-    // Check immediately
-    checkUrlParams()
-
-    // Also check after a short delay to handle async routing
-    const timer = setTimeout(checkUrlParams, 100)
-
-    return () => clearTimeout(timer)
-  }, [])
-
-  // Helper function to change tab and update URL
-  const handleTabChange = (tab: 'overview' | 'content-types') => {
-    setActiveTab(tab)
-    if (typeof window !== 'undefined') {
-      const url = new URL(window.location.href)
-      if (tab === 'overview') {
-        url.searchParams.delete('tab')
-      } else {
-        url.searchParams.set('tab', tab)
-      }
-      window.history.replaceState({}, '', url.toString())
-    }
-  }
 
   // Fetch collection stats and recent items
   useEffect(() => {
@@ -143,15 +104,22 @@ export const Dashboard: React.FC = () => {
 
           // Extract all collection slugs from navigation
           const slugs: string[] = []
+          const isStatsSlug = (slug: string) =>
+            slug &&
+            !slug.startsWith('custom-type:') &&
+            slug !== 'dashboard' &&
+            slug !== 'tools' &&
+            !slug.endsWith('-manager')
+
           navData.navSections?.forEach((section: any) => {
             section.items?.forEach((item: any) => {
-              if (item.slug && item.slug !== 'dashboard' && item.slug !== 'tools') {
+              if (item.slug && isStatsSlug(item.slug)) {
                 slugs.push(item.slug)
               }
               // Also check nested items
               if (item.items) {
                 item.items.forEach((nestedItem: any) => {
-                  if (nestedItem.slug) {
+                  if (nestedItem.slug && isStatsSlug(nestedItem.slug)) {
                     slugs.push(nestedItem.slug)
                   }
                 })
@@ -324,27 +292,8 @@ export const Dashboard: React.FC = () => {
         <p>Welcome back! Here's what's happening with your content.</p>
       </div>
 
-      {/* Tab Navigation */}
-      <div className="ra-dashboard__tabs">
-        <button
-          className={`ra-dashboard__tab ${activeTab === 'overview' ? 'ra-dashboard__tab--active' : ''}`}
-          onClick={() => handleTabChange('overview')}
-        >
-          <BarChartIcon size={16} /> Overview
-        </button>
-        <button
-          className={`ra-dashboard__tab ${activeTab === 'content-types' ? 'ra-dashboard__tab--active' : ''}`}
-          onClick={() => handleTabChange('content-types')}
-        >
-          <FolderIcon size={16} /> Content Types
-        </button>
-      </div>
-
-      {/* Overview Tab */}
-      {activeTab === 'overview' && (
-        <>
-          {/* Stats Grid */}
-          <div className="ra-dashboard__stats">
+      {/* Stats Grid */}
+      <div className="ra-dashboard__stats">
             {stats.map((stat) => {
               const IconComponent = stat.Icon
               return (
@@ -367,8 +316,8 @@ export const Dashboard: React.FC = () => {
             })}
           </div>
 
-          {/* Two-column grid for recent and drafts */}
-          <div className="ra-dashboard__grid">
+      {/* Two-column grid for recent and drafts */}
+      <div className="ra-dashboard__grid">
             {/* Recent Updates */}
             <div className="ra-dashboard__card">
               <div className="ra-dashboard__card-header">
@@ -433,8 +382,8 @@ export const Dashboard: React.FC = () => {
             </div>
           </div>
 
-          {/* Quick Create */}
-          <div className="ra-dashboard__section">
+      {/* Quick Create */}
+      <div className="ra-dashboard__section">
             <h2>Quick Create</h2>
             <div className="ra-dashboard__quick-actions">
               {collectionSlugs.includes('pages') && (
@@ -470,8 +419,8 @@ export const Dashboard: React.FC = () => {
             </div>
           </div>
 
-          {/* Site Configuration */}
-          <div className="ra-dashboard__section">
+      {/* Site Configuration */}
+      <div className="ra-dashboard__section">
             <h2>Site Configuration</h2>
             <div className="ra-dashboard__config-grid">
               <a href="/admin/globals/header" className="ra-dashboard__config-card">
@@ -504,13 +453,6 @@ export const Dashboard: React.FC = () => {
               </a>
             </div>
           </div>
-        </>
-      )}
-
-      {/* Content Types Tab */}
-      {activeTab === 'content-types' && (
-        <ContentTypeManager />
-      )}
     </div>
   )
 }

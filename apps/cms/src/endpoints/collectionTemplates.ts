@@ -123,6 +123,7 @@ export const getContentTypesEndpoint: Endpoint = {
         singularLabel: doc.singularLabel,
         pluralLabel: doc.pluralLabel,
         template: doc.template,
+        templateId: doc.templateId,
         icon: doc.icon,
         description: doc.description,
         hasArchive: doc.hasArchive,
@@ -187,6 +188,7 @@ export const createCustomCollectionEndpoint: Endpoint = {
       let resolvedHasArchive = typeof hasArchive === 'boolean' ? hasArchive : undefined
       let resolvedArchiveSlug = typeof archiveSlug === 'string' ? archiveSlug.trim() : ''
       let resolvedCustomFields: any[] = []
+      let resolvedTemplateId = typeof templateId === 'string' ? templateId : ''
 
       if (sourceContentTypeId) {
         const source = await payload.findByID({
@@ -201,6 +203,7 @@ export const createCustomCollectionEndpoint: Endpoint = {
         resolvedDescription = resolvedDescription || source?.description
         resolvedHasArchive = typeof resolvedHasArchive === 'boolean' ? resolvedHasArchive : source?.hasArchive
         resolvedArchiveSlug = resolvedArchiveSlug || source?.archiveSlug
+        resolvedTemplateId = resolvedTemplateId || source?.templateId
         resolvedCustomFields = Array.isArray(source?.customFields) ? source.customFields : []
 
         if (!resolvedName) {
@@ -291,6 +294,7 @@ export const createCustomCollectionEndpoint: Endpoint = {
           pluralLabel: resolvedPlural,
           icon: resolvedIcon || 'box',
           template: resolvedTemplate,
+          templateId: resolvedTemplateId || undefined,
           description: resolvedDescription || undefined,
           hasArchive: resolvedHasArchive,
           archiveSlug: resolvedHasArchive ? resolvedArchiveSlug : undefined,
@@ -414,6 +418,7 @@ export const addTemplateEndpoint: Endpoint = {
             pluralLabel: resolvedPlural,
             icon: template.contentTypeTemplate.icon || 'box',
             template: template.contentTypeTemplate.template,
+            templateId: template.id,
             description: template.description,
             hasArchive: template.contentTypeTemplate.hasArchive ?? true,
             archiveSlug,

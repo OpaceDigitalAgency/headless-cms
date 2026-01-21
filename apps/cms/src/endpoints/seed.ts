@@ -2,7 +2,7 @@ import type { Endpoint } from 'payload'
 import { createSeeder, isValidPresetId, PRESET_IDS, PRESET_METADATA, type PresetId } from '../seed/presets'
 import { ensureShowcasePage } from '../seed/showcase'
 import { isCollectionEnabled } from '../lib/collectionVisibility'
-import { getTemplateById } from '../collection-templates'
+import { getTemplateById, allTemplates } from '../collection-templates'
 import { createRichText } from '../seed/base'
 
 /**
@@ -386,37 +386,48 @@ export const seedContentTypeEndpoint: Endpoint = {
 
     try {
       const body = await req.json?.() || {}
-      const { templateId, action } = body
+      const { templateId, action, contentTypeId } = body
 
-      if (!templateId || typeof templateId !== 'string') {
-        return Response.json(
-          { success: false, message: 'Missing required field: templateId' },
-          { status: 400 }
-        )
+      let template = typeof templateId === 'string' ? getTemplateById(templateId) : undefined
+
+      let contentTypeDoc: any = null
+
+      if (contentTypeId) {
+        contentTypeDoc = await payload.findByID({
+          collection: 'content-types',
+          id: contentTypeId,
+          depth: 0,
+        })
+
+        if (!template && contentTypeDoc?.templateId) {
+          template = getTemplateById(contentTypeDoc.templateId)
+        }
       }
 
-      const template = getTemplateById(templateId)
       if (!template || !template.contentTypeTemplate) {
         return Response.json(
-          { success: false, message: `Template not found or not a content type: ${templateId}` },
+          { success: false, message: 'Template not found or not a content type.' },
           { status: 404 }
         )
       }
 
-      const contentTypeSlug = template.defaultSlug
-      const contentType = await payload.find({
-        collection: 'content-types',
-        where: {
-          slug: { equals: contentTypeSlug },
-        },
-        limit: 1,
-        depth: 0,
-      })
+      if (!contentTypeDoc) {
+        const contentTypeSlug = template.defaultSlug
+        const contentType = await payload.find({
+          collection: 'content-types',
+          where: {
+            slug: { equals: contentTypeSlug },
+          },
+          limit: 1,
+          depth: 0,
+        })
 
-      const contentTypeDoc = contentType.docs[0]
+        contentTypeDoc = contentType.docs[0]
+      }
+
       if (!contentTypeDoc) {
         return Response.json(
-          { success: false, message: `Content type "${contentTypeSlug}" is not enabled yet.` },
+          { success: false, message: 'Content type is not enabled yet.' },
           { status: 400 }
         )
       }
@@ -682,7 +693,9 @@ export const seedItemEndpoint: Endpoint = {
       }
 
       // Get the template to find seed items
-      const template = getTemplateById(collectionSlug)
+      // Note: collectionSlug is the collection slug (e.g., 'pages'), not the template ID (e.g., 'page')
+      // So we need to find the template by matching defaultSlug
+      const template = allTemplates.find(t => t.defaultSlug === collectionSlug)
       if (!template || !template.seedItems) {
         return Response.json(
           { success: false, message: `No seed items found for ${collectionSlug}` },

@@ -47,7 +47,7 @@ export const CustomItems: CollectionConfig = {
     group: 'Content',
     useAsTitle: 'title',
     defaultColumns: ['title', 'contentType', 'status', 'updatedAt'],
-    description: 'Items belonging to your custom content types',
+    description: 'Items belonging to your custom collections',
     listSearchableFields: ['title', 'slug'],
     preview: (doc) => {
       // Build preview URL with content type

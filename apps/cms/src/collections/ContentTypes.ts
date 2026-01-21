@@ -133,6 +133,15 @@ export const ContentTypes: CollectionConfig = {
       },
     },
     {
+      name: 'templateId',
+      type: 'text',
+      admin: {
+        readOnly: true,
+        position: 'sidebar',
+        description: 'Internal reference for template-based collections',
+      },
+    },
+    {
       name: 'description',
       type: 'textarea',
       admin: {

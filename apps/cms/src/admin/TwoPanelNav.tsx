@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef, useCallback } from 'react'
 import Link from 'next/link'
-import { useRouter, usePathname } from 'next/navigation'
+import { useRouter, usePathname, useSearchParams } from 'next/navigation'
 import { ThemeToggle } from './ThemeToggle'
 import type { NavSection } from './navData'
 
@@ -261,26 +261,34 @@ function resolveActiveSection(pathname: string, navSections: NavSection[]): stri
 /**
  * Resolve which item is active based on current path
  */
-function resolveActiveItem(pathname: string, navSections: NavSection[]): string | null {
+function resolveActiveItem(pathname: string, navSections: NavSection[], currentHref: string): string | null {
   for (const section of navSections) {
     for (const item of section.items) {
-      const itemHref = item.href?.split('?')[0] || item.href
+      const itemHrefRaw = item.href || ''
+      const itemHrefBase = itemHrefRaw.split('?')[0]
+      const matchesItem = itemHrefRaw.includes('?')
+        ? currentHref.startsWith(itemHrefRaw)
+        : pathname.startsWith(itemHrefBase)
       // Check direct item
-      if (itemHref === '/admin' && pathname === '/admin') {
+      if (itemHrefBase === '/admin' && pathname === '/admin') {
         return item.href
       }
-      if (itemHref && itemHref !== '/admin' && pathname.startsWith(itemHref)) {
+      if (itemHrefRaw && itemHrefBase !== '/admin' && matchesItem) {
         return item.href
       }
 
       // Check nested items
       if (item.items) {
         for (const nestedItem of item.items) {
-          const nestedHref = nestedItem.href?.split('?')[0] || nestedItem.href
-          if (nestedHref === '/admin' && pathname === '/admin') {
+          const nestedHrefRaw = nestedItem.href || ''
+          const nestedHrefBase = nestedHrefRaw.split('?')[0]
+          const matchesNested = nestedHrefRaw.includes('?')
+            ? currentHref.startsWith(nestedHrefRaw)
+            : pathname.startsWith(nestedHrefBase)
+          if (nestedHrefBase === '/admin' && pathname === '/admin') {
             return nestedItem.href
           }
-          if (nestedHref && nestedHref !== '/admin' && pathname.startsWith(nestedHref)) {
+          if (nestedHrefRaw && nestedHrefBase !== '/admin' && matchesNested) {
             return nestedItem.href
           }
         }
@@ -514,6 +522,11 @@ const AccountDropdown: React.FC = () => {
  */
 export const TwoPanelNav: React.FC = () => {
   const pathname = usePathname()
+  const searchParams = useSearchParams()
+  const currentHref = React.useMemo(() => {
+    const search = searchParams?.toString()
+    return search ? `${pathname}?${search}` : pathname
+  }, [pathname, searchParams])
   const [isCompact, setIsCompact] = useState(true)
   const getCachedNavData = () => {
     if (typeof window === 'undefined') {
@@ -546,7 +559,7 @@ export const TwoPanelNav: React.FC = () => {
   const [isLoading, setIsLoading] = useState(!cachedNavData)
 
   const activeSection = resolveActiveSection(pathname, navSections)
-  const activeItem = resolveActiveItem(pathname, navSections)
+  const activeItem = resolveActiveItem(pathname, navSections, currentHref)
 
   // Fetch dynamic navigation on mount with caching
   useEffect(() => {
