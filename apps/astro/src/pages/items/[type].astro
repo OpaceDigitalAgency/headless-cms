@@ -6,10 +6,16 @@ export async function getStaticPaths() {
   const types = await getContentTypes();
   return types.docs
     .filter((type: any) => type.hasArchive !== false)
-    .map((type: any) => ({
-      params: { type: type.archiveSlug ? type.archiveSlug.replace(/^\\/?items\\//, '') : type.slug },
-      props: { contentType: type },
-    }));
+    .map((type: any) => {
+      let typeParam = type.slug;
+      if (type.archiveSlug) {
+        typeParam = type.archiveSlug.replace(/^\/?(items\/)?/, '');
+      }
+      return {
+        params: { type: typeParam },
+        props: { contentType: type },
+      };
+    });
 }
 
 const { contentType } = Astro.props;
@@ -33,21 +39,25 @@ const items = await getCustomItemsByType(resolvedType.id, { limit: 100 });
         )}
       </header>
 
-      {items.docs.length === 0 ? (
+      {items.docs.length === 0 && (
         <p class="text-center text-gray-500">No items found.</p>
-      ) : (
+      )}
+      {items.docs.length > 0 && (
         <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {items.docs.map((item: any) => (
-            <a href={`/items/${resolvedType.archiveSlug ? resolvedType.archiveSlug.replace(/^\\/?items\\//, '') : resolvedType.slug}/${item.slug}`} class="card block overflow-hidden hover:shadow-lg transition-shadow">
-              {item.featuredImage?.url && (
-                <img src={item.featuredImage.url} alt={item.featuredImage.alt || item.title} class="w-full h-48 object-cover" />
-              )}
-              <div class="p-5">
-                <h2 class="text-xl font-semibold">{item.title}</h2>
-                {item.excerpt && <p class="mt-2 text-gray-600 dark:text-gray-300 line-clamp-2">{item.excerpt}</p>}
-              </div>
-            </a>
-          ))}
+          {items.docs.map((item: any) => {
+            const typeSlugForUrl = resolvedType.archiveSlug ? resolvedType.archiveSlug.replace(/^\/?(items\/)?/, '') : resolvedType.slug;
+            return (
+              <a href={`/items/${typeSlugForUrl}/${item.slug}`} class="card block overflow-hidden hover:shadow-lg transition-shadow">
+                {item.featuredImage?.url && (
+                  <img src={item.featuredImage.url} alt={item.featuredImage.alt || item.title} class="w-full h-48 object-cover" />
+                )}
+                <div class="p-5">
+                  <h2 class="text-xl font-semibold">{item.title}</h2>
+                  {item.excerpt && <p class="mt-2 text-gray-600 dark:text-gray-300 line-clamp-2">{item.excerpt}</p>}
+                </div>
+              </a>
+            );
+          })}
         </div>
       )}
     </div>

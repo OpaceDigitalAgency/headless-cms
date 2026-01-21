@@ -183,6 +183,9 @@ export abstract class BaseSeeder {
       slug: string
       excerpt?: string
       content?: any
+      blocks?: any[]
+      featuredImage?: string
+      gallery?: Array<{ image: string; caption?: string }>
       status?: 'draft' | 'published' | 'archived'
       customData?: Record<string, any>
     }>
@@ -209,15 +212,18 @@ export abstract class BaseSeeder {
         for (const item of data.items) {
           const created = await this.payload.create({
             collection: 'custom-items',
-            data: {
-              title: item.title,
-              slug: item.slug,
-              excerpt: item.excerpt,
-              content: item.content,
-              contentType: contentType.id,
-              status: item.status || 'published',
-              customData: item.customData || {},
-            },
+              data: {
+                title: item.title,
+                slug: item.slug,
+                excerpt: item.excerpt,
+                content: item.content,
+                blocks: item.blocks || [],
+                featuredImage: item.featuredImage,
+                gallery: item.gallery || [],
+                contentType: contentType.id,
+                status: item.status || 'published',
+                customData: item.customData || {},
+              },
           })
           this.trackId('custom-items', created.id)
         }

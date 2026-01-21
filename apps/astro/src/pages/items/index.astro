@@ -3,6 +3,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getContentTypes } from '../../lib/payload';
 
 const types = await getContentTypes();
+const filteredTypes = types.docs.filter((type: any) => type.hasArchive !== false);
 ---
 
 <BaseLayout title="Content Types" description="Browse all dynamic content archives.">
@@ -13,12 +14,13 @@ const types = await getContentTypes();
         <p class="mt-4 text-lg text-gray-600 dark:text-gray-300">Browse all dynamic content archives.</p>
       </header>
 
-      {types.docs.length === 0 ? (
+      {filteredTypes.length === 0 && (
         <p class="text-center text-gray-500">No content types found.</p>
-      ) : (
+      )}
+      {filteredTypes.length > 0 && (
         <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {types.docs.filter((type: any) => type.hasArchive !== false).map((type: any) => (
-            <a href={`/${(type.archiveSlug || `items/${type.slug}`).replace(/^\\//, '')}`} class="block rounded-lg border border-gray-100 p-6 shadow-sm hover:shadow-md">
+          {filteredTypes.map((type: any) => (
+            <a href={`/${(type.archiveSlug || `items/${type.slug}`).replace(/^\\/g, '')}`} class="block rounded-lg border border-gray-100 p-6 shadow-sm hover:shadow-md">
               <h2 class="text-xl font-semibold">{type.pluralLabel || type.name}</h2>
               {type.description && <p class="mt-2 text-sm text-gray-600 dark:text-gray-300">{type.description}</p>}
             </a>

@@ -1,6 +1,6 @@
 ---
 import { getTags, getTagContent } from '@/lib/payload';
-import Layout from '@/layouts/Layout.astro';
+import BaseLayout from '@/layouts/BaseLayout.astro';
 import { Image } from 'astro:assets';
 
 export async function getStaticPaths() {
@@ -46,7 +46,7 @@ const collectionPaths: Record<string, string> = {
 };
 ---
 
-<Layout title={tag.title} description={tag.description || `All content tagged with ${tag.title}`}>
+<BaseLayout title={tag.title} description={tag.description || `All content tagged with ${tag.title}`}>
   <div class="container py-16">
     <header class="mb-12 text-center">
       <p class="text-sm uppercase tracking-wide text-gray-500 dark:text-gray-400">Tag</p>
@@ -123,5 +123,5 @@ const collectionPaths: Record<string, string> = {
       );
     })}
   </div>
-</Layout>
+</BaseLayout>
 

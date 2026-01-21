@@ -76,16 +76,19 @@ const alignmentClasses: Record<string, string> = {
       {buttons.length > 0 && (
         <div class={`mt-8 flex flex-wrap gap-4 ${alignment === 'center' ? 'justify-center' : alignment === 'right' ? 'justify-end' : ''}`}>
           {buttons.map((button) => {
-            const variantClasses: Record<string, string> = {
-              primary: 'bg-blue-600 text-white hover:bg-blue-700',
-              secondary: 'bg-gray-800 text-white hover:bg-gray-900',
-              outline: `border-2 ${backgroundImage?.url ? 'border-white text-white hover:bg-white/10' : 'border-gray-800 text-gray-800 hover:bg-gray-100 dark:border-white dark:text-white dark:hover:bg-white/10'}`,
-            };
-            
+            let buttonClass = 'bg-blue-600 text-white hover:bg-blue-700';
+            if (button.variant === 'secondary') {
+              buttonClass = 'bg-gray-800 text-white hover:bg-gray-900';
+            } else if (button.variant === 'outline') {
+              buttonClass = backgroundImage?.url
+                ? 'border-2 border-white text-white hover:bg-white/10'
+                : 'border-2 border-gray-800 text-gray-800 hover:bg-gray-100 dark:border-white dark:text-white dark:hover:bg-white/10';
+            }
+
             return (
-              <a 
-                href={button.link} 
-                class={`inline-flex items-center px-6 py-3 rounded-lg font-semibold transition-colors ${variantClasses[button.variant || 'primary']}`}
+              <a
+                href={button.link}
+                class={`inline-flex items-center px-6 py-3 rounded-lg font-semibold transition-colors ${buttonClass}`}
               >
                 {button.label}
               </a>

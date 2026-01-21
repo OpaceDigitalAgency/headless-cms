@@ -94,6 +94,9 @@ export interface CollectionTemplate {
     slug: string
     excerpt?: string
     content?: any
+    blocks?: any[]
+    featuredImage?: string
+    gallery?: Array<{ image: string; caption?: string }>
     status?: 'draft' | 'published' | 'archived'
     customData?: Record<string, any>
   }>

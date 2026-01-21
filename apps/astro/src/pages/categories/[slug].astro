@@ -1,6 +1,6 @@
 ---
 import { getCategories, getCategoryContent } from '@/lib/payload';
-import Layout from '@/layouts/Layout.astro';
+import BaseLayout from '@/layouts/BaseLayout.astro';
 import { Image } from 'astro:assets';
 
 export async function getStaticPaths() {
@@ -54,7 +54,7 @@ while (currentCat) {
 }
 ---
 
-<Layout title={category.title} description={category.description || `All content in ${category.title}`}>
+<BaseLayout title={category.title} description={category.description || `All content in ${category.title}`}>
   <div class="container py-16">
     <header class="mb-12 text-center">
       {breadcrumbs.length > 1 && (
@@ -153,5 +153,5 @@ while (currentCat) {
       );
     })}
   </div>
-</Layout>
+</BaseLayout>
 

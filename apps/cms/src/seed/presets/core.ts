@@ -126,42 +126,133 @@ export class CoreSeeder extends BaseSeeder {
       {
         name: 'Florence, Italy',
         slug: 'florence-italy',
+        shortDescription: 'Birthplace of the Renaissance and a hub of artistic innovation.',
         description: 'The birthplace of the Renaissance, home to countless masterpieces.',
+        historicalSignificance: 'Florence fostered groundbreaking art, architecture, and humanist thought.',
         country: 'Italy',
         placeType: 'city',
         location: [11.2558, 43.7696],
+        contentBlocks: [
+          {
+            blockType: 'grid',
+            heading: 'Highlights',
+            description: 'Landmarks and cultural touchpoints that shaped the era.',
+            style: 'cards',
+            columns: '3',
+            items: [
+              { title: 'Duomo', description: 'Iconic cathedral with Brunelleschi\'s dome.' },
+              { title: 'Uffizi', description: 'Repository of Renaissance art collections.' },
+              { title: 'Medici Legacy', description: 'Patronage that powered artistic revolutions.' },
+            ],
+          },
+          {
+            blockType: 'stats',
+            heading: 'Cultural Snapshot',
+            stats: [
+              { value: '1400s', label: 'Golden Century' },
+              { value: '3', label: 'Major Dynasties' },
+              { value: '100+', label: 'Notable Works' },
+            ],
+          },
+        ],
       },
       {
         name: 'Rome, Italy',
         slug: 'rome-italy',
+        shortDescription: 'The Eternal City and heart of the Roman Empire.',
         description: 'The Eternal City, center of the Roman Empire and the Catholic Church.',
+        historicalSignificance: 'Rome shaped politics, religion, and engineering for centuries.',
         country: 'Italy',
         placeType: 'city',
         location: [12.4964, 41.9028],
+        contentBlocks: [
+          {
+            blockType: 'features',
+            heading: 'Enduring Influence',
+            layout: 'grid',
+            items: [
+              { title: 'Architecture', description: 'Engineering feats that defined urban planning.' },
+              { title: 'Religion', description: 'A global center for the Catholic Church.' },
+              { title: 'Politics', description: 'Legacy of empire and governance.' },
+            ],
+          },
+        ],
       },
       {
         name: 'Paris, France',
         slug: 'paris-france',
+        shortDescription: 'City of Light and a global center for art and culture.',
         description: 'The City of Light, a global center for art, fashion, and culture.',
+        historicalSignificance: 'Paris is synonymous with modern art movements and design leadership.',
         country: 'France',
         placeType: 'city',
         location: [2.3522, 48.8566],
+        contentBlocks: [
+          {
+            blockType: 'stats',
+            heading: 'Creative Pulse',
+            stats: [
+              { value: '1800s', label: 'Impressionist Rise' },
+              { value: '2', label: 'World Expos' },
+              { value: '12', label: 'Major Museums' },
+            ],
+          },
+          {
+            blockType: 'cta',
+            heading: 'Plan a Visit',
+            description: 'Explore the collections inspired by Parisian culture.',
+            links: [
+              { label: 'Explore Collections', url: '/collections', variant: 'primary' },
+            ],
+            backgroundColor: 'light',
+          },
+        ],
       },
       {
         name: 'Athens, Greece',
         slug: 'athens-greece',
+        shortDescription: 'Cradle of Western civilization and birthplace of democracy.',
         description: 'The cradle of Western civilization and birthplace of democracy.',
+        historicalSignificance: 'Athens shaped philosophy, governance, and classical art.',
         country: 'Greece',
         placeType: 'city',
         location: [23.7275, 37.9838],
+        contentBlocks: [
+          {
+            blockType: 'grid',
+            heading: 'Classical Foundations',
+            style: 'features',
+            columns: '2',
+            items: [
+              { title: 'Philosophy', description: 'Home to foundational thinkers and schools.' },
+              { title: 'Democracy', description: 'Early experiments in citizen governance.' },
+              { title: 'Theatre', description: 'Origins of dramatic performance traditions.' },
+              { title: 'Architecture', description: 'Temples and civic spaces still studied today.' },
+            ],
+          },
+        ],
       },
       {
         name: 'Cairo, Egypt',
         slug: 'cairo-egypt',
+        shortDescription: 'Gateway to ancient wonders and the Nile.',
         description: 'Gateway to the ancient wonders of Egypt and the pyramids.',
+        historicalSignificance: 'Cairo connects modern life with millennia of heritage.',
         country: 'Egypt',
         placeType: 'city',
         location: [31.2357, 30.0444],
+        contentBlocks: [
+          {
+            blockType: 'features',
+            heading: 'Cultural Threads',
+            layout: 'list',
+            items: [
+              { title: 'Nile Heritage', description: 'Lifeblood of trade and settlement.' },
+              { title: 'Dynastic Legacy', description: 'Connections to ancient royal sites.' },
+              { title: 'Craft Traditions', description: 'Artisan techniques passed through generations.' },
+            ],
+          },
+        ],
       },
     ]
 
@@ -171,10 +262,13 @@ export class CoreSeeder extends BaseSeeder {
       const place = await this.create('places', {
         name: data.name,
         slug: data.slug,
+        shortDescription: data.shortDescription,
         description: createRichText(data.description),
+        historicalSignificance: createRichText(data.historicalSignificance),
         country: data.country,
         placeType: data.placeType,
         location: data.location,
+        contentBlocks: data.contentBlocks,
         _status: 'published',
       })
       places[data.slug] = place.id
@@ -223,51 +317,193 @@ export class CoreSeeder extends BaseSeeder {
         name: 'Leonardo da Vinci',
         slug: 'leonardo-da-vinci',
         shortBio: 'Italian Renaissance polymath known for his art, science, and inventions.',
+        biography: createRichTextParagraphs([
+          'Leonardo blended art and science in a way few have ever matched.',
+          'His notebooks reveal experiments, observations, and designs that were centuries ahead of their time.',
+          'This profile highlights his interdisciplinary practice and lasting influence.',
+        ]),
         birthDate: '1452',
         deathDate: '1519',
         nationality: 'Italian',
         birthPlace: 'florence-italy',
         role: ['artist', 'sculptor', 'architect', 'scholar'],
+        contentBlocks: [
+          {
+            blockType: 'features',
+            heading: 'Signature Contributions',
+            layout: 'grid',
+            items: [
+              { title: 'Anatomical Studies', description: 'Precision drawings that advanced medical understanding.' },
+              { title: 'Flight Concepts', description: 'Early studies of lift, gliding, and aerial devices.' },
+              { title: 'Workshop Mastery', description: 'Large-scale works with complex production techniques.' },
+            ],
+          },
+          {
+            blockType: 'stats',
+            heading: 'At a Glance',
+            stats: [
+              { value: '7', label: 'Major Works' },
+              { value: '13k', label: 'Notebook Pages' },
+              { value: '4', label: 'Disciplines' },
+            ],
+          },
+          {
+            blockType: 'quote',
+            quote: 'Simplicity is the ultimate sophistication.',
+            author: 'Leonardo da Vinci',
+            align: 'left',
+          },
+        ],
       },
       {
         name: 'Michelangelo Buonarroti',
         slug: 'michelangelo-buonarroti',
         shortBio: 'Italian sculptor, painter, architect, and poet of the High Renaissance.',
+        biography: createRichTextParagraphs([
+          'Michelangelo\'s work redefined sculpture and monumental painting.',
+          'From marble to fresco, his craftsmanship elevated every medium he touched.',
+          'This profile explores his techniques, patrons, and legacy.',
+        ]),
         birthDate: '1475',
         deathDate: '1564',
         nationality: 'Italian',
         birthPlace: 'florence-italy',
         role: ['artist', 'sculptor', 'architect'],
+        contentBlocks: [
+          {
+            blockType: 'timeline',
+            heading: 'Creative Milestones',
+            layout: 'alternating',
+            events: [
+              { date: '1501', title: 'David Commission', description: createRichText('Begins the marble statue that became a symbol of Florence.') },
+              { date: '1508', title: 'Sistine Chapel', description: createRichText('Completes the iconic ceiling frescoes.') },
+              { date: '1546', title: 'St. Peter\'s', description: createRichText('Appointed chief architect of St. Peter\'s Basilica.') },
+            ],
+          },
+          {
+            blockType: 'features',
+            heading: 'Primary Mediums',
+            layout: 'list',
+            items: [
+              { title: 'Sculpture', description: 'Marble forms with intense anatomical realism.' },
+              { title: 'Painting', description: 'Narrative frescoes with bold composition.' },
+              { title: 'Architecture', description: 'Grand civic and religious structures.' },
+            ],
+          },
+        ],
       },
       {
         name: 'Raphael Sanzio',
         slug: 'raphael-sanzio',
         shortBio: 'Italian painter and architect of the High Renaissance.',
+        biography: createRichTextParagraphs([
+          'Raphael balanced grace and clarity across portraiture and large fresco cycles.',
+          'His workshop system enabled complex commissions on an ambitious scale.',
+          'This entry highlights his collaborative process and stylistic influence.',
+        ]),
         birthDate: '1483',
         deathDate: '1520',
         nationality: 'Italian',
         birthPlace: 'rome-italy',
         role: ['artist', 'architect'],
+        contentBlocks: [
+          {
+            blockType: 'grid',
+            heading: 'Studio Highlights',
+            description: 'Key themes across Raphael\'s major commissions.',
+            style: 'cards',
+            columns: '3',
+            items: [
+              { title: 'Portraiture', description: 'Balanced compositions with refined color.' },
+              { title: 'Fresco Cycles', description: 'Narrative suites for civic and religious patrons.' },
+              { title: 'Architecture', description: 'Elegant plans influenced by classical forms.' },
+            ],
+          },
+          {
+            blockType: 'cta',
+            heading: 'Explore the Raphael Collection',
+            description: 'Browse related archive items and sketches.',
+            links: [
+              { label: 'View Archive Items', url: '/archive-items', variant: 'primary' },
+            ],
+            backgroundColor: 'light',
+          },
+        ],
       },
       {
         name: 'Claude Monet',
         slug: 'claude-monet',
         shortBio: 'French painter and founder of Impressionism.',
+        biography: createRichTextParagraphs([
+          'Monet captured changing light with rapid brushwork and vibrant palettes.',
+          'His series paintings explored the same subject across different times and seasons.',
+          'This profile focuses on his approach to atmosphere and color.',
+        ]),
         birthDate: '1840',
         deathDate: '1926',
         nationality: 'French',
         birthPlace: 'paris-france',
         role: ['artist'],
+        contentBlocks: [
+          {
+            blockType: 'features',
+            heading: 'Series Themes',
+            layout: 'grid',
+            items: [
+              { title: 'Water Lilies', description: 'A long-running exploration of reflection and light.' },
+              { title: 'Cathedrals', description: 'Shifting tonal studies of stone and shadow.' },
+              { title: 'Haystacks', description: 'Seasonal variations rendered in quick strokes.' },
+            ],
+          },
+          {
+            blockType: 'testimonials',
+            heading: 'Curator Notes',
+            items: [
+              {
+                quote: 'Monet\'s palette reveals the emotional temperature of a scene.',
+                name: 'Elise Fournier',
+                role: 'Head Curator',
+              },
+              {
+                quote: 'A master of atmosphere, he made light the subject itself.',
+                name: 'Jonah Hart',
+                role: 'Collection Archivist',
+              },
+            ],
+          },
+        ],
       },
       {
         name: 'Phidias',
         slug: 'phidias',
         shortBio: 'Ancient Greek sculptor, painter, and architect.',
+        biography: createRichTextParagraphs([
+          'Phidias oversaw some of the most celebrated sculptural programs of antiquity.',
+          'His workshops produced monumental works that shaped classical ideals.',
+          'This profile focuses on his techniques and cultural legacy.',
+        ]),
         birthDate: '480 BCE',
         deathDate: '430 BCE',
         nationality: 'Greek',
         birthPlace: 'athens-greece',
         role: ['sculptor', 'architect'],
+        contentBlocks: [
+          {
+            blockType: 'stats',
+            heading: 'Legacy Metrics',
+            stats: [
+              { value: '2', label: 'Major Temples' },
+              { value: '5', label: 'Attributed Works' },
+              { value: '1', label: 'Classical Era' },
+            ],
+          },
+          {
+            blockType: 'quote',
+            quote: 'The aim of art is to represent not the outward appearance of things, but their inward significance.',
+            author: 'Attributed to Phidias',
+            align: 'center',
+          },
+        ],
       },
     ]
 
@@ -278,11 +514,13 @@ export class CoreSeeder extends BaseSeeder {
         name: data.name,
         slug: data.slug,
         shortBio: data.shortBio,
+        biography: data.biography,
         birthDate: data.birthDate,
         deathDate: data.deathDate,
         nationality: data.nationality,
         birthPlace: places[data.birthPlace] || null,
         role: data.role,
+        contentBlocks: data.contentBlocks,
         _status: 'published',
       })
       people[data.slug] = person.id
