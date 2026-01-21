@@ -55,6 +55,18 @@ export const navigationEndpoint: Endpoint = {
     const overridesBySlug = new Map(overrideList.map((item) => [item.slug, item]))
     const orderBySlug = new Map(overrideList.map((item, index) => [item.slug, index]))
 
+    const navSettings: any = await payload.findGlobal({ slug: 'navigation-settings', depth: 0 }).catch(() => null)
+    const rawGlobalOverrides = Array.isArray(navSettings?.globals) ? navSettings.globals : []
+    const globalOverrides = rawGlobalOverrides
+      .filter((item: any) => item && typeof item.slug === 'string')
+      .map((item: any) => ({
+        slug: item.slug,
+        enabled: typeof item.enabled === 'boolean' ? item.enabled : true,
+        label: typeof item.label === 'string' ? item.label : '',
+      }))
+    const globalOverridesBySlug = new Map(globalOverrides.map((item: any) => [item.slug, item]))
+    const globalOrderBySlug = new Map(globalOverrides.map((item: any, index: number) => [item.slug, index]))
+
     // Build collection items map
     const collectionItems: Record<string, any> = {}
     const collectionSections: Record<string, SectionId> = {}
@@ -233,11 +245,27 @@ export const navigationEndpoint: Endpoint = {
     console.log('[Navigation] Total globals in config:', payload.config.globals.length)
     console.log('[Navigation] Global slugs:', payload.config.globals.map(g => g.slug))
 
-    const globals = payload.config.globals.map((global) => ({
-      label: global.label || global.slug,
-      href: `/admin/globals/${global.slug}`,
-      slug: global.slug,
-    }))
+    const globals = payload.config.globals.map((global, index) => {
+      const override = globalOverridesBySlug.get(global.slug)
+      const labelOverride = typeof override?.label === 'string' ? override.label.trim() : ''
+      const label = labelOverride || global.label || global.slug
+      const enabled = override?.enabled !== false
+
+      return {
+        label,
+        href: `/admin/globals/${global.slug}`,
+        slug: global.slug,
+        _enabled: enabled,
+        _order: globalOrderBySlug.has(global.slug) ? globalOrderBySlug.get(global.slug) : index,
+      }
+    })
+    const globalSearchLinks = globals
+      .filter((global) => global._enabled)
+      .map((global) => ({
+        label: global.label,
+        href: global.href,
+        slug: global.slug,
+      }))
 
     const globalIconMap: Record<string, string> = {
       header: 'header',
@@ -246,13 +274,16 @@ export const navigationEndpoint: Endpoint = {
       'navigation-settings': 'settings',
     }
 
-    const globalNavItems = globals.map((global) => ({
-      label: global.label,
-      href: global.href,
-      icon: globalIconMap[global.slug] || 'settings',
-      slug: global.slug,
-      _order: Number.MAX_SAFE_INTEGER,
-    }))
+    const globalNavItems = globals
+      .filter((global) => global._enabled)
+      .sort((a, b) => (a._order || 0) - (b._order || 0))
+      .map((global) => ({
+        label: global.label,
+        href: global.href,
+        icon: globalIconMap[global.slug] || 'settings',
+        slug: global.slug,
+        _order: Number.MAX_SAFE_INTEGER,
+      }))
 
     console.log('[Navigation] Global nav items:', globalNavItems.length)
     console.log('[Navigation] Global nav items:', globalNavItems.map(g => ({ slug: g.slug, label: g.label })))
@@ -311,19 +342,10 @@ export const navigationEndpoint: Endpoint = {
 
       // Get custom links from navigation-settings global
       let customLinks: Array<{ label: string; url: string; insertPosition?: string; position?: 'start' | 'end' }> = []
-      try {
-        const navSettings = await payload.findGlobal({
-          slug: 'navigation-settings',
-          depth: 0,
-        })
-        if (navSettings && Array.isArray(navSettings.customLinks)) {
-          customLinks = navSettings.customLinks.filter((link: any) =>
-            link && typeof link.label === 'string' && typeof link.url === 'string'
-          )
-        }
-      } catch (error) {
-        // Navigation settings not found or error fetching - continue without custom links
-        console.log('Could not fetch custom links from navigation-settings')
+      if (navSettings && Array.isArray(navSettings.customLinks)) {
+        customLinks = navSettings.customLinks.filter((link: any) =>
+          link && typeof link.label === 'string' && typeof link.url === 'string'
+        )
       }
 
       // Remove Settings section if it's empty (no collections and no globals)
@@ -337,7 +359,7 @@ export const navigationEndpoint: Endpoint = {
 
       return Response.json({
         navSections,
-        globals,
+        globals: globalSearchLinks,
         collectionSearchConfig,
         customLinks,
       })

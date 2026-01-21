@@ -2,7 +2,7 @@ import type { GlobalConfig } from 'payload'
 
 export const NavigationSettings: GlobalConfig = {
   slug: 'navigation-settings',
-  label: 'CMS Navigation Settings',
+  label: 'Admin Navigation',
   admin: {
     group: 'Settings',
     description: 'Control which collections appear in the admin navigation and how they are grouped.',
@@ -35,7 +35,24 @@ export const NavigationSettings: GlobalConfig = {
         components: {
           Field: '/components/CollectionManagerField',
         },
+        custom: {
+          managerType: 'collections',
+        },
         description: 'Toggle collections and click "Save" below. Then refresh your browser (Cmd+R or F5) to see changes in the navigation menu.',
+      },
+    },
+    {
+      name: 'globals',
+      label: 'Global Navigation',
+      type: 'json',
+      admin: {
+        components: {
+          Field: '/components/CollectionManagerField',
+        },
+        custom: {
+          managerType: 'globals',
+        },
+        description: 'Reorder and rename global settings links. Save changes and refresh to see updates in the navigation menu.',
       },
     },
     {

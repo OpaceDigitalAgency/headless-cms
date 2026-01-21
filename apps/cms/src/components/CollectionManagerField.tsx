@@ -5,6 +5,8 @@ import { useField } from '@payloadcms/ui'
 import type { SectionId } from '../lib/navigationConfig'
 import { isDefaultEnabled, sectionLabels, sectionOrder } from '../lib/navigationConfig'
 
+type ManagerType = 'collections' | 'globals'
+
 interface CollectionInfo {
   slug: string
   label: string
@@ -22,21 +24,33 @@ interface CollectionSetting {
 interface CollectionManagerFieldProps {
   path: string
   label?: string
+  custom?: {
+    managerType?: ManagerType
+  }
+  field?: {
+    admin?: {
+      custom?: {
+        managerType?: ManagerType
+      }
+    }
+  }
 }
 
 const normalizeSettings = (
   collections: CollectionInfo[],
-  saved: CollectionSetting[]
+  saved: CollectionSetting[],
+  managerType: ManagerType
 ): CollectionSetting[] => {
-  // Filter out any internal collections from saved settings
-  const internalCollectionPrefixes = ['payload-', 'search-results']
-  const filteredSaved = saved.filter((item) => {
-    const isInternal = internalCollectionPrefixes.some(prefix => item.slug.startsWith(prefix)) || item.slug === 'search-results'
-    if (isInternal) {
-      console.log('[normalizeSettings] Filtering out internal collection from saved settings:', item.slug)
-    }
-    return !isInternal
-  })
+  const filteredSaved = managerType === 'collections'
+    ? saved.filter((item) => {
+        const internalCollectionPrefixes = ['payload-', 'search-results']
+        const isInternal = internalCollectionPrefixes.some(prefix => item.slug.startsWith(prefix)) || item.slug === 'search-results'
+        if (isInternal) {
+          console.log('[normalizeSettings] Filtering out internal collection from saved settings:', item.slug)
+        }
+        return !isInternal
+      })
+    : saved
 
   const savedMap = new Map(filteredSaved.map((item) => [item.slug, item]))
   const orderedSlugs = filteredSaved.map((item) => item.slug)
@@ -57,17 +71,25 @@ const normalizeSettings = (
     .map((slug) => {
       const collection = collections.find((item) => item.slug === slug)
       const savedItem = savedMap.get(slug)
-      const defaultEnabled = collection?.hidden ? false : isDefaultEnabled(slug)
+      const defaultEnabled = managerType === 'globals'
+        ? true
+        : collection?.hidden
+          ? false
+          : isDefaultEnabled(slug)
+      const fallbackSection = managerType === 'globals' ? 'settings' : 'content'
       return {
         slug,
         enabled: savedItem?.enabled ?? defaultEnabled,
-        section: savedItem?.section || collection?.defaultSection || 'content',
+        section: savedItem?.section || collection?.defaultSection || fallbackSection,
         label: savedItem?.label || '',
       }
     })
 }
 
-export const CollectionManagerField: React.FC<CollectionManagerFieldProps> = ({ path, label }) => {
+export const CollectionManagerField: React.FC<CollectionManagerFieldProps> = ({ path, label, custom, field }) => {
+  const managerType = custom?.managerType || field?.admin?.custom?.managerType || 'collections'
+  const managerLabel = managerType === 'globals' ? 'globals' : 'collections'
+  const managerTitle = managerType === 'globals' ? 'global links' : 'collections'
   const { value, setValue } = useField<CollectionSetting[]>({ path })
   const [collections, setCollections] = useState<CollectionInfo[]>([])
   const [items, setItems] = useState<CollectionSetting[]>([])
@@ -87,19 +109,21 @@ export const CollectionManagerField: React.FC<CollectionManagerFieldProps> = ({ 
         setErrorMessage(null)
         // Add cache-busting parameter to ensure fresh data
         const cacheBuster = Date.now()
-        const response = await fetch(`/api/admin/collection-manager?t=${cacheBuster}`, {
+        const response = await fetch(`/api/admin/collection-manager?t=${cacheBuster}&type=${managerType}`, {
           credentials: 'include',
           cache: 'no-store', // Disable caching
         })
         if (response.ok) {
           const data = await response.json()
+          const responseItems = Array.isArray(data.items) ? data.items : data.collections
           console.log('[CollectionManagerField] API response:', data)
-          console.log('[CollectionManagerField] Collections received:', data.collections?.map((c: CollectionInfo) => c.slug))
-          console.log('[CollectionManagerField] Collections count:', data.collections?.length)
+          console.log(`[CollectionManagerField] ${managerLabel} received:`, responseItems?.map((c: CollectionInfo) => c.slug))
+          console.log(`[CollectionManagerField] ${managerLabel} count:`, responseItems?.length)
 
           // Additional validation - filter out any internal collections that might have slipped through
-          const filteredCollections = Array.isArray(data.collections)
-            ? data.collections.filter((c: CollectionInfo) => {
+          const filteredItems = Array.isArray(responseItems)
+            ? responseItems.filter((c: CollectionInfo) => {
+                if (managerType !== 'collections') return true
                 const isInternal = c.slug.startsWith('payload-') || c.slug === 'search-results'
                 if (isInternal) {
                   console.warn('[CollectionManagerField] Filtering out internal collection that slipped through:', c.slug)
@@ -108,11 +132,11 @@ export const CollectionManagerField: React.FC<CollectionManagerFieldProps> = ({ 
               })
             : []
 
-          console.log('[CollectionManagerField] Final collections after client-side filter:', filteredCollections.map((c: CollectionInfo) => c.slug))
-          setCollections(filteredCollections)
+          console.log(`[CollectionManagerField] Final ${managerLabel} after client-side filter:`, filteredItems.map((c: CollectionInfo) => c.slug))
+          setCollections(filteredItems)
         } else {
           const payloadError = await response.json().catch(() => null)
-          const message = payloadError?.error || `Failed to load collections (status ${response.status})`
+          const message = payloadError?.error || `Failed to load ${managerLabel} (status ${response.status})`
           console.error('[CollectionManagerField] API error:', message, response.status)
           setErrorMessage(message)
           setCollections([])
@@ -120,12 +144,12 @@ export const CollectionManagerField: React.FC<CollectionManagerFieldProps> = ({ 
       } catch (error) {
         console.error('[CollectionManagerField] Fetch error:', error)
         setCollections([])
-        setErrorMessage(`Failed to load collections: ${error instanceof Error ? error.message : 'Unknown error'}`)
+        setErrorMessage(`Failed to load ${managerLabel}: ${error instanceof Error ? error.message : 'Unknown error'}`)
       }
     }
 
     fetchCollections()
-  }, [])
+  }, [managerType, managerLabel])
 
   useEffect(() => {
     console.log('[CollectionManagerField] Initializing with:', {
@@ -150,12 +174,12 @@ export const CollectionManagerField: React.FC<CollectionManagerFieldProps> = ({ 
     // If value is null/undefined/empty, treat as first-time setup
     const saved = Array.isArray(value) && value.length > 0 ? value : []
     console.log('[CollectionManagerField] Saved settings count:', saved.length)
-    const normalized = normalizeSettings(collections, saved)
+    const normalized = normalizeSettings(collections, saved, managerType)
     console.log('[CollectionManagerField] Normalized items count:', normalized.length)
     setItems(normalized)
     setIsLoading(false)
     initializedRef.current = true
-  }, [collections, value])
+  }, [collections, value, managerType])
 
   useEffect(() => {
     if (!initializedRef.current) return
@@ -245,8 +269,8 @@ export const CollectionManagerField: React.FC<CollectionManagerFieldProps> = ({ 
   }
 
   const resetToDefaults = () => {
-    if (window.confirm('Are you sure you want to reset all collections to their default settings?')) {
-      const normalized = normalizeSettings(collections, [])
+    if (window.confirm(`Are you sure you want to reset all ${managerTitle} to their default settings?`)) {
+      const normalized = normalizeSettings(collections, [], managerType)
       setItems(normalized)
     }
   }
@@ -304,8 +328,9 @@ export const CollectionManagerField: React.FC<CollectionManagerFieldProps> = ({ 
         <div>
           <div className="field-label">{label || 'Collection Navigation'}</div>
           <div className="field-description">
-            Toggle visibility, choose sections, and reorder collections in the admin navigation.
-            Click "Save" below to persist changes, then refresh the page to see updates in the menu.
+            {managerType === 'globals'
+              ? 'Reorder and rename global settings links in the admin navigation. Click "Save" below to persist changes, then refresh the page to see updates in the menu.'
+              : 'Toggle visibility, choose sections, and reorder collections in the admin navigation. Click "Save" below to persist changes, then refresh the page to see updates in the menu.'}
           </div>
         </div>
         <div style={{ display: 'flex', gap: '8px' }}>
@@ -319,11 +344,11 @@ export const CollectionManagerField: React.FC<CollectionManagerFieldProps> = ({ 
       </div>
 
       {isLoading ? (
-        <div className="ra-collection-manager__loading">Loading collections...</div>
+        <div className="ra-collection-manager__loading">Loading {managerLabel}...</div>
       ) : errorMessage ? (
         <div className="ra-collection-manager__loading">{errorMessage}</div>
       ) : items.length === 0 ? (
-        <div className="ra-collection-manager__loading">No collections available.</div>
+        <div className="ra-collection-manager__loading">No {managerLabel} available.</div>
       ) : (
         <div className="ra-collection-manager__sections">
           {sectionOrder.map(sectionId => {
@@ -338,7 +363,9 @@ export const CollectionManagerField: React.FC<CollectionManagerFieldProps> = ({ 
                 <div className="ra-collection-manager__list">
                   {sectionItems.map((item) => {
                     const index = items.indexOf(item)
-            const collection = collectionsBySlug.get(item.slug)
+                    const collection = collectionsBySlug.get(item.slug)
+                    const labelOverride = item.label?.trim()
+                    const displayLabel = labelOverride || collection?.label || item.slug
             return (
               <div key={item.slug} className="ra-collection-manager__row">
                 <div className="ra-collection-manager__move">
@@ -368,22 +395,26 @@ export const CollectionManagerField: React.FC<CollectionManagerFieldProps> = ({ 
                     checked={Boolean(item.enabled)}
                     onChange={(event) => updateItem(index, { enabled: event.target.checked })}
                   />
-                  <span>{collection?.label || item.slug}</span>
+                  <span>{displayLabel}</span>
                 </label>
 
                 <div className="ra-collection-manager__slug">{item.slug}</div>
 
-                <select
-                  className="ra-collection-manager__select"
-                  value={item.section}
-                  onChange={(event) => updateItem(index, { section: event.target.value as SectionId })}
-                >
-                  {sectionOrder.map((sectionId) => (
-                    <option key={sectionId} value={sectionId}>
-                      {sectionLabels[sectionId]}
-                    </option>
-                  ))}
-                </select>
+                {managerType === 'collections' ? (
+                  <select
+                    className="ra-collection-manager__select"
+                    value={item.section}
+                    onChange={(event) => updateItem(index, { section: event.target.value as SectionId })}
+                  >
+                    {sectionOrder.map((sectionId) => (
+                      <option key={sectionId} value={sectionId}>
+                        {sectionLabels[sectionId]}
+                      </option>
+                    ))}
+                  </select>
+                ) : (
+                  <div className="ra-collection-manager__select" aria-hidden="true" />
+                )}
 
                 <input
                   className="ra-collection-manager__input"

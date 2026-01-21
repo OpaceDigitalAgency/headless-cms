@@ -7,6 +7,20 @@ export const collectionManagerEndpoint: Endpoint = {
   handler: async (req) => {
     try {
       const { payload } = req
+      const url = new URL(req.url, 'http://localhost')
+      const managerType = url.searchParams.get('type') || 'collections'
+
+      if (managerType === 'globals') {
+        const globals = payload.config.globals.map((global) => ({
+          slug: global.slug,
+          label: global.label || global.slug,
+          hidden: false,
+          defaultSection: 'settings',
+        }))
+
+        return Response.json({ items: globals })
+      }
+
       console.log('\n========================================')
       console.log('[CollectionManager] Endpoint called at', new Date().toISOString())
       console.log('[CollectionManager] Total collections in config:', payload.config.collections.length)
@@ -57,10 +71,10 @@ export const collectionManagerEndpoint: Endpoint = {
       console.log('[CollectionManager] Response ready to send')
       console.log('========================================\n')
 
-      return Response.json({ collections })
+      return Response.json({ items: collections })
     } catch (error) {
       console.error('[CollectionManager] Endpoint error:', error)
-      return Response.json({ error: `Failed to load collections: ${error instanceof Error ? error.message : 'Unknown error'}` }, { status: 500 })
+      return Response.json({ error: `Failed to load navigation items: ${error instanceof Error ? error.message : 'Unknown error'}` }, { status: 500 })
     }
   },
 }

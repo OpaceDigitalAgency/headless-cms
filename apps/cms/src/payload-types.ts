@@ -9515,6 +9515,18 @@ export interface NavigationSetting {
     | boolean
     | null;
   /**
+   * Reorder and rename global settings links. Save changes and refresh to see updates in the navigation menu.
+   */
+  globals?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  /**
    * Add custom links to the top navigation bar. These appear in the horizontal menu at the very top of the admin panel. Save changes and refresh the page to see updates.
    */
   customLinks?:
@@ -9703,6 +9715,7 @@ export interface SettingsSelect<T extends boolean = true> {
  */
 export interface NavigationSettingsSelect<T extends boolean = true> {
   collections?: T;
+  globals?: T;
   customLinks?:
     | T
     | {
