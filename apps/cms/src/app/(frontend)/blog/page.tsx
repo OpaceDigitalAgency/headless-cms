@@ -1,11 +1,19 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
 import Image from 'next/image'
-import { getPosts } from '@/lib/payload-api'
+import { getPosts, getSettings } from '@/lib/payload-api'
+import { generateEnhancedMetadata } from '@/lib/seo/metadata'
 
-export const metadata: Metadata = {
-  title: 'Blog',
-  description: 'Latest news and articles',
+export async function generateMetadata(): Promise<Metadata> {
+  const settings = await getSettings()
+  return generateEnhancedMetadata(
+    {
+      title: 'Blog',
+      description: 'Latest news, articles, and updates',
+    },
+    settings,
+    '/blog'
+  )
 }
 
 export default async function BlogPage() {

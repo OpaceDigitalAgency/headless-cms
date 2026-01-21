@@ -1,6 +1,20 @@
-import { getArchiveItems } from '@/lib/payload-api'
+import type { Metadata } from 'next'
+import { getArchiveItems, getSettings } from '@/lib/payload-api'
+import { generateEnhancedMetadata } from '@/lib/seo/metadata'
 import Link from 'next/link'
 import Image from 'next/image'
+
+export async function generateMetadata(): Promise<Metadata> {
+  const settings = await getSettings()
+  return generateEnhancedMetadata(
+    {
+      title: 'Archive Items',
+      description: 'Explore curated archive items',
+    },
+    settings,
+    '/archive-items'
+  )
+}
 
 export default async function ArchiveItemsPage() {
   const items = await getArchiveItems(500).catch(() => ({ docs: [] }))

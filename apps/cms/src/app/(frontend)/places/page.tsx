@@ -1,5 +1,19 @@
 import Link from 'next/link'
-import { getPlaces } from '@/lib/payload-api'
+import type { Metadata } from 'next'
+import { getPlaces, getSettings } from '@/lib/payload-api'
+import { generateEnhancedMetadata } from '@/lib/seo/metadata'
+
+export async function generateMetadata(): Promise<Metadata> {
+  const settings = await getSettings()
+  return generateEnhancedMetadata(
+    {
+      title: 'Places',
+      description: 'Geographic locations, venues, and historical sites',
+    },
+    settings,
+    '/places'
+  )
+}
 
 export const dynamic = 'force-static'
 export const revalidate = 60

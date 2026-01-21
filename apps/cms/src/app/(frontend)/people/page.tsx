@@ -1,5 +1,19 @@
 import Link from 'next/link'
-import { getPeople } from '@/lib/payload-api'
+import type { Metadata } from 'next'
+import { getPeople, getSettings } from '@/lib/payload-api'
+import { generateEnhancedMetadata } from '@/lib/seo/metadata'
+
+export async function generateMetadata(): Promise<Metadata> {
+  const settings = await getSettings()
+  return generateEnhancedMetadata(
+    {
+      title: 'People',
+      description: 'Historical figures, artists, team members, and notable people',
+    },
+    settings,
+    '/people'
+  )
+}
 
 export const dynamic = 'force-static'
 export const revalidate = 60

@@ -1,5 +1,19 @@
 import Link from 'next/link'
-import { getEvents } from '@/lib/payload-api'
+import type { Metadata } from 'next'
+import { getEvents, getSettings } from '@/lib/payload-api'
+import { generateEnhancedMetadata } from '@/lib/seo/metadata'
+
+export async function generateMetadata(): Promise<Metadata> {
+  const settings = await getSettings()
+  return generateEnhancedMetadata(
+    {
+      title: 'Events',
+      description: 'Upcoming and past events, exhibitions, and workshops',
+    },
+    settings,
+    '/events'
+  )
+}
 
 export const dynamic = 'force-static'
 export const revalidate = 60
