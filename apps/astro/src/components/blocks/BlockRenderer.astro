@@ -143,7 +143,9 @@ const mapBlockProps = (block: any) => {
     case 'features':
       return {
         heading: block.heading,
-        features: block.features || [],
+        subheading: block.subheading,
+        layout: block.layout,
+        items: block.items || [],
       };
     case 'team':
       return {

@@ -237,7 +237,7 @@ export class BlogSeeder extends BaseSeeder {
           {
             blockType: 'features',
             heading: 'What We Offer',
-            features: [
+            items: [
               {
                 title: 'In-Depth Articles',
                 description: 'Comprehensive guides and long-form content that explores topics in detail.',

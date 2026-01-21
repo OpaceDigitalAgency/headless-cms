@@ -7,40 +7,53 @@
 
 interface Props {
   heading?: string;
-  features?: Array<{
+  subheading?: string;
+  layout?: 'grid' | 'list';
+  items?: Array<{
     title: string;
-    description: string;
+    description?: string;
     icon?: string;
   }>;
 }
 
-const { heading, features = [] } = Astro.props;
+const { heading, subheading, items = [], layout = 'grid' } = Astro.props;
 ---
 
 <section class="py-12">
   <div class="container">
-    {heading && (
-      <h2 class="text-3xl font-bold mb-12">
-        {heading}
-      </h2>
+    {(heading || subheading) && (
+      <div class="mb-12">
+        {heading && (
+          <h2 class="text-3xl font-bold">
+            {heading}
+          </h2>
+        )}
+        {subheading && (
+          <p class="mt-2 text-lg text-gray-600 dark:text-gray-400">
+            {subheading}
+          </p>
+        )}
+      </div>
     )}
-    
-    <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
-      {features.map((feature) => (
+
+    <div class={layout === 'list' ? 'space-y-6' : 'grid gap-8 md:grid-cols-2 lg:grid-cols-4'}>
+      {items.map((item) => (
         <div class="rounded-lg border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-800">
-          {feature.icon && (
+          {item.icon && (
             <div class="mb-4 text-3xl">
-              {feature.icon}
+              {item.icon}
             </div>
           )}
-          
+
           <h3 class="mb-2 font-semibold text-gray-900 dark:text-white">
-            {feature.title}
+            {item.title}
           </h3>
-          
-          <p class="text-sm text-gray-600 dark:text-gray-400">
-            {feature.description}
-          </p>
+
+          {item.description && (
+            <p class="text-sm text-gray-600 dark:text-gray-400">
+              {item.description}
+            </p>
+          )}
         </div>
       ))}
     </div>
