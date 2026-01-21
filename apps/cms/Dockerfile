@@ -9,7 +9,6 @@ FROM base AS deps
 COPY package.json pnpm-workspace.yaml pnpm-lock.yaml* ./
 COPY apps/cms/package.json ./apps/cms/
 COPY packages/shared/package.json ./packages/shared/
-COPY packages/templates/package.json ./packages/templates/
 RUN pnpm install --frozen-lockfile
 
 # Development stage
@@ -18,7 +17,6 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY --from=deps /app/apps/cms/node_modules ./apps/cms/node_modules
 COPY --from=deps /app/packages/shared/node_modules ./packages/shared/node_modules
-COPY --from=deps /app/packages/templates/node_modules ./packages/templates/node_modules
 COPY . .
 WORKDIR /app/apps/cms
 EXPOSE 3000
@@ -32,14 +30,10 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY --from=deps /app/apps/cms/node_modules ./apps/cms/node_modules
 COPY --from=deps /app/packages/shared/node_modules ./packages/shared/node_modules
-COPY --from=deps /app/packages/templates/node_modules ./packages/templates/node_modules
 COPY . .
 
 # Build shared packages first
 WORKDIR /app/packages/shared
-RUN pnpm build || true
-
-WORKDIR /app/packages/templates
 RUN pnpm build || true
 
 # Build CMS
