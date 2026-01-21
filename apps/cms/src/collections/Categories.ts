@@ -12,13 +12,13 @@ export const Categories: CollectionConfig = {
     defaultColumns: ['title', 'slug', 'parent', 'totalCount', 'updatedAt'],
     description: 'Hierarchical categories shared across Posts, Archive Items, Events, People, and Custom Items',
     preview: (doc) => {
-      const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3001'
+      const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
       return `${baseUrl}/categories/${doc.slug}`
     },
     livePreview: {
       url: ({ data }) => {
         if (!data?.slug) return null
-        const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3001'
+        const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
         return `${baseUrl}/categories/${data.slug}`
       },
     },
@@ -88,7 +88,7 @@ export const Categories: CollectionConfig = {
     ],
     afterChange: [
       async ({ doc, req }) => {
-        const revalidateUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3001'
+        const revalidateUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
         try {
           await fetch(`${revalidateUrl}/api/revalidate`, {
             method: 'POST',

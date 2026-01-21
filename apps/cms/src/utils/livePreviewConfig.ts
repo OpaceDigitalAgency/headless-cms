@@ -23,7 +23,7 @@ export function createLivePreviewConfig(
 ) {
   const { urlPath, useDraftApi = true } = options
 
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3001'
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
 
   // Default URL builder
   const buildUrl = (slug: string) => {
@@ -86,7 +86,7 @@ export const livePreviewPresets = {
       url: ({ data }: { data: any }) => {
         if (!data?.slug || !data?.contentType) return null
 
-        const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3001'
+        const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
 
         if (typeof data.contentType === 'object' && data.contentType.slug) {
           const typeSlug = data.contentType.archiveSlug

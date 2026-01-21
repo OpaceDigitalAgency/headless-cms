@@ -35,7 +35,7 @@ export const revalidateEndpoint: Endpoint = {
       payload.logger.info(`Revalidation requested for ${collection}/${slug || id}`)
 
       // Forward to frontend revalidation endpoint
-      const frontendUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3001'
+      const frontendUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
       
       try {
         const response = await fetch(`${frontendUrl}/api/revalidate`, {

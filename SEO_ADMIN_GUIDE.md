@@ -54,21 +54,26 @@ The schema is **NOT visible in the admin** - it's generated automatically in the
 
 ---
 
-## 3️⃣ ARE SEO CHANGES IN ADMIN APPLIED TO FRONTEND? ✅ YES, 100%
+## 3️⃣ ARE SEO CHANGES IN ADMIN APPLIED TO FRONTEND? ✅ YES, IMMEDIATELY!
 
-### How It Works:
+### How It Works (Instant Revalidation):
 
 **Step 1: Admin saves document**
 ```
 User edits post → Clicks "Save" → Payload stores in database
 ```
 
-**Step 2: Frontend fetches data**
+**Step 2: Payload hook triggers revalidation**
 ```
-getPostBySlug() → Payload API → Returns post with `meta` field
+afterChange hook → Calls revalidatePost() → Next.js cache cleared
 ```
 
-**Step 3: generateMetadata() uses SEO data**
+**Step 3: Frontend fetches fresh data**
+```
+Next request → getPostBySlug() → Returns updated post with new `meta` field
+```
+
+**Step 4: generateMetadata() uses SEO data**
 ```typescript
 // From blog/[slug]/page.tsx
 export async function generateMetadata({ params }) {
@@ -77,7 +82,7 @@ export async function generateMetadata({ params }) {
     {
       title: post.title,
       excerpt: post.excerpt,
-      meta: post.meta,  // ← SEO plugin data
+      meta: post.meta,  // ← SEO plugin data (fresh from DB)
     },
     settings,
     `/blog/${slug}`
@@ -85,17 +90,25 @@ export async function generateMetadata({ params }) {
 }
 ```
 
-**Step 4: Metadata rendered in HTML**
+**Step 5: Metadata rendered in HTML**
 ```html
 <title>Custom Title from Admin | Site Name</title>
 <meta name="description" content="Custom description from admin">
 <meta property="og:image" content="Custom image from admin">
 ```
 
-### ✅ Verification:
-1. Edit a post in admin → Change "Meta Title"
-2. Rebuild frontend: `pnpm run build`
+### ✅ Verification (No Build Required!):
+1. Edit a post in admin → Change "Meta Title" → Click "Save"
+2. **Immediately** refresh the frontend page
 3. View page source → See your custom title in `<title>` tag
+4. **No rebuild needed** - changes are live instantly!
+
+### 🔧 How Revalidation Works:
+- **Bundled Architecture**: CMS and frontend run on same Next.js server (port 3000)
+- **Direct Function Calls**: Payload hooks call `revalidatePath()` directly (no HTTP requests)
+- **Zero Latency**: Cache cleared instantly when admin saves
+- **Listing Pages**: Blog index, people index, etc. also revalidate automatically
+- **All Collections**: Posts, Pages, People, Places, Events, Archive Items all supported
 
 ---
 

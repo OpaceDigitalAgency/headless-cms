@@ -17,12 +17,12 @@ export const ProductCollections: CollectionConfig = {
     defaultColumns: ['name', 'slug', 'featured', '_status', 'updatedAt'],
     description: 'Curated product collections for marketing and merchandising',
     preview: (doc) => {
-      const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3001'
+      const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
       return `${baseUrl}/preview/collections/${doc.slug}`
     },
     livePreview: {
       url: ({ data }) => {
-        const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3001'
+        const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
         return `${baseUrl}/preview/collections/${data.slug}`
       },
     },
@@ -61,7 +61,7 @@ export const ProductCollections: CollectionConfig = {
     afterChange: [
       async ({ doc, req }) => {
         if (doc._status === 'published') {
-          const revalidateUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3001'
+          const revalidateUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
           try {
             await fetch(`${revalidateUrl}/api/revalidate`, {
               method: 'POST',

@@ -335,7 +335,7 @@ export default buildConfig({
       generateTitle: ({ doc }) => `${doc?.title || doc?.name || 'Untitled'} | CMS`,
       generateDescription: ({ doc }) => doc?.excerpt || doc?.shortDescription || doc?.shortBio || '',
       generateURL: ({ doc, collectionSlug }) => {
-        const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3001'
+        const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
         if (collectionSlug === 'pages') {
           return doc?.slug === 'home' ? baseUrl : `${baseUrl}/${doc?.slug || ''}`
         }
@@ -532,7 +532,7 @@ export default buildConfig({
   // ===========================================
   cors: [
     process.env.PAYLOAD_PUBLIC_SERVER_URL || 'http://localhost:3000',
-    process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3001',
+    process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000',
     'http://localhost:4321', // Astro dev server
   ].filter(Boolean),
 
@@ -541,7 +541,7 @@ export default buildConfig({
   // ===========================================
   csrf: [
     process.env.PAYLOAD_PUBLIC_SERVER_URL || 'http://localhost:3000',
-    process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3001',
+    process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000',
     'http://localhost:4321', // Astro dev server
   ].filter(Boolean),
 

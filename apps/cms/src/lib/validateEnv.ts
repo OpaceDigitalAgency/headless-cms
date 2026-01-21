@@ -38,7 +38,7 @@ const optionalEnvVars: EnvVar[] = [
     name: 'NEXT_PUBLIC_SITE_URL',
     required: false,
     description: 'Public URL of the frontend site',
-    example: 'http://localhost:3001',
+    example: 'http://localhost:3000',
   },
   {
     name: 'REVALIDATION_SECRET',

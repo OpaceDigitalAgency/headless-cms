@@ -290,7 +290,7 @@ export const ContentTypes: CollectionConfig = {
       async ({ doc, operation, req }) => {
         // Log content type changes for debugging
         console.log(`Content type ${operation}: ${doc.name} (${doc.slug})`)
-        const revalidateUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3001'
+        const revalidateUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
         const archiveSlug = doc.archiveSlug || `items/${doc.slug}`
         const archiveTail = archiveSlug.replace(/^\/?items\//, '')
         try {

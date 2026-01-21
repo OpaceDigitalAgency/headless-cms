@@ -423,7 +423,7 @@ export const CustomItems: CollectionConfig = {
     afterChange: [
       async ({ doc, req }) => {
         if (doc.status === 'published') {
-          const revalidateUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3001'
+          const revalidateUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
           let contentTypeSlug: string | undefined
           if (typeof doc.contentType === 'object' && doc.contentType?.slug) {
             contentTypeSlug = doc.contentType.archiveSlug

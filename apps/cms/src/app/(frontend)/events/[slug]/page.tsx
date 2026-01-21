@@ -77,7 +77,7 @@ export default async function EventPage({ params }: EventPageProps) {
     schemas.push(generateOrganizationSchema(settings))
 
     // Add Breadcrumb schema
-    const siteUrl = settings.siteUrl || process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3001'
+    const siteUrl = settings.siteUrl || process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
     const breadcrumbs = [
       { name: 'Home', url: siteUrl },
       { name: 'Events', url: `${siteUrl}/events` },

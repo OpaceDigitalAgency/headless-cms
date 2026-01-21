@@ -46,7 +46,7 @@ export const Products: CollectionConfig = {
     afterChange: [
       async ({ doc, req }) => {
         if (doc._status === 'published') {
-          const revalidateUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3001'
+          const revalidateUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
           try {
             await fetch(`${revalidateUrl}/api/revalidate`, {
               method: 'POST',

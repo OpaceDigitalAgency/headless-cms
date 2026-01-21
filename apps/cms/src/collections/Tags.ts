@@ -12,13 +12,13 @@ export const Tags: CollectionConfig = {
     defaultColumns: ['title', 'slug', 'totalCount', 'updatedAt'],
     description: 'Flat tags shared across Posts, Archive Items, Events, People, and Custom Items',
     preview: (doc) => {
-      const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3001'
+      const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
       return `${baseUrl}/tags/${doc.slug}`
     },
     livePreview: {
       url: ({ data }) => {
         if (!data?.slug) return null
-        const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3001'
+        const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
         return `${baseUrl}/tags/${data.slug}`
       },
     },
@@ -86,7 +86,7 @@ export const Tags: CollectionConfig = {
     ],
     afterChange: [
       async ({ doc, req }) => {
-        const revalidateUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3001'
+        const revalidateUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
         try {
           await fetch(`${revalidateUrl}/api/revalidate`, {
             method: 'POST',
