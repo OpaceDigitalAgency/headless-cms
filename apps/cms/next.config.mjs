@@ -48,7 +48,7 @@ const nextConfig = {
         moduleIds: 'named',
       }
       
-      // Exclude nodemailer and Node.js built-ins from client bundle
+      // Exclude server-only packages and Node.js built-ins from client bundle
       config.externals = [
         ...config.externals || [],
         {
@@ -56,6 +56,22 @@ const nextConfig = {
           net: 'commonjs net',
           dns: 'commonjs dns',
           child_process: 'commonjs child_process',
+          tls: 'commonjs tls',
+          worker_threads: 'commonjs worker_threads',
+          readline: 'commonjs readline',
+          'node:assert': 'commonjs assert',
+          'node:buffer': 'commonjs buffer',
+          'node:crypto': 'commonjs crypto',
+          'node:events': 'commonjs events',
+          'node:fs': 'commonjs fs',
+          'node:http': 'commonjs http',
+          'node:https': 'commonjs https',
+          'node:net': 'commonjs net',
+          'node:os': 'commonjs os',
+          'node:path': 'commonjs path',
+          'node:stream': 'commonjs stream',
+          'node:util': 'commonjs util',
+          'node:zlib': 'commonjs zlib',
         },
       ]
     }
