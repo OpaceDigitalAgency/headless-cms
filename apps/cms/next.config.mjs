@@ -47,6 +47,17 @@ const nextConfig = {
         ...config.optimization,
         moduleIds: 'named',
       }
+      
+      // Exclude nodemailer and Node.js built-ins from client bundle
+      config.externals = [
+        ...config.externals || [],
+        {
+          nodemailer: 'commonjs nodemailer',
+          net: 'commonjs net',
+          dns: 'commonjs dns',
+          child_process: 'commonjs child_process',
+        },
+      ]
     }
 
     return config
