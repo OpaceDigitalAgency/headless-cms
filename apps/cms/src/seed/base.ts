@@ -251,19 +251,36 @@ export abstract class BaseSeeder {
    */
   public async clearCollection(collection: string): Promise<void> {
     try {
-      const docs = await this.payload.find({
-        collection: collection as any,
-        limit: 1000,
-      })
-      
-      for (const doc of docs.docs) {
-        await this.payload.delete({
+      let totalCleared = 0
+      let hasMore = true
+
+      while (hasMore) {
+        const docs = await this.payload.find({
           collection: collection as any,
-          id: doc.id,
+          limit: 1000,
+          depth: 0,
         })
+
+        if (docs.docs.length === 0) {
+          hasMore = false
+          break
+        }
+
+        for (const doc of docs.docs) {
+          try {
+            await this.payload.delete({
+              collection: collection as any,
+              id: doc.id,
+              overrideAccess: true,
+            })
+            totalCleared++
+          } catch (error) {
+            this.error(`Failed to delete ${collection} item ${doc.id}: ${error}`)
+          }
+        }
       }
-      
-      this.log(`Cleared ${docs.docs.length} items from ${collection}`)
+
+      this.log(`Cleared ${totalCleared} items from ${collection}`)
     } catch (error) {
       this.error(`Failed to clear ${collection}: ${error}`)
     }
