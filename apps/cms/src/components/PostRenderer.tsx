@@ -3,13 +3,14 @@ import Link from 'next/link'
 import { RichText } from './RichText'
 import { RenderBlocks } from './RenderBlocks'
 import { generateArticleSchema, generateOrganizationSchema, generateBreadcrumbSchema, renderJsonLd } from '@/lib/seo/schema'
-import { getSettings } from '@/lib/payload-api'
+// import { getSettings } from '@/lib/payload-api' // Removed to make component client-safe
 
 interface PostRendererProps {
   post: any
+  settings?: any // Optional settings for schema generation
 }
 
-export async function PostRenderer({ post }: PostRendererProps) {
+export function PostRenderer({ post, settings }: PostRendererProps) {
   const {
     title,
     excerpt,
@@ -23,8 +24,7 @@ export async function PostRenderer({ post }: PostRendererProps) {
     slug,
   } = post
 
-  // Fetch settings for schema generation
-  const settings = await getSettings().catch(() => null)
+  // Settings can be passed as prop for schema generation (optional)
 
   // Generate JSON-LD schemas
   const schemas = []

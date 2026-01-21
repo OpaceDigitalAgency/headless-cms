@@ -64,13 +64,16 @@ export default async function Page({ params }: PageProps) {
   const { isEnabled: isDraftMode } = await draftMode()
 
   try {
-    const page = await getPageBySlug(slug, isDraftMode)
+    const [page, settings] = await Promise.all([
+      getPageBySlug(slug, isDraftMode),
+      getSettings().catch(() => null),
+    ])
 
     if (!page) {
       notFound()
     }
 
-    return <PageRenderer page={page} />
+    return <PageRenderer page={page} settings={settings} />
   } catch (error) {
     console.error(`Failed to fetch page ${slug}:`, error)
     notFound()

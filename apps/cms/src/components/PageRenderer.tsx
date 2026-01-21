@@ -22,10 +22,11 @@ import { SpacerBlock } from './blocks/SpacerBlock'
 import { HtmlBlock } from './blocks/HtmlBlock'
 import { Container, Section } from '@repo/ui/primitives'
 import { generateWebsiteSchema, generateOrganizationSchema, generateBreadcrumbSchema, renderJsonLd } from '@/lib/seo/schema'
-import { getSettings } from '@/lib/payload-api'
+// import { getSettings } from '@/lib/payload-api' // Removed to make component client-safe
 
 interface PageRendererProps {
   page: any // Using Payload's generated types would be ideal
+  settings?: any // Optional settings for schema generation
 }
 
 /**
@@ -50,9 +51,8 @@ function TemplateWrapper({ children }: { children: React.ReactNode }) {
   )
 }
 
-export async function PageRenderer({ page }: PageRendererProps) {
-  // Fetch settings for schema generation
-  const settings = await getSettings().catch(() => null)
+export function PageRenderer({ page, settings }: PageRendererProps) {
+  // Settings can be passed as prop for schema generation (optional)
   const { template, hero, content } = page
 
   // Generate JSON-LD schemas

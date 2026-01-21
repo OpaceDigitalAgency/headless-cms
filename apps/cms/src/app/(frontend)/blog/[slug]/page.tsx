@@ -76,7 +76,11 @@ export default async function PostPage({ params }: PostPageProps) {
   const { isEnabled: isDraft } = await draftMode()
   
   try {
-    const payload = await getPayloadHMR({ config: configPromise })
+    const [settings, payload] = await Promise.all([
+      getSettings().catch(() => null),
+      getPayloadHMR({ config: configPromise }),
+    ])
+    
     const { docs } = await payload.find({
       collection: 'posts',
       where: { slug: { equals: slug } },
@@ -92,7 +96,7 @@ export default async function PostPage({ params }: PostPageProps) {
     return (
       <Section spacing="lg" background="default">
         <Container>
-          <PostRenderer post={post} />
+          <PostRenderer post={post} settings={settings} />
         </Container>
       </Section>
     )

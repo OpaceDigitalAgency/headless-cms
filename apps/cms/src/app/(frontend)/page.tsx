@@ -38,10 +38,13 @@ export default async function HomePage() {
   const { isEnabled: isDraftMode } = await draftMode()
 
   // Try to fetch a home page from CMS
-  const page = await getPageBySlug('home', isDraftMode).catch(() => null)
+  const [page, settings] = await Promise.all([
+    getPageBySlug('home', isDraftMode).catch(() => null),
+    getSettings().catch(() => null),
+  ])
 
   if (page) {
-    return <PageRenderer page={page} />
+    return <PageRenderer page={page} settings={settings} />
   }
 
   // Fallback: render default home page with latest content
