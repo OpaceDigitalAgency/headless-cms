@@ -6,6 +6,8 @@ This platform provides a powerful, flexible, and developer-friendly CMS experien
 
 [![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/template/payload-jamstack?referralCode=payload)
 
+> **⚠️ Note**: The one-click deploy button requires the Railway template to be published first. See [RAILWAY_TEMPLATE_SETUP.md](RAILWAY_TEMPLATE_SETUP.md) for instructions on creating and publishing the template. For manual deployment, see [DEPLOY_TO_RAILWAY.md](DEPLOY_TO_RAILWAY.md).
+
 ---
 
 ## Table of Contents
@@ -59,6 +61,8 @@ This repo is a productised platform on top of Payload CMS, not a vanilla clone:
 ### One-Click Deploy to Railway
 
 [![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/template/payload-jamstack?referralCode=payload)
+
+> **Note**: Template must be published first. See [RAILWAY_TEMPLATE_SETUP.md](RAILWAY_TEMPLATE_SETUP.md) for setup instructions.
 
 ### Local Development
 
@@ -306,17 +310,54 @@ Create your admin user at http://localhost:3000/admin/create-first-user and run 
 
 This project is optimized for deployment on **Railway**.
 
-### Automatic Features
-- Automatic monorepo detection and builds
-- Pre-configured environment variables
-- PostgreSQL database provisioning
-- Automatic linking between services
+### One-Click Deploy (Recommended)
 
-### Deploy Steps
-1. Click the "Deploy on Railway" button above
-2. Configure your environment variables
-3. Wait for the build to complete
+Once the Railway template is published, users can deploy with a single click:
+
+1. Click the "Deploy on Railway" button
+2. Wait for automatic provisioning (PostgreSQL, CMS, Web services)
+3. All environment variables are auto-configured
 4. Access your CMS at the provided URL
+
+**What Gets Deployed Automatically:**
+- ✅ PostgreSQL database
+- ✅ CMS service (Payload CMS)
+- ✅ Web service (Next.js frontend)
+- ✅ All environment variables configured
+- ✅ Services linked together
+- ✅ Public domains generated
+
+### Manual Deployment
+
+For detailed manual deployment instructions, see [DEPLOY_TO_RAILWAY.md](DEPLOY_TO_RAILWAY.md).
+
+### Publishing Your Own Template
+
+To create your own Railway template for one-click deployment:
+
+1. Deploy the project manually first (see [DEPLOY_TO_RAILWAY.md](DEPLOY_TO_RAILWAY.md))
+2. Verify everything works correctly
+3. Follow the template creation guide in [RAILWAY_TEMPLATE_SETUP.md](RAILWAY_TEMPLATE_SETUP.md)
+4. Publish the template through Railway dashboard
+5. Update the deploy button URL in this README
+
+### Environment Variables
+
+The following environment variables are automatically configured when using the template:
+
+**CMS Service:**
+- `DATABASE_URL` - Auto-linked from PostgreSQL
+- `PAYLOAD_SECRET` - Auto-generated
+- `PAYLOAD_PUBLIC_SERVER_URL` - Auto-set from domain
+- `NODE_ENV` - Set to `production`
+
+**Web Service:**
+- `DATABASE_URL` - Auto-linked from PostgreSQL
+- `CMS_URL` - Auto-linked from CMS service
+- `NEXT_PUBLIC_CMS_URL` - Auto-linked from CMS service
+- `NEXT_PUBLIC_SITE_URL` - Auto-set from domain
+- `REVALIDATION_SECRET` - Auto-generated
+- `NODE_ENV` - Set to `production`
 
 ---
 

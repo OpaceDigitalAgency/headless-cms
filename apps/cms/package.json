@@ -35,6 +35,7 @@
     "@payloadcms/ui": "^3.71.1",
     "@repo/shared": "workspace:*",
     "@repo/templates": "workspace:^",
+    "@repo/ui": "workspace:*",
     "@tailwindcss/postcss": "^4.1.18",
     "@tailwindcss/typography": "^0.5.15",
     "cross-env": "^7.0.3",

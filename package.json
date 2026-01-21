@@ -16,13 +16,10 @@
   "scripts": {
     "dev": "pnpm -r --parallel dev",
     "dev:cms": "pnpm --filter @repo/cms dev",
-    "dev:web": "pnpm --filter @repo/web dev",
     "build": "pnpm -r build",
     "build:cms": "pnpm --filter @repo/cms build",
-    "build:web": "pnpm --filter @repo/web build",
     "start": "pnpm -r --parallel start",
     "start:cms": "pnpm --filter @repo/cms start",
-    "start:web": "pnpm --filter @repo/web start",
     "lint": "pnpm -r lint",
     "typecheck": "pnpm -r typecheck",
     "generate:types": "pnpm --filter @repo/cms generate:types",

@@ -7,8 +7,8 @@
         docker-up docker-down docker-build docker-clean \
         db-migrate db-seed db-reset db-fresh \
         railway-provision railway-deploy \
-        dev-cms dev-web dev-astro \
-        build-cms build-web build-astro \
+        dev-cms dev-astro \
+        build-cms build-astro \
         create blog-astro brochure-astro archive-next ecommerce-next \
         seed-blog seed-archive seed-ecommerce
 
@@ -77,16 +77,12 @@ dev: ## Start all services in development mode (requires Docker)
 	docker compose up -d postgres
 	@echo "$(YELLOW)Waiting for PostgreSQL to be ready...$(NC)"
 	@sleep 5
-	@echo "$(CYAN)Starting CMS and Web in parallel...$(NC)"
+	@echo "$(CYAN)Starting CMS in development mode...$(NC)"
 	pnpm dev
 
 dev-cms: ## Start only the CMS in development mode
 	@echo "$(CYAN)Starting CMS development server...$(NC)"
 	pnpm --filter @repo/cms dev
-
-dev-web: ## Start only the Next.js frontend in development mode
-	@echo "$(CYAN)Starting Next.js development server...$(NC)"
-	pnpm --filter @repo/web dev
 
 dev-astro: ## Start only the Astro frontend in development mode
 	@echo "$(CYAN)Starting Astro development server...$(NC)"
@@ -104,10 +100,6 @@ build: ## Build all packages for production
 build-cms: ## Build only the CMS
 	@echo "$(CYAN)Building CMS...$(NC)"
 	pnpm --filter @repo/cms build
-
-build-web: ## Build only the Next.js frontend
-	@echo "$(CYAN)Building Next.js frontend...$(NC)"
-	pnpm --filter @repo/web build
 
 build-astro: ## Build only the Astro frontend (pure SSG)
 	@echo "$(CYAN)Building Astro frontend...$(NC)"
@@ -160,9 +152,6 @@ docker-logs: ## View Docker logs
 
 docker-logs-cms: ## View CMS Docker logs
 	docker compose logs -f cms
-
-docker-logs-web: ## View Web Docker logs
-	docker compose logs -f web
 
 # ===========================================
 # Database
@@ -315,10 +304,10 @@ clean: ## Clean all build artifacts and dependencies
 	@echo "$(CYAN)Cleaning build artifacts...$(NC)"
 	rm -rf node_modules
 	rm -rf apps/cms/node_modules apps/cms/.next apps/cms/dist
-	rm -rf apps/web/node_modules apps/web/.next apps/web/dist
 	rm -rf apps/astro/node_modules apps/astro/dist
 	rm -rf packages/shared/node_modules packages/shared/dist
 	rm -rf packages/templates/node_modules packages/templates/dist
+	rm -rf packages/ui/node_modules packages/ui/dist
 	@echo "$(GREEN)Cleanup completed!$(NC)"
 
 clean-docker: ## Clean Docker resources
