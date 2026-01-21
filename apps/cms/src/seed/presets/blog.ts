@@ -269,7 +269,8 @@ export class BlogSeeder extends BaseSeeder {
           // Stats section
           {
             blockType: 'stats',
-            items: [
+            heading: 'By The Numbers',
+            stats: [
               { label: 'Articles Published', value: '150+' },
               { label: 'Active Readers', value: '50K+' },
               { label: 'Categories', value: '12' },
@@ -279,12 +280,12 @@ export class BlogSeeder extends BaseSeeder {
           // Latest posts grid
           {
             blockType: 'archive',
-            collection: 'posts',
+            heading: 'Latest Articles',
+            relationTo: 'posts',
             limit: 6,
-            showFeaturedImage: true,
+            showImage: true,
             showExcerpt: true,
             showDate: true,
-            showCategory: true,
           },
           // Testimonials section
           {

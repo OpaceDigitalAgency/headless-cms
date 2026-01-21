@@ -573,7 +573,7 @@ export class EcommerceSeeder extends BaseSeeder {
         stockQuantity: data.stockQuantity,
         trackInventory: true,
         availability: data.stockQuantity > 0 ? 'active' : 'out-of-stock',
-        variants: data.variants,
+        variants: data.variants || [],
         featured: data.featured || false,
         template: data.template || 'standard',
         contentBlocks: data.contentBlocks,
