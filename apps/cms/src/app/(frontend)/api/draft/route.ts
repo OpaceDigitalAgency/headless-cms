@@ -55,12 +55,61 @@ export async function GET(request: NextRequest) {
       redirectUrl = `/tags/${slug}`
       break
     case 'custom-items':
-      // For custom items, slug is already in format "type/slug" from the preview URL
-      // Just prepend /items/
+      // For custom items, slug might be in format "type/slug" or just "slug"
+      // Check if it's a valid type/slug format (type should be a string slug, not a number ID)
       if (slug && slug.includes('/')) {
-        redirectUrl = `/items/${slug}`
+        const [typeSlug, itemSlug] = slug.split('/')
+        // If the type part is a number (content type ID), we need to fetch the actual slug
+        if (/^\d+$/.test(typeSlug)) {
+          // Type is an ID, need to fetch the content type and item
+          try {
+            const payload = await getPayloadHMR({ config: configPromise })
+            console.log(`[Draft API] Looking for custom item with slug: "${itemSlug}" and contentType ID: "${typeSlug}"`)
+
+            const { docs } = await payload.find({
+              collection: 'custom-items',
+              where: {
+                slug: { equals: itemSlug },
+                contentType: { equals: typeSlug },
+              },
+              limit: 1,
+              depth: 2,
+              draft: true,
+            })
+
+            const item = docs[0]
+            if (item && item.contentType) {
+              let actualTypeSlug: string
+              if (typeof item.contentType === 'object' && item.contentType !== null) {
+                actualTypeSlug = item.contentType.archiveSlug
+                  ? item.contentType.archiveSlug.replace(/^\/?items\//, '')
+                  : item.contentType.slug
+                console.log(`[Draft API] ContentType populated: ${actualTypeSlug}`)
+              } else {
+                const ct = await payload.findByID({
+                  collection: 'content-types',
+                  id: typeSlug,
+                })
+                actualTypeSlug = ct.archiveSlug
+                  ? ct.archiveSlug.replace(/^\/?items\//, '')
+                  : ct.slug
+                console.log(`[Draft API] ContentType fetched: ${actualTypeSlug}`)
+              }
+              redirectUrl = `/items/${actualTypeSlug}/${itemSlug}`
+              console.log(`[Draft API] Redirecting to: ${redirectUrl}`)
+            } else {
+              redirectUrl = `/items/${slug}` // Fallback - will show 404
+            }
+          } catch (error) {
+            console.error('[Draft API] Error fetching custom item for preview:', error)
+            redirectUrl = `/items/${slug}` // Fallback
+          }
+        } else {
+          // Type is already a slug, use it directly
+          redirectUrl = `/items/${slug}`
+        }
       } else if (slug) {
-        // Fallback: try to fetch the item to get the content type
+        // No slash in slug: try to fetch the item to get the content type
         try {
           const payload = await getPayloadHMR({ config: configPromise })
 

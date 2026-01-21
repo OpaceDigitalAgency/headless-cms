@@ -49,6 +49,9 @@ export const CustomItems: CollectionConfig = {
     defaultColumns: ['title', 'contentType', 'status', 'updatedAt', 'preview'],
     description: 'Items belonging to your custom collections',
     listSearchableFields: ['title', 'slug'],
+    defaultPopulate: {
+      contentType: true,
+    },
     preview: (doc) => {
       // Build preview URL with content type
       if (doc.contentType && typeof doc.contentType === 'object' && doc.contentType.slug) {
