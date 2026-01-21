@@ -28,22 +28,43 @@ const normalizeSettings = (
   collections: CollectionInfo[],
   saved: CollectionSetting[]
 ): CollectionSetting[] => {
-  const savedMap = new Map(saved.map((item) => [item.slug, item]))
-  const orderedSlugs = saved.map((item) => item.slug)
+  // Filter out any internal collections from saved settings
+  const internalCollectionPrefixes = ['payload-', 'search-results']
+  const filteredSaved = saved.filter((item) => {
+    const isInternal = internalCollectionPrefixes.some(prefix => item.slug.startsWith(prefix)) || item.slug === 'search-results'
+    if (isInternal) {
+      console.log('[normalizeSettings] Filtering out internal collection from saved settings:', item.slug)
+    }
+    return !isInternal
+  })
+
+  const savedMap = new Map(filteredSaved.map((item) => [item.slug, item]))
+  const orderedSlugs = filteredSaved.map((item) => item.slug)
   const missing = collections.filter((item) => !savedMap.has(item.slug)).map((item) => item.slug)
   const mergedOrder = [...orderedSlugs, ...missing]
 
-  return mergedOrder.map((slug) => {
-    const collection = collections.find((item) => item.slug === slug)
-    const savedItem = savedMap.get(slug)
-    const defaultEnabled = collection?.hidden ? false : isDefaultEnabled(slug)
-    return {
-      slug,
-      enabled: savedItem?.enabled ?? defaultEnabled,
-      section: savedItem?.section || collection?.defaultSection || 'content',
-      label: savedItem?.label || '',
-    }
-  })
+  // Only include collections that actually exist in the collections list
+  const validCollectionSlugs = new Set(collections.map(c => c.slug))
+
+  return mergedOrder
+    .filter((slug) => {
+      const isValid = validCollectionSlugs.has(slug)
+      if (!isValid) {
+        console.log('[normalizeSettings] Skipping collection not in valid list:', slug)
+      }
+      return isValid
+    })
+    .map((slug) => {
+      const collection = collections.find((item) => item.slug === slug)
+      const savedItem = savedMap.get(slug)
+      const defaultEnabled = collection?.hidden ? false : isDefaultEnabled(slug)
+      return {
+        slug,
+        enabled: savedItem?.enabled ?? defaultEnabled,
+        section: savedItem?.section || collection?.defaultSection || 'content',
+        label: savedItem?.label || '',
+      }
+    })
 }
 
 export const CollectionManagerField: React.FC<CollectionManagerFieldProps> = ({ path, label }) => {
@@ -64,15 +85,31 @@ export const CollectionManagerField: React.FC<CollectionManagerFieldProps> = ({ 
     const fetchCollections = async () => {
       try {
         setErrorMessage(null)
-        // Try the correct endpoint path
-        const response = await fetch('/api/admin/collection-manager', {
+        // Add cache-busting parameter to ensure fresh data
+        const cacheBuster = Date.now()
+        const response = await fetch(`/api/admin/collection-manager?t=${cacheBuster}`, {
           credentials: 'include',
+          cache: 'no-store', // Disable caching
         })
         if (response.ok) {
           const data = await response.json()
           console.log('[CollectionManagerField] API response:', data)
+          console.log('[CollectionManagerField] Collections received:', data.collections?.map((c: CollectionInfo) => c.slug))
           console.log('[CollectionManagerField] Collections count:', data.collections?.length)
-          setCollections(Array.isArray(data.collections) ? data.collections : [])
+
+          // Additional validation - filter out any internal collections that might have slipped through
+          const filteredCollections = Array.isArray(data.collections)
+            ? data.collections.filter((c: CollectionInfo) => {
+                const isInternal = c.slug.startsWith('payload-') || c.slug === 'search-results'
+                if (isInternal) {
+                  console.warn('[CollectionManagerField] Filtering out internal collection that slipped through:', c.slug)
+                }
+                return !isInternal
+              })
+            : []
+
+          console.log('[CollectionManagerField] Final collections after client-side filter:', filteredCollections.map((c: CollectionInfo) => c.slug))
+          setCollections(filteredCollections)
         } else {
           const payloadError = await response.json().catch(() => null)
           const message = payloadError?.error || `Failed to load collections (status ${response.status})`

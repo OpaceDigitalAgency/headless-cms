@@ -7,7 +7,8 @@ export const collectionManagerEndpoint: Endpoint = {
   handler: async (req) => {
     try {
       const { payload } = req
-      console.log('[CollectionManager] Endpoint called')
+      console.log('\n========================================')
+      console.log('[CollectionManager] Endpoint called at', new Date().toISOString())
       console.log('[CollectionManager] Total collections in config:', payload.config.collections.length)
 
       // Filter out Payload's internal collections and auto-generated collections
@@ -23,14 +24,19 @@ export const collectionManagerEndpoint: Endpoint = {
       ])
 
       // Log all collection slugs before filtering
-      console.log('[CollectionManager] All collection slugs:', payload.config.collections.map(c => c.slug))
+      const allSlugs = payload.config.collections.map(c => c.slug)
+      console.log('[CollectionManager] All collection slugs:', allSlugs)
       console.log('[CollectionManager] Internal collections to filter:', Array.from(internalCollections))
+
+      // Check which internal collections are present
+      const foundInternalCollections = allSlugs.filter(slug => internalCollections.has(slug))
+      console.log('[CollectionManager] Found internal collections to filter:', foundInternalCollections)
 
       const collections = payload.config.collections
         .filter((collection) => {
           const isInternal = internalCollections.has(collection.slug)
           if (isInternal) {
-            console.log(`[CollectionManager] Filtering out internal collection: ${collection.slug}`)
+            console.log(`[CollectionManager] ❌ Filtering out internal collection: ${collection.slug}`)
           }
           return !isInternal
         })
@@ -42,12 +48,15 @@ export const collectionManagerEndpoint: Endpoint = {
             hidden: Boolean(collection.admin?.hidden),
             defaultSection: getDefaultSectionForSlug(slug),
           }
-          console.log(`[CollectionManager] Including collection: ${slug}`, item)
+          console.log(`[CollectionManager] ✅ Including collection: ${slug}`)
           return item
         })
 
-      console.log('[CollectionManager] Returning collections count:', collections.length)
-      console.log('[CollectionManager] Returning collection slugs:', collections.map(c => c.slug))
+      console.log('[CollectionManager] Final collections count:', collections.length)
+      console.log('[CollectionManager] Final collection slugs:', collections.map(c => c.slug))
+      console.log('[CollectionManager] Response ready to send')
+      console.log('========================================\n')
+
       return Response.json({ collections })
     } catch (error) {
       console.error('[CollectionManager] Endpoint error:', error)

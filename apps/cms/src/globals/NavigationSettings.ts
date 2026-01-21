@@ -43,7 +43,7 @@ export const NavigationSettings: GlobalConfig = {
       label: 'Custom Top Menu Links',
       type: 'array',
       admin: {
-        description: 'Add custom links to the top navigation bar (e.g., "Menu" linking to Header global)',
+        description: 'Add custom links to the top navigation bar. These appear in the horizontal menu at the very top of the admin panel. Save changes and refresh the page to see updates.',
       },
       fields: [
         {
@@ -64,15 +64,25 @@ export const NavigationSettings: GlobalConfig = {
           },
         },
         {
-          name: 'position',
+          name: 'insertPosition',
           type: 'select',
-          defaultValue: 'end',
+          defaultValue: 'after-admin',
+          required: true,
           options: [
-            { label: 'Start (before Dashboard)', value: 'start' },
-            { label: 'End (after Admin)', value: 'end' },
+            { label: 'Before Dashboard (leftmost)', value: 'before-dashboard' },
+            { label: 'After Dashboard', value: 'after-dashboard' },
+            { label: 'After Content', value: 'after-content' },
+            { label: 'After Taxonomy', value: 'after-taxonomy' },
+            { label: 'After Collections', value: 'after-collections' },
+            { label: 'After Shop', value: 'after-shop' },
+            { label: 'After Media', value: 'after-media' },
+            { label: 'After Forms', value: 'after-forms' },
+            { label: 'After Tools', value: 'after-tools' },
+            { label: 'After Settings', value: 'after-settings' },
+            { label: 'After Admin (rightmost)', value: 'after-admin' },
           ],
           admin: {
-            description: 'Where to place this link in the top menu',
+            description: 'Choose where to insert this link in the top horizontal menu bar. The link will appear immediately after the selected section.',
           },
         },
       ],

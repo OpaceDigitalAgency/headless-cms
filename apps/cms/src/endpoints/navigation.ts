@@ -166,8 +166,9 @@ export const navigationEndpoint: Endpoint = {
     sectionOrder.forEach((sectionId) => {
       const items = buildSectionItems(sectionId)
 
-      // Skip empty sections (no collections enabled)
-      if (items.length === 0) return
+      // Don't skip Settings section even if empty - we'll add globals to it later
+      // Skip other empty sections (no collections enabled)
+      if (items.length === 0 && sectionId !== 'settings') return
 
       // Add manager links at the top of each section (only if section has items)
       if (sectionId === 'content') {
@@ -228,6 +229,10 @@ export const navigationEndpoint: Endpoint = {
     }
 
     // Build globals list for search + navigation
+    console.log('[Navigation] Building globals list')
+    console.log('[Navigation] Total globals in config:', payload.config.globals.length)
+    console.log('[Navigation] Global slugs:', payload.config.globals.map(g => g.slug))
+
     const globals = payload.config.globals.map((global) => ({
       label: global.label || global.slug,
       href: `/admin/globals/${global.slug}`,
@@ -249,10 +254,17 @@ export const navigationEndpoint: Endpoint = {
       _order: Number.MAX_SAFE_INTEGER,
     }))
 
+    console.log('[Navigation] Global nav items:', globalNavItems.length)
+    console.log('[Navigation] Global nav items:', globalNavItems.map(g => ({ slug: g.slug, label: g.label })))
+
     if (globalNavItems.length > 0) {
       const settingsSection = navSections.find((section) => section.id === 'settings')
+      console.log('[Navigation] Settings section exists:', !!settingsSection)
+      console.log('[Navigation] Settings section items before adding globals:', settingsSection?.items?.length || 0)
+
       if (settingsSection) {
         settingsSection.items.push(...globalNavItems)
+        console.log('[Navigation] Settings section items after adding globals:', settingsSection.items.length)
       } else {
         navSections.push({
           id: 'settings',
@@ -260,6 +272,7 @@ export const navigationEndpoint: Endpoint = {
           icon: sectionMeta.settings.icon,
           items: globalNavItems,
         })
+        console.log('[Navigation] Created new settings section with globals')
       }
     }
 
@@ -297,7 +310,7 @@ export const navigationEndpoint: Endpoint = {
       })
 
       // Get custom links from navigation-settings global
-      let customLinks: Array<{ label: string; url: string; position: 'start' | 'end' }> = []
+      let customLinks: Array<{ label: string; url: string; insertPosition?: string; position?: 'start' | 'end' }> = []
       try {
         const navSettings = await payload.findGlobal({
           slug: 'navigation-settings',
@@ -312,6 +325,15 @@ export const navigationEndpoint: Endpoint = {
         // Navigation settings not found or error fetching - continue without custom links
         console.log('Could not fetch custom links from navigation-settings')
       }
+
+      // Remove Settings section if it's empty (no collections and no globals)
+      const settingsSectionIndex = navSections.findIndex(s => s.id === 'settings')
+      if (settingsSectionIndex >= 0 && navSections[settingsSectionIndex].items.length === 0) {
+        console.log('[Navigation] Removing empty Settings section')
+        navSections.splice(settingsSectionIndex, 1)
+      }
+
+      console.log('[Navigation] Final nav sections:', navSections.map(s => ({ id: s.id, itemCount: s.items.length })))
 
       return Response.json({
         navSections,

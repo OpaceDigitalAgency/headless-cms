@@ -665,6 +665,7 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   CREATE TYPE "public"."enum_settings_social_profiles_platform" AS ENUM('facebook', 'twitter', 'instagram', 'linkedin', 'youtube', 'tiktok', 'github');
   CREATE TYPE "public"."enum_settings_frontend_framework" AS ENUM('next', 'astro');
   CREATE TYPE "public"."enum_settings_frontend_site_type" AS ENUM('brochure', 'blog', 'museum', 'ecommerce', 'portfolio', 'custom');
+  CREATE TYPE "public"."enum_navigation_settings_custom_links_insert_position" AS ENUM('before-dashboard', 'after-dashboard', 'after-content', 'after-taxonomy', 'after-collections', 'after-shop', 'after-media', 'after-forms', 'after-tools', 'after-settings', 'after-admin');
   CREATE TABLE "users_social_links" (
   	"_order" integer NOT NULL,
   	"_parent_id" integer NOT NULL,
@@ -8218,6 +8219,15 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	"created_at" timestamp(3) with time zone
   );
   
+  CREATE TABLE "navigation_settings_custom_links" (
+  	"_order" integer NOT NULL,
+  	"_parent_id" integer NOT NULL,
+  	"id" varchar PRIMARY KEY NOT NULL,
+  	"label" varchar NOT NULL,
+  	"url" varchar NOT NULL,
+  	"insert_position" "enum_navigation_settings_custom_links_insert_position" DEFAULT 'after-admin' NOT NULL
+  );
+  
   CREATE TABLE "navigation_settings" (
   	"id" serial PRIMARY KEY NOT NULL,
   	"collections" jsonb,
@@ -9330,6 +9340,7 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   ALTER TABLE "settings" ADD CONSTRAINT "settings_favicon_id_media_id_fk" FOREIGN KEY ("favicon_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
   ALTER TABLE "settings" ADD CONSTRAINT "settings_logo_id_media_id_fk" FOREIGN KEY ("logo_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
   ALTER TABLE "settings" ADD CONSTRAINT "settings_default_meta_image_id_media_id_fk" FOREIGN KEY ("default_meta_image_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
+  ALTER TABLE "navigation_settings_custom_links" ADD CONSTRAINT "navigation_settings_custom_links_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."navigation_settings"("id") ON DELETE cascade ON UPDATE no action;
   CREATE INDEX "users_social_links_order_idx" ON "users_social_links" USING btree ("_order");
   CREATE INDEX "users_social_links_parent_id_idx" ON "users_social_links" USING btree ("_parent_id");
   CREATE INDEX "users_sessions_order_idx" ON "users_sessions" USING btree ("_order");
@@ -11417,7 +11428,9 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   CREATE INDEX "settings_social_profiles_parent_id_idx" ON "settings_social_profiles" USING btree ("_parent_id");
   CREATE INDEX "settings_favicon_idx" ON "settings" USING btree ("favicon_id");
   CREATE INDEX "settings_logo_idx" ON "settings" USING btree ("logo_id");
-  CREATE INDEX "settings_default_meta_default_meta_image_idx" ON "settings" USING btree ("default_meta_image_id");`)
+  CREATE INDEX "settings_default_meta_default_meta_image_idx" ON "settings" USING btree ("default_meta_image_id");
+  CREATE INDEX "navigation_settings_custom_links_order_idx" ON "navigation_settings_custom_links" USING btree ("_order");
+  CREATE INDEX "navigation_settings_custom_links_parent_id_idx" ON "navigation_settings_custom_links" USING btree ("_parent_id");`)
 }
 
 export async function down({ db, payload, req }: MigrateDownArgs): Promise<void> {
@@ -11973,6 +11986,7 @@ export async function down({ db, payload, req }: MigrateDownArgs): Promise<void>
   DROP TABLE "footer" CASCADE;
   DROP TABLE "settings_social_profiles" CASCADE;
   DROP TABLE "settings" CASCADE;
+  DROP TABLE "navigation_settings_custom_links" CASCADE;
   DROP TABLE "navigation_settings" CASCADE;
   DROP TYPE "public"."enum_users_social_links_platform";
   DROP TYPE "public"."enum_users_role";
@@ -12636,5 +12650,6 @@ export async function down({ db, payload, req }: MigrateDownArgs): Promise<void>
   DROP TYPE "public"."enum_footer_social_links_platform";
   DROP TYPE "public"."enum_settings_social_profiles_platform";
   DROP TYPE "public"."enum_settings_frontend_framework";
-  DROP TYPE "public"."enum_settings_frontend_site_type";`)
+  DROP TYPE "public"."enum_settings_frontend_site_type";
+  DROP TYPE "public"."enum_navigation_settings_custom_links_insert_position";`)
 }

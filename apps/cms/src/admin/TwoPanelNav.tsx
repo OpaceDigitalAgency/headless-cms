@@ -538,7 +538,7 @@ export const TwoPanelNav: React.FC = () => {
   const [collectionSearchConfig, setCollectionSearchConfig] = useState<Array<{ slug: string; label: string; titleField: string }>>(
     () => cachedNavData?.collectionSearchConfig || []
   )
-  const [customLinks, setCustomLinks] = useState<Array<{ label: string; url: string; position: 'start' | 'end' }>>(() => cachedNavData?.customLinks || [])
+  const [customLinks, setCustomLinks] = useState<Array<{ label: string; url: string; insertPosition?: string; position?: 'start' | 'end' }>>(() => cachedNavData?.customLinks || [])
   const [isLoading, setIsLoading] = useState(!cachedNavData)
 
   const activeSection = resolveActiveSection(pathname, navSections)
@@ -632,52 +632,66 @@ export const TwoPanelNav: React.FC = () => {
             </>
           ) : (
             <>
-              {/* Custom links at start */}
-              {customLinks.filter(link => link.position === 'start').map((link, index) => (
-                <Link
-                  key={`custom-start-${index}`}
-                  href={link.url}
-                  className={`ra-top-nav__link ${pathname === link.url ? 'ra-top-nav__link--active' : ''}`}
-                >
-                  {link.label}
-                </Link>
-              ))}
+              {/* Build menu with custom links inserted at specified positions */}
+              {(() => {
+                const menuItems: React.ReactNode[] = []
 
-              {/* Section links */}
-              {topMenuSections.map((section) => {
-                // For sections with nested items, find the first actual href
-                let sectionHref = '#'
-                if (section.items && section.items.length > 0) {
-                  // Check if first item has href directly
-                  if (section.items[0].href) {
-                    sectionHref = section.items[0].href
-                  } else if (section.items[0].items && section.items[0].items.length > 0) {
-                    // If first item is a label with nested items, use first nested item's href
-                    sectionHref = section.items[0].items[0]?.href || '#'
-                  }
-                }
-
-                return (
+                // Helper to render custom link
+                const renderCustomLink = (link: typeof customLinks[0], index: number) => (
                   <Link
-                    key={section.id}
-                    href={sectionHref}
-                    className={`ra-top-nav__link ${activeSection === section.id ? 'ra-top-nav__link--active' : ''}`}
+                    key={`custom-${index}`}
+                    href={link.url}
+                    className={`ra-top-nav__link ${pathname === link.url ? 'ra-top-nav__link--active' : ''}`}
                   >
-                    {section.label}
+                    {link.label}
                   </Link>
                 )
-              })}
 
-              {/* Custom links at end */}
-              {customLinks.filter(link => link.position === 'end').map((link, index) => (
-                <Link
-                  key={`custom-end-${index}`}
-                  href={link.url}
-                  className={`ra-top-nav__link ${pathname === link.url ? 'ra-top-nav__link--active' : ''}`}
-                >
-                  {link.label}
-                </Link>
-              ))}
+                // Helper to render section link
+                const renderSectionLink = (section: typeof topMenuSections[0]) => {
+                  let sectionHref = '#'
+                  if (section.items && section.items.length > 0) {
+                    if (section.items[0].href) {
+                      sectionHref = section.items[0].href
+                    } else if (section.items[0].items && section.items[0].items.length > 0) {
+                      sectionHref = section.items[0].items[0]?.href || '#'
+                    }
+                  }
+
+                  return (
+                    <Link
+                      key={section.id}
+                      href={sectionHref}
+                      className={`ra-top-nav__link ${activeSection === section.id ? 'ra-top-nav__link--active' : ''}`}
+                    >
+                      {section.label}
+                    </Link>
+                  )
+                }
+
+                // Add links before dashboard
+                customLinks.forEach((link, index) => {
+                  const position = link.insertPosition || link.position
+                  if (position === 'before-dashboard' || position === 'start') {
+                    menuItems.push(renderCustomLink(link, index))
+                  }
+                })
+
+                // Add sections with custom links inserted after each
+                topMenuSections.forEach((section) => {
+                  menuItems.push(renderSectionLink(section))
+
+                  // Add custom links that should appear after this section
+                  customLinks.forEach((link, index) => {
+                    const position = link.insertPosition || (link.position === 'end' ? 'after-admin' : '')
+                    if (position === `after-${section.id}`) {
+                      menuItems.push(renderCustomLink(link, index))
+                    }
+                  })
+                })
+
+                return menuItems
+              })()}
             </>
           )}
         </div>

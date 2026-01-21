@@ -9515,7 +9515,7 @@ export interface NavigationSetting {
     | boolean
     | null;
   /**
-   * Add custom links to the top navigation bar (e.g., "Menu" linking to Header global)
+   * Add custom links to the top navigation bar. These appear in the horizontal menu at the very top of the admin panel. Save changes and refresh the page to see updates.
    */
   customLinks?:
     | {
@@ -9528,9 +9528,20 @@ export interface NavigationSetting {
          */
         url: string;
         /**
-         * Where to place this link in the top menu
+         * Choose where to insert this link in the top horizontal menu bar. The link will appear immediately after the selected section.
          */
-        position?: ('start' | 'end') | null;
+        insertPosition:
+          | 'before-dashboard'
+          | 'after-dashboard'
+          | 'after-content'
+          | 'after-taxonomy'
+          | 'after-collections'
+          | 'after-shop'
+          | 'after-media'
+          | 'after-forms'
+          | 'after-tools'
+          | 'after-settings'
+          | 'after-admin';
         id?: string | null;
       }[]
     | null;
@@ -9697,7 +9708,7 @@ export interface NavigationSettingsSelect<T extends boolean = true> {
     | {
         label?: T;
         url?: T;
-        position?: T;
+        insertPosition?: T;
         id?: T;
       };
   updatedAt?: T;
