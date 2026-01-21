@@ -560,7 +560,7 @@
 
 /* Detail Template */
 .detail-template {
-  @apply container py-12;
+  @apply w-full;
 }
 
 .detail-header {
@@ -651,7 +651,7 @@
 
 /* List Template */
 .list-template {
-  @apply container py-12;
+  @apply w-full;
 }
 
 .list-header {
@@ -757,7 +757,7 @@
 
 /* Article Template */
 .article-template {
-  @apply container py-12;
+  @apply w-full;
 }
 
 .article-header {

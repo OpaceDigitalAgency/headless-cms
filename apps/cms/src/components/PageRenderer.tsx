@@ -28,6 +28,28 @@ interface PageRendererProps {
   page: any // Using Payload's generated types would be ideal
 }
 
+/**
+ * Wraps template components with Section and Container primitives
+ * This ensures consistent layout, spacing, and content centering across all page types
+ *
+ * IMPORTANT: All page templates MUST be wrapped with this to maintain:
+ * - Consistent max-width constraints
+ * - Proper horizontal padding and centering
+ * - Vertical spacing (py-16 sm:py-24)
+ * - Global theme alignment
+ *
+ * This prevents layout issues when creating new pages, posts, or collections
+ */
+function TemplateWrapper({ children }: { children: React.ReactNode }) {
+  return (
+    <Section spacing="lg" background="default">
+      <Container>
+        {children}
+      </Container>
+    </Section>
+  )
+}
+
 export async function PageRenderer({ page }: PageRendererProps) {
   // Fetch settings for schema generation
   const settings = await getSettings().catch(() => null)
@@ -140,14 +162,12 @@ export async function PageRenderer({ page }: PageRendererProps) {
               dangerouslySetInnerHTML={{ __html: renderJsonLd(schemas) }}
             />
           )}
-          <Section spacing="lg" background="default">
-            <Container>
-              <DetailTemplate
-                heading={page.title}
-                content={content ? <RenderBlocks blocks={content} /> : null}
-              />
-            </Container>
-          </Section>
+          <TemplateWrapper>
+            <DetailTemplate
+              heading={page.title}
+              content={content ? <RenderBlocks blocks={content} /> : null}
+            />
+          </TemplateWrapper>
         </>
       )
 
@@ -160,14 +180,12 @@ export async function PageRenderer({ page }: PageRendererProps) {
               dangerouslySetInnerHTML={{ __html: renderJsonLd(schemas) }}
             />
           )}
-          <Section spacing="lg" background="default">
-            <Container>
-              <ListTemplate
-                heading={page.title}
-                content={content ? <RenderBlocks blocks={content} /> : null}
-              />
-            </Container>
-          </Section>
+          <TemplateWrapper>
+            <ListTemplate
+              heading={page.title}
+              content={content ? <RenderBlocks blocks={content} /> : null}
+            />
+          </TemplateWrapper>
         </>
       )
 
@@ -180,14 +198,12 @@ export async function PageRenderer({ page }: PageRendererProps) {
               dangerouslySetInnerHTML={{ __html: renderJsonLd(schemas) }}
             />
           )}
-          <Section spacing="lg" background="default">
-            <Container>
-              <ArticleTemplate
-                heading={page.title}
-                content={content ? <RenderBlocks blocks={content} /> : null}
-              />
-            </Container>
-          </Section>
+          <TemplateWrapper>
+            <ArticleTemplate
+              heading={page.title}
+              content={content ? <RenderBlocks blocks={content} /> : null}
+            />
+          </TemplateWrapper>
         </>
       )
 
@@ -246,11 +262,9 @@ export async function PageRenderer({ page }: PageRendererProps) {
               </section>
             )}
             {content && (
-              <Section spacing="lg" background="default">
-                <Container>
-                  <RenderBlocks blocks={content} />
-                </Container>
-              </Section>
+              <TemplateWrapper>
+                <RenderBlocks blocks={content} />
+              </TemplateWrapper>
             )}
           </div>
         </>
