@@ -9503,7 +9503,7 @@ export interface Setting {
 export interface NavigationSetting {
   id: number;
   /**
-   * Toggle collections and click "Save" below. Then refresh your browser (Cmd+R or F5) to see changes in the navigation menu.
+   * Manage collections and global settings links in the left navigation. Globals always live in the Settings section.
    */
   collections?:
     | {
@@ -9514,9 +9514,6 @@ export interface NavigationSetting {
     | number
     | boolean
     | null;
-  /**
-   * Reorder and rename global settings links. Save changes and refresh to see updates in the navigation menu.
-   */
   globals?:
     | {
         [k: string]: unknown;

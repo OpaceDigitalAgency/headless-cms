@@ -36,9 +36,10 @@ export const NavigationSettings: GlobalConfig = {
           Field: '/components/CollectionManagerField',
         },
         custom: {
-          managerType: 'collections',
+          managerType: 'combined',
+          globalsPath: 'globals',
         },
-        description: 'Toggle collections and click "Save" below. Then refresh your browser (Cmd+R or F5) to see changes in the navigation menu.',
+        description: 'Manage collections and global settings links in the left navigation. Globals always live in the Settings section.',
       },
     },
     {
@@ -46,13 +47,7 @@ export const NavigationSettings: GlobalConfig = {
       label: 'Global Navigation',
       type: 'json',
       admin: {
-        components: {
-          Field: '/components/CollectionManagerField',
-        },
-        custom: {
-          managerType: 'globals',
-        },
-        description: 'Reorder and rename global settings links. Save changes and refresh to see updates in the navigation menu.',
+        hidden: true,
       },
     },
     {
