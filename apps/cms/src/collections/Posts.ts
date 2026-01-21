@@ -232,8 +232,11 @@ export const Posts: CollectionConfig = {
         },
         {
           label: 'SEO',
-          name: 'meta',
-          fields: [],
+          description: 'Search engine optimization settings',
+          fields: [
+            // SEO plugin will inject fields here automatically
+            // Fields include: title, description, image, noindex, canonical
+          ],
         },
       ],
     },

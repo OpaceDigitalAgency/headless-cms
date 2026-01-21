@@ -939,6 +939,11 @@ export interface Page {
           }
       )[]
     | null;
+  /**
+   * Select the page template
+   */
+  template: 'landing' | 'home' | 'detail' | 'article' | 'archive' | 'showcase';
+  publishedAt?: string | null;
   meta?: {
     title?: string | null;
     description?: string | null;
@@ -947,11 +952,6 @@ export interface Page {
      */
     image?: (number | null) | Media;
   };
-  /**
-   * Select the page template
-   */
-  template: 'landing' | 'home' | 'detail' | 'article' | 'archive' | 'showcase';
-  publishedAt?: string | null;
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
@@ -1694,14 +1694,6 @@ export interface Post {
    */
   tags?: (number | Tag)[] | null;
   relatedPosts?: (number | Post)[] | null;
-  meta?: {
-    title?: string | null;
-    description?: string | null;
-    /**
-     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
-     */
-    image?: (number | null) | Media;
-  };
   /**
    * Select the display template
    */
@@ -1712,6 +1704,14 @@ export interface Post {
    * Show in featured sections
    */
   featured?: boolean | null;
+  meta?: {
+    title?: string | null;
+    description?: string | null;
+    /**
+     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     */
+    image?: (number | null) | Media;
+  };
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
@@ -6216,6 +6216,8 @@ export interface PagesSelect<T extends boolean = true> {
               blockName?: T;
             };
       };
+  template?: T;
+  publishedAt?: T;
   meta?:
     | T
     | {
@@ -6223,8 +6225,6 @@ export interface PagesSelect<T extends boolean = true> {
         description?: T;
         image?: T;
       };
-  template?: T;
-  publishedAt?: T;
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
@@ -6648,6 +6648,10 @@ export interface PostsSelect<T extends boolean = true> {
   categories?: T;
   tags?: T;
   relatedPosts?: T;
+  template?: T;
+  author?: T;
+  publishedAt?: T;
+  featured?: T;
   meta?:
     | T
     | {
@@ -6655,10 +6659,6 @@ export interface PostsSelect<T extends boolean = true> {
         description?: T;
         image?: T;
       };
-  template?: T;
-  author?: T;
-  publishedAt?: T;
-  featured?: T;
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
@@ -9411,6 +9411,14 @@ export interface Setting {
   siteUrl?: string | null;
   favicon?: (number | null) | Media;
   logo?: (number | null) | Media;
+  /**
+   * Choose the default visual theme for your site. Users can override this preference.
+   */
+  defaultSkin?: ('minimal' | 'editorial' | 'saas' | 'soft' | 'bold' | 'monochrome' | 'glass' | 'high-contrast') | null;
+  /**
+   * Choose the default colour mode. Users can override this preference.
+   */
+  defaultMode?: ('light' | 'dark' | 'system') | null;
   frontend?: {
     /**
      * Choose the frontend framework for your site
@@ -9656,6 +9664,8 @@ export interface SettingsSelect<T extends boolean = true> {
   siteUrl?: T;
   favicon?: T;
   logo?: T;
+  defaultSkin?: T;
+  defaultMode?: T;
   frontend?:
     | T
     | {

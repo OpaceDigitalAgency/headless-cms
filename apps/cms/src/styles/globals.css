@@ -37,17 +37,26 @@
    =========================================== */
 
 @layer base {
+  /* ===========================================
+     Base Design Tokens (Minimal Skin - Default)
+     =========================================== */
   :root {
     --font-sans: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     --font-serif: Georgia, Cambria, 'Times New Roman', Times, serif;
     --font-mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Monaco, Consolas, monospace;
 
-    /* Light mode colors */
+    /* Light mode colors - Minimal skin */
     --color-background: 255 255 255;
     --color-foreground: 17 24 39;
     --color-muted: 107 114 128;
     --color-border: 229 231 235;
     --color-card: 255 255 255;
+    --color-accent: 14 165 233; /* sky-500 */
+
+    /* Surface styling */
+    --radius: 0.5rem;
+    --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
+    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
   }
 
   .dark {
@@ -56,6 +65,191 @@
     --color-muted: 148 163 184;
     --color-border: 51 65 85;
     --color-card: 30 41 59;
+    --color-accent: 56 189 248; /* sky-400 */
+  }
+
+  /* ===========================================
+     Skin: Editorial
+     =========================================== */
+  [data-skin="editorial"] {
+    --font-sans: 'Inter', system-ui, sans-serif;
+    --font-serif: 'Merriweather', Georgia, serif;
+
+    /* Light mode */
+    --color-background: 254 252 247;
+    --color-foreground: 28 25 23;
+    --color-muted: 120 113 108;
+    --color-border: 231 229 228;
+    --color-card: 255 255 255;
+    --color-accent: 217 119 6; /* amber-600 */
+
+    --radius: 0.25rem;
+    --shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  }
+
+  [data-skin="editorial"].dark {
+    --color-background: 28 25 23;
+    --color-foreground: 250 250 249;
+    --color-muted: 168 162 158;
+    --color-border: 68 64 60;
+    --color-card: 41 37 36;
+    --color-accent: 251 191 36; /* amber-400 */
+  }
+
+  /* ===========================================
+     Skin: SaaS
+     =========================================== */
+  [data-skin="saas"] {
+    /* Light mode */
+    --color-background: 255 255 255;
+    --color-foreground: 15 23 42;
+    --color-muted: 100 116 139;
+    --color-border: 226 232 240;
+    --color-card: 255 255 255;
+    --color-accent: 99 102 241; /* indigo-500 */
+
+    --radius: 0.75rem;
+    --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+    --shadow-lg: 0 20px 25px -5px rgb(0 0 0 / 0.1);
+  }
+
+  [data-skin="saas"].dark {
+    --color-background: 15 23 42;
+    --color-foreground: 248 250 252;
+    --color-muted: 148 163 184;
+    --color-border: 51 65 85;
+    --color-card: 30 41 59;
+    --color-accent: 129 140 248; /* indigo-400 */
+  }
+
+  /* ===========================================
+     Skin: Soft
+     =========================================== */
+  [data-skin="soft"] {
+    /* Light mode */
+    --color-background: 253 242 248;
+    --color-foreground: 63 63 70;
+    --color-muted: 113 113 122;
+    --color-border: 244 228 238;
+    --color-card: 255 255 255;
+    --color-accent: 236 72 153; /* pink-500 */
+
+    --radius: 1rem;
+    --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.05);
+    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.05);
+  }
+
+  [data-skin="soft"].dark {
+    --color-background: 39 39 42;
+    --color-foreground: 250 250 250;
+    --color-muted: 161 161 170;
+    --color-border: 63 63 70;
+    --color-card: 52 52 56;
+    --color-accent: 244 114 182; /* pink-400 */
+  }
+
+  /* ===========================================
+     Skin: Bold
+     =========================================== */
+  [data-skin="bold"] {
+    /* Light mode */
+    --color-background: 255 255 255;
+    --color-foreground: 0 0 0;
+    --color-muted: 82 82 91;
+    --color-border: 212 212 216;
+    --color-card: 255 255 255;
+    --color-accent: 239 68 68; /* red-500 */
+
+    --radius: 0.125rem;
+    --shadow: 0 2px 4px 0 rgb(0 0 0 / 0.2);
+    --shadow-lg: 0 12px 20px -4px rgb(0 0 0 / 0.2);
+  }
+
+  [data-skin="bold"].dark {
+    --color-background: 0 0 0;
+    --color-foreground: 255 255 255;
+    --color-muted: 161 161 170;
+    --color-border: 63 63 70;
+    --color-card: 24 24 27;
+    --color-accent: 248 113 113; /* red-400 */
+  }
+
+  /* ===========================================
+     Skin: Monochrome
+     =========================================== */
+  [data-skin="monochrome"] {
+    /* Light mode */
+    --color-background: 255 255 255;
+    --color-foreground: 23 23 23;
+    --color-muted: 115 115 115;
+    --color-border: 229 229 229;
+    --color-card: 250 250 250;
+    --color-accent: 64 64 64;
+
+    --radius: 0rem;
+    --shadow: 0 0 0 1px rgb(0 0 0 / 0.1);
+    --shadow-lg: 0 0 0 2px rgb(0 0 0 / 0.1);
+  }
+
+  [data-skin="monochrome"].dark {
+    --color-background: 23 23 23;
+    --color-foreground: 250 250 250;
+    --color-muted: 163 163 163;
+    --color-border: 64 64 64;
+    --color-card: 38 38 38;
+    --color-accent: 212 212 212;
+  }
+
+  /* ===========================================
+     Skin: Glass
+     =========================================== */
+  [data-skin="glass"] {
+    /* Light mode */
+    --color-background: 248 250 252;
+    --color-foreground: 15 23 42;
+    --color-muted: 100 116 139;
+    --color-border: 203 213 225 / 0.5;
+    --color-card: 255 255 255 / 0.7;
+    --color-accent: 14 165 233;
+
+    --radius: 1rem;
+    --shadow: 0 8px 32px 0 rgb(31 38 135 / 0.15);
+    --shadow-lg: 0 8px 32px 0 rgb(31 38 135 / 0.37);
+  }
+
+  [data-skin="glass"].dark {
+    --color-background: 15 23 42;
+    --color-foreground: 248 250 252;
+    --color-muted: 148 163 184;
+    --color-border: 51 65 85 / 0.5;
+    --color-card: 30 41 59 / 0.7;
+    --color-accent: 56 189 248;
+  }
+
+  /* ===========================================
+     Skin: High Contrast
+     =========================================== */
+  [data-skin="high-contrast"] {
+    /* Light mode */
+    --color-background: 255 255 255;
+    --color-foreground: 0 0 0;
+    --color-muted: 64 64 64;
+    --color-border: 0 0 0;
+    --color-card: 255 255 255;
+    --color-accent: 0 0 255;
+
+    --radius: 0.25rem;
+    --shadow: 0 0 0 2px rgb(0 0 0);
+    --shadow-lg: 0 0 0 4px rgb(0 0 0);
+  }
+
+  [data-skin="high-contrast"].dark {
+    --color-background: 0 0 0;
+    --color-foreground: 255 255 255;
+    --color-muted: 212 212 212;
+    --color-border: 255 255 255;
+    --color-card: 0 0 0;
+    --color-accent: 255 255 0;
   }
 
   html {
@@ -64,12 +258,22 @@
   }
 
   body {
-    @apply bg-white text-gray-900 antialiased dark:bg-slate-900 dark:text-slate-100;
+    background-color: rgb(var(--color-background));
+    color: rgb(var(--color-foreground));
+    @apply antialiased;
   }
 
   /* Focus styles */
   *:focus-visible {
-    @apply outline-2 outline-offset-2 outline-sky-500;
+    @apply outline-2 outline-offset-2;
+    outline-color: rgb(var(--color-accent));
+  }
+
+  /* Glass effect for glass skin */
+  [data-skin="glass"] .card,
+  [data-skin="glass"] .btn-secondary {
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
   }
 }
 

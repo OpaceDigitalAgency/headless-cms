@@ -1,8 +1,10 @@
 import { notFound } from 'next/navigation'
 import { draftMode } from 'next/headers'
 import type { Metadata } from 'next'
-import { getEvents, getEventBySlug } from '@/lib/payload-api'
+import { getEvents, getEventBySlug, getSettings } from '@/lib/payload-api'
 import { RenderBlocks } from '@/components/RenderBlocks'
+import { generateEnhancedMetadata } from '@/lib/seo/metadata'
+import { generateEventSchema, generateOrganizationSchema, generateBreadcrumbSchema, renderJsonLd } from '@/lib/seo/schema'
 
 interface EventPageProps {
   params: Promise<{ slug: string }>
@@ -18,15 +20,28 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: EventPageProps): Promise<Metadata> {
   const { slug } = await params
   const { isEnabled: isDraftMode } = await draftMode()
-  const event = await getEventBySlug(slug, isDraftMode)
 
-  if (!event) {
+  try {
+    const [event, settings] = await Promise.all([
+      getEventBySlug(slug, isDraftMode),
+      getSettings(),
+    ])
+
+    if (!event) {
+      return { title: 'Event Not Found' }
+    }
+
+    return generateEnhancedMetadata(
+      {
+        title: event.title,
+        description: event.excerpt || event.description || `Event: ${event.title}`,
+        image: event.featuredImage,
+      },
+      settings,
+      `/events/${slug}`
+    )
+  } catch (error) {
     return { title: 'Event Not Found' }
-  }
-
-  return {
-    title: event.title,
-    description: event.excerpt || `Event: ${event.title}`,
   }
 }
 
@@ -39,8 +54,47 @@ export default async function EventPage({ params }: EventPageProps) {
     notFound()
   }
 
+  // Generate JSON-LD schemas
+  const settings = await getSettings().catch(() => null)
+  const schemas = []
+
+  if (settings) {
+    // Add Event schema
+    schemas.push(generateEventSchema(
+      {
+        title: event.title,
+        description: event.excerpt || event.description,
+        startDate: event.startDate,
+        endDate: event.endDate,
+        location: event.location,
+        image: event.featuredImage?.url,
+      },
+      settings,
+      slug
+    ))
+
+    // Add Organization schema
+    schemas.push(generateOrganizationSchema(settings))
+
+    // Add Breadcrumb schema
+    const siteUrl = settings.siteUrl || process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3001'
+    const breadcrumbs = [
+      { name: 'Home', url: siteUrl },
+      { name: 'Events', url: `${siteUrl}/events` },
+      { name: event.title, url: `${siteUrl}/events/${slug}` },
+    ]
+    schemas.push(generateBreadcrumbSchema(breadcrumbs))
+  }
+
   return (
-    <article className="container py-16">
+    <>
+      {schemas.length > 0 && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: renderJsonLd(schemas) }}
+        />
+      )}
+      <article className="container py-16">
       <header className="mb-12">
         <h1 className="text-4xl font-bold">{event.title}</h1>
         {event.startDate && (
@@ -75,6 +129,7 @@ export default async function EventPage({ params }: EventPageProps) {
 
       {event.content && <RenderBlocks blocks={event.content} />}
     </article>
+    </>
   )
 }
 

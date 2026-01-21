@@ -2,12 +2,14 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { RichText } from './RichText'
 import { RenderBlocks } from './RenderBlocks'
+import { generateArticleSchema, generateOrganizationSchema, generateBreadcrumbSchema, renderJsonLd } from '@/lib/seo/schema'
+import { getSettings } from '@/lib/payload-api'
 
 interface PostRendererProps {
   post: any
 }
 
-export function PostRenderer({ post }: PostRendererProps) {
+export async function PostRenderer({ post }: PostRendererProps) {
   const {
     title,
     excerpt,
@@ -17,10 +19,58 @@ export function PostRenderer({ post }: PostRendererProps) {
     categories,
     author,
     publishedAt,
+    updatedAt,
+    slug,
   } = post
 
+  // Fetch settings for schema generation
+  const settings = await getSettings().catch(() => null)
+
+  // Generate JSON-LD schemas
+  const schemas = []
+
+  if (settings) {
+    // Add Article schema
+    schemas.push(generateArticleSchema(
+      {
+        title,
+        excerpt,
+        publishedAt,
+        updatedAt,
+        author: author ? { name: author.name || author.email } : undefined,
+        featuredImage: featuredImage?.url ? {
+          url: featuredImage.url,
+          width: featuredImage.width,
+          height: featuredImage.height,
+        } : undefined,
+        categories: categories?.map((cat: any) => ({ title: cat.title })),
+      },
+      settings,
+      slug
+    ))
+
+    // Add Organization schema
+    schemas.push(generateOrganizationSchema(settings))
+
+    // Add Breadcrumb schema
+    const siteUrl = settings.siteUrl || process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3001'
+    const breadcrumbs = [
+      { name: 'Home', url: siteUrl },
+      { name: 'Blog', url: `${siteUrl}/blog` },
+      { name: title, url: `${siteUrl}/blog/${slug}` },
+    ]
+    schemas.push(generateBreadcrumbSchema(breadcrumbs))
+  }
+
   return (
-    <article className="article-template">
+    <>
+      {schemas.length > 0 && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: renderJsonLd(schemas) }}
+        />
+      )}
+      <article className="article-template">
       {/* Header */}
       <header className="article-header">
         {categories && categories.length > 0 && (
@@ -112,5 +162,6 @@ export function PostRenderer({ post }: PostRendererProps) {
         </div>
       )}
     </article>
+    </>
   )
 }

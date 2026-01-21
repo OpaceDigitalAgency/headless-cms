@@ -4,6 +4,8 @@ import { draftMode } from 'next/headers'
 import { getPayloadHMR } from '@payloadcms/next/utilities'
 import configPromise from '@payload-config'
 import { PostRenderer } from '@/components/PostRenderer'
+import { getSettings } from '@/lib/payload-api'
+import { generateArticleMetadata } from '@/lib/seo/metadata'
 
 interface PostPageProps {
   params: Promise<{ slug: string }>
@@ -29,33 +31,40 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: PostPageProps): Promise<Metadata> {
   const { slug } = await params
-  
+
   try {
-    const payload = await getPayloadHMR({ config: configPromise })
+    const [settings, payload] = await Promise.all([
+      getSettings(),
+      getPayloadHMR({ config: configPromise }),
+    ])
+
     const { docs } = await payload.find({
       collection: 'posts',
       where: { slug: { equals: slug } },
       limit: 1,
     })
     const post = docs[0]
-    
+
     if (!post) {
       return { title: 'Post Not Found' }
     }
 
     const featuredImage = typeof post.featuredImage === 'object' ? post.featuredImage : null
+    const author = typeof post.author === 'object' ? post.author : null
 
-    return {
-      title: post.meta?.title || post.title,
-      description: post.meta?.description || post.excerpt,
-      openGraph: {
-        title: post.meta?.title || post.title,
-        description: post.meta?.description || post.excerpt || undefined,
-        images: featuredImage?.url ? [featuredImage.url] : undefined,
-        type: 'article',
-        publishedTime: post.publishedAt || undefined,
+    return generateArticleMetadata(
+      {
+        title: post.title,
+        excerpt: post.excerpt,
+        publishedAt: post.publishedAt,
+        updatedAt: post.updatedAt,
+        author: author ? { name: author.name } : undefined,
+        featuredImage: featuredImage || undefined,
+        meta: post.meta,
       },
-    }
+      settings,
+      `/blog/${slug}`
+    )
   } catch {
     return { title: 'Post Not Found' }
   }

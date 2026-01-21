@@ -4,6 +4,7 @@ import { getSettings, getHeader, getFooter } from '@/lib/payload-api'
 import { Header } from '@/components/Header'
 import { Footer } from '@/components/Footer'
 import { LivePreviewListener } from '@/components/LivePreviewListener'
+import { ThemeScript } from '@repo/ui'
 import '@/styles/globals.css'
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -32,21 +33,6 @@ export async function generateMetadata(): Promise<Metadata> {
   }
 }
 
-// Script to prevent flash of wrong theme
-const themeScript = `
-  (function() {
-    try {
-      var theme = localStorage.getItem('theme');
-      if (!theme) {
-        theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-      }
-      if (theme === 'dark') {
-        document.documentElement.classList.add('dark');
-      }
-    } catch (e) {}
-  })();
-`
-
 export default async function FrontendLayout({
   children,
 }: {
@@ -54,20 +40,32 @@ export default async function FrontendLayout({
 }) {
   let header = null
   let footer = null
+  let settings = null
 
   try {
-    header = await getHeader()
-    footer = await getFooter()
+    ;[header, footer, settings] = await Promise.all([
+      getHeader(),
+      getFooter(),
+      getSettings(),
+    ])
   } catch (error) {
     console.error('Failed to fetch globals:', error)
   }
 
+  // Get default theme preferences from settings
+  const defaultSkin = settings?.defaultSkin || 'minimal'
+  const defaultMode = settings?.defaultMode || 'light'
   const serverURL = process.env.NEXT_PUBLIC_SERVER_URL || process.env.PAYLOAD_PUBLIC_SERVER_URL || 'http://localhost:3000'
 
   return (
     <html lang="en" suppressHydrationWarning={true}>
-      <body className="flex min-h-screen flex-col bg-white text-gray-900 dark:bg-slate-900 dark:text-slate-100 transition-colors" suppressHydrationWarning={true}>
-        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+      <head>
+        <ThemeScript defaultSkin={defaultSkin} defaultMode={defaultMode} />
+      </head>
+      <body className="flex min-h-screen flex-col transition-colors" suppressHydrationWarning={true} style={{
+        backgroundColor: 'rgb(var(--color-background))',
+        color: 'rgb(var(--color-foreground))'
+      }}>
         <LivePreviewListener serverURL={serverURL} />
         {header && <Header data={header} />}
         <main className="flex-1">{children}</main>

@@ -1,7 +1,38 @@
 import { draftMode } from 'next/headers'
-import { getPageBySlug, getPosts, getArchiveItems } from '@/lib/payload-api'
+import type { Metadata } from 'next'
+import { getPageBySlug, getPosts, getArchiveItems, getSettings } from '@/lib/payload-api'
 import { PageRenderer } from '@/components/PageRenderer'
 import { HomeTemplate } from '@repo/templates'
+import { generateEnhancedMetadata } from '@/lib/seo/metadata'
+
+export async function generateMetadata(): Promise<Metadata> {
+  try {
+    const [page, settings] = await Promise.all([
+      getPageBySlug('home').catch(() => null),
+      getSettings(),
+    ])
+
+    if (page?.meta) {
+      return generateEnhancedMetadata(page.meta, settings, '/')
+    }
+
+    // Fallback metadata
+    return generateEnhancedMetadata(
+      {
+        title: settings.siteName || 'Home',
+        description: settings.siteDescription || 'Welcome to our site',
+        image: settings.defaultMeta?.image,
+      },
+      settings,
+      '/'
+    )
+  } catch (error) {
+    return {
+      title: 'Home',
+      description: 'Welcome',
+    }
+  }
+}
 
 export default async function HomePage() {
   const { isEnabled: isDraftMode } = await draftMode()

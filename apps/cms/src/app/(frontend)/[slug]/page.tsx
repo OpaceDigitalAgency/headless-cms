@@ -1,8 +1,9 @@
 import { notFound } from 'next/navigation'
 import { draftMode } from 'next/headers'
 import { Metadata } from 'next'
-import { getPages, getPageBySlug } from '@/lib/payload-api'
+import { getPages, getPageBySlug, getSettings } from '@/lib/payload-api'
 import { PageRenderer } from '@/components/PageRenderer'
+import { generateEnhancedMetadata } from '@/lib/seo/metadata'
 
 interface PageProps {
   params: Promise<{ slug: string }>
@@ -31,7 +32,10 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const { isEnabled: isDraftMode } = await draftMode()
 
   try {
-    const page = await getPageBySlug(slug, isDraftMode)
+    const [page, settings] = await Promise.all([
+      getPageBySlug(slug, isDraftMode),
+      getSettings(),
+    ])
 
     if (!page) {
       return {
@@ -39,15 +43,15 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       }
     }
 
-    return {
-      title: page.meta?.title || page.title,
-      description: page.meta?.description,
-      openGraph: {
-        title: page.meta?.title || page.title,
-        description: page.meta?.description || undefined,
-        images: page.meta?.image?.url ? [page.meta.image.url] : undefined,
+    return generateEnhancedMetadata(
+      page.meta || {
+        title: page.title,
+        description: undefined,
+        image: undefined,
       },
-    }
+      settings,
+      `/${slug}`
+    )
   } catch (error) {
     return {
       title: 'Page Not Found',

@@ -68,6 +68,45 @@ export const Settings: GlobalConfig = {
           ],
         },
         {
+          label: 'Appearance',
+          description: 'Configure the default theme and appearance for your site',
+          fields: [
+            {
+              name: 'defaultSkin',
+              type: 'select',
+              label: 'Default Skin',
+              defaultValue: 'minimal',
+              options: [
+                { label: 'Minimal', value: 'minimal' },
+                { label: 'Editorial', value: 'editorial' },
+                { label: 'SaaS', value: 'saas' },
+                { label: 'Soft', value: 'soft' },
+                { label: 'Bold', value: 'bold' },
+                { label: 'Monochrome', value: 'monochrome' },
+                { label: 'Glass', value: 'glass' },
+                { label: 'High Contrast', value: 'high-contrast' },
+              ],
+              admin: {
+                description: 'Choose the default visual theme for your site. Users can override this preference.',
+              },
+            },
+            {
+              name: 'defaultMode',
+              type: 'select',
+              label: 'Default Mode',
+              defaultValue: 'light',
+              options: [
+                { label: 'Light', value: 'light' },
+                { label: 'Dark', value: 'dark' },
+                { label: 'System Preference', value: 'system' },
+              ],
+              admin: {
+                description: 'Choose the default colour mode. Users can override this preference.',
+              },
+            },
+          ],
+        },
+        {
           label: 'Frontend',
           description: 'Configure your frontend framework and site type',
           fields: [
