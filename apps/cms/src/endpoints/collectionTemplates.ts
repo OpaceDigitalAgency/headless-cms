@@ -128,6 +128,7 @@ export const getContentTypesEndpoint: Endpoint = {
         description: doc.description,
         hasArchive: doc.hasArchive,
         archiveSlug: doc.archiveSlug,
+        uninstalled: doc.uninstalled,
         customFields: Array.isArray(doc.customFields) ? doc.customFields : [],
       })),
     })
@@ -268,6 +269,36 @@ export const createCustomCollectionEndpoint: Endpoint = {
         )
       }
 
+      const existing = await payload.find({
+        collection: 'content-types',
+        where: { slug: { equals: resolvedSlug } },
+        limit: 1,
+        depth: 0,
+        overrideAccess: true,
+      })
+
+      if (existing.docs[0]) {
+        if (existing.docs[0].uninstalled) {
+          const restored = await payload.update({
+            collection: 'content-types',
+            id: existing.docs[0].id,
+            data: { uninstalled: false },
+            overrideAccess: true,
+          })
+
+          return Response.json({
+            success: true,
+            message: `Custom collection "${restored.name}" restored`,
+            doc: restored,
+          })
+        }
+
+        return Response.json(
+          { success: false, message: `Custom collection slug "${resolvedSlug}" already exists.` },
+          { status: 409 }
+        )
+      }
+
       const resolvedSingular =
         typeof singularLabel === 'string' && singularLabel.trim()
           ? singularLabel.trim()
@@ -299,6 +330,7 @@ export const createCustomCollectionEndpoint: Endpoint = {
           hasArchive: resolvedHasArchive,
           archiveSlug: resolvedHasArchive ? resolvedArchiveSlug : undefined,
           customFields: resolvedCustomFields,
+          uninstalled: false,
         },
         overrideAccess: true,
       })

@@ -299,7 +299,8 @@ export class CoreSeeder extends BaseSeeder {
     this.log('Seeding pages...')
 
     // Home page
-    await this.create('pages', {
+    if (this.shouldSeedItem('home')) {
+      await this.create('pages', {
       title: 'Home',
       slug: 'home',
       template: 'home',
@@ -345,9 +346,11 @@ export class CoreSeeder extends BaseSeeder {
         },
       ],
     })
+    }
 
     // About page
-    await this.create('pages', {
+    if (this.shouldSeedItem('about')) {
+      await this.create('pages', {
       title: 'About the Archive',
       slug: 'about',
       template: 'detail',
@@ -386,6 +389,7 @@ export class CoreSeeder extends BaseSeeder {
         },
       ],
     })
+    }
 
     await ensureShowcasePage(this.payload, { updateHeader: true })
   }
@@ -437,16 +441,18 @@ export class CoreSeeder extends BaseSeeder {
     ]
 
     for (const post of posts) {
-      await this.create('posts', {
-        title: post.title,
-        slug: post.slug,
-        excerpt: post.excerpt,
-        content: post.content,
-        categories: categories[post.category] ? [categories[post.category]] : [],
-        author: adminId,
+      if (this.shouldSeedItem(post.slug)) {
+        await this.create('posts', {
+          title: post.title,
+          slug: post.slug,
+          excerpt: post.excerpt,
+          content: post.content,
+          categories: categories[post.category] ? [categories[post.category]] : [],
+          author: adminId,
         _status: 'published',
         publishedAt: new Date().toISOString(),
       })
+      }
     }
   }
 

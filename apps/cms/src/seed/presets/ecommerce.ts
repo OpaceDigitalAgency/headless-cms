@@ -312,7 +312,8 @@ export class EcommerceSeeder extends BaseSeeder {
     this.log('Seeding pages...')
 
     // Home page
-    await this.create('pages', {
+    if (this.shouldSeedItem('home')) {
+      await this.create('pages', {
       title: 'Home',
       slug: 'home',
       template: 'home',
@@ -349,9 +350,11 @@ export class EcommerceSeeder extends BaseSeeder {
         },
       ],
     })
+    }
 
     // About page
-    await this.create('pages', {
+    if (this.shouldSeedItem('about')) {
+      await this.create('pages', {
       title: 'About Us',
       slug: 'about',
       template: 'detail',
@@ -384,9 +387,11 @@ export class EcommerceSeeder extends BaseSeeder {
         },
       ],
     })
+    }
 
     // Contact page
-    await this.create('pages', {
+    if (this.shouldSeedItem('contact')) {
+      await this.create('pages', {
       title: 'Contact',
       slug: 'contact',
       template: 'detail',
@@ -408,6 +413,7 @@ export class EcommerceSeeder extends BaseSeeder {
         },
       ],
     })
+    }
   }
 
   private async seedGlobals(): Promise<void> {

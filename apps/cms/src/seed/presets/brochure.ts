@@ -68,7 +68,8 @@ export class BrochureSeeder extends BaseSeeder {
     this.log('Seeding pages...')
 
     // Home page
-    await this.create('pages', {
+    if (this.shouldSeedItem('home')) {
+      await this.create('pages', {
       title: 'Home',
       slug: 'home',
       template: 'home',
@@ -137,9 +138,11 @@ export class BrochureSeeder extends BaseSeeder {
         },
       ],
     })
+    }
 
     // About page
-    await this.create('pages', {
+    if (this.shouldSeedItem('about')) {
+      await this.create('pages', {
       title: 'About Us',
       slug: 'about',
       template: 'detail',
@@ -183,9 +186,11 @@ export class BrochureSeeder extends BaseSeeder {
         },
       ],
     })
+    }
 
     // Services page
-    await this.create('pages', {
+    if (this.shouldSeedItem('services')) {
+      await this.create('pages', {
       title: 'Services',
       slug: 'services',
       template: 'detail',
@@ -230,9 +235,11 @@ export class BrochureSeeder extends BaseSeeder {
         },
       ],
     })
+    }
 
     // Contact page
-    await this.create('pages', {
+    if (this.shouldSeedItem('contact')) {
+      await this.create('pages', {
       title: 'Contact',
       slug: 'contact',
       template: 'detail',
@@ -265,9 +272,11 @@ export class BrochureSeeder extends BaseSeeder {
         },
       ],
     })
+    }
 
     // Privacy Policy page
-    await this.create('pages', {
+    if (this.shouldSeedItem('privacy')) {
+      await this.create('pages', {
       title: 'Privacy Policy',
       slug: 'privacy',
       template: 'article',
@@ -289,6 +298,7 @@ export class BrochureSeeder extends BaseSeeder {
         },
       ],
     })
+    }
   }
 
   private async seedGlobals(): Promise<void> {

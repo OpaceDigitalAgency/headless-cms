@@ -1007,6 +1007,7 @@ export interface ContentType {
    * Internal reference for template-based collections
    */
   templateId?: string | null;
+  uninstalled?: boolean | null;
   /**
    * Optional description shown in the admin
    */
@@ -8580,6 +8581,7 @@ export interface ContentTypesSelect<T extends boolean = true> {
   icon?: T;
   template?: T;
   templateId?: T;
+  uninstalled?: T;
   description?: T;
   hasArchive?: T;
   archiveSlug?: T;

@@ -142,6 +142,14 @@ export const ContentTypes: CollectionConfig = {
       },
     },
     {
+      name: 'uninstalled',
+      type: 'checkbox',
+      defaultValue: false,
+      admin: {
+        hidden: true,
+      },
+    },
+    {
       name: 'description',
       type: 'textarea',
       admin: {
