@@ -36,11 +36,11 @@ COPY . .
 WORKDIR /app/packages/shared
 RUN pnpm build || true
 
-# Build CMS
-WORKDIR /app/apps/cms
+# Build CMS only (filtered build)
+WORKDIR /app
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
-RUN pnpm build
+RUN pnpm --filter @repo/cms build
 
 # Production stage
 FROM base AS production
