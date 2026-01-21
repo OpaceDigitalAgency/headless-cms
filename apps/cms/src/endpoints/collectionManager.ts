@@ -35,6 +35,9 @@ export const collectionManagerEndpoint: Endpoint = {
         'payload-kv', // Note: it's 'payload-kv' not 'payload-kvs'
         // Plugin-generated collections that shouldn't be in nav settings
         'search-results', // from @payloadcms/plugin-search (auto-generated, not user-facing)
+        // Internal dynamic collections (managed via custom collection manager)
+        'custom-items',
+        'content-types',
       ])
 
       // Log all collection slugs before filtering

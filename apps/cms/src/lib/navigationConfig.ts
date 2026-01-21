@@ -33,6 +33,8 @@ export const collectionsSectionSlugs = [
   'people',
   'places',
   'events',
+  'custom-items',
+  'content-types',
 ]
 
 export const defaultEnabledSlugs = new Set<string>([
@@ -44,6 +46,8 @@ export const defaultEnabledSlugs = new Set<string>([
   'people',
   'places',
   'events',
+  'custom-items',
+  'content-types',
   'media',
   'forms',
   'form-submissions',

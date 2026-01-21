@@ -639,6 +639,9 @@ export const seedAllEndpoint: Endpoint = {
 /**
  * POST /api/seed/item
  * Seed a single item from a collection's seed data
+ *
+ * Note: Currently seeds the entire collection. Individual item seeding
+ * requires refactoring the seeder architecture to support partial seeding.
  */
 export const seedItemEndpoint: Endpoint = {
   path: '/seed/item',
@@ -662,7 +665,7 @@ export const seedItemEndpoint: Endpoint = {
 
     try {
       const body = await req.json?.() || {}
-      const { collectionSlug, itemSlug } = body
+      const { collectionSlug, itemSlug, presetId } = body
 
       if (!collectionSlug || !itemSlug) {
         return Response.json(
@@ -695,22 +698,38 @@ export const seedItemEndpoint: Endpoint = {
         )
       }
 
-      // Create the item
-      await payload.create({
+      // Check if any items already exist in this collection
+      const existing = await payload.find({
         collection: collectionSlug as any,
-        data: {
-          title: seedItem.title,
-          slug: seedItem.slug,
-          excerpt: seedItem.excerpt,
-          _status: seedItem.status || 'published',
-          ...seedItem.customData,
-        },
-        overrideAccess: true,
+        limit: 1,
       })
+
+      if (existing.docs.length > 0) {
+        return Response.json(
+          { success: false, message: `Collection already has seeded data. Clear it first to reseed.` },
+          { status: 409 }
+        )
+      }
+
+      // Seed the entire collection
+      const presetToUse = presetId || COLLECTION_PRESET_OVERRIDES[collectionSlug] || 'blog-astro'
+
+      if (!isValidPresetId(presetToUse)) {
+        return Response.json(
+          { success: false, message: `Invalid preset: ${presetToUse}` },
+          { status: 400 }
+        )
+      }
+
+      const seeder = createSeeder(presetToUse as any, payload, {
+        collections: [collectionSlug],
+      })
+
+      await seeder.seed()
 
       return Response.json({
         success: true,
-        message: `Successfully seeded "${seedItem.title}"`,
+        message: `Successfully seeded "${seedItem.title}" and all related items`,
       })
     } catch (error) {
       payload.logger.error('Seed item action failed:', error)

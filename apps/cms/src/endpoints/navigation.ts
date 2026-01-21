@@ -70,12 +70,14 @@ export const navigationEndpoint: Endpoint = {
     // Build collection items map
     const collectionItems: Record<string, any> = {}
     const collectionSections: Record<string, SectionId> = {}
+    const navHiddenSlugs = new Set(['custom-items', 'content-types'])
 
     collections.forEach((collection) => {
       const slug = collection.slug
 
       // Skip hidden collections
       if (collection.admin?.hidden) return
+      if (navHiddenSlugs.has(slug)) return
 
       const override = overridesBySlug.get(slug)
       if (!resolveCollectionEnabled(slug, overridesBySlug)) return
@@ -125,6 +127,55 @@ export const navigationEndpoint: Endpoint = {
       const section = collectionSections[slug] || getDefaultSectionForSlug(slug)
       sectionItemsMap[section].push(item)
     })
+
+    const resolveContentTypeIcon = (icon?: string) => {
+      const iconMap: Record<string, string> = {
+        archive: 'archive',
+        'archive-item': 'archive',
+        product: 'collection',
+        'shopping-bag': 'collection',
+        person: 'person',
+        location: 'place',
+        event: 'post',
+        document: 'post',
+        image: 'image',
+        settings: 'settings',
+        users: 'users',
+        box: 'collection',
+      }
+
+      if (!icon) {
+        return 'collection'
+      }
+
+      return iconMap[icon] || 'collection'
+    }
+
+    // Add custom collections (content types) under Collections
+    const contentTypeDocs = await payload
+      .find({
+        collection: 'content-types',
+        limit: 200,
+        depth: 0,
+        overrideAccess: true,
+      })
+      .then((result) => result?.docs || [])
+      .catch(() => [])
+
+    if (contentTypeDocs.length > 0) {
+      const customTypeItems = contentTypeDocs.map((doc: any) => {
+        const label = doc?.pluralLabel || doc?.name || doc?.slug
+        return {
+          label,
+          href: `/admin/collections/custom-items?where[contentType][equals]=${doc.id}`,
+          icon: resolveContentTypeIcon(doc?.icon),
+          slug: `custom-type:${doc?.slug || doc?.id}`,
+          _order: Number.MAX_SAFE_INTEGER,
+        }
+      })
+
+      sectionItemsMap.collections.push(...customTypeItems)
+    }
 
     const nestedChildrenBySection = new Map<SectionId, Set<string>>()
     sectionOrder.forEach((sectionId) => nestedChildrenBySection.set(sectionId, new Set()))
