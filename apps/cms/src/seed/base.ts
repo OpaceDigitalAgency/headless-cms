@@ -370,6 +370,46 @@ export abstract class BaseSeeder {
 
     return admin.id
   }
+
+  /**
+   * Create a placeholder media file
+   */
+  protected async createPlaceholderMedia(filename: string, alt: string): Promise<any> {
+    try {
+      // Check if media already exists
+      const existing = await this.payload.find({
+        collection: 'media',
+        where: { filename: { equals: filename } },
+        limit: 1,
+        depth: 0,
+      })
+
+      if (existing.docs[0]) {
+        return existing.docs[0]
+      }
+
+      // Create a simple placeholder image (1x1 transparent PNG)
+      const placeholderBase64 = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+4x8UAAAAASUVORK5CYII='
+      const buffer = Buffer.from(placeholderBase64, 'base64')
+
+      const media = await this.payload.create({
+        collection: 'media',
+        data: { alt },
+        file: {
+          data: buffer,
+          mimetype: 'image/png',
+          name: filename,
+          size: buffer.length,
+        },
+        overrideAccess: true,
+      })
+
+      return media
+    } catch (error) {
+      this.error(`Failed to create placeholder media ${filename}: ${error}`)
+      return null
+    }
+  }
 }
 
 /**

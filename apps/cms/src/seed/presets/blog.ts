@@ -552,12 +552,20 @@ export class BlogSeeder extends BaseSeeder {
     // Get admin user to use as author
     const adminId = await this.getOrCreateAdminUser()
 
+    // Create placeholder featured images
+    const heroImage = await this.createPlaceholderMedia('post-hero.png', 'Standard article hero image')
+    const gridImage = await this.createPlaceholderMedia('post-grid.png', 'Feature story grid layout')
+    const guideImage = await this.createPlaceholderMedia('post-guide.png', 'In-depth guide image')
+    const caseStudyImage = await this.createPlaceholderMedia('post-case-study.png', 'Case study timeline')
+    const newsImage = await this.createPlaceholderMedia('post-news.png', 'News brief media gallery')
+
     const posts = [
       {
         title: 'Standard Article with Hero',
         slug: 'standard-article-with-hero',
         excerpt: 'Classic single-column layout with hero image, rich text content, and call-to-action.',
         category: 'technology',
+        featuredImage: heroImage?.id,
         content: createRichTextParagraphs([
           'This is a standard article layout showcasing the classic single-column design pattern.',
           'Perfect for blog posts, news articles, and long-form content that benefits from a clean, focused reading experience.',
@@ -591,6 +599,7 @@ export class BlogSeeder extends BaseSeeder {
         slug: 'feature-story-with-grid-layout',
         excerpt: 'Multi-column layout showcasing grid blocks, image galleries, and featured content sections.',
         category: 'design',
+        featuredImage: gridImage?.id,
         content: createRichTextParagraphs([
           'Feature stories benefit from dynamic, multi-column layouts that showcase visual content alongside text.',
           'Grid blocks allow you to display related items, products, or featured sections in an organised, visually appealing way.',
@@ -625,6 +634,7 @@ export class BlogSeeder extends BaseSeeder {
         slug: 'in-depth-guide-with-faq-section',
         excerpt: 'Comprehensive article with table of contents, multiple sections, and FAQ block for common questions.',
         category: 'business',
+        featuredImage: guideImage?.id,
         content: createRichTextParagraphs([
           'Comprehensive guides benefit from structured layouts with clear sections and navigation aids.',
           'FAQ blocks at the end address common questions, improving user experience and reducing support burden.',
@@ -656,6 +666,7 @@ export class BlogSeeder extends BaseSeeder {
         slug: 'case-study-with-timeline',
         excerpt: 'Narrative-driven post with timeline block showing project progression and key milestones.',
         category: 'business',
+        featuredImage: caseStudyImage?.id,
         content: createRichTextParagraphs([
           'Case studies tell a story of transformation, progress, and results. Timeline blocks are perfect for visualising project progression.',
           'By showing key milestones and achievements chronologically, you create a compelling narrative arc.',
@@ -680,6 +691,7 @@ export class BlogSeeder extends BaseSeeder {
         slug: 'news-brief-with-media-gallery',
         excerpt: 'Concise update with embedded media gallery, multiple images, and quick-reference callouts.',
         category: 'technology',
+        featuredImage: newsImage?.id,
         content: createRichTextParagraphs([
           'News briefs require concise, scannable content that gets straight to the point.',
           'Media galleries showcase multiple images or videos, perfect for announcements, events, or product launches.',
@@ -710,6 +722,7 @@ export class BlogSeeder extends BaseSeeder {
           excerpt: post.excerpt,
           content: post.content,
           contentBlocks: post.contentBlocks,
+          featuredImage: post.featuredImage,
           categories: categories[post.category] ? [categories[post.category]] : [],
           author: adminId,
           _status: 'published',
