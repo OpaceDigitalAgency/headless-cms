@@ -17,7 +17,11 @@ export const getPreviewUrl = ({
 }): string => {
   // Use the same URL as the CMS since frontend is now integrated
   const baseUrl = process.env.PAYLOAD_PUBLIC_SERVER_URL || process.env.NEXT_PUBLIC_SITE_URL || DEFAULT_SITE_URL
-  const secret = process.env.REVALIDATION_SECRET || DEFAULT_PREVIEW_SECRET
+
+  // Try to get the secret from both server-side and client-side environment variables
+  // NEXT_PUBLIC_REVALIDATION_SECRET is available in the browser for preview URL generation
+  // REVALIDATION_SECRET is available on the server side
+  const secret = process.env.REVALIDATION_SECRET || process.env.NEXT_PUBLIC_REVALIDATION_SECRET || DEFAULT_PREVIEW_SECRET
   const safeSlug = slug ? encodeURIComponent(slug) : ''
 
   return `${baseUrl}/api/draft?secret=${encodeURIComponent(secret)}&collection=${encodeURIComponent(

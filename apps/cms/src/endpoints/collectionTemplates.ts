@@ -631,9 +631,22 @@ export const uninstallCustomCollectionEndpoint: Endpoint = {
 
     try {
       const body = await req.json?.() || {}
-      const { id, deleteItems } = body
+      const { id, slug, deleteItems } = body
 
-      if (!id || typeof id !== 'string') {
+      let resolvedId = typeof id === 'string' ? id : ''
+
+      if (!resolvedId && typeof slug === 'string' && slug) {
+        const lookup = await payload.find({
+          collection: 'content-types',
+          where: { slug: { equals: slug } },
+          limit: 1,
+          depth: 0,
+          overrideAccess: true,
+        })
+        resolvedId = lookup.docs[0]?.id || ''
+      }
+
+      if (!resolvedId) {
         return Response.json(
           { success: false, message: 'Missing required field: id' },
           { status: 400 }
@@ -642,7 +655,7 @@ export const uninstallCustomCollectionEndpoint: Endpoint = {
 
       const contentType = await payload.findByID({
         collection: 'content-types',
-        id,
+        id: resolvedId,
         depth: 0,
         overrideAccess: true,
       })
@@ -659,7 +672,7 @@ export const uninstallCustomCollectionEndpoint: Endpoint = {
         while (true) {
           const results = await payload.find({
             collection: 'custom-items',
-            where: { contentType: { equals: id } },
+            where: { contentType: { equals: resolvedId } },
             limit: 100,
             depth: 0,
             overrideAccess: true,
@@ -680,7 +693,7 @@ export const uninstallCustomCollectionEndpoint: Endpoint = {
 
       const updated = await payload.update({
         collection: 'content-types',
-        id,
+        id: resolvedId,
         data: {
           uninstalled: true,
         },
@@ -728,9 +741,22 @@ export const reinstallCustomCollectionEndpoint: Endpoint = {
 
     try {
       const body = await req.json?.() || {}
-      const { id } = body
+      const { id, slug } = body
 
-      if (!id || typeof id !== 'string') {
+      let resolvedId = typeof id === 'string' ? id : ''
+
+      if (!resolvedId && typeof slug === 'string' && slug) {
+        const lookup = await payload.find({
+          collection: 'content-types',
+          where: { slug: { equals: slug } },
+          limit: 1,
+          depth: 0,
+          overrideAccess: true,
+        })
+        resolvedId = lookup.docs[0]?.id || ''
+      }
+
+      if (!resolvedId) {
         return Response.json(
           { success: false, message: 'Missing required field: id' },
           { status: 400 }
@@ -739,7 +765,7 @@ export const reinstallCustomCollectionEndpoint: Endpoint = {
 
       const updated = await payload.update({
         collection: 'content-types',
-        id,
+        id: resolvedId,
         data: {
           uninstalled: false,
         },

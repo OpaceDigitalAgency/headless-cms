@@ -810,7 +810,11 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ id: contentType.id, deleteItems: true }),
+        body: JSON.stringify({
+          id: contentType.id,
+          slug: contentType.slug,
+          deleteItems: true,
+        }),
       })
 
       const data = await response.json()
@@ -837,6 +841,14 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
   }
 
   const handleReinstallCustomCollection = async (contentType: CustomCollection) => {
+    if (!contentType.id) {
+      setMessage({
+        type: 'error',
+        text: 'Missing required field: id',
+      })
+      return
+    }
+
     setReinstalling(contentType.id)
     setMessage(null)
 
@@ -846,7 +858,7 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ id: contentType.id }),
+        body: JSON.stringify({ id: contentType.id, slug: contentType.slug }),
       })
 
       const data = await response.json()
@@ -1658,20 +1670,6 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
               </button>
             </div>
           )}
-        </div>
-      )}
-
-      {section === 'Collections' && uninstalledCustomCollections.length > 0 && (
-        <div style={{ marginBottom: '32px' }}>
-          <h3 style={{ fontSize: '18px', fontWeight: 600, marginBottom: '8px', color: '#333' }}>
-            Uninstalled Custom Collections
-          </h3>
-          <p style={{ fontSize: '13px', color: '#666', marginBottom: '16px' }}>
-            These custom collections were uninstalled. Reinstall to restore access.
-          </p>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '16px' }}>
-            {uninstalledCustomCollections.map(renderCustomCollectionCard)}
-          </div>
         </div>
       )}
 

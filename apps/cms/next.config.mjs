@@ -53,6 +53,9 @@ const nextConfig = {
   env: {
     NEXT_PUBLIC_SERVER_URL: process.env.PAYLOAD_PUBLIC_SERVER_URL || 'http://localhost:3000',
     NEXT_PUBLIC_SITE_URL: process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000',
+    // Expose REVALIDATION_SECRET for preview URL generation in the browser
+    // This is safe because the secret is already visible in preview URLs
+    NEXT_PUBLIC_REVALIDATION_SECRET: process.env.REVALIDATION_SECRET || 'revalidation-secret-key',
   },
 
   // Headers for security
