@@ -2,7 +2,7 @@ import type { CollectionTemplate } from '../types'
 
 export const serviceTemplate: CollectionTemplate = {
   id: 'service',
-  name: 'Service',
+  name: 'Services',
   description: 'Repeatable service offerings with rich content and metadata.',
   category: 'archive',
   icon: 'archive',

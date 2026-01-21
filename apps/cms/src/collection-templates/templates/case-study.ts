@@ -2,7 +2,7 @@ import type { CollectionTemplate } from '../types'
 
 export const caseStudyTemplate: CollectionTemplate = {
   id: 'case-study',
-  name: 'Case Study',
+  name: 'Case Studies',
   description: 'Project stories with outcomes, challenges, and results.',
   category: 'archive',
   icon: 'archive',

@@ -2,7 +2,7 @@ import type { CollectionTemplate } from '../types'
 
 export const faqTemplate: CollectionTemplate = {
   id: 'faq',
-  name: 'FAQ',
+  name: 'FAQs',
   description: 'Frequently asked questions for reuse across pages.',
   category: 'archive',
   icon: 'archive',

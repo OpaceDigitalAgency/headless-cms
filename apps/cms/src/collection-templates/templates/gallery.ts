@@ -2,7 +2,7 @@ import type { CollectionTemplate } from '../types'
 
 export const galleryTemplate: CollectionTemplate = {
   id: 'gallery',
-  name: 'Gallery',
+  name: 'Galleries',
   description: 'Curated galleries of visual work or media.',
   category: 'archive',
   icon: 'archive',

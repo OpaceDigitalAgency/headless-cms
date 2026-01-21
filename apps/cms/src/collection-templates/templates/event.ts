@@ -25,7 +25,7 @@ import {
 
 export const eventTemplate: CollectionTemplate = {
   id: 'event',
-  name: 'Event',
+  name: 'Events',
   description: 'Events, exhibitions, workshops, or performances with dates and venues',
   category: 'events',
   icon: 'calendar',

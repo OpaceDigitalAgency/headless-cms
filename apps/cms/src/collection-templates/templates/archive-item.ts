@@ -29,7 +29,7 @@ import {
 
 export const archiveItemTemplate: CollectionTemplate = {
   id: 'archive-item',
-  name: 'Archive Item',
+  name: 'Archives',
   description: 'Catalogued items like archive entries, portfolio pieces, or collectibles',
   category: 'archive',
   icon: 'archive',

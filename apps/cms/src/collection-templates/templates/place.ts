@@ -27,7 +27,7 @@ import {
 
 export const placeTemplate: CollectionTemplate = {
   id: 'place',
-  name: 'Place',
+  name: 'Places',
   description: 'Locations like venues, stores, historical sites, or geographic origins',
   category: 'places',
   icon: 'map-pin',

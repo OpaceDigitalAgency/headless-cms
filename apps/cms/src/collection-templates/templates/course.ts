@@ -2,7 +2,7 @@ import type { CollectionTemplate } from '../types'
 
 export const courseTemplate: CollectionTemplate = {
   id: 'course',
-  name: 'Course',
+  name: 'Courses',
   description: 'Structured learning programs with lessons, resources, and outcomes.',
   category: 'archive',
   icon: 'archive',

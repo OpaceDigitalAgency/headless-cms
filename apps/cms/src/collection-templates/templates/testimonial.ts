@@ -2,7 +2,7 @@ import type { CollectionTemplate } from '../types'
 
 export const testimonialTemplate: CollectionTemplate = {
   id: 'testimonial',
-  name: 'Testimonial',
+  name: 'Testimonials',
   description: 'Customer quotes and endorsements.',
   category: 'archive',
   icon: 'archive',
