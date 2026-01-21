@@ -15,6 +15,11 @@ import GridBlock from './GridBlock.astro';
 import TimelineBlock from './TimelineBlock.astro';
 import ArchiveBlock from './ArchiveBlock.astro';
 import FormBlock from './FormBlock.astro';
+import StatsBlock from './StatsBlock.astro';
+import TestimonialsBlock from './TestimonialsBlock.astro';
+import FeaturesBlock from './FeaturesBlock.astro';
+import TeamBlock from './TeamBlock.astro';
+import FAQBlock from './FAQBlock.astro';
 
 interface Props {
   blocks: any[];
@@ -33,6 +38,11 @@ const blockComponents: Record<string, any> = {
   timeline: TimelineBlock,
   archive: ArchiveBlock,
   form: FormBlock,
+  stats: StatsBlock,
+  testimonials: TestimonialsBlock,
+  features: FeaturesBlock,
+  team: TeamBlock,
+  faq: FAQBlock,
 };
 
 // Map Payload block shapes to Astro component props
@@ -120,6 +130,30 @@ const mapBlockProps = (block: any) => {
         form: block.form,
         heading: block.heading,
         description: block.description,
+      };
+    case 'stats':
+      return {
+        items: block.items || [],
+      };
+    case 'testimonials':
+      return {
+        heading: block.heading,
+        items: block.items || [],
+      };
+    case 'features':
+      return {
+        heading: block.heading,
+        features: block.features || [],
+      };
+    case 'team':
+      return {
+        heading: block.heading,
+        members: block.members || [],
+      };
+    case 'faq':
+      return {
+        heading: block.heading,
+        items: block.items || [],
       };
     default:
       return block;

@@ -128,27 +128,11 @@ export const navigationEndpoint: Endpoint = {
       sectionItemsMap[section].push(item)
     })
 
-    const resolveContentTypeIcon = (icon?: string) => {
-      const iconMap: Record<string, string> = {
-        archive: 'archive',
-        'archive-item': 'archive',
-        product: 'collection',
-        'shopping-bag': 'collection',
-        person: 'person',
-        location: 'place',
-        event: 'post',
-        document: 'post',
-        image: 'image',
-        settings: 'settings',
-        users: 'users',
-        box: 'collection',
-      }
-
-      if (!icon) {
-        return 'collection'
-      }
-
-      return iconMap[icon] || 'collection'
+    const resolveCustomTypeEnabled = (slug: string, doc: any) => {
+      if (doc?.uninstalled) return false
+      const override = overridesBySlug.get(slug)
+      if (typeof override?.enabled === 'boolean') return override.enabled
+      return true
     }
 
     // Add custom collections (content types) under Collections
@@ -163,18 +147,34 @@ export const navigationEndpoint: Endpoint = {
       .catch(() => [])
 
     if (contentTypeDocs.length > 0) {
-      const customTypeItems = contentTypeDocs.map((doc: any) => {
-        const label = doc?.pluralLabel || doc?.name || doc?.slug
-        return {
-          label,
-          href: `/admin/collections/custom-items?where[contentType][equals]=${doc.id}`,
-          icon: resolveContentTypeIcon(doc?.icon),
-          slug: `custom-type:${doc?.slug || doc?.id}`,
-          _order: Number.MAX_SAFE_INTEGER,
-        }
-      })
+      const customTypeItems = contentTypeDocs
+        .filter((doc: any) => !doc?.uninstalled)
+        .map((doc: any) => {
+          const customSlug = `custom:${doc?.slug || doc?.id}`
+          const override = overridesBySlug.get(customSlug)
+          if (!resolveCustomTypeEnabled(customSlug, doc)) return null
+          const labelOverride = typeof override?.label === 'string' ? override.label.trim() : ''
+          const label = labelOverride || doc?.pluralLabel || doc?.name || doc?.slug
+          const overrideSection = override?.section as SectionId | undefined
+          const section = overrideSection && sectionOrder.includes(overrideSection)
+            ? overrideSection
+            : 'collections'
 
-      sectionItemsMap.collections.push(...customTypeItems)
+          return {
+            label,
+            href: `/admin/collections/custom-items?where[contentType][equals]=${doc.id}`,
+            icon: 'customCollection',
+            slug: customSlug,
+            _order: orderBySlug.has(customSlug) ? orderBySlug.get(customSlug) : Number.MAX_SAFE_INTEGER,
+            _section: section,
+          }
+        })
+        .filter(Boolean)
+
+      customTypeItems.forEach((item: any) => {
+        const section = item._section as SectionId
+        sectionItemsMap[section].push(item)
+      })
     }
 
     const nestedChildrenBySection = new Map<SectionId, Set<string>>()

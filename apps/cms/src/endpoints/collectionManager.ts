@@ -69,12 +69,33 @@ export const collectionManagerEndpoint: Endpoint = {
           return item
         })
 
-      console.log('[CollectionManager] Final collections count:', collections.length)
-      console.log('[CollectionManager] Final collection slugs:', collections.map(c => c.slug))
+      const contentTypes = await payload.find({
+        collection: 'content-types',
+        limit: 200,
+        depth: 0,
+        overrideAccess: true,
+      }).catch(() => null)
+
+      const customCollectionItems = Array.isArray(contentTypes?.docs)
+        ? contentTypes.docs
+            .filter((doc: any) => !doc?.uninstalled)
+            .map((doc: any) => ({
+              slug: `custom:${doc.slug}`,
+              label: doc.pluralLabel || doc.name || doc.slug,
+              hidden: false,
+              defaultSection: 'collections',
+              defaultEnabled: true,
+            }))
+        : []
+
+      const combinedCollections = [...collections, ...customCollectionItems]
+
+      console.log('[CollectionManager] Final collections count:', combinedCollections.length)
+      console.log('[CollectionManager] Final collection slugs:', combinedCollections.map(c => c.slug))
       console.log('[CollectionManager] Response ready to send')
       console.log('========================================\n')
 
-      return Response.json({ items: collections })
+      return Response.json({ items: combinedCollections })
     } catch (error) {
       console.error('[CollectionManager] Endpoint error:', error)
       return Response.json({ error: `Failed to load navigation items: ${error instanceof Error ? error.message : 'Unknown error'}` }, { status: 500 })

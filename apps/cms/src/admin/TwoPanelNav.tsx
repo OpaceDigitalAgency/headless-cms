@@ -75,6 +75,12 @@ const NavIcon: Record<string, React.FC<{ size?: number }>> = {
       <rect x="3" y="14" width="7" height="7" />
     </svg>
   ),
+  customCollection: ({ size = 20 }) => (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M12 3l2.2 4.5 5 .7-3.6 3.5.9 5-4.5-2.4L7.5 16l.9-5L4.8 8.2l5-.7L12 3z" />
+      <path d="M4 21h16" />
+    </svg>
+  ),
   contentType: ({ size = 20 }) => (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
       <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />

@@ -195,7 +195,7 @@ export class BlogSeeder extends BaseSeeder {
             blockType: 'cta',
             heading: 'Stay Updated with Our Latest Content',
             description: 'Subscribe to our newsletter to get the latest articles, insights, and exclusive content delivered directly to your inbox.',
-            buttons: [
+            links: [
               { label: 'Subscribe Now', url: '/contact', variant: 'primary' },
             ],
           },
@@ -315,7 +315,7 @@ export class BlogSeeder extends BaseSeeder {
             blockType: 'cta',
             heading: 'Join Our Community',
             description: 'Subscribe to our newsletter and be the first to receive our latest articles, exclusive insights, and special announcements.',
-            buttons: [
+            links: [
               { label: 'Subscribe Now', url: '/contact', variant: 'primary' },
             ],
           },
@@ -408,7 +408,7 @@ export class BlogSeeder extends BaseSeeder {
             blockType: 'cta',
             heading: 'Ready to Connect?',
             description: 'Fill out the form below and we\'ll get back to you as soon as possible.',
-            buttons: [
+            links: [
               { label: 'Send Message', url: '#contact-form', variant: 'primary' },
             ],
           },

@@ -1,0 +1,49 @@
+---
+/**
+ * Features Block Component
+ * 
+ * Display a list of features or benefits.
+ */
+
+interface Props {
+  heading?: string;
+  features?: Array<{
+    title: string;
+    description: string;
+    icon?: string;
+  }>;
+}
+
+const { heading, features = [] } = Astro.props;
+---
+
+<section class="py-12">
+  <div class="container">
+    {heading && (
+      <h2 class="text-3xl font-bold mb-12">
+        {heading}
+      </h2>
+    )}
+    
+    <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
+      {features.map((feature) => (
+        <div class="rounded-lg border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-800">
+          {feature.icon && (
+            <div class="mb-4 text-3xl">
+              {feature.icon}
+            </div>
+          )}
+          
+          <h3 class="mb-2 font-semibold text-gray-900 dark:text-white">
+            {feature.title}
+          </h3>
+          
+          <p class="text-sm text-gray-600 dark:text-gray-400">
+            {feature.description}
+          </p>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+

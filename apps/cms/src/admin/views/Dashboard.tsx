@@ -106,7 +106,7 @@ export const Dashboard: React.FC = () => {
           const slugs: string[] = []
           const isStatsSlug = (slug: string) =>
             slug &&
-            !slug.startsWith('custom-type:') &&
+            !slug.startsWith('custom:') &&
             slug !== 'dashboard' &&
             slug !== 'tools' &&
             !slug.endsWith('-manager')

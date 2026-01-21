@@ -66,11 +66,11 @@ const pageImage = image || settings?.defaultMeta?.image?.url || '';
         
         <nav class="hidden md:flex items-center gap-6">
           {header?.navItems?.map((item: any) => (
-            <a 
-              href={item.link?.url || '#'} 
+            <a
+              href={item.url || item.link?.url || '#'}
               class="text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white transition-colors"
             >
-              {item.link?.label}
+              {item.label || item.link?.label}
             </a>
           ))}
         </nav>

@@ -132,7 +132,7 @@ export class BrochureSeeder extends BaseSeeder {
           blockType: 'cta',
           heading: 'Ready to Get Started?',
           description: 'Contact us today for a free consultation and discover how we can help your business grow.',
-          buttons: [
+          links: [
             { label: 'Contact Us', url: '/contact', variant: 'primary' },
           ],
         },
@@ -229,7 +229,7 @@ export class BrochureSeeder extends BaseSeeder {
           blockType: 'cta',
           heading: 'Need a Custom Solution?',
           description: 'Our team can create tailored solutions to meet your specific needs.',
-          buttons: [
+          links: [
             { label: 'Get in Touch', url: '/contact', variant: 'primary' },
           ],
         },

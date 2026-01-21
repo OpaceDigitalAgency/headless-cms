@@ -34,6 +34,7 @@ interface CustomCollection {
   description?: string
   hasArchive?: boolean
   archiveSlug?: string
+  uninstalled?: boolean
 }
 
 export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProps> = ({
@@ -176,6 +177,7 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
             description: doc.description,
             hasArchive: doc.hasArchive,
             archiveSlug: doc.archiveSlug,
+            uninstalled: doc.uninstalled,
           }))
         )
       }
@@ -741,6 +743,81 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
     }
   }
 
+  const handleUninstallCustomCollection = async (contentType: CustomCollection) => {
+    if (!window.confirm(`Uninstalling will delete all items in ${contentType.name}. Continue?`)) {
+      return
+    }
+
+    setUninstalling(contentType.id)
+    setMessage(null)
+
+    try {
+      const response = await fetch('/api/collection-templates/custom/uninstall', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ id: contentType.id, deleteItems: true }),
+      })
+
+      const data = await response.json()
+
+      if (response.ok && data.success) {
+        setMessage({
+          type: 'success',
+          text: data.message || `Successfully uninstalled ${contentType.name}`,
+        })
+        fetchContentTypes()
+        fetchCustomCollectionCounts()
+      } else {
+        throw new Error(data.message || 'Failed to uninstall custom collection')
+      }
+    } catch (error) {
+      console.error('Failed to uninstall custom collection:', error)
+      setMessage({
+        type: 'error',
+        text: error instanceof Error ? error.message : 'Failed to uninstall custom collection. Please try again.',
+      })
+    } finally {
+      setUninstalling(null)
+    }
+  }
+
+  const handleReinstallCustomCollection = async (contentType: CustomCollection) => {
+    setReinstalling(contentType.id)
+    setMessage(null)
+
+    try {
+      const response = await fetch('/api/collection-templates/custom/reinstall', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ id: contentType.id }),
+      })
+
+      const data = await response.json()
+
+      if (response.ok && data.success) {
+        setMessage({
+          type: 'success',
+          text: data.message || `Successfully reinstalled ${contentType.name}`,
+        })
+        fetchContentTypes()
+      } else {
+        throw new Error(data.message || 'Failed to reinstall custom collection')
+      }
+    } catch (error) {
+      console.error('Failed to reinstall custom collection:', error)
+      setMessage({
+        type: 'error',
+        text: error instanceof Error ? error.message : 'Failed to reinstall custom collection. Please try again.',
+      })
+    } finally {
+      setReinstalling(null)
+    }
+  }
+
   const templateById = new Map(allTemplates.map((template) => [template.id, template]))
 
   // Filter templates by section
@@ -763,6 +840,9 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
     people: { baseTemplate: 'person', label: 'People' },
     places: { baseTemplate: 'place', label: 'Places' },
   }
+
+  const installedCustomCollections = contentTypes.filter((contentType) => !contentType.uninstalled)
+  const uninstalledCustomCollections = contentTypes.filter((contentType) => contentType.uninstalled)
 
   // Categorize templates
   const coreTemplates = collectionTemplates.filter((t) => t.status === 'core')
@@ -1037,6 +1117,12 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
     const template = contentType.templateId ? templateById.get(contentType.templateId) : undefined
     const isSeedingThis = seeding === contentType.id
     const hasSeedData = Boolean(template?.hasSeedData)
+    const navSlug = `custom:${contentType.slug}`
+    const savedState = visibilitySettings[navSlug]
+    const isVisible = savedState !== undefined ? savedState : true
+    const isUninstallingThis = uninstalling === contentType.id
+    const isReinstallingThis = reinstalling === contentType.id
+    const isUninstalled = Boolean(contentType.uninstalled)
 
     return (
       <div
@@ -1058,12 +1144,12 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
                 fontSize: '11px',
                 padding: '3px 8px',
                 borderRadius: '4px',
-                background: '#10b981',
+                background: isUninstalled ? '#9ca3af' : '#10b981',
                 color: 'white',
                 fontWeight: 500,
               }}
             >
-              Custom
+              {isUninstalled ? 'Uninstalled' : 'Custom'}
             </span>
             {contentType.template && (
               <span
@@ -1110,6 +1196,8 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
               color: '#3b82f6',
               textDecoration: 'none',
               display: 'inline-block',
+              pointerEvents: isUninstalled ? 'none' : 'auto',
+              opacity: isUninstalled ? 0.6 : 1,
             }}
           >
             View Items
@@ -1126,6 +1214,8 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
               color: '#2563eb',
               textDecoration: 'none',
               display: 'inline-block',
+              pointerEvents: isUninstalled ? 'none' : 'auto',
+              opacity: isUninstalled ? 0.6 : 1,
             }}
           >
             Edit Definition
@@ -1149,15 +1239,74 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
               background: 'var(--theme-elevation-0)',
               color: '#2563eb',
               cursor: 'pointer',
+              opacity: isUninstalled ? 0.6 : 1,
             }}
+            disabled={isUninstalled}
           >
             Clone
           </button>
+          {!isUninstalled && (
+            <button
+              onClick={() => handleToggleVisibility(navSlug, isVisible)}
+              disabled={toggling === navSlug}
+              style={{
+                padding: '8px 14px',
+                fontSize: '13px',
+                fontWeight: 500,
+                borderRadius: '6px',
+                border: '1px solid var(--theme-elevation-200)',
+                background: 'var(--theme-elevation-0)',
+                color: '#666',
+                cursor: toggling === navSlug ? 'not-allowed' : 'pointer',
+                opacity: toggling === navSlug ? 0.6 : 1,
+              }}
+            >
+              {toggling === navSlug ? 'Updating...' : isVisible ? '🚫 Hide from Menu' : '👁️ Show in Menu'}
+            </button>
+          )}
+          {!isUninstalled && (
+            <button
+              onClick={() => handleUninstallCustomCollection(contentType)}
+              disabled={isUninstallingThis}
+              style={{
+                padding: '8px 14px',
+                fontSize: '13px',
+                fontWeight: 500,
+                borderRadius: '6px',
+                border: '1px solid #f87171',
+                background: '#fee2e2',
+                color: '#b91c1c',
+                cursor: isUninstallingThis ? 'not-allowed' : 'pointer',
+                opacity: isUninstallingThis ? 0.6 : 1,
+              }}
+            >
+              {isUninstallingThis ? 'Uninstalling...' : 'Uninstall'}
+            </button>
+          )}
+          {isUninstalled && (
+            <button
+              onClick={() => handleReinstallCustomCollection(contentType)}
+              disabled={isReinstallingThis}
+              style={{
+                padding: '8px 14px',
+                fontSize: '13px',
+                fontWeight: 500,
+                borderRadius: '6px',
+                border: '1px solid #86efac',
+                background: '#dcfce7',
+                color: '#166534',
+                cursor: isReinstallingThis ? 'not-allowed' : 'pointer',
+                opacity: isReinstallingThis ? 0.6 : 1,
+              }}
+            >
+              {isReinstallingThis ? 'Reinstalling...' : 'Reinstall'}
+            </button>
+          )}
           {hasSeedData && template && (
             <>
               <button
                 onClick={() => handleSeedContentTypeData(template, contentType.id)}
-                disabled={isSeedingThis}
+                disabled={isSeedingThis || isUninstalled}
                 style={{
                   padding: '8px 14px',
                   fontSize: '13px',
@@ -1166,15 +1315,15 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
                   border: 'none',
                   background: '#3b82f6',
                   color: 'white',
-                  cursor: isSeedingThis ? 'not-allowed' : 'pointer',
-                  opacity: isSeedingThis ? 0.6 : 1,
+                  cursor: isSeedingThis || isUninstalled ? 'not-allowed' : 'pointer',
+                  opacity: isSeedingThis || isUninstalled ? 0.6 : 1,
                 }}
               >
                 {isSeedingThis ? 'Seeding...' : 'Seed Data'}
               </button>
               <button
                 onClick={() => handleClearContentTypeSeedData(template, contentType.id)}
-                disabled={isSeedingThis}
+                disabled={isSeedingThis || isUninstalled}
                 style={{
                   padding: '8px 14px',
                   fontSize: '13px',
@@ -1183,8 +1332,8 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
                   border: '1px solid #fca5a5',
                   background: '#fee2e2',
                   color: '#991b1b',
-                  cursor: isSeedingThis ? 'not-allowed' : 'pointer',
-                  opacity: isSeedingThis ? 0.6 : 1,
+                  cursor: isSeedingThis || isUninstalled ? 'not-allowed' : 'pointer',
+                  opacity: isSeedingThis || isUninstalled ? 0.6 : 1,
                 }}
               >
                 {isSeedingThis ? 'Clearing...' : 'Clear Seed Data'}
@@ -1256,7 +1405,7 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
               cursor: 'pointer',
             }}
           >
-            Use Template
+            Install Template
           </button>
         </div>
       </div>
@@ -1340,9 +1489,9 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
           <p style={{ fontSize: '13px', color: '#666', marginBottom: '16px' }}>
             Create and manage custom collections from base templates. Items appear in the Collections menu immediately.
           </p>
-          {contentTypes.length > 0 ? (
+          {installedCustomCollections.length > 0 ? (
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '16px' }}>
-              {contentTypes.map(renderCustomCollectionCard)}
+              {installedCustomCollections.map(renderCustomCollectionCard)}
             </div>
           ) : (
             <div
@@ -1362,13 +1511,27 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
         </div>
       )}
 
+      {section === 'Collections' && uninstalledCustomCollections.length > 0 && (
+        <div style={{ marginBottom: '32px' }}>
+          <h3 style={{ fontSize: '18px', fontWeight: 600, marginBottom: '8px', color: '#333' }}>
+            Uninstalled Custom Collections
+          </h3>
+          <p style={{ fontSize: '13px', color: '#666', marginBottom: '16px' }}>
+            These custom collections were uninstalled. Reinstall to restore access.
+          </p>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '16px' }}>
+            {uninstalledCustomCollections.map(renderCustomCollectionCard)}
+          </div>
+        </div>
+      )}
+
       {section === 'Collections' && contentTypeTemplates.length > 0 && (
         <div style={{ marginBottom: '32px' }}>
           <h3 style={{ fontSize: '18px', fontWeight: 600, marginBottom: '8px', color: '#333' }}>
-            Template Library
+            Available Templates
           </h3>
           <p style={{ fontSize: '13px', color: '#666', marginBottom: '16px' }}>
-            Optional add-ons you can use as a starting point for custom collections.
+            Optional add-ons you can install to create new custom collections.
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '16px' }}>
             {contentTypeTemplates.map(renderContentTypeCard)}
@@ -1395,7 +1558,7 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
         uninstalledTemplates.length === 0 &&
         (section !== 'Collections'
           ? true
-          : contentTypes.length === 0 && contentTypeTemplates.length === 0) && (
+          : installedCustomCollections.length === 0 && contentTypeTemplates.length === 0) && (
         <div
           style={{
             padding: '40px',

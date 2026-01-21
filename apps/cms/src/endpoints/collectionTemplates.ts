@@ -605,6 +605,163 @@ export const addBundleEndpoint: Endpoint = {
 }
 
 /**
+ * Uninstall a custom collection (content type)
+ *
+ * Optionally deletes all custom items for the content type.
+ */
+export const uninstallCustomCollectionEndpoint: Endpoint = {
+  path: '/collection-templates/custom/uninstall',
+  method: 'post',
+  handler: async (req) => {
+    const { payload, user } = req
+
+    if (!user) {
+      return Response.json(
+        { success: false, message: 'Authentication required' },
+        { status: 401 }
+      )
+    }
+
+    if (user.role !== 'admin') {
+      return Response.json(
+        { success: false, message: 'Admin access required' },
+        { status: 403 }
+      )
+    }
+
+    try {
+      const body = await req.json?.() || {}
+      const { id, deleteItems } = body
+
+      if (!id || typeof id !== 'string') {
+        return Response.json(
+          { success: false, message: 'Missing required field: id' },
+          { status: 400 }
+        )
+      }
+
+      const contentType = await payload.findByID({
+        collection: 'content-types',
+        id,
+        depth: 0,
+        overrideAccess: true,
+      })
+
+      if (!contentType) {
+        return Response.json(
+          { success: false, message: 'Custom collection not found' },
+          { status: 404 }
+        )
+      }
+
+      let deletedCount = 0
+      if (deleteItems !== false) {
+        while (true) {
+          const results = await payload.find({
+            collection: 'custom-items',
+            where: { contentType: { equals: id } },
+            limit: 100,
+            depth: 0,
+            overrideAccess: true,
+          })
+
+          if (!results.docs.length) break
+
+          for (const doc of results.docs) {
+            await payload.delete({
+              collection: 'custom-items',
+              id: doc.id,
+              overrideAccess: true,
+            })
+            deletedCount += 1
+          }
+        }
+      }
+
+      const updated = await payload.update({
+        collection: 'content-types',
+        id,
+        data: {
+          uninstalled: true,
+        },
+        overrideAccess: true,
+      })
+
+      return Response.json({
+        success: true,
+        message: `Uninstalled ${updated.name} and removed ${deletedCount} items`,
+        itemsRemoved: deletedCount,
+      })
+    } catch (error) {
+      payload.logger.error('Uninstall custom collection failed:', error)
+      const errorMessage = error instanceof Error ? error.message : String(error)
+      return Response.json(
+        { success: false, message: `Operation failed: ${errorMessage}` },
+        { status: 500 }
+      )
+    }
+  },
+}
+
+/**
+ * Reinstall a custom collection (content type)
+ */
+export const reinstallCustomCollectionEndpoint: Endpoint = {
+  path: '/collection-templates/custom/reinstall',
+  method: 'post',
+  handler: async (req) => {
+    const { payload, user } = req
+
+    if (!user) {
+      return Response.json(
+        { success: false, message: 'Authentication required' },
+        { status: 401 }
+      )
+    }
+
+    if (user.role !== 'admin') {
+      return Response.json(
+        { success: false, message: 'Admin access required' },
+        { status: 403 }
+      )
+    }
+
+    try {
+      const body = await req.json?.() || {}
+      const { id } = body
+
+      if (!id || typeof id !== 'string') {
+        return Response.json(
+          { success: false, message: 'Missing required field: id' },
+          { status: 400 }
+        )
+      }
+
+      const updated = await payload.update({
+        collection: 'content-types',
+        id,
+        data: {
+          uninstalled: false,
+        },
+        overrideAccess: true,
+      })
+
+      return Response.json({
+        success: true,
+        message: `Reinstalled ${updated.name}`,
+      })
+    } catch (error) {
+      payload.logger.error('Reinstall custom collection failed:', error)
+      const errorMessage = error instanceof Error ? error.message : String(error)
+      return Response.json(
+        { success: false, message: `Operation failed: ${errorMessage}` },
+        { status: 500 }
+      )
+    }
+  },
+}
+
+/**
  * Uninstall a collection
  *
  * Deletes all documents and hides the collection from navigation.
@@ -832,6 +989,8 @@ export const collectionTemplateEndpoints: Endpoint[] = [
   createCustomCollectionEndpoint,
   addTemplateEndpoint,
   addBundleEndpoint,
+  uninstallCustomCollectionEndpoint,
+  reinstallCustomCollectionEndpoint,
   uninstallCollectionEndpoint,
   reinstallCollectionEndpoint,
 ]

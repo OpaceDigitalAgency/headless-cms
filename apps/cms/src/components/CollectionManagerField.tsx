@@ -12,6 +12,7 @@ interface CollectionInfo {
   label: string
   hidden: boolean
   defaultSection: SectionId
+  defaultEnabled?: boolean
 }
 
 interface CollectionSetting {
@@ -80,7 +81,9 @@ const normalizeSettings = (
         ? true
         : collection?.hidden
           ? false
-          : isDefaultEnabled(slug)
+          : typeof collection?.defaultEnabled === 'boolean'
+            ? collection.defaultEnabled
+            : isDefaultEnabled(slug)
       const fallbackSection = managerType === 'globals' ? 'settings' : 'content'
       return {
         slug,
