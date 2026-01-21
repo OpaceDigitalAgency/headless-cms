@@ -6,6 +6,7 @@ import {
   type CollectionTemplate,
   type CollectionStatus,
 } from '../collection-templates'
+import { SeedItemsList } from './SeedItemsList'
 
 /**
  * Section-Specific Collection Templates Interface
@@ -29,6 +30,7 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
 }) => {
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null)
   const [seeding, setSeeding] = useState<string | null>(null)
+  const [seedingItems, setSeedingItems] = useState<Set<string>>(new Set())
   const [installedSlugs, setInstalledSlugs] = useState<string[]>([])
   const [visibilitySettings, setVisibilitySettings] = useState<Record<string, boolean>>({})
   const [toggling, setToggling] = useState<string | null>(null)
@@ -293,6 +295,89 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
       setMessage({
         type: 'error',
         text: error instanceof Error ? error.message : 'Failed to seed data. Please try again.',
+      })
+    } finally {
+      setSeeding(null)
+    }
+  }
+
+  const handleSeedItem = async (collectionSlug: string, itemSlug: string) => {
+    setSeedingItems(prev => new Set([...prev, itemSlug]))
+    setMessage(null)
+
+    try {
+      const response = await fetch('/api/seed/item', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          collectionSlug,
+          itemSlug,
+          includeMedia: false,
+        }),
+      })
+
+      const data = await response.json()
+
+      if (response.ok && data.success) {
+        setMessage({
+          type: 'success',
+          text: data.message || `Successfully seeded ${itemSlug}`,
+        })
+        fetchSeedStatus()
+      } else {
+        throw new Error(data.message || 'Failed to seed item')
+      }
+    } catch (error) {
+      console.error('Failed to seed item:', error)
+      setMessage({
+        type: 'error',
+        text: error instanceof Error ? error.message : 'Failed to seed item. Please try again.',
+      })
+    } finally {
+      setSeedingItems(prev => {
+        const updated = new Set(prev)
+        updated.delete(itemSlug)
+        return updated
+      })
+    }
+  }
+
+  const handleSeedAllItems = async (collectionSlug: string) => {
+    setSeeding(collectionSlug)
+    setMessage(null)
+
+    try {
+      const response = await fetch('/api/seed/collection', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          action: 'seed',
+          slug: collectionSlug,
+          includeMedia: false,
+        }),
+      })
+
+      const data = await response.json()
+
+      if (response.ok && data.success) {
+        setMessage({
+          type: 'success',
+          text: data.message || `Successfully seeded all items in ${collectionSlug}`,
+        })
+        fetchInstalledCollections()
+        fetchSeedStatus()
+      } else {
+        throw new Error(data.message || 'Failed to seed all items')
+      }
+    } catch (error) {
+      console.error('Failed to seed all items:', error)
+      setMessage({
+        type: 'error',
+        text: error instanceof Error ? error.message : 'Failed to seed all items. Please try again.',
       })
     } finally {
       setSeeding(null)
@@ -634,12 +719,23 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
         </div>
 
         {template.hasSeedData && (
-          <div style={{ fontSize: '12px', color: '#666', marginBottom: '12px' }}>
-            {hasSeedData
-              ? isSeeded
-                ? `Seeded (${seededCount} items)`
-                : `Sample data available (${template.seedDataCount || 0} items)`
-              : 'Seed data not configured'}
+          <div style={{ marginBottom: '12px' }}>
+            <div style={{ fontSize: '12px', color: '#666', marginBottom: '8px' }}>
+              {hasSeedData
+                ? isSeeded
+                  ? `Seeded (${seededCount} items)`
+                  : `Sample data available (${template.seedDataCount || 0} items)`
+                : 'Seed data not configured'}
+            </div>
+            {!isSeeded && (
+              <SeedItemsList
+                template={template}
+                onSeedItem={(itemSlug) => handleSeedItem(template.defaultSlug, itemSlug)}
+                onSeedAll={() => handleSeedAllItems(template.defaultSlug)}
+                isSeeding={isSeedingThis}
+                seedingItems={seedingItems}
+              />
+            )}
           </div>
         )}
 

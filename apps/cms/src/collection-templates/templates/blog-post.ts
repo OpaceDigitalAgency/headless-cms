@@ -36,7 +36,39 @@ export const blogPostTemplate: CollectionTemplate = {
   hasSeedData: true,
   hasSeedMedia: false,
   seedDataCount: 5,
-  
+  seedItems: [
+    {
+      title: 'Standard Article with Hero',
+      slug: 'standard-article-with-hero',
+      excerpt: 'Classic single-column layout with hero image, rich text content, and call-to-action.',
+      status: 'published',
+    },
+    {
+      title: 'Feature Story with Grid Layout',
+      slug: 'feature-story-with-grid-layout',
+      excerpt: 'Multi-column layout showcasing grid blocks, image galleries, and featured content sections.',
+      status: 'published',
+    },
+    {
+      title: 'In-Depth Guide with FAQ Section',
+      slug: 'in-depth-guide-with-faq-section',
+      excerpt: 'Comprehensive article with table of contents, multiple sections, and FAQ block for common questions.',
+      status: 'published',
+    },
+    {
+      title: 'Case Study with Timeline',
+      slug: 'case-study-with-timeline',
+      excerpt: 'Narrative-driven post with timeline block showing project progression and key milestones.',
+      status: 'published',
+    },
+    {
+      title: 'News Brief with Media Gallery',
+      slug: 'news-brief-with-media-gallery',
+      excerpt: 'Concise update with embedded media gallery, multiple images, and quick-reference callouts.',
+      status: 'published',
+    },
+  ],
+
   fields: [
     titleField('Post Title'),
     slugField('title', '/blog'),

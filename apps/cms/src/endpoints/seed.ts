@@ -637,6 +637,93 @@ export const seedAllEndpoint: Endpoint = {
 }
 
 /**
+ * POST /api/seed/item
+ * Seed a single item from a collection's seed data
+ */
+export const seedItemEndpoint: Endpoint = {
+  path: '/seed/item',
+  method: 'post',
+  handler: async (req) => {
+    const { payload, user } = req
+
+    if (!user) {
+      return Response.json(
+        { success: false, message: 'Authentication required' },
+        { status: 401 }
+      )
+    }
+
+    if (user.role !== 'admin') {
+      return Response.json(
+        { success: false, message: 'Admin access required' },
+        { status: 403 }
+      )
+    }
+
+    try {
+      const body = await req.json?.() || {}
+      const { collectionSlug, itemSlug } = body
+
+      if (!collectionSlug || !itemSlug) {
+        return Response.json(
+          { success: false, message: 'collectionSlug and itemSlug are required' },
+          { status: 400 }
+        )
+      }
+
+      if (!(await isCollectionEnabled(payload, collectionSlug))) {
+        return Response.json(
+          { success: false, message: `Collection "${collectionSlug}" is disabled` },
+          { status: 400 }
+        )
+      }
+
+      // Get the template to find seed items
+      const template = getTemplateById(collectionSlug)
+      if (!template || !template.seedItems) {
+        return Response.json(
+          { success: false, message: `No seed items found for ${collectionSlug}` },
+          { status: 400 }
+        )
+      }
+
+      const seedItem = template.seedItems.find(item => item.slug === itemSlug)
+      if (!seedItem) {
+        return Response.json(
+          { success: false, message: `Seed item "${itemSlug}" not found` },
+          { status: 404 }
+        )
+      }
+
+      // Create the item
+      await payload.create({
+        collection: collectionSlug as any,
+        data: {
+          title: seedItem.title,
+          slug: seedItem.slug,
+          excerpt: seedItem.excerpt,
+          _status: seedItem.status || 'published',
+          ...seedItem.customData,
+        },
+        overrideAccess: true,
+      })
+
+      return Response.json({
+        success: true,
+        message: `Successfully seeded "${seedItem.title}"`,
+      })
+    } catch (error) {
+      payload.logger.error('Seed item action failed:', error)
+      const errorMessage = error instanceof Error ? error.message : String(error)
+      return Response.json(
+        { success: false, message: `Operation failed: ${errorMessage}` },
+        { status: 500 }
+      )
+    }
+  },
+}
+
+/**
  * All seed endpoints
  */
 export const seedEndpoints: Endpoint[] = [
@@ -648,6 +735,7 @@ export const seedEndpoints: Endpoint[] = [
   seedContentTypeEndpoint,
   seedShowcaseEndpoint,
   seedAllEndpoint,
+  seedItemEndpoint,
 ]
 
 export default seedEndpoints

@@ -28,7 +28,27 @@ export const pageTemplate: CollectionTemplate = {
   hasSeedData: true,
   hasSeedMedia: false,
   seedDataCount: 3,
-  
+  seedItems: [
+    {
+      title: 'Home',
+      slug: 'home',
+      excerpt: 'Welcome page with hero section and featured content',
+      status: 'published',
+    },
+    {
+      title: 'About Us',
+      slug: 'about',
+      excerpt: 'Learn more about our organisation and mission',
+      status: 'published',
+    },
+    {
+      title: 'Blocks Showcase',
+      slug: 'blocks-showcase',
+      excerpt: 'Demonstration of all available content blocks',
+      status: 'published',
+    },
+  ],
+
   fields: [
     titleField('Page Title'),
     slugField(),
