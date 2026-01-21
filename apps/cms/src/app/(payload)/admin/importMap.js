@@ -24,13 +24,20 @@ import { StrikethroughFeatureClient as StrikethroughFeatureClient_e70f5e05f09f93
 import { UnderlineFeatureClient as UnderlineFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
 import { BoldFeatureClient as BoldFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
 import { ItalicFeatureClient as ItalicFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
-import { default as default_c81b10fab563198da1d52f38e4b071ce } from '../../../components/PreviewButtonCell'
+import { default as default_f816ad831d1914fda4b2fda5a8a5abff } from '../../../components/PreviewButtonCells/PagesPreviewCell'
 import { OverviewComponent as OverviewComponent_a8a977ebc872c5d5ea7ee689724c0860 } from '@payloadcms/plugin-seo/client'
 import { MetaTitleComponent as MetaTitleComponent_a8a977ebc872c5d5ea7ee689724c0860 } from '@payloadcms/plugin-seo/client'
 import { MetaDescriptionComponent as MetaDescriptionComponent_a8a977ebc872c5d5ea7ee689724c0860 } from '@payloadcms/plugin-seo/client'
 import { MetaImageComponent as MetaImageComponent_a8a977ebc872c5d5ea7ee689724c0860 } from '@payloadcms/plugin-seo/client'
 import { PreviewComponent as PreviewComponent_a8a977ebc872c5d5ea7ee689724c0860 } from '@payloadcms/plugin-seo/client'
+import { default as default_2287ff956e96a8539b853bf429423292 } from '../../../components/PreviewButtonCells/PostsPreviewCell'
+import { default as default_f7ea1d98364ee50d9b03b0f1a144bd53 } from '../../../components/PreviewButtonCells/ArchiveItemsPreviewCell'
+import { default as default_a746c4e0133cbe976185d2f319037704 } from '../../../components/PreviewButtonCells/PeoplePreviewCell'
+import { default as default_a4d16b5eab717834fbd80608db478375 } from '../../../components/PreviewButtonCells/PlacesPreviewCell'
+import { default as default_cf5a718e85812f01f14fb7dcb4e9ad4b } from '../../../components/PreviewButtonCells/EventsPreviewCell'
+import { default as default_8e3a81edd9c3a515e585367aa801ee42 } from '../../../components/PreviewButtonCells/ContentTypesPreviewCell'
 import { default as default_78d34716f26bbc38d2d51d55b25955ba } from '../../../components/CustomDataField'
+import { default as default_b9ab8409b759872b73c0031ce9ca8d48 } from '../../../components/PreviewButtonCells/CustomItemsPreviewCell'
 import { LinkToDoc as LinkToDoc_aead06e4cbf6b2620c5c51c9ab283634 } from '@payloadcms/plugin-search/client'
 import { ReindexButton as ReindexButton_aead06e4cbf6b2620c5c51c9ab283634 } from '@payloadcms/plugin-search/client'
 import { default as default_1723744e6ae59cf3653e63611d4cba7a } from '../../../components/CollectionManagerField'
@@ -81,13 +88,20 @@ export const importMap = {
   "@payloadcms/richtext-lexical/client#UnderlineFeatureClient": UnderlineFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
   "@payloadcms/richtext-lexical/client#BoldFeatureClient": BoldFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
   "@payloadcms/richtext-lexical/client#ItalicFeatureClient": ItalicFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
-  "/components/PreviewButtonCell#default": default_c81b10fab563198da1d52f38e4b071ce,
+  "/components/PreviewButtonCells/PagesPreviewCell#default": default_f816ad831d1914fda4b2fda5a8a5abff,
   "@payloadcms/plugin-seo/client#OverviewComponent": OverviewComponent_a8a977ebc872c5d5ea7ee689724c0860,
   "@payloadcms/plugin-seo/client#MetaTitleComponent": MetaTitleComponent_a8a977ebc872c5d5ea7ee689724c0860,
   "@payloadcms/plugin-seo/client#MetaDescriptionComponent": MetaDescriptionComponent_a8a977ebc872c5d5ea7ee689724c0860,
   "@payloadcms/plugin-seo/client#MetaImageComponent": MetaImageComponent_a8a977ebc872c5d5ea7ee689724c0860,
   "@payloadcms/plugin-seo/client#PreviewComponent": PreviewComponent_a8a977ebc872c5d5ea7ee689724c0860,
+  "/components/PreviewButtonCells/PostsPreviewCell#default": default_2287ff956e96a8539b853bf429423292,
+  "/components/PreviewButtonCells/ArchiveItemsPreviewCell#default": default_f7ea1d98364ee50d9b03b0f1a144bd53,
+  "/components/PreviewButtonCells/PeoplePreviewCell#default": default_a746c4e0133cbe976185d2f319037704,
+  "/components/PreviewButtonCells/PlacesPreviewCell#default": default_a4d16b5eab717834fbd80608db478375,
+  "/components/PreviewButtonCells/EventsPreviewCell#default": default_cf5a718e85812f01f14fb7dcb4e9ad4b,
+  "/components/PreviewButtonCells/ContentTypesPreviewCell#default": default_8e3a81edd9c3a515e585367aa801ee42,
   "/components/CustomDataField#default": default_78d34716f26bbc38d2d51d55b25955ba,
+  "/components/PreviewButtonCells/CustomItemsPreviewCell#default": default_b9ab8409b759872b73c0031ce9ca8d48,
   "@payloadcms/plugin-search/client#LinkToDoc": LinkToDoc_aead06e4cbf6b2620c5c51c9ab283634,
   "@payloadcms/plugin-search/client#ReindexButton": ReindexButton_aead06e4cbf6b2620c5c51c9ab283634,
   "/components/CollectionManagerField#default": default_1723744e6ae59cf3653e63611d4cba7a,

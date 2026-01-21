@@ -423,7 +423,7 @@ export const Places: CollectionConfig = {
       type: 'ui',
       admin: {
         components: {
-          Cell: '/components/PreviewButtonCell',
+          Cell: '/components/PreviewButtonCells/PlacesPreviewCell',
         },
         condition: () => false, // Hide from form, only show in list
       },

@@ -298,7 +298,7 @@ export const Posts: CollectionConfig = {
       type: 'ui',
       admin: {
         components: {
-          Cell: '/components/PreviewButtonCell',
+          Cell: '/components/PreviewButtonCells/PostsPreviewCell',
         },
         condition: () => false, // Hide from form, only show in list
       },

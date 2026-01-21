@@ -166,7 +166,7 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
         const docs = Array.isArray(data?.docs) ? data.docs : []
         setContentTypes(
           docs.map((doc: any) => ({
-            id: doc.id,
+            id: doc.id || doc._id,
             slug: doc.slug,
             name: doc.name,
             singularLabel: doc.singularLabel,
@@ -789,6 +789,14 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
   }
 
   const handleUninstallCustomCollection = async (contentType: CustomCollection) => {
+    if (!contentType.id) {
+      setMessage({
+        type: 'error',
+        text: 'Missing required field: id',
+      })
+      return
+    }
+
     if (!window.confirm(`Uninstalling will delete all items in ${contentType.name}. Continue?`)) {
       return
     }
@@ -997,8 +1005,8 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
           </div>
         )}
 
-        <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-          {template.hasSeedData && !isSeeded && (
+        {template.hasSeedData && !isSeeded && (
+          <div style={{ marginBottom: '12px' }}>
             <button
               onClick={() => setExpandedSeedList(expandedSeedList === template.defaultSlug ? null : template.defaultSlug)}
               disabled={isSeedingThis || isUninstalled}
@@ -1030,7 +1038,10 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
               </span>
               {isSeedingThis ? 'Seeding...' : isUninstalled ? 'Reinstall to Seed' : `Seed sample ${template.defaultPlural?.toLowerCase() || 'items'}`}
             </button>
-          )}
+          </div>
+        )}
+
+        <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
           {section === 'Collections' && cloneableBaseTemplates[template.defaultSlug] && expandedSeedList === template.defaultSlug && (
             <button
               onClick={() => {
@@ -1276,6 +1287,42 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
           </div>
         )}
 
+        {hasSeedData && template && !isSeeded && (
+          <div style={{ marginBottom: '12px' }}>
+            <button
+              onClick={() => setExpandedSeedList(isSeedListExpanded ? null : seedListKey)}
+              disabled={isSeedingThis || isUninstalled}
+              style={{
+                padding: '8px 14px',
+                fontSize: '13px',
+                fontWeight: 500,
+                borderRadius: '6px',
+                border: 'none',
+                background: isUninstalled ? '#cbd5f5' : '#3b82f6',
+                color: isUninstalled ? '#475569' : 'white',
+                cursor: isSeedingThis || isUninstalled ? 'not-allowed' : 'pointer',
+                opacity: isSeedingThis || isUninstalled ? 0.6 : 1,
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px',
+              }}
+            >
+              <span style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                width: '16px',
+                height: '16px',
+                transition: 'transform 0.2s ease',
+                transform: isSeedListExpanded ? 'rotate(180deg)' : 'rotate(0deg)',
+              }}>
+                ▼
+              </span>
+              {isSeedingThis ? 'Seeding...' : isUninstalled ? 'Reinstall to Seed' : `Seed sample ${contentType.pluralLabel?.toLowerCase() || 'items'}`}
+            </button>
+          </div>
+        )}
+
         <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
           <a
             href={`/admin/collections/custom-items?where[contentType][equals]=${contentType.id}`}
@@ -1338,39 +1385,6 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
           >
             Clone
           </button>
-          {hasSeedData && template && !isSeeded && (
-            <button
-              onClick={() => setExpandedSeedList(isSeedListExpanded ? null : seedListKey)}
-              disabled={isSeedingThis || isUninstalled}
-              style={{
-                padding: '8px 14px',
-                fontSize: '13px',
-                fontWeight: 500,
-                borderRadius: '6px',
-                border: 'none',
-                background: isUninstalled ? '#cbd5f5' : '#3b82f6',
-                color: isUninstalled ? '#475569' : 'white',
-                cursor: isSeedingThis || isUninstalled ? 'not-allowed' : 'pointer',
-                opacity: isSeedingThis || isUninstalled ? 0.6 : 1,
-                display: 'flex',
-                alignItems: 'center',
-                gap: '6px',
-              }}
-            >
-              <span style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                width: '16px',
-                height: '16px',
-                transition: 'transform 0.2s ease',
-                transform: isSeedListExpanded ? 'rotate(180deg)' : 'rotate(0deg)',
-              }}>
-                ▼
-              </span>
-              {isSeedingThis ? 'Seeding...' : isUninstalled ? 'Reinstall to Seed' : `Seed sample ${contentType.pluralLabel?.toLowerCase() || 'items'}`}
-            </button>
-          )}
           {!isUninstalled && (
             <button
               onClick={() => handleToggleVisibility(navSlug, isVisible)}
@@ -1577,27 +1591,40 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
             <h3 style={{ fontSize: '18px', fontWeight: 600, marginBottom: 0, color: '#333' }}>
               Custom Collections
             </h3>
-            <button
-              onClick={() => openCreateModal({ mode: 'base', baseTemplate: 'archive-item' })}
-              style={{
-                padding: '8px 14px',
-                fontSize: '13px',
-                fontWeight: 600,
-                borderRadius: '6px',
-                border: 'none',
-                background: '#10b981',
-                color: 'white',
-                cursor: 'pointer',
-              }}
-            >
-              Add Custom Collection
-            </button>
           </div>
           <p style={{ fontSize: '13px', color: '#666', marginBottom: '16px' }}>
             Create and manage custom collections from base templates. Items appear in the Collections menu immediately.
           </p>
           {installedCustomCollections.length > 0 ? (
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '16px' }}>
+              <div
+                style={{
+                  padding: '24px',
+                  textAlign: 'center',
+                  background: 'var(--theme-elevation-50)',
+                  borderRadius: '8px',
+                  border: '1px dashed var(--theme-elevation-200)',
+                }}
+              >
+                <p style={{ fontSize: '14px', color: '#666', marginBottom: '16px' }}>
+                  Add a new custom collection from a base template.
+                </p>
+                <button
+                  onClick={() => openCreateModal({ mode: 'base', baseTemplate: 'archive-item' })}
+                  style={{
+                    padding: '8px 14px',
+                    fontSize: '13px',
+                    fontWeight: 600,
+                    borderRadius: '6px',
+                    border: 'none',
+                    background: '#10b981',
+                    color: 'white',
+                    cursor: 'pointer',
+                  }}
+                >
+                  Add Custom Collection
+                </button>
+              </div>
               {installedCustomCollections.map(renderCustomCollectionCard)}
             </div>
           ) : (
@@ -1613,6 +1640,22 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
               <p style={{ fontSize: '14px', color: '#666' }}>
                 No custom collections yet. Create one to get started.
               </p>
+              <button
+                onClick={() => openCreateModal({ mode: 'base', baseTemplate: 'archive-item' })}
+                style={{
+                  padding: '8px 14px',
+                  fontSize: '13px',
+                  fontWeight: 600,
+                  borderRadius: '6px',
+                  border: 'none',
+                  background: '#10b981',
+                  color: 'white',
+                  cursor: 'pointer',
+                  marginTop: '12px',
+                }}
+              >
+                Add Custom Collection
+              </button>
             </div>
           )}
         </div>

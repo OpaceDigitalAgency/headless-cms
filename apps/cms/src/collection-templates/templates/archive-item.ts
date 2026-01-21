@@ -211,7 +211,7 @@ export const archiveItemTemplate: CollectionTemplate = {
       type: 'ui',
       admin: {
         components: {
-          Cell: '/components/PreviewButtonCell',
+          Cell: '/components/PreviewButtonCells/ArchiveItemsPreviewCell',
         },
         condition: () => false, // Hide from form, only show in list
       },

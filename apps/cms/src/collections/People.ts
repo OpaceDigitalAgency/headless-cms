@@ -427,7 +427,7 @@ export const People: CollectionConfig = {
       type: 'ui',
       admin: {
         components: {
-          Cell: '/components/PreviewButtonCell',
+          Cell: '/components/PreviewButtonCells/PeoplePreviewCell',
         },
         condition: () => false, // Hide from form, only show in list
       },

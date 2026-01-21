@@ -321,7 +321,7 @@ export const CustomItems: CollectionConfig = {
       type: 'ui',
       admin: {
         components: {
-          Cell: '/components/PreviewButtonCell',
+          Cell: '/components/PreviewButtonCells/CustomItemsPreviewCell',
         },
         condition: () => false, // Hide from form, only show in list
       },

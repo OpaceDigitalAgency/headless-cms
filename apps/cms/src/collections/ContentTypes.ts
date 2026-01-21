@@ -279,7 +279,7 @@ export const ContentTypes: CollectionConfig = {
       type: 'ui',
       admin: {
         components: {
-          Cell: '/components/PreviewButtonCell',
+          Cell: '/components/PreviewButtonCells/ContentTypesPreviewCell',
         },
         condition: () => false, // Hide from form, only show in list
       },

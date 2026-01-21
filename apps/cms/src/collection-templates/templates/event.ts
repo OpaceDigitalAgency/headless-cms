@@ -329,7 +329,7 @@ export const eventTemplate: CollectionTemplate = {
       type: 'ui',
       admin: {
         components: {
-          Cell: '/components/PreviewButtonCell',
+          Cell: '/components/PreviewButtonCells/EventsPreviewCell',
         },
         condition: () => false, // Hide from form, only show in list
       },
