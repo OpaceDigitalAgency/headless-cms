@@ -44,7 +44,7 @@ export const CustomItems: CollectionConfig = {
     plural: 'Custom Items',
   },
   admin: {
-    group: 'Content',
+    group: 'Collections',
     useAsTitle: 'title',
     defaultColumns: ['title', 'contentType', 'status', 'updatedAt'],
     description: 'Items belonging to your custom collections',

@@ -296,14 +296,12 @@ export class BrochureSeeder extends BaseSeeder {
 
     // Header
     await this.updateGlobal('header', {
-      logo: {
-        text: 'Company Name',
-      },
+      logoText: 'Company Name',
       navItems: [
-        { link: { type: 'custom', label: 'Home', url: '/' } },
-        { link: { type: 'custom', label: 'About', url: '/about' } },
-        { link: { type: 'custom', label: 'Services', url: '/services' } },
-        { link: { type: 'custom', label: 'Contact', url: '/contact' } },
+        { label: 'Home', type: 'link', url: '/' },
+        { label: 'About', type: 'link', url: '/about' },
+        { label: 'Services', type: 'link', url: '/services' },
+        { label: 'Contact', type: 'link', url: '/contact' },
       ],
     })
 

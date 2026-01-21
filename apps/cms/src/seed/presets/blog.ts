@@ -109,18 +109,34 @@ export class BlogSeeder extends BaseSeeder {
 
     this.log('Seeding pages...')
 
-    // Home page
+    // Home page - Rich, well-designed homepage
     await this.create('pages', {
       title: 'Home',
       slug: 'home',
       template: 'home',
       _status: 'published',
       hero: {
-        type: 'standard',
-        heading: 'Welcome to Our Blog',
-        subheading: 'Discover stories, insights, and ideas that inspire.',
+        type: 'fullscreen',
+        heading: 'Discover Stories That Inspire',
+        subheading: 'Explore insights, ideas, and perspectives from our community of writers and thinkers.',
       },
       content: [
+        // Featured content section
+        {
+          blockType: 'content',
+          backgroundColor: 'light',
+          paddingTop: 'large',
+          paddingBottom: 'large',
+          columns: [
+            {
+              size: 'full',
+              richText: createRichTextParagraphs([
+                'Welcome to our blog, where we share thoughtful articles on technology, design, business, and lifestyle. Whether you\'re looking for practical tips, industry insights, or inspiring stories, you\'ll find it here.',
+              ]),
+            },
+          ],
+        },
+        // Latest posts grid
         {
           blockType: 'archive',
           collection: 'posts',
@@ -130,34 +146,73 @@ export class BlogSeeder extends BaseSeeder {
           showDate: true,
           showCategory: true,
         },
-      ],
-    })
-
-    // About page
-    await this.create('pages', {
-      title: 'About',
-      slug: 'about',
-      template: 'detail',
-      _status: 'published',
-      hero: {
-        type: 'minimal',
-        heading: 'About Us',
-        subheading: 'Learn more about who we are and what we do.',
-      },
-      content: [
+        // CTA section
         {
-          blockType: 'content',
-          columns: 'oneColumn',
-          content: createRichTextParagraphs([
-            'We are a team of passionate writers and creators dedicated to sharing knowledge and inspiring others.',
-            'Our blog covers a wide range of topics from technology and design to business and lifestyle.',
-            'Founded in 2024, we have grown to become a trusted source of information and inspiration for thousands of readers worldwide.',
-          ]),
+          blockType: 'cta',
+          heading: 'Stay Updated',
+          description: 'Subscribe to our newsletter to get the latest articles delivered to your inbox.',
+          buttons: [
+            { label: 'Subscribe Now', url: '/contact', variant: 'primary' },
+          ],
         },
       ],
     })
 
-    // Contact page
+    // About page - Comprehensive about page
+    await this.create('pages', {
+      title: 'About Us',
+      slug: 'about',
+      template: 'detail',
+      _status: 'published',
+      hero: {
+        type: 'standard',
+        heading: 'About Our Blog',
+        subheading: 'Learn more about our mission, values, and the team behind the content.',
+      },
+      content: [
+        {
+          blockType: 'content',
+          backgroundColor: 'none',
+          paddingTop: 'medium',
+          paddingBottom: 'medium',
+          columns: [
+            {
+              size: 'full',
+              richText: createRichTextParagraphs([
+                'We are a team of passionate writers, designers, and thinkers dedicated to sharing knowledge and inspiring others through thoughtful content.',
+                'Our blog covers a wide range of topics from technology and design to business and lifestyle. We believe in the power of storytelling and the importance of sharing diverse perspectives.',
+                'Founded in 2024, we have grown to become a trusted source of information and inspiration for thousands of readers worldwide.',
+              ]),
+            },
+          ],
+        },
+        // Features section
+        {
+          blockType: 'features',
+          heading: 'What We Offer',
+          features: [
+            {
+              title: 'In-Depth Articles',
+              description: 'Comprehensive guides and long-form content that explores topics in detail.',
+            },
+            {
+              title: 'Expert Insights',
+              description: 'Perspectives from industry leaders and experienced professionals.',
+            },
+            {
+              title: 'Practical Tips',
+              description: 'Actionable advice you can apply to your work and life.',
+            },
+            {
+              title: 'Community',
+              description: 'Join a community of curious minds and engaged readers.',
+            },
+          ],
+        },
+      ],
+    })
+
+    // Contact page - Simple contact page
     await this.create('pages', {
       title: 'Contact',
       slug: 'contact',
@@ -166,17 +221,17 @@ export class BlogSeeder extends BaseSeeder {
       hero: {
         type: 'minimal',
         heading: 'Get in Touch',
-        subheading: 'We would love to hear from you.',
+        subheading: 'We would love to hear from you. Send us a message and we will respond as soon as possible.',
       },
       content: [
         {
           blockType: 'content',
-          columns: 'oneColumn',
-          content: createRichText('Have a question or want to collaborate? Drop us a message and we will get back to you as soon as possible.'),
-        },
-        {
-          blockType: 'form',
-          formType: 'contact',
+          columns: [
+            {
+              size: 'full',
+              richText: createRichText('Have a question, suggestion, or just want to say hello? We\'d love to hear from you. Fill out the form below and we\'ll get back to you shortly.'),
+            },
+          ],
         },
       ],
     })
@@ -274,14 +329,12 @@ export class BlogSeeder extends BaseSeeder {
 
     // Header
     await this.updateGlobal('header', {
-      logo: {
-        text: 'My Blog',
-      },
+      logoText: 'My Blog',
       navItems: [
-        { link: { type: 'custom', label: 'Home', url: '/' } },
-        { link: { type: 'custom', label: 'Blog', url: '/blog' } },
-        { link: { type: 'custom', label: 'About', url: '/about' } },
-        { link: { type: 'custom', label: 'Contact', url: '/contact' } },
+        { label: 'Home', type: 'link', url: '/' },
+        { label: 'Blog', type: 'link', url: '/blog' },
+        { label: 'About', type: 'link', url: '/about' },
+        { label: 'Contact', type: 'link', url: '/contact' },
       ],
     })
 

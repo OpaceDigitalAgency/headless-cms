@@ -1137,6 +1137,7 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
                 sourceContentTypeId: contentType.id,
                 baseTemplate: contentType.template || 'archive-item',
                 name: `${contentType.name} Copy`,
+                hasArchive: contentType.hasArchive ?? true,
               })
             }
             style={{

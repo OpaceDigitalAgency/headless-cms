@@ -455,17 +455,15 @@ export class CoreSeeder extends BaseSeeder {
 
     // Header
     await this.updateGlobal('header', {
-      logo: {
-        text: 'Museum Collection',
-      },
+      logoText: 'Museum Collection',
       navItems: [
-        { link: { type: 'custom', label: 'Home', url: '/' } },
-        { link: { type: 'custom', label: 'Blocks Showcase', url: '/blocks-showcase' } },
-        { link: { type: 'custom', label: 'Archive Items', url: '/archive-items' } },
-        { link: { type: 'custom', label: 'People', url: '/people' } },
-        { link: { type: 'custom', label: 'Places', url: '/places' } },
-        { link: { type: 'custom', label: 'Collections', url: '/collections' } },
-        { link: { type: 'custom', label: 'Blog', url: '/blog' } },
+        { label: 'Home', type: 'link', url: '/' },
+        { label: 'Blocks Showcase', type: 'link', url: '/blocks-showcase' },
+        { label: 'Archive Items', type: 'link', url: '/archive-items' },
+        { label: 'People', type: 'link', url: '/people' },
+        { label: 'Places', type: 'link', url: '/places' },
+        { label: 'Collections', type: 'link', url: '/collections' },
+        { label: 'Blog', type: 'link', url: '/blog' },
       ],
     })
 

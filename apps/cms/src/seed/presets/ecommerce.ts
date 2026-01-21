@@ -415,16 +415,14 @@ export class EcommerceSeeder extends BaseSeeder {
 
     // Header
     await this.updateGlobal('header', {
-      logo: {
-        text: 'My Store',
-      },
+      logoText: 'My Store',
       navItems: [
-        { link: { type: 'custom', label: 'Home', url: '/' } },
-        { link: { type: 'custom', label: 'Products', url: '/products' } },
-        { link: { type: 'custom', label: 'Collections', url: '/collections' } },
-        { link: { type: 'custom', label: 'Sale', url: '/collections/summer-sale' } },
-        { link: { type: 'custom', label: 'About', url: '/about' } },
-        { link: { type: 'custom', label: 'Contact', url: '/contact' } },
+        { label: 'Home', type: 'link', url: '/' },
+        { label: 'Products', type: 'link', url: '/products' },
+        { label: 'Collections', type: 'link', url: '/collections' },
+        { label: 'Sale', type: 'link', url: '/collections/summer-sale' },
+        { label: 'About', type: 'link', url: '/about' },
+        { label: 'Contact', type: 'link', url: '/contact' },
       ],
     })
 
