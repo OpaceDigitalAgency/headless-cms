@@ -14,6 +14,9 @@ const nextConfig = {
     reactCompiler: false,
   },
 
+  // Keep server-only packages on the server
+  serverExternalPackages: ['nodemailer'],
+
   // Image optimization
   images: {
     remotePatterns: [
