@@ -9,8 +9,8 @@ RUN corepack enable && corepack prepare pnpm@latest --activate
 # Dependencies stage
 FROM base AS deps
 COPY package.json pnpm-workspace.yaml pnpm-lock.yaml* ./
-COPY apps/astro/package.json ./apps/astro/
-COPY packages/shared/package.json ./packages/shared/
+COPY ./apps/astro/package.json ./apps/astro/
+COPY ./packages/shared/package.json ./packages/shared/
 RUN pnpm install --frozen-lockfile
 
 # Build stage

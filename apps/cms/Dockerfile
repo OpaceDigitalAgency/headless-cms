@@ -7,8 +7,8 @@ WORKDIR /app
 # Dependencies stage
 FROM base AS deps
 COPY package.json pnpm-workspace.yaml pnpm-lock.yaml* ./
-COPY apps/cms/package.json ./apps/cms/
-COPY packages/shared/package.json ./packages/shared/
+COPY ./apps/cms/package.json ./apps/cms/
+COPY ./packages/shared/package.json ./packages/shared/
 RUN pnpm install --frozen-lockfile
 
 # Development stage
