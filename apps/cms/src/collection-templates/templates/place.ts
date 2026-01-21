@@ -20,7 +20,6 @@ import {
   tagsField,
   featuredField,
   templateField,
-  seoTabFields,
   richContentField,
   mediaGalleryField,
 } from '../shared-fields'
@@ -64,14 +63,13 @@ export const placeTemplate: CollectionTemplate = {
   ],
   
   fields: [
-    nameField('Place Name'),
-    slugField('name', '/places'),
     {
       type: 'tabs',
       tabs: [
         {
           label: 'Details',
           fields: [
+            nameField('Place Name'),
             featuredImageField,
             excerptField('Short Description'),
             richContentField('Full Description'),
@@ -223,13 +221,9 @@ export const placeTemplate: CollectionTemplate = {
             contentBlocksField,
           ],
         },
-        {
-          label: 'SEO',
-          name: 'meta',
-          fields: seoTabFields,
-        },
       ],
     },
+    slugField('name', '/places'),
     featuredField,
     templateField([
       { label: 'Location Page', value: 'location' },

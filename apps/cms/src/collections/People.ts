@@ -136,24 +136,23 @@ export const People: CollectionConfig = {
 
   fields: [
     {
-      name: 'name',
-      type: 'text',
-      required: true,
-      label: 'Full Name',
-    },
-    slugField('name'),
-    {
-      name: 'portrait',
-      type: 'upload',
-      relationTo: 'media',
-      label: 'Portrait',
-    },
-    {
       type: 'tabs',
       tabs: [
         {
           label: 'Biography',
           fields: [
+            {
+              name: 'name',
+              type: 'text',
+              required: true,
+              label: 'Full Name',
+            },
+            {
+              name: 'portrait',
+              type: 'upload',
+              relationTo: 'media',
+              label: 'Portrait',
+            },
             {
               name: 'shortBio',
               type: 'textarea',
@@ -392,13 +391,9 @@ export const People: CollectionConfig = {
             },
           ],
         },
-        {
-          label: 'SEO',
-          name: 'meta',
-          fields: [],
-        },
       ],
     },
+    slugField('name'),
     {
       name: 'template',
       type: 'select',

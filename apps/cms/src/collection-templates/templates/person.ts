@@ -20,7 +20,6 @@ import {
   tagsField,
   featuredField,
   templateField,
-  seoTabFields,
   richContentField,
 } from '../shared-fields'
 
@@ -63,14 +62,13 @@ export const personTemplate: CollectionTemplate = {
   ],
   
   fields: [
-    nameField('Full Name'),
-    slugField('name', '/people'),
     {
       type: 'tabs',
       tabs: [
         {
           label: 'Profile',
           fields: [
+            nameField('Full Name'),
             {
               name: 'portrait',
               type: 'upload',
@@ -204,13 +202,9 @@ export const personTemplate: CollectionTemplate = {
             contentBlocksField,
           ],
         },
-        {
-          label: 'SEO',
-          name: 'meta',
-          fields: seoTabFields,
-        },
       ],
     },
+    slugField('name', '/people'),
     featuredField,
     templateField([
       { label: 'Profile Page', value: 'profile' },

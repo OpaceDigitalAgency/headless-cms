@@ -10,7 +10,6 @@ import {
   titleField,
   slugField,
   contentBlocksField,
-  seoTabFields,
   templateField,
 } from '../shared-fields'
 
@@ -50,14 +49,13 @@ export const pageTemplate: CollectionTemplate = {
   ],
 
   fields: [
-    titleField('Page Title'),
-    slugField(),
     {
       type: 'tabs',
       tabs: [
         {
           label: 'Hero',
           fields: [
+            titleField('Page Title'),
             {
               name: 'hero',
               type: 'group',
@@ -129,13 +127,9 @@ export const pageTemplate: CollectionTemplate = {
             contentBlocksField,
           ],
         },
-        {
-          label: 'SEO',
-          name: 'meta',
-          fields: seoTabFields,
-        },
       ],
     },
+    slugField(),
     templateField([
       { label: 'Default', value: 'default' },
       { label: 'Landing Page', value: 'landing' },
@@ -145,4 +139,3 @@ export const pageTemplate: CollectionTemplate = {
 }
 
 export default pageTemplate
-

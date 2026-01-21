@@ -83,18 +83,17 @@ export const Pages: CollectionConfig = {
 
   fields: [
     {
-      name: 'title',
-      type: 'text',
-      required: true,
-      label: 'Page Title',
-    },
-    slugField('title', ''),
-    {
       type: 'tabs',
       tabs: [
         {
           label: 'Hero',
           fields: [
+            {
+              name: 'title',
+              type: 'text',
+              required: true,
+              label: 'Page Title',
+            },
             {
               name: 'hero',
               type: 'group',
@@ -205,10 +204,9 @@ export const Pages: CollectionConfig = {
             },
           ],
         },
-        // SEO tab is automatically added by @payloadcms/plugin-seo
-        // Do not define it manually when using tabbedUI: true
       ],
     },
+    slugField('title', ''),
     {
       name: 'template',
       type: 'select',

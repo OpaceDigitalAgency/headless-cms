@@ -220,11 +220,6 @@ export const mediaGalleryField: Field = {
 }
 
 /**
- * SEO tab fields placeholder (handled by SEO plugin)
- */
-export const seoTabFields: Field[] = []
-
-/**
  * Standard content tabs structure
  */
 export const createContentTabs = (
@@ -247,11 +242,6 @@ export const createContentTabs = (
       ],
     },
     ...additionalTabs,
-    {
-      label: 'SEO',
-      name: 'meta',
-      fields: seoTabFields,
-    },
   ],
 })
 

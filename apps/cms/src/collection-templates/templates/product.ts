@@ -19,7 +19,6 @@ import {
   tagsField,
   featuredField,
   templateField,
-  seoTabFields,
   richContentField,
   mediaGalleryField,
 } from '../shared-fields'
@@ -63,14 +62,13 @@ export const productTemplate: CollectionTemplate = {
   ],
   
   fields: [
-    titleField('Product Name'),
-    slugField(),
     {
       type: 'tabs',
       tabs: [
         {
           label: 'Details',
           fields: [
+            titleField('Product Name'),
             featuredImageField,
             excerptField('Short Description'),
             richContentField('Full Description'),
@@ -271,13 +269,9 @@ export const productTemplate: CollectionTemplate = {
             contentBlocksField,
           ],
         },
-        {
-          label: 'SEO',
-          name: 'meta',
-          fields: seoTabFields,
-        },
       ],
     },
+    slugField(),
     featuredField,
     {
       name: 'availability',

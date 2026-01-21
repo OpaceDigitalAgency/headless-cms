@@ -401,10 +401,6 @@ export interface Media {
 export interface Page {
   id: number;
   title: string;
-  /**
-   * URL-friendly identifier (auto-generated from title)
-   */
-  slug: string;
   hero?: {
     type?: ('standard' | 'minimal' | 'fullscreen' | 'none') | null;
     heading?: string | null;
@@ -939,11 +935,6 @@ export interface Page {
           }
       )[]
     | null;
-  /**
-   * Select the page template
-   */
-  template: 'landing' | 'home' | 'detail' | 'article' | 'archive' | 'showcase';
-  publishedAt?: string | null;
   meta?: {
     title?: string | null;
     description?: string | null;
@@ -952,6 +943,15 @@ export interface Page {
      */
     image?: (number | null) | Media;
   };
+  /**
+   * URL-friendly identifier (auto-generated from title)
+   */
+  slug: string;
+  /**
+   * Select the page template
+   */
+  template: 'landing' | 'home' | 'detail' | 'article' | 'archive' | 'showcase';
+  publishedAt?: string | null;
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
@@ -1140,10 +1140,6 @@ export interface Tag {
 export interface Post {
   id: number;
   title: string;
-  /**
-   * URL-friendly identifier. Will be published at: /blog/[slug]
-   */
-  slug: string;
   featuredImage?: (number | null) | Media;
   /**
    * Brief summary for listings and SEO
@@ -1694,6 +1690,18 @@ export interface Post {
    */
   tags?: (number | Tag)[] | null;
   relatedPosts?: (number | Post)[] | null;
+  meta?: {
+    title?: string | null;
+    description?: string | null;
+    /**
+     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     */
+    image?: (number | null) | Media;
+  };
+  /**
+   * URL-friendly identifier. Will be published at: /blog/[slug]
+   */
+  slug: string;
   /**
    * Select the display template
    */
@@ -1704,14 +1712,6 @@ export interface Post {
    * Show in featured sections
    */
   featured?: boolean | null;
-  meta?: {
-    title?: string | null;
-    description?: string | null;
-    /**
-     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
-     */
-    image?: (number | null) | Media;
-  };
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
@@ -1725,10 +1725,6 @@ export interface Post {
 export interface ArchiveItem {
   id: number;
   title: string;
-  /**
-   * URL-friendly identifier. Will be published at: /archive-items/[slug]
-   */
-  slug: string;
   featuredImage?: (number | null) | Media;
   /**
    * Brief summary for listings and SEO
@@ -2160,6 +2156,10 @@ export interface ArchiveItem {
     image?: (number | null) | Media;
   };
   /**
+   * URL-friendly identifier. Will be published at: /archive-items/[slug]
+   */
+  slug: string;
+  /**
    * Show in featured sections
    */
   featured?: boolean | null;
@@ -2182,10 +2182,6 @@ export interface ArchiveItem {
 export interface Person {
   id: number;
   name: string;
-  /**
-   * URL-friendly identifier (auto-generated from title)
-   */
-  slug: string;
   portrait?: (number | null) | Media;
   /**
    * Brief description for listings and SEO
@@ -2793,6 +2789,10 @@ export interface Person {
     image?: (number | null) | Media;
   };
   /**
+   * URL-friendly identifier (auto-generated from title)
+   */
+  slug: string;
+  /**
    * Select the display template
    */
   template?: ('profile' | 'card' | 'biography') | null;
@@ -2810,10 +2810,6 @@ export interface Person {
 export interface Place {
   id: number;
   name: string;
-  /**
-   * URL-friendly identifier (auto-generated from title)
-   */
-  slug: string;
   featuredImage?: (number | null) | Media;
   /**
    * Brief summary for listings and SEO
@@ -3440,6 +3436,10 @@ export interface Place {
     image?: (number | null) | Media;
   };
   /**
+   * URL-friendly identifier (auto-generated from title)
+   */
+  slug: string;
+  /**
    * Select the display template
    */
   template?: ('location' | 'map' | 'card') | null;
@@ -3459,10 +3459,6 @@ export interface Place {
  */
 export interface CustomItem {
   id: number;
-  /**
-   * The type of content this item belongs to
-   */
-  contentType: number | ContentType;
   title: string;
   /**
    * URL-friendly identifier
@@ -4053,6 +4049,10 @@ export interface CustomItem {
      */
     image?: (number | null) | Media;
   };
+  /**
+   * The type of content this item belongs to
+   */
+  contentType: number | ContentType;
   status?: ('draft' | 'published' | 'archived') | null;
   /**
    * Publication date
@@ -4246,10 +4246,6 @@ export interface Form {
 export interface Event {
   id: number;
   title: string;
-  /**
-   * URL-friendly identifier. Will be published at: /events/[slug]
-   */
-  slug: string;
   featuredImage?: (number | null) | Media;
   /**
    * Brief summary for listings and SEO
@@ -4665,6 +4661,10 @@ export interface Event {
     image?: (number | null) | Media;
   };
   /**
+   * URL-friendly identifier. Will be published at: /events/[slug]
+   */
+  slug: string;
+  /**
    * Show in featured sections
    */
   featured?: boolean | null;
@@ -4689,10 +4689,6 @@ export interface Event {
 export interface Product {
   id: number;
   title: string;
-  /**
-   * URL-friendly identifier (auto-generated from title)
-   */
-  slug: string;
   featuredImage?: (number | null) | Media;
   /**
    * Brief summary for listings and SEO
@@ -5125,6 +5121,10 @@ export interface Product {
     image?: (number | null) | Media;
   };
   /**
+   * URL-friendly identifier (auto-generated from title)
+   */
+  slug: string;
+  /**
    * Show in featured sections
    */
   featured?: boolean | null;
@@ -5149,10 +5149,6 @@ export interface Product {
 export interface ProductCollection {
   id: number;
   name: string;
-  /**
-   * URL-friendly identifier (auto-generated from title)
-   */
-  slug: string;
   description?: {
     root: {
       type: string;
@@ -5207,7 +5203,10 @@ export interface ProductCollection {
    * Apply a discount to all products in this collection
    */
   discountPercentage?: number | null;
-  meta?: {};
+  /**
+   * URL-friendly identifier (auto-generated from title)
+   */
+  slug: string;
   featured?: boolean | null;
   showInNavigation?: boolean | null;
   updatedAt: string;
@@ -5791,7 +5790,6 @@ export interface MediaSelect<T extends boolean = true> {
  */
 export interface PagesSelect<T extends boolean = true> {
   title?: T;
-  slug?: T;
   hero?:
     | T
     | {
@@ -6216,8 +6214,6 @@ export interface PagesSelect<T extends boolean = true> {
               blockName?: T;
             };
       };
-  template?: T;
-  publishedAt?: T;
   meta?:
     | T
     | {
@@ -6225,6 +6221,9 @@ export interface PagesSelect<T extends boolean = true> {
         description?: T;
         image?: T;
       };
+  slug?: T;
+  template?: T;
+  publishedAt?: T;
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
@@ -6235,7 +6234,6 @@ export interface PagesSelect<T extends boolean = true> {
  */
 export interface PostsSelect<T extends boolean = true> {
   title?: T;
-  slug?: T;
   featuredImage?: T;
   excerpt?: T;
   content?: T;
@@ -6648,10 +6646,6 @@ export interface PostsSelect<T extends boolean = true> {
   categories?: T;
   tags?: T;
   relatedPosts?: T;
-  template?: T;
-  author?: T;
-  publishedAt?: T;
-  featured?: T;
   meta?:
     | T
     | {
@@ -6659,6 +6653,11 @@ export interface PostsSelect<T extends boolean = true> {
         description?: T;
         image?: T;
       };
+  slug?: T;
+  template?: T;
+  author?: T;
+  publishedAt?: T;
+  featured?: T;
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
@@ -6713,7 +6712,6 @@ export interface TagsSelect<T extends boolean = true> {
  */
 export interface ArchiveItemsSelect<T extends boolean = true> {
   title?: T;
-  slug?: T;
   featuredImage?: T;
   excerpt?: T;
   richContent?: T;
@@ -6990,6 +6988,7 @@ export interface ArchiveItemsSelect<T extends boolean = true> {
         description?: T;
         image?: T;
       };
+  slug?: T;
   featured?: T;
   onDisplay?: T;
   location?: T;
@@ -7004,7 +7003,6 @@ export interface ArchiveItemsSelect<T extends boolean = true> {
  */
 export interface PeopleSelect<T extends boolean = true> {
   name?: T;
-  slug?: T;
   portrait?: T;
   shortBio?: T;
   biography?: T;
@@ -7448,6 +7446,7 @@ export interface PeopleSelect<T extends boolean = true> {
         description?: T;
         image?: T;
       };
+  slug?: T;
   template?: T;
   featured?: T;
   updatedAt?: T;
@@ -7460,7 +7459,6 @@ export interface PeopleSelect<T extends boolean = true> {
  */
 export interface PlacesSelect<T extends boolean = true> {
   name?: T;
-  slug?: T;
   featuredImage?: T;
   shortDescription?: T;
   description?: T;
@@ -7920,6 +7918,7 @@ export interface PlacesSelect<T extends boolean = true> {
         description?: T;
         image?: T;
       };
+  slug?: T;
   template?: T;
   placeType?: T;
   featured?: T;
@@ -7933,7 +7932,6 @@ export interface PlacesSelect<T extends boolean = true> {
  */
 export interface EventsSelect<T extends boolean = true> {
   title?: T;
-  slug?: T;
   featuredImage?: T;
   excerpt?: T;
   richContent?: T;
@@ -8214,6 +8212,7 @@ export interface EventsSelect<T extends boolean = true> {
         description?: T;
         image?: T;
       };
+  slug?: T;
   featured?: T;
   eventStatus?: T;
   template?: T;
@@ -8227,7 +8226,6 @@ export interface EventsSelect<T extends boolean = true> {
  */
 export interface ProductsSelect<T extends boolean = true> {
   title?: T;
-  slug?: T;
   featuredImage?: T;
   excerpt?: T;
   richContent?: T;
@@ -8514,6 +8512,7 @@ export interface ProductsSelect<T extends boolean = true> {
         description?: T;
         image?: T;
       };
+  slug?: T;
   featured?: T;
   availability?: T;
   template?: T;
@@ -8549,7 +8548,6 @@ export interface ProductCategoriesSelect<T extends boolean = true> {
  */
 export interface ProductCollectionsSelect<T extends boolean = true> {
   name?: T;
-  slug?: T;
   description?: T;
   shortDescription?: T;
   featuredImage?: T;
@@ -8562,7 +8560,7 @@ export interface ProductCollectionsSelect<T extends boolean = true> {
   startDate?: T;
   endDate?: T;
   discountPercentage?: T;
-  meta?: T | {};
+  slug?: T;
   featured?: T;
   showInNavigation?: T;
   updatedAt?: T;
@@ -8616,7 +8614,6 @@ export interface ContentTypesSelect<T extends boolean = true> {
  * via the `definition` "custom-items_select".
  */
 export interface CustomItemsSelect<T extends boolean = true> {
-  contentType?: T;
   title?: T;
   slug?: T;
   excerpt?: T;
@@ -9045,6 +9042,7 @@ export interface CustomItemsSelect<T extends boolean = true> {
         description?: T;
         image?: T;
       };
+  contentType?: T;
   status?: T;
   publishedAt?: T;
   author?: T;

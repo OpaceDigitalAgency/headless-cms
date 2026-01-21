@@ -114,18 +114,6 @@ export const CustomItems: CollectionConfig = {
     },
   ],
   fields: [
-    // Content Type Reference
-    {
-      name: 'contentType',
-      type: 'relationship',
-      relationTo: 'content-types',
-      required: true,
-      hasMany: false,
-      admin: {
-        description: 'The type of content this item belongs to',
-        position: 'sidebar',
-      },
-    },
     // Standard Fields Tab
     {
       type: 'tabs',
@@ -279,12 +267,19 @@ export const CustomItems: CollectionConfig = {
             },
           ],
         },
-        {
-          label: 'SEO',
-          name: 'meta',
-          fields: [],
-        },
       ],
+    },
+    // Content Type Reference
+    {
+      name: 'contentType',
+      type: 'relationship',
+      relationTo: 'content-types',
+      required: true,
+      hasMany: false,
+      admin: {
+        description: 'The type of content this item belongs to',
+        position: 'sidebar',
+      },
     },
     // Sidebar fields
     {

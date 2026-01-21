@@ -123,18 +123,17 @@ export const Posts: CollectionConfig = {
 
   fields: [
     {
-      name: 'title',
-      type: 'text',
-      required: true,
-      label: 'Post Title',
-    },
-    slugField('title', '/blog'),
-    {
       type: 'tabs',
       tabs: [
         {
           label: 'Content',
           fields: [
+            {
+              name: 'title',
+              type: 'text',
+              required: true,
+              label: 'Post Title',
+            },
             {
               name: 'featuredImage',
               type: 'upload',
@@ -230,10 +229,9 @@ export const Posts: CollectionConfig = {
             },
           ],
         },
-        // SEO tab is automatically added by @payloadcms/plugin-seo
-        // Do not define it manually when using tabbedUI: true
       ],
     },
+    slugField('title', '/blog'),
     {
       name: 'template',
       type: 'select',

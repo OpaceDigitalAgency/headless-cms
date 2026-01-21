@@ -18,7 +18,6 @@ import {
   publishedAtField,
   featuredField,
   templateField,
-  seoTabFields,
   richContentField,
 } from '../shared-fields'
 
@@ -70,14 +69,13 @@ export const blogPostTemplate: CollectionTemplate = {
   ],
 
   fields: [
-    titleField('Post Title'),
-    slugField('title', '/blog'),
     {
       type: 'tabs',
       tabs: [
         {
           label: 'Content',
           fields: [
+            titleField('Post Title'),
             featuredImageField,
             excerptField('Excerpt'),
             richContentField('Main Content'),
@@ -101,13 +99,9 @@ export const blogPostTemplate: CollectionTemplate = {
             },
           ],
         },
-        {
-          label: 'SEO',
-          name: 'meta',
-          fields: seoTabFields,
-        },
       ],
     },
+    slugField('title', '/blog'),
     authorField,
     publishedAtField,
     featuredField,

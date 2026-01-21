@@ -4,7 +4,7 @@ import { getSettings, getHeader, getFooter } from '@/lib/payload-api'
 import { Header } from '@/components/Header'
 import { Footer } from '@/components/Footer'
 import { LivePreviewListener } from '@/components/LivePreviewListener'
-import { ThemeProvider } from '@repo/ui'
+import { ThemeProvider } from '@repo/ui/components/ThemeProvider'
 import '@/styles/globals.css'
 
 export async function generateMetadata(): Promise<Metadata> {

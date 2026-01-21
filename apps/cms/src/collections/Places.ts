@@ -100,24 +100,23 @@ export const Places: CollectionConfig = {
 
   fields: [
     {
-      name: 'name',
-      type: 'text',
-      required: true,
-      label: 'Place Name',
-    },
-    slugField('name'),
-    {
-      name: 'featuredImage',
-      type: 'upload',
-      relationTo: 'media',
-      label: 'Featured Image',
-    },
-    {
       type: 'tabs',
       tabs: [
         {
           label: 'Details',
           fields: [
+            {
+              name: 'name',
+              type: 'text',
+              required: true,
+              label: 'Place Name',
+            },
+            {
+              name: 'featuredImage',
+              type: 'upload',
+              relationTo: 'media',
+              label: 'Featured Image',
+            },
             {
               name: 'shortDescription',
               type: 'textarea',
@@ -369,13 +368,9 @@ export const Places: CollectionConfig = {
             },
           ],
         },
-        {
-          label: 'SEO',
-          name: 'meta',
-          fields: [],
-        },
       ],
     },
+    slugField('name'),
     {
       name: 'template',
       type: 'select',

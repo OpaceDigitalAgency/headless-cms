@@ -31,28 +31,26 @@ interface ThemeProviderProps {
  * - Persistence via localStorage
  * - No FOUC (Flash of Unstyled Content)
  */
-export function ThemeProvider({ 
-  children, 
+export function ThemeProvider({
+  children,
   defaultSkin = 'minimal',
   defaultMode = 'system'
 }: ThemeProviderProps) {
   const [skin, setSkinState] = useState<Skin>(defaultSkin)
   const [mounted, setMounted] = useState(false)
 
-  // Load saved skin preference on mount
+  // Initialize on mount - always use the admin's defaultSkin setting
+  // The skin is controlled by the admin in Settings, not by user preference
   useEffect(() => {
     setMounted(true)
-    const savedSkin = localStorage.getItem('theme-skin') as Skin | null
-    if (savedSkin && SKINS.includes(savedSkin)) {
-      setSkinState(savedSkin)
-    }
-  }, [])
+    // Always apply the admin's default skin
+    setSkinState(defaultSkin)
+  }, [defaultSkin])
 
   // Apply skin to document
   useEffect(() => {
     if (!mounted) return
     document.documentElement.setAttribute('data-skin', skin)
-    localStorage.setItem('theme-skin', skin)
   }, [skin, mounted])
 
   return (

@@ -19,7 +19,6 @@ import {
   tagsField,
   featuredField,
   templateField,
-  seoTabFields,
   richContentField,
 } from '../shared-fields'
 
@@ -62,14 +61,13 @@ export const eventTemplate: CollectionTemplate = {
   ],
   
   fields: [
-    titleField('Event Title'),
-    slugField('title', '/events'),
     {
       type: 'tabs',
       tabs: [
         {
           label: 'Details',
           fields: [
+            titleField('Event Title'),
             featuredImageField,
             excerptField('Short Description'),
             richContentField('Full Description'),
@@ -294,13 +292,9 @@ export const eventTemplate: CollectionTemplate = {
             contentBlocksField,
           ],
         },
-        {
-          label: 'SEO',
-          name: 'meta',
-          fields: seoTabFields,
-        },
       ],
     },
+    slugField('title', '/events'),
     featuredField,
     {
       name: 'eventStatus',

@@ -5,7 +5,7 @@
  */
 
 import type { CollectionTemplate } from '../types'
-import { slugField, featuredField, seoTabFields } from '../shared-fields'
+import { slugField, featuredField } from '../shared-fields'
 
 export const productCollectionTemplate: CollectionTemplate = {
   id: 'product-collection',
@@ -47,18 +47,17 @@ export const productCollectionTemplate: CollectionTemplate = {
 
   fields: [
     {
-      name: 'name',
-      type: 'text',
-      label: 'Collection Name',
-      required: true,
-    },
-    slugField('name'),
-    {
       type: 'tabs',
       tabs: [
         {
           label: 'Details',
           fields: [
+            {
+              name: 'name',
+              type: 'text',
+              label: 'Collection Name',
+              required: true,
+            },
             {
               name: 'description',
               type: 'richText',
@@ -180,13 +179,9 @@ export const productCollectionTemplate: CollectionTemplate = {
             },
           ],
         },
-        {
-          label: 'SEO',
-          name: 'meta',
-          fields: seoTabFields,
-        },
       ],
     },
+    slugField('name'),
     featuredField,
     {
       name: 'showInNavigation',

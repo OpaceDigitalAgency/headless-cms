@@ -44,21 +44,22 @@ export function ThemeSwitcher({ className = '' }: ThemeSwitcherProps) {
   }
 
   return (
-    <div className={`flex flex-col gap-4 ${className}`}>
+    <div className={`flex flex-col gap-6 ${className}`}>
       <div>
-        <label htmlFor="skin-select" className="block text-sm font-medium mb-2">
+        <label htmlFor="skin-select" className="block text-sm font-semibold mb-3">
           Theme Skin
         </label>
         <select
           id="skin-select"
           value={skin}
           onChange={(e) => setSkin(e.target.value as Skin)}
-          className="w-full rounded-lg border px-3 py-2 text-sm"
+          className="w-full rounded-md border-2 px-4 py-2.5 text-sm font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2"
           style={{
             borderColor: `rgb(var(--color-border))`,
             backgroundColor: `rgb(var(--color-card))`,
             color: `rgb(var(--color-foreground))`,
-          }}
+            '--tw-ring-color': `rgb(var(--color-accent))`,
+          } as React.CSSProperties}
         >
           {SKINS.map((s) => (
             <option key={s} value={s}>
@@ -69,19 +70,20 @@ export function ThemeSwitcher({ className = '' }: ThemeSwitcherProps) {
       </div>
 
       <div>
-        <label htmlFor="mode-select" className="block text-sm font-medium mb-2">
+        <label htmlFor="mode-select" className="block text-sm font-semibold mb-3">
           Colour Mode
         </label>
         <select
           id="mode-select"
           value={theme}
           onChange={(e) => setTheme(e.target.value)}
-          className="w-full rounded-lg border px-3 py-2 text-sm"
+          className="w-full rounded-md border-2 px-4 py-2.5 text-sm font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2"
           style={{
             borderColor: `rgb(var(--color-border))`,
             backgroundColor: `rgb(var(--color-card))`,
             color: `rgb(var(--color-foreground))`,
-          }}
+            '--tw-ring-color': `rgb(var(--color-accent))`,
+          } as React.CSSProperties}
         >
           {MODES.map((m) => (
             <option key={m.value} value={m.value}>
@@ -91,8 +93,8 @@ export function ThemeSwitcher({ className = '' }: ThemeSwitcherProps) {
         </select>
       </div>
 
-      <div className="text-xs" style={{ color: `rgb(var(--color-muted))` }}>
-        Current: {SKIN_LABELS[skin]} • {MODES.find(m => m.value === theme)?.label || 'System'}
+      <div className="text-xs font-medium pt-2 border-t" style={{ color: `rgb(var(--color-muted))`, borderColor: `rgb(var(--color-border))` }}>
+        <span className="block">Current: <strong>{SKIN_LABELS[skin]}</strong> • <strong>{MODES.find(m => m.value === theme)?.label || 'System'}</strong></span>
       </div>
     </div>
   )

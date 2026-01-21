@@ -85,18 +85,17 @@ export const ProductCollections: CollectionConfig = {
 
   fields: [
     {
-      name: 'name',
-      type: 'text',
-      required: true,
-      label: 'Collection Name',
-    },
-    slugField('name'),
-    {
       type: 'tabs',
       tabs: [
         {
           label: 'Details',
           fields: [
+            {
+              name: 'name',
+              type: 'text',
+              required: true,
+              label: 'Collection Name',
+            },
             {
               name: 'description',
               type: 'richText',
@@ -218,13 +217,9 @@ export const ProductCollections: CollectionConfig = {
             },
           ],
         },
-        {
-          label: 'SEO',
-          name: 'meta',
-          fields: [],
-        },
       ],
     },
+    slugField('name'),
     {
       name: 'featured',
       type: 'checkbox',

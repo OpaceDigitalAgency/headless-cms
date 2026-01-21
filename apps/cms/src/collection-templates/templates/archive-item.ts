@@ -22,7 +22,6 @@ import {
   publishedAtField,
   featuredField,
   templateField,
-  seoTabFields,
   richContentField,
   mediaGalleryField,
 } from '../shared-fields'
@@ -116,14 +115,13 @@ export const archiveItemTemplate: CollectionTemplate = {
   ],
   
   fields: [
-    titleField('Item Title'),
-    slugField('title', '/archive-items'),
     {
       type: 'tabs',
       tabs: [
         {
           label: 'Details',
           fields: [
+            titleField('Item Title'),
             featuredImageField,
             excerptField('Short Description'),
             richContentField('Full Description'),
@@ -225,13 +223,9 @@ export const archiveItemTemplate: CollectionTemplate = {
             contentBlocksField,
           ],
         },
-        {
-          label: 'SEO',
-          name: 'meta',
-          fields: seoTabFields,
-        },
       ],
     },
+    slugField('title', '/archive-items'),
     featuredField,
     {
       name: 'onDisplay',
