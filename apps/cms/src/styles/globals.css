@@ -348,28 +348,28 @@
      Skin: Neon Grid
      =========================================== */
   [data-skin="neon-grid"] {
-    --font-sans: 'Space Grotesk', 'Inter', system-ui, sans-serif;
-    --font-serif: 'Space Grotesk', 'Inter', system-ui, sans-serif;
+    --font-sans: 'Manrope', 'Inter', system-ui, sans-serif;
+    --font-serif: 'Manrope', 'Inter', system-ui, sans-serif;
 
     /* Light mode (intentionally dark for this skin) */
-    --color-background: 5 8 10;
-    --color-foreground: 236 255 248;
-    --color-muted: 148 170 164;
-    --color-border: 28 38 42;
-    --color-card: 10 16 20;
-    --color-accent: 16 185 129;
-    --color-accent-light: 45 212 191;
+    --color-background: 5 6 12;
+    --color-foreground: 235 240 255;
+    --color-muted: 136 146 170;
+    --color-border: 24 28 44;
+    --color-card: 10 12 20;
+    --color-accent: 99 102 241;
+    --color-accent-light: 56 189 248;
 
     --radius: 1.5rem;
-    --shadow: 0 20px 60px -40px rgb(16 185 129 / 0.65);
-    --shadow-lg: 0 30px 70px -35px rgb(45 212 191 / 0.6);
+    --shadow: 0 20px 60px -40px rgb(99 102 241 / 0.6);
+    --shadow-lg: 0 30px 70px -35px rgb(56 189 248 / 0.6);
     --border-width: 1px;
     --letter-spacing: -0.01em;
     --skin-bg-image:
-      radial-gradient(circle at 15% -10%, rgb(16 185 129 / 0.25), transparent 45%),
-      radial-gradient(circle at 85% 0%, rgb(45 212 191 / 0.12), transparent 40%),
-      linear-gradient(to right, rgb(31 41 55 / 0.55) 1px, transparent 1px),
-      linear-gradient(to bottom, rgb(31 41 55 / 0.55) 1px, transparent 1px);
+      radial-gradient(circle at 12% -10%, rgb(99 102 241 / 0.28), transparent 45%),
+      radial-gradient(circle at 90% 0%, rgb(56 189 248 / 0.18), transparent 40%),
+      linear-gradient(to right, rgb(30 41 59 / 0.65) 1px, transparent 1px),
+      linear-gradient(to bottom, rgb(30 41 59 / 0.65) 1px, transparent 1px);
     --skin-bg-size: auto, auto, 4rem 4rem, 4rem 4rem;
     --skin-bg-position: top left;
     --skin-bg-repeat: no-repeat, no-repeat, repeat, repeat;
@@ -377,18 +377,69 @@
   }
 
   [data-skin="neon-grid"].dark {
-    --color-background: 2 6 10;
-    --color-foreground: 241 255 250;
-    --color-muted: 148 170 164;
+    --color-background: 3 5 10;
+    --color-foreground: 238 244 255;
+    --color-muted: 136 146 170;
+    --color-border: 18 22 34;
+    --color-card: 8 10 16;
+    --color-accent: 99 102 241;
+    --color-accent-light: 56 189 248;
+    --skin-bg-image:
+      radial-gradient(circle at 12% -10%, rgb(99 102 241 / 0.32), transparent 45%),
+      radial-gradient(circle at 90% 0%, rgb(56 189 248 / 0.22), transparent 40%),
+      linear-gradient(to right, rgb(15 23 42 / 0.8) 1px, transparent 1px),
+      linear-gradient(to bottom, rgb(15 23 42 / 0.8) 1px, transparent 1px);
+    --skin-bg-size: auto, auto, 4rem 4rem, 4rem 4rem;
+    --skin-bg-position: top left;
+    --skin-bg-repeat: no-repeat, no-repeat, repeat, repeat;
+    --skin-bg-attachment: fixed;
+  }
+
+  /* ===========================================
+     Skin: Agency
+     =========================================== */
+  [data-skin="agency"] {
+    --font-sans: 'Space Grotesk', 'Inter', system-ui, sans-serif;
+    --font-serif: 'Space Grotesk', 'Inter', system-ui, sans-serif;
+
+    /* Light mode (intentionally dark for this skin) */
+    --color-background: 4 6 8;
+    --color-foreground: 234 255 248;
+    --color-muted: 132 157 150;
+    --color-border: 28 36 40;
+    --color-card: 10 14 18;
+    --color-accent: 16 185 129;
+    --color-accent-light: 45 212 191;
+
+    --radius: 1.5rem;
+    --shadow: 0 20px 60px -40px rgb(16 185 129 / 0.65);
+    --shadow-lg: 0 30px 80px -40px rgb(16 185 129 / 0.7);
+    --border-width: 1px;
+    --letter-spacing: -0.015em;
+    --skin-bg-image:
+      radial-gradient(circle at 18% -10%, rgb(16 185 129 / 0.28), transparent 45%),
+      radial-gradient(circle at 85% 0%, rgb(45 212 191 / 0.16), transparent 40%),
+      linear-gradient(to right, rgb(31 41 55 / 0.7) 1px, transparent 1px),
+      linear-gradient(to bottom, rgb(31 41 55 / 0.7) 1px, transparent 1px);
+    --skin-bg-size: auto, auto, 4rem 4rem, 4rem 4rem;
+    --skin-bg-position: top left;
+    --skin-bg-repeat: no-repeat, no-repeat, repeat, repeat;
+    --skin-bg-attachment: fixed;
+  }
+
+  [data-skin="agency"].dark {
+    --color-background: 2 5 8;
+    --color-foreground: 238 255 250;
+    --color-muted: 132 157 150;
     --color-border: 18 26 30;
     --color-card: 8 12 16;
     --color-accent: 16 185 129;
     --color-accent-light: 45 212 191;
     --skin-bg-image:
-      radial-gradient(circle at 15% -10%, rgb(16 185 129 / 0.3), transparent 45%),
-      radial-gradient(circle at 85% 0%, rgb(45 212 191 / 0.18), transparent 40%),
-      linear-gradient(to right, rgb(17 24 39 / 0.75) 1px, transparent 1px),
-      linear-gradient(to bottom, rgb(17 24 39 / 0.75) 1px, transparent 1px);
+      radial-gradient(circle at 18% -10%, rgb(16 185 129 / 0.32), transparent 45%),
+      radial-gradient(circle at 85% 0%, rgb(45 212 191 / 0.2), transparent 40%),
+      linear-gradient(to right, rgb(17 24 39 / 0.8) 1px, transparent 1px),
+      linear-gradient(to bottom, rgb(17 24 39 / 0.8) 1px, transparent 1px);
     --skin-bg-size: auto, auto, 4rem 4rem, 4rem 4rem;
     --skin-bg-position: top left;
     --skin-bg-repeat: no-repeat, no-repeat, repeat, repeat;
@@ -692,26 +743,62 @@
   }
 
   [data-skin="neon-grid"] .card {
-    background: linear-gradient(145deg, rgb(10 16 20), rgb(5 10 12)) !important;
-    border-color: rgb(32 48 52) !important;
-    box-shadow: 0 25px 80px -50px rgb(16 185 129 / 0.8) !important;
+    background: linear-gradient(145deg, rgb(12 16 28), rgb(8 10 18)) !important;
+    border-color: rgb(30 41 59) !important;
+    box-shadow: 0 25px 80px -50px rgb(99 102 241 / 0.7) !important;
   }
 
   [data-skin="neon-grid"] .btn-primary {
-    background-image: linear-gradient(120deg, rgb(16 185 129), rgb(20 184 166)) !important;
+    background-image: linear-gradient(120deg, rgb(99 102 241), rgb(56 189 248)) !important;
     border-color: transparent !important;
-    color: rgb(3 7 10) !important;
-    box-shadow: 0 0 25px rgb(16 185 129 / 0.45) !important;
+    color: rgb(6 9 18) !important;
+    box-shadow: 0 0 25px rgb(99 102 241 / 0.45) !important;
   }
 
   [data-skin="neon-grid"] .btn-secondary,
   [data-skin="neon-grid"] .btn-outline {
-    border-color: rgb(32 48 52) !important;
-    background-color: rgb(7 12 14 / 0.75) !important;
-    color: rgb(236 255 248) !important;
+    border-color: rgb(30 41 59) !important;
+    background-color: rgb(8 12 18 / 0.75) !important;
+    color: rgb(235 240 255) !important;
   }
 
   [data-skin="neon-grid"] a {
+    color: rgb(var(--color-accent)) !important;
+  }
+
+  [data-skin="agency"] h1,
+  [data-skin="agency"] h2,
+  [data-skin="agency"] h3 {
+    font-family: var(--font-sans) !important;
+    letter-spacing: -0.03em !important;
+  }
+
+  [data-skin="agency"] .card {
+    background: linear-gradient(145deg, rgb(10 16 20), rgb(6 9 12)) !important;
+    border-color: rgb(32 46 52) !important;
+    box-shadow: 0 25px 90px -50px rgb(16 185 129 / 0.9) !important;
+  }
+
+  [data-skin="agency"] .btn {
+    border-radius: 9999px !important;
+    font-weight: 700;
+  }
+
+  [data-skin="agency"] .btn-primary {
+    background-image: linear-gradient(120deg, rgb(16 185 129), rgb(20 184 166)) !important;
+    border-color: transparent !important;
+    color: rgb(3 7 10) !important;
+    box-shadow: 0 0 28px rgb(16 185 129 / 0.5) !important;
+  }
+
+  [data-skin="agency"] .btn-secondary,
+  [data-skin="agency"] .btn-outline {
+    border-color: rgb(32 46 52) !important;
+    background-color: rgb(7 11 14 / 0.7) !important;
+    color: rgb(236 255 248) !important;
+  }
+
+  [data-skin="agency"] a {
     color: rgb(var(--color-accent)) !important;
   }
 
@@ -724,6 +811,78 @@
   [data-skin="bold"] h6 {
     font-weight: 900 !important;
     letter-spacing: 0.05em !important;
+  }
+}
+
+@keyframes blob {
+  0%, 100% { transform: translate(0px, 0px) scale(1); }
+  33% { transform: translate(30px, -50px) scale(1.1); }
+  66% { transform: translate(-20px, 20px) scale(0.9); }
+}
+
+@keyframes gradient-shift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+@keyframes text-shimmer {
+  0%, 100% { opacity: 0.7; }
+  50% { opacity: 1; }
+}
+
+@keyframes pulse-slow {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.8; }
+}
+
+@keyframes button-glow {
+  0%, 100% { box-shadow: 0 0 20px rgb(16 185 129 / 0.5); }
+  50% { box-shadow: 0 0 40px rgb(16 185 129 / 0.8); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-20px); }
+}
+
+@keyframes rotate-slow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.animate-blob { animation: blob 7s infinite; }
+.animate-blob-delayed-2 { animation: blob 7s infinite 2s; }
+.animate-blob-delayed-4 { animation: blob 7s infinite 4s; }
+.animate-blob-slow { animation: blob 10s infinite; }
+.animate-blob-slower { animation: blob 12s infinite 3s; }
+.animate-blob-slowest { animation: blob 15s infinite; }
+.animate-blob-9s { animation: blob 9s infinite; }
+.animate-blob-11s { animation: blob 11s infinite 2s; }
+.animate-gradient-x { animation: gradient-shift 8s ease infinite; }
+.animate-text-shimmer { animation: text-shimmer 3s ease-in-out infinite; }
+.animate-pulse-slow { animation: pulse-slow 3s ease-in-out infinite; }
+.animate-button-glow { animation: button-glow 2s ease-in-out infinite; }
+.animate-float { animation: float 3s ease-in-out infinite; }
+.animate-rotate-slow { animation: rotate-slow 20s linear infinite; }
+.animate-rotate-reverse { animation: rotate-slow 20s linear infinite reverse; }
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-blob,
+  .animate-blob-delayed-2,
+  .animate-blob-delayed-4,
+  .animate-blob-slow,
+  .animate-blob-slower,
+  .animate-blob-slowest,
+  .animate-blob-9s,
+  .animate-blob-11s,
+  .animate-gradient-x,
+  .animate-text-shimmer,
+  .animate-pulse-slow,
+  .animate-button-glow,
+  .animate-float,
+  .animate-rotate-slow,
+  .animate-rotate-reverse {
+    animation: none !important;
   }
 }
 
@@ -755,6 +914,10 @@
 
   [data-skin="high-contrast"] .container {
     max-width: 72rem;
+  }
+
+  [data-skin="agency"] .container {
+    max-width: 80rem;
   }
 
   /* Buttons */

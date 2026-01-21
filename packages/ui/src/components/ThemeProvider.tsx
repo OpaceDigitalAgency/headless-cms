@@ -13,6 +13,7 @@ const SKINS = [
   'glass',
   'high-contrast',
   'neon-grid',
+  'agency',
 ] as const
 
 type Skin = typeof SKINS[number]

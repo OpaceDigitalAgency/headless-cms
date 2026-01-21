@@ -14,6 +14,7 @@ const SKIN_LABELS: Record<Skin, string> = {
   glass: 'Glass',
   'high-contrast': 'High Contrast',
   'neon-grid': 'Neon Grid',
+  agency: 'Agency',
 }
 
 const MODES = [
