@@ -19,6 +19,8 @@ export interface SeedOptions {
   collections?: string[]
   /** Number of items to create per collection */
   itemCounts?: Record<string, number>
+  /** Seed only a specific item by slug */
+  seedOnlyItem?: string
 }
 
 /**
@@ -296,6 +298,16 @@ export abstract class BaseSeeder {
   protected shouldSeedCollection(collection: string): boolean {
     if (this.options.collections && this.options.collections.length > 0) {
       return this.options.collections.includes(collection)
+    }
+    return true
+  }
+
+  /**
+   * Check if a specific item should be seeded
+   */
+  protected shouldSeedItem(itemSlug: string): boolean {
+    if (this.options.seedOnlyItem) {
+      return this.options.seedOnlyItem === itemSlug
     }
     return true
   }

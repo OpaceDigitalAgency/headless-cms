@@ -711,20 +711,25 @@ export const seedItemEndpoint: Endpoint = {
         )
       }
 
-      // Check if any items already exist in this collection
+      // Check if this specific item already exists
       const existing = await payload.find({
         collection: collectionSlug as any,
+        where: {
+          slug: {
+            equals: itemSlug,
+          },
+        },
         limit: 1,
       })
 
       if (existing.docs.length > 0) {
         return Response.json(
-          { success: false, message: `Collection already has seeded data. Clear it first to reseed.` },
+          { success: false, message: `"${seedItem.title}" already exists. Delete it first to reseed.` },
           { status: 409 }
         )
       }
 
-      // Seed the entire collection
+      // Seed only this specific item
       const presetToUse = presetId || COLLECTION_PRESET_OVERRIDES[collectionSlug] || 'blog-astro'
 
       if (!isValidPresetId(presetToUse)) {
@@ -736,13 +741,14 @@ export const seedItemEndpoint: Endpoint = {
 
       const seeder = createSeeder(presetToUse as any, payload, {
         collections: [collectionSlug],
+        seedOnlyItem: itemSlug, // Pass the specific item to seed
       })
 
       await seeder.seed()
 
       return Response.json({
         success: true,
-        message: `Successfully seeded "${seedItem.title}" and all related items`,
+        message: `Successfully seeded "${seedItem.title}"`,
       })
     } catch (error) {
       payload.logger.error('Seed item action failed:', error)
