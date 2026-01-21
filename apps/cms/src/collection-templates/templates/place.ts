@@ -39,6 +39,29 @@ export const placeTemplate: CollectionTemplate = {
   hasSeedData: true,
   hasSeedMedia: true,
   seedDataCount: 5,
+  seedItems: [
+    {
+      title: 'Florence, Italy',
+      slug: 'florence-italy',
+      excerpt: 'Birthplace of the Renaissance and a hub of artistic innovation.',
+      content: 'Landmarks, museums, and cultural heritage across the historic center.',
+      status: 'published',
+    },
+    {
+      title: 'Rome, Italy',
+      slug: 'rome-italy',
+      excerpt: 'The Eternal City, center of the Roman Empire and the Catholic Church.',
+      content: 'Historic sites, classical architecture, and cultural institutions.',
+      status: 'published',
+    },
+    {
+      title: 'Paris, France',
+      slug: 'paris-france',
+      excerpt: 'The City of Light, a global center for art, fashion, and culture.',
+      content: 'Museums, galleries, and a long tradition of modern art movements.',
+      status: 'published',
+    },
+  ],
   
   fields: [
     nameField('Place Name'),

@@ -38,6 +38,29 @@ export const productTemplate: CollectionTemplate = {
   hasSeedData: true,
   hasSeedMedia: true,
   seedDataCount: 12,
+  seedItems: [
+    {
+      title: 'Wireless Bluetooth Headphones',
+      slug: 'wireless-bluetooth-headphones',
+      excerpt: 'Premium wireless headphones with noise cancellation.',
+      content: 'Immersive audio with long battery life and comfortable fit.',
+      status: 'published',
+    },
+    {
+      title: 'Classic Cotton T-Shirt',
+      slug: 'classic-cotton-tshirt',
+      excerpt: 'Comfortable 100% cotton t-shirt in multiple colors.',
+      content: 'Soft organic cotton with a durable, classic fit.',
+      status: 'published',
+    },
+    {
+      title: 'Smart Home Hub',
+      slug: 'smart-home-hub',
+      excerpt: 'Control all your smart devices from one central hub.',
+      content: 'Voice-enabled control with wide device compatibility.',
+      status: 'published',
+    },
+  ],
   
   fields: [
     titleField('Product Name'),

@@ -26,6 +26,19 @@ export const faqTemplate: CollectionTemplate = {
       slug: 'how-do-i-get-started',
       excerpt: 'Simple steps to begin using the platform.',
       content: 'Create your first content type, seed example data, and publish your first page.',
+      blocks: [
+        {
+          blockType: 'grid',
+          heading: 'Quick Start Checklist',
+          style: 'cards',
+          columns: '3',
+          items: [
+            { title: 'Create', description: 'Add a collection from templates.' },
+            { title: 'Seed', description: 'Generate sample content.' },
+            { title: 'Publish', description: 'Make your first page live.' },
+          ],
+        },
+      ],
       status: 'published',
     },
     {
@@ -33,6 +46,18 @@ export const faqTemplate: CollectionTemplate = {
       slug: 'can-i-customize-fields',
       excerpt: 'Extend content types with custom fields.',
       content: 'Yes. Add fields in Content Types to match your content model.',
+      blocks: [
+        {
+          blockType: 'features',
+          heading: 'Custom Field Ideas',
+          layout: 'grid',
+          items: [
+            { title: 'Metadata', description: 'Add ratings, dates, and tags.' },
+            { title: 'Relationships', description: 'Connect items and collections.' },
+            { title: 'Layout Blocks', description: 'Build rich page sections.' },
+          ],
+        },
+      ],
       status: 'published',
     },
     {
@@ -40,6 +65,17 @@ export const faqTemplate: CollectionTemplate = {
       slug: 'how-do-i-manage-visibility',
       excerpt: 'Control what appears in navigation.',
       content: 'Use Navigation Settings to show or hide collections.',
+      blocks: [
+        {
+          blockType: 'stats',
+          heading: 'Navigation Controls',
+          stats: [
+            { value: '3', label: 'Menus' },
+            { value: '1', label: 'Toggle' },
+            { value: 'Global', label: 'Scope' },
+          ],
+        },
+      ],
       status: 'published',
     },
   ],

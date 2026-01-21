@@ -21,6 +21,29 @@ export const productCollectionTemplate: CollectionTemplate = {
   hasSeedData: true,
   hasSeedMedia: false,
   seedDataCount: 3,
+  seedItems: [
+    {
+      title: 'Summer Sale',
+      slug: 'summer-sale',
+      excerpt: 'Hot deals for the summer season.',
+      content: 'Discounted products across popular categories.',
+      status: 'published',
+    },
+    {
+      title: 'New Arrivals',
+      slug: 'new-arrivals',
+      excerpt: 'The newest additions to our catalog.',
+      content: 'Latest products, fresh off the shelves.',
+      status: 'published',
+    },
+    {
+      title: 'Best Sellers',
+      slug: 'best-sellers',
+      excerpt: 'Customer favorites and most popular items.',
+      content: 'Top-performing products loved by customers.',
+      status: 'published',
+    },
+  ],
 
   fields: [
     {

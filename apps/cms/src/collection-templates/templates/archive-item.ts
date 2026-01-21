@@ -42,6 +42,29 @@ export const archiveItemTemplate: CollectionTemplate = {
   hasSeedData: true,
   hasSeedMedia: true,
   seedDataCount: 10,
+  seedItems: [
+    {
+      title: 'Leonardo\'s Notebook',
+      slug: 'leonardos-notebook',
+      excerpt: 'Original notebook containing sketches and notes by Leonardo da Vinci.',
+      content: 'A rare notebook showcasing sketches, anatomical studies, and engineering notes.',
+      status: 'published',
+    },
+    {
+      title: 'Renaissance Painting Techniques Manual',
+      slug: 'renaissance-painting-techniques-manual',
+      excerpt: 'A comprehensive guide to painting techniques used during the Renaissance.',
+      content: 'Includes pigment preparation, glazing methods, and workshop practices.',
+      status: 'published',
+    },
+    {
+      title: 'Ancient Roman Coin Collection',
+      slug: 'ancient-roman-coin-collection',
+      excerpt: 'A collection of coins from the Roman Empire period.',
+      content: 'Curated coins featuring emperors, civic iconography, and regional mints.',
+      status: 'published',
+    },
+  ],
   
   fields: [
     titleField('Item Title'),

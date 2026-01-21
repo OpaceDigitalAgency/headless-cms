@@ -19,7 +19,7 @@ export class CoreSeeder extends BaseSeeder {
   }
 
   getCollections(): string[] {
-    return ['pages', 'posts', 'categories', 'people', 'places', 'events', 'archive-items', 'content-types', 'custom-items']
+    return ['pages', 'posts', 'categories', 'tags', 'people', 'places', 'events', 'archive-items', 'content-types', 'custom-items']
   }
 
   async seed(): Promise<void> {
@@ -27,6 +27,7 @@ export class CoreSeeder extends BaseSeeder {
 
     // Seed in dependency order
     const categories = await this.seedCategories()
+    await this.seedTags()
     const places = await this.seedPlaces()
     const people = await this.seedPeople(places)
     await this.seedEvents(places)
@@ -54,6 +55,7 @@ export class CoreSeeder extends BaseSeeder {
     await this.clearCollection('custom-items')
     await this.clearCollection('content-types')
     await this.clearCollection('categories')
+    await this.clearCollection('tags')
 
     this.log('Core preset data cleared!')
   }
@@ -62,6 +64,9 @@ export class CoreSeeder extends BaseSeeder {
     switch (collection) {
       case 'categories':
         await this.seedCategories()
+        return
+      case 'tags':
+        await this.seedTags()
         return
       case 'places':
         await this.seedPlaces()
@@ -113,6 +118,33 @@ export class CoreSeeder extends BaseSeeder {
     }
 
     return categories
+  }
+
+  private async seedTags(): Promise<Record<string, string>> {
+    if (!this.shouldSeedCollection('tags')) {
+      return {}
+    }
+
+    this.log('Seeding tags...')
+
+    const tagData = [
+      { title: 'Restoration', slug: 'restoration', description: 'Updates on preservation work and conservation projects' },
+      { title: 'Behind the Scenes', slug: 'behind-the-scenes', description: 'Process notes from the archive team' },
+      { title: 'New Acquisition', slug: 'new-acquisition', description: 'Recently acquired items and collections' },
+    ]
+
+    const tags: Record<string, string> = {}
+
+    for (const data of tagData.slice(0, this.getItemCount('tags', 3))) {
+      const tag = await this.create('tags', {
+        title: data.title,
+        slug: data.slug,
+        description: data.description,
+      })
+      tags[data.slug] = tag.id
+    }
+
+    return tags
   }
 
   private async seedPlaces(): Promise<Record<string, string>> {
@@ -299,7 +331,92 @@ export class CoreSeeder extends BaseSeeder {
           title: 'Renaissance Wonders',
           slug: 'renaissance-wonders',
           excerpt: 'A curated exhibition of Renaissance masterpieces.',
+          content: createRichTextParagraphs([
+            'A flagship exhibition featuring paintings, sketches, and restored artifacts from the Renaissance.',
+            'Includes curator-led tours, interactive stations, and a digital companion guide.',
+          ]),
+          blocks: [
+            {
+              blockType: 'features',
+              heading: 'Exhibition Focus',
+              layout: 'grid',
+              items: [
+                { title: 'Masterworks', description: 'Signature pieces from leading artists.' },
+                { title: 'Techniques', description: 'Hands-on demos of period methods.' },
+                { title: 'Context', description: 'Social and cultural background panels.' },
+              ],
+            },
+            {
+              blockType: 'stats',
+              heading: 'Visitor Experience',
+              stats: [
+                { value: '45+', label: 'Works' },
+                { value: '8', label: 'Weeks' },
+                { value: '6', label: 'Guided Tours' },
+              ],
+            },
+          ],
           customData: { startDate: '2024-06-01', endDate: '2024-09-30', location: 'Main Gallery' },
+        },
+        {
+          title: 'Modern Perspectives',
+          slug: 'modern-perspectives',
+          excerpt: 'A contemporary lens on classical themes.',
+          content: createRichTextParagraphs([
+            'A rotating exhibition that pairs classical works with contemporary responses.',
+            'Explores reinterpretation, technique, and cultural dialogue.',
+          ]),
+          blocks: [
+            {
+              blockType: 'grid',
+              heading: 'Program Elements',
+              style: 'cards',
+              columns: '3',
+              items: [
+                { title: 'Artist Talks', description: 'Weekly conversations with modern artists.' },
+                { title: 'Studio Visits', description: 'Behind-the-scenes views of active studios.' },
+                { title: 'Interactive Labs', description: 'Hands-on creative sessions.' },
+              ],
+            },
+            {
+              blockType: 'testimonials',
+              heading: 'Audience Notes',
+              items: [
+                { quote: 'A bold reimagining of classical themes.', name: 'Ava Romero', role: 'Visitor' },
+                { quote: 'The dialogue between eras feels immediate.', name: 'Samir Patel', role: 'Educator' },
+              ],
+            },
+          ],
+          customData: { startDate: '2024-10-15', endDate: '2025-01-10', location: 'East Wing' },
+        },
+        {
+          title: 'Archaeology in Focus',
+          slug: 'archaeology-in-focus',
+          excerpt: 'Highlights from our latest excavation research.',
+          content: createRichTextParagraphs([
+            'Showcases new artifacts and findings from recent fieldwork.',
+            'Includes conservation notes, field photography, and site maps.',
+          ]),
+          blocks: [
+            {
+              blockType: 'stats',
+              heading: 'Field Report',
+              stats: [
+                { value: '3', label: 'Sites' },
+                { value: '120', label: 'Artifacts' },
+                { value: '14', label: 'Researchers' },
+              ],
+            },
+            {
+              blockType: 'faq',
+              heading: 'Research FAQs',
+              items: [
+                { question: 'How long was the excavation?', answer: createRichText('The fieldwork ran for 12 weeks.') },
+                { question: 'Are artifacts on display?', answer: createRichText('Yes, select pieces are in Gallery C.') },
+              ],
+            },
+          ],
+          customData: { startDate: '2025-02-01', endDate: '2025-04-30', location: 'Research Gallery' },
         },
       ],
     })
@@ -653,6 +770,29 @@ export class CoreSeeder extends BaseSeeder {
           'This exhibition features over 50 works from the greatest artists of the Renaissance period.',
           'Join us for the opening reception on the first Saturday of next month.',
         ]),
+        contentBlocks: [
+          {
+            blockType: 'grid',
+            heading: 'Opening Night Highlights',
+            description: 'What to expect during the launch event.',
+            style: 'cards',
+            columns: '3',
+            items: [
+              { title: 'Curator Tour', description: 'A guided tour through the new galleries.' },
+              { title: 'Live Music', description: 'String quartet in the main hall.' },
+              { title: 'Reception', description: 'Light refreshments and networking.' },
+            ],
+          },
+          {
+            blockType: 'cta',
+            heading: 'Reserve Your Spot',
+            description: 'Opening night is ticketed and will sell out.',
+            links: [
+              { label: 'Get Tickets', url: '/events/renaissance-art-exhibition', variant: 'primary' },
+            ],
+            backgroundColor: 'primary',
+          },
+        ],
       },
       {
         title: 'Recent Archaeological Discoveries',
@@ -664,6 +804,27 @@ export class CoreSeeder extends BaseSeeder {
           'These findings provide new insights into ancient trade routes and cultural exchanges.',
           'A detailed research paper will be published in the upcoming journal edition.',
         ]),
+        contentBlocks: [
+          {
+            blockType: 'stats',
+            heading: 'Field Notes',
+            stats: [
+              { value: '38', label: 'Artifacts' },
+              { value: '12', label: 'Team Members' },
+              { value: '4', label: 'Sites' },
+            ],
+          },
+          {
+            blockType: 'features',
+            heading: 'Key Insights',
+            layout: 'list',
+            items: [
+              { title: 'Trade Routes', description: 'Evidence of cross-region commerce.' },
+              { title: 'Material Studies', description: 'New pigment analysis techniques.' },
+              { title: 'Cultural Exchange', description: 'Shared motifs across regions.' },
+            ],
+          },
+        ],
       },
       {
         title: 'Family Day at the Archive',
@@ -675,6 +836,20 @@ export class CoreSeeder extends BaseSeeder {
           'Activities include guided tours, hands-on workshops, and special performances.',
           'Admission is free for children under 12 when accompanied by an adult.',
         ]),
+        contentBlocks: [
+          {
+            blockType: 'grid',
+            heading: 'Family Day Schedule',
+            style: 'cards',
+            columns: '2',
+            items: [
+              { title: '10:00 AM', description: 'Interactive gallery tour.' },
+              { title: '12:00 PM', description: 'Storytelling in the courtyard.' },
+              { title: '2:00 PM', description: 'Hands-on art workshop.' },
+              { title: '4:00 PM', description: 'Live performance.' },
+            ],
+          },
+        ],
       },
     ]
 
@@ -685,6 +860,7 @@ export class CoreSeeder extends BaseSeeder {
           slug: post.slug,
           excerpt: post.excerpt,
           content: post.content,
+          contentBlocks: post.contentBlocks,
           categories: categories[post.category] ? [categories[post.category]] : [],
           author: adminId,
         _status: 'published',
@@ -753,45 +929,180 @@ export class CoreSeeder extends BaseSeeder {
         title: 'Renaissance Art Exhibition',
         slug: 'renaissance-art-exhibition',
         excerpt: 'A comprehensive exhibition showcasing masterpieces from the Renaissance period.',
+        richContent: createRichTextParagraphs([
+          'Experience a curated journey through Renaissance masterworks.',
+          'Highlights include rare sketches, restored paintings, and interactive gallery talks.',
+          'Timed entry is available throughout the exhibition run.',
+        ]),
         eventType: 'exhibition',
         startDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(), // 30 days from now
         endDate: new Date(Date.now() + 120 * 24 * 60 * 60 * 1000).toISOString(), // 120 days from now
         venue: places['florence-italy'],
+        capacity: 200,
+        template: 'event',
+        requiresRegistration: true,
+        registrationUrl: 'https://example.com/renaissance-exhibition',
+        price: { isFree: false, amount: 18, currency: 'GBP' },
+        contentBlocks: [
+          {
+            blockType: 'features',
+            heading: 'Exhibition Highlights',
+            layout: 'grid',
+            items: [
+              { title: 'Restored Panels', description: 'Recently conserved works revealed to the public.' },
+              { title: 'Expert Talks', description: 'Weekly curator-led walkthroughs.' },
+              { title: 'Interactive Stations', description: 'Hands-on exploration of technique.' },
+            ],
+          },
+          {
+            blockType: 'stats',
+            heading: 'Visitor Snapshot',
+            stats: [
+              { value: '50+', label: 'Works Displayed' },
+              { value: '12', label: 'Guest Lectures' },
+              { value: '8', label: 'Weeks' },
+            ],
+          },
+        ],
       },
       {
-        title: 'Curator Talk: Ancient Civilisations',
-        slug: 'curator-talk-ancient-civilisations',
-        excerpt: 'Join our lead curator for an in-depth discussion about ancient civilisations.',
-        eventType: 'lecture',
-        startDate: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toISOString(), // 14 days from now
-        endDate: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000 + 2 * 60 * 60 * 1000).toISOString(), // 2 hours later
-      },
-      {
-        title: 'Family Workshop: Pottery Making',
-        slug: 'family-workshop-pottery-making',
-        excerpt: 'Hands-on pottery workshop for families. Learn traditional techniques.',
+        title: 'Ancient Civilizations Workshop',
+        slug: 'ancient-civilizations-workshop',
+        excerpt: 'Hands-on workshop exploring artifacts and techniques from ancient civilizations.',
+        richContent: createRichTextParagraphs([
+          'Join our education team for a hands-on workshop inspired by ancient craftsmanship.',
+          'Participants will explore materials, motifs, and techniques with guided instruction.',
+          'All tools and materials provided.',
+        ]),
         eventType: 'workshop',
-        startDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(), // 7 days from now
-        endDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000 + 3 * 60 * 60 * 1000).toISOString(), // 3 hours later
-        capacity: 20,
-      },
-      {
-        title: 'Museum Night: After Hours Tour',
-        slug: 'after-hours-archive-tour',
-        excerpt: 'Experience the archive in a new light with our exclusive after-hours tour.',
-        eventType: 'tour',
-        startDate: new Date(Date.now() + 21 * 24 * 60 * 60 * 1000).toISOString(), // 21 days from now
-        endDate: new Date(Date.now() + 21 * 24 * 60 * 60 * 1000 + 2 * 60 * 60 * 1000).toISOString(), // 2 hours later
+        startDate: new Date(Date.now() + 15 * 24 * 60 * 60 * 1000).toISOString(), // 15 days from now
+        endDate: new Date(Date.now() + 15 * 24 * 60 * 60 * 1000 + 3 * 60 * 60 * 1000).toISOString(), // 3 hours later
+        venue: places['athens-greece'],
         capacity: 30,
+        template: 'card',
+        requiresRegistration: true,
+        registrationUrl: 'https://example.com/ancient-workshop',
+        price: { isFree: false, amount: 45, currency: 'GBP' },
+        contentBlocks: [
+          {
+            blockType: 'grid',
+            heading: 'Workshop Modules',
+            style: 'cards',
+            columns: '2',
+            items: [
+              { title: 'Clay & Pigments', description: 'Mix and apply natural pigments.' },
+              { title: 'Pattern Studies', description: 'Recreate common ancient motifs.' },
+              { title: 'Artifact Handling', description: 'Learn safe handling practices.' },
+              { title: 'Takeaway Guide', description: 'Templates and resources for later study.' },
+            ],
+          },
+          {
+            blockType: 'cta',
+            heading: 'Reserve Your Spot',
+            description: 'Limited capacity for this hands-on session.',
+            links: [
+              { label: 'Register Now', url: 'https://example.com/ancient-workshop', variant: 'primary' },
+            ],
+            backgroundColor: 'primary',
+          },
+        ],
       },
       {
-        title: 'Classical Music Performance',
-        slug: 'classical-music-performance',
-        excerpt: 'An evening of classical music in the venue\'s grand hall.',
-        eventType: 'performance',
-        startDate: new Date(Date.now() + 45 * 24 * 60 * 60 * 1000).toISOString(), // 45 days from now
-        endDate: new Date(Date.now() + 45 * 24 * 60 * 60 * 1000 + 2 * 60 * 60 * 1000).toISOString(), // 2 hours later
+        title: 'Museum Lecture Series: Art Through the Ages',
+        slug: 'museum-lecture-series-art-ages',
+        excerpt: 'Weekly lecture series exploring the evolution of art across different eras.',
+        richContent: createRichTextParagraphs([
+          'A six-part lecture series covering major movements in art history.',
+          'Sessions include Q&A and curated reading lists.',
+          'Attend in-person or stream live online.',
+        ]),
+        eventType: 'lecture',
+        startDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(), // 7 days from now
+        endDate: new Date(Date.now() + 49 * 24 * 60 * 60 * 1000).toISOString(), // 7 weeks later
+        venue: places['rome-italy'],
         capacity: 100,
+        template: 'calendar',
+        requiresRegistration: true,
+        registrationUrl: 'https://example.com/lecture-series',
+        price: { isFree: true },
+        contentBlocks: [
+          {
+            blockType: 'stats',
+            heading: 'Series Overview',
+            stats: [
+              { value: '6', label: 'Sessions' },
+              { value: '3', label: 'Guest Speakers' },
+              { value: '90m', label: 'Per Session' },
+            ],
+          },
+          {
+            blockType: 'faq',
+            heading: 'Attendance Details',
+            items: [
+              { question: 'Is the series recorded?', answer: createRichText('Yes, recordings are provided within 48 hours.') },
+              { question: 'Can I attend remotely?', answer: createRichText('Yes, livestream access is included with registration.') },
+            ],
+          },
+        ],
+      },
+      {
+        title: 'Family Day at the Museum',
+        slug: 'family-day-museum',
+        excerpt: 'Family-friendly activities, tours, and performances for all ages.',
+        richContent: createRichTextParagraphs([
+          'Bring the whole family for an afternoon of discovery.',
+          'Enjoy interactive tours, crafts, and live performances.',
+          'Activities are included with general admission.',
+        ]),
+        eventType: 'tour',
+        startDate: new Date(Date.now() + 60 * 24 * 60 * 60 * 1000).toISOString(), // 60 days from now
+        endDate: new Date(Date.now() + 60 * 24 * 60 * 60 * 1000 + 5 * 60 * 60 * 1000).toISOString(), // 5 hours later
+        venue: places['paris-france'],
+        capacity: 300,
+        template: 'card',
+        requiresRegistration: false,
+        price: { isFree: true },
+        contentBlocks: [
+          {
+            blockType: 'features',
+            heading: 'What\'s Included',
+            layout: 'grid',
+            items: [
+              { title: 'Interactive Tours', description: 'Guided walks with kid-friendly stories.' },
+              { title: 'Creative Stations', description: 'Hands-on art activities throughout the day.' },
+              { title: 'Live Performances', description: 'Short performances in the main hall.' },
+            ],
+          },
+        ],
+      },
+      {
+        title: 'Contemporary Art Opening',
+        slug: 'contemporary-art-opening',
+        excerpt: 'Opening night for our new contemporary art wing.',
+        richContent: createRichTextParagraphs([
+          'Celebrate the opening of our contemporary art wing.',
+          'Evening includes live music, curator talks, and gallery previews.',
+          'Refreshments provided while supplies last.',
+        ]),
+        eventType: 'opening',
+        startDate: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000).toISOString(), // 90 days from now
+        endDate: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000 + 4 * 60 * 60 * 1000).toISOString(), // 4 hours later
+        venue: places['paris-france'],
+        capacity: 150,
+        template: 'event',
+        requiresRegistration: true,
+        registrationUrl: 'https://example.com/contemporary-opening',
+        price: { isFree: true },
+        contentBlocks: [
+          {
+            blockType: 'testimonials',
+            heading: 'Preview Notes',
+            items: [
+              { quote: 'A vibrant new chapter for contemporary practice.', name: 'Lia Perez', role: 'Curator' },
+              { quote: 'An ambitious and immersive space for new voices.', name: 'Theo Morgan', role: 'Gallery Director' },
+            ],
+          },
+        ],
       },
     ]
 
@@ -800,16 +1111,17 @@ export class CoreSeeder extends BaseSeeder {
         title: event.title,
         slug: event.slug,
         excerpt: event.excerpt,
-        content: createRichTextParagraphs([
-          event.excerpt,
-          'This event offers a unique opportunity to engage with our collection and experts.',
-          'Booking is recommended as spaces are limited.',
-        ]),
+        richContent: event.richContent,
+        contentBlocks: event.contentBlocks,
         eventType: event.eventType,
         startDate: event.startDate,
         endDate: event.endDate,
         venue: event.venue,
         capacity: event.capacity,
+        requiresRegistration: event.requiresRegistration,
+        registrationUrl: event.registrationUrl,
+        price: event.price,
+        template: event.template,
         _status: 'published',
       })
     }
@@ -827,39 +1139,177 @@ export class CoreSeeder extends BaseSeeder {
         title: 'Leonardo\'s Notebook',
         slug: 'leonardos-notebook',
         excerpt: 'Original notebook containing sketches and notes by Leonardo da Vinci.',
-        itemType: 'document',
-        creator: people['leonardo-da-vinci'],
-        origin: places['florence-italy'],
-        dateCreated: '1490-01-01',
+        richContent: createRichTextParagraphs([
+          'A rare notebook showcasing Leonardo\'s detailed sketches and engineering studies.',
+          'Pages feature anatomical notes, mechanical diagrams, and early experiments.',
+        ]),
+        dateCreated: 'circa 1490',
+        dateAcquired: new Date(Date.now() - 365 * 24 * 60 * 60 * 1000).toISOString(),
+        provenance: createRichText('Acquired from a private collection and authenticated in 1987.'),
+        catalogNumber: 'ARC-1490-LEO',
+        creators: [people['leonardo-da-vinci']].filter(Boolean),
+        origins: [places['florence-italy']].filter(Boolean),
+        specifications: {
+          height: '32 cm',
+          width: '22 cm',
+          depth: '4 cm',
+          weight: '1.4 kg',
+          materials: 'Ink on paper, leather binding',
+          condition: 'Excellent',
+        },
+        onDisplay: true,
+        location: 'Gallery A - Renaissance',
+        template: 'detail',
+        contentBlocks: [
+          {
+            blockType: 'features',
+            heading: 'Notebook Highlights',
+            layout: 'grid',
+            items: [
+              { title: 'Anatomy Studies', description: 'Detailed muscle and skeletal drawings.' },
+              { title: 'Flight Concepts', description: 'Early glider and wing experiments.' },
+              { title: 'Hydraulic Designs', description: 'Schematics for pumps and canals.' },
+            ],
+          },
+          {
+            blockType: 'quote',
+            quote: 'Learning never exhausts the mind.',
+            author: 'Leonardo da Vinci',
+            align: 'left',
+          },
+        ],
       },
       {
         title: 'Renaissance Painting Techniques Manual',
         slug: 'renaissance-painting-techniques-manual',
         excerpt: 'A comprehensive guide to painting techniques used during the Renaissance.',
-        itemType: 'document',
-        origin: places['florence-italy'],
-        dateCreated: '1520-01-01',
+        richContent: createRichTextParagraphs([
+          'An instructional manual detailing pigment preparation and glazing methods.',
+          'Includes diagrams and notes on underpainting techniques.',
+        ]),
+        dateCreated: 'circa 1520',
+        dateAcquired: new Date(Date.now() - 730 * 24 * 60 * 60 * 1000).toISOString(),
+        provenance: createRichText('Donated by the Florentine Academy in 1972.'),
+        catalogNumber: 'ARC-1520-REN',
+        origins: [places['florence-italy']].filter(Boolean),
+        specifications: {
+          height: '28 cm',
+          width: '19 cm',
+          depth: '3 cm',
+          materials: 'Manuscript on parchment',
+          condition: 'Good',
+        },
+        template: 'detail',
+        contentBlocks: [
+          {
+            blockType: 'grid',
+            heading: 'Technique Index',
+            description: 'Core practices referenced throughout the manual.',
+            style: 'cards',
+            columns: '3',
+            items: [
+              { title: 'Gesso Prep', description: 'Preparing surfaces for paint layers.' },
+              { title: 'Glazing', description: 'Building depth through transparent layers.' },
+              { title: 'Pigment Mixing', description: 'Balancing mineral pigments and binders.' },
+            ],
+          },
+        ],
       },
       {
         title: 'Ancient Roman Coin Collection',
         slug: 'ancient-roman-coin-collection',
         excerpt: 'A collection of coins from the Roman Empire period.',
-        itemType: 'object',
-        dateCreated: '100-01-01',
+        richContent: createRichTextParagraphs([
+          'A curated selection of Roman coinage featuring emperors and civic iconography.',
+          'Coins highlight shifts in political messaging across decades.',
+        ]),
+        dateCreated: '100-200 CE',
+        dateAcquired: new Date(Date.now() - 1100 * 24 * 60 * 60 * 1000).toISOString(),
+        provenance: createRichText('Recovered during a 1924 archaeological survey.'),
+        catalogNumber: 'ARC-0100-ROM',
+        origins: [places['rome-italy']].filter(Boolean),
+        specifications: {
+          weight: '2.2 kg',
+          materials: 'Silver, bronze',
+          condition: 'Mixed',
+        },
+        template: 'gallery',
+        contentBlocks: [
+          {
+            blockType: 'stats',
+            heading: 'Collection Scope',
+            stats: [
+              { value: '120', label: 'Coins' },
+              { value: '18', label: 'Emperors' },
+              { value: '5', label: 'Mints' },
+            ],
+          },
+        ],
       },
       {
         title: 'Medieval Manuscript',
         slug: 'medieval-manuscript',
         excerpt: 'Illuminated manuscript from the medieval period.',
-        itemType: 'document',
-        dateCreated: '1200-01-01',
+        richContent: createRichTextParagraphs([
+          'Illuminated manuscript featuring elaborate marginalia and gold leaf.',
+          'The text includes a liturgical calendar and devotional readings.',
+        ]),
+        dateCreated: 'circa 1200',
+        dateAcquired: new Date(Date.now() - 820 * 24 * 60 * 60 * 1000).toISOString(),
+        provenance: createRichText('Transferred from the cathedral archive in 1964.'),
+        catalogNumber: 'ARC-1200-MED',
+        origins: [places['rome-italy']].filter(Boolean),
+        specifications: {
+          height: '35 cm',
+          width: '25 cm',
+          materials: 'Vellum, gold leaf, ink',
+          condition: 'Very good',
+        },
+        template: 'detail',
+        contentBlocks: [
+          {
+            blockType: 'features',
+            heading: 'Manuscript Details',
+            layout: 'list',
+            items: [
+              { title: 'Illumination', description: 'Gold leaf and vibrant pigments throughout.' },
+              { title: 'Script', description: 'Gothic textura with rubricated headings.' },
+              { title: 'Marginalia', description: 'Decorative and narrative motifs.' },
+            ],
+          },
+        ],
       },
       {
         title: 'Victorian Era Photographs',
         slug: 'victorian-era-photographs',
         excerpt: 'Collection of photographs from the Victorian era.',
-        itemType: 'photograph',
-        dateCreated: '1880-01-01',
+        richContent: createRichTextParagraphs([
+          'A series of early photographs documenting industrial and social life.',
+          'Includes portraits, cityscapes, and architectural studies.',
+        ]),
+        dateCreated: 'circa 1880',
+        dateAcquired: new Date(Date.now() - 540 * 24 * 60 * 60 * 1000).toISOString(),
+        provenance: createRichText('Acquired from the Harrington Estate in 1999.'),
+        catalogNumber: 'ARC-1880-VIC',
+        origins: [places['paris-france']].filter(Boolean),
+        specifications: {
+          materials: 'Albumen prints on paper',
+          condition: 'Good',
+        },
+        template: 'gallery',
+        contentBlocks: [
+          {
+            blockType: 'grid',
+            heading: 'Series Themes',
+            style: 'cards',
+            columns: '3',
+            items: [
+              { title: 'Portraits', description: 'Studio photography and formal attire.' },
+              { title: 'Industry', description: 'Factories, rail lines, and urban growth.' },
+              { title: 'Architecture', description: 'Public buildings and civic design.' },
+            ],
+          },
+        ],
       },
     ]
 
@@ -868,14 +1318,18 @@ export class CoreSeeder extends BaseSeeder {
         title: item.title,
         slug: item.slug,
         excerpt: item.excerpt,
-        description: createRichTextParagraphs([
-          item.excerpt,
-          'This item is part of our permanent collection and represents an important piece of history.',
-        ]),
-        itemType: item.itemType,
-        creator: item.creator,
-        origin: item.origin,
+        richContent: item.richContent,
+        contentBlocks: item.contentBlocks,
+        specifications: item.specifications,
         dateCreated: item.dateCreated,
+        dateAcquired: item.dateAcquired,
+        provenance: item.provenance,
+        catalogNumber: item.catalogNumber,
+        creators: item.creators,
+        origins: item.origins,
+        onDisplay: item.onDisplay,
+        location: item.location,
+        template: item.template,
         _status: 'published',
       })
     }

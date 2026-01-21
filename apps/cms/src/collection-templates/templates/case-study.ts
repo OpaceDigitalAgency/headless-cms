@@ -26,6 +26,28 @@ export const caseStudyTemplate: CollectionTemplate = {
       slug: 'modernized-ecommerce-stack',
       excerpt: 'A platform refresh that improved conversion and speed.',
       content: 'We streamlined the architecture, improved performance, and lifted conversions.',
+      blocks: [
+        {
+          blockType: 'stats',
+          heading: 'Outcomes',
+          stats: [
+            { value: '2.1x', label: 'Conversion' },
+            { value: '48%', label: 'Faster TTFB' },
+            { value: '30%', label: 'Bounce Drop' },
+          ],
+        },
+        {
+          blockType: 'grid',
+          heading: 'Key Improvements',
+          style: 'cards',
+          columns: '3',
+          items: [
+            { title: 'Architecture', description: 'Simplified deployment and caching.' },
+            { title: 'UX', description: 'Streamlined checkout flow.' },
+            { title: 'Search', description: 'Improved product discovery.' },
+          ],
+        },
+      ],
       status: 'published',
     },
     {
@@ -33,6 +55,25 @@ export const caseStudyTemplate: CollectionTemplate = {
       slug: 'local-brand-relaunch',
       excerpt: 'A refreshed identity and content system for growth.',
       content: 'A new narrative, visual language, and publishing workflow.',
+      blocks: [
+        {
+          blockType: 'features',
+          heading: 'What We Delivered',
+          layout: 'grid',
+          items: [
+            { title: 'Brand System', description: 'Updated identity and guidelines.' },
+            { title: 'Content Model', description: 'Reusable templates and governance.' },
+            { title: 'Launch Plan', description: 'Rollout strategy with milestones.' },
+          ],
+        },
+        {
+          blockType: 'testimonials',
+          heading: 'Client Note',
+          items: [
+            { quote: 'Our team finally has a content system that scales.', name: 'Riley Clarke', role: 'Marketing Lead' },
+          ],
+        },
+      ],
       status: 'published',
     },
     {
@@ -40,6 +81,20 @@ export const caseStudyTemplate: CollectionTemplate = {
       slug: 'service-design-sprint',
       excerpt: 'Rapid validation of a new service offering.',
       content: 'A focused sprint delivered validated concepts and a delivery plan.',
+      blocks: [
+        {
+          blockType: 'grid',
+          heading: 'Sprint Outputs',
+          style: 'cards',
+          columns: '2',
+          items: [
+            { title: 'Prototype', description: 'Interactive flow for testing.' },
+            { title: 'Insights', description: 'User feedback synthesis.' },
+            { title: 'Roadmap', description: 'Delivery phases and scope.' },
+            { title: 'Business Case', description: 'Expected impact and ROI.' },
+          ],
+        },
+      ],
       status: 'published',
     },
   ],

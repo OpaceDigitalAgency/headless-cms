@@ -37,6 +37,29 @@ export const eventTemplate: CollectionTemplate = {
   hasSeedData: true,
   hasSeedMedia: false,
   seedDataCount: 5,
+  seedItems: [
+    {
+      title: 'Renaissance Art Exhibition',
+      slug: 'renaissance-art-exhibition',
+      excerpt: 'A comprehensive exhibition showcasing masterpieces from the Renaissance period.',
+      content: 'Highlights include curated tours, gallery talks, and interactive stations.',
+      status: 'published',
+    },
+    {
+      title: 'Ancient Civilizations Workshop',
+      slug: 'ancient-civilizations-workshop',
+      excerpt: 'Hands-on workshop exploring artifacts and techniques from ancient civilizations.',
+      content: 'Participants explore materials, motifs, and restoration techniques.',
+      status: 'published',
+    },
+    {
+      title: 'Museum Lecture Series: Art Through the Ages',
+      slug: 'museum-lecture-series-art-ages',
+      excerpt: 'Weekly lecture series exploring the evolution of art across different eras.',
+      content: 'Sessions include Q&A and curated reading lists.',
+      status: 'published',
+    },
+  ],
   
   fields: [
     titleField('Event Title'),

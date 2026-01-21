@@ -21,6 +21,29 @@ export const productCategoryTemplate: CollectionTemplate = {
   hasSeedData: true,
   hasSeedMedia: false,
   seedDataCount: 5,
+  seedItems: [
+    {
+      title: 'Electronics',
+      slug: 'electronics',
+      excerpt: 'Gadgets, devices, and tech accessories.',
+      content: 'Headphones, speakers, smart devices, and more.',
+      status: 'published',
+    },
+    {
+      title: 'Clothing',
+      slug: 'clothing',
+      excerpt: 'Apparel and fashion items.',
+      content: 'Essentials, seasonal wear, and accessories.',
+      status: 'published',
+    },
+    {
+      title: 'Home & Garden',
+      slug: 'home-garden',
+      excerpt: 'Furniture, decor, and outdoor items.',
+      content: 'Home office, lounge, and garden essentials.',
+      status: 'published',
+    },
+  ],
 
   fields: [
     {

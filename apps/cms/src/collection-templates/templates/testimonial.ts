@@ -26,6 +26,17 @@ export const testimonialTemplate: CollectionTemplate = {
       slug: 'clear-process-great-outcomes',
       excerpt: '“We shipped faster and with more confidence.”',
       content: '“We shipped faster and with more confidence. The workflow was clear and collaborative.”',
+      blocks: [
+        {
+          blockType: 'stats',
+          heading: 'Impact',
+          stats: [
+            { value: '2x', label: 'Delivery Speed' },
+            { value: '3', label: 'Teams' },
+            { value: '4.8', label: 'Satisfaction' },
+          ],
+        },
+      ],
       status: 'published',
     },
     {
@@ -33,6 +44,18 @@ export const testimonialTemplate: CollectionTemplate = {
       slug: 'content-feels-consistent',
       excerpt: '“Everything looks and feels cohesive now.”',
       content: '“Everything looks and feels cohesive now. The structure is easy to maintain.”',
+      blocks: [
+        {
+          blockType: 'features',
+          heading: 'Why It Worked',
+          layout: 'grid',
+          items: [
+            { title: 'Consistent Templates', description: 'Unified layouts across content.' },
+            { title: 'Clear Governance', description: 'Defined roles and reviews.' },
+            { title: 'Reusable Blocks', description: 'Faster publishing cycles.' },
+          ],
+        },
+      ],
       status: 'published',
     },
     {
@@ -40,6 +63,19 @@ export const testimonialTemplate: CollectionTemplate = {
       slug: 'results-we-could-measure',
       excerpt: '“Engagement increased within weeks.”',
       content: '“Engagement increased within weeks and we now have a clear reporting baseline.”',
+      blocks: [
+        {
+          blockType: 'grid',
+          heading: 'Performance Wins',
+          style: 'stats',
+          columns: '3',
+          items: [
+            { title: 'Engagement', stat: '+28%', description: 'Time on page increase.' },
+            { title: 'Leads', stat: '+18%', description: 'Form conversion lift.' },
+            { title: 'Bounce', stat: '-22%', description: 'Reduced drop-off.' },
+          ],
+        },
+      ],
       status: 'published',
     },
   ],

@@ -489,11 +489,11 @@
 }
 
 .home-sections {
-  @apply space-y-24 py-24;
+  @apply space-y-0 py-0;
 }
 
 .home-section {
-  @apply container;
+  @apply container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-24;
 }
 
 .section-header {

@@ -21,6 +21,29 @@ export const categoryTemplate: CollectionTemplate = {
   hasSeedData: true,
   hasSeedMedia: false,
   seedDataCount: 3,
+  seedItems: [
+    {
+      title: 'Exhibitions',
+      slug: 'exhibitions',
+      excerpt: 'Curated exhibitions and gallery programs.',
+      content: 'Used for exhibition announcements, highlights, and recaps.',
+      status: 'published',
+    },
+    {
+      title: 'Research',
+      slug: 'research',
+      excerpt: 'Field research, archaeology, and academic work.',
+      content: 'Long-form updates and discoveries from research teams.',
+      status: 'published',
+    },
+    {
+      title: 'Events',
+      slug: 'events',
+      excerpt: 'Workshops, lectures, and public programs.',
+      content: 'Event listings, previews, and schedules.',
+      status: 'published',
+    },
+  ],
   
   fields: [
     {

@@ -18,9 +18,32 @@ export const tagTemplate: CollectionTemplate = {
   defaultPlural: 'Tags',
   adminGroup: 'Taxonomy',
   status: 'core', // Tags are a core collection
-  hasSeedData: false,
+  hasSeedData: true,
   hasSeedMedia: false,
-  seedDataCount: 0,
+  seedDataCount: 3,
+  seedItems: [
+    {
+      title: 'Restoration',
+      slug: 'restoration',
+      excerpt: 'Updates and projects related to conservation work.',
+      content: 'Tag for preservation and restoration efforts.',
+      status: 'published',
+    },
+    {
+      title: 'Behind the Scenes',
+      slug: 'behind-the-scenes',
+      excerpt: 'Operational insights and staff perspectives.',
+      content: 'Used for internal processes and studio stories.',
+      status: 'published',
+    },
+    {
+      title: 'New Acquisition',
+      slug: 'new-acquisition',
+      excerpt: 'Recently acquired items and collections.',
+      content: 'Tag for new additions to the archive.',
+      status: 'published',
+    },
+  ],
   
   fields: [
     {
@@ -51,4 +74,3 @@ export const tagTemplate: CollectionTemplate = {
 }
 
 export default tagTemplate
-

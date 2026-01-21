@@ -69,7 +69,7 @@ const getItemUrl = (item: any) => {
   if (collection === 'custom-items') {
     const typeSlug = typeof item.contentType === 'object' ? item.contentType.slug : null;
     const archiveSlug = typeof item.contentType === 'object' ? item.contentType.archiveSlug : null;
-    const resolvedType = archiveSlug ? archiveSlug.replace(/^\\/?items\\//, '') : typeSlug;
+    const resolvedType = archiveSlug ? archiveSlug.replace(/^\/?(items\/)?/, '') : typeSlug;
     if (resolvedType) {
       return `/items/${resolvedType}/${item.slug}`;
     }

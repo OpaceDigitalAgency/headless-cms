@@ -46,7 +46,67 @@ export class EcommerceSeeder extends BaseSeeder {
           title: 'Acme Co.',
           slug: 'acme-co',
           excerpt: 'A trusted brand for everyday products.',
+          content: createRichTextParagraphs([
+            'Acme is known for reliable household essentials and strong customer support.',
+            'Their product line focuses on durable, affordable design.',
+          ]),
+          blocks: [
+            {
+              blockType: 'stats',
+              heading: 'Brand Snapshot',
+              stats: [
+                { value: '1986', label: 'Founded' },
+                { value: '40+', label: 'Countries' },
+                { value: '2M', label: 'Customers' },
+              ],
+            },
+          ],
           customData: { country: 'USA', founded: 1986 },
+        },
+        {
+          title: 'Nordic Supply',
+          slug: 'nordic-supply',
+          excerpt: 'Scandinavian design meets everyday utility.',
+          content: createRichTextParagraphs([
+            'Minimalist design and functional craftsmanship are at the heart of Nordic Supply.',
+            'Their catalog emphasizes sustainable materials and clean aesthetics.',
+          ]),
+          blocks: [
+            {
+              blockType: 'features',
+              heading: 'Brand Values',
+              layout: 'grid',
+              items: [
+                { title: 'Sustainability', description: 'Responsible sourcing and packaging.' },
+                { title: 'Minimalism', description: 'Clean, timeless product design.' },
+                { title: 'Durability', description: 'Built to last with quality materials.' },
+              ],
+            },
+          ],
+          customData: { country: 'Sweden', founded: 1998 },
+        },
+        {
+          title: 'Solara Tech',
+          slug: 'solara-tech',
+          excerpt: 'Smart devices with a renewable-first approach.',
+          content: createRichTextParagraphs([
+            'Solara designs smart home products optimized for energy efficiency.',
+            'Their devices integrate with leading automation platforms.',
+          ]),
+          blocks: [
+            {
+              blockType: 'grid',
+              heading: 'Signature Products',
+              style: 'cards',
+              columns: '3',
+              items: [
+                { title: 'Energy Hub', description: 'Monitors household consumption.' },
+                { title: 'Solar Panel Kit', description: 'Plug-and-play renewable setup.' },
+                { title: 'Smart Thermostat', description: 'Adaptive temperature control.' },
+              ],
+            },
+          ],
+          customData: { country: 'Germany', founded: 2012 },
         },
       ],
     })
@@ -58,7 +118,7 @@ export class EcommerceSeeder extends BaseSeeder {
 
   async clear(): Promise<void> {
     this.log('Clearing ecommerce data...')
-    
+
     // Clear in reverse dependency order
     await this.clearCollection('products')
     await this.clearCollection('product-collections')
@@ -66,8 +126,68 @@ export class EcommerceSeeder extends BaseSeeder {
     await this.clearCollection('pages')
     await this.clearCollection('custom-items')
     await this.clearCollection('content-types')
-    
+
     this.log('Ecommerce data cleared!')
+  }
+
+  public async seedCollection(collection: string): Promise<void> {
+    switch (collection) {
+      case 'product-categories':
+        await this.seedProductCategories()
+        return
+      case 'product-collections':
+        await this.seedProductCollections()
+        return
+      case 'products': {
+        const categories = await this.seedProductCategories()
+        const collections = await this.seedProductCollections()
+        await this.seedProducts(categories, collections)
+        return
+      }
+      case 'pages':
+        await this.seedPages()
+        return
+      case 'content-types':
+      case 'custom-items':
+        await this.seedCustomContentType({
+          name: 'Brands',
+          slug: 'brands',
+          singularLabel: 'Brand',
+          pluralLabel: 'Brands',
+          icon: 'service',
+          template: 'archive-item',
+          customFields: [
+            { name: 'country', label: 'Country', type: 'text', required: true },
+            { name: 'founded', label: 'Founded', type: 'number', required: false },
+          ],
+          items: [
+            {
+              title: 'Acme Co.',
+              slug: 'acme-co',
+              excerpt: 'A trusted brand for everyday products.',
+              content: createRichTextParagraphs([
+                'Acme is known for reliable household essentials and strong customer support.',
+                'Their product line focuses on durable, affordable design.',
+              ]),
+              blocks: [
+                {
+                  blockType: 'stats',
+                  heading: 'Brand Snapshot',
+                  stats: [
+                    { value: '1986', label: 'Founded' },
+                    { value: '40+', label: 'Countries' },
+                    { value: '2M', label: 'Customers' },
+                  ],
+                },
+              ],
+              customData: { country: 'USA', founded: 1986 },
+            },
+          ],
+        })
+        return
+      default:
+        this.log(`No seed handler for collection: ${collection}`)
+    }
   }
 
   private async seedProductCategories(): Promise<Record<string, string>> {
@@ -161,144 +281,302 @@ export class EcommerceSeeder extends BaseSeeder {
 
     const productsData = [
       {
-        name: 'Wireless Bluetooth Headphones',
+        title: 'Wireless Bluetooth Headphones',
         slug: 'wireless-bluetooth-headphones',
         sku: 'ELEC-001',
-        shortDescription: 'Premium wireless headphones with noise cancellation.',
-        description: 'Experience crystal-clear audio with our premium wireless headphones featuring active noise cancellation and 30-hour battery life.',
+        excerpt: 'Premium wireless headphones with noise cancellation.',
+        richContent: createRichTextParagraphs([
+          'Experience crystal-clear audio with premium wireless headphones featuring active noise cancellation.',
+          'Designed for long listening sessions with a 30-hour battery life and comfortable fit.',
+        ]),
         price: 149.99,
         salePrice: 119.99,
         category: 'electronics',
         collections: ['summer-sale', 'best-sellers'],
-        features: ['Active Noise Cancellation', '30-hour Battery Life', 'Bluetooth 5.0', 'Foldable Design'],
-        inStock: true,
-        quantity: 50,
+        stockQuantity: 50,
         featured: true,
+        template: 'featured',
+        contentBlocks: [
+          {
+            blockType: 'features',
+            heading: 'Audio Highlights',
+            layout: 'grid',
+            items: [
+              { title: 'Noise Cancellation', description: 'Adaptive ANC for immersive listening.' },
+              { title: 'Battery', description: 'Up to 30 hours on a single charge.' },
+              { title: 'Connectivity', description: 'Bluetooth 5.0 with multi-device pairing.' },
+            ],
+          },
+          {
+            blockType: 'stats',
+            heading: 'Performance',
+            stats: [
+              { value: '30h', label: 'Battery Life' },
+              { value: '3', label: 'EQ Modes' },
+              { value: '12m', label: 'Range' },
+            ],
+          },
+        ],
       },
       {
-        name: 'Classic Cotton T-Shirt',
+        title: 'Classic Cotton T-Shirt',
         slug: 'classic-cotton-tshirt',
         sku: 'CLTH-001',
-        shortDescription: 'Comfortable 100% cotton t-shirt in multiple colors.',
-        description: 'Our classic cotton t-shirt is made from premium 100% organic cotton for ultimate comfort and durability.',
+        excerpt: 'Comfortable 100% cotton t-shirt in multiple colors.',
+        richContent: createRichTextParagraphs([
+          'A classic fit made from 100% organic cotton for everyday wear.',
+          'Breathable fabric with a soft hand feel and durable stitching.',
+        ]),
         price: 29.99,
         category: 'clothing',
         collections: ['best-sellers'],
-        features: ['100% Organic Cotton', 'Pre-shrunk', 'Machine Washable', 'Available in 8 Colors'],
-        inStock: true,
-        quantity: 200,
-        hasVariants: true,
+        stockQuantity: 200,
+        template: 'standard',
+        variants: [
+          { name: 'Small / Black', sku: 'CLTH-001-S-BLK', price: 29.99, stockQuantity: 60 },
+          { name: 'Medium / White', sku: 'CLTH-001-M-WHT', price: 29.99, stockQuantity: 70 },
+          { name: 'Large / Navy', sku: 'CLTH-001-L-NVY', price: 29.99, stockQuantity: 70 },
+        ],
+        contentBlocks: [
+          {
+            blockType: 'grid',
+            heading: 'Fabric & Fit',
+            style: 'cards',
+            columns: '3',
+            items: [
+              { title: 'Organic Cotton', description: 'Soft, breathable, and responsibly sourced.' },
+              { title: 'Pre-Shrunk', description: 'Holds shape after every wash.' },
+              { title: 'Classic Fit', description: 'A timeless silhouette for everyday wear.' },
+            ],
+          },
+        ],
       },
       {
-        name: 'Smart Home Hub',
+        title: 'Smart Home Hub',
         slug: 'smart-home-hub',
         sku: 'ELEC-002',
-        shortDescription: 'Control all your smart devices from one central hub.',
-        description: 'The ultimate smart home control center. Compatible with over 1000 devices from major brands.',
+        excerpt: 'Control all your smart devices from one central hub.',
+        richContent: createRichTextParagraphs([
+          'The ultimate smart home control center with support for over 1,000 devices.',
+          'Voice-enabled control with a sleek, minimal interface.',
+        ]),
         price: 199.99,
         salePrice: 149.99,
         category: 'electronics',
         collections: ['summer-sale', 'new-arrivals'],
-        features: ['Voice Control', 'Works with Alexa & Google', '1000+ Device Compatibility', 'Easy Setup'],
-        inStock: true,
-        quantity: 30,
+        stockQuantity: 30,
         featured: true,
-        newArrival: true,
+        template: 'featured',
+        contentBlocks: [
+          {
+            blockType: 'features',
+            heading: 'Smart Home Ready',
+            layout: 'grid',
+            items: [
+              { title: 'Voice Control', description: 'Works with Alexa and Google Assistant.' },
+              { title: 'Device Sync', description: 'Connects with 1,000+ devices.' },
+              { title: 'Automation', description: 'Create routines with one tap.' },
+            ],
+          },
+          {
+            blockType: 'stats',
+            heading: 'Compatibility',
+            stats: [
+              { value: '1000+', label: 'Devices' },
+              { value: '3', label: 'Assistants' },
+              { value: '10m', label: 'Setup' },
+            ],
+          },
+        ],
       },
       {
-        name: 'Ergonomic Office Chair',
+        title: 'Ergonomic Office Chair',
         slug: 'ergonomic-office-chair',
         sku: 'HOME-001',
-        shortDescription: 'Premium ergonomic chair for all-day comfort.',
-        description: 'Designed with your comfort in mind, this ergonomic office chair features adjustable lumbar support and breathable mesh back.',
+        excerpt: 'Premium ergonomic chair for all-day comfort.',
+        richContent: createRichTextParagraphs([
+          'Designed with adjustable lumbar support and breathable mesh backing.',
+          'Built for long sessions with multi-position armrests and tilt control.',
+        ]),
         price: 399.99,
         salePrice: 349.99,
         category: 'home-garden',
         collections: ['summer-sale'],
-        features: ['Adjustable Lumbar Support', 'Breathable Mesh', 'Height Adjustable', '5-Year Warranty'],
-        inStock: true,
-        quantity: 15,
+        stockQuantity: 15,
+        template: 'standard',
+        contentBlocks: [
+          {
+            blockType: 'features',
+            heading: 'Comfort Features',
+            layout: 'list',
+            items: [
+              { title: 'Lumbar Support', description: 'Adjustable lumbar support for posture.' },
+              { title: 'Breathable Mesh', description: 'Cooling airflow through the backrest.' },
+              { title: 'Tilt Control', description: 'Lockable recline with tension adjustment.' },
+            ],
+          },
+          {
+            blockType: 'testimonials',
+            heading: 'Customer Feedback',
+            items: [
+              { quote: 'My back feels better after long workdays.', name: 'Jordan Lee', role: 'Remote Designer' },
+            ],
+          },
+        ],
       },
       {
-        name: 'Yoga Mat Premium',
+        title: 'Yoga Mat Premium',
         slug: 'yoga-mat-premium',
         sku: 'SPRT-001',
-        shortDescription: 'Extra thick, non-slip yoga mat for all practices.',
-        description: 'Our premium yoga mat provides the perfect balance of cushioning and stability for any yoga practice.',
+        excerpt: 'Extra thick, non-slip yoga mat for all practices.',
+        richContent: createRichTextParagraphs([
+          'Extra-cushioned mat that keeps you stable across all poses.',
+          'Textured grip and eco-friendly materials for daily practice.',
+        ]),
         price: 49.99,
         category: 'sports-outdoors',
         collections: ['new-arrivals'],
-        features: ['6mm Thick', 'Non-Slip Surface', 'Eco-Friendly Materials', 'Includes Carry Strap'],
-        inStock: true,
-        quantity: 75,
-        newArrival: true,
+        stockQuantity: 75,
+        template: 'standard',
+        contentBlocks: [
+          {
+            blockType: 'grid',
+            heading: 'Practice Ready',
+            style: 'cards',
+            columns: '2',
+            items: [
+              { title: '6mm Cushioning', description: 'Extra support for knees and joints.' },
+              { title: 'Non-Slip Texture', description: 'Stay grounded in every flow.' },
+              { title: 'Eco-Friendly', description: 'Made with responsibly sourced materials.' },
+              { title: 'Carry Strap', description: 'Easy transport to studio or outdoors.' },
+            ],
+          },
+        ],
       },
       {
-        name: 'Bestselling Novel Collection',
+        title: 'Bestselling Novel Collection',
         slug: 'bestselling-novel-collection',
         sku: 'BOOK-001',
-        shortDescription: 'A curated collection of this year\'s bestselling novels.',
-        description: 'Dive into the most talked-about books of the year with this carefully curated collection of bestselling novels.',
+        excerpt: 'A curated collection of this year\'s bestselling novels.',
+        richContent: createRichTextParagraphs([
+          'A curated bundle of the most talked-about novels of the year.',
+          'Hardcover editions packaged in a gift-ready box.',
+        ]),
         price: 79.99,
         salePrice: 59.99,
         category: 'books-media',
         collections: ['summer-sale', 'best-sellers'],
-        features: ['5 Bestselling Titles', 'Hardcover Editions', 'Gift Box Included', 'Author Bookmarks'],
-        inStock: true,
-        quantity: 40,
-        bestSeller: true,
+        stockQuantity: 40,
+        template: 'featured',
+        contentBlocks: [
+          {
+            blockType: 'stats',
+            heading: 'Bundle Value',
+            stats: [
+              { value: '5', label: 'Titles' },
+              { value: '2', label: 'Exclusive Editions' },
+              { value: '1', label: 'Gift Box' },
+            ],
+          },
+          {
+            blockType: 'cta',
+            heading: 'Gift the Collection',
+            description: 'Perfect for readers who love new releases.',
+            links: [
+              { label: 'Add to Cart', url: '/products/bestselling-novel-collection', variant: 'primary' },
+            ],
+            backgroundColor: 'secondary',
+          },
+        ],
       },
       {
-        name: 'Portable Bluetooth Speaker',
+        title: 'Portable Bluetooth Speaker',
         slug: 'portable-bluetooth-speaker',
         sku: 'ELEC-003',
-        shortDescription: 'Waterproof speaker with 360° sound.',
-        description: 'Take your music anywhere with this waterproof portable speaker featuring powerful 360° sound.',
+        excerpt: 'Waterproof speaker with 360° sound.',
+        richContent: createRichTextParagraphs([
+          'Take your music anywhere with immersive 360-degree sound.',
+          'Waterproof build and long battery life make it travel-ready.',
+        ]),
         price: 79.99,
         category: 'electronics',
         collections: ['new-arrivals', 'best-sellers'],
-        features: ['IPX7 Waterproof', '360° Sound', '12-hour Battery', 'Built-in Microphone'],
-        inStock: true,
-        quantity: 60,
-        newArrival: true,
-        bestSeller: true,
+        stockQuantity: 60,
+        template: 'standard',
+        contentBlocks: [
+          {
+            blockType: 'features',
+            heading: 'Built for Adventure',
+            layout: 'grid',
+            items: [
+              { title: 'IPX7 Waterproof', description: 'Safe by pool or beach.' },
+              { title: '360° Sound', description: 'Immersive audio in any direction.' },
+              { title: '12h Battery', description: 'All-day playback on a single charge.' },
+            ],
+          },
+        ],
       },
       {
-        name: 'Running Shoes Pro',
+        title: 'Running Shoes Pro',
         slug: 'running-shoes-pro',
         sku: 'SPRT-002',
-        shortDescription: 'Lightweight running shoes with responsive cushioning.',
-        description: 'Engineered for performance, these running shoes feature responsive cushioning and breathable mesh upper.',
+        excerpt: 'Lightweight running shoes with responsive cushioning.',
+        richContent: createRichTextParagraphs([
+          'Engineered for performance with responsive cushioning and breathable mesh.',
+          'Designed for daily training and long-distance comfort.',
+        ]),
         price: 129.99,
         category: 'sports-outdoors',
         collections: ['best-sellers'],
-        features: ['Responsive Cushioning', 'Breathable Mesh', 'Lightweight Design', 'Reflective Details'],
-        inStock: true,
-        quantity: 45,
-        hasVariants: true,
-        bestSeller: true,
+        stockQuantity: 45,
+        template: 'featured',
+        variants: [
+          { name: 'UK 8 / Black', sku: 'SPRT-002-8-BLK', price: 129.99, stockQuantity: 12 },
+          { name: 'UK 9 / Gray', sku: 'SPRT-002-9-GRY', price: 129.99, stockQuantity: 18 },
+          { name: 'UK 10 / Blue', sku: 'SPRT-002-10-BLU', price: 129.99, stockQuantity: 15 },
+        ],
+        contentBlocks: [
+          {
+            blockType: 'features',
+            heading: 'Performance Build',
+            layout: 'list',
+            items: [
+              { title: 'Cushioning', description: 'Responsive foam for impact control.' },
+              { title: 'Breathability', description: 'Mesh upper keeps feet cool.' },
+              { title: 'Visibility', description: 'Reflective accents for night runs.' },
+            ],
+          },
+          {
+            blockType: 'stats',
+            heading: 'Runner Metrics',
+            stats: [
+              { value: '240g', label: 'Weight' },
+              { value: '8mm', label: 'Drop' },
+              { value: '500+', label: 'KM Durability' },
+            ],
+          },
+        ],
       },
     ]
 
     for (const data of productsData.slice(0, this.getItemCount('products', 12))) {
       await this.create('products', {
-        name: data.name,
+        title: data.title,
         slug: data.slug,
         sku: data.sku,
-        shortDescription: data.shortDescription,
-        description: createRichText(data.description),
+        excerpt: data.excerpt,
+        richContent: data.richContent,
         price: data.price,
         salePrice: data.salePrice,
         categories: categories[data.category] ? [categories[data.category]] : [],
         collections: data.collections.map(slug => collections[slug]).filter(Boolean),
-        features: data.features.map(feature => ({ feature })),
-        inStock: data.inStock,
-        quantity: data.quantity,
+        stockQuantity: data.stockQuantity,
         trackInventory: true,
-        hasVariants: data.hasVariants || false,
+        availability: data.stockQuantity > 0 ? 'active' : 'out-of-stock',
+        variants: data.variants,
         featured: data.featured || false,
-        newArrival: data.newArrival || false,
-        bestSeller: data.bestSeller || false,
+        template: data.template || 'standard',
+        contentBlocks: data.contentBlocks,
         _status: 'published',
       })
     }

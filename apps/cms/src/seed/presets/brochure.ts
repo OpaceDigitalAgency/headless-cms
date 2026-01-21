@@ -42,7 +42,85 @@ export class BrochureSeeder extends BaseSeeder {
           title: 'Retail Growth Strategy',
           slug: 'retail-growth-strategy',
           excerpt: 'How we grew a retail brand by 120% YoY.',
+          content: createRichTextParagraphs([
+            'A multi-channel growth strategy that aligned merchandising, paid media, and retention.',
+            'We focused on conversion optimization and customer lifetime value improvements.',
+          ]),
+          blocks: [
+            {
+              blockType: 'stats',
+              heading: 'Outcome Summary',
+              stats: [
+                { value: '120%', label: 'YoY Growth' },
+                { value: '3.2x', label: 'ROAS' },
+                { value: '18%', label: 'CVR Lift' },
+              ],
+            },
+            {
+              blockType: 'features',
+              heading: 'Key Initiatives',
+              layout: 'grid',
+              items: [
+                { title: 'Merchandising', description: 'Rebuilt category structure for discovery.' },
+                { title: 'Retention', description: 'Lifecycle programs for repeat revenue.' },
+                { title: 'Paid Media', description: 'Full-funnel testing and optimization.' },
+              ],
+            },
+          ],
           customData: { industry: 'Retail', result: '120% YoY growth' },
+        },
+        {
+          title: 'SaaS Onboarding Redesign',
+          slug: 'saas-onboarding-redesign',
+          excerpt: 'Reducing time-to-value for a SaaS platform.',
+          content: createRichTextParagraphs([
+            'We redesigned onboarding to focus on faster activation and clearer guidance.',
+            'The new flow reduced drop-off and improved retention in the first 30 days.',
+          ]),
+          blocks: [
+            {
+              blockType: 'grid',
+              heading: 'What Changed',
+              style: 'cards',
+              columns: '3',
+              items: [
+                { title: 'Guided Setup', description: 'Step-by-step activation checklist.' },
+                { title: 'In-App Tips', description: 'Contextual nudges at key moments.' },
+                { title: 'Success Metrics', description: 'Clear progress milestones.' },
+              ],
+            },
+          ],
+          customData: { industry: 'SaaS', result: '35% activation lift' },
+        },
+        {
+          title: 'Manufacturing Process Audit',
+          slug: 'manufacturing-process-audit',
+          excerpt: 'Operational audit driving measurable efficiency gains.',
+          content: createRichTextParagraphs([
+            'A full operational audit identified bottlenecks across production lines.',
+            'We implemented a phased optimization plan for measurable efficiency gains.',
+          ]),
+          blocks: [
+            {
+              blockType: 'stats',
+              heading: 'Operational Impact',
+              stats: [
+                { value: '22%', label: 'Cycle Time Cut' },
+                { value: '15%', label: 'Cost Reduction' },
+                { value: '9%', label: 'Throughput Gain' },
+              ],
+            },
+            {
+              blockType: 'cta',
+              heading: 'Need an Operational Review?',
+              description: 'We can help identify your next efficiency wins.',
+              links: [
+                { label: 'Book a Consultation', url: '/contact', variant: 'primary' },
+              ],
+              backgroundColor: 'light',
+            },
+          ],
+          customData: { industry: 'Manufacturing', result: '22% cycle time reduction' },
         },
       ],
     })
@@ -58,6 +136,54 @@ export class BrochureSeeder extends BaseSeeder {
     await this.clearCollection('custom-items')
     await this.clearCollection('content-types')
     this.log('Brochure data cleared!')
+  }
+
+  public async seedCollection(collection: string): Promise<void> {
+    switch (collection) {
+      case 'pages':
+        await this.seedPages()
+        return
+      case 'content-types':
+      case 'custom-items':
+        await this.seedCustomContentType({
+          name: 'Case Studies',
+          slug: 'case-studies',
+          singularLabel: 'Case Study',
+          pluralLabel: 'Case Studies',
+          icon: 'document',
+          template: 'article',
+          customFields: [
+            { name: 'industry', label: 'Industry', type: 'text', required: true },
+            { name: 'result', label: 'Result', type: 'text', required: true },
+          ],
+          items: [
+            {
+              title: 'Digital Transformation Success',
+              slug: 'digital-transformation-success',
+              excerpt: 'How we helped a manufacturing company modernise their operations.',
+              content: createRichTextParagraphs([
+                'A leading manufacturing company faced operational challenges with legacy systems.',
+                'Through strategic digital transformation, we achieved significant improvements.',
+              ]),
+              blocks: [
+                {
+                  blockType: 'stats',
+                  heading: 'Operational Impact',
+                  stats: [
+                    { value: '22%', label: 'Cycle Time Cut' },
+                    { value: '15%', label: 'Cost Reduction' },
+                    { value: '9%', label: 'Throughput Gain' },
+                  ],
+                },
+              ],
+              customData: { industry: 'Manufacturing', result: '22% cycle time reduction' },
+            },
+          ],
+        })
+        return
+      default:
+        this.log(`No seed handler for collection: ${collection}`)
+    }
   }
 
   private async seedPages(): Promise<void> {

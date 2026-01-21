@@ -29,7 +29,7 @@ const COLLECTION_SEED_CONFIG: Record<string, {
   pages: { label: 'Pages', icon: 'file-text', hasSeedData: true, hasSeedMedia: false },
   posts: { label: 'Posts', icon: 'edit', hasSeedData: true, hasSeedMedia: false },
   categories: { label: 'Categories', icon: 'tag', hasSeedData: true, hasSeedMedia: false },
-  tags: { label: 'Tags', icon: 'tag', hasSeedData: false, hasSeedMedia: false },
+  tags: { label: 'Tags', icon: 'tag', hasSeedData: true, hasSeedMedia: false },
   'archive-items': { label: 'Archive Items', icon: 'archive', hasSeedData: true, hasSeedMedia: true },
   people: { label: 'People', icon: 'user', hasSeedData: true, hasSeedMedia: true },
   places: { label: 'Places', icon: 'map-pin', hasSeedData: true, hasSeedMedia: true },

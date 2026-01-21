@@ -50,7 +50,75 @@ export class BlogSeeder extends BaseSeeder {
           title: 'Payload CMS Review',
           slug: 'payload-cms-review',
           excerpt: 'A quick look at how Payload compares for content teams.',
+          content: createRichTextParagraphs([
+            'Payload delivers a flexible developer experience with a modern admin UI.',
+            'This review highlights strengths in customization, typing, and performance.',
+          ]),
+          blocks: [
+            {
+              blockType: 'stats',
+              heading: 'Review Snapshot',
+              stats: [
+                { value: '4.5/5', label: 'Overall' },
+                { value: '5/5', label: 'Flexibility' },
+                { value: '4/5', label: 'UX' },
+              ],
+            },
+            {
+              blockType: 'features',
+              heading: 'Standout Features',
+              layout: 'grid',
+              items: [
+                { title: 'Type Safety', description: 'Generated types and strong schemas.' },
+                { title: 'Custom UI', description: 'Extensible admin experience.' },
+                { title: 'Performance', description: 'Optimized API responses.' },
+              ],
+            },
+          ],
           customData: { rating: 4.5, product: 'Payload CMS' },
+        },
+        {
+          title: 'Astro CMS Starter Review',
+          slug: 'astro-cms-starter-review',
+          excerpt: 'A design-forward starter focused on performance and editorial flow.',
+          content: createRichTextParagraphs([
+            'The Astro starter prioritizes speed and structured content layouts.',
+            'Great for marketing sites that need flexible blocks and fast build times.',
+          ]),
+          blocks: [
+            {
+              blockType: 'testimonials',
+              heading: 'Editor Feedback',
+              items: [
+                { quote: 'The layout tools are easy to grasp.', name: 'Casey Nguyen', role: 'Content Lead' },
+                { quote: 'Fast previews make iteration painless.', name: 'Morgan Lee', role: 'Designer' },
+              ],
+            },
+          ],
+          customData: { rating: 4.2, product: 'Astro CMS Starter' },
+        },
+        {
+          title: 'Next.js Commerce Review',
+          slug: 'nextjs-commerce-review',
+          excerpt: 'A quick assessment of commerce readiness and extensibility.',
+          content: createRichTextParagraphs([
+            'A solid foundation for modern commerce with clean data models.',
+            'Best suited for teams with in-house engineering support.',
+          ]),
+          blocks: [
+            {
+              blockType: 'grid',
+              heading: 'Key Scores',
+              style: 'stats',
+              columns: '3',
+              items: [
+                { title: 'Performance', stat: '4.6', description: 'Core Web Vitals friendly.' },
+                { title: 'Flexibility', stat: '4.4', description: 'Composable architecture.' },
+                { title: 'UX', stat: '4.1', description: 'Needs editorial polish.' },
+              ],
+            },
+          ],
+          customData: { rating: 4.1, product: 'Next.js Commerce' },
         },
       ],
     })
@@ -63,15 +131,71 @@ export class BlogSeeder extends BaseSeeder {
 
   async clear(): Promise<void> {
     this.log('Clearing blog data...')
-    
+
     // Clear in reverse dependency order
     await this.clearCollection('posts')
     await this.clearCollection('pages')
     await this.clearCollection('custom-items')
     await this.clearCollection('content-types')
     await this.clearCollection('categories')
-    
+
     this.log('Blog data cleared!')
+  }
+
+  public async seedCollection(collection: string): Promise<void> {
+    switch (collection) {
+      case 'categories':
+        await this.seedCategories()
+        return
+      case 'pages':
+        await this.seedPages()
+        return
+      case 'posts': {
+        const categories = await this.seedCategories()
+        await this.seedPosts(categories)
+        return
+      }
+      case 'content-types':
+      case 'custom-items':
+        await this.seedCustomContentType({
+          name: 'Reviews',
+          slug: 'reviews',
+          singularLabel: 'Review',
+          pluralLabel: 'Reviews',
+          icon: 'document',
+          template: 'article',
+          customFields: [
+            { name: 'rating', label: 'Rating', type: 'number', required: true },
+            { name: 'product', label: 'Product', type: 'text', required: true },
+          ],
+          items: [
+            {
+              title: 'Payload CMS Review',
+              slug: 'payload-cms-review',
+              excerpt: 'A quick look at how Payload compares for content teams.',
+              content: createRichTextParagraphs([
+                'Payload delivers a flexible developer experience with a modern admin UI.',
+                'This review highlights strengths in customization, typing, and performance.',
+              ]),
+              blocks: [
+                {
+                  blockType: 'stats',
+                  heading: 'Review Snapshot',
+                  stats: [
+                    { value: '4.5/5', label: 'Overall' },
+                    { value: '5/5', label: 'Flexibility' },
+                    { value: '4/5', label: 'UX' },
+                  ],
+                },
+              ],
+              customData: { rating: 4.5, product: 'Payload CMS' },
+            },
+          ],
+        })
+        return
+      default:
+        this.log(`No seed handler for collection: ${collection}`)
+    }
   }
 
   private async seedCategories(): Promise<Record<string, string>> {
@@ -439,6 +563,27 @@ export class BlogSeeder extends BaseSeeder {
           'The hero section at the top draws attention, whilst the rich text content below provides the main narrative.',
           'This layout is ideal for articles that prioritise readability and engagement with minimal distractions.',
         ]),
+        contentBlocks: [
+          {
+            blockType: 'features',
+            heading: 'Why It Works',
+            layout: 'grid',
+            items: [
+              { title: 'Focus', description: 'Keeps attention on the narrative.' },
+              { title: 'Clarity', description: 'Simple structure for long reads.' },
+              { title: 'CTA Ready', description: 'Clear next steps for readers.' },
+            ],
+          },
+          {
+            blockType: 'cta',
+            heading: 'Enjoyed This Article?',
+            description: 'Subscribe for weekly insights and updates.',
+            links: [
+              { label: 'Subscribe', url: '/contact', variant: 'primary' },
+            ],
+            backgroundColor: 'primary',
+          },
+        ],
       },
       {
         title: 'Feature Story with Grid Layout',
@@ -451,6 +596,28 @@ export class BlogSeeder extends BaseSeeder {
           'Image galleries can be embedded to tell a visual story, whilst maintaining a professional appearance.',
           'This layout works exceptionally well for case studies, portfolio pieces, and visually-rich narratives.',
         ]),
+        contentBlocks: [
+          {
+            blockType: 'grid',
+            heading: 'Featured Sections',
+            style: 'cards',
+            columns: '3',
+            items: [
+              { title: 'Concept', description: 'The big idea and positioning.' },
+              { title: 'Execution', description: 'Design system and rollout.' },
+              { title: 'Results', description: 'Impact and lessons learned.' },
+            ],
+          },
+          {
+            blockType: 'stats',
+            heading: 'Project Signals',
+            stats: [
+              { value: '3', label: 'Months' },
+              { value: '12', label: 'Layouts' },
+              { value: '2x', label: 'Engagement' },
+            ],
+          },
+        ],
       },
       {
         title: 'In-Depth Guide with FAQ Section',
@@ -463,6 +630,25 @@ export class BlogSeeder extends BaseSeeder {
           'Multiple content sections allow you to break up long-form content into digestible, scannable chunks.',
           'This layout is perfect for tutorials, how-to guides, and educational content that requires depth and clarity.',
         ]),
+        contentBlocks: [
+          {
+            blockType: 'faq',
+            heading: 'Common Questions',
+            items: [
+              { question: 'How long should guides be?', answer: createRichText('Long enough to be useful, short enough to be clear.') },
+              { question: 'Should I include visuals?', answer: createRichText('Yes, visuals break up text and improve comprehension.') },
+            ],
+          },
+          {
+            blockType: 'stats',
+            heading: 'Guide Benchmarks',
+            stats: [
+              { value: '8', label: 'Sections' },
+              { value: '10m', label: 'Read Time' },
+              { value: '3', label: 'Checklists' },
+            ],
+          },
+        ],
       },
       {
         title: 'Case Study with Timeline',
@@ -475,6 +661,18 @@ export class BlogSeeder extends BaseSeeder {
           'This layout helps readers understand the journey, challenges overcome, and outcomes achieved.',
           'Ideal for showcasing client success stories, project retrospectives, and historical narratives.',
         ]),
+        contentBlocks: [
+          {
+            blockType: 'timeline',
+            heading: 'Project Timeline',
+            layout: 'vertical',
+            events: [
+              { date: 'Week 1', title: 'Discovery', description: createRichText('Research, interviews, and baseline metrics.') },
+              { date: 'Week 3', title: 'Prototype', description: createRichText('Rapid prototyping and usability testing.') },
+              { date: 'Week 6', title: 'Launch', description: createRichText('Go-live with monitoring and iteration plan.') },
+            ],
+          },
+        ],
       },
       {
         title: 'News Brief with Media Gallery',
@@ -487,6 +685,19 @@ export class BlogSeeder extends BaseSeeder {
           'Quick-reference callouts highlight key information, making content accessible at a glance.',
           'This layout is ideal for news updates, announcements, and time-sensitive content that needs immediate impact.',
         ]),
+        contentBlocks: [
+          {
+            blockType: 'grid',
+            heading: 'Key Updates',
+            style: 'stats',
+            columns: '3',
+            items: [
+              { title: 'Launch', stat: 'Today', description: 'New feature rollout begins.' },
+              { title: 'Coverage', stat: '24/7', description: 'Support team ready.' },
+              { title: 'Next Up', stat: 'Q2', description: 'Expansion roadmap.' },
+            ],
+          },
+        ],
       },
     ]
 
@@ -497,6 +708,7 @@ export class BlogSeeder extends BaseSeeder {
           slug: post.slug,
           excerpt: post.excerpt,
           content: post.content,
+          contentBlocks: post.contentBlocks,
           categories: categories[post.category] ? [categories[post.category]] : [],
           author: adminId,
           _status: 'published',

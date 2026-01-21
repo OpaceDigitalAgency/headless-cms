@@ -38,6 +38,29 @@ export const personTemplate: CollectionTemplate = {
   hasSeedData: true,
   hasSeedMedia: true,
   seedDataCount: 6,
+  seedItems: [
+    {
+      title: 'Leonardo da Vinci',
+      slug: 'leonardo-da-vinci',
+      excerpt: 'Italian Renaissance polymath known for his art, science, and inventions.',
+      content: 'Highlights interdisciplinary practice, notebooks, and artistic legacy.',
+      status: 'published',
+    },
+    {
+      title: 'Michelangelo Buonarroti',
+      slug: 'michelangelo-buonarroti',
+      excerpt: 'Italian sculptor, painter, architect, and poet of the High Renaissance.',
+      content: 'Profile of key works, commissions, and artistic impact.',
+      status: 'published',
+    },
+    {
+      title: 'Claude Monet',
+      slug: 'claude-monet',
+      excerpt: 'French painter and founder of Impressionism.',
+      content: 'Overview of series paintings and influence on modern art.',
+      status: 'published',
+    },
+  ],
   
   fields: [
     nameField('Full Name'),
