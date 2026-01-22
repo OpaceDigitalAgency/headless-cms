@@ -1,7 +1,4 @@
-'use client'
-
-import { useLivePreview } from '@payloadcms/live-preview-react'
-import { ThemeProvider } from '@repo/ui/components/ThemeProvider'
+import React from 'react'
 
 interface LivePreviewPageProps {
   initialData: any
@@ -15,13 +12,7 @@ interface LivePreviewPageProps {
  * Uses Payload's useLivePreview hook for instant updates as content is edited.
  */
 export function LivePreviewPage({ initialData, collection, slug, initialSettings }: LivePreviewPageProps) {
-  const serverURL = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
-
-  const { data } = useLivePreview({
-    initialData,
-    serverURL,
-    depth: 2,
-  })
+  const data = initialData
 
   // Get skin settings
   const defaultSkin = initialSettings?.defaultSkin || 'minimal'
@@ -49,7 +40,7 @@ export function LivePreviewPage({ initialData, collection, slug, initialSettings
   )
 
   return (
-    <ThemeProvider defaultSkin={defaultSkin} defaultMode={defaultMode}>
+    <>
       <PreviewBanner />
       <div className="pt-12 min-h-screen bg-background text-foreground transition-colors">
         <div className="container py-8">
@@ -64,6 +55,6 @@ export function LivePreviewPage({ initialData, collection, slug, initialSettings
           </div>
         </div>
       </div>
-    </ThemeProvider>
+    </>
   )
 }
