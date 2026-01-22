@@ -96,6 +96,5 @@ export default async function PlacePage({ params }: PlacePageProps) {
   }
 }
 
-export const dynamic = 'force-dynamic'
 export const revalidate = 60
 

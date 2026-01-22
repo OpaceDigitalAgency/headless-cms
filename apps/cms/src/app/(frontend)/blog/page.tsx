@@ -18,7 +18,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function BlogPage() {
-  const posts = await getPosts(100)
+  const posts = await getPosts(100).catch(() => ({ docs: [] }))
 
   return (
     <Section spacing="lg" background="default">

@@ -93,5 +93,4 @@ export default async function ArchiveItemPage({ params }: ArchiveItemPageProps) 
   }
 }
 
-export const dynamic = 'force-dynamic'
 export const revalidate = 60

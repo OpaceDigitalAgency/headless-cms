@@ -104,6 +104,5 @@ export default async function TagPage({ params }: TagPageProps) {
   )
 }
 
-export const dynamic = 'force-dynamic'
 export const dynamicParams = true
 export const revalidate = 60

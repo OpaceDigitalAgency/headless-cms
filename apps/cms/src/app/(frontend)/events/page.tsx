@@ -16,11 +16,10 @@ export async function generateMetadata(): Promise<Metadata> {
   )
 }
 
-export const dynamic = 'force-static'
 export const revalidate = 60
 
 export default async function EventsPage() {
-  const events = await getEvents(100)
+  const events = await getEvents(100).catch(() => ({ docs: [] }))
 
   return (
     <Section spacing="lg" background="default">

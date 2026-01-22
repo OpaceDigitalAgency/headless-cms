@@ -68,4 +68,4 @@ export default async function ArchiveItemsPage() {
   )
 }
 
-export const dynamic = 'force-static'
+export const revalidate = 60
