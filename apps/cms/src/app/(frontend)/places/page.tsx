@@ -27,7 +27,7 @@ export default async function PlacesPage() {
       <Container>
         <header className="mb-12">
           <h1 className="text-4xl font-bold">Places</h1>
-          <p className="mt-4 text-lg text-gray-600">
+          <p className="mt-4 text-lg text-muted">
             Geographic locations, venues, and historical sites
           </p>
         </header>
@@ -51,10 +51,10 @@ export default async function PlacesPage() {
               <div className="p-6">
                 <h2 className="text-xl font-semibold">{place.name}</h2>
                 {place.placeType && (
-                  <p className="mt-1 text-sm text-gray-500">{place.placeType}</p>
+                  <p className="mt-1 text-sm text-muted">{place.placeType}</p>
                 )}
                 {place.description && (
-                  <p className="mt-2 text-gray-600 line-clamp-2">{place.description}</p>
+                  <p className="mt-2 text-muted line-clamp-2">{place.description}</p>
                 )}
               </div>
             </Link>

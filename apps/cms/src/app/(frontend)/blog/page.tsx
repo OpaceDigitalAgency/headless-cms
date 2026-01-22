@@ -24,8 +24,8 @@ export default async function BlogPage() {
     <Section spacing="lg" background="default">
       <Container>
         <header className="mb-12 text-center">
-          <h1 className="text-4xl font-bold tracking-tight text-gray-900 dark:text-white">Blog</h1>
-          <p className="mt-4 text-lg text-gray-600 dark:text-gray-300">
+          <h1 className="text-4xl font-bold tracking-tight text-foreground text-foreground">Blog</h1>
+          <p className="mt-4 text-lg text-muted text-muted">
             Latest news, articles, and updates
           </p>
         </header>
@@ -53,19 +53,19 @@ export default async function BlogPage() {
                     {post.categories.map((cat: any) => (
                       <span
                         key={cat.id}
-                        className="rounded-full bg-blue-100 px-2 py-0.5 text-xs font-medium text-blue-700 dark:bg-blue-900 dark:text-blue-300"
+                        className="rounded-full bg-accent-soft px-2 py-0.5 text-xs font-medium text-accent bg-accent-soft text-accent"
                       >
                         {cat.title}
                       </span>
                     ))}
                   </div>
                 )}
-                <h2 className="text-xl font-semibold text-gray-900 dark:text-white">{post.title}</h2>
+                <h2 className="text-xl font-semibold text-foreground text-foreground">{post.title}</h2>
                 {post.excerpt && (
-                  <p className="mt-2 text-gray-600 dark:text-gray-300 line-clamp-2">{post.excerpt}</p>
+                  <p className="mt-2 text-muted text-muted line-clamp-2">{post.excerpt}</p>
                 )}
                 {post.publishedAt && (
-                  <p className="mt-4 text-sm text-gray-400">
+                  <p className="mt-4 text-sm text-muted">
                     {new Date(post.publishedAt).toLocaleDateString('en-GB', {
                       year: 'numeric',
                       month: 'long',
@@ -79,7 +79,7 @@ export default async function BlogPage() {
         </div>
 
         {posts.docs.length === 0 && (
-          <div className="text-center text-gray-500 dark:text-gray-400">
+          <div className="text-center text-muted text-muted">
             <p>No posts found.</p>
           </div>
         )}

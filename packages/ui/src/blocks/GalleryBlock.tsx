@@ -41,7 +41,7 @@ export function GalleryBlock({ block }: GalleryBlockProps) {
             <figure key={index} className="overflow-hidden rounded-lg">
               <img src={image.url} alt={image.alt || ''} className="h-60 w-full object-cover" />
               {showCaptions && item.caption && (
-                <figcaption className="mt-2 text-sm text-gray-500">{item.caption}</figcaption>
+                <figcaption className="mt-2 text-sm text-muted">{item.caption}</figcaption>
               )}
             </figure>
           )

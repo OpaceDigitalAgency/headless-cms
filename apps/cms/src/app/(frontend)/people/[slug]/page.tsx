@@ -103,7 +103,7 @@ export default async function PersonPage({ params }: PersonPageProps) {
               <header className="mb-12">
                 <h1 className="text-4xl font-bold">{person.name}</h1>
                 {person.role && (
-                  <p className="mt-4 text-lg text-gray-600">{person.role}</p>
+                  <p className="mt-4 text-lg text-muted">{person.role}</p>
                 )}
               </header>
 

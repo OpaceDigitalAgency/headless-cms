@@ -18,12 +18,12 @@ export function EmbedBlock({ block }: EmbedBlockProps) {
   const paddingTop = aspectRatioPadding[block.aspectRatio || '16:9'] || '56.25%'
 
   return (
-    <section className="bg-white py-16">
+    <section className="bg-base py-16">
       <div className="container">
         {block.heading && (
-          <h2 className="mb-6 text-3xl font-semibold text-gray-900">{block.heading}</h2>
+          <h2 className="mb-6 text-3xl font-semibold text-foreground">{block.heading}</h2>
         )}
-        <div className="relative w-full overflow-hidden rounded-2xl border border-gray-200 bg-black" style={{ paddingTop }}>
+        <div className="relative w-full overflow-hidden rounded-2xl border border-default bg-black" style={{ paddingTop }}>
           <iframe
             src={block.url}
             title={block.caption || 'Embedded content'}
@@ -32,7 +32,7 @@ export function EmbedBlock({ block }: EmbedBlockProps) {
             allowFullScreen
           />
         </div>
-        {block.caption && <p className="mt-3 text-sm text-gray-500">{block.caption}</p>}
+        {block.caption && <p className="mt-3 text-sm text-muted">{block.caption}</p>}
       </div>
     </section>
   )

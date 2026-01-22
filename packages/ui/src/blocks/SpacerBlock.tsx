@@ -21,7 +21,7 @@ export function SpacerBlock({ block }: SpacerBlockProps) {
 
   return (
     <div className={`w-full ${sizeClasses[size]}`}>
-      {style === 'divider' && <hr className={`border-t border-gray-200 ${lineStyle}`} />}
+      {style === 'divider' && <hr className={`border-t border-default ${lineStyle}`} />}
     </div>
   )
 }

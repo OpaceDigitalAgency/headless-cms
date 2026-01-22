@@ -27,7 +27,7 @@ export default async function EventsPage() {
       <Container>
         <header className="mb-12">
           <h1 className="text-4xl font-bold">Events</h1>
-          <p className="mt-4 text-lg text-gray-600">
+          <p className="mt-4 text-lg text-muted">
             Upcoming and past events, exhibitions, and workshops
           </p>
         </header>
@@ -51,7 +51,7 @@ export default async function EventsPage() {
               <div className="p-6">
                 <h2 className="text-xl font-semibold">{event.title}</h2>
                 {event.startDate && (
-                  <p className="mt-2 text-sm text-gray-500">
+                  <p className="mt-2 text-sm text-muted">
                     {new Date(event.startDate).toLocaleDateString('en-GB', {
                       year: 'numeric',
                       month: 'long',
@@ -60,7 +60,7 @@ export default async function EventsPage() {
                   </p>
                 )}
                 {event.excerpt && (
-                  <p className="mt-2 text-gray-600 line-clamp-2">{event.excerpt}</p>
+                  <p className="mt-2 text-muted line-clamp-2">{event.excerpt}</p>
                 )}
               </div>
             </Link>

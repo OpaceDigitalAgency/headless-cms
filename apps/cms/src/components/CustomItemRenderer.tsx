@@ -58,8 +58,8 @@ export function CustomItemRenderer({ item, contentType }: CustomItemRendererProp
             <dl className="mt-4 space-y-3">
               {customFields.map((field) => (
                 <div key={field.name}>
-                  <dt className="text-sm text-gray-500">{field.label}</dt>
-                  <dd className="text-sm font-medium text-gray-900">
+                  <dt className="text-sm text-muted">{field.label}</dt>
+                  <dd className="text-sm font-medium text-foreground">
                     {String(customData[field.name] ?? '—')}
                   </dd>
                 </div>

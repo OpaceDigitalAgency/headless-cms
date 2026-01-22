@@ -135,12 +135,12 @@ export async function ArchiveBlock({ block }: ArchiveBlockProps) {
       {(heading || description) && (
         <div className="mb-8 text-center">
           {heading && (
-            <h2 className="text-3xl font-bold tracking-tight text-gray-900">
+            <h2 className="text-3xl font-bold tracking-tight text-foreground">
               {heading}
             </h2>
           )}
           {description && (
-            <p className="mt-2 text-lg text-gray-600">{description}</p>
+            <p className="mt-2 text-lg text-muted">{description}</p>
           )}
         </div>
       )}
@@ -164,16 +164,16 @@ export async function ArchiveBlock({ block }: ArchiveBlockProps) {
                 </div>
               )}
               <div className="p-4">
-                <h3 className="font-semibold text-gray-900">
+                <h3 className="font-semibold text-foreground">
                   {item.title || item.name}
                 </h3>
                 {showExcerpt && getItemExcerpt(item) && (
-                  <p className="mt-2 text-sm text-gray-600 line-clamp-2">
+                  <p className="mt-2 text-sm text-muted line-clamp-2">
                     {getItemExcerpt(item)}
                   </p>
                 )}
                 {showDate && item.publishedAt && (
-                  <p className="mt-2 text-xs text-gray-400">
+                  <p className="mt-2 text-xs text-muted">
                     {new Date(item.publishedAt).toLocaleDateString()}
                   </p>
                 )}
@@ -200,16 +200,16 @@ export async function ArchiveBlock({ block }: ArchiveBlockProps) {
                 </div>
               )}
               <div className="flex-1 p-4">
-                <h3 className="font-semibold text-gray-900">
+                <h3 className="font-semibold text-foreground">
                   {item.title || item.name}
                 </h3>
                 {showExcerpt && getItemExcerpt(item) && (
-                  <p className="mt-2 text-sm text-gray-600 line-clamp-2">
+                  <p className="mt-2 text-sm text-muted line-clamp-2">
                     {getItemExcerpt(item)}
                   </p>
                 )}
                 {showDate && item.publishedAt && (
-                  <p className="mt-2 text-xs text-gray-400">
+                  <p className="mt-2 text-xs text-muted">
                     {new Date(item.publishedAt).toLocaleDateString()}
                   </p>
                 )}

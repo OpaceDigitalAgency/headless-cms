@@ -54,7 +54,7 @@ export function RenderBlocksClient({ blocks }: RenderBlocksClientProps) {
           console.warn(`Unknown block type: ${block.blockType}`)
           return (
             <div key={index} className="container">
-              <div className="rounded-lg border border-dashed border-gray-300 bg-gray-50 p-8 text-centre text-gray-500">
+              <div className="rounded-lg border border-dashed border-default bg-card p-8 text-centre text-muted">
                 Unknown block type: {block.blockType}
               </div>
             </div>

@@ -20,7 +20,7 @@ export function Header({ data }: HeaderProps) {
   }
 
   return (
-    <header className="sticky top-0 z-40 bg-white/80 backdrop-blur-sm shadow-sm dark:bg-slate-900/80 dark:shadow-slate-800/50 transition-colors">
+    <header className="sticky top-0 z-40 bg-base/80 backdrop-blur-sm shadow-sm transition-colors">
       <Container>
         <nav className="flex h-16 items-center justify-between">
         {/* Logo */}
@@ -34,7 +34,7 @@ export function Header({ data }: HeaderProps) {
               className="h-8 w-auto"
             />
           ) : (
-            <span className="text-xl font-bold text-gray-900 dark:text-white">
+            <span className="text-xl font-bold text-foreground">
               {data.logoText || 'Site'}
             </span>
           )}
@@ -46,24 +46,24 @@ export function Header({ data }: HeaderProps) {
             <div key={index} className="relative">
               {item.type === 'dropdown' ? (
                 <div className="group">
-                  <button className="flex items-center gap-1 text-sm font-medium text-gray-700 hover:text-gray-900 dark:text-slate-300 dark:hover:text-white">
+                  <button className="flex items-center gap-1 text-sm font-medium text-foreground hover:text-foreground">
                     {item.label}
                     <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                     </svg>
                   </button>
                   <div className="invisible absolute left-0 top-full pt-2 opacity-0 transition-all group-hover:visible group-hover:opacity-100">
-                    <div className="min-w-[200px] rounded-lg bg-white p-2 shadow-lg ring-1 ring-gray-200 dark:bg-slate-800 dark:ring-slate-700">
+                    <div className="min-w-[200px] rounded-lg bg-card p-2 shadow-lg ring-1 ring-default">
                       {item.children?.map((child: any, childIndex: number) => (
                         <Link
                           key={childIndex}
                           href={getUrl(child)}
                           target={child.newTab ? '_blank' : undefined}
-                          className="block rounded-md px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-slate-300 dark:hover:bg-slate-700"
+                          className="block rounded-md px-3 py-2 text-sm text-foreground hover:bg-card"
                         >
                           {child.label}
                           {child.description && (
-                            <span className="block text-xs text-gray-500 dark:text-slate-400">{child.description}</span>
+                            <span className="block text-xs text-muted">{child.description}</span>
                           )}
                         </Link>
                       ))}
@@ -74,7 +74,7 @@ export function Header({ data }: HeaderProps) {
                 <Link
                   href={getUrl(item)}
                   target={item.newTab ? '_blank' : undefined}
-                  className="text-sm font-medium text-gray-700 hover:text-gray-900 dark:text-slate-300 dark:hover:text-white"
+                  className="text-sm font-medium text-foreground hover:text-foreground"
                 >
                   {item.label}
                 </Link>
@@ -105,7 +105,7 @@ export function Header({ data }: HeaderProps) {
             aria-label="Toggle menu"
             className="p-2"
           >
-            <svg className="h-6 w-6 text-gray-700 dark:text-slate-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg className="h-6 w-6 text-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               {mobileMenuOpen ? (
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
               ) : (
@@ -119,14 +119,14 @@ export function Header({ data }: HeaderProps) {
 
       {/* Mobile Menu */}
       {mobileMenuOpen && (
-        <div className="border-t border-gray-200 bg-white dark:border-slate-700 dark:bg-slate-900 md:hidden">
+        <div className="border-t border-default bg-base md:hidden">
           <Container>
             <div className="space-y-1 py-4">
             {data.navItems?.map((item, index) => (
               <div key={index}>
                 {item.type === 'dropdown' ? (
                   <>
-                    <span className="block px-3 py-2 text-sm font-medium text-gray-500 dark:text-slate-400">
+                    <span className="block px-3 py-2 text-sm font-medium text-muted">
                       {item.label}
                     </span>
                     {item.children?.map((child: any, childIndex: number) => (
@@ -134,7 +134,7 @@ export function Header({ data }: HeaderProps) {
                         key={childIndex}
                         href={getUrl(child)}
                         target={child.newTab ? '_blank' : undefined}
-                        className="block px-6 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-slate-300 dark:hover:bg-slate-800"
+                        className="block px-6 py-2 text-sm text-foreground hover:bg-card"
                         onClick={() => setMobileMenuOpen(false)}
                       >
                         {child.label}
@@ -145,7 +145,7 @@ export function Header({ data }: HeaderProps) {
                   <Link
                     href={getUrl(item)}
                     target={item.newTab ? '_blank' : undefined}
-                    className="block px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 dark:text-slate-300 dark:hover:bg-slate-800"
+                    className="block px-3 py-2 text-sm font-medium text-foreground hover:bg-card"
                     onClick={() => setMobileMenuOpen(false)}
                   >
                     {item.label}

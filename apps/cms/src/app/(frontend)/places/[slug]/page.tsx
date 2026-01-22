@@ -56,7 +56,7 @@ export default async function PlacePage({ params }: PlacePageProps) {
             <header className="mb-12">
               <h1 className="text-4xl font-bold">{place.name}</h1>
               {place.placeType && (
-                <p className="mt-4 text-lg text-gray-600">{place.placeType}</p>
+                <p className="mt-4 text-lg text-muted">{place.placeType}</p>
               )}
             </header>
 

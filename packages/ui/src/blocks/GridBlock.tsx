@@ -30,17 +30,17 @@ export function GridBlock({ block }: GridBlockProps) {
   return (
     <section className="container py-12">
       {heading && <h2 className="mb-2 text-2xl font-semibold">{heading}</h2>}
-      {description && <p className="mb-6 text-gray-600">{description}</p>}
+      {description && <p className="mb-6 text-muted">{description}</p>}
       <div className={`grid gap-6 ${gridCols}`}>
         {items.map((item, index) => (
-          <div key={index} className="rounded-lg border border-gray-100 p-5 shadow-sm">
+          <div key={index} className="rounded-lg border border-default p-5 shadow-sm">
             {item.image?.url && (
               <img src={item.image.url} alt={item.image.alt || ''} className="mb-4 h-40 w-full rounded object-cover" />
             )}
             {item.stat && <div className="text-2xl font-bold">{item.stat}</div>}
             {item.title && <h3 className="mt-2 text-lg font-semibold">{item.title}</h3>}
-            {item.subtitle && <p className="text-sm text-gray-500">{item.subtitle}</p>}
-            {item.description && <p className="mt-2 text-sm text-gray-600">{item.description}</p>}
+            {item.subtitle && <p className="text-sm text-muted">{item.subtitle}</p>}
+            {item.description && <p className="mt-2 text-sm text-muted">{item.description}</p>}
           </div>
         ))}
       </div>

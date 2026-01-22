@@ -40,7 +40,7 @@ export function HeroBlock({ block }: HeroBlockProps) {
 
   const overlayClasses = {
     none: '',
-    light: 'bg-white/50',
+    light: 'bg-base/50',
     dark: 'bg-black/50',
     gradient: 'bg-gradient-to-t from-black/80 to-transparent',
   }
@@ -111,8 +111,8 @@ export function HeroBlock({ block }: HeroBlockProps) {
                   link.variant === 'primary'
                     ? 'btn-primary'
                     : link.variant === 'outline'
-                    ? 'border border-white bg-transparent text-white hover:bg-white/10'
-                    : 'bg-white/10 text-white hover:bg-white/20'
+                    ? 'border border-white bg-transparent text-white hover:bg-base/10'
+                    : 'bg-base/10 text-white hover:bg-base/20'
                 }`}
               >
                 {link.label}

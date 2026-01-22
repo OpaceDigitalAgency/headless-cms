@@ -27,7 +27,7 @@ export default async function PeoplePage() {
       <Container>
         <header className="mb-12">
           <h1 className="text-4xl font-bold">People</h1>
-          <p className="mt-4 text-lg text-gray-600">
+          <p className="mt-4 text-lg text-muted">
             Historical figures, artists, team members, and notable people
           </p>
         </header>
@@ -51,10 +51,10 @@ export default async function PeoplePage() {
               <div className="p-6">
                 <h2 className="text-xl font-semibold">{person.name}</h2>
                 {person.role && (
-                  <p className="mt-1 text-sm text-gray-500">{person.role}</p>
+                  <p className="mt-1 text-sm text-muted">{person.role}</p>
                 )}
                 {person.bio && (
-                  <p className="mt-2 text-gray-600 line-clamp-2">{person.bio}</p>
+                  <p className="mt-2 text-muted line-clamp-2">{person.bio}</p>
                 )}
               </div>
             </Link>

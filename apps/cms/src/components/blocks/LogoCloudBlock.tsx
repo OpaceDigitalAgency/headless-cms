@@ -16,10 +16,10 @@ export function LogoCloudBlock({ block }: LogoCloudBlockProps) {
   const logos = block.logos || []
 
   return (
-    <section className="bg-white py-14">
+    <section className="bg-base py-14">
       <div className="w-full">
         {block.heading && (
-          <h2 className="mb-8 text-center text-2xl font-semibold text-gray-800">
+          <h2 className="mb-8 text-center text-2xl font-semibold text-foreground">
             {block.heading}
           </h2>
         )}
@@ -34,11 +34,11 @@ export function LogoCloudBlock({ block }: LogoCloudBlockProps) {
                 className="h-10 w-auto object-contain opacity-75 grayscale"
               />
             ) : (
-              <span className="text-sm text-gray-400">{logo.label}</span>
+              <span className="text-sm text-muted">{logo.label}</span>
             )
 
             return (
-              <div key={index} className="flex items-center justify-center rounded-lg border border-gray-100 bg-gray-50 px-4 py-3">
+              <div key={index} className="flex items-center justify-center rounded-lg border border-default bg-card px-4 py-3">
                 {logo.url ? <Link href={logo.url}>{content}</Link> : content}
               </div>
             )

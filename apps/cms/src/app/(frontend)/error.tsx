@@ -18,8 +18,8 @@ export default function Error({
     <Section spacing="lg" background="default">
       <Container>
         <div className="flex min-h-[60vh] flex-col items-center justify-center text-center">
-          <h1 className="text-4xl font-bold text-gray-900 dark:text-white">Something went wrong</h1>
-          <p className="mt-4 text-gray-500 dark:text-gray-400">
+          <h1 className="text-4xl font-bold text-foreground text-foreground">Something went wrong</h1>
+          <p className="mt-4 text-muted text-muted">
             An error occurred while loading this page.
           </p>
           <button

@@ -14,19 +14,19 @@ export function FaqBlock({ block }: FaqBlockProps) {
   const items = block.items || []
 
   return (
-    <section className="bg-white py-16">
+    <section className="bg-base py-16">
       <div className="container">
         {block.heading && (
-          <h2 className="mb-8 text-3xl font-semibold text-gray-900">{block.heading}</h2>
+          <h2 className="mb-8 text-3xl font-semibold text-foreground">{block.heading}</h2>
         )}
         <div className="space-y-4">
           {items.map((item, index) => (
-            <details key={index} className="rounded-xl border border-gray-200 bg-gray-50 p-5">
-              <summary className="cursor-pointer text-base font-semibold text-gray-800">
+            <details key={index} className="rounded-xl border border-default bg-card p-5">
+              <summary className="cursor-pointer text-base font-semibold text-foreground">
                 {item.question}
               </summary>
               {item.answer && (
-                <div className="mt-4 prose prose-sm max-w-none text-gray-600">
+                <div className="mt-4 prose prose-sm max-w-none text-muted">
                   <RichText content={item.answer} />
                 </div>
               )}

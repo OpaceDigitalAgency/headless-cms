@@ -52,7 +52,7 @@ export function PlaceRenderer({ place }: PlaceRendererProps) {
           {/* Historical Significance */}
           {place.historicalSignificance && (
             <div className="mt-8">
-              <h2 className="text-xl font-semibold text-gray-900">Historical Significance</h2>
+              <h2 className="text-xl font-semibold text-foreground">Historical Significance</h2>
               <div className="mt-4 prose prose-lg">
                 <RichText content={place.historicalSignificance} />
               </div>
@@ -62,13 +62,13 @@ export function PlaceRenderer({ place }: PlaceRendererProps) {
           {/* Historical Names */}
           {place.historicalNames && place.historicalNames.length > 0 && (
             <div className="mt-8">
-              <h2 className="text-xl font-semibold text-gray-900">Historical Names</h2>
+              <h2 className="text-xl font-semibold text-foreground">Historical Names</h2>
               <dl className="mt-4 space-y-3">
                 {place.historicalNames.map((item: any, index: number) => (
                   <div key={index} className="flex gap-4">
                     <dt className="font-medium">{item.name}</dt>
                     {item.period && (
-                      <dd className="text-gray-500">({item.period})</dd>
+                      <dd className="text-muted">({item.period})</dd>
                     )}
                   </div>
                 ))}
@@ -81,9 +81,9 @@ export function PlaceRenderer({ place }: PlaceRendererProps) {
         <aside className="detail-sidebar">
           {/* Location Info */}
           <div className="card p-6">
-            <h3 className="font-semibold text-gray-900">Location</h3>
+            <h3 className="font-semibold text-foreground">Location</h3>
             {place.address && (
-              <address className="mt-4 not-italic text-sm text-gray-600">
+              <address className="mt-4 not-italic text-sm text-muted">
                 {place.address.street && <div>{place.address.street}</div>}
                 {(place.address.city || place.address.region) && (
                   <div>
@@ -99,14 +99,14 @@ export function PlaceRenderer({ place }: PlaceRendererProps) {
             
             {location && (
               <div className="mt-4">
-                <p className="text-sm text-gray-500">
+                <p className="text-sm text-muted">
                   Coordinates: {location.latitude?.toFixed(4)}, {location.longitude?.toFixed(4)}
                 </p>
                 <a
                   href={`https://www.google.com/maps?q=${location.latitude},${location.longitude}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="mt-2 inline-block text-sm text-primary-600 hover:text-primary-700"
+                  className="mt-2 inline-block text-sm text-accent hover:text-accent"
                 >
                   View on Google Maps →
                 </a>
@@ -117,21 +117,21 @@ export function PlaceRenderer({ place }: PlaceRendererProps) {
           {/* Place Type */}
           {place.placeType && (
             <div className="card p-6">
-              <h3 className="font-semibold text-gray-900">Type</h3>
-              <p className="mt-2 capitalize text-gray-600">{place.placeType}</p>
+              <h3 className="font-semibold text-foreground">Type</h3>
+              <p className="mt-2 capitalize text-muted">{place.placeType}</p>
             </div>
           )}
 
           {/* Related Places */}
           {place.relatedPlaces && place.relatedPlaces.length > 0 && (
             <div className="card p-6">
-              <h3 className="font-semibold text-gray-900">Related Places</h3>
+              <h3 className="font-semibold text-foreground">Related Places</h3>
               <ul className="mt-4 space-y-2">
                 {place.relatedPlaces.map((related: any) => (
                   <li key={related.id}>
                     <Link
                       href={`/places/${related.slug}`}
-                      className="text-sm hover:text-primary-600"
+                      className="text-sm hover:text-accent"
                     >
                       {related.name}
                     </Link>
@@ -146,7 +146,7 @@ export function PlaceRenderer({ place }: PlaceRendererProps) {
       {/* Gallery */}
       {place.gallery && place.gallery.length > 0 && (
         <div className="detail-gallery">
-          <h2 className="text-xl font-semibold text-gray-900">Gallery</h2>
+          <h2 className="text-xl font-semibold text-foreground">Gallery</h2>
           <div className="gallery-grid">
             {place.gallery.map((item: any, index: number) => (
               <div key={index} className="gallery-item">
@@ -160,7 +160,7 @@ export function PlaceRenderer({ place }: PlaceRendererProps) {
                   />
                 )}
                 {item.caption && (
-                  <p className="mt-2 text-sm text-gray-500">{item.caption}</p>
+                  <p className="mt-2 text-sm text-muted">{item.caption}</p>
                 )}
               </div>
             ))}
@@ -171,7 +171,7 @@ export function PlaceRenderer({ place }: PlaceRendererProps) {
       {/* Related Items */}
       {place.relatedItems?.docs && place.relatedItems.docs.length > 0 && (
         <div className="detail-related">
-          <h2 className="text-xl font-semibold text-gray-900">Related Items</h2>
+          <h2 className="text-xl font-semibold text-foreground">Related Items</h2>
           <div className="related-grid">
             {place.relatedItems.docs.map((artifact: any) => (
               <Link

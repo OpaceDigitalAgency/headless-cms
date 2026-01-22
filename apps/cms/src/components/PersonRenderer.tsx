@@ -35,29 +35,29 @@ export function PersonRenderer({ person }: PersonRendererProps) {
           )}
 
           <div className="mt-6 card p-6">
-            <h2 className="font-semibold text-gray-900">Details</h2>
+            <h2 className="font-semibold text-foreground">Details</h2>
             <dl className="mt-4 space-y-3 text-sm">
               {birthDate && (
                 <div>
-                  <dt className="text-gray-500">Born</dt>
+                  <dt className="text-muted">Born</dt>
                   <dd className="font-medium">{birthDate}</dd>
                 </div>
               )}
               {deathDate && (
                 <div>
-                  <dt className="text-gray-500">Died</dt>
+                  <dt className="text-muted">Died</dt>
                   <dd className="font-medium">{deathDate}</dd>
                 </div>
               )}
               {person.nationality && (
                 <div>
-                  <dt className="text-gray-500">Nationality</dt>
+                  <dt className="text-muted">Nationality</dt>
                   <dd className="font-medium">{person.nationality}</dd>
                 </div>
               )}
               {person.role && person.role.length > 0 && (
                 <div>
-                  <dt className="text-gray-500">Roles</dt>
+                  <dt className="text-muted">Roles</dt>
                   <dd className="font-medium capitalize">
                     {person.role.join(', ')}
                   </dd>
@@ -69,12 +69,12 @@ export function PersonRenderer({ person }: PersonRendererProps) {
           {/* Movements */}
           {person.movements && person.movements.length > 0 && (
             <div className="mt-6 card p-6">
-              <h3 className="font-semibold text-gray-900">Artistic Movements</h3>
+              <h3 className="font-semibold text-foreground">Artistic Movements</h3>
               <div className="mt-3 flex flex-wrap gap-2">
                 {person.movements.map((item: any, index: number) => (
                   <span
                     key={index}
-                    className="rounded-full bg-gray-100 px-3 py-1 text-sm text-gray-700"
+                    className="rounded-full bg-card px-3 py-1 text-sm text-foreground"
                   >
                     {item.movement}
                   </span>
@@ -102,7 +102,7 @@ export function PersonRenderer({ person }: PersonRendererProps) {
           {/* Influences */}
           {person.influences && person.influences.length > 0 && (
             <div className="mt-12">
-              <h2 className="text-xl font-semibold text-gray-900">Influenced By</h2>
+              <h2 className="text-xl font-semibold text-foreground">Influenced By</h2>
               <div className="mt-4 grid gap-4 sm:grid-cols-2">
                 {person.influences.map((influence: any) => (
                   <Link
@@ -129,7 +129,7 @@ export function PersonRenderer({ person }: PersonRendererProps) {
           {/* Influenced */}
           {person.influenced && person.influenced.length > 0 && (
             <div className="mt-12">
-              <h2 className="text-xl font-semibold text-gray-900">Influenced</h2>
+              <h2 className="text-xl font-semibold text-foreground">Influenced</h2>
               <div className="mt-4 grid gap-4 sm:grid-cols-2">
                 {person.influenced.map((influence: any) => (
                   <Link
@@ -156,7 +156,7 @@ export function PersonRenderer({ person }: PersonRendererProps) {
           {/* Related Items */}
           {person.relatedItems?.docs && person.relatedItems.docs.length > 0 && (
             <div className="mt-12">
-              <h2 className="text-xl font-semibold text-gray-900">Related Items</h2>
+              <h2 className="text-xl font-semibold text-foreground">Related Items</h2>
               <div className="related-grid">
                 {person.relatedItems.docs.map((artifact: any) => (
                   <Link

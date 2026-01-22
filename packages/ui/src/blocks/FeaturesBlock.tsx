@@ -19,22 +19,22 @@ export function FeaturesBlock({ block }: FeaturesBlockProps) {
   const items = block.items || []
 
   return (
-    <section className="bg-white py-16">
+    <section className="bg-base py-16">
       <div className="container">
         {(block.heading || block.subheading) && (
           <div className="mb-10 max-w-2xl">
             {block.heading && (
-              <h2 className="text-3xl font-semibold text-gray-900">{block.heading}</h2>
+              <h2 className="text-3xl font-semibold text-foreground">{block.heading}</h2>
             )}
             {block.subheading && (
-              <p className="mt-3 text-lg text-gray-500">{block.subheading}</p>
+              <p className="mt-3 text-lg text-muted">{block.subheading}</p>
             )}
           </div>
         )}
 
         <div className={layout === 'grid' ? 'grid gap-8 md:grid-cols-2 lg:grid-cols-3' : 'space-y-6'}>
           {items.map((item, index) => (
-            <div key={index} className="rounded-xl border border-gray-100 bg-gray-50 p-6">
+            <div key={index} className="rounded-xl border border-default bg-card p-6">
               <div className="mb-3 flex items-center gap-3">
                 {item.media?.url && (
                   <Image
@@ -46,13 +46,13 @@ export function FeaturesBlock({ block }: FeaturesBlockProps) {
                   />
                 )}
                 {!item.media?.url && item.icon && (
-                  <span className="text-xl text-gray-500">{item.icon}</span>
+                  <span className="text-xl text-muted">{item.icon}</span>
                 )}
                 {item.title && (
-                  <h3 className="text-lg font-semibold text-gray-900">{item.title}</h3>
+                  <h3 className="text-lg font-semibold text-foreground">{item.title}</h3>
                 )}
               </div>
-              {item.description && <p className="text-sm text-gray-600">{item.description}</p>}
+              {item.description && <p className="text-sm text-muted">{item.description}</p>}
             </div>
           ))}
         </div>

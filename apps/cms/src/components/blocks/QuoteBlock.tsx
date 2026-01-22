@@ -16,15 +16,15 @@ export function QuoteBlock({ block }: QuoteBlockProps) {
   }
 
   return (
-    <section className="bg-white py-12">
+    <section className="bg-base py-12">
       <div className="w-full">
         <div className={`flex flex-col gap-4 ${alignClasses[align]}`}>
-          <blockquote className="max-w-3xl text-2xl font-medium text-gray-900">
+          <blockquote className="max-w-3xl text-2xl font-medium text-foreground">
             “{block.quote}”
           </blockquote>
           {(block.author || block.role) && (
-            <div className="text-sm text-gray-500">
-              {block.author && <span className="font-semibold text-gray-700">{block.author}</span>}
+            <div className="text-sm text-muted">
+              {block.author && <span className="font-semibold text-foreground">{block.author}</span>}
               {block.role && <span className="ml-2">· {block.role}</span>}
             </div>
           )}

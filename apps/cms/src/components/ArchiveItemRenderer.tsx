@@ -34,7 +34,7 @@ export function ArchiveItemRenderer({ item }: ArchiveItemRendererProps) {
       <header className="detail-header">
         <h1 className="detail-heading">{title}</h1>
         {template && (
-          <p className="mt-2 text-sm uppercase tracking-wide text-gray-500">{template}</p>
+          <p className="mt-2 text-sm uppercase tracking-wide text-muted">{template}</p>
         )}
       </header>
 
@@ -61,43 +61,43 @@ export function ArchiveItemRenderer({ item }: ArchiveItemRendererProps) {
 
           {specifications && (
             <div className="mt-8">
-              <h2 className="text-lg font-semibold text-gray-900">Specifications</h2>
+              <h2 className="text-lg font-semibold text-foreground">Specifications</h2>
               <dl className="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-4">
                 {specifications.height && (
                   <div>
-                    <dt className="text-sm text-gray-500">Height</dt>
+                    <dt className="text-sm text-muted">Height</dt>
                     <dd className="font-medium">{specifications.height}</dd>
                   </div>
                 )}
                 {specifications.width && (
                   <div>
-                    <dt className="text-sm text-gray-500">Width</dt>
+                    <dt className="text-sm text-muted">Width</dt>
                     <dd className="font-medium">{specifications.width}</dd>
                   </div>
                 )}
                 {specifications.depth && (
                   <div>
-                    <dt className="text-sm text-gray-500">Depth</dt>
+                    <dt className="text-sm text-muted">Depth</dt>
                     <dd className="font-medium">{specifications.depth}</dd>
                   </div>
                 )}
                 {specifications.weight && (
                   <div>
-                    <dt className="text-sm text-gray-500">Weight</dt>
+                    <dt className="text-sm text-muted">Weight</dt>
                     <dd className="font-medium">{specifications.weight}</dd>
                   </div>
                 )}
               </dl>
               {specifications.materials && (
                 <div className="mt-4">
-                  <h3 className="text-sm font-semibold text-gray-700">Materials</h3>
-                  <p className="mt-1 text-sm text-gray-600">{specifications.materials}</p>
+                  <h3 className="text-sm font-semibold text-foreground">Materials</h3>
+                  <p className="mt-1 text-sm text-muted">{specifications.materials}</p>
                 </div>
               )}
               {specifications.condition && (
                 <div className="mt-4">
-                  <h3 className="text-sm font-semibold text-gray-700">Condition</h3>
-                  <p className="mt-1 text-sm text-gray-600">{specifications.condition}</p>
+                  <h3 className="text-sm font-semibold text-foreground">Condition</h3>
+                  <p className="mt-1 text-sm text-muted">{specifications.condition}</p>
                 </div>
               )}
             </div>
@@ -105,7 +105,7 @@ export function ArchiveItemRenderer({ item }: ArchiveItemRendererProps) {
 
           {provenance && (
             <div className="mt-8">
-              <h2 className="text-lg font-semibold text-gray-900">Provenance</h2>
+              <h2 className="text-lg font-semibold text-foreground">Provenance</h2>
               <div className="mt-4 prose prose-sm">
                 <RichText content={provenance} />
               </div>
@@ -115,29 +115,29 @@ export function ArchiveItemRenderer({ item }: ArchiveItemRendererProps) {
 
         <aside className="detail-sidebar">
           <div className="card p-6">
-            <h3 className="font-semibold text-gray-900">Quick Facts</h3>
+            <h3 className="font-semibold text-foreground">Quick Facts</h3>
             <dl className="mt-4 space-y-3 text-sm">
               {dateCreated && (
                 <div>
-                  <dt className="text-gray-500">Date Created</dt>
+                  <dt className="text-muted">Date Created</dt>
                   <dd className="font-medium">{dateCreated}</dd>
                 </div>
               )}
               {dateAcquired && (
                 <div>
-                  <dt className="text-gray-500">Date Acquired</dt>
+                  <dt className="text-muted">Date Acquired</dt>
                   <dd className="font-medium">{dateAcquired}</dd>
                 </div>
               )}
               {catalogNumber && (
                 <div>
-                  <dt className="text-gray-500">Catalog Number</dt>
+                  <dt className="text-muted">Catalog Number</dt>
                   <dd className="font-medium">{catalogNumber}</dd>
                 </div>
               )}
               {onDisplay && (
                 <div>
-                  <dt className="text-gray-500">Location</dt>
+                  <dt className="text-muted">Location</dt>
                   <dd className="font-medium">{location || 'On Display'}</dd>
                 </div>
               )}
@@ -146,13 +146,13 @@ export function ArchiveItemRenderer({ item }: ArchiveItemRendererProps) {
 
           {creators && creators.length > 0 && (
             <div className="card p-6">
-              <h3 className="font-semibold text-gray-900">Creators</h3>
+              <h3 className="font-semibold text-foreground">Creators</h3>
               <ul className="mt-4 space-y-3">
                 {creators.map((person: any) => (
                   <li key={person.id}>
                     <Link
                       href={`/people/${person.slug}`}
-                      className="flex items-center gap-3 text-sm hover:text-primary-600"
+                      className="flex items-center gap-3 text-sm hover:text-accent"
                     >
                       {person.portrait?.url && (
                         <Image
@@ -173,13 +173,13 @@ export function ArchiveItemRenderer({ item }: ArchiveItemRendererProps) {
 
           {origins && origins.length > 0 && (
             <div className="card p-6">
-              <h3 className="font-semibold text-gray-900">Places of Origin</h3>
+              <h3 className="font-semibold text-foreground">Places of Origin</h3>
               <ul className="mt-4 space-y-2">
                 {origins.map((place: any) => (
                   <li key={place.id}>
                     <Link
                       href={`/places/${place.slug}`}
-                      className="text-sm hover:text-primary-600"
+                      className="text-sm hover:text-accent"
                     >
                       {place.name}
                     </Link>
@@ -193,7 +193,7 @@ export function ArchiveItemRenderer({ item }: ArchiveItemRendererProps) {
 
       {gallery && gallery.length > 1 && (
         <div className="detail-gallery">
-          <h2 className="text-xl font-semibold text-gray-900">Gallery</h2>
+          <h2 className="text-xl font-semibold text-foreground">Gallery</h2>
           <div className="gallery-grid">
             {gallery.slice(1).map((entry: any, index: number) => (
               <div key={index} className="gallery-item">
@@ -207,7 +207,7 @@ export function ArchiveItemRenderer({ item }: ArchiveItemRendererProps) {
                   />
                 )}
                 {entry.caption && (
-                  <p className="mt-2 text-sm text-gray-500">{entry.caption}</p>
+                  <p className="mt-2 text-sm text-muted">{entry.caption}</p>
                 )}
               </div>
             ))}
@@ -217,7 +217,7 @@ export function ArchiveItemRenderer({ item }: ArchiveItemRendererProps) {
 
       {relatedItems && relatedItems.length > 0 && (
         <div className="detail-related">
-          <h2 className="text-xl font-semibold text-gray-900">Related Items</h2>
+          <h2 className="text-xl font-semibold text-foreground">Related Items</h2>
           <div className="related-grid">
             {relatedItems.map((related: any) => (
               <Link

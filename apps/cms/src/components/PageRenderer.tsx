@@ -141,7 +141,7 @@ export function PageRenderer({ page, settings }: PageRendererProps) {
               if (!BlockComponent) {
                 return (
                   <div className="container">
-                    <div className="rounded-lg border border-dashed border-gray-300 bg-gray-50 p-8 text-center text-gray-500">
+                    <div className="rounded-lg border border-dashed border-default bg-card p-8 text-center text-muted">
                       Unknown block type: {block.blockType}
                     </div>
                   </div>
@@ -234,7 +234,7 @@ export function PageRenderer({ page, settings }: PageRendererProps) {
                     {heroData.heading}
                   </h1>
                   {heroData.subheading && (
-                    <p className="mx-auto mt-6 max-w-2xl text-xl text-gray-300">
+                    <p className="mx-auto mt-6 max-w-2xl text-xl text-muted">
                       {heroData.subheading}
                     </p>
                   )}
@@ -250,7 +250,7 @@ export function PageRenderer({ page, settings }: PageRendererProps) {
                               ? 'btn-primary'
                               : link.variant === 'outline'
                               ? 'btn-outline text-white'
-                              : 'bg-white/10 text-white hover:bg-white/20'
+                              : 'bg-base/10 text-white hover:bg-base/20'
                           }`}
                         >
                           {link.label}

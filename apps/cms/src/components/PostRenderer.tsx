@@ -133,7 +133,7 @@ export function PostRenderer({ post, settings }: PostRendererProps) {
       <div className="article-layout">
         <div className="article-content">
           {excerpt && (
-            <p className="lead text-xl text-gray-600">{excerpt}</p>
+            <p className="lead text-xl text-muted">{excerpt}</p>
           )}
           {content && <RichText content={content} />}
         </div>

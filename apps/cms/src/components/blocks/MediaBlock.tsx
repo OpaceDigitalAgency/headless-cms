@@ -79,7 +79,7 @@ export function MediaBlock({ block }: MediaBlockProps) {
         />
       )}
       {caption && (
-        <figcaption className="mt-2 text-center text-sm text-gray-500">
+        <figcaption className="mt-2 text-center text-sm text-muted">
           {caption}
         </figcaption>
       )}

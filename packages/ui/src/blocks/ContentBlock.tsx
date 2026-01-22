@@ -29,11 +29,11 @@ export function ContentBlock({ block }: ContentBlockProps) {
   } = block
 
   const bgClasses = {
-    none: 'bg-white',
-    light: 'bg-gray-50',
-    dark: 'bg-gray-900 text-white',
-    primary: 'bg-primary-600 text-white',
-    secondary: 'bg-secondary-600 text-white',
+    none: 'bg-base',
+    light: 'bg-card',
+    dark: 'bg-[rgb(var(--color-foreground))] text-[rgb(var(--color-background))]',
+    primary: 'bg-accent text-[rgb(var(--color-background))]',
+    secondary: 'bg-card text-foreground',
   }
 
   const paddingTopClasses = {

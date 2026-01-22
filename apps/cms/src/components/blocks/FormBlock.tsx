@@ -39,9 +39,9 @@ export function FormBlock({ block }: FormBlockProps) {
   }
 
   const bgClasses = {
-    none: 'bg-white',
-    light: 'bg-gray-50',
-    dark: 'bg-gray-900 text-white',
+    none: 'bg-base',
+    light: 'bg-card',
+    dark: 'bg-[rgb(var(--color-foreground))] text-[rgb(var(--color-background))]',
   }
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -84,7 +84,7 @@ export function FormBlock({ block }: FormBlockProps) {
   }
 
   const renderField = (field: any) => {
-    const baseInputClasses = 'w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20'
+    const baseInputClasses = 'w-full rounded-lg border border-default px-4 py-2 focus:border-[rgb(var(--color-accent))] focus:outline-none focus:ring-2 focus:ring-[rgb(var(--color-accent))]'
     
     switch (field.blockType) {
       case 'text':
@@ -139,7 +139,7 @@ export function FormBlock({ block }: FormBlockProps) {
               type="checkbox"
               name={field.name}
               required={field.required}
-              className="h-4 w-4 rounded border-gray-300 text-primary-600 focus:ring-primary-500"
+              className="h-4 w-4 rounded border-default text-accent focus:ring-[rgb(var(--color-accent))]"
             />
             <span className="text-sm">{field.label}</span>
           </label>

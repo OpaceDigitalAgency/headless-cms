@@ -6,11 +6,11 @@ export default function NotFound() {
     <Section spacing="lg" background="default">
       <Container>
         <div className="flex min-h-[60vh] flex-col items-center justify-center text-center">
-          <h1 className="text-6xl font-bold text-gray-900 dark:text-white">404</h1>
-          <h2 className="mt-4 text-2xl font-semibold text-gray-700 dark:text-gray-300">
+          <h1 className="text-6xl font-bold text-foreground text-foreground">404</h1>
+          <h2 className="mt-4 text-2xl font-semibold text-foreground text-muted">
             Page Not Found
           </h2>
-          <p className="mt-2 text-gray-500 dark:text-gray-400">
+          <p className="mt-2 text-muted text-muted">
             Sorry, we couldn&apos;t find the page you&apos;re looking for.
           </p>
           <Link

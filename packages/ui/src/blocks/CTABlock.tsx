@@ -35,11 +35,11 @@ export function CTABlock({ block }: CTABlockProps) {
   }
 
   const bgClasses = {
-    none: 'bg-white',
-    light: 'bg-gray-50',
-    dark: 'bg-gray-900 text-white',
-    primary: 'bg-primary-600 text-white',
-    secondary: 'bg-secondary-600 text-white',
+    none: 'bg-base',
+    light: 'bg-card',
+    dark: 'bg-[rgb(var(--color-foreground))] text-[rgb(var(--color-background))]',
+    primary: 'bg-accent text-[rgb(var(--color-background))]',
+    secondary: 'bg-card text-foreground',
   }
 
   if (style === 'banner') {
@@ -61,7 +61,7 @@ export function CTABlock({ block }: CTABlockProps) {
             {heading}
           </h2>
           {description && (
-            <p className="mx-auto mt-4 max-w-2xl text-lg text-gray-200">
+            <p className="mx-auto mt-4 max-w-2xl text-lg text-muted">
               {description}
             </p>
           )}
@@ -74,8 +74,8 @@ export function CTABlock({ block }: CTABlockProps) {
                   target={link.newTab ? '_blank' : undefined}
                   className={`btn ${
                     link.variant === 'primary'
-                      ? 'bg-white text-gray-900 hover:bg-gray-100'
-                      : 'border border-white bg-transparent text-white hover:bg-white/10'
+                      ? 'bg-base text-foreground hover:bg-card'
+                      : 'border border-white bg-transparent text-white hover:bg-base/10'
                   }`}
                 >
                   {link.label}
@@ -103,11 +103,11 @@ export function CTABlock({ block }: CTABlockProps) {
             </div>
           )}
           <div className="relative z-10 p-8 text-center md:p-12">
-            <h2 className="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">
+            <h2 className="text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
               {heading}
             </h2>
             {description && (
-              <p className="mx-auto mt-4 max-w-xl text-gray-600">
+              <p className="mx-auto mt-4 max-w-xl text-muted">
                 {description}
               </p>
             )}
@@ -159,8 +159,8 @@ export function CTABlock({ block }: CTABlockProps) {
                 className={`btn ${
                   backgroundColor === 'primary' || backgroundColor === 'dark'
                     ? link.variant === 'primary'
-                      ? 'bg-white text-gray-900 hover:bg-gray-100'
-                      : 'border border-white bg-transparent hover:bg-white/10'
+                      ? 'bg-base text-foreground hover:bg-card'
+                      : 'border border-white bg-transparent hover:bg-base/10'
                     : link.variant === 'primary'
                     ? 'btn-primary'
                     : 'btn-outline'

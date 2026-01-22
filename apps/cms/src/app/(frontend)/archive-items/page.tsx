@@ -24,8 +24,8 @@ export default async function ArchiveItemsPage() {
     <Section spacing="lg" background="default">
       <Container>
         <header className="mb-12 text-center">
-          <h1 className="text-4xl font-bold tracking-tight text-gray-900">Archive Items</h1>
-          <p className="mt-4 text-lg text-gray-600">Explore curated archive items.</p>
+          <h1 className="text-4xl font-bold tracking-tight text-foreground">Archive Items</h1>
+          <p className="mt-4 text-lg text-muted">Explore curated archive items.</p>
         </header>
 
         <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
@@ -50,8 +50,8 @@ export default async function ArchiveItemsPage() {
                 </div>
               )}
               {!item.featuredImage?.url && (
-                <div className="bg-gray-100 p-6">
-                  <h2 className="text-xl font-bold text-gray-900">{item.title}</h2>
+                <div className="bg-card p-6">
+                  <h2 className="text-xl font-bold text-foreground">{item.title}</h2>
                 </div>
               )}
             </Link>
@@ -59,7 +59,7 @@ export default async function ArchiveItemsPage() {
         </div>
 
         {items.docs.length === 0 && (
-          <div className="text-center text-gray-500">
+          <div className="text-center text-muted">
             <p>No archive items found.</p>
           </div>
         )}

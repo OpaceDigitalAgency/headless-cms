@@ -46,10 +46,10 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
   return (
     <div className="container py-16">
       <header className="mb-12 text-centre">
-        <p className="text-sm uppercase tracking-wide text-gray-500 dark:text-gray-400">Category</p>
-        <h1 className="mt-2 text-4xl font-bold tracking-tight text-gray-900 dark:text-white">{category.title}</h1>
+        <p className="text-sm uppercase tracking-wide text-muted text-muted">Category</p>
+        <h1 className="mt-2 text-4xl font-bold tracking-tight text-foreground text-foreground">{category.title}</h1>
         {category.description && (
-          <p className="mt-4 text-lg text-gray-600 dark:text-gray-300">
+          <p className="mt-4 text-lg text-muted text-muted">
             {category.description}
           </p>
         )}
@@ -73,12 +73,12 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
               </div>
             )}
             <div className="p-6">
-              <h2 className="text-xl font-semibold text-gray-900 dark:text-white">{post.title}</h2>
+              <h2 className="text-xl font-semibold text-foreground text-foreground">{post.title}</h2>
               {post.excerpt && (
-                <p className="mt-2 text-gray-600 dark:text-gray-300 line-clamp-2">{post.excerpt}</p>
+                <p className="mt-2 text-muted text-muted line-clamp-2">{post.excerpt}</p>
               )}
               {post.publishedAt && (
-                <p className="mt-4 text-sm text-gray-400">
+                <p className="mt-4 text-sm text-muted">
                   {new Date(post.publishedAt).toLocaleDateString('en-GB', {
                     year: 'numeric',
                     month: 'long',
@@ -92,7 +92,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
       </div>
 
       {posts.docs.length === 0 && (
-        <div className="text-centre text-gray-500 dark:text-gray-400">
+        <div className="text-centre text-muted text-muted">
           <p>No posts found in this category.</p>
         </div>
       )}
