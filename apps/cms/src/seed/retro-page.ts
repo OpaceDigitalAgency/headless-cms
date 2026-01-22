@@ -7,7 +7,7 @@ const retroPageData = {
     title: 'Retro Dreams',
     slug: 'retro',
     _status: 'published' as const,
-    layout: [
+    content: [
         {
             blockType: 'hero',
             variant: 'retro',
