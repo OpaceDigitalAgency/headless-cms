@@ -20,12 +20,15 @@ import { EcommerceSeeder } from './ecommerce'
 
 /**
  * Available preset IDs
+ *
+ * Note: Presets define content structure, not frontend choice.
+ * Any preset can be used with Next.js or Astro frontends.
  */
 export const PRESET_IDS = [
-  'blog-astro',
-  'brochure-astro',
-  'archive-next',
-  'ecommerce-next',
+  'blog',
+  'brochure',
+  'archive',
+  'ecommerce',
 ] as const
 
 export type PresetId = typeof PRESET_IDS[number]
@@ -40,29 +43,29 @@ export const PRESET_METADATA: Record<PresetId, {
   hasSeedData: boolean
   hasSampleMedia: boolean
 }> = {
-  'blog-astro': {
-    name: 'Blog (Astro)',
+  'blog': {
+    name: 'Blog',
     description: 'A blog site with posts, categories, and pages',
     collections: ['pages', 'posts', 'categories', 'content-types', 'custom-items'],
     hasSeedData: true,
     hasSampleMedia: false,
   },
-  'brochure-astro': {
-    name: 'Brochure (Astro)',
+  'brochure': {
+    name: 'Brochure',
     description: 'A marketing/brochure website with landing pages',
     collections: ['pages', 'content-types', 'custom-items'],
     hasSeedData: true,
     hasSampleMedia: false,
   },
-  'archive-next': {
-    name: 'Archive (Next.js)',
+  'archive': {
+    name: 'Archive',
     description: 'An archive-focused site with archive items, people, and places',
     collections: ['pages', 'posts', 'categories', 'archive-items', 'people', 'places', 'content-types', 'custom-items'],
     hasSeedData: true,
     hasSampleMedia: true,
   },
-  'ecommerce-next': {
-    name: 'Ecommerce (Next.js)',
+  'ecommerce': {
+    name: 'Ecommerce',
     description: 'An ecommerce catalog with products and collections',
     collections: ['pages', 'products', 'product-categories', 'product-collections', 'content-types', 'custom-items'],
     hasSeedData: true,
@@ -79,13 +82,13 @@ export function createSeeder(
   options: SeedOptions = {}
 ): BaseSeeder {
   switch (presetId) {
-    case 'blog-astro':
+    case 'blog':
       return new BlogSeeder(payload, options)
-    case 'brochure-astro':
+    case 'brochure':
       return new BrochureSeeder(payload, options)
-    case 'archive-next':
+    case 'archive':
       return new CoreSeeder(payload, options)
-    case 'ecommerce-next':
+    case 'ecommerce':
       return new EcommerceSeeder(payload, options)
     default:
       throw new Error(`Unknown preset: ${presetId}`)

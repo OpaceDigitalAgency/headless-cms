@@ -9539,6 +9539,10 @@ export interface Footer {
  */
 export interface Setting {
   id: number;
+  /**
+   * The type of site you are building. This determines which seed data and collections are used.
+   */
+  activePreset: 'blog' | 'brochure' | 'archive' | 'ecommerce';
   siteName: string;
   siteDescription?: string | null;
   /**
@@ -9808,6 +9812,7 @@ export interface FooterSelect<T extends boolean = true> {
  * via the `definition` "settings_select".
  */
 export interface SettingsSelect<T extends boolean = true> {
+  activePreset?: T;
   siteName?: T;
   siteDescription?: T;
   siteUrl?: T;

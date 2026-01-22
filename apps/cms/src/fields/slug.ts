@@ -39,6 +39,13 @@ export function slugField(sourceField: string = 'title', urlPath?: string): Fiel
         },
       ],
     },
+    validate: (value) => {
+      // Ensure slug is not empty after slugification
+      if (!value || typeof value !== 'string' || value.trim() === '') {
+        return 'Slug cannot be empty. Please provide a title or slug.'
+      }
+      return true
+    },
   }
 }
 

@@ -1,18 +1,20 @@
 {
-  "id": "ecommerce-next",
-  "name": "Ecommerce Catalog (Next.js)",
-  "description": "A product catalog site with products, categories, and collections. Perfect for showcasing products with SEO-optimized static pages. Payment integration optional.",
-  "category": "ecommerce",
-  "frontend": "next",
+  "id": "archive",
+  "name": "Archive",
+  "description": "A comprehensive archive or gallery site with archive items, people, and places. Features complex relationships, timeline views, and tag-based revalidation. Works with Next.js or Astro frontends.",
+  "category": "archive",
+  "frontend": "any",
   "version": "1.0.0",
   "author": "Payload CMS + Jamstack Platform",
   "collections": [
     "users",
     "media",
     "pages",
-    "products",
-    "product-categories",
-    "product-collections",
+    "posts",
+    "categories",
+    "archive-items",
+    "people",
+    "places",
     "content-types",
     "custom-items"
   ],
@@ -26,6 +28,8 @@
     "landing",
     "detail",
     "list",
+    "article",
+    "timeline",
     "archive"
   ],
   "blocks": [
@@ -35,13 +39,15 @@
     "cta",
     "archive",
     "gallery",
-    "grid"
+    "grid",
+    "timeline"
   ],
   "hasSeedData": true,
   "hasSampleMedia": true,
   "packs": [
     "seo",
-    "search"
+    "search",
+    "redirects"
   ],
   "payloadVersion": "^3.0.0",
   "requiredEnvVars": [
@@ -57,8 +63,6 @@
     "S3_BUCKET",
     "S3_REGION",
     "S3_ACCESS_KEY_ID",
-    "S3_SECRET_ACCESS_KEY",
-    "STRIPE_SECRET_KEY",
-    "STRIPE_WEBHOOK_SECRET"
+    "S3_SECRET_ACCESS_KEY"
   ]
 }

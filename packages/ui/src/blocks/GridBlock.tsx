@@ -32,18 +32,15 @@ export function GridBlock({ block }: GridBlockProps) {
   const isAgencyList = style === 'agency-list'
 
   return (
-    <section className={isAgencyCards || isAgencyList ? 'relative bg-base py-20' : 'container py-12'}>
-      {(isAgencyCards || isAgencyList) && (
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.05)_1px,transparent_1px)] bg-[size:4rem_4rem] opacity-40" />
-      )}
+    <section className={isAgencyCards || isAgencyList ? 'relative w-full bg-base py-16 sm:py-20 lg:py-24' : 'container py-12'}>
       <div className={isAgencyCards || isAgencyList ? 'container relative' : undefined}>
         {description && (
-          <div className="mb-4 inline-flex items-center rounded-full border border-default px-3 py-1 text-xs font-semibold uppercase tracking-widest text-muted">
+          <div className="mb-4 inline-flex items-center text-xs font-semibold uppercase tracking-[0.15em] text-muted">
             {description}
           </div>
         )}
         {heading && (
-          <h2 className={isAgencyCards || isAgencyList ? 'mb-10 text-4xl font-bold text-foreground sm:text-5xl' : 'mb-2 text-2xl font-semibold'}>
+          <h2 className={isAgencyCards || isAgencyList ? 'mb-12 text-3xl font-bold text-foreground sm:text-4xl lg:text-5xl' : 'mb-6 text-2xl font-semibold text-foreground'}>
             {heading}
           </h2>
         )}
@@ -53,37 +50,34 @@ export function GridBlock({ block }: GridBlockProps) {
               key={index}
               className={
                 isAgencyCards
-                  ? 'group relative overflow-hidden rounded-3xl border border-default bg-card p-8 shadow-xl shadow-black/20'
+                  ? 'card group relative overflow-hidden p-8 transition-all hover:scale-[1.02]'
                   : isAgencyList
-                  ? 'group relative overflow-hidden rounded-3xl border border-default bg-card p-8 shadow-lg shadow-black/20'
-                  : 'rounded-lg border border-default p-5 shadow-sm'
+                  ? 'card group relative overflow-hidden p-8 transition-all hover:border-[rgb(var(--color-accent))]'
+                  : 'card p-5'
               }
             >
-              {isAgencyCards && (
-                <div className="absolute inset-0 bg-gradient-to-br from-[rgba(34,197,94,0.12)] via-transparent to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
-              )}
               {item.image?.url && (
                 <img src={item.image.url} alt={item.image.alt || ''} className="mb-4 h-40 w-full rounded object-cover" />
               )}
               {item.stat && (
-                <div className={isAgencyCards || isAgencyList ? 'mb-5 inline-flex h-10 w-10 items-center justify-center rounded-xl bg-accent-soft text-sm font-bold text-accent ring-1 ring-default' : 'text-2xl font-bold'}>
+                <div className={isAgencyCards || isAgencyList ? 'mb-5 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-[rgb(var(--color-accent))]/10 text-sm font-bold text-[rgb(var(--color-accent))] ring-1 ring-[rgb(var(--color-border))]' : 'mb-3 text-2xl font-bold text-[rgb(var(--color-accent))]'}>
                   {item.stat}
                 </div>
               )}
               {item.title && (
-                <h3 className={isAgencyCards || isAgencyList ? 'text-xl font-semibold text-foreground sm:text-2xl' : 'mt-2 text-lg font-semibold'}>
+                <h3 className={isAgencyCards || isAgencyList ? 'text-xl font-semibold text-foreground sm:text-2xl' : 'mt-2 text-lg font-semibold text-foreground'}>
                   {item.title}
                 </h3>
               )}
-              {item.subtitle && <p className="text-sm text-muted">{item.subtitle}</p>}
+              {item.subtitle && <p className="mt-1 text-sm text-muted">{item.subtitle}</p>}
               {item.description && (
-                <p className={isAgencyCards || isAgencyList ? 'mt-3 text-base text-muted' : 'mt-2 text-sm text-muted'}>
+                <p className={isAgencyCards || isAgencyList ? 'mt-3 text-base leading-relaxed text-muted' : 'mt-2 text-sm text-muted'}>
                   {item.description}
                 </p>
               )}
               {isAgencyList && (
                 <div className="mt-6 flex items-center justify-end">
-                  <span className="inline-flex h-12 w-12 items-center justify-center rounded-full border border-default text-accent transition-transform group-hover:translate-x-1">
+                  <span className="inline-flex h-12 w-12 items-center justify-center rounded-full border border-[rgb(var(--color-border))] text-[rgb(var(--color-accent))] transition-all group-hover:translate-x-1 group-hover:border-[rgb(var(--color-accent))]">
                     →
                   </span>
                 </div>

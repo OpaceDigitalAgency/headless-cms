@@ -52,21 +52,21 @@ install: ## Install all dependencies
 create: ## Create a new project (interactive mode)
 	@./scripts/create.sh
 
-blog-astro: ## Create a new blog project with Astro frontend
-	@echo "$(CYAN)Creating blog project with Astro...$(NC)"
-	@read -p "Enter project name: " name && ./scripts/create.sh blog-astro $$name
+blog: ## Create a new blog project
+	@echo "$(CYAN)Creating blog project...$(NC)"
+	@read -p "Enter project name: " name && ./scripts/create.sh blog $$name
 
-brochure-astro: ## Create a new brochure site with Astro frontend
-	@echo "$(CYAN)Creating brochure site with Astro...$(NC)"
-	@read -p "Enter project name: " name && ./scripts/create.sh brochure-astro $$name
+brochure: ## Create a new brochure site
+	@echo "$(CYAN)Creating brochure site...$(NC)"
+	@read -p "Enter project name: " name && ./scripts/create.sh brochure $$name
 
-archive-next: ## Create a new archive site with Next.js
-	@echo "$(CYAN)Creating archive site with Next.js...$(NC)"
-	@read -p "Enter project name: " name && ./scripts/create.sh archive-next $$name
+archive: ## Create a new archive site
+	@echo "$(CYAN)Creating archive site...$(NC)"
+	@read -p "Enter project name: " name && ./scripts/create.sh archive $$name
 
-ecommerce-next: ## Create a new ecommerce catalog with Next.js
-	@echo "$(CYAN)Creating ecommerce site with Next.js...$(NC)"
-	@read -p "Enter project name: " name && ./scripts/create.sh ecommerce-next $$name
+ecommerce: ## Create a new ecommerce catalog
+	@echo "$(CYAN)Creating ecommerce site...$(NC)"
+	@read -p "Enter project name: " name && ./scripts/create.sh ecommerce $$name
 
 # ===========================================
 # Development
@@ -228,17 +228,17 @@ db-studio: ## Open Drizzle Studio for database management
 
 seed-blog: ## Seed blog-specific sample data
 	@echo "$(CYAN)Seeding blog data...$(NC)"
-	SEED_PRESET=blog-astro pnpm --filter @repo/cms seed
+	SEED_PRESET=blog pnpm --filter @repo/cms seed
 	@echo "$(GREEN)Blog data seeded!$(NC)"
 
 seed-archive: ## Seed archive-specific sample data
 	@echo "$(CYAN)Seeding archive data...$(NC)"
-	SEED_PRESET=archive-next pnpm --filter @repo/cms seed
+	SEED_PRESET=archive pnpm --filter @repo/cms seed
 	@echo "$(GREEN)Archive data seeded!$(NC)"
 
 seed-ecommerce: ## Seed ecommerce-specific sample data
 	@echo "$(CYAN)Seeding ecommerce data...$(NC)"
-	SEED_PRESET=ecommerce-next pnpm --filter @repo/cms seed
+	SEED_PRESET=ecommerce pnpm --filter @repo/cms seed
 	@echo "$(GREEN)Ecommerce data seeded!$(NC)"
 
 seed-with-media: ## Seed data including sample media downloads

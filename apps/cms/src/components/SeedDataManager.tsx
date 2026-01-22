@@ -140,7 +140,7 @@ export const SeedDataManager: React.FC = () => {
 
   const getDefaultPresets = (): PresetInfo[] => [
     {
-      id: 'blog-astro',
+      id: 'blog',
       name: 'Blog',
       description: 'A blog site with posts, categories, and pages',
       collections: ['pages', 'posts', 'categories'],
@@ -148,7 +148,7 @@ export const SeedDataManager: React.FC = () => {
       hasSampleMedia: false,
     },
     {
-      id: 'brochure-astro',
+      id: 'brochure',
       name: 'Brochure',
       description: 'A marketing/brochure website with landing pages',
       collections: ['pages'],
@@ -156,7 +156,7 @@ export const SeedDataManager: React.FC = () => {
       hasSampleMedia: false,
     },
     {
-      id: 'archive-next',
+      id: 'archive',
       name: 'Archive',
       description: 'An archive-focused site with archive items, people, and places',
       collections: ['pages', 'posts', 'categories', 'archive-items', 'people', 'places'],
@@ -164,7 +164,7 @@ export const SeedDataManager: React.FC = () => {
       hasSampleMedia: true,
     },
     {
-      id: 'ecommerce-next',
+      id: 'ecommerce',
       name: 'Ecommerce',
       description: 'An ecommerce catalog with products and collections',
       collections: ['pages', 'products', 'product-categories', 'product-collections'],

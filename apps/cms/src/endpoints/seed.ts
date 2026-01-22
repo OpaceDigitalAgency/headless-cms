@@ -43,9 +43,31 @@ const COLLECTION_SEED_CONFIG: Record<string, {
 }
 
 const COLLECTION_PRESET_OVERRIDES: Record<string, PresetId> = {
-  products: 'ecommerce-next',
-  'product-categories': 'ecommerce-next',
-  'product-collections': 'ecommerce-next',
+  products: 'ecommerce',
+  'product-categories': 'ecommerce',
+  'product-collections': 'ecommerce',
+}
+
+/**
+ * Get the active preset from Settings global
+ * Falls back to 'blog' if not set
+ */
+async function getActivePreset(payload: any): Promise<PresetId> {
+  try {
+    const settings = await payload.findGlobal({ slug: 'settings' })
+    const activePreset = settings?.activePreset || 'blog'
+
+    // Validate it's a valid preset
+    if (isValidPresetId(activePreset)) {
+      return activePreset as PresetId
+    }
+
+    payload.logger.warn(`Invalid activePreset in Settings: ${activePreset}, falling back to 'blog'`)
+    return 'blog'
+  } catch (error) {
+    payload.logger.warn('Failed to get activePreset from Settings, falling back to \'blog\'')
+    return 'blog'
+  }
 }
 
 /**
@@ -291,7 +313,8 @@ export const seedCollectionEndpoint: Endpoint = {
 
       const config = COLLECTION_SEED_CONFIG[slug]
 
-      const presetId = COLLECTION_PRESET_OVERRIDES[slug] || 'archive-next'
+      // Use collection-specific preset override, or fall back to active preset from Settings
+      const presetId = COLLECTION_PRESET_OVERRIDES[slug] || await getActivePreset(payload)
       const seeder = createSeeder(presetId, payload, {
         downloadMedia: includeMedia && config.hasSeedMedia,
         clearExisting: action === 'reseed',
@@ -783,7 +806,8 @@ export const seedItemEndpoint: Endpoint = {
       }
 
       // Seed only this specific item
-      const presetToUse = presetId || COLLECTION_PRESET_OVERRIDES[collectionSlug] || 'archive-next'
+      // Use provided preset, collection override, or active preset from Settings
+      const presetToUse = presetId || COLLECTION_PRESET_OVERRIDES[collectionSlug] || await getActivePreset(payload)
 
       if (!isValidPresetId(presetToUse)) {
         return Response.json(

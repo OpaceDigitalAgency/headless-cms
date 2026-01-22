@@ -44,7 +44,7 @@ export function CTABlock({ block }: CTABlockProps) {
 
   if (style === 'banner') {
     return (
-      <section className="relative overflow-hidden py-16">
+      <section className="relative w-full overflow-hidden py-16">
         {image?.url && (
           <div className="absolute inset-0">
             <Image
@@ -53,29 +53,29 @@ export function CTABlock({ block }: CTABlockProps) {
               fill
               className="object-cover"
             />
-            <div className="absolute inset-0 bg-black/60" />
+            <div className="absolute inset-0 bg-[rgb(var(--color-foreground))]/70" />
           </div>
         )}
-        <div className="w-full relative z-10 text-center text-white">
+        <div className="container relative z-10 text-center text-[rgb(var(--color-background))]">
           <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
             {heading}
           </h2>
           {description && (
-            <p className="mx-auto mt-4 max-w-2xl text-lg text-muted">
+            <p className="mx-auto mt-6 max-w-2xl text-lg opacity-90">
               {description}
             </p>
           )}
           {links && links.length > 0 && (
-            <div className="mt-8 flex flex-wrap justify-center gap-4">
+            <div className="mt-10 flex flex-wrap justify-center gap-4">
               {links.map((link, index) => (
                 <Link
                   key={index}
                   href={getUrl(link)}
                   target={link.newTab ? '_blank' : undefined}
-                  className={`btn ${
+                  className={`btn inline-flex items-center justify-center rounded-full px-8 py-3 text-base font-semibold transition-all ${
                     link.variant === 'primary'
-                      ? 'bg-base text-foreground hover:bg-card'
-                      : 'border border-white bg-transparent text-white hover:bg-base/10'
+                      ? 'bg-[rgb(var(--color-background))] text-foreground hover:bg-[rgb(var(--color-card))]'
+                      : 'border border-[rgb(var(--color-background))] bg-transparent text-[rgb(var(--color-background))] hover:bg-[rgb(var(--color-background))]/10'
                   }`}
                 >
                   {link.label}
@@ -107,23 +107,23 @@ export function CTABlock({ block }: CTABlockProps) {
               {heading}
             </h2>
             {description && (
-              <p className="mx-auto mt-4 max-w-xl text-muted">
+              <p className="mx-auto mt-6 max-w-xl text-muted">
                 {description}
               </p>
             )}
             {links && links.length > 0 && (
-              <div className="mt-6 flex flex-wrap justify-center gap-4">
+              <div className="mt-8 flex flex-wrap justify-center gap-4">
                 {links.map((link, index) => (
                   <Link
                     key={index}
                     href={getUrl(link)}
                     target={link.newTab ? '_blank' : undefined}
-                    className={`btn ${
+                    className={`btn inline-flex items-center justify-center rounded-full px-8 py-3 text-base font-semibold transition-all ${
                       link.variant === 'primary'
                         ? 'btn-primary'
                         : link.variant === 'outline'
-                        ? 'btn-outline'
-                        : 'btn-secondary'
+                        ? 'border border-[rgb(var(--color-border))] bg-transparent text-foreground hover:border-[rgb(var(--color-accent))] hover:bg-[rgb(var(--color-card))]'
+                        : 'bg-[rgb(var(--color-card))] text-foreground hover:bg-[rgb(var(--color-accent))]/10'
                     }`}
                   >
                     {link.label}
@@ -139,23 +139,22 @@ export function CTABlock({ block }: CTABlockProps) {
 
   if (style === 'agency') {
     return (
-      <section className="relative overflow-hidden bg-accent py-20 text-[rgb(var(--color-background))]">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(0,0,0,0.35),transparent_60%)]" />
+      <section className="relative w-full overflow-hidden bg-[rgb(var(--color-accent))] py-16 text-[rgb(var(--color-background))] sm:py-20 lg:py-24">
         <div className="container relative text-center">
-          <h2 className="text-4xl font-bold tracking-tight sm:text-5xl">{heading}</h2>
+          <h2 className="text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl">{heading}</h2>
           {description && (
-            <p className="mx-auto mt-4 max-w-2xl text-lg opacity-90">
+            <p className="mx-auto mt-6 max-w-2xl text-lg opacity-90">
               {description}
             </p>
           )}
           {links && links.length > 0 && (
-            <div className="mt-8 flex flex-wrap justify-center gap-4">
+            <div className="mt-10 flex flex-wrap justify-center gap-4">
               {links.map((link, index) => (
                 <Link
                   key={index}
                   href={getUrl(link)}
                   target={link.newTab ? '_blank' : undefined}
-                  className="btn bg-[rgb(var(--color-background))] text-foreground hover:bg-base/80"
+                  className="btn inline-flex items-center justify-center rounded-full bg-[rgb(var(--color-background))] px-8 py-3 text-base font-semibold text-foreground transition-all hover:bg-[rgb(var(--color-card))]"
                 >
                   {link.label}
                 </Link>
@@ -169,31 +168,31 @@ export function CTABlock({ block }: CTABlockProps) {
 
   // Standard CTA
   return (
-    <section className={`${bgClasses[backgroundColor as keyof typeof bgClasses]} py-16`}>
-      <div className="w-full text-center">
-        <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
+    <section className={`w-full ${bgClasses[backgroundColor as keyof typeof bgClasses]} py-16`}>
+      <div className="container text-center">
+        <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
           {heading}
         </h2>
         {description && (
-          <p className="mx-auto mt-4 max-w-2xl text-lg opacity-90">
+          <p className="mx-auto mt-6 max-w-2xl text-lg text-muted">
             {description}
           </p>
         )}
         {links && links.length > 0 && (
-          <div className="mt-8 flex flex-wrap justify-center gap-4">
+          <div className="mt-10 flex flex-wrap justify-center gap-4">
             {links.map((link, index) => (
               <Link
                 key={index}
                 href={getUrl(link)}
                 target={link.newTab ? '_blank' : undefined}
-                className={`btn ${
+                className={`btn inline-flex items-center justify-center rounded-full px-8 py-3 text-base font-semibold transition-all ${
                   backgroundColor === 'primary' || backgroundColor === 'dark'
                     ? link.variant === 'primary'
-                      ? 'bg-base text-foreground hover:bg-card'
-                      : 'border border-white bg-transparent hover:bg-base/10'
+                      ? 'bg-[rgb(var(--color-background))] text-foreground hover:bg-[rgb(var(--color-card))]'
+                      : 'border border-[rgb(var(--color-background))] bg-transparent text-[rgb(var(--color-background))] hover:bg-[rgb(var(--color-background))]/10'
                     : link.variant === 'primary'
                     ? 'btn-primary'
-                    : 'btn-outline'
+                    : 'border border-[rgb(var(--color-border))] bg-transparent text-foreground hover:border-[rgb(var(--color-accent))] hover:bg-[rgb(var(--color-card))]'
                 }`}
               >
                 {link.label}

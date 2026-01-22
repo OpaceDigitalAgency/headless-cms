@@ -131,12 +131,15 @@ export interface PresetRegistryEntry {
 
 /**
  * Available presets in the system
+ *
+ * Note: Presets define content structure, not frontend choice.
+ * Any preset can be used with Next.js or Astro frontends.
  */
 export const AVAILABLE_PRESETS = [
-  'blog-astro',
-  'brochure-astro',
-  'archive-next',
-  'ecommerce-next',
+  'blog',
+  'brochure',
+  'archive',
+  'ecommerce',
 ] as const
 
 export type AvailablePreset = typeof AVAILABLE_PRESETS[number]

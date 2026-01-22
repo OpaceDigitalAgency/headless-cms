@@ -8,10 +8,10 @@
 # Usage: ./scripts/create.sh [preset] [project-name]
 #
 # Available presets:
-#   - blog-astro      : Blog with Astro frontend
-#   - brochure-astro  : Brochure/marketing site with Astro
-#   - archive-next    : Archive site with Next.js
-#   - ecommerce-next  : Ecommerce catalog with Next.js
+#   - blog      : Blog site (works with Next.js or Astro)
+#   - brochure  : Brochure/marketing site (works with Next.js or Astro)
+#   - archive   : Archive site (works with Next.js or Astro)
+#   - ecommerce : Ecommerce catalog (works with Next.js or Astro)
 #
 
 set -e
@@ -28,7 +28,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT_DIR="$(dirname "$SCRIPT_DIR")"
 
 # Available presets
-PRESETS=("blog-astro" "brochure-astro" "archive-next" "ecommerce-next")
+PRESETS=("blog" "brochure" "archive" "ecommerce")
 
 # ===========================================
 # Helper Functions
@@ -67,9 +67,9 @@ show_usage() {
     done
     echo ""
     echo "Examples:"
-    echo "  $0 blog-astro my-blog"
-    echo "  $0 archive-next art-gallery"
-    echo "  $0 ecommerce-next my-shop"
+    echo "  $0 blog my-blog"
+    echo "  $0 archive art-gallery"
+    echo "  $0 ecommerce my-shop"
     echo ""
 }
 

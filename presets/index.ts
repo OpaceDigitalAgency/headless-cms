@@ -165,19 +165,19 @@ export function getPresetSeedConfig(presetId: AvailablePreset): SeedConfig {
   
   // Default seed configurations per preset type
   const defaultConfigs: Record<string, Partial<SeedConfig>> = {
-    'blog-astro': {
+    'blog': {
       itemCounts: {
         pages: 3,
         posts: 5,
         categories: 4,
       },
     },
-    'brochure-astro': {
+    'brochure': {
       itemCounts: {
         pages: 5,
       },
     },
-    'archive-next': {
+    'archive': {
       itemCounts: {
         pages: 3,
         posts: 3,
@@ -187,7 +187,7 @@ export function getPresetSeedConfig(presetId: AvailablePreset): SeedConfig {
         places: 5,
       },
     },
-    'ecommerce-next': {
+    'ecommerce': {
       itemCounts: {
         pages: 3,
         products: 12,

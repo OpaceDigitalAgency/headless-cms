@@ -1,7 +1,7 @@
 /**
  * Brochure Preset Seeder
- * 
- * Seeds sample data for the brochure-astro preset.
+ *
+ * Seeds sample data for the brochure preset.
  * Creates pages suitable for a marketing/brochure website.
  */
 
@@ -14,7 +14,7 @@ export class BrochureSeeder extends BaseSeeder {
   }
 
   getPresetId(): string {
-    return 'brochure-astro'
+    return 'brochure'
   }
 
   getCollections(): string[] {

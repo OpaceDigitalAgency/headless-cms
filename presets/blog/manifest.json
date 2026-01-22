@@ -1,15 +1,17 @@
 {
-  "id": "brochure-astro",
-  "name": "Brochure Site (Astro)",
-  "description": "A simple marketing/brochure website with pages and basic content blocks. Ideal for small business sites, portfolios, and landing pages.",
-  "category": "brochure",
-  "frontend": "astro",
+  "id": "blog",
+  "name": "Blog",
+  "description": "A simple blog with posts, categories, and pages. Perfect for personal blogs, company blogs, or documentation sites. Works with Next.js or Astro frontends.",
+  "category": "blog",
+  "frontend": "any",
   "version": "1.0.0",
   "author": "Payload CMS + Jamstack Platform",
   "collections": [
     "users",
     "media",
     "pages",
+    "posts",
+    "categories",
     "content-types",
     "custom-items"
   ],
@@ -21,21 +23,21 @@
   "templates": [
     "home",
     "landing",
-    "detail"
+    "detail",
+    "article",
+    "archive"
   ],
   "blocks": [
     "hero",
     "content",
     "media",
     "cta",
-    "gallery",
-    "grid"
+    "archive"
   ],
   "hasSeedData": true,
   "hasSampleMedia": true,
   "packs": [
-    "seo",
-    "forms"
+    "seo"
   ],
   "payloadVersion": "^3.0.0",
   "requiredEnvVars": [

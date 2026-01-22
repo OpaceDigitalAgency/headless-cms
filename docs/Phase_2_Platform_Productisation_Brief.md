@@ -93,10 +93,10 @@ Introduce a filesystem-based packaging system.
 ### 2.1 Presets (Site Types)
 ```
 presets/
-├── blog-astro/
-├── brochure-astro/
-├── archive-next/
-├── ecommerce-next/
+├── blog/
+├── brochure/
+├── archive/
+├── ecommerce/
 ```
 
 Each preset includes:
@@ -104,7 +104,7 @@ Each preset includes:
 - Globals
 - Template mappings
 - Seed data
-- Frontend routes/layouts
+- Frontend routes/layouts (works with Next.js or Astro)
 
 ### 2.2 Feature Packs (Future)
 ```
@@ -140,10 +140,10 @@ Responsibilities:
 
 ### 3.2 Makefile Shortcuts
 Commands such as:
-- `make blog-next`
-- `make brochure-astro`
-- `make ecommerce-next`
-- `make archive-next`
+- `make blog`
+- `make brochure`
+- `make ecommerce`
+- `make archive`
 
 These wrap the generator for non-technical users.
 

@@ -35,6 +35,22 @@ export const Settings: GlobalConfig = {
           label: 'General',
           fields: [
             {
+              name: 'activePreset',
+              type: 'select',
+              required: true,
+              defaultValue: 'blog',
+              label: 'Site Type',
+              admin: {
+                description: 'The type of site you are building. This determines which seed data and collections are used.',
+              },
+              options: [
+                { label: 'Blog', value: 'blog' },
+                { label: 'Brochure', value: 'brochure' },
+                { label: 'Archive', value: 'archive' },
+                { label: 'Ecommerce', value: 'ecommerce' },
+              ],
+            },
+            {
               name: 'siteName',
               type: 'text',
               required: true,

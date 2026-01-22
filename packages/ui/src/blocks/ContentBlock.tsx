@@ -65,9 +65,9 @@ export function ContentBlock({ block }: ContentBlockProps) {
 
   return (
     <section
-      className={`${bgClasses[backgroundColor as keyof typeof bgClasses]} ${paddingTopClasses[paddingTop as keyof typeof paddingTopClasses]} ${paddingBottomClasses[paddingBottom as keyof typeof paddingBottomClasses]}`}
+      className={`w-full ${bgClasses[backgroundColor as keyof typeof bgClasses]} ${paddingTopClasses[paddingTop as keyof typeof paddingTopClasses]} ${paddingBottomClasses[paddingBottom as keyof typeof paddingBottomClasses]}`}
     >
-      <div className="w-full">
+      <div className="container">
         <div className="grid grid-cols-12 gap-8">
           {columns.map((column, index) => (
             <div
@@ -75,17 +75,17 @@ export function ContentBlock({ block }: ContentBlockProps) {
               className={`col-span-12 ${sizeClasses[column.size as keyof typeof sizeClasses] || 'md:col-span-12'}`}
             >
               {column.richText && (
-                <div className="prose prose-lg max-w-none">
+                <div className="prose prose-lg max-w-none text-foreground">
                   <RichText content={column.richText} />
                 </div>
               )}
-              
+
               {column.enableLink && column.link?.label && (
                 <div className="mt-6">
                   <Link
                     href={getUrl(column.link)}
                     target={column.link.newTab ? '_blank' : undefined}
-                    className="link font-medium"
+                    className="font-medium text-[rgb(var(--color-accent))] transition-colors hover:text-[rgb(var(--color-accent-light))]"
                   >
                     {column.link.label} →
                   </Link>

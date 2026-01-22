@@ -1639,6 +1639,14 @@
           "primaryKey": true,
           "notNull": true
         },
+        "variant": {
+          "name": "variant",
+          "type": "enum_pages_blocks_hero_variant",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'standard'"
+        },
         "type": {
           "name": "type",
           "type": "enum_pages_blocks_hero_type",
@@ -1646,6 +1654,12 @@
           "primaryKey": false,
           "notNull": false,
           "default": "'standard'"
+        },
+        "eyebrow": {
+          "name": "eyebrow",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
         },
         "heading": {
           "name": "heading",
@@ -3570,6 +3584,14 @@
           "type": "varchar",
           "primaryKey": false,
           "notNull": false
+        },
+        "style": {
+          "name": "style",
+          "type": "enum_pages_blocks_testimonials_style",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'standard'"
         },
         "block_name": {
           "name": "block_name",
@@ -6458,12 +6480,6 @@
           "primaryKey": false,
           "notNull": false
         },
-        "slug": {
-          "name": "slug",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": false
-        },
         "hero_type": {
           "name": "hero_type",
           "type": "enum_pages_hero_type",
@@ -6490,20 +6506,6 @@
           "primaryKey": false,
           "notNull": false
         },
-        "template": {
-          "name": "template",
-          "type": "enum_pages_template",
-          "typeSchema": "public",
-          "primaryKey": false,
-          "notNull": false,
-          "default": "'landing'"
-        },
-        "published_at": {
-          "name": "published_at",
-          "type": "timestamp(3) with time zone",
-          "primaryKey": false,
-          "notNull": false
-        },
         "meta_title": {
           "name": "meta_title",
           "type": "varchar",
@@ -6519,6 +6521,26 @@
         "meta_image_id": {
           "name": "meta_image_id",
           "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "slug": {
+          "name": "slug",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "template": {
+          "name": "template",
+          "type": "enum_pages_template",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'landing'"
+        },
+        "published_at": {
+          "name": "published_at",
+          "type": "timestamp(3) with time zone",
           "primaryKey": false,
           "notNull": false
         },
@@ -6546,21 +6568,6 @@
         }
       },
       "indexes": {
-        "pages_slug_idx": {
-          "name": "pages_slug_idx",
-          "columns": [
-            {
-              "expression": "slug",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": true,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
         "pages_hero_hero_image_idx": {
           "name": "pages_hero_hero_image_idx",
           "columns": [
@@ -6587,6 +6594,21 @@
             }
           ],
           "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "pages_slug_idx": {
+          "name": "pages_slug_idx",
+          "columns": [
+            {
+              "expression": "slug",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
           "concurrently": false,
           "method": "btree",
           "with": {}
@@ -7352,6 +7374,14 @@
           "primaryKey": true,
           "notNull": true
         },
+        "variant": {
+          "name": "variant",
+          "type": "enum__pages_v_blocks_hero_variant",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'standard'"
+        },
         "type": {
           "name": "type",
           "type": "enum__pages_v_blocks_hero_type",
@@ -7359,6 +7389,12 @@
           "primaryKey": false,
           "notNull": false,
           "default": "'standard'"
+        },
+        "eyebrow": {
+          "name": "eyebrow",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
         },
         "heading": {
           "name": "heading",
@@ -9367,6 +9403,14 @@
           "type": "varchar",
           "primaryKey": false,
           "notNull": false
+        },
+        "style": {
+          "name": "style",
+          "type": "enum__pages_v_blocks_testimonials_style",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'standard'"
         },
         "_uuid": {
           "name": "_uuid",
@@ -12381,12 +12425,6 @@
           "primaryKey": false,
           "notNull": false
         },
-        "version_slug": {
-          "name": "version_slug",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": false
-        },
         "version_hero_type": {
           "name": "version_hero_type",
           "type": "enum__pages_v_version_hero_type",
@@ -12413,20 +12451,6 @@
           "primaryKey": false,
           "notNull": false
         },
-        "version_template": {
-          "name": "version_template",
-          "type": "enum__pages_v_version_template",
-          "typeSchema": "public",
-          "primaryKey": false,
-          "notNull": false,
-          "default": "'landing'"
-        },
-        "version_published_at": {
-          "name": "version_published_at",
-          "type": "timestamp(3) with time zone",
-          "primaryKey": false,
-          "notNull": false
-        },
         "version_meta_title": {
           "name": "version_meta_title",
           "type": "varchar",
@@ -12442,6 +12466,26 @@
         "version_meta_image_id": {
           "name": "version_meta_image_id",
           "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "version_slug": {
+          "name": "version_slug",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "version_template": {
+          "name": "version_template",
+          "type": "enum__pages_v_version_template",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'landing'"
+        },
+        "version_published_at": {
+          "name": "version_published_at",
+          "type": "timestamp(3) with time zone",
           "primaryKey": false,
           "notNull": false
         },
@@ -12508,21 +12552,6 @@
           "method": "btree",
           "with": {}
         },
-        "_pages_v_version_version_slug_idx": {
-          "name": "_pages_v_version_version_slug_idx",
-          "columns": [
-            {
-              "expression": "version_slug",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
         "_pages_v_version_hero_version_hero_image_idx": {
           "name": "_pages_v_version_hero_version_hero_image_idx",
           "columns": [
@@ -12543,6 +12572,21 @@
           "columns": [
             {
               "expression": "version_meta_image_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "_pages_v_version_version_slug_idx": {
+          "name": "_pages_v_version_version_slug_idx",
+          "columns": [
+            {
+              "expression": "version_slug",
               "isExpression": false,
               "asc": true,
               "nulls": "last"
@@ -13239,6 +13283,14 @@
           "primaryKey": true,
           "notNull": true
         },
+        "variant": {
+          "name": "variant",
+          "type": "enum_posts_blocks_hero_variant",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'standard'"
+        },
         "type": {
           "name": "type",
           "type": "enum_posts_blocks_hero_type",
@@ -13246,6 +13298,12 @@
           "primaryKey": false,
           "notNull": false,
           "default": "'standard'"
+        },
+        "eyebrow": {
+          "name": "eyebrow",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
         },
         "heading": {
           "name": "heading",
@@ -15170,6 +15228,14 @@
           "type": "varchar",
           "primaryKey": false,
           "notNull": false
+        },
+        "style": {
+          "name": "style",
+          "type": "enum_posts_blocks_testimonials_style",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'standard'"
         },
         "block_name": {
           "name": "block_name",
@@ -18058,12 +18124,6 @@
           "primaryKey": false,
           "notNull": false
         },
-        "slug": {
-          "name": "slug",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": false
-        },
         "featured_image_id": {
           "name": "featured_image_id",
           "type": "integer",
@@ -18079,6 +18139,30 @@
         "content": {
           "name": "content",
           "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "meta_title": {
+          "name": "meta_title",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "meta_description": {
+          "name": "meta_description",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "meta_image_id": {
+          "name": "meta_image_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "slug": {
+          "name": "slug",
+          "type": "varchar",
           "primaryKey": false,
           "notNull": false
         },
@@ -18108,24 +18192,6 @@
           "primaryKey": false,
           "notNull": false
         },
-        "meta_title": {
-          "name": "meta_title",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "meta_description": {
-          "name": "meta_description",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "meta_image_id": {
-          "name": "meta_image_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false
-        },
         "updated_at": {
           "name": "updated_at",
           "type": "timestamp(3) with time zone",
@@ -18150,21 +18216,6 @@
         }
       },
       "indexes": {
-        "posts_slug_idx": {
-          "name": "posts_slug_idx",
-          "columns": [
-            {
-              "expression": "slug",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": true,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
         "posts_featured_image_idx": {
           "name": "posts_featured_image_idx",
           "columns": [
@@ -18180,11 +18231,11 @@
           "method": "btree",
           "with": {}
         },
-        "posts_author_idx": {
-          "name": "posts_author_idx",
+        "posts_meta_meta_image_idx": {
+          "name": "posts_meta_meta_image_idx",
           "columns": [
             {
-              "expression": "author_id",
+              "expression": "meta_image_id",
               "isExpression": false,
               "asc": true,
               "nulls": "last"
@@ -18195,11 +18246,26 @@
           "method": "btree",
           "with": {}
         },
-        "posts_meta_meta_image_idx": {
-          "name": "posts_meta_meta_image_idx",
+        "posts_slug_idx": {
+          "name": "posts_slug_idx",
           "columns": [
             {
-              "expression": "meta_image_id",
+              "expression": "slug",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "posts_author_idx": {
+          "name": "posts_author_idx",
+          "columns": [
+            {
+              "expression": "author_id",
               "isExpression": false,
               "asc": true,
               "nulls": "last"
@@ -18270,12 +18336,12 @@
           "onDelete": "set null",
           "onUpdate": "no action"
         },
-        "posts_author_id_users_id_fk": {
-          "name": "posts_author_id_users_id_fk",
+        "posts_meta_image_id_media_id_fk": {
+          "name": "posts_meta_image_id_media_id_fk",
           "tableFrom": "posts",
-          "tableTo": "users",
+          "tableTo": "media",
           "columnsFrom": [
-            "author_id"
+            "meta_image_id"
           ],
           "columnsTo": [
             "id"
@@ -18283,12 +18349,12 @@
           "onDelete": "set null",
           "onUpdate": "no action"
         },
-        "posts_meta_image_id_media_id_fk": {
-          "name": "posts_meta_image_id_media_id_fk",
+        "posts_author_id_users_id_fk": {
+          "name": "posts_author_id_users_id_fk",
           "tableFrom": "posts",
-          "tableTo": "media",
+          "tableTo": "users",
           "columnsFrom": [
-            "meta_image_id"
+            "author_id"
           ],
           "columnsTo": [
             "id"
@@ -18842,6 +18908,14 @@
           "primaryKey": true,
           "notNull": true
         },
+        "variant": {
+          "name": "variant",
+          "type": "enum__posts_v_blocks_hero_variant",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'standard'"
+        },
         "type": {
           "name": "type",
           "type": "enum__posts_v_blocks_hero_type",
@@ -18849,6 +18923,12 @@
           "primaryKey": false,
           "notNull": false,
           "default": "'standard'"
+        },
+        "eyebrow": {
+          "name": "eyebrow",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
         },
         "heading": {
           "name": "heading",
@@ -20857,6 +20937,14 @@
           "type": "varchar",
           "primaryKey": false,
           "notNull": false
+        },
+        "style": {
+          "name": "style",
+          "type": "enum__posts_v_blocks_testimonials_style",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'standard'"
         },
         "_uuid": {
           "name": "_uuid",
@@ -23871,12 +23959,6 @@
           "primaryKey": false,
           "notNull": false
         },
-        "version_slug": {
-          "name": "version_slug",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": false
-        },
         "version_featured_image_id": {
           "name": "version_featured_image_id",
           "type": "integer",
@@ -23892,6 +23974,30 @@
         "version_content": {
           "name": "version_content",
           "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "version_meta_title": {
+          "name": "version_meta_title",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "version_meta_description": {
+          "name": "version_meta_description",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "version_meta_image_id": {
+          "name": "version_meta_image_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "version_slug": {
+          "name": "version_slug",
+          "type": "varchar",
           "primaryKey": false,
           "notNull": false
         },
@@ -23918,24 +24024,6 @@
         "version_featured": {
           "name": "version_featured",
           "type": "boolean",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "version_meta_title": {
-          "name": "version_meta_title",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "version_meta_description": {
-          "name": "version_meta_description",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "version_meta_image_id": {
-          "name": "version_meta_image_id",
-          "type": "integer",
           "primaryKey": false,
           "notNull": false
         },
@@ -24002,21 +24090,6 @@
           "method": "btree",
           "with": {}
         },
-        "_posts_v_version_version_slug_idx": {
-          "name": "_posts_v_version_version_slug_idx",
-          "columns": [
-            {
-              "expression": "version_slug",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
         "_posts_v_version_version_featured_image_idx": {
           "name": "_posts_v_version_version_featured_image_idx",
           "columns": [
@@ -24032,11 +24105,11 @@
           "method": "btree",
           "with": {}
         },
-        "_posts_v_version_version_author_idx": {
-          "name": "_posts_v_version_version_author_idx",
+        "_posts_v_version_meta_version_meta_image_idx": {
+          "name": "_posts_v_version_meta_version_meta_image_idx",
           "columns": [
             {
-              "expression": "version_author_id",
+              "expression": "version_meta_image_id",
               "isExpression": false,
               "asc": true,
               "nulls": "last"
@@ -24047,11 +24120,26 @@
           "method": "btree",
           "with": {}
         },
-        "_posts_v_version_meta_version_meta_image_idx": {
-          "name": "_posts_v_version_meta_version_meta_image_idx",
+        "_posts_v_version_version_slug_idx": {
+          "name": "_posts_v_version_version_slug_idx",
           "columns": [
             {
-              "expression": "version_meta_image_id",
+              "expression": "version_slug",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "_posts_v_version_version_author_idx": {
+          "name": "_posts_v_version_version_author_idx",
+          "columns": [
+            {
+              "expression": "version_author_id",
               "isExpression": false,
               "asc": true,
               "nulls": "last"
@@ -24195,12 +24283,12 @@
           "onDelete": "set null",
           "onUpdate": "no action"
         },
-        "_posts_v_version_author_id_users_id_fk": {
-          "name": "_posts_v_version_author_id_users_id_fk",
+        "_posts_v_version_meta_image_id_media_id_fk": {
+          "name": "_posts_v_version_meta_image_id_media_id_fk",
           "tableFrom": "_posts_v",
-          "tableTo": "users",
+          "tableTo": "media",
           "columnsFrom": [
-            "version_author_id"
+            "version_meta_image_id"
           ],
           "columnsTo": [
             "id"
@@ -24208,12 +24296,12 @@
           "onDelete": "set null",
           "onUpdate": "no action"
         },
-        "_posts_v_version_meta_image_id_media_id_fk": {
-          "name": "_posts_v_version_meta_image_id_media_id_fk",
+        "_posts_v_version_author_id_users_id_fk": {
+          "name": "_posts_v_version_author_id_users_id_fk",
           "tableFrom": "_posts_v",
-          "tableTo": "media",
+          "tableTo": "users",
           "columnsFrom": [
-            "version_meta_image_id"
+            "version_author_id"
           ],
           "columnsTo": [
             "id"
@@ -25950,6 +26038,14 @@
           "primaryKey": true,
           "notNull": true
         },
+        "variant": {
+          "name": "variant",
+          "type": "enum_archive_items_blocks_hero_variant",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'standard'"
+        },
         "type": {
           "name": "type",
           "type": "enum_archive_items_blocks_hero_type",
@@ -25957,6 +26053,12 @@
           "primaryKey": false,
           "notNull": false,
           "default": "'standard'"
+        },
+        "eyebrow": {
+          "name": "eyebrow",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
         },
         "heading": {
           "name": "heading",
@@ -28497,12 +28599,6 @@
           "primaryKey": false,
           "notNull": false
         },
-        "slug": {
-          "name": "slug",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": false
-        },
         "featured_image_id": {
           "name": "featured_image_id",
           "type": "integer",
@@ -28581,6 +28677,30 @@
           "primaryKey": false,
           "notNull": false
         },
+        "meta_title": {
+          "name": "meta_title",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "meta_description": {
+          "name": "meta_description",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "meta_image_id": {
+          "name": "meta_image_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "slug": {
+          "name": "slug",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
         "featured": {
           "name": "featured",
           "type": "boolean",
@@ -28607,24 +28727,6 @@
           "notNull": false,
           "default": "'detail'"
         },
-        "meta_title": {
-          "name": "meta_title",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "meta_description": {
-          "name": "meta_description",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "meta_image_id": {
-          "name": "meta_image_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false
-        },
         "updated_at": {
           "name": "updated_at",
           "type": "timestamp(3) with time zone",
@@ -28649,21 +28751,6 @@
         }
       },
       "indexes": {
-        "archive_items_slug_idx": {
-          "name": "archive_items_slug_idx",
-          "columns": [
-            {
-              "expression": "slug",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": true,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
         "archive_items_featured_image_idx": {
           "name": "archive_items_featured_image_idx",
           "columns": [
@@ -28705,6 +28792,21 @@
             }
           ],
           "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "archive_items_slug_idx": {
+          "name": "archive_items_slug_idx",
+          "columns": [
+            {
+              "expression": "slug",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
           "concurrently": false,
           "method": "btree",
           "with": {}
@@ -29450,6 +29552,14 @@
           "primaryKey": true,
           "notNull": true
         },
+        "variant": {
+          "name": "variant",
+          "type": "enum__archive_items_v_blocks_hero_variant",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'standard'"
+        },
         "type": {
           "name": "type",
           "type": "enum__archive_items_v_blocks_hero_type",
@@ -29457,6 +29567,12 @@
           "primaryKey": false,
           "notNull": false,
           "default": "'standard'"
+        },
+        "eyebrow": {
+          "name": "eyebrow",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
         },
         "heading": {
           "name": "heading",
@@ -32087,12 +32203,6 @@
           "primaryKey": false,
           "notNull": false
         },
-        "version_slug": {
-          "name": "version_slug",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": false
-        },
         "version_featured_image_id": {
           "name": "version_featured_image_id",
           "type": "integer",
@@ -32171,6 +32281,30 @@
           "primaryKey": false,
           "notNull": false
         },
+        "version_meta_title": {
+          "name": "version_meta_title",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "version_meta_description": {
+          "name": "version_meta_description",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "version_meta_image_id": {
+          "name": "version_meta_image_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "version_slug": {
+          "name": "version_slug",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
         "version_featured": {
           "name": "version_featured",
           "type": "boolean",
@@ -32196,24 +32330,6 @@
           "primaryKey": false,
           "notNull": false,
           "default": "'detail'"
-        },
-        "version_meta_title": {
-          "name": "version_meta_title",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "version_meta_description": {
-          "name": "version_meta_description",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "version_meta_image_id": {
-          "name": "version_meta_image_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false
         },
         "version_updated_at": {
           "name": "version_updated_at",
@@ -32278,21 +32394,6 @@
           "method": "btree",
           "with": {}
         },
-        "_archive_items_v_version_version_slug_idx": {
-          "name": "_archive_items_v_version_version_slug_idx",
-          "columns": [
-            {
-              "expression": "version_slug",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
         "_archive_items_v_version_version_featured_image_idx": {
           "name": "_archive_items_v_version_version_featured_image_idx",
           "columns": [
@@ -32328,6 +32429,21 @@
           "columns": [
             {
               "expression": "version_meta_image_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "_archive_items_v_version_version_slug_idx": {
+          "name": "_archive_items_v_version_version_slug_idx",
+          "columns": [
+            {
+              "expression": "version_slug",
               "isExpression": false,
               "asc": true,
               "nulls": "last"
@@ -33278,6 +33394,14 @@
           "primaryKey": true,
           "notNull": true
         },
+        "variant": {
+          "name": "variant",
+          "type": "enum_people_blocks_hero_variant",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'standard'"
+        },
         "type": {
           "name": "type",
           "type": "enum_people_blocks_hero_type",
@@ -33285,6 +33409,12 @@
           "primaryKey": false,
           "notNull": false,
           "default": "'standard'"
+        },
+        "eyebrow": {
+          "name": "eyebrow",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
         },
         "heading": {
           "name": "heading",
@@ -35209,6 +35339,14 @@
           "type": "varchar",
           "primaryKey": false,
           "notNull": false
+        },
+        "style": {
+          "name": "style",
+          "type": "enum_people_blocks_testimonials_style",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'standard'"
         },
         "block_name": {
           "name": "block_name",
@@ -38097,12 +38235,6 @@
           "primaryKey": false,
           "notNull": false
         },
-        "slug": {
-          "name": "slug",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": false
-        },
         "portrait_id": {
           "name": "portrait_id",
           "type": "integer",
@@ -38169,20 +38301,6 @@
           "primaryKey": false,
           "notNull": false
         },
-        "template": {
-          "name": "template",
-          "type": "enum_people_template",
-          "typeSchema": "public",
-          "primaryKey": false,
-          "notNull": false,
-          "default": "'profile'"
-        },
-        "featured": {
-          "name": "featured",
-          "type": "boolean",
-          "primaryKey": false,
-          "notNull": false
-        },
         "meta_title": {
           "name": "meta_title",
           "type": "varchar",
@@ -38198,6 +38316,26 @@
         "meta_image_id": {
           "name": "meta_image_id",
           "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "slug": {
+          "name": "slug",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "template": {
+          "name": "template",
+          "type": "enum_people_template",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'profile'"
+        },
+        "featured": {
+          "name": "featured",
+          "type": "boolean",
           "primaryKey": false,
           "notNull": false
         },
@@ -38225,21 +38363,6 @@
         }
       },
       "indexes": {
-        "people_slug_idx": {
-          "name": "people_slug_idx",
-          "columns": [
-            {
-              "expression": "slug",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": true,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
         "people_portrait_idx": {
           "name": "people_portrait_idx",
           "columns": [
@@ -38296,6 +38419,21 @@
             }
           ],
           "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "people_slug_idx": {
+          "name": "people_slug_idx",
+          "columns": [
+            {
+              "expression": "slug",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
           "concurrently": false,
           "method": "btree",
           "with": {}
@@ -39211,6 +39349,14 @@
           "primaryKey": true,
           "notNull": true
         },
+        "variant": {
+          "name": "variant",
+          "type": "enum__people_v_blocks_hero_variant",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'standard'"
+        },
         "type": {
           "name": "type",
           "type": "enum__people_v_blocks_hero_type",
@@ -39218,6 +39364,12 @@
           "primaryKey": false,
           "notNull": false,
           "default": "'standard'"
+        },
+        "eyebrow": {
+          "name": "eyebrow",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
         },
         "heading": {
           "name": "heading",
@@ -41226,6 +41378,14 @@
           "type": "varchar",
           "primaryKey": false,
           "notNull": false
+        },
+        "style": {
+          "name": "style",
+          "type": "enum__people_v_blocks_testimonials_style",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'standard'"
         },
         "_uuid": {
           "name": "_uuid",
@@ -44240,12 +44400,6 @@
           "primaryKey": false,
           "notNull": false
         },
-        "version_slug": {
-          "name": "version_slug",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": false
-        },
         "version_portrait_id": {
           "name": "version_portrait_id",
           "type": "integer",
@@ -44312,20 +44466,6 @@
           "primaryKey": false,
           "notNull": false
         },
-        "version_template": {
-          "name": "version_template",
-          "type": "enum__people_v_version_template",
-          "typeSchema": "public",
-          "primaryKey": false,
-          "notNull": false,
-          "default": "'profile'"
-        },
-        "version_featured": {
-          "name": "version_featured",
-          "type": "boolean",
-          "primaryKey": false,
-          "notNull": false
-        },
         "version_meta_title": {
           "name": "version_meta_title",
           "type": "varchar",
@@ -44341,6 +44481,26 @@
         "version_meta_image_id": {
           "name": "version_meta_image_id",
           "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "version_slug": {
+          "name": "version_slug",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "version_template": {
+          "name": "version_template",
+          "type": "enum__people_v_version_template",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'profile'"
+        },
+        "version_featured": {
+          "name": "version_featured",
+          "type": "boolean",
           "primaryKey": false,
           "notNull": false
         },
@@ -44407,21 +44567,6 @@
           "method": "btree",
           "with": {}
         },
-        "_people_v_version_version_slug_idx": {
-          "name": "_people_v_version_version_slug_idx",
-          "columns": [
-            {
-              "expression": "version_slug",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
         "_people_v_version_version_portrait_idx": {
           "name": "_people_v_version_version_portrait_idx",
           "columns": [
@@ -44472,6 +44617,21 @@
           "columns": [
             {
               "expression": "version_meta_image_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "_people_v_version_version_slug_idx": {
+          "name": "_people_v_version_version_slug_idx",
+          "columns": [
+            {
+              "expression": "version_slug",
               "isExpression": false,
               "asc": true,
               "nulls": "last"
@@ -45499,6 +45659,14 @@
           "primaryKey": true,
           "notNull": true
         },
+        "variant": {
+          "name": "variant",
+          "type": "enum_places_blocks_hero_variant",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'standard'"
+        },
         "type": {
           "name": "type",
           "type": "enum_places_blocks_hero_type",
@@ -45506,6 +45674,12 @@
           "primaryKey": false,
           "notNull": false,
           "default": "'standard'"
+        },
+        "eyebrow": {
+          "name": "eyebrow",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
         },
         "heading": {
           "name": "heading",
@@ -47430,6 +47604,14 @@
           "type": "varchar",
           "primaryKey": false,
           "notNull": false
+        },
+        "style": {
+          "name": "style",
+          "type": "enum_places_blocks_testimonials_style",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'standard'"
         },
         "block_name": {
           "name": "block_name",
@@ -50318,12 +50500,6 @@
           "primaryKey": false,
           "notNull": false
         },
-        "slug": {
-          "name": "slug",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": false
-        },
         "featured_image_id": {
           "name": "featured_image_id",
           "type": "integer",
@@ -50408,6 +50584,30 @@
           "primaryKey": false,
           "notNull": false
         },
+        "meta_title": {
+          "name": "meta_title",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "meta_description": {
+          "name": "meta_description",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "meta_image_id": {
+          "name": "meta_image_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "slug": {
+          "name": "slug",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
         "template": {
           "name": "template",
           "type": "enum_places_template",
@@ -50426,24 +50626,6 @@
         "featured": {
           "name": "featured",
           "type": "boolean",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "meta_title": {
-          "name": "meta_title",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "meta_description": {
-          "name": "meta_description",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "meta_image_id": {
-          "name": "meta_image_id",
-          "type": "integer",
           "primaryKey": false,
           "notNull": false
         },
@@ -50471,21 +50653,6 @@
         }
       },
       "indexes": {
-        "places_slug_idx": {
-          "name": "places_slug_idx",
-          "columns": [
-            {
-              "expression": "slug",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": true,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
         "places_featured_image_idx": {
           "name": "places_featured_image_idx",
           "columns": [
@@ -50512,6 +50679,21 @@
             }
           ],
           "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "places_slug_idx": {
+          "name": "places_slug_idx",
+          "columns": [
+            {
+              "expression": "slug",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
           "concurrently": false,
           "method": "btree",
           "with": {}
@@ -51458,6 +51640,14 @@
           "primaryKey": true,
           "notNull": true
         },
+        "variant": {
+          "name": "variant",
+          "type": "enum__places_v_blocks_hero_variant",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'standard'"
+        },
         "type": {
           "name": "type",
           "type": "enum__places_v_blocks_hero_type",
@@ -51465,6 +51655,12 @@
           "primaryKey": false,
           "notNull": false,
           "default": "'standard'"
+        },
+        "eyebrow": {
+          "name": "eyebrow",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
         },
         "heading": {
           "name": "heading",
@@ -53473,6 +53669,14 @@
           "type": "varchar",
           "primaryKey": false,
           "notNull": false
+        },
+        "style": {
+          "name": "style",
+          "type": "enum__places_v_blocks_testimonials_style",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'standard'"
         },
         "_uuid": {
           "name": "_uuid",
@@ -56487,12 +56691,6 @@
           "primaryKey": false,
           "notNull": false
         },
-        "version_slug": {
-          "name": "version_slug",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": false
-        },
         "version_featured_image_id": {
           "name": "version_featured_image_id",
           "type": "integer",
@@ -56577,6 +56775,30 @@
           "primaryKey": false,
           "notNull": false
         },
+        "version_meta_title": {
+          "name": "version_meta_title",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "version_meta_description": {
+          "name": "version_meta_description",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "version_meta_image_id": {
+          "name": "version_meta_image_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "version_slug": {
+          "name": "version_slug",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
         "version_template": {
           "name": "version_template",
           "type": "enum__places_v_version_template",
@@ -56595,24 +56817,6 @@
         "version_featured": {
           "name": "version_featured",
           "type": "boolean",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "version_meta_title": {
-          "name": "version_meta_title",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "version_meta_description": {
-          "name": "version_meta_description",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "version_meta_image_id": {
-          "name": "version_meta_image_id",
-          "type": "integer",
           "primaryKey": false,
           "notNull": false
         },
@@ -56679,21 +56883,6 @@
           "method": "btree",
           "with": {}
         },
-        "_places_v_version_version_slug_idx": {
-          "name": "_places_v_version_version_slug_idx",
-          "columns": [
-            {
-              "expression": "version_slug",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
         "_places_v_version_version_featured_image_idx": {
           "name": "_places_v_version_version_featured_image_idx",
           "columns": [
@@ -56714,6 +56903,21 @@
           "columns": [
             {
               "expression": "version_meta_image_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "_places_v_version_version_slug_idx": {
+          "name": "_places_v_version_version_slug_idx",
+          "columns": [
+            {
+              "expression": "version_slug",
               "isExpression": false,
               "asc": true,
               "nulls": "last"
@@ -57410,6 +57614,14 @@
           "primaryKey": true,
           "notNull": true
         },
+        "variant": {
+          "name": "variant",
+          "type": "enum_events_blocks_hero_variant",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'standard'"
+        },
         "type": {
           "name": "type",
           "type": "enum_events_blocks_hero_type",
@@ -57417,6 +57629,12 @@
           "primaryKey": false,
           "notNull": false,
           "default": "'standard'"
+        },
+        "eyebrow": {
+          "name": "eyebrow",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
         },
         "heading": {
           "name": "heading",
@@ -59957,12 +60175,6 @@
           "primaryKey": false,
           "notNull": false
         },
-        "slug": {
-          "name": "slug",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": false
-        },
         "featured_image_id": {
           "name": "featured_image_id",
           "type": "integer",
@@ -60095,6 +60307,30 @@
           "notNull": false,
           "default": "'GBP'"
         },
+        "meta_title": {
+          "name": "meta_title",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "meta_description": {
+          "name": "meta_description",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "meta_image_id": {
+          "name": "meta_image_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "slug": {
+          "name": "slug",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
         "featured": {
           "name": "featured",
           "type": "boolean",
@@ -60116,24 +60352,6 @@
           "primaryKey": false,
           "notNull": false,
           "default": "'event'"
-        },
-        "meta_title": {
-          "name": "meta_title",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "meta_description": {
-          "name": "meta_description",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "meta_image_id": {
-          "name": "meta_image_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false
         },
         "updated_at": {
           "name": "updated_at",
@@ -60159,21 +60377,6 @@
         }
       },
       "indexes": {
-        "events_slug_idx": {
-          "name": "events_slug_idx",
-          "columns": [
-            {
-              "expression": "slug",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": true,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
         "events_featured_image_idx": {
           "name": "events_featured_image_idx",
           "columns": [
@@ -60215,6 +60418,21 @@
             }
           ],
           "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "events_slug_idx": {
+          "name": "events_slug_idx",
+          "columns": [
+            {
+              "expression": "slug",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
           "concurrently": false,
           "method": "btree",
           "with": {}
@@ -60885,6 +61103,14 @@
           "primaryKey": true,
           "notNull": true
         },
+        "variant": {
+          "name": "variant",
+          "type": "enum__events_v_blocks_hero_variant",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'standard'"
+        },
         "type": {
           "name": "type",
           "type": "enum__events_v_blocks_hero_type",
@@ -60892,6 +61118,12 @@
           "primaryKey": false,
           "notNull": false,
           "default": "'standard'"
+        },
+        "eyebrow": {
+          "name": "eyebrow",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
         },
         "heading": {
           "name": "heading",
@@ -63522,12 +63754,6 @@
           "primaryKey": false,
           "notNull": false
         },
-        "version_slug": {
-          "name": "version_slug",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": false
-        },
         "version_featured_image_id": {
           "name": "version_featured_image_id",
           "type": "integer",
@@ -63660,6 +63886,30 @@
           "notNull": false,
           "default": "'GBP'"
         },
+        "version_meta_title": {
+          "name": "version_meta_title",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "version_meta_description": {
+          "name": "version_meta_description",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "version_meta_image_id": {
+          "name": "version_meta_image_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "version_slug": {
+          "name": "version_slug",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
         "version_featured": {
           "name": "version_featured",
           "type": "boolean",
@@ -63681,24 +63931,6 @@
           "primaryKey": false,
           "notNull": false,
           "default": "'event'"
-        },
-        "version_meta_title": {
-          "name": "version_meta_title",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "version_meta_description": {
-          "name": "version_meta_description",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "version_meta_image_id": {
-          "name": "version_meta_image_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false
         },
         "version_updated_at": {
           "name": "version_updated_at",
@@ -63763,21 +63995,6 @@
           "method": "btree",
           "with": {}
         },
-        "_events_v_version_version_slug_idx": {
-          "name": "_events_v_version_version_slug_idx",
-          "columns": [
-            {
-              "expression": "version_slug",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
         "_events_v_version_version_featured_image_idx": {
           "name": "_events_v_version_version_featured_image_idx",
           "columns": [
@@ -63813,6 +64030,21 @@
           "columns": [
             {
               "expression": "version_meta_image_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "_events_v_version_version_slug_idx": {
+          "name": "_events_v_version_version_slug_idx",
+          "columns": [
+            {
+              "expression": "version_slug",
               "isExpression": false,
               "asc": true,
               "nulls": "last"
@@ -64806,6 +65038,14 @@
           "primaryKey": true,
           "notNull": true
         },
+        "variant": {
+          "name": "variant",
+          "type": "enum_products_blocks_hero_variant",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'standard'"
+        },
         "type": {
           "name": "type",
           "type": "enum_products_blocks_hero_type",
@@ -64813,6 +65053,12 @@
           "primaryKey": false,
           "notNull": false,
           "default": "'standard'"
+        },
+        "eyebrow": {
+          "name": "eyebrow",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
         },
         "heading": {
           "name": "heading",
@@ -67353,12 +67599,6 @@
           "primaryKey": false,
           "notNull": false
         },
-        "slug": {
-          "name": "slug",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": false
-        },
         "featured_image_id": {
           "name": "featured_image_id",
           "type": "integer",
@@ -67475,6 +67715,30 @@
           "primaryKey": false,
           "notNull": false
         },
+        "meta_title": {
+          "name": "meta_title",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "meta_description": {
+          "name": "meta_description",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "meta_image_id": {
+          "name": "meta_image_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "slug": {
+          "name": "slug",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
         "featured": {
           "name": "featured",
           "type": "boolean",
@@ -67496,24 +67760,6 @@
           "primaryKey": false,
           "notNull": false,
           "default": "'standard'"
-        },
-        "meta_title": {
-          "name": "meta_title",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "meta_description": {
-          "name": "meta_description",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "meta_image_id": {
-          "name": "meta_image_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false
         },
         "updated_at": {
           "name": "updated_at",
@@ -67539,21 +67785,6 @@
         }
       },
       "indexes": {
-        "products_slug_idx": {
-          "name": "products_slug_idx",
-          "columns": [
-            {
-              "expression": "slug",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": true,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
         "products_featured_image_idx": {
           "name": "products_featured_image_idx",
           "columns": [
@@ -67595,6 +67826,21 @@
             }
           ],
           "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "products_slug_idx": {
+          "name": "products_slug_idx",
+          "columns": [
+            {
+              "expression": "slug",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
           "concurrently": false,
           "method": "btree",
           "with": {}
@@ -68548,6 +68794,14 @@
           "primaryKey": true,
           "notNull": true
         },
+        "variant": {
+          "name": "variant",
+          "type": "enum__products_v_blocks_hero_variant",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'standard'"
+        },
         "type": {
           "name": "type",
           "type": "enum__products_v_blocks_hero_type",
@@ -68555,6 +68809,12 @@
           "primaryKey": false,
           "notNull": false,
           "default": "'standard'"
+        },
+        "eyebrow": {
+          "name": "eyebrow",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
         },
         "heading": {
           "name": "heading",
@@ -71185,12 +71445,6 @@
           "primaryKey": false,
           "notNull": false
         },
-        "version_slug": {
-          "name": "version_slug",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": false
-        },
         "version_featured_image_id": {
           "name": "version_featured_image_id",
           "type": "integer",
@@ -71307,6 +71561,30 @@
           "primaryKey": false,
           "notNull": false
         },
+        "version_meta_title": {
+          "name": "version_meta_title",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "version_meta_description": {
+          "name": "version_meta_description",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "version_meta_image_id": {
+          "name": "version_meta_image_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "version_slug": {
+          "name": "version_slug",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
         "version_featured": {
           "name": "version_featured",
           "type": "boolean",
@@ -71328,24 +71606,6 @@
           "primaryKey": false,
           "notNull": false,
           "default": "'standard'"
-        },
-        "version_meta_title": {
-          "name": "version_meta_title",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "version_meta_description": {
-          "name": "version_meta_description",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "version_meta_image_id": {
-          "name": "version_meta_image_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false
         },
         "version_updated_at": {
           "name": "version_updated_at",
@@ -71410,21 +71670,6 @@
           "method": "btree",
           "with": {}
         },
-        "_products_v_version_version_slug_idx": {
-          "name": "_products_v_version_version_slug_idx",
-          "columns": [
-            {
-              "expression": "version_slug",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
         "_products_v_version_version_featured_image_idx": {
           "name": "_products_v_version_version_featured_image_idx",
           "columns": [
@@ -71460,6 +71705,21 @@
           "columns": [
             {
               "expression": "version_meta_image_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "_products_v_version_version_slug_idx": {
+          "name": "_products_v_version_version_slug_idx",
+          "columns": [
+            {
+              "expression": "version_slug",
               "isExpression": false,
               "asc": true,
               "nulls": "last"
@@ -72746,12 +73006,6 @@
           "primaryKey": false,
           "notNull": false
         },
-        "slug": {
-          "name": "slug",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": false
-        },
         "description": {
           "name": "description",
           "type": "jsonb",
@@ -72814,6 +73068,12 @@
           "primaryKey": false,
           "notNull": false
         },
+        "slug": {
+          "name": "slug",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
         "featured": {
           "name": "featured",
           "type": "boolean",
@@ -72850,21 +73110,6 @@
         }
       },
       "indexes": {
-        "product_collections_slug_idx": {
-          "name": "product_collections_slug_idx",
-          "columns": [
-            {
-              "expression": "slug",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": true,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
         "product_collections_featured_image_idx": {
           "name": "product_collections_featured_image_idx",
           "columns": [
@@ -72891,6 +73136,21 @@
             }
           ],
           "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "product_collections_slug_idx": {
+          "name": "product_collections_slug_idx",
+          "columns": [
+            {
+              "expression": "slug",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
           "concurrently": false,
           "method": "btree",
           "with": {}
@@ -73128,12 +73388,6 @@
           "primaryKey": false,
           "notNull": false
         },
-        "version_slug": {
-          "name": "version_slug",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": false
-        },
         "version_description": {
           "name": "version_description",
           "type": "jsonb",
@@ -73193,6 +73447,12 @@
         "version_discount_percentage": {
           "name": "version_discount_percentage",
           "type": "numeric",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "version_slug": {
+          "name": "version_slug",
+          "type": "varchar",
           "primaryKey": false,
           "notNull": false
         },
@@ -73271,21 +73531,6 @@
           "method": "btree",
           "with": {}
         },
-        "_product_collections_v_version_version_slug_idx": {
-          "name": "_product_collections_v_version_version_slug_idx",
-          "columns": [
-            {
-              "expression": "version_slug",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
         "_product_collections_v_version_version_featured_image_idx": {
           "name": "_product_collections_v_version_version_featured_image_idx",
           "columns": [
@@ -73306,6 +73551,21 @@
           "columns": [
             {
               "expression": "version_banner_image_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "_product_collections_v_version_version_slug_idx": {
+          "name": "_product_collections_v_version_version_slug_idx",
+          "columns": [
+            {
+              "expression": "version_slug",
               "isExpression": false,
               "asc": true,
               "nulls": "last"
@@ -74085,6 +74345,14 @@
           "primaryKey": true,
           "notNull": true
         },
+        "variant": {
+          "name": "variant",
+          "type": "enum_custom_items_blocks_hero_variant",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'standard'"
+        },
         "type": {
           "name": "type",
           "type": "enum_custom_items_blocks_hero_type",
@@ -74092,6 +74360,12 @@
           "primaryKey": false,
           "notNull": false,
           "default": "'standard'"
+        },
+        "eyebrow": {
+          "name": "eyebrow",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
         },
         "heading": {
           "name": "heading",
@@ -76016,6 +76290,14 @@
           "type": "varchar",
           "primaryKey": false,
           "notNull": false
+        },
+        "style": {
+          "name": "style",
+          "type": "enum_custom_items_blocks_testimonials_style",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'standard'"
         },
         "block_name": {
           "name": "block_name",
@@ -79014,12 +79296,6 @@
           "primaryKey": true,
           "notNull": true
         },
-        "content_type_id": {
-          "name": "content_type_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false
-        },
         "title": {
           "name": "title",
           "type": "varchar",
@@ -79056,6 +79332,30 @@
           "primaryKey": false,
           "notNull": false
         },
+        "meta_title": {
+          "name": "meta_title",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "meta_description": {
+          "name": "meta_description",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "meta_image_id": {
+          "name": "meta_image_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "content_type_id": {
+          "name": "content_type_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
         "status": {
           "name": "status",
           "type": "enum_custom_items_status",
@@ -79072,24 +79372,6 @@
         },
         "author_id": {
           "name": "author_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "meta_title": {
-          "name": "meta_title",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "meta_description": {
-          "name": "meta_description",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "meta_image_id": {
-          "name": "meta_image_id",
           "type": "integer",
           "primaryKey": false,
           "notNull": false
@@ -79118,21 +79400,6 @@
         }
       },
       "indexes": {
-        "custom_items_content_type_idx": {
-          "name": "custom_items_content_type_idx",
-          "columns": [
-            {
-              "expression": "content_type_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
         "custom_items_featured_image_idx": {
           "name": "custom_items_featured_image_idx",
           "columns": [
@@ -79148,11 +79415,11 @@
           "method": "btree",
           "with": {}
         },
-        "custom_items_author_idx": {
-          "name": "custom_items_author_idx",
+        "custom_items_meta_meta_image_idx": {
+          "name": "custom_items_meta_meta_image_idx",
           "columns": [
             {
-              "expression": "author_id",
+              "expression": "meta_image_id",
               "isExpression": false,
               "asc": true,
               "nulls": "last"
@@ -79163,11 +79430,26 @@
           "method": "btree",
           "with": {}
         },
-        "custom_items_meta_meta_image_idx": {
-          "name": "custom_items_meta_meta_image_idx",
+        "custom_items_content_type_idx": {
+          "name": "custom_items_content_type_idx",
           "columns": [
             {
-              "expression": "meta_image_id",
+              "expression": "content_type_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "custom_items_author_idx": {
+          "name": "custom_items_author_idx",
+          "columns": [
+            {
+              "expression": "author_id",
               "isExpression": false,
               "asc": true,
               "nulls": "last"
@@ -79246,19 +79528,6 @@
         }
       },
       "foreignKeys": {
-        "custom_items_content_type_id_content_types_id_fk": {
-          "name": "custom_items_content_type_id_content_types_id_fk",
-          "tableFrom": "custom_items",
-          "tableTo": "content_types",
-          "columnsFrom": [
-            "content_type_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "set null",
-          "onUpdate": "no action"
-        },
         "custom_items_featured_image_id_media_id_fk": {
           "name": "custom_items_featured_image_id_media_id_fk",
           "tableFrom": "custom_items",
@@ -79272,12 +79541,12 @@
           "onDelete": "set null",
           "onUpdate": "no action"
         },
-        "custom_items_author_id_users_id_fk": {
-          "name": "custom_items_author_id_users_id_fk",
+        "custom_items_meta_image_id_media_id_fk": {
+          "name": "custom_items_meta_image_id_media_id_fk",
           "tableFrom": "custom_items",
-          "tableTo": "users",
+          "tableTo": "media",
           "columnsFrom": [
-            "author_id"
+            "meta_image_id"
           ],
           "columnsTo": [
             "id"
@@ -79285,12 +79554,25 @@
           "onDelete": "set null",
           "onUpdate": "no action"
         },
-        "custom_items_meta_image_id_media_id_fk": {
-          "name": "custom_items_meta_image_id_media_id_fk",
+        "custom_items_content_type_id_content_types_id_fk": {
+          "name": "custom_items_content_type_id_content_types_id_fk",
           "tableFrom": "custom_items",
-          "tableTo": "media",
+          "tableTo": "content_types",
           "columnsFrom": [
-            "meta_image_id"
+            "content_type_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        },
+        "custom_items_author_id_users_id_fk": {
+          "name": "custom_items_author_id_users_id_fk",
+          "tableFrom": "custom_items",
+          "tableTo": "users",
+          "columnsFrom": [
+            "author_id"
           ],
           "columnsTo": [
             "id"
@@ -79844,6 +80126,14 @@
           "primaryKey": true,
           "notNull": true
         },
+        "variant": {
+          "name": "variant",
+          "type": "enum__custom_items_v_blocks_hero_variant",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'standard'"
+        },
         "type": {
           "name": "type",
           "type": "enum__custom_items_v_blocks_hero_type",
@@ -79851,6 +80141,12 @@
           "primaryKey": false,
           "notNull": false,
           "default": "'standard'"
+        },
+        "eyebrow": {
+          "name": "eyebrow",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
         },
         "heading": {
           "name": "heading",
@@ -81859,6 +82155,14 @@
           "type": "varchar",
           "primaryKey": false,
           "notNull": false
+        },
+        "style": {
+          "name": "style",
+          "type": "enum__custom_items_v_blocks_testimonials_style",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'standard'"
         },
         "_uuid": {
           "name": "_uuid",
@@ -84989,12 +85293,6 @@
           "primaryKey": false,
           "notNull": false
         },
-        "version_content_type_id": {
-          "name": "version_content_type_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false
-        },
         "version_title": {
           "name": "version_title",
           "type": "varchar",
@@ -85031,6 +85329,30 @@
           "primaryKey": false,
           "notNull": false
         },
+        "version_meta_title": {
+          "name": "version_meta_title",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "version_meta_description": {
+          "name": "version_meta_description",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "version_meta_image_id": {
+          "name": "version_meta_image_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "version_content_type_id": {
+          "name": "version_content_type_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
         "version_status": {
           "name": "version_status",
           "type": "enum__custom_items_v_version_status",
@@ -85047,24 +85369,6 @@
         },
         "version_author_id": {
           "name": "version_author_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "version_meta_title": {
-          "name": "version_meta_title",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "version_meta_description": {
-          "name": "version_meta_description",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "version_meta_image_id": {
-          "name": "version_meta_image_id",
           "type": "integer",
           "primaryKey": false,
           "notNull": false
@@ -85132,21 +85436,6 @@
           "method": "btree",
           "with": {}
         },
-        "_custom_items_v_version_version_content_type_idx": {
-          "name": "_custom_items_v_version_version_content_type_idx",
-          "columns": [
-            {
-              "expression": "version_content_type_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
         "_custom_items_v_version_version_featured_image_idx": {
           "name": "_custom_items_v_version_version_featured_image_idx",
           "columns": [
@@ -85162,11 +85451,11 @@
           "method": "btree",
           "with": {}
         },
-        "_custom_items_v_version_version_author_idx": {
-          "name": "_custom_items_v_version_version_author_idx",
+        "_custom_items_v_version_meta_version_meta_image_idx": {
+          "name": "_custom_items_v_version_meta_version_meta_image_idx",
           "columns": [
             {
-              "expression": "version_author_id",
+              "expression": "version_meta_image_id",
               "isExpression": false,
               "asc": true,
               "nulls": "last"
@@ -85177,11 +85466,26 @@
           "method": "btree",
           "with": {}
         },
-        "_custom_items_v_version_meta_version_meta_image_idx": {
-          "name": "_custom_items_v_version_meta_version_meta_image_idx",
+        "_custom_items_v_version_version_content_type_idx": {
+          "name": "_custom_items_v_version_version_content_type_idx",
           "columns": [
             {
-              "expression": "version_meta_image_id",
+              "expression": "version_content_type_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "_custom_items_v_version_version_author_idx": {
+          "name": "_custom_items_v_version_version_author_idx",
+          "columns": [
+            {
+              "expression": "version_author_id",
               "isExpression": false,
               "asc": true,
               "nulls": "last"
@@ -85333,19 +85637,6 @@
           "onDelete": "set null",
           "onUpdate": "no action"
         },
-        "_custom_items_v_version_content_type_id_content_types_id_fk": {
-          "name": "_custom_items_v_version_content_type_id_content_types_id_fk",
-          "tableFrom": "_custom_items_v",
-          "tableTo": "content_types",
-          "columnsFrom": [
-            "version_content_type_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "set null",
-          "onUpdate": "no action"
-        },
         "_custom_items_v_version_featured_image_id_media_id_fk": {
           "name": "_custom_items_v_version_featured_image_id_media_id_fk",
           "tableFrom": "_custom_items_v",
@@ -85359,12 +85650,12 @@
           "onDelete": "set null",
           "onUpdate": "no action"
         },
-        "_custom_items_v_version_author_id_users_id_fk": {
-          "name": "_custom_items_v_version_author_id_users_id_fk",
+        "_custom_items_v_version_meta_image_id_media_id_fk": {
+          "name": "_custom_items_v_version_meta_image_id_media_id_fk",
           "tableFrom": "_custom_items_v",
-          "tableTo": "users",
+          "tableTo": "media",
           "columnsFrom": [
-            "version_author_id"
+            "version_meta_image_id"
           ],
           "columnsTo": [
             "id"
@@ -85372,12 +85663,25 @@
           "onDelete": "set null",
           "onUpdate": "no action"
         },
-        "_custom_items_v_version_meta_image_id_media_id_fk": {
-          "name": "_custom_items_v_version_meta_image_id_media_id_fk",
+        "_custom_items_v_version_content_type_id_content_types_id_fk": {
+          "name": "_custom_items_v_version_content_type_id_content_types_id_fk",
           "tableFrom": "_custom_items_v",
-          "tableTo": "media",
+          "tableTo": "content_types",
           "columnsFrom": [
-            "version_meta_image_id"
+            "version_content_type_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        },
+        "_custom_items_v_version_author_id_users_id_fk": {
+          "name": "_custom_items_v_version_author_id_users_id_fk",
+          "tableFrom": "_custom_items_v",
+          "tableTo": "users",
+          "columnsFrom": [
+            "version_author_id"
           ],
           "columnsTo": [
             "id"
@@ -90723,6 +91027,14 @@
           "primaryKey": true,
           "notNull": true
         },
+        "active_preset": {
+          "name": "active_preset",
+          "type": "enum_settings_active_preset",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'blog'"
+        },
         "site_name": {
           "name": "site_name",
           "type": "varchar",
@@ -90752,6 +91064,22 @@
           "type": "integer",
           "primaryKey": false,
           "notNull": false
+        },
+        "default_skin": {
+          "name": "default_skin",
+          "type": "enum_settings_default_skin",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'minimal'"
+        },
+        "default_mode": {
+          "name": "default_mode",
+          "type": "enum_settings_default_mode",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'light'"
         },
         "frontend_framework": {
           "name": "frontend_framework",
@@ -91221,6 +91549,14 @@
         "outline"
       ]
     },
+    "public.enum_pages_blocks_hero_variant": {
+      "name": "enum_pages_blocks_hero_variant",
+      "schema": "public",
+      "values": [
+        "standard",
+        "agency"
+      ]
+    },
     "public.enum_pages_blocks_hero_type": {
       "name": "enum_pages_blocks_hero_type",
       "schema": "public",
@@ -91327,7 +91663,8 @@
         "standard",
         "banner",
         "card",
-        "inline"
+        "inline",
+        "agency"
       ]
     },
     "public.enum_pages_blocks_cta_background_color": {
@@ -91356,6 +91693,14 @@
       "values": [
         "grid",
         "list"
+      ]
+    },
+    "public.enum_pages_blocks_testimonials_style": {
+      "name": "enum_pages_blocks_testimonials_style",
+      "schema": "public",
+      "values": [
+        "standard",
+        "agency"
       ]
     },
     "public.enum_pages_blocks_embed_aspect_ratio": {
@@ -91479,7 +91824,9 @@
         "stats",
         "team",
         "testimonials",
-        "logos"
+        "logos",
+        "agency-cards",
+        "agency-list"
       ]
     },
     "public.enum_pages_blocks_grid_columns": {
@@ -91649,6 +91996,14 @@
         "outline"
       ]
     },
+    "public.enum__pages_v_blocks_hero_variant": {
+      "name": "enum__pages_v_blocks_hero_variant",
+      "schema": "public",
+      "values": [
+        "standard",
+        "agency"
+      ]
+    },
     "public.enum__pages_v_blocks_hero_type": {
       "name": "enum__pages_v_blocks_hero_type",
       "schema": "public",
@@ -91755,7 +92110,8 @@
         "standard",
         "banner",
         "card",
-        "inline"
+        "inline",
+        "agency"
       ]
     },
     "public.enum__pages_v_blocks_cta_background_color": {
@@ -91784,6 +92140,14 @@
       "values": [
         "grid",
         "list"
+      ]
+    },
+    "public.enum__pages_v_blocks_testimonials_style": {
+      "name": "enum__pages_v_blocks_testimonials_style",
+      "schema": "public",
+      "values": [
+        "standard",
+        "agency"
       ]
     },
     "public.enum__pages_v_blocks_embed_aspect_ratio": {
@@ -91907,7 +92271,9 @@
         "stats",
         "team",
         "testimonials",
-        "logos"
+        "logos",
+        "agency-cards",
+        "agency-list"
       ]
     },
     "public.enum__pages_v_blocks_grid_columns": {
@@ -92069,6 +92435,14 @@
         "outline"
       ]
     },
+    "public.enum_posts_blocks_hero_variant": {
+      "name": "enum_posts_blocks_hero_variant",
+      "schema": "public",
+      "values": [
+        "standard",
+        "agency"
+      ]
+    },
     "public.enum_posts_blocks_hero_type": {
       "name": "enum_posts_blocks_hero_type",
       "schema": "public",
@@ -92175,7 +92549,8 @@
         "standard",
         "banner",
         "card",
-        "inline"
+        "inline",
+        "agency"
       ]
     },
     "public.enum_posts_blocks_cta_background_color": {
@@ -92204,6 +92579,14 @@
       "values": [
         "grid",
         "list"
+      ]
+    },
+    "public.enum_posts_blocks_testimonials_style": {
+      "name": "enum_posts_blocks_testimonials_style",
+      "schema": "public",
+      "values": [
+        "standard",
+        "agency"
       ]
     },
     "public.enum_posts_blocks_embed_aspect_ratio": {
@@ -92327,7 +92710,9 @@
         "stats",
         "team",
         "testimonials",
-        "logos"
+        "logos",
+        "agency-cards",
+        "agency-list"
       ]
     },
     "public.enum_posts_blocks_grid_columns": {
@@ -92477,6 +92862,14 @@
         "outline"
       ]
     },
+    "public.enum__posts_v_blocks_hero_variant": {
+      "name": "enum__posts_v_blocks_hero_variant",
+      "schema": "public",
+      "values": [
+        "standard",
+        "agency"
+      ]
+    },
     "public.enum__posts_v_blocks_hero_type": {
       "name": "enum__posts_v_blocks_hero_type",
       "schema": "public",
@@ -92583,7 +92976,8 @@
         "standard",
         "banner",
         "card",
-        "inline"
+        "inline",
+        "agency"
       ]
     },
     "public.enum__posts_v_blocks_cta_background_color": {
@@ -92612,6 +93006,14 @@
       "values": [
         "grid",
         "list"
+      ]
+    },
+    "public.enum__posts_v_blocks_testimonials_style": {
+      "name": "enum__posts_v_blocks_testimonials_style",
+      "schema": "public",
+      "values": [
+        "standard",
+        "agency"
       ]
     },
     "public.enum__posts_v_blocks_embed_aspect_ratio": {
@@ -92735,7 +93137,9 @@
         "stats",
         "team",
         "testimonials",
-        "logos"
+        "logos",
+        "agency-cards",
+        "agency-list"
       ]
     },
     "public.enum__posts_v_blocks_grid_columns": {
@@ -92885,6 +93289,14 @@
         "outline"
       ]
     },
+    "public.enum_archive_items_blocks_hero_variant": {
+      "name": "enum_archive_items_blocks_hero_variant",
+      "schema": "public",
+      "values": [
+        "standard",
+        "agency"
+      ]
+    },
     "public.enum_archive_items_blocks_hero_type": {
       "name": "enum_archive_items_blocks_hero_type",
       "schema": "public",
@@ -92991,7 +93403,8 @@
         "standard",
         "banner",
         "card",
-        "inline"
+        "inline",
+        "agency"
       ]
     },
     "public.enum_archive_items_blocks_cta_background_color": {
@@ -93116,7 +93529,9 @@
         "stats",
         "team",
         "testimonials",
-        "logos"
+        "logos",
+        "agency-cards",
+        "agency-list"
       ]
     },
     "public.enum_archive_items_blocks_grid_columns": {
@@ -93237,6 +93652,14 @@
         "outline"
       ]
     },
+    "public.enum__archive_items_v_blocks_hero_variant": {
+      "name": "enum__archive_items_v_blocks_hero_variant",
+      "schema": "public",
+      "values": [
+        "standard",
+        "agency"
+      ]
+    },
     "public.enum__archive_items_v_blocks_hero_type": {
       "name": "enum__archive_items_v_blocks_hero_type",
       "schema": "public",
@@ -93343,7 +93766,8 @@
         "standard",
         "banner",
         "card",
-        "inline"
+        "inline",
+        "agency"
       ]
     },
     "public.enum__archive_items_v_blocks_cta_background_color": {
@@ -93468,7 +93892,9 @@
         "stats",
         "team",
         "testimonials",
-        "logos"
+        "logos",
+        "agency-cards",
+        "agency-list"
       ]
     },
     "public.enum__archive_items_v_blocks_grid_columns": {
@@ -93619,6 +94045,14 @@
         "outline"
       ]
     },
+    "public.enum_people_blocks_hero_variant": {
+      "name": "enum_people_blocks_hero_variant",
+      "schema": "public",
+      "values": [
+        "standard",
+        "agency"
+      ]
+    },
     "public.enum_people_blocks_hero_type": {
       "name": "enum_people_blocks_hero_type",
       "schema": "public",
@@ -93725,7 +94159,8 @@
         "standard",
         "banner",
         "card",
-        "inline"
+        "inline",
+        "agency"
       ]
     },
     "public.enum_people_blocks_cta_background_color": {
@@ -93754,6 +94189,14 @@
       "values": [
         "grid",
         "list"
+      ]
+    },
+    "public.enum_people_blocks_testimonials_style": {
+      "name": "enum_people_blocks_testimonials_style",
+      "schema": "public",
+      "values": [
+        "standard",
+        "agency"
       ]
     },
     "public.enum_people_blocks_embed_aspect_ratio": {
@@ -93877,7 +94320,9 @@
         "stats",
         "team",
         "testimonials",
-        "logos"
+        "logos",
+        "agency-cards",
+        "agency-list"
       ]
     },
     "public.enum_people_blocks_grid_columns": {
@@ -94056,6 +94501,14 @@
         "outline"
       ]
     },
+    "public.enum__people_v_blocks_hero_variant": {
+      "name": "enum__people_v_blocks_hero_variant",
+      "schema": "public",
+      "values": [
+        "standard",
+        "agency"
+      ]
+    },
     "public.enum__people_v_blocks_hero_type": {
       "name": "enum__people_v_blocks_hero_type",
       "schema": "public",
@@ -94162,7 +94615,8 @@
         "standard",
         "banner",
         "card",
-        "inline"
+        "inline",
+        "agency"
       ]
     },
     "public.enum__people_v_blocks_cta_background_color": {
@@ -94191,6 +94645,14 @@
       "values": [
         "grid",
         "list"
+      ]
+    },
+    "public.enum__people_v_blocks_testimonials_style": {
+      "name": "enum__people_v_blocks_testimonials_style",
+      "schema": "public",
+      "values": [
+        "standard",
+        "agency"
       ]
     },
     "public.enum__people_v_blocks_embed_aspect_ratio": {
@@ -94314,7 +94776,9 @@
         "stats",
         "team",
         "testimonials",
-        "logos"
+        "logos",
+        "agency-cards",
+        "agency-list"
       ]
     },
     "public.enum__people_v_blocks_grid_columns": {
@@ -94476,6 +94940,14 @@
         "outline"
       ]
     },
+    "public.enum_places_blocks_hero_variant": {
+      "name": "enum_places_blocks_hero_variant",
+      "schema": "public",
+      "values": [
+        "standard",
+        "agency"
+      ]
+    },
     "public.enum_places_blocks_hero_type": {
       "name": "enum_places_blocks_hero_type",
       "schema": "public",
@@ -94582,7 +95054,8 @@
         "standard",
         "banner",
         "card",
-        "inline"
+        "inline",
+        "agency"
       ]
     },
     "public.enum_places_blocks_cta_background_color": {
@@ -94611,6 +95084,14 @@
       "values": [
         "grid",
         "list"
+      ]
+    },
+    "public.enum_places_blocks_testimonials_style": {
+      "name": "enum_places_blocks_testimonials_style",
+      "schema": "public",
+      "values": [
+        "standard",
+        "agency"
       ]
     },
     "public.enum_places_blocks_embed_aspect_ratio": {
@@ -94734,7 +95215,9 @@
         "stats",
         "team",
         "testimonials",
-        "logos"
+        "logos",
+        "agency-cards",
+        "agency-list"
       ]
     },
     "public.enum_places_blocks_grid_columns": {
@@ -94911,6 +95394,14 @@
         "outline"
       ]
     },
+    "public.enum__places_v_blocks_hero_variant": {
+      "name": "enum__places_v_blocks_hero_variant",
+      "schema": "public",
+      "values": [
+        "standard",
+        "agency"
+      ]
+    },
     "public.enum__places_v_blocks_hero_type": {
       "name": "enum__places_v_blocks_hero_type",
       "schema": "public",
@@ -95017,7 +95508,8 @@
         "standard",
         "banner",
         "card",
-        "inline"
+        "inline",
+        "agency"
       ]
     },
     "public.enum__places_v_blocks_cta_background_color": {
@@ -95046,6 +95538,14 @@
       "values": [
         "grid",
         "list"
+      ]
+    },
+    "public.enum__places_v_blocks_testimonials_style": {
+      "name": "enum__places_v_blocks_testimonials_style",
+      "schema": "public",
+      "values": [
+        "standard",
+        "agency"
       ]
     },
     "public.enum__places_v_blocks_embed_aspect_ratio": {
@@ -95169,7 +95669,9 @@
         "stats",
         "team",
         "testimonials",
-        "logos"
+        "logos",
+        "agency-cards",
+        "agency-list"
       ]
     },
     "public.enum__places_v_blocks_grid_columns": {
@@ -95333,6 +95835,14 @@
         "outline"
       ]
     },
+    "public.enum_events_blocks_hero_variant": {
+      "name": "enum_events_blocks_hero_variant",
+      "schema": "public",
+      "values": [
+        "standard",
+        "agency"
+      ]
+    },
     "public.enum_events_blocks_hero_type": {
       "name": "enum_events_blocks_hero_type",
       "schema": "public",
@@ -95439,7 +95949,8 @@
         "standard",
         "banner",
         "card",
-        "inline"
+        "inline",
+        "agency"
       ]
     },
     "public.enum_events_blocks_cta_background_color": {
@@ -95564,7 +96075,9 @@
         "stats",
         "team",
         "testimonials",
-        "logos"
+        "logos",
+        "agency-cards",
+        "agency-list"
       ]
     },
     "public.enum_events_blocks_grid_columns": {
@@ -95729,6 +96242,14 @@
         "outline"
       ]
     },
+    "public.enum__events_v_blocks_hero_variant": {
+      "name": "enum__events_v_blocks_hero_variant",
+      "schema": "public",
+      "values": [
+        "standard",
+        "agency"
+      ]
+    },
     "public.enum__events_v_blocks_hero_type": {
       "name": "enum__events_v_blocks_hero_type",
       "schema": "public",
@@ -95835,7 +96356,8 @@
         "standard",
         "banner",
         "card",
-        "inline"
+        "inline",
+        "agency"
       ]
     },
     "public.enum__events_v_blocks_cta_background_color": {
@@ -95960,7 +96482,9 @@
         "stats",
         "team",
         "testimonials",
-        "logos"
+        "logos",
+        "agency-cards",
+        "agency-list"
       ]
     },
     "public.enum__events_v_blocks_grid_columns": {
@@ -96125,6 +96649,14 @@
         "outline"
       ]
     },
+    "public.enum_products_blocks_hero_variant": {
+      "name": "enum_products_blocks_hero_variant",
+      "schema": "public",
+      "values": [
+        "standard",
+        "agency"
+      ]
+    },
     "public.enum_products_blocks_hero_type": {
       "name": "enum_products_blocks_hero_type",
       "schema": "public",
@@ -96231,7 +96763,8 @@
         "standard",
         "banner",
         "card",
-        "inline"
+        "inline",
+        "agency"
       ]
     },
     "public.enum_products_blocks_cta_background_color": {
@@ -96356,7 +96889,9 @@
         "stats",
         "team",
         "testimonials",
-        "logos"
+        "logos",
+        "agency-cards",
+        "agency-list"
       ]
     },
     "public.enum_products_blocks_grid_columns": {
@@ -96505,6 +97040,14 @@
         "outline"
       ]
     },
+    "public.enum__products_v_blocks_hero_variant": {
+      "name": "enum__products_v_blocks_hero_variant",
+      "schema": "public",
+      "values": [
+        "standard",
+        "agency"
+      ]
+    },
     "public.enum__products_v_blocks_hero_type": {
       "name": "enum__products_v_blocks_hero_type",
       "schema": "public",
@@ -96611,7 +97154,8 @@
         "standard",
         "banner",
         "card",
-        "inline"
+        "inline",
+        "agency"
       ]
     },
     "public.enum__products_v_blocks_cta_background_color": {
@@ -96736,7 +97280,9 @@
         "stats",
         "team",
         "testimonials",
-        "logos"
+        "logos",
+        "agency-cards",
+        "agency-list"
       ]
     },
     "public.enum__products_v_blocks_grid_columns": {
@@ -96963,6 +97509,14 @@
         "outline"
       ]
     },
+    "public.enum_custom_items_blocks_hero_variant": {
+      "name": "enum_custom_items_blocks_hero_variant",
+      "schema": "public",
+      "values": [
+        "standard",
+        "agency"
+      ]
+    },
     "public.enum_custom_items_blocks_hero_type": {
       "name": "enum_custom_items_blocks_hero_type",
       "schema": "public",
@@ -97069,7 +97623,8 @@
         "standard",
         "banner",
         "card",
-        "inline"
+        "inline",
+        "agency"
       ]
     },
     "public.enum_custom_items_blocks_cta_background_color": {
@@ -97098,6 +97653,14 @@
       "values": [
         "grid",
         "list"
+      ]
+    },
+    "public.enum_custom_items_blocks_testimonials_style": {
+      "name": "enum_custom_items_blocks_testimonials_style",
+      "schema": "public",
+      "values": [
+        "standard",
+        "agency"
       ]
     },
     "public.enum_custom_items_blocks_embed_aspect_ratio": {
@@ -97163,7 +97726,9 @@
         "stats",
         "team",
         "testimonials",
-        "logos"
+        "logos",
+        "agency-cards",
+        "agency-list"
       ]
     },
     "public.enum_custom_items_blocks_grid_columns": {
@@ -97361,6 +97926,14 @@
         "outline"
       ]
     },
+    "public.enum__custom_items_v_blocks_hero_variant": {
+      "name": "enum__custom_items_v_blocks_hero_variant",
+      "schema": "public",
+      "values": [
+        "standard",
+        "agency"
+      ]
+    },
     "public.enum__custom_items_v_blocks_hero_type": {
       "name": "enum__custom_items_v_blocks_hero_type",
       "schema": "public",
@@ -97467,7 +98040,8 @@
         "standard",
         "banner",
         "card",
-        "inline"
+        "inline",
+        "agency"
       ]
     },
     "public.enum__custom_items_v_blocks_cta_background_color": {
@@ -97496,6 +98070,14 @@
       "values": [
         "grid",
         "list"
+      ]
+    },
+    "public.enum__custom_items_v_blocks_testimonials_style": {
+      "name": "enum__custom_items_v_blocks_testimonials_style",
+      "schema": "public",
+      "values": [
+        "standard",
+        "agency"
       ]
     },
     "public.enum__custom_items_v_blocks_embed_aspect_ratio": {
@@ -97561,7 +98143,9 @@
         "stats",
         "team",
         "testimonials",
-        "logos"
+        "logos",
+        "agency-cards",
+        "agency-list"
       ]
     },
     "public.enum__custom_items_v_blocks_grid_columns": {
@@ -97825,6 +98409,41 @@
         "github"
       ]
     },
+    "public.enum_settings_active_preset": {
+      "name": "enum_settings_active_preset",
+      "schema": "public",
+      "values": [
+        "blog",
+        "brochure",
+        "archive",
+        "ecommerce"
+      ]
+    },
+    "public.enum_settings_default_skin": {
+      "name": "enum_settings_default_skin",
+      "schema": "public",
+      "values": [
+        "minimal",
+        "editorial",
+        "saas",
+        "soft",
+        "bold",
+        "monochrome",
+        "glass",
+        "high-contrast",
+        "neon-grid",
+        "agency"
+      ]
+    },
+    "public.enum_settings_default_mode": {
+      "name": "enum_settings_default_mode",
+      "schema": "public",
+      "values": [
+        "light",
+        "dark",
+        "system"
+      ]
+    },
     "public.enum_settings_frontend_framework": {
       "name": "enum_settings_frontend_framework",
       "schema": "public",
@@ -97873,6 +98492,6 @@
     "tables": {},
     "columns": {}
   },
-  "id": "bf0554ad-851a-4686-9cad-98fb4ce6dd16",
+  "id": "7e6f9001-6127-4c6b-939e-ae20eb36a7cd",
   "prevId": "00000000-0000-0000-0000-000000000000"
 }

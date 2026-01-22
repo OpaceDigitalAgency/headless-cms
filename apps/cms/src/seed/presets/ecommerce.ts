@@ -1,7 +1,7 @@
 /**
  * Ecommerce Preset Seeder
- * 
- * Seeds sample data for the ecommerce-next preset.
+ *
+ * Seeds sample data for the ecommerce preset.
  * Creates products, categories, and collections suitable for an ecommerce catalog site.
  */
 
@@ -14,7 +14,7 @@ export class EcommerceSeeder extends BaseSeeder {
   }
 
   getPresetId(): string {
-    return 'ecommerce-next'
+    return 'ecommerce'
   }
 
   getCollections(): string[] {

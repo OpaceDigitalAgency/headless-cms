@@ -1,7 +1,7 @@
 /**
  * Core Preset Seeder
  *
- * Seeds sample data for the core preset (archive-next preset ID).
+ * Seeds sample data for the archive preset.
  * Used as the "kitchen sink" preset to cover the broadest set of collections.
  */
 
@@ -15,7 +15,7 @@ export class CoreSeeder extends BaseSeeder {
   }
 
   getPresetId(): string {
-    return 'archive-next'
+    return 'archive'
   }
 
   getCollections(): string[] {

@@ -37,10 +37,10 @@
 
 **Actions Required:**
 - Create `presets/` directory structure
-- Create `blog-astro/` preset
-- Create `brochure-astro/` preset
-- Create `archive-next/` preset (formalize existing)
-- Create `ecommerce-next/` preset
+- Create `blog/` preset
+- Create `brochure/` preset
+- Create `archive/` preset (formalize existing)
+- Create `ecommerce/` preset
 
 ### 2. Presets & Packs System
 

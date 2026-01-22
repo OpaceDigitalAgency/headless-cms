@@ -1,7 +1,7 @@
 /**
  * Blog Preset Seeder
- * 
- * Seeds sample data for the blog-astro preset.
+ *
+ * Seeds sample data for the blog preset.
  * Creates posts, categories, and pages suitable for a blog site.
  */
 
@@ -14,7 +14,7 @@ export class BlogSeeder extends BaseSeeder {
   }
 
   getPresetId(): string {
-    return 'blog-astro'
+    return 'blog'
   }
 
   getCollections(): string[] {
