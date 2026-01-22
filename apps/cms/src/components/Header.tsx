@@ -4,6 +4,7 @@ import { useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { ThemeToggle } from '@repo/ui/components/ThemeToggle'
+import { Container } from '@repo/ui/primitives'
 
 interface HeaderProps {
   data: any
@@ -20,7 +21,8 @@ export function Header({ data }: HeaderProps) {
 
   return (
     <header className="sticky top-0 z-40 bg-white/80 backdrop-blur-sm shadow-sm dark:bg-slate-900/80 dark:shadow-slate-800/50 transition-colors">
-      <nav className="container flex h-16 items-center justify-between">
+      <Container>
+        <nav className="flex h-16 items-center justify-between">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2">
           {data.logo?.url ? (
@@ -113,11 +115,13 @@ export function Header({ data }: HeaderProps) {
           </button>
         </div>
       </nav>
+      </Container>
 
       {/* Mobile Menu */}
       {mobileMenuOpen && (
         <div className="border-t border-gray-200 bg-white dark:border-slate-700 dark:bg-slate-900 md:hidden">
-          <div className="container space-y-1 py-4">
+          <Container>
+            <div className="space-y-1 py-4">
             {data.navItems?.map((item, index) => (
               <div key={index}>
                 {item.type === 'dropdown' ? (
@@ -161,7 +165,8 @@ export function Header({ data }: HeaderProps) {
                 </Link>
               </div>
             )}
-          </div>
+            </div>
+          </Container>
         </div>
       )}
     </header>

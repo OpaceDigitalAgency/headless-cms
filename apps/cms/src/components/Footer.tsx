@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import Image from 'next/image'
+import { Container } from '@repo/ui/primitives'
 
 interface FooterProps {
   data: any
@@ -60,7 +61,8 @@ export function Footer({ data }: FooterProps) {
 
   return (
     <footer className="border-t border-gray-200 bg-gray-50 dark:border-slate-800 dark:bg-slate-900/50 transition-colors">
-      <div className="container py-12">
+      <Container>
+        <div className="py-12">
         <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-5">
           {/* Logo and Description */}
           <div className="lg:col-span-2">
@@ -143,7 +145,8 @@ export function Footer({ data }: FooterProps) {
             </div>
           )}
         </div>
-      </div>
+        </div>
+      </Container>
     </footer>
   )
 }
