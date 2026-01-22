@@ -97,7 +97,7 @@ export const SeedItemsList: React.FC<SeedItemsListProps> = ({
           paddingRight: seedItems.length > 4 ? '8px' : '0',
         }}>
           {seedItems.map((item, index) => {
-            const isSeedingThis = seedingItems.has(item.slug)
+            const isSeedingThis = seedingItems.has(item.slug) || isSeeding
             const isDisabled = disabledItems.has(item.slug)
             return (
               <div

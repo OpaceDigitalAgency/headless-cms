@@ -26,7 +26,7 @@ export const pageTemplate: CollectionTemplate = {
   status: 'core', // Pages are a core collection
   hasSeedData: true,
   hasSeedMedia: false,
-  seedDataCount: 3,
+  seedDataCount: 4,
   seedItems: [
     {
       title: 'Home',
@@ -38,6 +38,12 @@ export const pageTemplate: CollectionTemplate = {
       title: 'About Us',
       slug: 'about',
       excerpt: 'Learn more about our organisation and mission',
+      status: 'published',
+    },
+    {
+      title: 'Contact',
+      slug: 'contact',
+      excerpt: 'Send us a message and we will respond as soon as possible',
       status: 'published',
     },
     {

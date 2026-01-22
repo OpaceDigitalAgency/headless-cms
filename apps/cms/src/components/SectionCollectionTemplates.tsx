@@ -213,15 +213,15 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
         const data = await response.json()
         const status: Record<string, { count: number; hasSeedData: boolean; hasSeedMedia: boolean }> = {}
 
-        ;(data.collections || []).forEach((collection: any) => {
-          if (collection?.slug) {
-            status[collection.slug] = {
-              count: collection.count || 0,
-              hasSeedData: Boolean(collection.hasSeedData),
-              hasSeedMedia: Boolean(collection.hasSeedMedia),
+          ; (data.collections || []).forEach((collection: any) => {
+            if (collection?.slug) {
+              status[collection.slug] = {
+                count: collection.count || 0,
+                hasSeedData: Boolean(collection.hasSeedData),
+                hasSeedMedia: Boolean(collection.hasSeedMedia),
+              }
             }
-          }
-        })
+          })
 
         setSeedStatus(status)
       }
@@ -1043,8 +1043,45 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
           borderRadius: '8px',
           padding: '20px',
           background: 'var(--theme-elevation-50)',
+          position: 'relative',
         }}
       >
+        {isSeedingThis && (
+          <div style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: 'rgba(255, 255, 255, 0.7)',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 10,
+            borderRadius: '8px',
+            backdropFilter: 'blur(2px)',
+          }}>
+            <div style={{
+              width: '32px',
+              height: '32px',
+              border: '3px solid #f3f3f3',
+              borderTop: '3px solid #3b82f6',
+              borderRadius: '50%',
+              animation: 'spin-collection 1s linear infinite',
+              marginBottom: '12px',
+            }} />
+            <style>{`
+              @keyframes spin-collection {
+                0% { transform: rotate(0deg); }
+                100% { transform: rotate(360deg); }
+              }
+            `}</style>
+            <div style={{ fontSize: '14px', fontWeight: 600, color: '#3b82f6' }}>
+              Seeding Sample Data...
+            </div>
+          </div>
+        )}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '12px' }}>
           <h4 style={{ fontSize: '16px', fontWeight: 600, margin: 0, color: '#333' }}>
             {template.name}
@@ -1688,7 +1725,7 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
             These collections are always enabled and visible in the navigation menu.
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '16px' }}>
-            {coreTemplates.map(renderTemplateCard)}
+            {coreTemplates.map((t) => renderTemplateCard(t))}
           </div>
         </div>
       )}
@@ -1702,7 +1739,7 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
             These collections are currently active. You can enable/disable them in the navigation menu and seed them with sample data.
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '16px' }}>
-            {installedTemplates.map(renderTemplateCard)}
+            {installedTemplates.map((t) => renderTemplateCard(t))}
           </div>
         </div>
       )}
@@ -1817,20 +1854,20 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
         (section !== 'Collections'
           ? true
           : installedCustomCollections.length === 0 && contentTypeTemplates.length === 0) && (
-        <div
-          style={{
-            padding: '40px',
-            textAlign: 'center',
-            background: 'var(--theme-elevation-50)',
-            borderRadius: '8px',
-            border: '1px dashed var(--theme-elevation-200)',
-          }}
-        >
-          <p style={{ fontSize: '14px', color: '#666' }}>
-            No collections found in the {section} section.
-          </p>
-        </div>
-      )}
+          <div
+            style={{
+              padding: '40px',
+              textAlign: 'center',
+              background: 'var(--theme-elevation-50)',
+              borderRadius: '8px',
+              border: '1px dashed var(--theme-elevation-200)',
+            }}
+          >
+            <p style={{ fontSize: '14px', color: '#666' }}>
+              No collections found in the {section} section.
+            </p>
+          </div>
+        )}
 
       {createModalOpen && (
         <div
