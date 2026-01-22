@@ -13,6 +13,10 @@ interface CustomItemPageProps {
  * Generate static params for all published custom items
  */
 export async function generateStaticParams() {
+  if (process.env.SKIP_STATIC_GENERATION === "1") {
+    return []
+  }
+
   try {
     const payload = await getPayloadHMR({ config: configPromise })
     

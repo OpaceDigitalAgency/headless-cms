@@ -12,6 +12,10 @@ interface EventPageProps {
 }
 
 export async function generateStaticParams() {
+  if (process.env.SKIP_STATIC_GENERATION === "1") {
+    return []
+  }
+
   const events = await getEvents(1000)
   return events.docs.map((event) => ({
     slug: event.slug,

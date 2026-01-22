@@ -9,6 +9,10 @@ interface CategoryPageProps {
 }
 
 export async function generateStaticParams() {
+  if (process.env.SKIP_STATIC_GENERATION === "1") {
+    return []
+  }
+
   try {
     const categories = await getCategories(1000)
     return categories.docs.map((category: any) => ({

@@ -9,6 +9,10 @@ interface TagPageProps {
 }
 
 export async function generateStaticParams() {
+  if (process.env.SKIP_STATIC_GENERATION === "1") {
+    return []
+  }
+
   try {
     const tags = await getTags(1000)
     return tags.docs.map((tag: any) => ({

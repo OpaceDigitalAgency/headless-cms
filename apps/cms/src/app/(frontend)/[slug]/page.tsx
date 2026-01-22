@@ -14,6 +14,10 @@ interface PageProps {
  * This runs at build time to pre-render all pages
  */
 export async function generateStaticParams() {
+  if (process.env.SKIP_STATIC_GENERATION === "1") {
+    return []
+  }
+
   try {
     const pages = await getPages(1000)
     return pages.docs

@@ -16,6 +16,10 @@ interface PostPageProps {
  * Generate static params for all published posts
  */
 export async function generateStaticParams() {
+  if (process.env.SKIP_STATIC_GENERATION === "1") {
+    return []
+  }
+
   try {
     const payload = await getPayloadHMR({ config: configPromise })
     const posts = await payload.find({

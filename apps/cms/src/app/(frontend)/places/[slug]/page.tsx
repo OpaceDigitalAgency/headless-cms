@@ -11,6 +11,10 @@ interface PlacePageProps {
 }
 
 export async function generateStaticParams() {
+  if (process.env.SKIP_STATIC_GENERATION === "1") {
+    return []
+  }
+
   const places = await getPlaces(1000)
   return places.docs.map((place) => ({
     slug: place.slug,

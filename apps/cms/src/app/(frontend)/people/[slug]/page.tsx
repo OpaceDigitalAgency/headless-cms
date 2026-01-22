@@ -13,6 +13,10 @@ interface PersonPageProps {
 }
 
 export async function generateStaticParams() {
+  if (process.env.SKIP_STATIC_GENERATION === "1") {
+    return []
+  }
+
   const people = await getPeople(1000)
   return people.docs.map((person) => ({
     slug: person.slug,

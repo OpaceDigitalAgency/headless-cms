@@ -11,6 +11,10 @@ interface ArchiveItemPageProps {
 }
 
 export async function generateStaticParams() {
+  if (process.env.SKIP_STATIC_GENERATION === "1") {
+    return []
+  }
+
   try {
     const items = await getArchiveItems(1000)
     return items.docs.map((item: any) => ({
