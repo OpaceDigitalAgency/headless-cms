@@ -1,30 +1,31 @@
 'use client'
 
 import { useLivePreview } from '@payloadcms/live-preview-react'
-import { PageRenderer } from '@/components/PageRenderer'
-import { PostRenderer } from '@/components/PostRenderer'
-import { ArchiveItemRenderer } from '@/components/ArchiveItemRenderer'
-import { PreviewLoadingSkeleton } from '@/components/PreviewLoadingSkeleton'
-import { Suspense } from 'react'
+import { ThemeProvider } from '@repo/ui/components/ThemeProvider'
 
 interface LivePreviewPageProps {
   initialData: any
   collection: string
   slug: string
+  initialSettings?: any
 }
 
 /**
  * Client component for live preview with real-time updates.
  * Uses Payload's useLivePreview hook for instant updates as content is edited.
  */
-export function LivePreviewPage({ initialData, collection, slug }: LivePreviewPageProps) {
+export function LivePreviewPage({ initialData, collection, slug, initialSettings }: LivePreviewPageProps) {
   const serverURL = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
-  
+
   const { data } = useLivePreview({
     initialData,
     serverURL,
     depth: 2,
   })
+
+  // Get skin settings
+  const defaultSkin = initialSettings?.defaultSkin || 'minimal'
+  const defaultMode = initialSettings?.defaultMode || 'light'
 
   // Preview banner component
   const PreviewBanner = () => (
@@ -47,25 +48,22 @@ export function LivePreviewPage({ initialData, collection, slug }: LivePreviewPa
     </div>
   )
 
-  // Render based on collection type
   return (
-    <>
+    <ThemeProvider defaultSkin={defaultSkin} defaultMode={defaultMode}>
       <PreviewBanner />
-      <div className="pt-12">
-        <Suspense fallback={<PreviewLoadingSkeleton />}>
-          {collection === 'pages' && <PageRenderer page={data} />}
-          {collection === 'posts' && (
-            <div className="container py-16">
-              <PostRenderer post={data} />
-            </div>
-          )}
-          {collection === 'archive-items' && (
-            <div className="container py-16">
-              <ArchiveItemRenderer item={data} />
-            </div>
-          )}
-        </Suspense>
+      <div className="pt-12 min-h-screen bg-background text-foreground transition-colors">
+        <div className="container py-8">
+          <div className="rounded-lg border border-default bg-card p-6 text-left">
+            <h2 className="text-lg font-semibold">Live Preview Payload</h2>
+            <p className="mt-1 text-sm text-muted">
+              Rendering is temporarily simplified for deployment stability.
+            </p>
+            <pre className="mt-4 max-h-[60vh] overflow-auto rounded bg-muted p-4 text-xs">
+              {JSON.stringify(data, null, 2)}
+            </pre>
+          </div>
+        </div>
       </div>
-    </>
+    </ThemeProvider>
   )
 }
