@@ -681,6 +681,19 @@ export class CoreSeeder extends BaseSeeder {
       if (!this.shouldSeedItem(data.slug)) {
         continue
       }
+      if (await this.checkIfExists('people', data.slug)) {
+        this.log(`Person "${data.name}" already exists, skipping.`)
+        const existing = await this.payload.find({
+          collection: 'people',
+          where: { slug: { equals: data.slug } },
+          limit: 1,
+          depth: 0,
+        })
+        if (existing.docs[0]) {
+          people[data.slug] = String(existing.docs[0].id)
+        }
+        continue
+      }
       const person = await this.create('people', {
         name: data.name,
         slug: data.slug,
@@ -1549,6 +1562,10 @@ export class CoreSeeder extends BaseSeeder {
 
     for (const item of archiveItemsData.slice(0, this.getItemCount('archive-items', 10))) {
       if (!this.shouldSeedItem(item.slug)) {
+        continue
+      }
+      if (await this.checkIfExists('archive-items', item.slug)) {
+        this.log(`Archive item "${item.title}" already exists, skipping.`)
         continue
       }
       await this.create('archive-items', {
