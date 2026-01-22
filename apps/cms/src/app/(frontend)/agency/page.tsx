@@ -4,7 +4,9 @@ const blocks = [
   {
     blockType: 'hero',
     type: 'fullscreen',
-    overlay: 'gradient',
+    variant: 'agency',
+    eyebrow: 'DIGITAL EXCELLENCE',
+    overlay: 'none',
     textAlign: 'left',
     heading: 'We build premium digital experiences',
     subheading: 'Brand, web, and content systems for ambitious teams.',
@@ -18,6 +20,7 @@ const blocks = [
     heading: 'Built for scale',
     description: 'Capabilities',
     columns: '3',
+    style: 'agency-cards',
     items: [
       {
         stat: '01',
@@ -41,6 +44,7 @@ const blocks = [
     heading: 'Case Studies',
     description: 'Portfolio',
     columns: '1',
+    style: 'agency-list',
     items: [
       {
         stat: '01',
@@ -62,6 +66,7 @@ const blocks = [
   {
     blockType: 'testimonials',
     heading: 'Proven Results',
+    style: 'agency',
     items: [
       {
         quote: 'We doubled qualified leads in 60 days.',
@@ -90,6 +95,7 @@ const blocks = [
     blockType: 'cta',
     heading: 'Ready to grow with a partner you can trust?',
     description: 'Let’s build something remarkable together.',
+    style: 'agency',
     links: [
       { label: 'Let’s talk →', url: '/contact', variant: 'primary' },
     ],

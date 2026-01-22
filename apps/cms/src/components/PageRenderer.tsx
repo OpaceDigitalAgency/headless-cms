@@ -219,7 +219,7 @@ export function PageRenderer({ page, settings }: PageRendererProps) {
           )}
           <div className="min-h-screen">
             {heroData && (
-              <section className="relative flex min-h-[50vh] items-center justify-center overflow-hidden bg-gray-900">
+              <section className="relative flex min-h-[50vh] items-center justify-center overflow-hidden bg-base">
                 {heroData.image && (
                   <div className="absolute inset-0">
                     <img
@@ -229,7 +229,7 @@ export function PageRenderer({ page, settings }: PageRendererProps) {
                     />
                   </div>
                 )}
-                <div className="relative z-10 px-4 text-center text-white">
+                <div className="relative z-10 px-4 text-center text-foreground">
                   <h1 className="text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
                     {heroData.heading}
                   </h1>
@@ -249,8 +249,8 @@ export function PageRenderer({ page, settings }: PageRendererProps) {
                             link.variant === 'primary'
                               ? 'btn-primary'
                               : link.variant === 'outline'
-                              ? 'btn-outline text-white'
-                              : 'bg-base/10 text-white hover:bg-base/20'
+                              ? 'btn-outline'
+                              : 'bg-base/10 text-foreground hover:bg-base/20'
                           }`}
                         >
                           {link.label}

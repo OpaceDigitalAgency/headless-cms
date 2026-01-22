@@ -137,6 +137,36 @@ export function CTABlock({ block }: CTABlockProps) {
     )
   }
 
+  if (style === 'agency') {
+    return (
+      <section className="relative overflow-hidden bg-accent py-20 text-[rgb(var(--color-background))]">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(0,0,0,0.35),transparent_60%)]" />
+        <div className="container relative text-center">
+          <h2 className="text-4xl font-bold tracking-tight sm:text-5xl">{heading}</h2>
+          {description && (
+            <p className="mx-auto mt-4 max-w-2xl text-lg opacity-90">
+              {description}
+            </p>
+          )}
+          {links && links.length > 0 && (
+            <div className="mt-8 flex flex-wrap justify-center gap-4">
+              {links.map((link, index) => (
+                <Link
+                  key={index}
+                  href={getUrl(link)}
+                  target={link.newTab ? '_blank' : undefined}
+                  className="btn bg-[rgb(var(--color-background))] text-foreground hover:bg-base/80"
+                >
+                  {link.label}
+                </Link>
+              ))}
+            </div>
+          )}
+        </div>
+      </section>
+    )
+  }
+
   // Standard CTA
   return (
     <section className={`${bgClasses[backgroundColor as keyof typeof bgClasses]} py-16`}>

@@ -17,8 +17,8 @@ const spacingClasses = {
 
 const backgroundClasses = {
   default: '',
-  muted: 'bg-gray-50 dark:bg-gray-900',
-  accent: 'bg-blue-50 dark:bg-blue-950',
+  muted: 'bg-card',
+  accent: 'bg-accent-soft',
 }
 
 export function Section({
@@ -33,4 +33,3 @@ export function Section({
     </section>
   )
 }
-
