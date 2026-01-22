@@ -1,7 +1,9 @@
-# Payload Front‑end Seed Layouts & Block Compositions
+# Payload Front-end Seed Layouts & Block Compositions
 
-This document defines **seed layouts** for each current content type in your Payload setup.  
-Each seed layout represents a **best‑practice, high‑quality example** of how that content type could be presented using your existing Blocks system.
+> [!NOTE]
+> This document defines the *target patterns* for seed data. For the implementation details of how the seeding system works, see the [SEEDING_SYSTEM_GUIDE.md](../SEEDING_SYSTEM_GUIDE.md).
+
+This document defines **seed layouts** for each current content type in your Payload setup.
 
 The aim is to:
 - Give editors strong starting points (not restrictive templates)

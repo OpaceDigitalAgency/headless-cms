@@ -1,7 +1,9 @@
-# Payload CMS Blocks & Seed Data Audit - Complete
+# Payload CMS Blocks & Seed Data Audit - Historical Reference
 
-**Completed:** 2026-01-22  
-**Status:** All 20 blocks registered ✅ | Seed data verified ✅
+> [!WARNING]
+> This document is maintained for historical audit purposes only. For the current technical specification and architecture, please refer to the canonical [SEEDING_SYSTEM_GUIDE.md](../SEEDING_SYSTEM_GUIDE.md).
+
+**Completed:** 2026-01-22
 
 ---
 

@@ -1,8 +1,9 @@
-# Seeded Pages Audit
+# Seeded Pages Audit - Historical Reference
+
+> [!WARNING]
+> This document is maintained for historical reference only. For the current seeding architecture and preset definitions, please refer to the [SEEDING_SYSTEM_GUIDE.md](../SEEDING_SYSTEM_GUIDE.md).
 
 Date: 2026-01-21
-
-This audit is based on the preset seed files in `apps/cms/src/seed/presets/`. It confirms which pages are created and which blocks each page uses. Visual QA should still be done in the browser after tokenization.
 
 ## Core Preset (`core.ts`)
 
