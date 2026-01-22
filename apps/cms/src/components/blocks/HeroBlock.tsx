@@ -87,7 +87,7 @@ export function HeroBlock({ block }: HeroBlockProps) {
       {videoUrl && type === 'video' && (
         <div className="absolute inset-0">
           <iframe
-            src={videoUrl.includes('youtube') 
+            src={videoUrl.includes('youtube')
               ? `${videoUrl}?autoplay=1&mute=1&loop=1&controls=0&showinfo=0`
               : videoUrl
             }
@@ -110,12 +110,12 @@ export function HeroBlock({ block }: HeroBlockProps) {
             {eyebrow}
           </span>
         )}
-        <h1 className={`max-w-4xl font-bold tracking-tight text-foreground ${isAgency ? 'text-5xl sm:text-6xl lg:text-7xl xl:text-8xl' : 'text-4xl sm:text-5xl lg:text-6xl'}`}>
+        <h1 className={`max-w-4xl font-bold tracking-tight text-foreground ${isAgency ? 'text-5xl sm:text-6xl lg:text-7xl xl:text-8xl gradient-text-hero' : 'text-4xl sm:text-5xl lg:text-6xl'}`}>
           {heading}
         </h1>
-        
+
         {subheading && (
-          <p className={`mt-6 max-w-2xl ${isAgency ? 'text-xl sm:text-2xl' : 'text-xl'} text-muted`}>
+          <p className={`mt-6 max-w-2xl ${isAgency ? 'text-xl sm:text-2xl gradient-subheading' : 'text-xl'} text-muted`}>
             {subheading}
           </p>
         )}
@@ -127,13 +127,12 @@ export function HeroBlock({ block }: HeroBlockProps) {
                 key={index}
                 href={getUrl(link)}
                 target={link.newTab ? '_blank' : undefined}
-                className={`btn ${
-                  link.variant === 'primary'
-                    ? 'btn-primary'
+                className={`btn ${link.variant === 'primary'
+                    ? `btn-primary ${isAgency ? 'gradient-btn-primary' : ''}`
                     : link.variant === 'outline'
-                    ? 'border border-default bg-transparent text-foreground hover:bg-base/10'
-                    : 'bg-base/10 text-foreground hover:bg-base/20'
-                }`}
+                      ? 'border border-default bg-transparent text-foreground hover:bg-base/10'
+                      : 'bg-base/10 text-foreground hover:bg-base/20'
+                  }`}
               >
                 {link.label}
               </Link>

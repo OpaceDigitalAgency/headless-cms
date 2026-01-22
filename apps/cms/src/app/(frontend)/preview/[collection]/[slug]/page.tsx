@@ -1,7 +1,7 @@
 import { notFound, redirect } from 'next/navigation'
 import { draftMode } from 'next/headers'
 import { LivePreviewPage } from './LivePreviewPage'
-import { getPayloadClient } from '@/lib/payload-api'
+import { getPayloadClient, getSettings } from '@/lib/payload-api'
 
 interface PreviewPageProps {
   params: Promise<{
@@ -31,7 +31,8 @@ export default async function PreviewPage({ params }: PreviewPageProps) {
   }
 
   const payload = await getPayloadClient()
-  
+  const settings = await getSettings()
+
   // Fetch initial data
   let document: any = null
 
@@ -56,10 +57,11 @@ export default async function PreviewPage({ params }: PreviewPageProps) {
 
   // Pass to client component for live preview
   return (
-    <LivePreviewPage 
-      initialData={document} 
+    <LivePreviewPage
+      initialData={document}
       collection={collection}
       slug={slug}
+      initialSettings={settings}
     />
   )
 }

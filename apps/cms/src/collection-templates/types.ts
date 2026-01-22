@@ -19,6 +19,7 @@ export type TemplateCategory =
   | 'places'       // Locations, venues, origins
   | 'events'       // Events, exhibitions, shows
   | 'media'        // Video, audio, documents
+  | 'taxonomy'     // Categories, tags
 
 /**
  * Collection installation status
@@ -67,8 +68,8 @@ export interface CollectionTemplate {
   /** Whether this template includes related sub-collections */
   includesRelated?: string[]
 
-  /** Field definitions for this template */
-  fields: Field[]
+  /** Field definitions for this template (optional for custom content types) */
+  fields?: Field[]
 
   /** Whether sample data is available */
   hasSeedData: boolean
@@ -110,28 +111,28 @@ export interface CollectionTemplate {
 export interface InstalledCollection {
   /** Unique instance ID */
   id: string
-  
+
   /** Template this was created from */
   templateId: string
-  
+
   /** Custom name given by user */
   customName: string
-  
+
   /** Collection slug */
   slug: string
-  
+
   /** Singular label */
   singular: string
-  
+
   /** Plural label */
   plural: string
-  
+
   /** When this was installed */
   installedAt: string
-  
+
   /** Whether seed data has been loaded */
   hasSeededData: boolean
-  
+
   /** Custom field modifications (future use) */
   fieldOverrides?: Record<string, any>
 }
@@ -144,7 +145,7 @@ export interface InstalledCollection {
 export interface TemplateRegistryState {
   /** List of installed collection instances */
   installedCollections: InstalledCollection[]
-  
+
   /** Last updated timestamp */
   updatedAt: string
 }
@@ -211,5 +212,10 @@ export const TEMPLATE_CATEGORIES: Record<TemplateCategory, { label: string; desc
     label: 'Media',
     description: 'Video, audio, documents, downloads',
     icon: 'image',
+  },
+  taxonomy: {
+    label: 'Taxonomy',
+    description: 'Categories, tags, and classifications',
+    icon: 'tag',
   },
 }

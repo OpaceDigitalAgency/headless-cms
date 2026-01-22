@@ -23,10 +23,10 @@ export function GridBlock({ block }: GridBlockProps) {
     colCount === 1
       ? 'md:grid-cols-1'
       : colCount === 2
-      ? 'md:grid-cols-2'
-      : colCount === 4
-      ? 'md:grid-cols-4'
-      : 'md:grid-cols-3'
+        ? 'md:grid-cols-2'
+        : colCount === 4
+          ? 'md:grid-cols-4'
+          : 'md:grid-cols-3'
 
   const isAgencyCards = style === 'agency-cards'
   const isAgencyList = style === 'agency-list'
@@ -55,18 +55,18 @@ export function GridBlock({ block }: GridBlockProps) {
                 isAgencyCards
                   ? 'group relative overflow-hidden rounded-3xl border border-default bg-card p-8 shadow-xl shadow-black/20'
                   : isAgencyList
-                  ? 'group relative overflow-hidden rounded-3xl border border-default bg-card p-8 shadow-lg shadow-black/20'
-                  : 'rounded-lg border border-default p-5 shadow-sm'
+                    ? 'group relative overflow-hidden rounded-3xl border border-default bg-card p-8 shadow-lg shadow-black/20'
+                    : 'rounded-lg border border-default p-5 shadow-sm'
               }
             >
               {isAgencyCards && (
-                <div className="absolute inset-0 bg-gradient-to-br from-[rgba(34,197,94,0.12)] via-transparent to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
+                <div className="absolute inset-0 bg-gradient-to-br from-[rgb(var(--color-accent))]/10 via-transparent to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
               )}
               {item.image?.url && (
                 <img src={item.image.url} alt={item.image.alt || ''} className="mb-4 h-40 w-full rounded object-cover" />
               )}
               {item.stat && (
-                <div className={isAgencyCards || isAgencyList ? 'mb-5 inline-flex h-10 w-10 items-center justify-center rounded-xl bg-accent-soft text-sm font-bold text-accent ring-1 ring-default' : 'text-2xl font-bold'}>
+                <div className={isAgencyCards || isAgencyList ? 'mb-5 inline-flex h-10 w-10 items-center justify-center rounded-xl bg-[rgb(var(--color-accent))]/10 text-sm font-bold text-[rgb(var(--color-accent))] ring-1 ring-[rgb(var(--color-accent))]/20' : 'text-2xl font-bold'}>
                   {item.stat}
                 </div>
               )}

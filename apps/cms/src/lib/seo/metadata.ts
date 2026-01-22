@@ -1,14 +1,14 @@
 import type { Metadata } from 'next'
 
 interface SEOData {
-  title?: string
-  description?: string
+  title?: string | null
+  description?: string | null
   image?: {
-    url?: string
-    alt?: string
-    width?: number
-    height?: number
-  }
+    url?: string | null
+    alt?: string | null
+    width?: number | null
+    height?: number | null
+  } | null
   noindex?: boolean
   canonical?: string
 }
@@ -40,30 +40,30 @@ export function generateEnhancedMetadata(
 ): Metadata {
   const siteUrl = settings.siteUrl || process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
   const siteName = settings.siteName || 'Website'
-  
+
   // Title with fallbacks
   const title = seo?.title || settings.defaultMeta?.title || siteName
   const description = seo?.description || settings.defaultMeta?.description || settings.siteDescription || ''
-  
+
   // Image with fallbacks
   const ogImage = seo?.image?.url || settings.defaultMeta?.image?.url
   const ogImageAlt = seo?.image?.alt || settings.defaultMeta?.image?.alt || title
   const ogImageWidth = seo?.image?.width || settings.defaultMeta?.image?.width || 1200
   const ogImageHeight = seo?.image?.height || settings.defaultMeta?.image?.height || 630
-  
+
   // Canonical URL
   const canonical = seo?.canonical || `${siteUrl}${path}`
-  
+
   // Robots
   const robots = seo?.noindex
     ? {
-        index: false,
-        follow: false,
-      }
+      index: false,
+      follow: false,
+    }
     : {
-        index: true,
-        follow: true,
-      }
+      index: true,
+      follow: true,
+    }
 
   const metadata: Metadata = {
     title,
@@ -81,13 +81,13 @@ export function generateEnhancedMetadata(
       locale: 'en_GB',
       images: ogImage
         ? [
-            {
-              url: ogImage,
-              alt: ogImageAlt,
-              width: ogImageWidth,
-              height: ogImageHeight,
-            },
-          ]
+          {
+            url: ogImage,
+            alt: ogImageAlt,
+            width: ogImageWidth,
+            height: ogImageHeight,
+          },
+        ]
         : undefined,
     },
     twitter: {

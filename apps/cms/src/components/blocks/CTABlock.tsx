@@ -72,11 +72,10 @@ export function CTABlock({ block }: CTABlockProps) {
                   key={index}
                   href={getUrl(link)}
                   target={link.newTab ? '_blank' : undefined}
-                  className={`btn ${
-                    link.variant === 'primary'
+                  className={`btn ${link.variant === 'primary'
                       ? 'bg-base text-foreground hover:bg-card'
                       : 'border border-white bg-transparent text-white hover:bg-base/10'
-                  }`}
+                    }`}
                 >
                   {link.label}
                 </Link>
@@ -118,13 +117,12 @@ export function CTABlock({ block }: CTABlockProps) {
                     key={index}
                     href={getUrl(link)}
                     target={link.newTab ? '_blank' : undefined}
-                    className={`btn ${
-                      link.variant === 'primary'
+                    className={`btn ${link.variant === 'primary'
                         ? 'btn-primary'
                         : link.variant === 'outline'
-                        ? 'btn-outline'
-                        : 'btn-secondary'
-                    }`}
+                          ? 'btn-outline'
+                          : 'btn-secondary'
+                      }`}
                   >
                     {link.label}
                   </Link>
@@ -139,23 +137,29 @@ export function CTABlock({ block }: CTABlockProps) {
 
   if (style === 'agency') {
     return (
-      <section className="relative overflow-hidden bg-accent py-20 text-[rgb(var(--color-background))]">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(0,0,0,0.35),transparent_60%)]" />
-        <div className="container relative text-center">
-          <h2 className="text-4xl font-bold tracking-tight sm:text-5xl">{heading}</h2>
+      <section className="relative overflow-hidden bg-black py-32 sm:py-40 lg:py-48">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(16,185,129,0.1),transparent_60%)]" />
+        <div className="absolute inset-0">
+          <div className="absolute -left-1/4 bottom-0 h-[600px] w-[600px] animate-blob-9s rounded-full bg-[rgb(var(--color-accent))]/20 mix-blend-multiply blur-3xl" />
+          <div className="absolute -right-1/4 bottom-0 h-[600px] w-[600px] animate-blob-11s rounded-full bg-[rgb(var(--color-accent-light))]/20 mix-blend-multiply blur-3xl" />
+        </div>
+        <div className="container relative z-10 text-center">
+          <h2 className="max-w-4xl mx-auto text-5xl font-black tracking-tighter sm:text-6xl lg:text-7xl xl:text-8xl mb-12">
+            <span className="gradient-text-hero">{heading}</span>
+          </h2>
           {description && (
-            <p className="mx-auto mt-4 max-w-2xl text-lg opacity-90">
+            <p className="mx-auto mt-4 max-w-2xl text-xl text-gray-400">
               {description}
             </p>
           )}
           {links && links.length > 0 && (
-            <div className="mt-8 flex flex-wrap justify-center gap-4">
+            <div className="mt-12 flex flex-wrap justify-center gap-4">
               {links.map((link, index) => (
                 <Link
                   key={index}
                   href={getUrl(link)}
                   target={link.newTab ? '_blank' : undefined}
-                  className="btn bg-[rgb(var(--color-background))] text-foreground hover:bg-base/80"
+                  className="btn btn-primary gradient-btn-primary text-black font-bold px-12 py-6 text-xl shadow-2xl hover:scale-105 transition-transform"
                 >
                   {link.label}
                 </Link>
@@ -186,15 +190,14 @@ export function CTABlock({ block }: CTABlockProps) {
                 key={index}
                 href={getUrl(link)}
                 target={link.newTab ? '_blank' : undefined}
-                className={`btn ${
-                  backgroundColor === 'primary' || backgroundColor === 'dark'
+                className={`btn ${backgroundColor === 'primary' || backgroundColor === 'dark'
                     ? link.variant === 'primary'
                       ? 'bg-base text-foreground hover:bg-card'
                       : 'border border-white bg-transparent hover:bg-base/10'
                     : link.variant === 'primary'
-                    ? 'btn-primary'
-                    : 'btn-outline'
-                }`}
+                      ? 'btn-primary'
+                      : 'btn-outline'
+                  }`}
               >
                 {link.label}
               </Link>

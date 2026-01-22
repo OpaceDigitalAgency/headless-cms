@@ -13,6 +13,9 @@ import { SeedItemsList } from './SeedItemsList'
  * Shows collections filtered by admin group (section).
  * Used for Content, Collections, Shop, Taxonomy manager pages.
  */
+const templateById = new Map(allTemplates.map((template) => [template.id, template]))
+const templateBySlug = new Map(allTemplates.map((template) => [template.defaultSlug, template]))
+
 interface SectionCollectionTemplatesProps {
   /** Filter collections by admin group */
   section: 'Content' | 'Collections' | 'Shop' | 'Taxonomy'
@@ -280,7 +283,7 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
     try {
       const updates: Record<string, number> = {}
       await Promise.all(
-        contentTypes.map(async (contentType) => {
+        contentTypes.map(async (contentType: CustomCollection) => {
           const response = await fetch(`/api/custom-items?where[contentType][equals]=${contentType.id}&limit=0`)
           if (!response.ok) return
           const data = await response.json()
@@ -627,7 +630,7 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
     })
   }
 
-  const handleSeedContentTypeData = async (templateIn: CollectionTemplate, contentTypeId?: string) => {
+  const handleSeedContentTypeData = async (contentType: CustomCollection, templateIn: CollectionTemplate) => {
     // Improved template lookup consistency
     let template = templateIn
     if (!template.contentTypeTemplate && template.id !== 'blog-post') {
@@ -635,10 +638,11 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
       if (blogTemplate) template = blogTemplate
     }
 
-    setSeeding(contentTypeId || template.defaultSlug)
+    setSeeding(contentType.id)
     setMessage(null)
-    const seededKey = contentTypeId ? `custom:${contentTypeId}` : template.defaultSlug
+    const seededKey = `custom:${contentType.id}`
 
+    const collectionLabel = contentType.pluralLabel || contentType.name
     try {
       const response = await fetch('/api/seed/content-type', {
         method: 'POST',
@@ -647,7 +651,7 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
         },
         body: JSON.stringify({
           templateId: template.id,
-          contentTypeId,
+          contentTypeId: contentType.id,
           action: 'seed',
         }),
       })
@@ -657,19 +661,19 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
       if (response.ok && data.success) {
         setMessage({
           type: 'success',
-          text: data.message || `Successfully seeded ${template.name}`,
+          text: data.message || `Successfully seeded ${collectionLabel}`,
         })
         fetchSeedStatus()
         fetchCustomCollectionCounts()
         updateSeededItemsForKey(seededKey, getSeedItemSlugs(template))
       } else {
-        throw new Error(data.message || 'Failed to seed content type')
+        throw new Error(data.message || `Failed to seed ${collectionLabel}`)
       }
     } catch (error) {
       console.error('Failed to seed content type:', error)
       setMessage({
         type: 'error',
-        text: error instanceof Error ? error.message : 'Failed to seed content type. Please try again.',
+        text: error instanceof Error ? error.message : `Failed to seed ${collectionLabel}. Please try again.`,
       })
     } finally {
       setSeeding(null)
@@ -729,7 +733,7 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
     }
   }
 
-  const handleClearContentTypeSeedData = async (templateIn: CollectionTemplate, contentTypeId?: string) => {
+  const handleClearContentTypeSeedData = async (contentType: CustomCollection, templateIn: CollectionTemplate) => {
     // Improved template lookup consistency
     let template = templateIn
     if (!template.contentTypeTemplate && template.id !== 'blog-post') {
@@ -737,10 +741,11 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
       if (blogTemplate) template = blogTemplate
     }
 
-    setSeeding(contentTypeId || template.defaultSlug)
+    setSeeding(contentType.id)
     setMessage(null)
-    const seededKey = contentTypeId ? `custom:${contentTypeId}` : template.defaultSlug
+    const seededKey = `custom:${contentType.id}`
 
+    const collectionLabel = contentType.pluralLabel || contentType.name
     try {
       const response = await fetch('/api/seed/content-type', {
         method: 'POST',
@@ -749,7 +754,7 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
         },
         body: JSON.stringify({
           templateId: template.id,
-          contentTypeId,
+          contentTypeId: contentType.id,
           action: 'clear',
         }),
       })
@@ -759,19 +764,19 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
       if (response.ok && data.success) {
         setMessage({
           type: 'success',
-          text: data.message || `Successfully cleared ${template.name}`,
+          text: data.message || `Successfully cleared ${collectionLabel}`,
         })
         fetchSeedStatus()
         fetchCustomCollectionCounts()
         clearSeededItemsForKey(seededKey)
       } else {
-        throw new Error(data.message || 'Failed to clear content type seed data')
+        throw new Error(data.message || `Failed to clear ${collectionLabel}`)
       }
     } catch (error) {
       console.error('Failed to clear content type seed data:', error)
       setMessage({
         type: 'error',
-        text: error instanceof Error ? error.message : 'Failed to clear seed data. Please try again.',
+        text: error instanceof Error ? error.message : `Failed to clear ${collectionLabel}. Please try again.`,
       })
     } finally {
       setSeeding(null)
@@ -995,7 +1000,6 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
     }
   }
 
-  const templateById = new Map(allTemplates.map((template) => [template.id, template]))
 
   // Filter templates by section
   const sectionTemplates = allTemplates.filter((template) => template.adminGroup === section)
@@ -1498,8 +1502,8 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
             {!isUninstalled && (
               <SeedItemsList
                 template={template}
-                onSeedItem={(itemSlug) => handleSeedContentTypeItem(template, contentType.id, itemSlug)}
-                onSeedAll={() => handleSeedContentTypeData(template, contentType.id)}
+                onSeedItem={(itemSlug) => handleSeedContentTypeItem(template!, contentType.id, itemSlug)}
+                onSeedAll={() => handleSeedContentTypeData(contentType, template!)}
                 isSeeding={isSeedingThis}
                 seedingItems={seedingItems}
                 disabledItems={seededItems}
@@ -1521,7 +1525,7 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
         {hasSeedData && template && (
           <div style={{ marginBottom: '16px' }}>
             <button
-              onClick={() => toggleSeedList(seedListKey, template, { contentTypeId: contentType.id, collectionSlug: 'custom-items' })}
+              onClick={() => toggleSeedList(seedListKey, template!, { contentTypeId: contentType.id, collectionSlug: 'custom-items' })}
               disabled={isSeedingThis || isUninstalled}
               style={{
                 padding: '8px 14px',
@@ -1617,9 +1621,9 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
             Clone
           </button>
 
-          {hasSeedData && template && isSeeded && !isUninstalled && (
+          {hasSeedData && template && !isUninstalled && (
             <button
-              onClick={() => handleClearContentTypeSeedData(template, contentType.id)}
+              onClick={() => handleClearContentTypeSeedData(contentType, template!)}
               disabled={isSeedingThis}
               style={{
                 padding: '8px 14px',
