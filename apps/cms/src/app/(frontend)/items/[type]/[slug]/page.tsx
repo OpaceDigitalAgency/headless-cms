@@ -168,5 +168,6 @@ export default async function CustomItemPage({ params }: CustomItemPageProps) {
 }
 
 // Static generation with ISR
+export const dynamic = 'force-dynamic'
 export const revalidate = 60
 

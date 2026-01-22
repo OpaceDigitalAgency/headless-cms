@@ -140,5 +140,6 @@ export default async function PersonPage({ params }: PersonPageProps) {
   }
 }
 
+export const dynamic = 'force-dynamic'
 export const revalidate = 60
 

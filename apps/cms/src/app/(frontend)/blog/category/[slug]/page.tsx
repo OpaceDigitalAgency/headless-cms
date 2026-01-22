@@ -104,4 +104,6 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
   )
 }
 
+export const dynamic = 'force-dynamic'
 export const dynamicParams = true
+export const revalidate = 60

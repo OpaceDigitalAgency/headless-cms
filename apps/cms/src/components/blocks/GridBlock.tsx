@@ -81,9 +81,11 @@ export function GridBlock({ block }: GridBlockProps) {
 
   return (
     <section className={isAgencyCards || isAgencyList || isRetroCards ? 'relative bg-base py-20' : 'container py-12'}>
-      {(isAgencyCards || isAgencyList) && (
+      {(isAgencyCards || isAgencyList) && !isRetroCards && (
         <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.05)_1px,transparent_1px)] bg-[size:4rem_4rem] opacity-40" />
       )}
+
+      {/* Retro Global Background Elements for Grid Sections */}
       {isRetroCards && (
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <div className="absolute inset-0 retro-grain opacity-20" />
@@ -92,6 +94,19 @@ export function GridBlock({ block }: GridBlockProps) {
           </div>
           <div className="absolute bottom-20 left-1/3 w-6 h-6 text-[rgb(var(--color-accent))] opacity-10 animate-pulse" style={{ animationDelay: '1s' }}>
             <Icons.Sparkles width={24} height={24} />
+          </div>
+        </div>
+      )}
+
+      {/* Retro Testimonials Background Elements */}
+      {isAgencyCards && (
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute inset-0 retro-grain opacity-20 animate-pulse" style={{ animationDuration: '6s' }} />
+          <div className="absolute top-1/4 left-10 w-6 h-6 text-[rgb(var(--color-accent))] opacity-10 animate-pulse">
+            <Icons.Heart width={24} height={24} />
+          </div>
+          <div className="absolute bottom-1/3 right-20 w-5 h-5 text-[rgb(var(--color-accent))] opacity-10 animate-pulse" style={{ animationDelay: '1.5s' }}>
+            <Icons.Heart width={20} height={20} />
           </div>
         </div>
       )}
@@ -111,30 +126,90 @@ export function GridBlock({ block }: GridBlockProps) {
           {items.map((item, index) => {
             const Icon = item.icon ? iconMap[item.icon.toLowerCase()] : null
 
+            // Retro Services Card Style (matches 'retro-cards')
+            if (isRetroCards) {
+              return (
+                <div
+                  key={index}
+                  className="group relative bg-card border border-border rounded-2xl p-8 transition-all duration-500 hover:scale-105 hover:-rotate-1 hover:shadow-2xl hover:shadow-[rgb(var(--color-accent))]/20 hover:border-accent"
+                >
+                  <div className="absolute inset-0 rounded-2xl overflow-hidden opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
+                    <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[rgb(var(--color-accent))]/5 to-transparent animate-scanline" />
+                  </div>
+
+                  <div className="relative z-10 space-y-4">
+                    {Icon && (
+                      <div className="w-16 h-16 bg-[rgb(var(--color-accent))]/10 rounded-xl flex items-center justify-center text-[rgb(var(--color-accent))] transition-all duration-500 group-hover:bg-[rgb(var(--color-accent))] group-hover:text-base group-hover:scale-110 group-hover:rotate-12">
+                        <Icon className="w-8 h-8" />
+                      </div>
+                    )}
+                    {item.title && (
+                      <h3 className="text-2xl font-bold text-foreground transition-all duration-300 group-hover:text-accent">
+                        {item.title}
+                      </h3>
+                    )}
+                    {item.description && (
+                      <p className="text-muted leading-relaxed transition-all duration-300 group-hover:text-foreground">
+                        {item.description}
+                      </p>
+                    )}
+                  </div>
+
+                  <div className="absolute top-0 right-0 w-20 h-20 gradient-border-retro rounded-bl-full opacity-0 group-hover:opacity-30 transition-all duration-500 group-hover:rotate-45" />
+                  <div className="absolute bottom-0 left-0 w-16 h-16 bg-[rgb(var(--color-accent))]/5 rounded-tr-full opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                </div>
+              )
+            }
+
+            // Retro Testimonials Style (mapped from 'agency-cards' when in retro skin context logic - technically agency cards is shared but we embellish it here)
+            if (isAgencyCards) {
+              return (
+                <div
+                  key={index}
+                  className="group relative bg-card border border-border rounded-2xl p-8 backdrop-blur-sm transition-all duration-500 hover:scale-105 hover:shadow-xl hover:border-accent hover:rotate-1"
+                >
+                  <div className="relative z-10 space-y-6">
+                    <div className="text-6xl text-[rgb(var(--color-accent))] opacity-20 font-serif leading-none transition-all duration-500 group-hover:scale-110 group-hover:opacity-40">
+                      "
+                    </div>
+                    {item.description && (
+                      <p className="text-lg text-foreground leading-relaxed -mt-8 transition-all duration-300 group-hover:text-accent">
+                        {item.description} {/* Using description field for quote */}
+                      </p>
+                    )}
+                    <div className="pt-4 border-t border-border transition-colors duration-300 group-hover:border-accent">
+                      {item.title && (
+                        <p className="font-semibold text-foreground transition-colors duration-300 group-hover:text-accent">
+                          {item.title}
+                        </p>
+                      )}
+                      {item.subtitle && (
+                        <p className="text-sm text-muted transition-colors duration-300 group-hover:text-foreground">
+                          {item.subtitle}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                  <div className="absolute inset-0 rounded-2xl bg-[rgb(var(--color-accent))] opacity-0 blur-2xl transition-opacity duration-500 group-hover:opacity-10" />
+                  <div className="absolute top-4 right-4 w-5 h-5 text-[rgb(var(--color-accent))] opacity-0 transition-all duration-500 group-hover:opacity-30 group-hover:rotate-180">
+                    <Icons.Sparkles width={20} height={20} />
+                  </div>
+                </div>
+              )
+            }
+
+            // Default Card
             return (
               <div
                 key={index}
                 className={
-                  isAgencyCards
-                    ? 'group relative overflow-hidden rounded-3xl border border-default bg-card p-8 shadow-xl shadow-black/20'
-                    : isAgencyList
-                      ? 'group relative overflow-hidden rounded-3xl border border-default bg-card p-8 shadow-lg shadow-black/20'
-                      : isRetroCards
-                        ? 'group relative bg-card border border-border rounded-2xl p-8 transition-all duration-500 hover:scale-105 hover:-rotate-1 hover:shadow-2xl hover:shadow-[rgb(var(--color-accent))]/20 hover:border-accent'
-                        : 'rounded-lg border border-default p-5 shadow-sm'
+                  isAgencyList
+                    ? 'group relative overflow-hidden rounded-3xl border border-default bg-card p-8 shadow-lg shadow-black/20'
+                    : 'rounded-lg border border-default p-5 shadow-sm'
                 }
               >
-                {isAgencyCards && (
-                  <div className="absolute inset-0 bg-gradient-to-br from-[rgb(var(--color-accent))]/10 via-transparent to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
-                )}
-                {isRetroCards && (
-                  <>
-                    <div className="absolute inset-0 rounded-2xl overflow-hidden opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
-                      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[rgb(var(--color-accent))]/5 to-transparent animate-scanline" />
-                    </div>
-                    <div className="absolute top-0 right-0 w-20 h-20 gradient-border-retro rounded-bl-full opacity-0 group-hover:opacity-30 transition-all duration-500 group-hover:rotate-45" />
-                    <div className="absolute bottom-0 left-0 w-16 h-16 bg-[rgb(var(--color-accent))]/5 rounded-tr-full opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                  </>
+                {isAgencyList && (
+                  <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.05)_1px,transparent_1px)] bg-[size:4rem_4rem] opacity-40" />
                 )}
 
                 {item.image?.url && (
@@ -142,24 +217,24 @@ export function GridBlock({ block }: GridBlockProps) {
                 )}
 
                 {Icon && (
-                  <div className={isRetroCards ? "w-16 h-16 bg-[rgb(var(--color-accent))]/10 rounded-xl flex items-center justify-center text-[rgb(var(--color-accent))] transition-all duration-500 group-hover:bg-[rgb(var(--color-accent))] group-hover:text-base group-hover:scale-110 group-hover:rotate-12 mb-4" : "mb-4 text-primary"}>
-                    <Icon className={isRetroCards ? "w-8 h-8" : "w-6 h-6"} />
+                  <div className="mb-4 text-primary">
+                    <Icon className="w-6 h-6" />
                   </div>
                 )}
 
                 {item.stat && (
-                  <div className={isAgencyCards || isAgencyList ? 'mb-5 inline-flex h-10 w-10 items-center justify-center rounded-xl bg-[rgb(var(--color-accent))]/10 text-sm font-bold text-[rgb(var(--color-accent))] ring-1 ring-[rgb(var(--color-accent))]/20' : 'text-2xl font-bold'}>
+                  <div className="text-2xl font-bold">
                     {item.stat}
                   </div>
                 )}
                 {item.title && (
-                  <h3 className={isAgencyCards || isAgencyList ? 'text-xl font-semibold text-foreground sm:text-2xl' : isRetroCards ? 'text-2xl font-bold text-foreground transition-all duration-300 group-hover:text-accent' : 'mt-2 text-lg font-semibold'}>
+                  <h3 className={isAgencyList ? 'text-xl font-semibold text-foreground sm:text-2xl' : 'mt-2 text-lg font-semibold'}>
                     {item.title}
                   </h3>
                 )}
                 {item.subtitle && <p className="text-sm text-muted">{item.subtitle}</p>}
                 {item.description && (
-                  <p className={isAgencyCards || isAgencyList ? 'mt-3 text-base text-muted' : isRetroCards ? 'mt-3 text-muted leading-relaxed transition-all duration-300 group-hover:text-foreground' : 'mt-2 text-sm text-muted'}>
+                  <p className={isAgencyList ? 'mt-3 text-base text-muted' : 'mt-2 text-sm text-muted'}>
                     {item.description}
                   </p>
                 )}

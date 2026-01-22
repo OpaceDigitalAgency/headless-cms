@@ -151,5 +151,6 @@ export default async function EventPage({ params }: EventPageProps) {
   }
 }
 
+export const dynamic = 'force-dynamic'
 export const revalidate = 60
 

@@ -111,5 +111,6 @@ export default async function Page({ params }: PageProps) {
 }
 
 // Static generation with ISR fallback
+export const dynamic = 'force-dynamic'
 export const revalidate = 60
 

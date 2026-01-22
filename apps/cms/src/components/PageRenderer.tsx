@@ -78,23 +78,23 @@ export function PageRenderer({ page, settings }: PageRendererProps) {
     schemas.push(generateBreadcrumbSchema(breadcrumbs))
   }
 
-  // Map hero data if present
-  const heroData = hero
+  // Map hero data if present and not 'none'
+  const heroData = hero && hero.type !== 'none'
     ? {
-        type: hero.type || 'standard',
-        heading: hero.heading,
-        subheading: hero.subheading,
-        image: hero.image?.url ? { url: hero.image.url, alt: hero.image.alt } : undefined,
-        videoUrl: hero.videoUrl,
-        overlay: hero.overlay,
-        textAlign: hero.textAlign,
-        links: hero.links?.map((link: any) => ({
-          label: link.label,
-          url: link.url || (link.page?.slug ? `/${link.page.slug}` : '#'),
-          variant: link.variant,
-          newTab: link.newTab,
-        })),
-      }
+      type: hero.type || 'standard',
+      heading: hero.heading,
+      subheading: hero.subheading,
+      image: hero.image?.url ? { url: hero.image.url, alt: hero.image.alt } : undefined,
+      videoUrl: hero.videoUrl,
+      overlay: hero.overlay,
+      textAlign: hero.textAlign,
+      links: hero.links?.map((link: any) => ({
+        label: link.label,
+        url: link.url || (link.page?.slug ? `/${link.page.slug}` : '#'),
+        variant: link.variant,
+        newTab: link.newTab,
+      })),
+    }
     : undefined
 
   // Block component mapping
@@ -245,13 +245,12 @@ export function PageRenderer({ page, settings }: PageRendererProps) {
                           key={index}
                           href={link.url}
                           target={link.newTab ? '_blank' : undefined}
-                          className={`btn ${
-                            link.variant === 'primary'
+                          className={`btn ${link.variant === 'primary'
                               ? 'btn-primary'
                               : link.variant === 'outline'
-                              ? 'btn-outline'
-                              : 'bg-base/10 text-foreground hover:bg-base/20'
-                          }`}
+                                ? 'btn-outline'
+                                : 'bg-base/10 text-foreground hover:bg-base/20'
+                            }`}
                         >
                           {link.label}
                         </a>

@@ -59,6 +59,80 @@ export function HeroBlock({ block }: HeroBlockProps) {
   const isAgency = variant === 'agency'
   const isRetro = variant === 'retro'
 
+  // Custom Retro Implementation to match user's design exactly
+  if (isRetro) {
+    return (
+      <section className="relative min-h-screen flex items-center justify-center px-6 py-20 overflow-hidden bg-base">
+        <div className="absolute inset-0 retro-grain opacity-30 animate-pulse" style={{ animationDuration: '4s' }} />
+        <div className="absolute inset-0 gradient-bg-retro opacity-20" />
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-[rgb(var(--color-accent))] opacity-10 rounded-full blur-3xl animate-pulse" />
+          <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-[rgb(var(--color-accent))] opacity-10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
+          <div className="absolute top-1/2 right-1/3 w-72 h-72 bg-[rgb(var(--color-accent))] opacity-5 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }} />
+
+          {/* Decorative Stars/Hearts */}
+          <div className="absolute top-20 left-10 w-6 h-6 text-[rgb(var(--color-accent))] opacity-30 animate-spin" style={{ animationDuration: '20s' }}>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" /></svg>
+          </div>
+          <div className="absolute top-40 right-20 w-4 h-4 text-[rgb(var(--color-accent))] opacity-40 animate-spin" style={{ animationDuration: '15s' }}>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" /></svg>
+          </div>
+          <div className="absolute bottom-32 left-1/4 w-5 h-5 text-[rgb(var(--color-accent))] opacity-20 animate-spin" style={{ animationDuration: '25s' }}>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" /></svg>
+          </div>
+          <div className="absolute top-1/3 right-10 w-5 h-5 text-[rgb(var(--color-accent))] opacity-20 animate-pulse">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" /></svg>
+          </div>
+        </div>
+
+        <div className="relative z-10 max-w-5xl mx-auto text-center space-y-8">
+          <div className="animate-in fade-in slide-in-from-bottom-8 duration-1000">
+            <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight gradient-text-retro animate-text-shimmer">
+              {heading}
+            </h1>
+          </div>
+          <p className="text-xl md:text-2xl text-muted max-w-3xl mx-auto animate-in fade-in slide-in-from-bottom-6 duration-1000 hover:text-foreground transition-colors" style={{ animationDelay: '200ms' }}>
+            {subheading}
+          </p>
+
+          {links && links.length > 0 && (
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-6 pt-4 animate-in fade-in slide-in-from-bottom-4 duration-1000" style={{ animationDelay: '400ms' }}>
+              {links.map((link, index) => {
+                const isPrimary = link.variant !== 'secondary'
+                return (
+                  <Link
+                    key={index}
+                    href={getUrl(link)}
+                    target={link.newTab ? '_blank' : undefined}
+                    className={isPrimary
+                      ? "group relative px-8 py-4 bg-[rgb(var(--color-accent))] text-base rounded-lg font-semibold transition-all duration-500 hover:scale-110 hover:shadow-2xl hover:shadow-[rgb(var(--color-accent))]/50 hover:rotate-1"
+                      : "group px-8 py-4 text-[rgb(var(--color-accent))] border-2 border-[rgb(var(--color-accent))] rounded-lg font-semibold transition-all duration-500 hover:bg-[rgb(var(--color-accent))] hover:text-base hover:scale-110 hover:-rotate-1"
+                    }
+                  >
+                    <span className="relative z-10 flex items-center gap-2">
+                      {link.label}
+                      {isPrimary && (
+                        <svg className="w-5 h-5 transition-transform duration-500 group-hover:translate-x-2" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" /></svg>
+                      )}
+                    </span>
+                    {isPrimary && <div className="absolute inset-0 rounded-lg bg-[rgb(var(--color-accent))] opacity-0 blur-xl transition-opacity duration-500 group-hover:opacity-50" />}
+                  </Link>
+                )
+              })}
+            </div>
+          )}
+        </div>
+
+        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
+          <div className="w-6 h-10 border-2 border-[rgb(var(--color-accent))] rounded-full flex items-start justify-center p-2 hover:scale-110 transition-transform cursor-pointer">
+            <div className="w-1 h-2 bg-[rgb(var(--color-accent))] rounded-full animate-pulse" />
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  // Standard / Agency Default Implementation
   return (
     <section className={`relative flex ${minHeight} items-center justify-center overflow-hidden bg-base`}>
       {isAgency && (
@@ -71,25 +145,7 @@ export function HeroBlock({ block }: HeroBlockProps) {
           </div>
         </>
       )}
-      {isRetro && (
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute inset-0 retro-grain opacity-30 animate-pulse" style={{ animationDuration: '4s' }} />
-          <div className="absolute inset-0 gradient-bg-retro opacity-20" />
-          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-[rgb(var(--color-accent))] opacity-10 rounded-full blur-3xl animate-pulse" />
-          <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-[rgb(var(--color-accent))] opacity-10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
 
-          {/* Decorative Stars/Hearts */}
-          <div className="absolute top-20 left-10 w-6 h-6 text-[rgb(var(--color-accent))] opacity-30 animate-spin" style={{ animationDuration: '20s' }}>
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
-          </div>
-          <div className="absolute bottom-32 left-1/4 w-5 h-5 text-[rgb(var(--color-accent))] opacity-20 animate-spin" style={{ animationDuration: '25s' }}>
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
-          </div>
-          <div className="absolute top-1/3 right-10 w-5 h-5 text-[rgb(var(--color-accent))] opacity-20 animate-pulse">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
-          </div>
-        </div>
-      )}
       {/* Background Image */}
       {image?.url && (
         <div className="absolute inset-0">
@@ -130,12 +186,12 @@ export function HeroBlock({ block }: HeroBlockProps) {
             {eyebrow}
           </span>
         )}
-        <h1 className={`max-w-4xl font-bold tracking-tight text-foreground ${isAgency ? 'text-5xl sm:text-6xl lg:text-7xl xl:text-8xl gradient-text-hero' : isRetro ? 'text-5xl md:text-7xl lg:text-8xl gradient-text-retro animate-text-shimmer' : 'text-4xl sm:text-5xl lg:text-6xl'}`}>
+        <h1 className={`max-w-4xl font-bold tracking-tight text-foreground ${isAgency ? 'text-5xl sm:text-6xl lg:text-7xl xl:text-8xl gradient-text-hero' : 'text-4xl sm:text-5xl lg:text-6xl'}`}>
           {heading}
         </h1>
 
         {subheading && (
-          <p className={`mt-6 max-w-2xl ${isAgency ? 'text-xl sm:text-2xl gradient-subheading' : isRetro ? 'text-xl md:text-2xl text-muted hover:text-foreground transition-colors' : 'text-xl'} text-muted`}>
+          <p className={`mt-6 max-w-2xl ${isAgency ? 'text-xl sm:text-2xl gradient-subheading' : 'text-xl'} text-muted`}>
             {subheading}
           </p>
         )}

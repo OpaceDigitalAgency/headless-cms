@@ -7,6 +7,10 @@ const retroPageData = {
     title: 'Retro Dreams',
     slug: 'retro',
     _status: 'published' as const,
+    hero: {
+        type: 'none',
+        title: 'Retro Dreams', // required field
+    },
     content: [
         {
             blockType: 'hero',
@@ -99,6 +103,49 @@ const retroPageData = {
                     subtitle: 'Design Enthusiast',
                     description: '"I\'ve been following this artist for years. Finally got a limited print and the quality blew me away. Retro never looked so good."',
                     icon: 'sparkles',
+                },
+            ],
+        },
+        {
+            blockType: 'timeline',
+            heading: 'The Creative Process',
+            description: 'From concept to masterpiece, step by step',
+            events: [
+                {
+                    date: '01',
+                    title: 'Consultation',
+                    description: [
+                        {
+                            children: [{ text: "We discuss your vision, references, and the vibe you're going for." }]
+                        }
+                    ],
+                },
+                {
+                    date: '02',
+                    title: 'Sketch & Concept',
+                    description: [
+                        {
+                            children: [{ text: "I create initial concepts and mood boards for your approval." }]
+                        }
+                    ],
+                },
+                {
+                    date: '03',
+                    title: 'Creation',
+                    description: [
+                        {
+                            children: [{ text: "The magic happens. Digital or physical, every detail is crafted with care." }]
+                        }
+                    ],
+                },
+                {
+                    date: '04',
+                    title: 'Delivery',
+                    description: [
+                        {
+                            children: [{ text: "High-res files delivered instantly, or prints shipped worldwide with tracking." }]
+                        }
+                    ],
                 },
             ],
         },
