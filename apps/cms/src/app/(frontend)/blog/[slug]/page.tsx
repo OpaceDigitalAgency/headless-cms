@@ -93,13 +93,7 @@ export default async function PostPage({ params }: PostPageProps) {
       notFound()
     }
 
-    return (
-      <Section spacing="lg" background="default">
-        <Container>
-          <PostRenderer post={post} settings={settings} />
-        </Container>
-      </Section>
-    )
+    return <PostRenderer post={post} settings={settings} />
   } catch (error) {
     console.error(`Failed to fetch post ${slug}:`, error)
     notFound()

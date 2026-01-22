@@ -411,7 +411,31 @@
     --font-sans: 'Space Grotesk', 'Inter', system-ui, sans-serif;
     --font-serif: 'Space Grotesk', 'Inter', system-ui, sans-serif;
 
-    /* Light mode (intentionally dark for this skin) */
+    /* Light mode */
+    --color-background: 255 255 255;
+    --color-foreground: 15 23 42;
+    --color-muted: 100 116 139;
+    --color-border: 226 232 240;
+    --color-card: 248 250 252;
+    --color-accent: 16 185 129;
+    --color-accent-light: 52 211 153;
+
+    --radius: 0.75rem;
+    --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+    --shadow-lg: 0 20px 25px -5px rgb(0 0 0 / 0.1);
+    --border-width: 1px;
+    --letter-spacing: -0.02em;
+    --container-max: 90rem;
+    --skin-bg-image:
+      radial-gradient(circle at 10% 20%, rgb(16 185 129 / 0.08), transparent 50%),
+      linear-gradient(to right, rgb(226 232 240 / 0.4) 1px, transparent 1px),
+      linear-gradient(to bottom, rgb(226 232 240 / 0.4) 1px, transparent 1px);
+    --skin-bg-size: 100% 100%, 4rem 4rem, 4rem 4rem;
+    --skin-bg-position: top left;
+    --skin-bg-repeat: no-repeat, repeat, repeat;
+  }
+
+  [data-skin="agency"].dark {
     --color-background: 3 7 10;
     --color-foreground: 255 255 255;
     --color-muted: 156 163 175;
@@ -419,30 +443,13 @@
     --color-card: 17 24 39;
     --color-accent: 16 185 129;
     --color-accent-light: 52 211 153;
-    --color-cta-bg: 16 185 129;
-
-    --radius: 0.75rem;
-    --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.3);
-    --shadow-lg: 0 20px 25px -5px rgb(0 0 0 / 0.3);
-    --border-width: 1px;
-    --letter-spacing: -0.02em;
-    --container-max: 90rem;
-    --skin-bg-image: none;
-    --skin-bg-size: auto;
+    --skin-bg-image:
+      radial-gradient(circle at 10% 20%, rgb(16 185 129 / 0.15), transparent 50%),
+      linear-gradient(to right, rgb(31 41 55 / 0.6) 1px, transparent 1px),
+      linear-gradient(to bottom, rgb(31 41 55 / 0.6) 1px, transparent 1px);
+    --skin-bg-size: 100% 100%, 4rem 4rem, 4rem 4rem;
     --skin-bg-position: top left;
-    --skin-bg-repeat: no-repeat;
-    --skin-bg-attachment: scroll;
-  }
-
-  [data-skin="agency"].dark {
-    --color-background: 0 0 0;
-    --color-foreground: 255 255 255;
-    --color-muted: 156 163 175;
-    --color-border: 31 41 55;
-    --color-card: 17 24 39;
-    --color-accent: 16 185 129;
-    --color-accent-light: 52 211 153;
-    --color-cta-bg: 16 185 129;
+    --skin-bg-repeat: no-repeat, repeat, repeat;
   }
 
   /* ===========================================
@@ -1390,15 +1397,23 @@
 }
 
 .category-link {
-  @apply rounded-full bg-primary-100 px-3 py-1 text-sm font-medium text-primary-700 hover:bg-primary-200 dark:bg-primary-900 dark:text-primary-300 dark:hover:bg-primary-800;
+  @apply rounded-full px-3 py-1 text-sm font-medium transition-colors;
+  background-color: rgb(var(--color-accent) / 0.1);
+  color: rgb(var(--color-accent));
+}
+
+.category-link:hover {
+  background-color: rgb(var(--color-accent) / 0.2);
 }
 
 .article-heading {
-  @apply text-4xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-5xl;
+  @apply text-4xl font-bold tracking-tight sm:text-5xl;
+  color: rgb(var(--color-foreground));
 }
 
 .article-meta {
-  @apply mt-6 flex flex-wrap items-center justify-center gap-4 text-sm text-gray-500 dark:text-slate-400;
+  @apply mt-6 flex flex-wrap items-center justify-center gap-4 text-sm;
+  color: rgb(var(--color-muted));
 }
 
 .article-featured-image {
@@ -1422,7 +1437,8 @@
 }
 
 .article-toc h2 {
-  @apply mb-4 text-sm font-semibold uppercase tracking-wide text-gray-500 dark:text-slate-400;
+  @apply mb-4 text-sm font-semibold uppercase tracking-wide;
+  color: rgb(var(--color-muted));
 }
 
 .article-toc ul {
@@ -1430,7 +1446,12 @@
 }
 
 .toc-item a {
-  @apply text-gray-600 hover:text-gray-900 dark:text-slate-400 dark:hover:text-white;
+  @apply transition-colors;
+  color: rgb(var(--color-muted));
+}
+
+.toc-item a:hover {
+  color: rgb(var(--color-foreground));
 }
 
 .toc-item--level-3 {
@@ -1441,22 +1462,34 @@
   @apply max-w-none lg:col-span-3;
   font-size: 1.125rem;
   line-height: 1.75;
+  color: rgb(var(--color-foreground));
 }
 
 .article-tags {
-  @apply mx-auto mt-12 flex max-w-3xl flex-wrap items-center gap-2 border-t border-gray-200 dark:border-slate-700 pt-8;
+  @apply mx-auto mt-12 flex max-w-3xl flex-wrap items-center gap-2 border-t pt-8;
+  border-color: rgb(var(--color-border));
 }
 
 .tags-label {
-  @apply text-sm font-medium text-gray-500 dark:text-slate-400;
+  @apply text-sm font-medium;
+  color: rgb(var(--color-muted));
 }
 
 .tag-link {
-  @apply rounded-full bg-gray-100 px-3 py-1 text-sm text-gray-700 hover:bg-gray-200 dark:bg-slate-700 dark:text-slate-300 dark:hover:bg-slate-600;
+  @apply rounded-full px-3 py-1 text-sm transition-colors;
+  background-color: rgb(var(--color-card));
+  color: rgb(var(--color-foreground));
+  border: 1px solid rgb(var(--color-border));
+}
+
+.tag-link:hover {
+  background-color: rgb(var(--color-accent) / 0.1);
+  border-color: rgb(var(--color-accent));
 }
 
 .article-related {
-  @apply mt-16 border-t border-gray-200 dark:border-slate-700 pt-12;
+  @apply mt-16 border-t pt-12;
+  border-color: rgb(var(--color-border));
 }
 
 .related-posts-grid {
