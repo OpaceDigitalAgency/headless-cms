@@ -1343,7 +1343,13 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
 
   const renderCustomCollectionCard = (contentType: CustomCollection) => {
     const itemCount = customCollectionCounts[contentType.id] || 0
-    const template = contentType.templateId ? templateById.get(contentType.templateId) : undefined
+
+    // Improved template lookup
+    let template = contentType.templateId ? templateById.get(contentType.templateId) : undefined
+    if (!template && contentType.template === 'article') {
+      template = templateById.get('blog-post')
+    }
+
     const isSeedingThis = seeding === contentType.id
     const hasSeedData = Boolean(template?.hasSeedData)
     const isSeeded = itemCount > 0
@@ -1365,8 +1371,45 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
           borderRadius: '8px',
           padding: '20px',
           background: 'var(--theme-elevation-50)',
+          position: 'relative',
         }}
       >
+        {isSeedingThis && (
+          <div style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: 'rgba(255, 255, 255, 0.7)',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 10,
+            borderRadius: '8px',
+            backdropFilter: 'blur(2px)',
+          }}>
+            <div style={{
+              width: '32px',
+              height: '32px',
+              border: '3px solid #f3f3f3',
+              borderTop: '3px solid #3b82f6',
+              borderRadius: '50%',
+              animation: 'spin-collection 1s linear infinite',
+              marginBottom: '12px',
+            }} />
+            <style>{`
+              @keyframes spin-collection {
+                0% { transform: rotate(0deg); }
+                100% { transform: rotate(360deg); }
+              }
+            `}</style>
+            <div style={{ fontSize: '14px', fontWeight: 600, color: '#3b82f6' }}>
+              Seeding Sample Data...
+            </div>
+          </div>
+        )}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '12px' }}>
           <h4 style={{ fontSize: '16px', fontWeight: 600, margin: 0, color: '#333' }}>
             {contentType.pluralLabel || contentType.name}
@@ -1398,6 +1441,18 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
                 {contentType.template}
               </span>
             )}
+            <span
+              style={{
+                fontSize: '11px',
+                padding: '3px 8px',
+                borderRadius: '4px',
+                background: isVisible ? '#10b981' : '#6b7280',
+                color: 'white',
+                fontWeight: 500,
+              }}
+            >
+              {isVisible ? '👁️ Visible' : '🚫 Hidden'}
+            </span>
           </div>
         </div>
 
@@ -1405,15 +1460,11 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
           {contentType.description || 'Custom collection managed from the Collections manager.'}
         </p>
 
-        <div style={{ fontSize: '12px', color: '#888', marginBottom: '12px' }}>
+        <div style={{ fontSize: '12px', color: '#888', marginBottom: '16px' }}>
           <span style={{ fontWeight: 500 }}>Slug: </span>
           <code style={{ background: 'var(--theme-elevation-100)', padding: '2px 6px', borderRadius: '3px' }}>
             {contentType.slug}
           </code>
-        </div>
-
-        <div style={{ fontSize: '12px', color: '#666', marginBottom: '16px' }}>
-          {itemCount} item{itemCount === 1 ? '' : 's'}
         </div>
 
         {hasSeedData && template && (
@@ -1447,7 +1498,7 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
         )}
 
         {hasSeedData && template && (
-          <div style={{ marginBottom: '12px' }}>
+          <div style={{ marginBottom: '16px' }}>
             <button
               onClick={() => toggleSeedList(seedListKey, template, { contentTypeId: contentType.id, collectionSlug: 'custom-items' })}
               disabled={isSeedingThis || isUninstalled}
@@ -1544,6 +1595,27 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
           >
             Clone
           </button>
+
+          {hasSeedData && template && isSeeded && !isUninstalled && (
+            <button
+              onClick={() => handleClearContentTypeSeedData(template, contentType.id)}
+              disabled={isSeedingThis}
+              style={{
+                padding: '8px 14px',
+                fontSize: '13px',
+                fontWeight: 500,
+                borderRadius: '6px',
+                border: '1px solid #fca5a5',
+                background: '#fee2e2',
+                color: '#991b1b',
+                cursor: isSeedingThis ? 'not-allowed' : 'pointer',
+                opacity: isSeedingThis ? 0.6 : 1,
+              }}
+            >
+              {isSeedingThis ? 'Clearing...' : 'Clear Seed Data'}
+            </button>
+          )}
+
           {!isUninstalled && (
             <button
               onClick={() => handleToggleVisibility(navSlug, isVisible)}
@@ -1563,6 +1635,7 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
               {toggling === navSlug ? 'Updating...' : isVisible ? '🚫 Hide from Menu' : '👁️ Show in Menu'}
             </button>
           )}
+
           {!isUninstalled && (
             <button
               onClick={() => handleUninstallCustomCollection(contentType)}
@@ -1582,6 +1655,7 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
               {isUninstallingThis ? 'Uninstalling...' : 'Uninstall'}
             </button>
           )}
+
           {isUninstalled && (
             <button
               onClick={() => handleReinstallCustomCollection(contentType)}
@@ -1599,25 +1673,6 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
               }}
             >
               {isReinstallingThis ? 'Reinstalling...' : 'Reinstall'}
-            </button>
-          )}
-          {hasSeedData && template && isSeeded && (
-            <button
-              onClick={() => handleClearContentTypeSeedData(template, contentType.id)}
-              disabled={isSeedingThis || isUninstalled}
-              style={{
-                padding: '8px 14px',
-                fontSize: '13px',
-                fontWeight: 500,
-                borderRadius: '6px',
-                border: '1px solid #fca5a5',
-                background: '#fee2e2',
-                color: '#991b1b',
-                cursor: isSeedingThis || isUninstalled ? 'not-allowed' : 'pointer',
-                opacity: isSeedingThis || isUninstalled ? 0.6 : 1,
-              }}
-            >
-              {isSeedingThis ? 'Clearing...' : 'Clear Seed Data'}
             </button>
           )}
         </div>

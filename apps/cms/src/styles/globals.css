@@ -405,13 +405,13 @@
   }
 
   /* ===========================================
-     Skin: Agency
+     Skin: Agency (Bolt Design)
      =========================================== */
   [data-skin="agency"] {
     --font-sans: 'Space Grotesk', 'Inter', system-ui, sans-serif;
     --font-serif: 'Space Grotesk', 'Inter', system-ui, sans-serif;
 
-    /* Light mode */
+    /* Light mode - Agency uses dark theme primarily */
     --color-background: 255 255 255;
     --color-foreground: 15 23 42;
     --color-muted: 100 116 139;
@@ -420,13 +420,12 @@
     --color-accent: 16 185 129;
     --color-accent-light: 52 211 153;
 
-    --radius: 0.75rem;
+    --radius: 1.5rem;
     --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
     --shadow-lg: 0 20px 25px -5px rgb(0 0 0 / 0.1);
     --border-width: 1px;
-    --letter-spacing: -0.02em;
+    --letter-spacing: -0.05em;
     --container-max: 90rem;
-    /* Background grid is applied only to HeroBlock, not globally */
     --skin-bg-image: none;
     --skin-bg-size: auto;
     --skin-bg-position: center;
@@ -434,18 +433,16 @@
   }
 
   [data-skin="agency"].dark {
-    --color-background: 3 7 10;
+    /* Dark mode - Primary agency theme (matches Bolt black background) */
+    --color-background: 0 0 0;
     --color-foreground: 255 255 255;
     --color-muted: 156 163 175;
     --color-border: 31 41 55;
     --color-card: 17 24 39;
     --color-accent: 16 185 129;
     --color-accent-light: 52 211 153;
-    /* Background grid is applied only to HeroBlock, not globally */
-    --skin-bg-image: none;
-    --skin-bg-size: auto;
-    --skin-bg-position: center;
-    --skin-bg-repeat: no-repeat;
+    --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.3);
+    --shadow-lg: 0 20px 25px -5px rgb(0 0 0 / 0.3);
   }
 
   /* ===========================================
@@ -785,31 +782,35 @@
     color: rgb(var(--color-accent)) !important;
   }
 
+  /* Agency Typography - Matches Bolt Design */
   [data-skin="agency"] h1,
   [data-skin="agency"] h2,
   [data-skin="agency"] h3 {
     font-family: var(--font-sans) !important;
-    letter-spacing: -0.02em !important;
-    font-weight: 700 !important;
+    letter-spacing: var(--letter-spacing) !important;
+    font-weight: 900 !important;
   }
 
   [data-skin="agency"] h1 {
-    font-size: clamp(3rem, 8vw, 6rem) !important;
+    font-size: clamp(3.5rem, 10vw, 9rem) !important;
     line-height: 1.1 !important;
+    font-weight: 900 !important;
   }
 
   [data-skin="agency"] h2 {
-    font-size: clamp(2rem, 5vw, 3.5rem) !important;
-    line-height: 1.2 !important;
+    font-size: clamp(3rem, 7vw, 7rem) !important;
+    line-height: 1.1 !important;
+    font-weight: 900 !important;
   }
 
   [data-skin="agency"] h3 {
-    font-size: clamp(1.5rem, 3vw, 2rem) !important;
-    line-height: 1.3 !important;
+    font-size: clamp(1.875rem, 4vw, 3rem) !important;
+    line-height: 1.2 !important;
+    font-weight: 700 !important;
   }
 
   [data-skin="agency"] p {
-    font-size: 1.125rem;
+    font-size: 1.25rem;
     line-height: 1.75;
     color: rgb(var(--color-muted)) !important;
   }
@@ -822,48 +823,76 @@
     color: rgb(var(--color-muted)) !important;
   }
 
+  /* Agency Cards - Matches Bolt Design */
   [data-skin="agency"] .card {
-    background-color: rgb(var(--color-card)) !important;
+    background: linear-gradient(135deg, rgb(17 24 39) 0%, rgb(0 0 0) 100%) !important;
     border-color: rgb(var(--color-border)) !important;
+    border-radius: 1.5rem !important;
     box-shadow: var(--shadow-lg) !important;
+    transition: all 0.3s ease !important;
   }
 
+  [data-skin="agency"] .card:hover {
+    border-color: rgb(var(--color-accent) / 0.5) !important;
+    box-shadow: 0 20px 25px -5px rgb(var(--color-accent) / 0.1) !important;
+    transform: translateY(-0.5rem) !important;
+  }
+
+  /* Agency Buttons - Matches Bolt Design */
   [data-skin="agency"] .btn {
     border-radius: 9999px !important;
-    font-weight: 600;
-    padding-left: 2rem !important;
-    padding-right: 2rem !important;
+    font-weight: 700 !important;
+    padding-left: 2.5rem !important;
+    padding-right: 2.5rem !important;
+    padding-top: 1.25rem !important;
+    padding-bottom: 1.25rem !important;
+    font-size: 1.125rem !important;
+    transition: all 0.3s ease !important;
   }
 
   [data-skin="agency"] .btn-primary {
-    background-color: rgb(var(--color-accent)) !important;
-    border-color: rgb(var(--color-accent)) !important;
-    color: rgb(var(--color-background)) !important;
-    box-shadow: 0 0 0 0 rgb(var(--color-accent) / 0) !important;
-    transition: all 0.2s ease !important;
+    background: linear-gradient(90deg, rgb(var(--color-accent)) 0%, rgb(var(--color-accent-light)) 100%) !important;
+    border: none !important;
+    color: rgb(0 0 0) !important;
+    box-shadow: 0 10px 40px rgb(var(--color-accent) / 0.5) !important;
   }
 
   [data-skin="agency"] .btn-primary:hover {
-    background-color: rgb(var(--color-accent-light)) !important;
-    border-color: rgb(var(--color-accent-light)) !important;
-    box-shadow: 0 0 20px rgb(var(--color-accent) / 0.4) !important;
+    transform: scale(1.05) !important;
+    box-shadow: 0 10px 50px rgb(var(--color-accent) / 0.7) !important;
   }
 
   [data-skin="agency"] .btn-secondary,
   [data-skin="agency"] .btn-outline {
-    border-color: rgb(var(--color-border)) !important;
-    background-color: transparent !important;
+    border: 2px solid rgb(var(--color-border)) !important;
+    background-color: rgb(0 0 0 / 0.4) !important;
     color: rgb(var(--color-foreground)) !important;
+    backdrop-filter: blur(8px) !important;
   }
 
   [data-skin="agency"] .btn-secondary:hover,
   [data-skin="agency"] .btn-outline:hover {
-    background-color: rgb(var(--color-card)) !important;
-    border-color: rgb(var(--color-accent)) !important;
+    background-color: rgb(var(--color-accent) / 0.1) !important;
+    border-color: rgb(var(--color-accent) / 0.5) !important;
   }
 
   [data-skin="agency"] a {
     color: rgb(var(--color-accent)) !important;
+  }
+
+  /* Agency Eyebrow/Badge - Matches Bolt Design */
+  [data-skin="agency"] .eyebrow,
+  [data-skin="agency"] .badge {
+    background-color: rgb(var(--color-accent) / 0.1) !important;
+    border: 1px solid rgb(var(--color-accent) / 0.2) !important;
+    color: rgb(var(--color-accent)) !important;
+    backdrop-filter: blur(8px) !important;
+    border-radius: 9999px !important;
+    padding: 0.5rem 1rem !important;
+    font-size: 0.75rem !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.1em !important;
+    text-transform: uppercase !important;
   }
 
   /* Bold skin - maximum contrast */

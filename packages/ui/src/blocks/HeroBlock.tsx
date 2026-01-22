@@ -59,16 +59,22 @@ export function HeroBlock({ block }: HeroBlockProps) {
   const isAgency = variant === 'agency'
 
   return (
-    <section className={`relative flex ${minHeight} w-full items-center justify-center overflow-hidden bg-base`}>
-      {/* Agency Background Effects */}
+    <section className={`relative flex ${minHeight} w-full items-center justify-center overflow-hidden ${isAgency ? 'bg-black' : 'bg-base'}`}>
+      {/* Agency Background Effects - Matches Bolt Design */}
       {isAgency && (
         <>
-          <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(31,41,55,0.6)_1px,transparent_1px),linear-gradient(to_bottom,rgba(31,41,55,0.6)_1px,transparent_1px)] bg-[size:4rem_4rem] opacity-40" />
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_15%_10%,rgba(16,185,129,0.18),transparent_45%),radial-gradient(circle_at_85%_0%,rgba(45,212,191,0.12),transparent_40%)]" />
-          <div className="absolute inset-0">
-            <div className="absolute -left-1/4 top-0 h-[480px] w-[480px] animate-blob rounded-full bg-[rgb(var(--color-accent))]/20 blur-3xl" />
-            <div className="absolute -right-1/4 top-8 h-[480px] w-[480px] animate-blob-delayed-2 rounded-full bg-[rgb(var(--color-accent-light))]/15 blur-3xl" />
+          {/* Grid Pattern */}
+          <div className="absolute inset-0 bg-[linear-gradient(to_right,#1f1f1f_1px,transparent_1px),linear-gradient(to_bottom,#1f1f1f_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_0%,#000_70%,transparent_110%)]" />
+
+          {/* Animated Blobs */}
+          <div className="absolute inset-0 overflow-hidden">
+            <div className="absolute -left-1/4 top-0 h-[500px] w-[500px] animate-blob rounded-full bg-emerald-500/30 mix-blend-multiply blur-3xl" />
+            <div className="absolute -right-1/4 top-0 h-[500px] w-[500px] animate-blob-delayed-2 rounded-full bg-teal-500/30 mix-blend-multiply blur-3xl" />
+            <div className="absolute -bottom-8 left-1/2 h-[500px] w-[500px] animate-blob-delayed-4 rounded-full bg-cyan-500/30 mix-blend-multiply blur-3xl" />
           </div>
+
+          {/* Radial Gradients */}
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_50%,rgba(16,185,129,0.1)_0%,transparent_50%),radial-gradient(circle_at_80%_80%,rgba(20,184,166,0.1)_0%,transparent_50%)] opacity-30" />
         </>
       )}
 
