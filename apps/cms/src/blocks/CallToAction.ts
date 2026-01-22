@@ -20,6 +20,7 @@ export const ctaBlock: Block = {
         { label: 'Banner', value: 'banner' },
         { label: 'Card', value: 'card' },
         { label: 'Inline', value: 'inline' },
+        { label: 'Agency', value: 'agency' },
       ],
     },
     {

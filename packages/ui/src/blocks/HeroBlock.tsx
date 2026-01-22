@@ -3,7 +3,9 @@ import Image from 'next/image'
 
 interface HeroBlockProps {
   block: {
+    variant?: string
     type?: string
+    eyebrow?: string
     heading: string
     subheading?: string
     image?: { url: string; alt?: string }
@@ -22,7 +24,9 @@ interface HeroBlockProps {
 
 export function HeroBlock({ block }: HeroBlockProps) {
   const {
+    variant = 'standard',
     type = 'standard',
+    eyebrow,
     heading,
     subheading,
     image,
@@ -41,8 +45,8 @@ export function HeroBlock({ block }: HeroBlockProps) {
   const overlayClasses = {
     none: '',
     light: 'bg-base/50',
-    dark: 'bg-black/50',
-    gradient: 'bg-gradient-to-t from-black/80 to-transparent',
+    dark: 'bg-[rgb(var(--color-foreground))]/50',
+    gradient: 'bg-gradient-to-t from-[rgb(var(--color-foreground))]/80 to-transparent',
   }
 
   const alignClasses = {
@@ -52,9 +56,20 @@ export function HeroBlock({ block }: HeroBlockProps) {
   }
 
   const minHeight = type === 'fullscreen' ? 'min-h-screen' : 'min-h-[60vh]'
+  const isAgency = variant === 'agency'
 
   return (
-    <section className={`relative flex ${minHeight} items-center justify-center overflow-hidden bg-gray-900`}>
+    <section className={`relative flex ${minHeight} items-center justify-center overflow-hidden bg-base`}>
+      {isAgency && (
+        <>
+          <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(31,41,55,0.6)_1px,transparent_1px),linear-gradient(to_bottom,rgba(31,41,55,0.6)_1px,transparent_1px)] bg-[size:4rem_4rem] opacity-40" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_15%_10%,rgba(16,185,129,0.18),transparent_45%),radial-gradient(circle_at_85%_0%,rgba(45,212,191,0.12),transparent_40%)]" />
+          <div className="absolute inset-0">
+            <div className="absolute -left-1/4 top-0 h-[480px] w-[480px] animate-blob rounded-full bg-[rgb(var(--color-accent))]/20 blur-3xl" />
+            <div className="absolute -right-1/4 top-8 h-[480px] w-[480px] animate-blob-delayed-2 rounded-full bg-[rgb(var(--color-accent-light))]/15 blur-3xl" />
+          </div>
+        </>
+      )}
       {/* Background Image */}
       {image?.url && (
         <div className="absolute inset-0">
@@ -90,12 +105,17 @@ export function HeroBlock({ block }: HeroBlockProps) {
 
       {/* Content */}
       <div className={`container relative z-10 flex flex-col px-4 py-16 ${alignClasses[textAlign as keyof typeof alignClasses]}`}>
-        <h1 className="max-w-4xl text-4xl font-bold tracking-tight text-white sm:text-5xl lg:text-6xl">
+        {eyebrow && isAgency && (
+          <span className="mb-6 inline-flex items-center rounded-full border border-default bg-base/60 px-4 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-muted backdrop-blur">
+            {eyebrow}
+          </span>
+        )}
+        <h1 className={`max-w-4xl font-bold tracking-tight text-foreground ${isAgency ? 'text-5xl sm:text-6xl lg:text-7xl xl:text-8xl' : 'text-4xl sm:text-5xl lg:text-6xl'}`}>
           {heading}
         </h1>
         
         {subheading && (
-          <p className="mt-6 max-w-2xl text-xl text-gray-200">
+          <p className={`mt-6 max-w-2xl ${isAgency ? 'text-xl sm:text-2xl' : 'text-xl'} text-muted`}>
             {subheading}
           </p>
         )}
@@ -111,8 +131,8 @@ export function HeroBlock({ block }: HeroBlockProps) {
                   link.variant === 'primary'
                     ? 'btn-primary'
                     : link.variant === 'outline'
-                    ? 'border border-white bg-transparent text-white hover:bg-base/10'
-                    : 'bg-base/10 text-white hover:bg-base/20'
+                    ? 'border border-default bg-transparent text-foreground hover:bg-base/10'
+                    : 'bg-base/10 text-foreground hover:bg-base/20'
                 }`}
               >
                 {link.label}

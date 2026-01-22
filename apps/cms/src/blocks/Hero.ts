@@ -11,6 +11,16 @@ export const heroBlock: Block = {
   imageAltText: 'Hero block preview',
   fields: [
     {
+      name: 'variant',
+      type: 'select',
+      label: 'Visual Variant',
+      defaultValue: 'standard',
+      options: [
+        { label: 'Standard', value: 'standard' },
+        { label: 'Agency', value: 'agency' },
+      ],
+    },
+    {
       name: 'type',
       type: 'select',
       defaultValue: 'standard',
@@ -21,6 +31,14 @@ export const heroBlock: Block = {
         { label: 'Split', value: 'split' },
         { label: 'Video Background', value: 'video' },
       ],
+    },
+    {
+      name: 'eyebrow',
+      type: 'text',
+      label: 'Eyebrow / Badge Text',
+      admin: {
+        description: 'Optional badge label displayed above the heading.',
+      },
     },
     {
       name: 'heading',

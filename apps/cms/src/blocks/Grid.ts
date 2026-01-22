@@ -39,6 +39,8 @@ export const gridBlock: Block = {
         { label: 'Team', value: 'team' },
         { label: 'Testimonials', value: 'testimonials' },
         { label: 'Logos', value: 'logos' },
+        { label: 'Agency Cards', value: 'agency-cards' },
+        { label: 'Agency List', value: 'agency-list' },
       ],
       admin: {
         description: 'Choose the visual style of grid items',

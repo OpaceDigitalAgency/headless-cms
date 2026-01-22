@@ -16,6 +16,16 @@ export const testimonialsBlock: Block = {
       label: 'Heading',
     },
     {
+      name: 'style',
+      type: 'select',
+      label: 'Style',
+      defaultValue: 'standard',
+      options: [
+        { label: 'Standard', value: 'standard' },
+        { label: 'Agency', value: 'agency' },
+      ],
+    },
+    {
       name: 'items',
       type: 'array',
       label: 'Testimonials',

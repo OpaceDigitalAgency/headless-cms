@@ -420,7 +420,12 @@ export interface Page {
   content?:
     | (
         | {
+            variant?: ('standard' | 'agency') | null;
             type?: ('standard' | 'minimal' | 'fullscreen' | 'split' | 'video') | null;
+            /**
+             * Optional badge label displayed above the heading.
+             */
+            eyebrow?: string | null;
             heading: string;
             subheading?: string | null;
             image?: (number | null) | Media;
@@ -496,7 +501,7 @@ export interface Page {
             blockType: 'media';
           }
         | {
-            style?: ('standard' | 'banner' | 'card' | 'inline') | null;
+            style?: ('standard' | 'banner' | 'card' | 'inline' | 'agency') | null;
             heading: string;
             description?: string | null;
             image?: (number | null) | Media;
@@ -572,6 +577,7 @@ export interface Page {
           }
         | {
             heading?: string | null;
+            style?: ('standard' | 'agency') | null;
             items?:
               | {
                   quote: string;
@@ -801,7 +807,16 @@ export interface Page {
             /**
              * Choose the visual style of grid items
              */
-            style: 'cards' | 'features' | 'icons' | 'stats' | 'team' | 'testimonials' | 'logos';
+            style:
+              | 'cards'
+              | 'features'
+              | 'icons'
+              | 'stats'
+              | 'team'
+              | 'testimonials'
+              | 'logos'
+              | 'agency-cards'
+              | 'agency-list';
             /**
              * Number of columns on desktop
              */
@@ -1166,7 +1181,12 @@ export interface Post {
   contentBlocks?:
     | (
         | {
+            variant?: ('standard' | 'agency') | null;
             type?: ('standard' | 'minimal' | 'fullscreen' | 'split' | 'video') | null;
+            /**
+             * Optional badge label displayed above the heading.
+             */
+            eyebrow?: string | null;
             heading: string;
             subheading?: string | null;
             image?: (number | null) | Media;
@@ -1242,7 +1262,7 @@ export interface Post {
             blockType: 'media';
           }
         | {
-            style?: ('standard' | 'banner' | 'card' | 'inline') | null;
+            style?: ('standard' | 'banner' | 'card' | 'inline' | 'agency') | null;
             heading: string;
             description?: string | null;
             image?: (number | null) | Media;
@@ -1318,6 +1338,7 @@ export interface Post {
           }
         | {
             heading?: string | null;
+            style?: ('standard' | 'agency') | null;
             items?:
               | {
                   quote: string;
@@ -1547,7 +1568,16 @@ export interface Post {
             /**
              * Choose the visual style of grid items
              */
-            style: 'cards' | 'features' | 'icons' | 'stats' | 'team' | 'testimonials' | 'logos';
+            style:
+              | 'cards'
+              | 'features'
+              | 'icons'
+              | 'stats'
+              | 'team'
+              | 'testimonials'
+              | 'logos'
+              | 'agency-cards'
+              | 'agency-list';
             /**
              * Number of columns on desktop
              */
@@ -1804,7 +1834,12 @@ export interface ArchiveItem {
   contentBlocks?:
     | (
         | {
+            variant?: ('standard' | 'agency') | null;
             type?: ('standard' | 'minimal' | 'fullscreen' | 'split' | 'video') | null;
+            /**
+             * Optional badge label displayed above the heading.
+             */
+            eyebrow?: string | null;
             heading: string;
             subheading?: string | null;
             image?: (number | null) | Media;
@@ -1880,7 +1915,7 @@ export interface ArchiveItem {
             blockType: 'media';
           }
         | {
-            style?: ('standard' | 'banner' | 'card' | 'inline') | null;
+            style?: ('standard' | 'banner' | 'card' | 'inline' | 'agency') | null;
             heading: string;
             description?: string | null;
             image?: (number | null) | Media;
@@ -2030,7 +2065,16 @@ export interface ArchiveItem {
             /**
              * Choose the visual style of grid items
              */
-            style: 'cards' | 'features' | 'icons' | 'stats' | 'team' | 'testimonials' | 'logos';
+            style:
+              | 'cards'
+              | 'features'
+              | 'icons'
+              | 'stats'
+              | 'team'
+              | 'testimonials'
+              | 'logos'
+              | 'agency-cards'
+              | 'agency-list';
             /**
              * Number of columns on desktop
              */
@@ -2265,7 +2309,12 @@ export interface Person {
   contentBlocks?:
     | (
         | {
+            variant?: ('standard' | 'agency') | null;
             type?: ('standard' | 'minimal' | 'fullscreen' | 'split' | 'video') | null;
+            /**
+             * Optional badge label displayed above the heading.
+             */
+            eyebrow?: string | null;
             heading: string;
             subheading?: string | null;
             image?: (number | null) | Media;
@@ -2341,7 +2390,7 @@ export interface Person {
             blockType: 'media';
           }
         | {
-            style?: ('standard' | 'banner' | 'card' | 'inline') | null;
+            style?: ('standard' | 'banner' | 'card' | 'inline' | 'agency') | null;
             heading: string;
             description?: string | null;
             image?: (number | null) | Media;
@@ -2417,6 +2466,7 @@ export interface Person {
           }
         | {
             heading?: string | null;
+            style?: ('standard' | 'agency') | null;
             items?:
               | {
                   quote: string;
@@ -2646,7 +2696,16 @@ export interface Person {
             /**
              * Choose the visual style of grid items
              */
-            style: 'cards' | 'features' | 'icons' | 'stats' | 'team' | 'testimonials' | 'logos';
+            style:
+              | 'cards'
+              | 'features'
+              | 'icons'
+              | 'stats'
+              | 'team'
+              | 'testimonials'
+              | 'logos'
+              | 'agency-cards'
+              | 'agency-list';
             /**
              * Number of columns on desktop
              */
@@ -2912,7 +2971,12 @@ export interface Place {
   contentBlocks?:
     | (
         | {
+            variant?: ('standard' | 'agency') | null;
             type?: ('standard' | 'minimal' | 'fullscreen' | 'split' | 'video') | null;
+            /**
+             * Optional badge label displayed above the heading.
+             */
+            eyebrow?: string | null;
             heading: string;
             subheading?: string | null;
             image?: (number | null) | Media;
@@ -2988,7 +3052,7 @@ export interface Place {
             blockType: 'media';
           }
         | {
-            style?: ('standard' | 'banner' | 'card' | 'inline') | null;
+            style?: ('standard' | 'banner' | 'card' | 'inline' | 'agency') | null;
             heading: string;
             description?: string | null;
             image?: (number | null) | Media;
@@ -3064,6 +3128,7 @@ export interface Place {
           }
         | {
             heading?: string | null;
+            style?: ('standard' | 'agency') | null;
             items?:
               | {
                   quote: string;
@@ -3293,7 +3358,16 @@ export interface Place {
             /**
              * Choose the visual style of grid items
              */
-            style: 'cards' | 'features' | 'icons' | 'stats' | 'team' | 'testimonials' | 'logos';
+            style:
+              | 'cards'
+              | 'features'
+              | 'icons'
+              | 'stats'
+              | 'team'
+              | 'testimonials'
+              | 'logos'
+              | 'agency-cards'
+              | 'agency-list';
             /**
              * Number of columns on desktop
              */
@@ -3492,7 +3566,12 @@ export interface CustomItem {
   blocks?:
     | (
         | {
+            variant?: ('standard' | 'agency') | null;
             type?: ('standard' | 'minimal' | 'fullscreen' | 'split' | 'video') | null;
+            /**
+             * Optional badge label displayed above the heading.
+             */
+            eyebrow?: string | null;
             heading: string;
             subheading?: string | null;
             image?: (number | null) | Media;
@@ -3568,7 +3647,7 @@ export interface CustomItem {
             blockType: 'media';
           }
         | {
-            style?: ('standard' | 'banner' | 'card' | 'inline') | null;
+            style?: ('standard' | 'banner' | 'card' | 'inline' | 'agency') | null;
             heading: string;
             description?: string | null;
             image?: (number | null) | Media;
@@ -3644,6 +3723,7 @@ export interface CustomItem {
           }
         | {
             heading?: string | null;
+            style?: ('standard' | 'agency') | null;
             items?:
               | {
                   quote: string;
@@ -3794,7 +3874,16 @@ export interface CustomItem {
             /**
              * Choose the visual style of grid items
              */
-            style: 'cards' | 'features' | 'icons' | 'stats' | 'team' | 'testimonials' | 'logos';
+            style:
+              | 'cards'
+              | 'features'
+              | 'icons'
+              | 'stats'
+              | 'team'
+              | 'testimonials'
+              | 'logos'
+              | 'agency-cards'
+              | 'agency-list';
             /**
              * Number of columns on desktop
              */
@@ -4309,7 +4398,12 @@ export interface Event {
   contentBlocks?:
     | (
         | {
+            variant?: ('standard' | 'agency') | null;
             type?: ('standard' | 'minimal' | 'fullscreen' | 'split' | 'video') | null;
+            /**
+             * Optional badge label displayed above the heading.
+             */
+            eyebrow?: string | null;
             heading: string;
             subheading?: string | null;
             image?: (number | null) | Media;
@@ -4385,7 +4479,7 @@ export interface Event {
             blockType: 'media';
           }
         | {
-            style?: ('standard' | 'banner' | 'card' | 'inline') | null;
+            style?: ('standard' | 'banner' | 'card' | 'inline' | 'agency') | null;
             heading: string;
             description?: string | null;
             image?: (number | null) | Media;
@@ -4535,7 +4629,16 @@ export interface Event {
             /**
              * Choose the visual style of grid items
              */
-            style: 'cards' | 'features' | 'icons' | 'stats' | 'team' | 'testimonials' | 'logos';
+            style:
+              | 'cards'
+              | 'features'
+              | 'icons'
+              | 'stats'
+              | 'team'
+              | 'testimonials'
+              | 'logos'
+              | 'agency-cards'
+              | 'agency-list';
             /**
              * Number of columns on desktop
              */
@@ -4769,7 +4872,12 @@ export interface Product {
   contentBlocks?:
     | (
         | {
+            variant?: ('standard' | 'agency') | null;
             type?: ('standard' | 'minimal' | 'fullscreen' | 'split' | 'video') | null;
+            /**
+             * Optional badge label displayed above the heading.
+             */
+            eyebrow?: string | null;
             heading: string;
             subheading?: string | null;
             image?: (number | null) | Media;
@@ -4845,7 +4953,7 @@ export interface Product {
             blockType: 'media';
           }
         | {
-            style?: ('standard' | 'banner' | 'card' | 'inline') | null;
+            style?: ('standard' | 'banner' | 'card' | 'inline' | 'agency') | null;
             heading: string;
             description?: string | null;
             image?: (number | null) | Media;
@@ -4995,7 +5103,16 @@ export interface Product {
             /**
              * Choose the visual style of grid items
              */
-            style: 'cards' | 'features' | 'icons' | 'stats' | 'team' | 'testimonials' | 'logos';
+            style:
+              | 'cards'
+              | 'features'
+              | 'icons'
+              | 'stats'
+              | 'team'
+              | 'testimonials'
+              | 'logos'
+              | 'agency-cards'
+              | 'agency-list';
             /**
              * Number of columns on desktop
              */
@@ -5814,7 +5931,9 @@ export interface PagesSelect<T extends boolean = true> {
         hero?:
           | T
           | {
+              variant?: T;
               type?: T;
+              eyebrow?: T;
               heading?: T;
               subheading?: T;
               image?: T;
@@ -5961,6 +6080,7 @@ export interface PagesSelect<T extends boolean = true> {
           | T
           | {
               heading?: T;
+              style?: T;
               items?:
                 | T
                 | {
@@ -6243,7 +6363,9 @@ export interface PostsSelect<T extends boolean = true> {
         hero?:
           | T
           | {
+              variant?: T;
               type?: T;
+              eyebrow?: T;
               heading?: T;
               subheading?: T;
               image?: T;
@@ -6390,6 +6512,7 @@ export interface PostsSelect<T extends boolean = true> {
           | T
           | {
               heading?: T;
+              style?: T;
               items?:
                 | T
                 | {
@@ -6747,7 +6870,9 @@ export interface ArchiveItemsSelect<T extends boolean = true> {
         hero?:
           | T
           | {
+              variant?: T;
               type?: T;
+              eyebrow?: T;
               heading?: T;
               subheading?: T;
               image?: T;
@@ -7039,7 +7164,9 @@ export interface PeopleSelect<T extends boolean = true> {
         hero?:
           | T
           | {
+              variant?: T;
               type?: T;
+              eyebrow?: T;
               heading?: T;
               subheading?: T;
               image?: T;
@@ -7186,6 +7313,7 @@ export interface PeopleSelect<T extends boolean = true> {
           | T
           | {
               heading?: T;
+              style?: T;
               items?:
                 | T
                 | {
@@ -7511,7 +7639,9 @@ export interface PlacesSelect<T extends boolean = true> {
         hero?:
           | T
           | {
+              variant?: T;
               type?: T;
+              eyebrow?: T;
               heading?: T;
               subheading?: T;
               image?: T;
@@ -7658,6 +7788,7 @@ export interface PlacesSelect<T extends boolean = true> {
           | T
           | {
               heading?: T;
+              style?: T;
               items?:
                 | T
                 | {
@@ -7971,7 +8102,9 @@ export interface EventsSelect<T extends boolean = true> {
         hero?:
           | T
           | {
+              variant?: T;
               type?: T;
+              eyebrow?: T;
               heading?: T;
               subheading?: T;
               image?: T;
@@ -8271,7 +8404,9 @@ export interface ProductsSelect<T extends boolean = true> {
         hero?:
           | T
           | {
+              variant?: T;
               type?: T;
+              eyebrow?: T;
               heading?: T;
               subheading?: T;
               image?: T;
@@ -8624,7 +8759,9 @@ export interface CustomItemsSelect<T extends boolean = true> {
         hero?:
           | T
           | {
+              variant?: T;
               type?: T;
+              eyebrow?: T;
               heading?: T;
               subheading?: T;
               image?: T;
@@ -8771,6 +8908,7 @@ export interface CustomItemsSelect<T extends boolean = true> {
           | T
           | {
               heading?: T;
+              style?: T;
               items?:
                 | T
                 | {
