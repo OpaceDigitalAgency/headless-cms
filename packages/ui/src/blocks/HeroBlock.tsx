@@ -60,6 +60,18 @@ export function HeroBlock({ block }: HeroBlockProps) {
 
   return (
     <section className={`relative flex ${minHeight} w-full items-center justify-center overflow-hidden bg-base`}>
+      {/* Agency Background Effects */}
+      {isAgency && (
+        <>
+          <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(31,41,55,0.6)_1px,transparent_1px),linear-gradient(to_bottom,rgba(31,41,55,0.6)_1px,transparent_1px)] bg-[size:4rem_4rem] opacity-40" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_15%_10%,rgba(16,185,129,0.18),transparent_45%),radial-gradient(circle_at_85%_0%,rgba(45,212,191,0.12),transparent_40%)]" />
+          <div className="absolute inset-0">
+            <div className="absolute -left-1/4 top-0 h-[480px] w-[480px] animate-blob rounded-full bg-[rgb(var(--color-accent))]/20 blur-3xl" />
+            <div className="absolute -right-1/4 top-8 h-[480px] w-[480px] animate-blob-delayed-2 rounded-full bg-[rgb(var(--color-accent-light))]/15 blur-3xl" />
+          </div>
+        </>
+      )}
+
       {/* Background Image */}
       {image?.url && (
         <div className="absolute inset-0">
