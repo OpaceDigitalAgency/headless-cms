@@ -1,18 +1,11 @@
 import type { Metadata } from 'next'
 import React from 'react'
-import dynamic from 'next/dynamic'
 import { getSettings, getHeader, getFooter } from '@/lib/payload-api'
 import { Header } from '@/components/Header'
 import { Footer } from '@/components/Footer'
+import { LivePreviewListener } from '@/components/LivePreviewListener'
 import { ThemeProvider } from '@repo/ui/components/ThemeProvider'
 import '@/styles/globals.css'
-
-const LivePreviewListener = process.env.NODE_ENV === 'production'
-  ? null
-  : dynamic(
-      () => import('@/components/LivePreviewListener').then((mod) => mod.LivePreviewListener),
-      { ssr: false }
-    )
 
 export async function generateMetadata(): Promise<Metadata> {
   try {
@@ -71,7 +64,7 @@ export default async function FrontendLayout({
         color: 'rgb(var(--color-foreground))'
       }}>
         <ThemeProvider defaultSkin={defaultSkin} defaultMode={defaultMode}>
-          {LivePreviewListener ? <LivePreviewListener serverURL={serverURL} /> : null}
+          {process.env.NODE_ENV === 'production' ? null : <LivePreviewListener serverURL={serverURL} />}
           {header && <Header data={header} />}
           <main className="flex-1">{children}</main>
           {footer && <Footer data={footer} />}
