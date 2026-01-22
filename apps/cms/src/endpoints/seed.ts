@@ -457,10 +457,11 @@ export const seedContentTypeEndpoint: Endpoint = {
 
       switch (action) {
         case 'seed': {
+          const displayName = contentTypeDoc?.pluralLabel || contentTypeDoc?.name || template.name
           if (!seedItems.length) {
             return Response.json({
               success: true,
-              message: `No seed data configured for ${template.name}`,
+              message: `No seed data configured for ${displayName}`,
               itemsAffected: 0,
             })
           }
@@ -517,6 +518,21 @@ export const seedContentTypeEndpoint: Endpoint = {
 
           let createdCount = 0
           for (const item of seedItems) {
+            // Check if item already exists for this content type to avoid duplicate slug errors
+            const existing = await payload.find({
+              collection: 'custom-items',
+              where: {
+                slug: { equals: item.slug },
+                contentType: { equals: contentTypeDoc.id },
+              },
+              limit: 1,
+              depth: 0,
+            })
+
+            if (existing.docs.length > 0) {
+              continue // Skip existing items
+            }
+
             await payload.create({
               collection: 'custom-items',
               data: {
@@ -538,7 +554,7 @@ export const seedContentTypeEndpoint: Endpoint = {
 
           return Response.json({
             success: true,
-            message: `Seeded ${template.name}`,
+            message: `Seeded ${createdCount} items to ${displayName}`,
             itemsAffected: createdCount,
           })
         }
@@ -567,9 +583,10 @@ export const seedContentTypeEndpoint: Endpoint = {
             }
           }
 
+          const clearDisplayName = contentTypeDoc?.pluralLabel || contentTypeDoc?.name || template.name
           return Response.json({
             success: true,
-            message: `Cleared ${template.name}`,
+            message: `Cleared ${deletedCount} items from ${clearDisplayName}`,
             itemsAffected: deletedCount,
           })
         }

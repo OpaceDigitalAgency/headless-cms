@@ -5,9 +5,55 @@ const config: Config = {
   content: [
     './src/**/*.{js,ts,jsx,tsx,mdx}',
     '../../packages/templates/src/**/*.{js,ts,jsx,tsx}',
+    '../../packages/ui/src/**/*.{js,ts,jsx,tsx}',
   ],
   theme: {
     extend: {
+      animation: {
+        'blob': 'blob 7s infinite',
+        'blob-delayed-2': 'blob 7s infinite 2s',
+        'blob-delayed-4': 'blob 7s infinite 4s',
+        'blob-9s': 'blob 9s infinite',
+        'blob-11s': 'blob 11s infinite',
+        'blob-slowest': 'blob 20s infinite',
+        'gradient-x': 'gradient-shift 3s ease infinite',
+        'text-shimmer': 'text-shimmer 2s ease-in-out infinite',
+        'pulse-slow': 'pulse-slow 3s ease-in-out infinite',
+        'button-glow': 'button-glow 2s ease-in-out infinite',
+        'float': 'float 3s ease-in-out infinite',
+        'rotate-slow': 'rotate-slow 10s linear infinite',
+      },
+      keyframes: {
+        blob: {
+          '0%, 100%': { transform: 'translate(0, 0) scale(1)' },
+          '33%': { transform: 'translate(30px, -50px) scale(1.1)' },
+          '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
+        },
+        'gradient-shift': {
+          '0%, 100%': { backgroundPosition: '0% 50%' },
+          '50%': { backgroundPosition: '100% 50%' },
+        },
+        'text-shimmer': {
+          '0%, 100%': { backgroundPosition: '0% 50%' },
+          '50%': { backgroundPosition: '100% 50%' },
+        },
+        'pulse-slow': {
+          '0%, 100%': { opacity: '1' },
+          '50%': { opacity: '0.5' },
+        },
+        'button-glow': {
+          '0%, 100%': { boxShadow: '0 0 20px rgba(16, 185, 129, 0.5)' },
+          '50%': { boxShadow: '0 0 40px rgba(16, 185, 129, 0.8)' },
+        },
+        float: {
+          '0%, 100%': { transform: 'translateY(0)' },
+          '50%': { transform: 'translateY(-10px)' },
+        },
+        'rotate-slow': {
+          '0%': { transform: 'rotate(0deg)' },
+          '100%': { transform: 'rotate(360deg)' },
+        },
+      },
       colors: {
         primary: {
           50: '#f0f9ff',
