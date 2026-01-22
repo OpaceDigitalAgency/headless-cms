@@ -4,7 +4,7 @@ RUN apk add --no-cache libc6-compat
 RUN corepack enable && corepack prepare pnpm@9.1.0 --activate
 WORKDIR /app
 
-# Dependencies stage
+# Dependencies stage - Install all workspace package dependencies
 FROM base AS deps
 COPY package.json pnpm-workspace.yaml pnpm-lock.yaml* ./
 COPY ./apps/cms/package.json ./apps/cms/
