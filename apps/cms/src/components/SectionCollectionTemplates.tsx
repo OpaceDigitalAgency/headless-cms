@@ -627,7 +627,14 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
     })
   }
 
-  const handleSeedContentTypeData = async (template: CollectionTemplate, contentTypeId?: string) => {
+  const handleSeedContentTypeData = async (templateIn: CollectionTemplate, contentTypeId?: string) => {
+    // Improved template lookup consistency
+    let template = templateIn
+    if (!template.contentTypeTemplate && template.id !== 'blog-post') {
+      const blogTemplate = templateById.get('blog-post')
+      if (blogTemplate) template = blogTemplate
+    }
+
     setSeeding(contentTypeId || template.defaultSlug)
     setMessage(null)
     const seededKey = contentTypeId ? `custom:${contentTypeId}` : template.defaultSlug
@@ -669,7 +676,14 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
     }
   }
 
-  const handleSeedContentTypeItem = async (template: CollectionTemplate, contentTypeId: string, itemSlug: string) => {
+  const handleSeedContentTypeItem = async (templateIn: CollectionTemplate, contentTypeId: string, itemSlug: string) => {
+    // Improved template lookup consistency
+    let template = templateIn
+    if (!template.contentTypeTemplate && template.id !== 'blog-post') {
+      const blogTemplate = templateById.get('blog-post')
+      if (blogTemplate) template = blogTemplate
+    }
+
     setSeedingItems(prev => new Set([...prev, itemSlug]))
     setMessage(null)
 
@@ -715,7 +729,14 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
     }
   }
 
-  const handleClearContentTypeSeedData = async (template: CollectionTemplate, contentTypeId?: string) => {
+  const handleClearContentTypeSeedData = async (templateIn: CollectionTemplate, contentTypeId?: string) => {
+    // Improved template lookup consistency
+    let template = templateIn
+    if (!template.contentTypeTemplate && template.id !== 'blog-post') {
+      const blogTemplate = templateById.get('blog-post')
+      if (blogTemplate) template = blogTemplate
+    }
+
     setSeeding(contentTypeId || template.defaultSlug)
     setMessage(null)
     const seededKey = contentTypeId ? `custom:${contentTypeId}` : template.defaultSlug

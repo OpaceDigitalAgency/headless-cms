@@ -139,24 +139,40 @@ export function CTABlock({ block }: CTABlockProps) {
 
   if (style === 'agency') {
     return (
-      <section className="relative w-full overflow-hidden bg-[rgb(var(--color-accent))] py-16 text-[rgb(var(--color-background))] sm:py-20 lg:py-24">
-        <div className="container relative text-center">
-          <h2 className="text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl">{heading}</h2>
+      <section className="relative overflow-hidden bg-black px-6 py-32 sm:px-8 sm:py-40 lg:px-12 lg:py-48">
+        {/* Agency Background Effects - Matches Bolt Design */}
+        <div className="absolute inset-0 bg-gradient-to-t from-emerald-500/10 via-transparent to-transparent" />
+        <div className="absolute inset-0">
+          <div className="absolute inset-0 bg-[linear-gradient(to_right,#1f1f1f_1px,transparent_1px),linear-gradient(to_bottom,#1f1f1f_1px,transparent_1px)] bg-[size:4rem_4rem] opacity-20" />
+        </div>
+
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute -left-1/4 bottom-0 h-[600px] w-[600px] animate-blob-9s rounded-full bg-emerald-500/20 mix-blend-multiply blur-3xl" />
+          <div className="absolute -right-1/4 bottom-0 h-[600px] w-[600px] animate-blob-11s rounded-full bg-teal-500/20 mix-blend-multiply blur-3xl" />
+        </div>
+
+        <div className="relative mx-auto max-w-5xl text-center">
+          <h2 className="text-5xl font-black leading-[1.1] tracking-tighter sm:text-6xl lg:text-7xl xl:text-8xl mb-12">
+            <span className="inline-block bg-gradient-to-r from-white via-emerald-100 to-teal-100 bg-clip-text text-transparent bg-[length:200%_auto] animate-gradient-x">
+              {heading}
+            </span>
+          </h2>
           {description && (
-            <p className="mx-auto mt-6 max-w-2xl text-lg opacity-90">
+            <p className="mx-auto mt-6 max-w-2xl text-xl leading-relaxed text-gray-400 sm:text-2xl">
               {description}
             </p>
           )}
           {links && links.length > 0 && (
-            <div className="mt-10 flex flex-wrap justify-center gap-4">
+            <div className="mt-12 flex flex-wrap justify-center gap-6">
               {links.map((link, index) => (
                 <Link
                   key={index}
                   href={getUrl(link)}
                   target={link.newTab ? '_blank' : undefined}
-                  className="btn inline-flex items-center justify-center rounded-full bg-[rgb(var(--color-background))] px-8 py-3 text-base font-semibold text-foreground transition-all hover:bg-[rgb(var(--color-card))]"
+                  className="group relative inline-flex items-center justify-center overflow-hidden rounded-full bg-gradient-to-r from-emerald-500 to-teal-500 px-10 py-5 text-lg font-bold text-black shadow-2xl shadow-emerald-500/50 transition-all hover:scale-105 hover:shadow-emerald-500/70 focus:outline-none focus:ring-4 focus:ring-emerald-500/50 animate-button-glow"
                 >
-                  {link.label}
+                  <span className="absolute inset-0 bg-gradient-to-r from-teal-400 to-emerald-400 opacity-0 transition-opacity group-hover:opacity-100" />
+                  <span className="relative">{link.label}</span>
                 </Link>
               ))}
             </div>

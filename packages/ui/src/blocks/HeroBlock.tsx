@@ -114,38 +114,78 @@ export function HeroBlock({ block }: HeroBlockProps) {
       {/* Content */}
       <div className={`container relative z-10 flex flex-col px-4 py-20 sm:py-24 lg:py-32 ${alignClasses[textAlign as keyof typeof alignClasses]}`}>
         {eyebrow && (
-          <span className="mb-6 inline-flex items-center text-xs font-semibold uppercase tracking-[0.15em] text-muted">
-            {eyebrow}
-          </span>
+          <div className={`mb-8 inline-block ${isAgency ? 'px-4 py-2 rounded-full bg-emerald-500/10 border border-emerald-500/20 backdrop-blur-sm animate-pulse-slow' : ''}`}>
+            <span className={`text-xs font-semibold uppercase tracking-[0.15em] ${isAgency ? 'text-emerald-400 tracking-wide' : 'text-muted'}`}>
+              {eyebrow}
+            </span>
+          </div>
         )}
-        <h1 className="max-w-4xl text-4xl font-bold tracking-tight text-foreground sm:text-5xl lg:text-6xl">
-          {heading}
+        <h1 className={`max-w-4xl text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl ${isAgency ? 'text-6xl font-black leading-[1.1] tracking-tighter sm:text-7xl lg:text-8xl xl:text-9xl' : 'text-foreground'}`}>
+          {isAgency ? (
+            heading.split(' ').map((word, i) => (
+              <span
+                key={i}
+                className="inline-block bg-gradient-to-r from-white via-emerald-100 to-teal-100 bg-clip-text text-transparent bg-[length:200%_auto] animate-gradient-x"
+              >
+                {word}{' '}
+              </span>
+            ))
+          ) : (
+            heading
+          )}
         </h1>
 
         {subheading && (
-          <p className="mt-6 max-w-2xl text-lg text-muted sm:text-xl">
+          <p className={`mt-6 max-w-2xl text-lg sm:text-xl ${isAgency ? 'mt-8 text-xl leading-relaxed text-gray-400 sm:text-2xl lg:text-3xl max-w-3xl font-light animate-text-shimmer' : 'text-muted'}`}>
             {subheading}
           </p>
         )}
 
         {links && links.length > 0 && (
-          <div className="mt-10 flex flex-wrap gap-4">
-            {links.map((link, index) => (
-              <Link
-                key={index}
-                href={getUrl(link)}
-                target={link.newTab ? '_blank' : undefined}
-                className={`btn inline-flex items-center justify-center rounded-full px-8 py-3 text-base font-semibold transition-all ${
-                  link.variant === 'primary'
-                    ? 'btn-primary'
-                    : link.variant === 'outline'
-                    ? 'border border-[rgb(var(--color-border))] bg-transparent text-foreground hover:border-[rgb(var(--color-accent))] hover:bg-[rgb(var(--color-card))]'
-                    : 'bg-[rgb(var(--color-card))] text-foreground hover:bg-[rgb(var(--color-accent))]/10'
-                }`}
-              >
-                {link.label}
-              </Link>
-            ))}
+          <div className={`mt-10 flex flex-wrap gap-4 ${isAgency ? 'mt-12 flex-col items-start gap-4 sm:flex-row sm:gap-6' : ''}`}>
+            {links.map((link, index) => {
+              if (isAgency && link.variant === 'primary') {
+                return (
+                  <Link
+                    key={index}
+                    href={getUrl(link)}
+                    target={link.newTab ? '_blank' : undefined}
+                    className="group relative inline-flex items-center justify-center overflow-hidden rounded-full bg-gradient-to-r from-emerald-500 to-teal-500 px-10 py-5 text-lg font-bold text-black shadow-2xl shadow-emerald-500/50 transition-all hover:scale-105 hover:shadow-emerald-500/70 focus:outline-none focus:ring-4 focus:ring-emerald-500/50 animate-button-glow"
+                  >
+                    <span className="absolute inset-0 bg-gradient-to-r from-teal-400 to-emerald-400 opacity-0 transition-opacity group-hover:opacity-100" />
+                    <span className="relative">{link.label}</span>
+                  </Link>
+                )
+              } else if (isAgency && link.variant === 'outline') {
+                return (
+                  <Link
+                    key={index}
+                    href={getUrl(link)}
+                    target={link.newTab ? '_blank' : undefined}
+                    className="group inline-flex items-center justify-center rounded-full border-2 border-gray-700 bg-black/40 px-10 py-5 text-lg font-bold text-white backdrop-blur-sm transition-all hover:border-emerald-500/50 hover:bg-emerald-500/10 focus:outline-none focus:ring-4 focus:ring-emerald-500/50"
+                  >
+                    {link.label}
+                  </Link>
+                )
+              } else {
+                return (
+                  <Link
+                    key={index}
+                    href={getUrl(link)}
+                    target={link.newTab ? '_blank' : undefined}
+                    className={`btn inline-flex items-center justify-center rounded-full px-8 py-3 text-base font-semibold transition-all ${
+                      link.variant === 'primary'
+                        ? 'btn-primary'
+                        : link.variant === 'outline'
+                        ? 'border border-[rgb(var(--color-border))] bg-transparent text-foreground hover:border-[rgb(var(--color-accent))] hover:bg-[rgb(var(--color-card))]'
+                        : 'bg-[rgb(var(--color-card))] text-foreground hover:bg-[rgb(var(--color-accent))]/10'
+                    }`}
+                  >
+                    {link.label}
+                  </Link>
+                )
+              }
+            })}
           </div>
         )}
       </div>

@@ -419,9 +419,15 @@ export const seedContentTypeEndpoint: Endpoint = {
         }
       }
 
-      if (!template || !template.contentTypeTemplate) {
+      if (!template && contentTypeDoc?.template === 'article') {
+        template = getTemplateById('blog-post')
+      }
+
+      // Allow seeding if it has seed data/items, even if contentTypeTemplate is not explicitly defined
+      // (as is the case for updated core-to-custom templates like blog-post/article)
+      if (!template || (!template.contentTypeTemplate && !template.hasSeedData && !template.seedItems)) {
         return Response.json(
-          { success: false, message: 'Template not found or not a content type.' },
+          { success: false, message: 'Template not found or does not support seeding.' },
           { status: 404 }
         )
       }
