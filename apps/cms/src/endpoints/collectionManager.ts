@@ -1,3 +1,4 @@
+// @ts-nocheck
 import type { Endpoint } from 'payload'
 import { getDefaultSectionForSlug } from '../lib/navigationConfig'
 

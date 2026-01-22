@@ -49,18 +49,16 @@ export const CustomItems: CollectionConfig = {
     defaultColumns: ['title', 'contentType', 'status', 'updatedAt', 'preview'],
     description: 'Items belonging to your custom collections',
     listSearchableFields: ['title', 'slug'],
-    defaultPopulate: {
-      contentType: true,
-    },
     preview: (doc) => {
       // Build preview URL with content type
-      if (doc.contentType && typeof doc.contentType === 'object' && doc.contentType.slug) {
-        const typeSlug = doc.contentType.archiveSlug
-          ? doc.contentType.archiveSlug.replace(/^\/?items\//, '')
-          : doc.contentType.slug
-        return getPreviewUrl({ collection: 'custom-items', slug: `${typeSlug}/${doc.slug}` })
+      if (doc.contentType && typeof doc.contentType === 'object') {
+        const contentType = doc.contentType as any
+        const typeSlug = contentType.archiveSlug
+          ? contentType.archiveSlug.replace(/^\/?items\//, '')
+          : contentType.slug
+        return getPreviewUrl({ collection: 'custom-items', slug: `${typeSlug}/${doc.slug as string}` })
       }
-      return getPreviewUrl({ collection: 'custom-items', slug: doc.slug })
+      return getPreviewUrl({ collection: 'custom-items', slug: doc.slug as string })
     },
     livePreview: {
       url: ({ data }) => {

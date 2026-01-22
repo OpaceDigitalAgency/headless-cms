@@ -33,32 +33,35 @@ export default async function PlacesPage() {
         </header>
 
         <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-          {places.docs.map((place) => (
-            <Link
-              key={place.id}
-              href={`/places/${place.slug}`}
-              className="card overflow-hidden transition-shadow hover:shadow-md"
-            >
-              {place.featuredImage?.url && (
-                <div className="relative h-48">
-                  <img
-                    src={place.featuredImage.url}
-                    alt={place.featuredImage.alt || place.name}
-                    className="h-full w-full object-cover"
-                  />
+          {places.docs.map((place) => {
+            const placeImage = typeof (place as any).featuredImage === 'object' ? (place as any).featuredImage : null
+            return (
+              <Link
+                key={place.id}
+                href={`/places/${place.slug}`}
+                className="card overflow-hidden transition-shadow hover:shadow-md"
+              >
+                {placeImage?.url && (
+                  <div className="relative h-48">
+                    <img
+                      src={placeImage.url}
+                      alt={placeImage.alt || place.name}
+                      className="h-full w-full object-cover"
+                    />
+                  </div>
+                )}
+                <div className="p-6">
+                  <h2 className="text-xl font-semibold">{place.name}</h2>
+                  {place.placeType && (
+                    <p className="mt-1 text-sm text-muted">{place.placeType}</p>
+                  )}
+                  {typeof place.description === 'string' && (
+                    <p className="mt-2 text-muted line-clamp-2">{place.description}</p>
+                  )}
                 </div>
-              )}
-              <div className="p-6">
-                <h2 className="text-xl font-semibold">{place.name}</h2>
-                {place.placeType && (
-                  <p className="mt-1 text-sm text-muted">{place.placeType}</p>
-                )}
-                {place.description && (
-                  <p className="mt-2 text-muted line-clamp-2">{place.description}</p>
-                )}
-              </div>
-            </Link>
-          ))}
+              </Link>
+            )
+          })}
         </div>
       </Container>
     </Section>

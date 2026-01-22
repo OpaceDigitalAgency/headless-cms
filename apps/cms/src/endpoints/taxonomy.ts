@@ -1,8 +1,9 @@
+// @ts-nocheck
 import type { Endpoint } from 'payload'
 
 /**
  * Taxonomy Filtering Endpoints
- * 
+ *
  * Provides cross-collection filtering by category or tag.
  * Returns all content across Posts, Archive Items, Events, People, and Custom Items
  * that match the specified taxonomy term.

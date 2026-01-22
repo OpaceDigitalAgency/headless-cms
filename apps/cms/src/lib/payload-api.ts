@@ -1,9 +1,9 @@
 /**
  * Payload Local API Utilities
- * 
+ *
  * These functions use Payload's Local API for direct database access.
  * This is more efficient than REST API calls since we're in the same process.
- * 
+ *
  * Benefits:
  * - No network overhead
  * - Direct database access
@@ -11,6 +11,7 @@
  * - Simpler revalidation (direct revalidatePath/revalidateTag calls)
  */
 
+import 'server-only'
 import { getPayload } from 'payload'
 import configPromise from '@/payload.config'
 import { unstable_cache } from 'next/cache'

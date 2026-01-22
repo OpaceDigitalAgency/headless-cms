@@ -38,7 +38,7 @@ export const People: CollectionConfig = {
     group: 'Collections',
     defaultColumns: ['name', 'role', 'categories', '_status', 'updatedAt', 'preview'],
     description: 'Historical figures, artists, team members, and notable people',
-    preview: (doc) => getPreviewUrl({ collection: 'people', slug: doc.slug }),
+    preview: (doc) => getPreviewUrl({ collection: 'people', slug: doc.slug as string }),
     livePreview: {
       url: ({ data }) => getPreviewUrl({ collection: 'people', slug: data?.slug }),
     },

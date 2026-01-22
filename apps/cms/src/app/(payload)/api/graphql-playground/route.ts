@@ -1,6 +1,5 @@
 /* THIS FILE WAS GENERATED AUTOMATICALLY BY PAYLOAD. */
 /* DO NOT MODIFY IT BECAUSE IT COULD BE REWRITTEN AT ANY TIME. */
-import config from '@payloadcms/next/config'
 import { GRAPHQL_PLAYGROUND_GET } from '@payloadcms/next/routes'
 import configPromise from '@/payload.config'
 

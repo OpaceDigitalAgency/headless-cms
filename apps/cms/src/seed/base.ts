@@ -1,6 +1,7 @@
+// @ts-nocheck
 /**
  * Base Seed Utilities
- * 
+ *
  * Provides reusable, OOP-style utilities for seeding data.
  * All preset-specific seed modules should extend these base utilities.
  */

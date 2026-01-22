@@ -41,6 +41,7 @@ export const gridBlock: Block = {
         { label: 'Logos', value: 'logos' },
         { label: 'Agency Cards', value: 'agency-cards' },
         { label: 'Agency List', value: 'agency-list' },
+        { label: 'Retro Cards', value: 'retro-cards' },
       ],
       admin: {
         description: 'Choose the visual style of grid items',
@@ -100,7 +101,7 @@ export const gridBlock: Block = {
           relationTo: 'media',
           label: 'Image',
           admin: {
-            condition: (_, __, { siblingData }) => 
+            condition: (_, siblingData) =>
               !['stats', 'icons'].includes(siblingData?.style),
           },
         },
@@ -110,7 +111,7 @@ export const gridBlock: Block = {
           label: 'Icon Name',
           admin: {
             description: 'Lucide icon name (e.g., "star", "heart", "check")',
-            condition: (_, __, { siblingData }) => 
+            condition: (_, siblingData) =>
               ['features', 'icons', 'stats'].includes(siblingData?.style),
           },
         },
@@ -125,7 +126,7 @@ export const gridBlock: Block = {
           type: 'text',
           label: 'Subtitle',
           admin: {
-            condition: (_, __, { siblingData }) => 
+            condition: (_, siblingData) =>
               ['team', 'testimonials'].includes(siblingData?.style),
           },
         },
@@ -140,7 +141,7 @@ export const gridBlock: Block = {
           label: 'Stat Value',
           admin: {
             description: 'e.g., "99%", "10K+", "$1M"',
-            condition: (_, __, { siblingData }) => siblingData?.style === 'stats',
+            condition: (_, siblingData) => siblingData?.style === 'stats',
           },
         },
         {

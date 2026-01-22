@@ -35,8 +35,8 @@ export async function generateMetadata({ params }: EventPageProps): Promise<Meta
     return generateEnhancedMetadata(
       {
         title: event.title,
-        description: event.excerpt || event.description || `Event: ${event.title}`,
-        image: event.featuredImage,
+        description: (event as any).excerpt || (event as any).description || `Event: ${event.title}`,
+        image: undefined,
       },
       settings,
       `/events/${slug}`
@@ -57,6 +57,9 @@ export default async function EventPage({ params }: EventPageProps) {
       notFound()
     }
 
+    // Extract featuredImage early so it's available throughout the component
+    const featuredImage = typeof event.featuredImage === 'object' ? event.featuredImage : null
+
     // Generate JSON-LD schemas
     const settings = await getSettings().catch(() => null)
     const schemas = []
@@ -66,14 +69,14 @@ export default async function EventPage({ params }: EventPageProps) {
       schemas.push(generateEventSchema(
         {
           title: event.title,
-          description: event.excerpt || event.description,
+          slug,
+          description: (event as any).excerpt || (event as any).description,
           startDate: event.startDate,
           endDate: event.endDate,
-          location: event.location,
-          image: event.featuredImage?.url,
+          location: (event as any).location,
+          image: featuredImage,
         },
-        settings,
-        slug
+        settings
       ))
 
       // Add Organization schema
@@ -122,17 +125,17 @@ export default async function EventPage({ params }: EventPageProps) {
                 )}
               </header>
 
-              {event.featuredImage?.url && (
+              {featuredImage?.url && (
                 <div className="mb-12">
                   <img
-                    src={event.featuredImage.url}
-                    alt={event.featuredImage.alt || event.title}
+                    src={featuredImage.url}
+                    alt={featuredImage.alt || event.title}
                     className="w-full rounded-lg"
                   />
                 </div>
               )}
 
-              {event.content && <RenderBlocks blocks={event.content} />}
+              {(event as any).content && <RenderBlocks blocks={(event as any).content} />}
             </article>
           </Container>
         </Section>

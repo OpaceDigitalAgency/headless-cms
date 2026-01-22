@@ -420,7 +420,7 @@ export interface Page {
   content?:
     | (
         | {
-            variant?: ('standard' | 'agency') | null;
+            variant?: ('standard' | 'agency' | 'retro') | null;
             type?: ('standard' | 'minimal' | 'fullscreen' | 'split' | 'video') | null;
             /**
              * Optional badge label displayed above the heading.
@@ -816,7 +816,8 @@ export interface Page {
               | 'testimonials'
               | 'logos'
               | 'agency-cards'
-              | 'agency-list';
+              | 'agency-list'
+              | 'retro-cards';
             /**
              * Number of columns on desktop
              */
@@ -1181,7 +1182,7 @@ export interface Post {
   contentBlocks?:
     | (
         | {
-            variant?: ('standard' | 'agency') | null;
+            variant?: ('standard' | 'agency' | 'retro') | null;
             type?: ('standard' | 'minimal' | 'fullscreen' | 'split' | 'video') | null;
             /**
              * Optional badge label displayed above the heading.
@@ -1577,7 +1578,8 @@ export interface Post {
               | 'testimonials'
               | 'logos'
               | 'agency-cards'
-              | 'agency-list';
+              | 'agency-list'
+              | 'retro-cards';
             /**
              * Number of columns on desktop
              */
@@ -1834,7 +1836,7 @@ export interface ArchiveItem {
   contentBlocks?:
     | (
         | {
-            variant?: ('standard' | 'agency') | null;
+            variant?: ('standard' | 'agency' | 'retro') | null;
             type?: ('standard' | 'minimal' | 'fullscreen' | 'split' | 'video') | null;
             /**
              * Optional badge label displayed above the heading.
@@ -2074,7 +2076,8 @@ export interface ArchiveItem {
               | 'testimonials'
               | 'logos'
               | 'agency-cards'
-              | 'agency-list';
+              | 'agency-list'
+              | 'retro-cards';
             /**
              * Number of columns on desktop
              */
@@ -2309,7 +2312,7 @@ export interface Person {
   contentBlocks?:
     | (
         | {
-            variant?: ('standard' | 'agency') | null;
+            variant?: ('standard' | 'agency' | 'retro') | null;
             type?: ('standard' | 'minimal' | 'fullscreen' | 'split' | 'video') | null;
             /**
              * Optional badge label displayed above the heading.
@@ -2705,7 +2708,8 @@ export interface Person {
               | 'testimonials'
               | 'logos'
               | 'agency-cards'
-              | 'agency-list';
+              | 'agency-list'
+              | 'retro-cards';
             /**
              * Number of columns on desktop
              */
@@ -2971,7 +2975,7 @@ export interface Place {
   contentBlocks?:
     | (
         | {
-            variant?: ('standard' | 'agency') | null;
+            variant?: ('standard' | 'agency' | 'retro') | null;
             type?: ('standard' | 'minimal' | 'fullscreen' | 'split' | 'video') | null;
             /**
              * Optional badge label displayed above the heading.
@@ -3367,7 +3371,8 @@ export interface Place {
               | 'testimonials'
               | 'logos'
               | 'agency-cards'
-              | 'agency-list';
+              | 'agency-list'
+              | 'retro-cards';
             /**
              * Number of columns on desktop
              */
@@ -3566,7 +3571,7 @@ export interface CustomItem {
   blocks?:
     | (
         | {
-            variant?: ('standard' | 'agency') | null;
+            variant?: ('standard' | 'agency' | 'retro') | null;
             type?: ('standard' | 'minimal' | 'fullscreen' | 'split' | 'video') | null;
             /**
              * Optional badge label displayed above the heading.
@@ -3883,7 +3888,8 @@ export interface CustomItem {
               | 'testimonials'
               | 'logos'
               | 'agency-cards'
-              | 'agency-list';
+              | 'agency-list'
+              | 'retro-cards';
             /**
              * Number of columns on desktop
              */
@@ -4398,7 +4404,7 @@ export interface Event {
   contentBlocks?:
     | (
         | {
-            variant?: ('standard' | 'agency') | null;
+            variant?: ('standard' | 'agency' | 'retro') | null;
             type?: ('standard' | 'minimal' | 'fullscreen' | 'split' | 'video') | null;
             /**
              * Optional badge label displayed above the heading.
@@ -4638,7 +4644,8 @@ export interface Event {
               | 'testimonials'
               | 'logos'
               | 'agency-cards'
-              | 'agency-list';
+              | 'agency-list'
+              | 'retro-cards';
             /**
              * Number of columns on desktop
              */
@@ -4872,7 +4879,7 @@ export interface Product {
   contentBlocks?:
     | (
         | {
-            variant?: ('standard' | 'agency') | null;
+            variant?: ('standard' | 'agency' | 'retro') | null;
             type?: ('standard' | 'minimal' | 'fullscreen' | 'split' | 'video') | null;
             /**
              * Optional badge label displayed above the heading.
@@ -5112,7 +5119,8 @@ export interface Product {
               | 'testimonials'
               | 'logos'
               | 'agency-cards'
-              | 'agency-list';
+              | 'agency-list'
+              | 'retro-cards';
             /**
              * Number of columns on desktop
              */
@@ -9566,6 +9574,7 @@ export interface Setting {
         | 'high-contrast'
         | 'neon-grid'
         | 'agency'
+        | 'retro'
       )
     | null;
   /**

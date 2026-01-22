@@ -1,5 +1,5 @@
 import { notFound } from 'next/navigation'
-import { Metadata } from 'next/metadata'
+import { Metadata } from 'next'
 import { draftMode } from 'next/headers'
 import { getPayloadHMR } from '@payloadcms/next/utilities'
 import configPromise from '@payload-config'
@@ -154,7 +154,7 @@ export default async function CustomItemPage({ params }: CustomItemPageProps) {
     
     return (
       <div className="container py-16">
-        <CustomItemRenderer item={item} contentType={contentType} />
+        <CustomItemRenderer item={item} contentType={contentType as any} />
       </div>
     )
   } catch (error) {

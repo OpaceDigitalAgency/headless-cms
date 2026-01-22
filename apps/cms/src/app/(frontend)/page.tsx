@@ -13,15 +13,40 @@ export async function generateMetadata(): Promise<Metadata> {
     ])
 
     if (page?.meta) {
-      return generateEnhancedMetadata(page.meta, settings, '/')
+      const metaImage = page.meta.image && typeof page.meta.image === 'object'
+        ? {
+            url: page.meta.image.url || null,
+            alt: page.meta.image.alt || null,
+            width: page.meta.image.width || null,
+            height: page.meta.image.height || null,
+          }
+        : null
+
+      return generateEnhancedMetadata(
+        {
+          ...page.meta,
+          image: metaImage,
+        },
+        settings,
+        '/'
+      )
     }
 
     // Fallback metadata
+    const defaultImage = settings.defaultMeta?.image && typeof settings.defaultMeta.image === 'object'
+      ? {
+          url: settings.defaultMeta.image.url || null,
+          alt: settings.defaultMeta.image.alt || null,
+          width: settings.defaultMeta.image.width || null,
+          height: settings.defaultMeta.image.height || null,
+        }
+      : null
+
     return generateEnhancedMetadata(
       {
         title: settings.siteName || 'Home',
         description: settings.siteDescription || 'Welcome to our site',
-        image: settings.defaultMeta?.image,
+        image: defaultImage,
       },
       settings,
       '/'

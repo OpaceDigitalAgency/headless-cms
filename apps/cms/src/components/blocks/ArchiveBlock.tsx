@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import Image from 'next/image'
+import { getPayloadClient } from '@/lib/payload-api'
 
 interface ArchiveBlockProps {
   block: {
@@ -47,25 +48,23 @@ export async function ArchiveBlock({ block }: ArchiveBlockProps) {
   if (populateBy === 'selection' && selectedDocs) {
     items = selectedDocs
   } else {
-    // Fetch from collection
+    // Fetch from collection using Payload API directly (not HTTP)
     try {
-      const params = new URLSearchParams()
-      params.set('limit', limit.toString())
-      params.set('depth', '2')
+      const payload = await getPayloadClient()
+      const where: any = { _status: { equals: 'published' } }
 
-      let endpoint = `/api/${relationTo}`
-      if (relationTo === 'custom-items') {
+      if (relationTo === 'custom-items' && contentType) {
         const contentTypeId = typeof contentType === 'object' ? contentType?.id : contentType
-        if (contentTypeId) {
-          params.set('where[contentType][equals]', contentTypeId)
-        }
+        where.contentType = { equals: contentTypeId }
       }
 
-      const response = await fetch(`${endpoint}?${params.toString()}`)
-      if (response.ok) {
-        const data = await response.json()
-        items = data.docs || []
-      }
+      const result = await payload.find({
+        collection: relationTo as any,
+        where,
+        limit,
+        depth: 2,
+      })
+      items = result.docs || []
     } catch (error) {
       console.error('Failed to fetch archive items:', error)
     }

@@ -19,9 +19,9 @@ export async function generateMetadata(): Promise<Metadata> {
       description: settings.siteDescription || 'A modern CMS platform',
       metadataBase: new URL(settings.siteUrl || process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'),
       openGraph: {
-        title: settings.siteName,
-        description: settings.siteDescription,
-        siteName: settings.siteName,
+        title: settings.siteName || undefined,
+        description: settings.siteDescription || undefined,
+        siteName: settings.siteName || undefined,
         type: 'website',
       },
     }
@@ -53,8 +53,8 @@ export default async function FrontendLayout({
   }
 
   // Get default theme preferences from settings
-  const defaultSkin = settings?.defaultSkin || 'minimal'
-  const defaultMode = settings?.defaultMode || 'light'
+  const defaultSkin = (settings?.defaultSkin as any) || 'minimal'
+  const defaultMode = (settings?.defaultMode as any) || 'light'
   const serverURL = process.env.NEXT_PUBLIC_SERVER_URL || process.env.PAYLOAD_PUBLIC_SERVER_URL || 'http://localhost:3000'
 
   return (
@@ -63,7 +63,7 @@ export default async function FrontendLayout({
         backgroundColor: 'rgb(var(--color-background))',
         color: 'rgb(var(--color-foreground))'
       }}>
-        <ThemeProvider defaultSkin={defaultSkin} defaultMode={defaultMode}>
+        <ThemeProvider defaultSkin={defaultSkin as any} defaultMode={defaultMode as any}>
           {process.env.NODE_ENV === 'production' ? null : <LivePreviewListener serverURL={serverURL} />}
           {header && <Header data={header} />}
           <main className="flex-1">{children}</main>

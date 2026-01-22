@@ -30,7 +30,7 @@ export async function generateMetadata({ params }: PlacePageProps): Promise<Meta
 
     return {
       title: place.name,
-      description: place.description || `Information about ${place.name}`,
+      description: typeof place.description === 'string' ? place.description : `Information about ${place.name}`,
     }
   } catch (error) {
     console.error(`Error generating metadata for place ${slug}:`, error)
@@ -60,17 +60,20 @@ export default async function PlacePage({ params }: PlacePageProps) {
               )}
             </header>
 
-            {place.featuredImage?.url && (
-              <div className="mb-12">
-                <img
-                  src={place.featuredImage.url}
-                  alt={place.featuredImage.alt || place.name}
-                  className="w-full rounded-lg"
-                />
-              </div>
-            )}
+            {(() => {
+              const placeImage = typeof (place as any).featuredImage === 'object' ? (place as any).featuredImage : null
+              return placeImage?.url && (
+                <div className="mb-12">
+                  <img
+                    src={placeImage.url}
+                    alt={placeImage.alt || place.name}
+                    className="w-full rounded-lg"
+                  />
+                </div>
+              )
+            })()}
 
-            {place.description && (
+            {typeof place.description === 'string' && (
               <div className="mb-12">
                 <RichText content={place.description} />
               </div>

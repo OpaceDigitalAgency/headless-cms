@@ -36,8 +36,8 @@ export async function generateMetadata({ params }: PersonPageProps): Promise<Met
     return generateEnhancedMetadata(
       {
         title: person.name,
-        description: person.bio || person.shortBio || `Profile of ${person.name}`,
-        image: person.featuredImage,
+        description: (person as any).bio || person.shortBio || `Profile of ${person.name}`,
+        image: undefined,
       },
       settings,
       `/people/${slug}`
@@ -64,16 +64,17 @@ export default async function PersonPage({ params }: PersonPageProps) {
 
     if (settings) {
       // Add Person schema
+      const personImage = (person as any).featuredImage && typeof (person as any).featuredImage === 'object' ? (person as any).featuredImage : null
       schemas.push(generatePersonSchema(
         {
           name: person.name,
-          bio: person.bio || person.shortBio,
-          image: person.featuredImage?.url,
-          jobTitle: person.role,
-          email: person.email,
+          slug,
+          bio: (person as any).bio || person.shortBio,
+          image: personImage,
+          jobTitle: typeof person.role === 'string' ? person.role : undefined,
+          email: person.email || undefined,
         },
-        settings,
-        slug
+        settings
       ))
 
       // Add Organization schema
@@ -103,27 +104,27 @@ export default async function PersonPage({ params }: PersonPageProps) {
               <header className="mb-12">
                 <h1 className="text-4xl font-bold">{person.name}</h1>
                 {person.role && (
-                  <p className="mt-4 text-lg text-muted">{person.role}</p>
+                  <p className="mt-4 text-lg text-muted">{Array.isArray(person.role) ? person.role[0] : person.role}</p>
                 )}
               </header>
 
-              {person.featuredImage?.url && (
+              {(person as any).featuredImage?.url && (
                 <div className="mb-12">
                   <img
-                    src={person.featuredImage.url}
-                    alt={person.featuredImage.alt || person.name}
+                    src={(person as any).featuredImage.url}
+                    alt={(person as any).featuredImage.alt || person.name}
                     className="w-full rounded-lg"
                   />
                 </div>
               )}
 
-              {person.bio && (
+              {(person as any).bio && (
                 <div className="mb-12">
-                  <RichText content={person.bio} />
+                  <RichText content={(person as any).bio} />
                 </div>
               )}
 
-              {person.content && <RenderBlocks blocks={person.content} />}
+              {(person as any).content && <RenderBlocks blocks={(person as any).content} />}
             </article>
           </Container>
         </Section>

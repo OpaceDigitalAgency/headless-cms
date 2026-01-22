@@ -20,7 +20,7 @@ export const Users: CollectionConfig = {
     depth: 0,
     cookies: {
       secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
+      sameSite: 'Lax',
       domain: undefined,
     },
   },

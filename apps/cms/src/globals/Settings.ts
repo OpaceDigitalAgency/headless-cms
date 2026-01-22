@@ -103,6 +103,7 @@ export const Settings: GlobalConfig = {
                 { label: 'High Contrast', value: 'high-contrast' },
                 { label: 'Neon Grid', value: 'neon-grid' },
                 { label: 'Agency', value: 'agency' },
+                { label: 'Retro', value: 'retro' },
               ],
               admin: {
                 description: 'Choose the default visual theme for your site. Users can override this preference.',

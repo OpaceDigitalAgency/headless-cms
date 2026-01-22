@@ -15,7 +15,7 @@ const nextConfig = {
   },
 
   // Keep server-only packages on the server
-  serverExternalPackages: ['nodemailer'],
+  serverExternalPackages: ['nodemailer', 'payload', 'undici', '@payloadcms/db-postgres'],
 
   // Image optimization
   images: {
@@ -34,55 +34,15 @@ const nextConfig = {
   // Webpack configuration
   webpack: (config, { isServer }) => {
     // Handle node modules that need to be transpiled
-    config.resolve.fallback = {
-      ...config.resolve.fallback,
-      fs: false,
-      path: false,
-    }
-
-    // Fix for Payload CMS client components bundling issue
-    // This prevents the "__webpack_modules__[moduleId] is not a function" error
     if (!isServer) {
-      config.optimization = {
-        ...config.optimization,
-        moduleIds: 'named',
+      config.resolve.fallback = {
+        ...config.resolve.fallback,
+        fs: false,
+        path: false,
+        net: false,
+        tls: false,
+        crypto: false,
       }
-      
-      // Exclude server-only packages and Node.js built-ins from client bundle
-      config.externals = [
-        ...config.externals || [],
-        {
-          nodemailer: 'commonjs nodemailer',
-          net: 'commonjs net',
-          dns: 'commonjs dns',
-          child_process: 'commonjs child_process',
-          tls: 'commonjs tls',
-          worker_threads: 'commonjs worker_threads',
-          readline: 'commonjs readline',
-          'node:assert': 'commonjs assert',
-          'node:async_hooks': 'commonjs async_hooks',
-          'node:buffer': 'commonjs buffer',
-          'node:crypto': 'commonjs crypto',
-          'node:dgram': 'commonjs dgram',
-          'node:events': 'commonjs events',
-          'node:fs': 'commonjs fs',
-          'node:http': 'commonjs http',
-          'node:http2': 'commonjs http2',
-          'node:https': 'commonjs https',
-          'node:net': 'commonjs net',
-          'node:os': 'commonjs os',
-          'node:path': 'commonjs path',
-          'node:perf_hooks': 'commonjs perf_hooks',
-          'node:stream': 'commonjs stream',
-          'node:string_decoder': 'commonjs string_decoder',
-          'node:timers': 'commonjs timers',
-          'node:tls': 'commonjs tls',
-          'node:util': 'commonjs util',
-          'node:zlib': 'commonjs zlib',
-          payload: 'commonjs payload',
-          undici: 'commonjs undici',
-        },
-      ]
     }
 
     return config

@@ -18,6 +18,7 @@ export const heroBlock: Block = {
       options: [
         { label: 'Standard', value: 'standard' },
         { label: 'Agency', value: 'agency' },
+        { label: 'Retro', value: 'retro' },
       ],
     },
     {

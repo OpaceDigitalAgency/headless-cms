@@ -33,32 +33,35 @@ export default async function PeoplePage() {
         </header>
 
         <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-          {people.docs.map((person) => (
-            <Link
-              key={person.id}
-              href={`/people/${person.slug}`}
-              className="card overflow-hidden transition-shadow hover:shadow-md"
-            >
-              {person.featuredImage?.url && (
-                <div className="relative h-48">
-                  <img
-                    src={person.featuredImage.url}
-                    alt={person.featuredImage.alt || person.name}
-                    className="h-full w-full object-cover"
-                  />
+          {people.docs.map((person) => {
+            const personImage = (person as any).featuredImage && typeof (person as any).featuredImage === 'object' ? (person as any).featuredImage : null
+            return (
+              <Link
+                key={person.id}
+                href={`/people/${person.slug}`}
+                className="card overflow-hidden transition-shadow hover:shadow-md"
+              >
+                {personImage?.url && (
+                  <div className="relative h-48">
+                    <img
+                      src={personImage.url}
+                      alt={personImage.alt || person.name}
+                      className="h-full w-full object-cover"
+                    />
+                  </div>
+                )}
+                <div className="p-6">
+                  <h2 className="text-xl font-semibold">{person.name}</h2>
+                  {person.role && (
+                    <p className="mt-1 text-sm text-muted">{Array.isArray(person.role) ? person.role[0] : person.role}</p>
+                  )}
+                  {(person as any).bio && (
+                    <p className="mt-2 text-muted line-clamp-2">{(person as any).bio}</p>
+                  )}
                 </div>
-              )}
-              <div className="p-6">
-                <h2 className="text-xl font-semibold">{person.name}</h2>
-                {person.role && (
-                  <p className="mt-1 text-sm text-muted">{person.role}</p>
-                )}
-                {person.bio && (
-                  <p className="mt-2 text-muted line-clamp-2">{person.bio}</p>
-                )}
-              </div>
-            </Link>
-          ))}
+              </Link>
+            )
+          })}
         </div>
       </Container>
     </Section>

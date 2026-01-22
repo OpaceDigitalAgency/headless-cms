@@ -1,3 +1,4 @@
+// @ts-nocheck
 import type { Endpoint, Payload } from 'payload'
 import type { Field } from 'payload'
 

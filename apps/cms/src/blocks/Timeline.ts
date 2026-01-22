@@ -104,7 +104,7 @@ export const timelineBlock: Block = {
           label: 'Icon Name',
           admin: {
             description: 'Lucide icon name (used when marker style is "icon")',
-            condition: (_, __, { siblingData }) => siblingData?.markerStyle === 'icon',
+            condition: (_, siblingData) => siblingData?.markerStyle === 'icon',
           },
         },
         {

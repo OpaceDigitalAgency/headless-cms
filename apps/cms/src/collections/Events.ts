@@ -37,7 +37,7 @@ export const Events: CollectionConfig = {
     delete: async ({ req }) => (await isCollectionEnabled(req.payload, 'events')) && req.user?.role === 'admin',
   },
 
-  fields: eventTemplate.fields,
+  fields: eventTemplate.fields || [],
 
   // Hooks for revalidation - direct calls since we're in the same Next.js app
   hooks: {

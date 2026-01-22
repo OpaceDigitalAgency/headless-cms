@@ -57,6 +57,7 @@ export function HeroBlock({ block }: HeroBlockProps) {
 
   const minHeight = type === 'fullscreen' ? 'min-h-screen' : 'min-h-[60vh]'
   const isAgency = variant === 'agency'
+  const isRetro = variant === 'retro'
 
   return (
     <section className={`relative flex ${minHeight} items-center justify-center overflow-hidden bg-base`}>
@@ -69,6 +70,25 @@ export function HeroBlock({ block }: HeroBlockProps) {
             <div className="absolute -right-1/4 top-8 h-[480px] w-[480px] animate-blob-delayed-2 rounded-full bg-[rgb(var(--color-accent-light))]/15 blur-3xl" />
           </div>
         </>
+      )}
+      {isRetro && (
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute inset-0 retro-grain opacity-30 animate-pulse" style={{ animationDuration: '4s' }} />
+          <div className="absolute inset-0 gradient-bg-retro opacity-20" />
+          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-[rgb(var(--color-accent))] opacity-10 rounded-full blur-3xl animate-pulse" />
+          <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-[rgb(var(--color-accent))] opacity-10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
+
+          {/* Decorative Stars/Hearts */}
+          <div className="absolute top-20 left-10 w-6 h-6 text-[rgb(var(--color-accent))] opacity-30 animate-spin" style={{ animationDuration: '20s' }}>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+          </div>
+          <div className="absolute bottom-32 left-1/4 w-5 h-5 text-[rgb(var(--color-accent))] opacity-20 animate-spin" style={{ animationDuration: '25s' }}>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+          </div>
+          <div className="absolute top-1/3 right-10 w-5 h-5 text-[rgb(var(--color-accent))] opacity-20 animate-pulse">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+          </div>
+        </div>
       )}
       {/* Background Image */}
       {image?.url && (
@@ -110,12 +130,12 @@ export function HeroBlock({ block }: HeroBlockProps) {
             {eyebrow}
           </span>
         )}
-        <h1 className={`max-w-4xl font-bold tracking-tight text-foreground ${isAgency ? 'text-5xl sm:text-6xl lg:text-7xl xl:text-8xl gradient-text-hero' : 'text-4xl sm:text-5xl lg:text-6xl'}`}>
+        <h1 className={`max-w-4xl font-bold tracking-tight text-foreground ${isAgency ? 'text-5xl sm:text-6xl lg:text-7xl xl:text-8xl gradient-text-hero' : isRetro ? 'text-5xl md:text-7xl lg:text-8xl gradient-text-retro animate-text-shimmer' : 'text-4xl sm:text-5xl lg:text-6xl'}`}>
           {heading}
         </h1>
 
         {subheading && (
-          <p className={`mt-6 max-w-2xl ${isAgency ? 'text-xl sm:text-2xl gradient-subheading' : 'text-xl'} text-muted`}>
+          <p className={`mt-6 max-w-2xl ${isAgency ? 'text-xl sm:text-2xl gradient-subheading' : isRetro ? 'text-xl md:text-2xl text-muted hover:text-foreground transition-colors' : 'text-xl'} text-muted`}>
             {subheading}
           </p>
         )}
@@ -128,10 +148,10 @@ export function HeroBlock({ block }: HeroBlockProps) {
                 href={getUrl(link)}
                 target={link.newTab ? '_blank' : undefined}
                 className={`btn ${link.variant === 'primary'
-                    ? `btn-primary ${isAgency ? 'gradient-btn-primary' : ''}`
-                    : link.variant === 'outline'
-                      ? 'border border-default bg-transparent text-foreground hover:bg-base/10'
-                      : 'bg-base/10 text-foreground hover:bg-base/20'
+                  ? `btn-primary ${isAgency ? 'gradient-btn-primary' : ''}`
+                  : link.variant === 'outline'
+                    ? 'border border-default bg-transparent text-foreground hover:bg-base/10'
+                    : 'bg-base/10 text-foreground hover:bg-base/20'
                   }`}
               >
                 {link.label}

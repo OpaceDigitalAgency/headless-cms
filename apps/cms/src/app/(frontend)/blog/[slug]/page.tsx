@@ -53,6 +53,16 @@ export async function generateMetadata({ params }: PostPageProps): Promise<Metad
     const featuredImage = typeof post.featuredImage === 'object' ? post.featuredImage : null
     const author = typeof post.author === 'object' ? post.author : null
 
+    // Transform meta image if it's a Media object
+    const metaImage = post.meta?.image && typeof post.meta.image === 'object'
+      ? {
+          url: post.meta.image.url || null,
+          alt: post.meta.image.alt || null,
+          width: post.meta.image.width || null,
+          height: post.meta.image.height || null,
+        }
+      : null
+
     return generateArticleMetadata(
       {
         title: post.title,
@@ -61,7 +71,10 @@ export async function generateMetadata({ params }: PostPageProps): Promise<Metad
         updatedAt: post.updatedAt,
         author: author ? { name: author.name } : undefined,
         featuredImage: featuredImage || undefined,
-        meta: post.meta,
+        meta: post.meta ? {
+          ...post.meta,
+          image: metaImage,
+        } : undefined,
       },
       settings,
       `/blog/${slug}`

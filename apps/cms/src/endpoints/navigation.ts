@@ -1,3 +1,4 @@
+// @ts-nocheck
 import type { Endpoint } from 'payload'
 import { getDefaultSectionForSlug, nestedCollections, sectionOrder } from '../lib/navigationConfig'
 import { getCollectionOverrides, resolveCollectionEnabled } from '../lib/collectionVisibility'

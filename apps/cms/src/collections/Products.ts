@@ -15,7 +15,7 @@ export const Products: CollectionConfig = {
     group: 'Shop',
     defaultColumns: ['title', '_status', 'updatedAt'],
     description: 'Products, services, or inventory items with pricing and variants',
-    preview: (doc) => getPreviewUrl({ collection: 'products', slug: doc.slug }),
+    preview: (doc) => getPreviewUrl({ collection: 'products', slug: doc.slug as string }),
     livePreview: {
       url: ({ data }) => getPreviewUrl({ collection: 'products', slug: data?.slug }),
     },
@@ -40,7 +40,7 @@ export const Products: CollectionConfig = {
     delete: async ({ req }) => (await isCollectionEnabled(req.payload, 'products')) && req.user?.role === 'admin',
   },
 
-  fields: productTemplate.fields,
+  fields: productTemplate.fields || [],
 
   hooks: {
     afterChange: [

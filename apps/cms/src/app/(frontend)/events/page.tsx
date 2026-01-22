@@ -33,21 +33,23 @@ export default async function EventsPage() {
         </header>
 
         <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-          {events.docs.map((event) => (
-            <Link
-              key={event.id}
-              href={`/events/${event.slug}`}
-              className="card overflow-hidden transition-shadow hover:shadow-md"
-            >
-              {event.featuredImage?.url && (
-                <div className="relative h-48">
-                  <img
-                    src={event.featuredImage.url}
-                    alt={event.featuredImage.alt || event.title}
-                    className="h-full w-full object-cover"
-                  />
-                </div>
-              )}
+          {events.docs.map((event) => {
+            const featuredImage = typeof event.featuredImage === 'object' ? event.featuredImage : null
+            return (
+              <Link
+                key={event.id}
+                href={`/events/${event.slug}`}
+                className="card overflow-hidden transition-shadow hover:shadow-md"
+              >
+                {featuredImage?.url && (
+                  <div className="relative h-48">
+                    <img
+                      src={featuredImage.url}
+                      alt={featuredImage.alt || event.title}
+                      className="h-full w-full object-cover"
+                    />
+                  </div>
+                )}
               <div className="p-6">
                 <h2 className="text-xl font-semibold">{event.title}</h2>
                 {event.startDate && (
@@ -59,12 +61,13 @@ export default async function EventsPage() {
                     })}
                   </p>
                 )}
-                {event.excerpt && (
-                  <p className="mt-2 text-muted line-clamp-2">{event.excerpt}</p>
+                {(event as any).excerpt && (
+                  <p className="mt-2 text-muted line-clamp-2">{(event as any).excerpt}</p>
                 )}
               </div>
             </Link>
-          ))}
+            )
+          })}
         </div>
       </Container>
     </Section>

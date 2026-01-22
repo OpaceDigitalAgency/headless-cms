@@ -43,13 +43,39 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       }
     }
 
+    // Transform meta image if it's a Media object
+    const metaImage = page.meta?.image && typeof page.meta.image === 'object'
+      ? {
+          url: page.meta.image.url || null,
+          alt: page.meta.image.alt || null,
+          width: page.meta.image.width || null,
+          height: page.meta.image.height || null,
+        }
+      : null
+
+    // Transform settings defaultMeta image if it's a Media object
+    const defaultMetaImage = settings.defaultMeta?.image && typeof settings.defaultMeta.image === 'object'
+      ? {
+          url: settings.defaultMeta.image.url || null,
+          alt: settings.defaultMeta.image.alt || null,
+          width: settings.defaultMeta.image.width || null,
+          height: settings.defaultMeta.image.height || null,
+        }
+      : null
+
     return generateEnhancedMetadata(
-      page.meta || {
-        title: page.title,
-        description: undefined,
-        image: undefined,
+      {
+        ...page.meta,
+        title: page.meta?.title || page.title,
+        image: metaImage,
       },
-      settings,
+      {
+        ...settings,
+        defaultMeta: settings.defaultMeta ? {
+          ...settings.defaultMeta,
+          image: defaultMetaImage,
+        } : null,
+      },
       `/${slug}`
     )
   } catch (error) {

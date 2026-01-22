@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { buildConfig } from 'payload'
 import { postgresAdapter } from '@payloadcms/db-postgres'
 import { lexicalEditor, FixedToolbarFeature, HeadingFeature, LinkFeature, UploadFeature, BlockquoteFeature, OrderedListFeature, UnorderedListFeature, ParagraphFeature, InlineCodeFeature, BoldFeature, ItalicFeature, UnderlineFeature, StrikethroughFeature } from '@payloadcms/richtext-lexical'

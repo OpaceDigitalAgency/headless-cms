@@ -38,7 +38,7 @@ export const Places: CollectionConfig = {
     group: 'Collections',
     defaultColumns: ['name', 'placeType', 'categories', '_status', 'updatedAt', 'preview'],
     description: 'Geographic locations, venues, and historical sites',
-    preview: (doc) => getPreviewUrl({ collection: 'places', slug: doc.slug }),
+    preview: (doc) => getPreviewUrl({ collection: 'places', slug: doc.slug as string }),
     livePreview: {
       url: ({ data }) => getPreviewUrl({ collection: 'places', slug: data?.slug }),
     },

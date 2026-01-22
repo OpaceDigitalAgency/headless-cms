@@ -144,7 +144,9 @@ export async function GET(request: NextRequest) {
               console.log(`[Draft API] ContentType populated: ${typeSlug}`)
             } else {
               // ContentType is just an ID, fetch it
-              const contentTypeId = typeof item.contentType === 'string' ? item.contentType : item.contentType.id
+              const contentTypeId = typeof item.contentType === 'string' || typeof item.contentType === 'number'
+                ? item.contentType
+                : (item.contentType as any).id
               console.log(`[Draft API] Fetching contentType with ID: ${contentTypeId}`)
               const ct = await payload.findByID({
                 collection: 'content-types',

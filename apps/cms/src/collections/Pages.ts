@@ -31,7 +31,7 @@ export const Pages: CollectionConfig = {
     group: 'Content',
     defaultColumns: ['title', 'slug', 'template', '_status', 'updatedAt', 'preview'],
     description: 'Create and manage website pages',
-    preview: (doc) => getPreviewUrl({ collection: 'pages', slug: doc.slug }),
+    preview: (doc) => getPreviewUrl({ collection: 'pages', slug: doc.slug as string }),
     livePreview: {
       url: ({ data }) => getPreviewUrl({ collection: 'pages', slug: data?.slug }),
     },

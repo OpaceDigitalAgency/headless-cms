@@ -15,7 +15,7 @@ export const ArchiveItems: CollectionConfig = {
     group: 'Archive',
     defaultColumns: ['title', '_status', 'updatedAt', 'preview'],
     description: 'Archive items such as gallery pieces, portfolio items, or collectibles',
-    preview: (doc) => getPreviewUrl({ collection: 'archive-items', slug: doc.slug }),
+    preview: (doc) => getPreviewUrl({ collection: 'archive-items', slug: doc.slug as string }),
     livePreview: {
       url: ({ data }) => getPreviewUrl({ collection: 'archive-items', slug: data?.slug }),
     },
@@ -40,7 +40,7 @@ export const ArchiveItems: CollectionConfig = {
     delete: async ({ req }) => (await isCollectionEnabled(req.payload, 'archive-items')) && req.user?.role === 'admin',
   },
 
-  fields: archiveItemTemplate.fields,
+  fields: archiveItemTemplate.fields || [],
 
   // Hooks for revalidation - direct calls since we're in the same Next.js app
   hooks: {
