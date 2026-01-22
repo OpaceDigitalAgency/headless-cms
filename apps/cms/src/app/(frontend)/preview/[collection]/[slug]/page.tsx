@@ -1,7 +1,8 @@
 import { notFound, redirect } from 'next/navigation'
 import { draftMode } from 'next/headers'
 import { LivePreviewPage } from './LivePreviewPage'
-import { getPayloadClient, getSettings } from '@/lib/payload-api'
+import { getPayloadClient } from '@/lib/server/archive-data'
+import { getSettings } from '@/lib/payload-api'
 
 interface PreviewPageProps {
   params: Promise<{
