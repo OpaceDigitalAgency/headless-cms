@@ -112,7 +112,7 @@ export function HeroBlock({ block }: HeroBlockProps) {
             {eyebrow}
           </span>
         )}
-        <h1 className="max-w-4xl font-bold tracking-tight text-foreground">
+        <h1 className="max-w-4xl text-4xl font-bold tracking-tight text-foreground sm:text-5xl lg:text-6xl">
           {heading}
         </h1>
 

@@ -198,11 +198,11 @@ export abstract class BaseSeeder {
           slug: data.slug,
           singularLabel: data.singularLabel,
           pluralLabel: data.pluralLabel,
-          icon: data.icon || 'box',
-          template: data.template,
+          icon: (data.icon as any) || 'box',
+          template: data.template as any,
           hasArchive: true,
           archiveSlug: `items/${data.slug}`,
-          customFields: data.customFields || [],
+          customFields: (data.customFields as any) || [],
         },
       })
 
@@ -210,20 +210,38 @@ export abstract class BaseSeeder {
 
       if (data.items && data.items.length > 0) {
         for (const item of data.items) {
+          // Check if item already exists
+          const existing = await this.payload.find({
+            collection: 'custom-items',
+            where: {
+              and: [
+                { slug: { equals: item.slug } },
+                { contentType: { equals: contentType.id } }
+              ]
+            },
+            limit: 1,
+            depth: 0,
+          })
+
+          if (existing.docs.length > 0) {
+            this.log(`Skipping existing custom item: ${item.slug}`)
+            continue
+          }
+
           const created = await this.payload.create({
             collection: 'custom-items',
-              data: {
-                title: item.title,
-                slug: item.slug,
-                excerpt: item.excerpt,
-                content: item.content,
-                blocks: item.blocks || [],
-                featuredImage: item.featuredImage,
-                gallery: item.gallery || [],
-                contentType: contentType.id,
-                status: item.status || 'published',
-                customData: item.customData || {},
-              },
+            data: {
+              title: item.title,
+              slug: item.slug,
+              excerpt: item.excerpt,
+              content: item.content,
+              blocks: item.blocks || [],
+              featuredImage: item.featuredImage,
+              gallery: item.gallery || [],
+              contentType: contentType.id,
+              status: item.status || 'published',
+              customData: item.customData || {},
+            },
           })
           this.trackId('custom-items', created.id)
         }
@@ -294,7 +312,7 @@ export abstract class BaseSeeder {
     data: Record<string, any>
   ): Promise<T> {
     const doc = await this.payload.create({
-      collection,
+      collection: collection as any,
       data,
       overrideAccess: true, // Bypass access control for seeding
     })
@@ -310,7 +328,7 @@ export abstract class BaseSeeder {
     data: Record<string, any>
   ): Promise<void> {
     await this.payload.updateGlobal({
-      slug,
+      slug: slug as any,
       data,
     })
   }
@@ -408,6 +426,24 @@ export abstract class BaseSeeder {
     } catch (error) {
       this.error(`Failed to create placeholder media ${filename}: ${error}`)
       return null
+    }
+  }
+
+  /**
+   * Check if a document already exists by slug
+   */
+  protected async checkIfExists(collection: string, slug: string): Promise<boolean> {
+    try {
+      const existing = await this.payload.find({
+        collection: collection as any,
+        where: { slug: { equals: slug } },
+        limit: 1,
+        depth: 0,
+      })
+      return existing.docs.length > 0
+    } catch (error) {
+      this.error(`Failed to check existence for ${collection}/${slug}: ${error}`)
+      return false
     }
   }
 }

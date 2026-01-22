@@ -11,7 +11,7 @@ const blocks = [
     heading: 'We build premium digital experiences',
     subheading: 'Brand, web, and content systems for ambitious teams.',
     links: [
-      { label: 'Book a call →', url: '/contact', variant: 'primary' },
+      { label: 'Book a call', url: '/contact', variant: 'primary' },
       { label: 'View work →', url: '/work', variant: 'outline' },
     ],
   },

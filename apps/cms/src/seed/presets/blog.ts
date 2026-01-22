@@ -7,6 +7,7 @@
 
 import type { Payload } from 'payload'
 import { BaseSeeder, createRichText, createRichTextParagraphs, type SeedOptions } from '../base'
+import { ensureShowcasePage } from '../showcase'
 
 export class BlogSeeder extends BaseSeeder {
   constructor(payload: Payload, options: SeedOptions = {}) {
@@ -204,7 +205,7 @@ export class BlogSeeder extends BaseSeeder {
     }
 
     this.log('Seeding categories...')
-    
+
     const categoryData = [
       { name: 'Technology', slug: 'technology', description: 'Tech news, tutorials, and insights' },
       { name: 'Design', slug: 'design', description: 'UI/UX, graphic design, and creative inspiration' },
@@ -213,8 +214,23 @@ export class BlogSeeder extends BaseSeeder {
     ]
 
     const categories: Record<string, string> = {}
-    
+
     for (const data of categoryData.slice(0, this.getItemCount('categories', 4))) {
+      if (await this.checkIfExists('categories', data.slug)) {
+        this.log(`Category "${data.name}" already exists, skipping.`)
+        // Try to get the existing category ID to return it
+        const existing = await this.payload.find({
+          collection: 'categories',
+          where: { slug: { equals: data.slug } },
+          limit: 1,
+          depth: 0,
+        })
+        if (existing.docs[0]) {
+          categories[data.slug] = String(existing.docs[0].id)
+        }
+        continue
+      }
+
       const category = await this.create('categories', {
         title: data.name,
         slug: data.slug,
@@ -235,310 +251,327 @@ export class BlogSeeder extends BaseSeeder {
 
     // Home page - Rich, well-designed homepage
     if (this.shouldSeedItem('home')) {
-      await this.create('pages', {
-        title: 'Home',
-        slug: 'home',
-        template: 'home',
-        _status: 'published',
-        hero: {
-          type: 'fullscreen',
-          heading: 'Discover Stories That Inspire',
-          subheading: 'Explore insights, ideas, and perspectives from our community of writers and thinkers.',
-          links: [
-            { label: 'Read Latest Articles', url: '/blog', variant: 'primary' },
-            { label: 'Learn More', url: '/about', variant: 'secondary' },
-          ],
-        },
-        content: [
-          // Featured content section with intro
-          {
-            blockType: 'content',
-            backgroundColor: 'light',
-            paddingTop: 'large',
-            paddingBottom: 'large',
-            columns: [
-              {
-                size: 'full',
-                richText: createRichTextParagraphs([
-                  'Welcome to our blog, where we share thoughtful articles on technology, design, business, and lifestyle.',
-                  'Whether you\'re looking for practical tips, industry insights, or inspiring stories, you\'ll find it here. Our team of passionate writers and thinkers is dedicated to delivering quality content that educates, inspires, and entertains.',
-                ]),
-              },
-            ],
-          },
-          // Stats section
-          {
-            blockType: 'stats',
-            heading: 'By The Numbers',
-            stats: [
-              { label: 'Articles Published', value: '150+' },
-              { label: 'Active Readers', value: '50K+' },
-              { label: 'Categories', value: '12' },
-              { label: 'Years Active', value: '5+' },
-            ],
-          },
-          // Latest posts grid
-          {
-            blockType: 'archive',
-            heading: 'Latest Articles',
-            relationTo: 'posts',
-            limit: 6,
-            showImage: true,
-            showExcerpt: true,
-            showDate: true,
-          },
-          // Testimonials section
-          {
-            blockType: 'testimonials',
-            heading: 'What Our Readers Say',
-            items: [
-              {
-                quote: 'The articles here have genuinely helped me improve my skills and stay updated with industry trends.',
-                name: 'Sarah Johnson',
-                role: 'Product Manager',
-                company: 'Tech Innovations Inc',
-                rating: 5,
-              },
-              {
-                quote: 'Excellent writing quality and diverse topics. This is my go-to source for reliable information.',
-                name: 'Michael Chen',
-                role: 'Software Engineer',
-                company: 'Digital Solutions Ltd',
-                rating: 5,
-              },
-              {
-                quote: 'The design articles are particularly insightful. Highly recommend to anyone in the creative field.',
-                name: 'Emma Williams',
-                role: 'UX Designer',
-                company: 'Creative Studios',
-                rating: 5,
-              },
-            ],
-          },
-          // CTA section
-          {
-            blockType: 'cta',
-            heading: 'Stay Updated with Our Latest Content',
-            description: 'Subscribe to our newsletter to get the latest articles, insights, and exclusive content delivered directly to your inbox.',
+      if (await this.checkIfExists('pages', 'home')) {
+        this.log('Home page already exists, skipping.')
+      } else {
+        await this.create('pages', {
+          title: 'Home',
+          slug: 'home',
+          template: 'home',
+          _status: 'published',
+          hero: {
+            type: 'fullscreen',
+            heading: 'Discover Stories That Inspire',
+            subheading: 'Explore insights, ideas, and perspectives from our community of writers and thinkers.',
             links: [
-              { label: 'Subscribe Now', url: '/contact', variant: 'primary' },
+              { label: 'Read Latest Articles', url: '/blog', variant: 'primary' },
+              { label: 'Learn More', url: '/about', variant: 'secondary' },
             ],
           },
-        ],
-      })
+          content: [
+            // Featured content section with intro
+            {
+              blockType: 'content',
+              backgroundColor: 'light',
+              paddingTop: 'large',
+              paddingBottom: 'large',
+              columns: [
+                {
+                  size: 'full',
+                  richText: createRichTextParagraphs([
+                    'Welcome to our blog, where we share thoughtful articles on technology, design, business, and lifestyle.',
+                    'Whether you\'re looking for practical tips, industry insights, or inspiring stories, you\'ll find it here. Our team of passionate writers and thinkers is dedicated to delivering quality content that educates, inspires, and entertains.',
+                  ]),
+                },
+              ],
+            },
+            // Stats section
+            {
+              blockType: 'stats',
+              heading: 'By The Numbers',
+              stats: [
+                { label: 'Articles Published', value: '150+' },
+                { label: 'Active Readers', value: '50K+' },
+                { label: 'Categories', value: '12' },
+                { label: 'Years Active', value: '5+' },
+              ],
+            },
+            // Latest posts grid
+            {
+              blockType: 'archive',
+              heading: 'Latest Articles',
+              relationTo: 'posts',
+              limit: 6,
+              showImage: true,
+              showExcerpt: true,
+              showDate: true,
+            },
+            // Testimonials section
+            {
+              blockType: 'testimonials',
+              heading: 'What Our Readers Say',
+              items: [
+                {
+                  quote: 'The articles here have genuinely helped me improve my skills and stay updated with industry trends.',
+                  name: 'Sarah Johnson',
+                  role: 'Product Manager',
+                  company: 'Tech Innovations Inc',
+                  rating: 5,
+                },
+                {
+                  quote: 'Excellent writing quality and diverse topics. This is my go-to source for reliable information.',
+                  name: 'Michael Chen',
+                  role: 'Software Engineer',
+                  company: 'Digital Solutions Ltd',
+                  rating: 5,
+                },
+                {
+                  quote: 'The design articles are particularly insightful. Highly recommend to anyone in the creative field.',
+                  name: 'Emma Williams',
+                  role: 'UX Designer',
+                  company: 'Creative Studios',
+                  rating: 5,
+                },
+              ],
+            },
+            // CTA section
+            {
+              blockType: 'cta',
+              heading: 'Stay Updated with Our Latest Content',
+              description: 'Subscribe to our newsletter to get the latest articles, insights, and exclusive content delivered directly to your inbox.',
+              links: [
+                { label: 'Subscribe Now', url: '/contact', variant: 'primary' },
+              ],
+            },
+          ],
+        })
+      }
     }
 
     // About page - Comprehensive about page
     if (this.shouldSeedItem('about')) {
-      await this.create('pages', {
-        title: 'About Us',
-        slug: 'about',
-        template: 'detail',
-        _status: 'published',
-        hero: {
-          type: 'standard',
-          heading: 'About Our Blog',
-          subheading: 'Learn more about our mission, values, and the team behind the content.',
-        },
-        content: [
-          // Mission section
-          {
-            blockType: 'content',
-            backgroundColor: 'none',
-            paddingTop: 'large',
-            paddingBottom: 'large',
-            columns: [
-              {
-                size: 'full',
-                richText: createRichTextParagraphs([
-                  'We are a team of passionate writers, designers, and thinkers dedicated to sharing knowledge and inspiring others through thoughtful content.',
-                  'Our blog covers a wide range of topics from technology and design to business and lifestyle. We believe in the power of storytelling and the importance of sharing diverse perspectives.',
-                  'Founded in 2024, we have grown to become a trusted source of information and inspiration for thousands of readers worldwide.',
-                ]),
-              },
-            ],
+      if (await this.checkIfExists('pages', 'about')) {
+        this.log('About page already exists, skipping.')
+      } else {
+        await this.create('pages', {
+          title: 'About Us',
+          slug: 'about',
+          template: 'detail',
+          _status: 'published',
+          hero: {
+            type: 'standard',
+            heading: 'About Our Blog',
+            subheading: 'Learn more about our mission, values, and the team behind the content.',
           },
-          // Features section - What We Offer
-          {
-            blockType: 'features',
-            heading: 'What We Offer',
-            items: [
-              {
-                title: 'In-Depth Articles',
-                description: 'Comprehensive guides and long-form content that explores topics in detail.',
-              },
-              {
-                title: 'Expert Insights',
-                description: 'Perspectives from industry leaders and experienced professionals.',
-              },
-              {
-                title: 'Practical Tips',
-                description: 'Actionable advice you can apply to your work and life.',
-              },
-              {
-                title: 'Community',
-                description: 'Join a community of curious minds and engaged readers.',
-              },
-            ],
-          },
-          // Team section
-          {
-            blockType: 'team',
-            heading: 'Meet Our Team',
-            members: [
-              {
-                name: 'Alex Rivera',
-                role: 'Founder & Editor-in-Chief',
-                bio: 'With over 10 years of experience in digital media, Alex leads our editorial vision and ensures quality content.',
-              },
-              {
-                name: 'Jordan Smith',
-                role: 'Senior Writer',
-                bio: 'Specialising in technology and innovation, Jordan brings deep industry knowledge to every article.',
-              },
-              {
-                name: 'Casey Lee',
-                role: 'Design & UX Writer',
-                bio: 'Casey explores the intersection of design, user experience, and business strategy.',
-              },
-              {
-                name: 'Morgan Taylor',
-                role: 'Community Manager',
-                bio: 'Morgan builds and nurtures our community, ensuring every reader feels heard and valued.',
-              },
-            ],
-          },
-          // Values section
-          {
-            blockType: 'content',
-            backgroundColor: 'light',
-            paddingTop: 'large',
-            paddingBottom: 'large',
-            columns: [
-              {
-                size: 'full',
-                richText: createRichText('Our Core Values'),
-              },
-              {
-                size: 'half',
-                richText: createRichTextParagraphs([
-                  'Quality: We prioritise well-researched, thoughtfully written content that provides real value.',
-                  'Authenticity: We share genuine perspectives and honest insights from our team and contributors.',
-                ]),
-              },
-              {
-                size: 'half',
-                richText: createRichTextParagraphs([
-                  'Inclusivity: We celebrate diverse voices and perspectives from around the world.',
-                  'Impact: We aim to inspire positive change and help our readers grow professionally and personally.',
-                ]),
-              },
-            ],
-          },
-          // CTA section
-          {
-            blockType: 'cta',
-            heading: 'Join Our Community',
-            description: 'Subscribe to our newsletter and be the first to receive our latest articles, exclusive insights, and special announcements.',
-            links: [
-              { label: 'Subscribe Now', url: '/contact', variant: 'primary' },
-            ],
-          },
-        ],
-      })
+          content: [
+            // Mission section
+            {
+              blockType: 'content',
+              backgroundColor: 'none',
+              paddingTop: 'large',
+              paddingBottom: 'large',
+              columns: [
+                {
+                  size: 'full',
+                  richText: createRichTextParagraphs([
+                    'We are a team of passionate writers, designers, and thinkers dedicated to sharing knowledge and inspiring others through thoughtful content.',
+                    'Our blog covers a wide range of topics from technology and design to business and lifestyle. We believe in the power of storytelling and the importance of sharing diverse perspectives.',
+                    'Founded in 2024, we have grown to become a trusted source of information and inspiration for thousands of readers worldwide.',
+                  ]),
+                },
+              ],
+            },
+            // Features section - What We Offer
+            {
+              blockType: 'features',
+              heading: 'What We Offer',
+              items: [
+                {
+                  title: 'In-Depth Articles',
+                  description: 'Comprehensive guides and long-form content that explores topics in detail.',
+                },
+                {
+                  title: 'Expert Insights',
+                  description: 'Perspectives from industry leaders and experienced professionals.',
+                },
+                {
+                  title: 'Practical Tips',
+                  description: 'Actionable advice you can apply to your work and life.',
+                },
+                {
+                  title: 'Community',
+                  description: 'Join a community of curious minds and engaged readers.',
+                },
+              ],
+            },
+            // Team section
+            {
+              blockType: 'team',
+              heading: 'Meet Our Team',
+              members: [
+                {
+                  name: 'Alex Rivera',
+                  role: 'Founder & Editor-in-Chief',
+                  bio: 'With over 10 years of experience in digital media, Alex leads our editorial vision and ensures quality content.',
+                },
+                {
+                  name: 'Jordan Smith',
+                  role: 'Senior Writer',
+                  bio: 'Specialising in technology and innovation, Jordan brings deep industry knowledge to every article.',
+                },
+                {
+                  name: 'Casey Lee',
+                  role: 'Design & UX Writer',
+                  bio: 'Casey explores the intersection of design, user experience, and business strategy.',
+                },
+                {
+                  name: 'Morgan Taylor',
+                  role: 'Community Manager',
+                  bio: 'Morgan builds and nurtures our community, ensuring every reader feels heard and valued.',
+                },
+              ],
+            },
+            // Values section
+            {
+              blockType: 'content',
+              backgroundColor: 'light',
+              paddingTop: 'large',
+              paddingBottom: 'large',
+              columns: [
+                {
+                  size: 'full',
+                  richText: createRichText('Our Core Values'),
+                },
+                {
+                  size: 'half',
+                  richText: createRichTextParagraphs([
+                    'Quality: We prioritise well-researched, thoughtfully written content that provides real value.',
+                    'Authenticity: We share genuine perspectives and honest insights from our team and contributors.',
+                  ]),
+                },
+                {
+                  size: 'half',
+                  richText: createRichTextParagraphs([
+                    'Inclusivity: We celebrate diverse voices and perspectives from around the world.',
+                    'Impact: We aim to inspire positive change and help our readers grow professionally and personally.',
+                  ]),
+                },
+              ],
+            },
+            // CTA section
+            {
+              blockType: 'cta',
+              heading: 'Join Our Community',
+              description: 'Subscribe to our newsletter and be the first to receive our latest articles, exclusive insights, and special announcements.',
+              links: [
+                { label: 'Subscribe Now', url: '/contact', variant: 'primary' },
+              ],
+            },
+          ],
+        })
+      }
     }
 
     // Contact page - Rich contact page with multiple sections
     if (this.shouldSeedItem('contact')) {
-      await this.create('pages', {
-        title: 'Contact',
-        slug: 'contact',
-        template: 'detail',
-        _status: 'published',
-        hero: {
-          type: 'standard',
-          heading: 'Get in Touch',
-          subheading: 'We would love to hear from you. Send us a message and we will respond as soon as possible.',
-        },
-        content: [
-          // Introduction section
-          {
-            blockType: 'content',
-            backgroundColor: 'none',
-            paddingTop: 'large',
-            paddingBottom: 'large',
-            columns: [
-              {
-                size: 'full',
-                richText: createRichTextParagraphs([
-                  'Have a question, suggestion, or just want to say hello? We\'d love to hear from you.',
-                  'Whether you\'re interested in collaborating, have feedback on our content, or simply want to connect, please don\'t hesitate to reach out. We read and respond to every message.',
-                ]),
-              },
-            ],
+      if (await this.checkIfExists('pages', 'contact')) {
+        this.log('Contact page already exists, skipping.')
+      } else {
+        await this.create('pages', {
+          title: 'Contact',
+          slug: 'contact',
+          template: 'detail',
+          _status: 'published',
+          hero: {
+            type: 'standard',
+            heading: 'Get in Touch',
+            subheading: 'We would love to hear from you. Send us a message and we will respond as soon as possible.',
           },
-          // Contact info section
-          {
-            blockType: 'content',
-            backgroundColor: 'light',
-            paddingTop: 'large',
-            paddingBottom: 'large',
-            columns: [
-              {
-                size: 'full',
-                richText: createRichText('How to Reach Us'),
-              },
-              {
-                size: 'half',
-                richText: createRichTextParagraphs([
-                  'Email: hello@myblog.com',
-                  'Response time: 24-48 hours',
-                  'Available: Monday to Friday, 9 AM - 5 PM EST',
-                ]),
-              },
-              {
-                size: 'half',
-                richText: createRichTextParagraphs([
-                  'Follow us on social media for daily updates and behind-the-scenes content.',
-                  'Twitter | LinkedIn | Instagram | Facebook',
-                ]),
-              },
-            ],
-          },
-          // FAQ section
-          {
-            blockType: 'faq',
-            heading: 'Frequently Asked Questions',
-            items: [
-              {
-                question: 'How often do you publish new articles?',
-                answer: createRichText('We publish new articles every week, typically on Mondays and Thursdays. Subscribe to our newsletter to never miss an update.'),
-              },
-              {
-                question: 'Can I contribute to your blog?',
-                answer: createRichText('Absolutely! We welcome guest contributions from experts and passionate writers. Please email us with your article idea and a brief bio.'),
-              },
-              {
-                question: 'Do you accept sponsorships or partnerships?',
-                answer: createRichText('Yes, we do. We work with brands and organisations that align with our values. Please contact us to discuss partnership opportunities.'),
-              },
-              {
-                question: 'How can I unsubscribe from the newsletter?',
-                answer: createRichText('You can unsubscribe at any time by clicking the unsubscribe link at the bottom of any newsletter email.'),
-              },
-            ],
-          },
-          // CTA section
-          {
-            blockType: 'cta',
-            heading: 'Ready to Connect?',
-            description: 'Fill out the form below and we\'ll get back to you as soon as possible.',
-            links: [
-              { label: 'Send Message', url: '#contact-form', variant: 'primary' },
-            ],
-          },
-        ],
-      })
+          content: [
+            // Introduction section
+            {
+              blockType: 'content',
+              backgroundColor: 'none',
+              paddingTop: 'large',
+              paddingBottom: 'large',
+              columns: [
+                {
+                  size: 'full',
+                  richText: createRichTextParagraphs([
+                    'Have a question, suggestion, or just want to say hello? We\'d love to hear from you.',
+                    'Whether you\'re interested in collaborating, have feedback on our content, or simply want to connect, please don\'t hesitate to reach out. We read and respond to every message.',
+                  ]),
+                },
+              ],
+            },
+            // Contact info section
+            {
+              blockType: 'content',
+              backgroundColor: 'light',
+              paddingTop: 'large',
+              paddingBottom: 'large',
+              columns: [
+                {
+                  size: 'full',
+                  richText: createRichText('How to Reach Us'),
+                },
+                {
+                  size: 'half',
+                  richText: createRichTextParagraphs([
+                    'Email: hello@myblog.com',
+                    'Response time: 24-48 hours',
+                    'Available: Monday to Friday, 9 AM - 5 PM EST',
+                  ]),
+                },
+                {
+                  size: 'half',
+                  richText: createRichTextParagraphs([
+                    'Follow us on social media for daily updates and behind-the-scenes content.',
+                    'Twitter | LinkedIn | Instagram | Facebook',
+                  ]),
+                },
+              ],
+            },
+            // FAQ section
+            {
+              blockType: 'faq',
+              heading: 'Frequently Asked Questions',
+              items: [
+                {
+                  question: 'How often do you publish new articles?',
+                  answer: createRichText('We publish new articles every week, typically on Mondays and Thursdays. Subscribe to our newsletter to never miss an update.'),
+                },
+                {
+                  question: 'Can I contribute to your blog?',
+                  answer: createRichText('Absolutely! We welcome guest contributions from experts and passionate writers. Please email us with your article idea and a brief bio.'),
+                },
+                {
+                  question: 'Do you accept sponsorships or partnerships?',
+                  answer: createRichText('Yes, we do. We work with brands and organisations that align with our values. Please contact us to discuss partnership opportunities.'),
+                },
+                {
+                  question: 'How can I unsubscribe from the newsletter?',
+                  answer: createRichText('You can unsubscribe at any time by clicking the unsubscribe link at the bottom of any newsletter email.'),
+                },
+              ],
+            },
+            // CTA section
+            {
+              blockType: 'cta',
+              heading: 'Ready to Connect?',
+              description: 'Fill out the form below and we\'ll get back to you as soon as possible.',
+              links: [
+                { label: 'Send Message', url: '#contact-form', variant: 'primary' },
+              ],
+            },
+          ],
+        })
+      }
+    }
+
+    // Blocks Showcase page
+    if (this.shouldSeedItem('blocks-showcase')) {
+      await ensureShowcasePage(this.payload, { updateHeader: true })
     }
   }
 

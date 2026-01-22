@@ -110,7 +110,7 @@ export class CoreSeeder extends BaseSeeder {
     }
 
     this.log('Seeding categories...')
-    
+
     const categoryData = [
       { name: 'Exhibitions', slug: 'exhibitions', description: 'Current and upcoming exhibitions' },
       { name: 'Research', slug: 'research', description: 'Academic research and discoveries' },
@@ -118,8 +118,20 @@ export class CoreSeeder extends BaseSeeder {
     ]
 
     const categories: Record<string, string> = {}
-    
+
     for (const data of categoryData) {
+      if (await this.checkIfExists('categories', data.slug)) {
+        const existing = await this.payload.find({
+          collection: 'categories',
+          where: { slug: { equals: data.slug } },
+          limit: 1,
+          depth: 0,
+        })
+        if (existing.docs[0]) {
+          categories[data.slug] = String(existing.docs[0].id)
+        }
+        continue
+      }
       const category = await this.create('categories', {
         title: data.name,
         slug: data.slug,
@@ -147,6 +159,18 @@ export class CoreSeeder extends BaseSeeder {
     const tags: Record<string, string> = {}
 
     for (const data of tagData.slice(0, this.getItemCount('tags', 3))) {
+      if (await this.checkIfExists('tags', data.slug)) {
+        const existing = await this.payload.find({
+          collection: 'tags',
+          where: { slug: { equals: data.slug } },
+          limit: 1,
+          depth: 0,
+        })
+        if (existing.docs[0]) {
+          tags[data.slug] = String(existing.docs[0].id)
+        }
+        continue
+      }
       const tag = await this.create('tags', {
         title: data.title,
         slug: data.slug,
@@ -300,9 +324,22 @@ export class CoreSeeder extends BaseSeeder {
     ]
 
     const places: Record<string, string> = {}
-    
+
     for (const data of placesData.slice(0, this.getItemCount('places', 5))) {
       if (!this.shouldSeedItem(data.slug)) {
+        continue
+      }
+      if (await this.checkIfExists('places', data.slug)) {
+        this.log(`Place "${data.name}" already exists, skipping.`)
+        const existing = await this.payload.find({
+          collection: 'places',
+          where: { slug: { equals: data.slug } },
+          limit: 1,
+          depth: 0,
+        })
+        if (existing.docs[0]) {
+          places[data.slug] = String(existing.docs[0].id)
+        }
         continue
       }
       const place = await this.create('places', {
@@ -639,7 +676,7 @@ export class CoreSeeder extends BaseSeeder {
     ]
 
     const people: Record<string, string> = {}
-    
+
     for (const data of peopleData.slice(0, this.getItemCount('people', 5))) {
       if (!this.shouldSeedItem(data.slug)) {
         continue
@@ -672,95 +709,103 @@ export class CoreSeeder extends BaseSeeder {
 
     // Home page
     if (this.shouldSeedItem('home')) {
-      await this.create('pages', {
-      title: 'Home',
-      slug: 'home',
-      template: 'home',
-      _status: 'published',
-      hero: {
-        type: 'fullscreen',
-        heading: 'Discover Our Collection',
-        subheading: 'Explore thousands of archive items, artworks, and historical treasures from around the world.',
-      },
-      content: [
-        {
-          blockType: 'grid',
-          heading: 'Featured Collections',
-          description: 'Browse highlighted themes from our catalog.',
-          style: 'cards',
-          columns: '3',
-          gap: 'medium',
-          alignment: 'left',
-          items: [
-            { title: 'Renaissance Masters', description: 'Masterpieces from the Renaissance era' },
-            { title: 'Ancient Civilizations', description: 'Treasures from the ancient world' },
-            { title: 'Impressionist Gallery', description: 'Light and color captured on canvas' },
-          ],
-        },
-        {
-          blockType: 'archive',
-          heading: 'Featured Archive Items',
-          description: 'A curated selection of standout items.',
-          populateBy: 'collection',
-          relationTo: 'archive-items',
-          limit: 6,
-          layout: 'grid',
-          columns: '3',
-          showImage: true,
-          showExcerpt: true,
-          showDate: false,
-          showAuthor: false,
-          link: {
-            show: true,
-            label: 'View All Archive Items',
-            url: '/archive-items',
+      if (await this.checkIfExists('pages', 'home')) {
+        this.log('Home page already exists, skipping.')
+      } else {
+        await this.create('pages', {
+          title: 'Home',
+          slug: 'home',
+          template: 'home',
+          _status: 'published',
+          hero: {
+            type: 'fullscreen',
+            heading: 'Discover Our Collection',
+            subheading: 'Explore thousands of archive items, artworks, and historical treasures from around the world.',
           },
-        },
-      ],
-    })
+          content: [
+            {
+              blockType: 'grid',
+              heading: 'Featured Collections',
+              description: 'Browse highlighted themes from our catalog.',
+              style: 'cards',
+              columns: '3',
+              gap: 'medium',
+              alignment: 'left',
+              items: [
+                { title: 'Renaissance Masters', description: 'Masterpieces from the Renaissance era' },
+                { title: 'Ancient Civilizations', description: 'Treasures from the ancient world' },
+                { title: 'Impressionist Gallery', description: 'Light and color captured on canvas' },
+              ],
+            },
+            {
+              blockType: 'archive',
+              heading: 'Featured Archive Items',
+              description: 'A curated selection of standout items.',
+              populateBy: 'collection',
+              relationTo: 'archive-items',
+              limit: 6,
+              layout: 'grid',
+              columns: '3',
+              showImage: true,
+              showExcerpt: true,
+              showDate: false,
+              showAuthor: false,
+              link: {
+                show: true,
+                label: 'View All Archive Items',
+                url: '/archive-items',
+              },
+            },
+          ],
+        })
+      }
     }
 
     // About page
     if (this.shouldSeedItem('about')) {
-      await this.create('pages', {
-      title: 'About the Archive',
-      slug: 'about',
-      template: 'detail',
-      _status: 'published',
-      hero: {
-        type: 'standard',
-        heading: 'About Us',
-        subheading: 'Preserving and sharing cultural heritage for future generations.',
-      },
-      content: [
-        {
-          blockType: 'content',
-          backgroundColor: 'none',
-          paddingTop: 'medium',
-          paddingBottom: 'medium',
-          columns: [
+      if (await this.checkIfExists('pages', 'about')) {
+        this.log('About page already exists, skipping.')
+      } else {
+        await this.create('pages', {
+          title: 'About the Archive',
+          slug: 'about',
+          template: 'detail',
+          _status: 'published',
+          hero: {
+            type: 'standard',
+            heading: 'About Us',
+            subheading: 'Preserving and sharing cultural heritage for future generations.',
+          },
+          content: [
             {
-              size: 'full',
-              richText: createRichTextParagraphs([
-                'Our archive is dedicated to preserving and sharing the world\'s cultural heritage.',
-                'With collections spanning thousands of years and multiple continents, we offer visitors a unique journey through human history and creativity.',
-                'Our mission is to inspire curiosity, foster learning, and connect people with the stories of our shared past.',
-              ]),
+              blockType: 'content',
+              backgroundColor: 'none',
+              paddingTop: 'medium',
+              paddingBottom: 'medium',
+              columns: [
+                {
+                  size: 'full',
+                  richText: createRichTextParagraphs([
+                    'Our archive is dedicated to preserving and sharing the world\'s cultural heritage.',
+                    'With collections spanning thousands of years and multiple continents, we offer visitors a unique journey through human history and creativity.',
+                    'Our mission is to inspire curiosity, foster learning, and connect people with the stories of our shared past.',
+                  ]),
+                },
+              ],
+            },
+            {
+              blockType: 'timeline',
+              heading: 'Our History',
+              layout: 'vertical',
+              events: [
+                { date: '1850', title: 'Foundation', description: createRichText('The archive was founded by a group of passionate collectors.') },
+                { date: '1920', title: 'Major Expansion', description: createRichText('A new wing was added to house the growing collection.') },
+                { date: '2000', title: 'Digital Initiative', description: createRichText('The archive launched its first digital collection.') },
+              ],
             },
           ],
-        },
-        {
-          blockType: 'timeline',
-          heading: 'Our History',
-          layout: 'vertical',
-          events: [
-            { date: '1850', title: 'Foundation', description: createRichText('The archive was founded by a group of passionate collectors.') },
-            { date: '1920', title: 'Major Expansion', description: createRichText('A new wing was added to house the growing collection.') },
-            { date: '2000', title: 'Digital Initiative', description: createRichText('The archive launched its first digital collection.') },
-          ],
-        },
-      ],
-    })
+        })
+      }
     }
 
     await ensureShowcasePage(this.payload, { updateHeader: true })
@@ -872,6 +917,10 @@ export class CoreSeeder extends BaseSeeder {
 
     for (const post of posts) {
       if (this.shouldSeedItem(post.slug)) {
+        if (await this.checkIfExists('posts', post.slug)) {
+          this.log(`Post "${post.title}" already exists, skipping.`)
+          continue
+        }
         await this.create('posts', {
           title: post.title,
           slug: post.slug,
@@ -880,9 +929,9 @@ export class CoreSeeder extends BaseSeeder {
           contentBlocks: post.contentBlocks,
           categories: categories[post.category] ? [categories[post.category]] : [],
           author: adminId,
-        _status: 'published',
-        publishedAt: new Date().toISOString(),
-      })
+          _status: 'published',
+          publishedAt: new Date().toISOString(),
+        })
       }
     }
   }
@@ -1125,6 +1174,10 @@ export class CoreSeeder extends BaseSeeder {
 
     for (const event of eventsData.slice(0, this.getItemCount('events', 5))) {
       if (!this.shouldSeedItem(event.slug)) {
+        continue
+      }
+      if (await this.checkIfExists('events', event.slug)) {
+        this.log(`Event "${event.title}" already exists, skipping.`)
         continue
       }
       await this.create('events', {

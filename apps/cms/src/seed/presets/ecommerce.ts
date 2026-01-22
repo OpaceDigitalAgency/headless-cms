@@ -7,6 +7,7 @@
 
 import type { Payload } from 'payload'
 import { BaseSeeder, createRichText, createRichTextParagraphs, type SeedOptions } from '../base'
+import { ensureShowcasePage } from '../showcase'
 
 export class EcommerceSeeder extends BaseSeeder {
   constructor(payload: Payload, options: SeedOptions = {}) {
@@ -196,7 +197,7 @@ export class EcommerceSeeder extends BaseSeeder {
     }
 
     this.log('Seeding product categories...')
-    
+
     const categoryData = [
       { name: 'Electronics', slug: 'electronics', description: 'Gadgets, devices, and tech accessories' },
       { name: 'Clothing', slug: 'clothing', description: 'Apparel and fashion items' },
@@ -206,8 +207,22 @@ export class EcommerceSeeder extends BaseSeeder {
     ]
 
     const categories: Record<string, string> = {}
-    
+
     for (const data of categoryData.slice(0, this.getItemCount('product-categories', 5))) {
+      if (await this.checkIfExists('product-categories', data.slug)) {
+        this.log(`Category "${data.name}" already exists, skipping.`)
+        const existing = await this.payload.find({
+          collection: 'product-categories',
+          where: { slug: { equals: data.slug } },
+          limit: 1,
+          depth: 0,
+        })
+        if (existing.docs[0]) {
+          categories[data.slug] = String(existing.docs[0].id)
+        }
+        continue
+      }
+
       const category = await this.create('product-categories', {
         name: data.name,
         slug: data.slug,
@@ -252,7 +267,7 @@ export class EcommerceSeeder extends BaseSeeder {
     ]
 
     const collections: Record<string, string> = {}
-    
+
     for (const data of collectionsData) {
       const collection = await this.create('product-collections', {
         name: data.name,
@@ -591,106 +606,123 @@ export class EcommerceSeeder extends BaseSeeder {
 
     // Home page
     if (this.shouldSeedItem('home')) {
-      await this.create('pages', {
-      title: 'Home',
-      slug: 'home',
-      template: 'home',
-      _status: 'published',
-      hero: {
-        type: 'fullscreen',
-        heading: 'Summer Sale Now On',
-        subheading: 'Up to 50% off selected items. Shop now and save big!',
-        links: [
-          { label: 'Shop Now', url: '/products', variant: 'primary' },
-          { label: 'View Collections', url: '/collections', variant: 'secondary' },
-        ],
-      },
-      content: [
-        {
-          blockType: 'grid',
-          heading: 'Shop by Category',
-          style: 'cards',
-          columns: '5',
-          items: [
-            { title: 'Electronics', description: 'Gadgets & Tech' },
-            { title: 'Clothing', description: 'Fashion & Apparel' },
-            { title: 'Home & Garden', description: 'Furniture & Decor' },
-            { title: 'Sports', description: 'Athletic Gear' },
-            { title: 'Books', description: 'Books & Media' },
+      if (await this.checkIfExists('pages', 'home')) {
+        this.log('Home page already exists, skipping.')
+      } else {
+        await this.create('pages', {
+          title: 'Home',
+          slug: 'home',
+          template: 'home',
+          _status: 'published',
+          hero: {
+            type: 'fullscreen',
+            heading: 'Summer Sale Now On',
+            subheading: 'Up to 50% off selected items. Shop now and save big!',
+            links: [
+              { label: 'Shop Now', url: '/products', variant: 'primary' },
+              { label: 'View Collections', url: '/collections', variant: 'secondary' },
+            ],
+          },
+          content: [
+            {
+              blockType: 'grid',
+              heading: 'Shop by Category',
+              style: 'cards',
+              columns: '5',
+              items: [
+                { title: 'Electronics', description: 'Gadgets & Tech' },
+                { title: 'Clothing', description: 'Fashion & Apparel' },
+                { title: 'Home & Garden', description: 'Furniture & Decor' },
+                { title: 'Sports', description: 'Athletic Gear' },
+                { title: 'Books', description: 'Books & Media' },
+              ],
+            },
+            {
+              blockType: 'archive',
+              heading: 'Featured Products',
+              collection: 'products',
+              limit: 8,
+              showFeaturedImage: true,
+            },
           ],
-        },
-        {
-          blockType: 'archive',
-          heading: 'Featured Products',
-          collection: 'products',
-          limit: 8,
-          showFeaturedImage: true,
-        },
-      ],
-    })
+        })
+      }
     }
 
     // About page
     if (this.shouldSeedItem('about')) {
-      await this.create('pages', {
-      title: 'About Us',
-      slug: 'about',
-      template: 'detail',
-      _status: 'published',
-      hero: {
-        type: 'standard',
-        heading: 'About Our Store',
-        subheading: 'Quality products, exceptional service.',
-      },
-      content: [
-        {
-          blockType: 'content',
-          columns: 'oneColumn',
-          content: createRichTextParagraphs([
-            'Welcome to our online store! We are dedicated to providing you with the best products at competitive prices.',
-            'Founded in 2020, we have grown to become a trusted destination for quality products across multiple categories.',
-            'Our commitment to customer satisfaction drives everything we do. From carefully curating our product selection to providing excellent customer support, we strive to exceed your expectations.',
-          ]),
-        },
-        {
-          blockType: 'grid',
-          heading: 'Why Shop With Us',
-          style: 'features',
-          columns: '3',
-          items: [
-            { icon: 'truck', title: 'Free Shipping', description: 'On orders over $50' },
-            { icon: 'shield', title: 'Secure Payment', description: '100% secure checkout' },
-            { icon: 'headphones', title: '24/7 Support', description: 'Always here to help' },
+      if (await this.checkIfExists('pages', 'about')) {
+        this.log('About page already exists, skipping.')
+      } else {
+        await this.create('pages', {
+          title: 'About Us',
+          slug: 'about',
+          template: 'detail',
+          _status: 'published',
+          hero: {
+            type: 'standard',
+            heading: 'About Our Store',
+            subheading: 'Quality products, exceptional service.',
+          },
+          content: [
+            {
+              blockType: 'content',
+              columns: 'oneColumn',
+              content: createRichTextParagraphs([
+                'Welcome to our online store! We are dedicated to providing you with the best products at competitive prices.',
+                'Founded in 2020, we have grown to become a trusted destination for quality products across multiple categories.',
+                'Our commitment to customer satisfaction drives everything we do. From carefully curating our product selection to providing excellent customer support, we strive to exceed your expectations.',
+              ]),
+            },
+            {
+              blockType: 'grid',
+              heading: 'Why Shop With Us',
+              style: 'features',
+              columns: '3',
+              items: [
+                { icon: 'truck', title: 'Free Shipping', description: 'On orders over $50' },
+                { icon: 'shield', title: 'Secure Payment', description: '100% secure checkout' },
+                { icon: 'headphones', title: '24/7 Support', description: 'Always here to help' },
+              ],
+            },
           ],
-        },
-      ],
-    })
+        })
+      }
     }
 
     // Contact page
     if (this.shouldSeedItem('contact')) {
-      await this.create('pages', {
-      title: 'Contact',
-      slug: 'contact',
-      template: 'detail',
-      _status: 'published',
-      hero: {
-        type: 'minimal',
-        heading: 'Contact Us',
-        subheading: 'We would love to hear from you.',
-      },
-      content: [
-        {
-          blockType: 'content',
-          columns: 'oneColumn',
-          content: createRichText('Have a question about an order or need help finding the perfect product? Our team is here to help!'),
-        },
-        {
-          blockType: 'form',
-          formType: 'contact',
-        },
-      ],
-    })
+      if (await this.checkIfExists('pages', 'contact')) {
+        this.log('Contact page already exists, skipping.')
+      } else {
+        await this.create('pages', {
+          title: 'Contact',
+          slug: 'contact',
+          template: 'detail',
+          _status: 'published',
+          hero: {
+            type: 'minimal',
+            heading: 'Contact Us',
+            subheading: 'We would love to hear from you.',
+          },
+          content: [
+            {
+              blockType: 'content',
+              columns: 'oneColumn',
+              content: createRichText('Have a question about an order or need help finding the perfect product? Our team is here to help!'),
+            },
+            {
+              blockType: 'form',
+              formType: 'contact',
+            },
+          ],
+        })
+      }
+    }
+
+    // Blocks Showcase page
+    if (this.shouldSeedItem('blocks-showcase')) {
+      await ensureShowcasePage(this.payload, { updateHeader: true })
     }
   }
 
