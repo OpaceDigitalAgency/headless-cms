@@ -7,7 +7,6 @@
 
 import type { Payload } from 'payload'
 import { BaseSeeder, createRichText, createRichTextParagraphs, type SeedOptions } from '../base'
-import { ensureShowcasePage } from '../showcase'
 
 export class BlogSeeder extends BaseSeeder {
   constructor(payload: Payload, options: SeedOptions = {}) {
@@ -226,7 +225,7 @@ export class BlogSeeder extends BaseSeeder {
           depth: 0,
         })
         if (existing.docs[0]) {
-          categories[data.slug] = String(existing.docs[0].id)
+          categories[data.slug] = existing.docs[0].id as any
         }
         continue
       }
@@ -239,6 +238,7 @@ export class BlogSeeder extends BaseSeeder {
       categories[data.slug] = category.id
     }
 
+    this.log(`Seeding categories completed. Found/Created: ${Object.keys(categories).join(', ')}`)
     return categories
   }
 
@@ -569,10 +569,6 @@ export class BlogSeeder extends BaseSeeder {
       }
     }
 
-    // Blocks Showcase page
-    if (this.shouldSeedItem('blocks-showcase')) {
-      await ensureShowcasePage(this.payload, { updateHeader: true })
-    }
   }
 
   private async seedPosts(categories: Record<string, string>): Promise<void> {
@@ -749,6 +745,7 @@ export class BlogSeeder extends BaseSeeder {
 
     for (const post of posts.slice(0, this.getItemCount('posts', 5))) {
       if (this.shouldSeedItem(post.slug)) {
+        this.log(`Seeding post "${post.title}" with category slug "${post.category}" -> ID "${categories[post.category]}"`)
         await this.create('posts', {
           title: post.title,
           slug: post.slug,

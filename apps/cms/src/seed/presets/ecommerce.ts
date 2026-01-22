@@ -7,7 +7,6 @@
 
 import type { Payload } from 'payload'
 import { BaseSeeder, createRichText, createRichTextParagraphs, type SeedOptions } from '../base'
-import { ensureShowcasePage } from '../showcase'
 
 export class EcommerceSeeder extends BaseSeeder {
   constructor(payload: Payload, options: SeedOptions = {}) {
@@ -218,7 +217,7 @@ export class EcommerceSeeder extends BaseSeeder {
           depth: 0,
         })
         if (existing.docs[0]) {
-          categories[data.slug] = String(existing.docs[0].id)
+          categories[data.slug] = existing.docs[0].id as any
         }
         continue
       }
@@ -720,10 +719,6 @@ export class EcommerceSeeder extends BaseSeeder {
       }
     }
 
-    // Blocks Showcase page
-    if (this.shouldSeedItem('blocks-showcase')) {
-      await ensureShowcasePage(this.payload, { updateHeader: true })
-    }
   }
 
   private async seedGlobals(): Promise<void> {

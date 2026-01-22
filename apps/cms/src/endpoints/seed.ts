@@ -39,13 +39,16 @@ const COLLECTION_SEED_CONFIG: Record<string, {
   'product-categories': { label: 'Product Categories', icon: 'box', hasSeedData: true, hasSeedMedia: false },
   'product-collections': { label: 'Product Collections', icon: 'shopping-bag', hasSeedData: true, hasSeedMedia: false },
   events: { label: 'Events', icon: 'calendar', hasSeedData: true, hasSeedMedia: true },
-  'archive-items': { label: 'Archive Items', icon: 'archive', hasSeedData: true, hasSeedMedia: true },
 }
 
 const COLLECTION_PRESET_OVERRIDES: Record<string, PresetId> = {
   products: 'ecommerce',
   'product-categories': 'ecommerce',
   'product-collections': 'ecommerce',
+  'archive-items': 'archive',
+  people: 'archive',
+  places: 'archive',
+  events: 'archive',
 }
 
 /**
@@ -154,13 +157,13 @@ export const getCollectionsStatusEndpoint: Endpoint = {
 
       return Response.json({ collections })
     } catch (error) {
-      return Response.json({ 
+      return Response.json({
         collections: Object.entries(COLLECTION_SEED_CONFIG).map(([slug, config]) => ({
           slug,
           ...config,
           count: 0,
         })),
-        error: 'Failed to fetch collection status' 
+        error: 'Failed to fetch collection status'
       })
     }
   },
@@ -255,7 +258,7 @@ export const seedActionEndpoint: Endpoint = {
             { status: 400 }
           )
       }
-    } catch (error) {
+    } catch (error: any) {
       payload.logger.error('Seed action failed:', error)
       const errorMessage = error instanceof Error ? error.message : String(error)
       return Response.json(
@@ -360,20 +363,9 @@ export const seedCollectionEndpoint: Endpoint = {
             { status: 400 }
           )
       }
-    } catch (error) {
+    } catch (error: any) {
       payload.logger.error('Collection seed action failed:', error)
-      payload.logger.error('Error type:', typeof error)
-      payload.logger.error('Error constructor:', error?.constructor?.name)
-      if (error instanceof Error) {
-        payload.logger.error('Error message:', error.message)
-        payload.logger.error('Error stack:', error.stack)
-      }
-      // Also log as JSON to see all properties
-      try {
-        payload.logger.error('Error JSON:', JSON.stringify(error, Object.getOwnPropertyNames(error), 2))
-      } catch {
-        payload.logger.error('Could not stringify error')
-      }
+
       const errorMessage = error instanceof Error ? error.message : String(error)
       return Response.json(
         { success: false, message: `Operation failed: ${errorMessage}` },
@@ -501,8 +493,8 @@ export const seedContentTypeEndpoint: Endpoint = {
                 excerpt: seedItem.excerpt,
                 content: typeof seedItem.content === 'string' ? createRichText(seedItem.content) : seedItem.content,
                 blocks: seedItem.blocks || [],
-                featuredImage: seedItem.featuredImage,
-                gallery: seedItem.gallery || [],
+                featuredImage: seedItem.featuredImage as any,
+                gallery: (seedItem.gallery || []) as any,
                 contentType: contentTypeDoc.id,
                 status: seedItem.status || 'published',
                 customData: seedItem.customData || {},
@@ -527,8 +519,8 @@ export const seedContentTypeEndpoint: Endpoint = {
                 excerpt: item.excerpt,
                 content: typeof item.content === 'string' ? createRichText(item.content) : item.content,
                 blocks: item.blocks || [],
-                featuredImage: item.featuredImage,
-                gallery: item.gallery || [],
+                featuredImage: item.featuredImage as any,
+                gallery: (item.gallery || []) as any,
                 contentType: contentTypeDoc.id,
                 status: item.status || 'published',
                 customData: item.customData || {},
@@ -582,7 +574,7 @@ export const seedContentTypeEndpoint: Endpoint = {
             { status: 400 }
           )
       }
-    } catch (error) {
+    } catch (error: any) {
       payload.logger.error('Content type seed action failed:', error)
       const errorMessage = error instanceof Error ? error.message : String(error)
       return Response.json(
@@ -618,20 +610,19 @@ export const seedShowcaseEndpoint: Endpoint = {
     }
 
     try {
-      const page = await ensureShowcasePage(payload, { updateHeader: true })
+      const result = await ensureShowcasePage(payload, { updateHeader: true })
+      const pageId = ('id' in result) ? result.id : (Array.isArray(result) ? result[0]?.id : undefined)
+      const slug = ('slug' in result) ? result.slug : (Array.isArray(result) ? result[0]?.slug : undefined)
+
       return Response.json({
         success: true,
         message: 'Blocks Showcase page created/updated',
-        pageId: page.id,
-        slug: page.slug,
+        pageId,
+        slug,
       })
-    } catch (error) {
+    } catch (error: any) {
       payload.logger.error('Showcase seed failed:', error)
       const errorMessage = error instanceof Error ? error.message : String(error)
-      const errorStack = error instanceof Error ? error.stack : undefined
-      if (errorStack) {
-        payload.logger.error('Stack trace:', errorStack)
-      }
       return Response.json(
         { success: false, message: `Operation failed: ${errorMessage}` },
         { status: 500 }
@@ -685,7 +676,7 @@ export const seedAllEndpoint: Endpoint = {
         )
       }
 
-      const seeder = createSeeder('archive-next', payload, {
+      const seeder = createSeeder('archive', payload, {
         downloadMedia: false,
         clearExisting: false,
         collections: enabledCollections,
@@ -712,7 +703,7 @@ export const seedAllEndpoint: Endpoint = {
             { status: 400 }
           )
       }
-    } catch (error) {
+    } catch (error: any) {
       payload.logger.error('Seed all action failed:', error)
       const errorMessage = error instanceof Error ? error.message : String(error)
       return Response.json(
@@ -827,7 +818,7 @@ export const seedItemEndpoint: Endpoint = {
         success: true,
         message: `Successfully seeded "${seedItem.title}"`,
       })
-    } catch (error) {
+    } catch (error: any) {
       payload.logger.error('Seed item action failed:', error)
       const errorMessage = error instanceof Error ? error.message : String(error)
       return Response.json(

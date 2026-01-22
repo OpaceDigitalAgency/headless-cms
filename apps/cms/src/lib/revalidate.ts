@@ -19,8 +19,13 @@ import { revalidatePath, revalidateTag } from 'next/cache'
 export async function revalidatePage(slug: string, previousSlug?: string) {
   const path = slug === 'home' ? '/' : `/${slug}`
 
-  revalidatePath(path)
-  revalidateTag('pages')
+  try {
+    revalidatePath(path)
+    revalidateTag('pages')
+  } catch (err) {
+    // Silence errors when revalidating outside of a request context (e.g. seeding)
+    console.warn(`[Revalidate] Skipping page revalidation for ${path}: ${err instanceof Error ? err.message : String(err)}`)
+  }
 
   // If slug changed, also revalidate the old path
   if (previousSlug && previousSlug !== slug) {
@@ -37,9 +42,13 @@ export async function revalidatePage(slug: string, previousSlug?: string) {
 export async function revalidatePost(slug: string, previousSlug?: string) {
   const path = `/blog/${slug}`
 
-  revalidatePath(path)
-  revalidatePath('/blog') // Blog listing page
-  revalidateTag('posts')
+  try {
+    revalidatePath(path)
+    revalidatePath('/blog') // Blog listing page
+    revalidateTag('posts')
+  } catch (err) {
+    console.warn(`[Revalidate] Skipping post revalidation for ${path}: ${err instanceof Error ? err.message : String(err)}`)
+  }
 
   // If slug changed, also revalidate the old path
   if (previousSlug && previousSlug !== slug) {
@@ -55,9 +64,13 @@ export async function revalidatePost(slug: string, previousSlug?: string) {
 export async function revalidateArchiveItem(slug: string, previousSlug?: string) {
   const path = `/archive-items/${slug}`
 
-  revalidatePath(path)
-  revalidatePath('/archive-items') // Archive items listing page
-  revalidateTag('archive-items')
+  try {
+    revalidatePath(path)
+    revalidatePath('/archive-items') // Archive items listing page
+    revalidateTag('archive-items')
+  } catch (err) {
+    console.warn(`[Revalidate] Skipping archive item revalidation for ${path}: ${err instanceof Error ? err.message : String(err)}`)
+  }
 
   // If slug changed, also revalidate the old path
   if (previousSlug && previousSlug !== slug) {
@@ -73,9 +86,13 @@ export async function revalidateArchiveItem(slug: string, previousSlug?: string)
 export async function revalidatePerson(slug: string, previousSlug?: string) {
   const path = `/people/${slug}`
 
-  revalidatePath(path)
-  revalidatePath('/people') // People listing page
-  revalidateTag('people')
+  try {
+    revalidatePath(path)
+    revalidatePath('/people') // People listing page
+    revalidateTag('people')
+  } catch (err) {
+    console.warn(`[Revalidate] Skipping person revalidation for ${path}: ${err instanceof Error ? err.message : String(err)}`)
+  }
 
   // If slug changed, also revalidate the old path
   if (previousSlug && previousSlug !== slug) {
@@ -91,9 +108,13 @@ export async function revalidatePerson(slug: string, previousSlug?: string) {
 export async function revalidatePlace(slug: string, previousSlug?: string) {
   const path = `/places/${slug}`
 
-  revalidatePath(path)
-  revalidatePath('/places') // Places listing page
-  revalidateTag('places')
+  try {
+    revalidatePath(path)
+    revalidatePath('/places') // Places listing page
+    revalidateTag('places')
+  } catch (err) {
+    console.warn(`[Revalidate] Skipping place revalidation for ${path}: ${err instanceof Error ? err.message : String(err)}`)
+  }
 
   // If slug changed, also revalidate the old path
   if (previousSlug && previousSlug !== slug) {
@@ -109,9 +130,13 @@ export async function revalidatePlace(slug: string, previousSlug?: string) {
 export async function revalidateEvent(slug: string, previousSlug?: string) {
   const path = `/events/${slug}`
 
-  revalidatePath(path)
-  revalidatePath('/events') // Events listing page
-  revalidateTag('events')
+  try {
+    revalidatePath(path)
+    revalidatePath('/events') // Events listing page
+    revalidateTag('events')
+  } catch (err) {
+    console.warn(`[Revalidate] Skipping event revalidation for ${path}: ${err instanceof Error ? err.message : String(err)}`)
+  }
 
   // If slug changed, also revalidate the old path
   if (previousSlug && previousSlug !== slug) {
@@ -125,9 +150,13 @@ export async function revalidateEvent(slug: string, previousSlug?: string) {
  * Revalidate header global
  */
 export async function revalidateHeader() {
-  revalidateTag('header')
-  // Header appears on all pages, revalidate the layout
-  revalidatePath('/', 'layout')
+  try {
+    revalidateTag('header')
+    // Header appears on all pages, revalidate the layout
+    revalidatePath('/', 'layout')
+  } catch (err) {
+    console.warn(`[Revalidate] Skipping header revalidation: ${err instanceof Error ? err.message : String(err)}`)
+  }
   console.log('[Revalidate] Header global')
 }
 
@@ -135,9 +164,13 @@ export async function revalidateHeader() {
  * Revalidate footer global
  */
 export async function revalidateFooter() {
-  revalidateTag('footer')
-  // Footer appears on all pages, revalidate the layout
-  revalidatePath('/', 'layout')
+  try {
+    revalidateTag('footer')
+    // Footer appears on all pages, revalidate the layout
+    revalidatePath('/', 'layout')
+  } catch (err) {
+    console.warn(`[Revalidate] Skipping footer revalidation: ${err instanceof Error ? err.message : String(err)}`)
+  }
   console.log('[Revalidate] Footer global')
 }
 
@@ -145,9 +178,13 @@ export async function revalidateFooter() {
  * Revalidate settings global
  */
 export async function revalidateSettings() {
-  revalidateTag('settings')
-  // Settings affect all pages, revalidate the layout
-  revalidatePath('/', 'layout')
+  try {
+    revalidateTag('settings')
+    // Settings affect all pages, revalidate the layout
+    revalidatePath('/', 'layout')
+  } catch (err) {
+    console.warn(`[Revalidate] Skipping settings revalidation: ${err instanceof Error ? err.message : String(err)}`)
+  }
   console.log('[Revalidate] Settings global')
 }
 

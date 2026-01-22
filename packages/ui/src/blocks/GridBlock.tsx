@@ -44,7 +44,7 @@ export function GridBlock({ block }: GridBlockProps) {
             {heading}
           </h2>
         )}
-        <div className={`grid gap-6 ${gridCols}`}>
+        <div className={`grid ${isAgencyCards || isAgencyList ? 'gap-8' : 'gap-6'} ${gridCols}`}>
           {items.map((item, index) => (
             <div
               key={index}

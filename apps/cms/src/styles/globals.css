@@ -426,13 +426,11 @@
     --border-width: 1px;
     --letter-spacing: -0.02em;
     --container-max: 90rem;
-    --skin-bg-image:
-      radial-gradient(circle at 10% 20%, rgb(16 185 129 / 0.08), transparent 50%),
-      linear-gradient(to right, rgb(226 232 240 / 0.4) 1px, transparent 1px),
-      linear-gradient(to bottom, rgb(226 232 240 / 0.4) 1px, transparent 1px);
-    --skin-bg-size: 100% 100%, 4rem 4rem, 4rem 4rem;
-    --skin-bg-position: top left;
-    --skin-bg-repeat: no-repeat, repeat, repeat;
+    /* Background grid is applied only to HeroBlock, not globally */
+    --skin-bg-image: none;
+    --skin-bg-size: auto;
+    --skin-bg-position: center;
+    --skin-bg-repeat: no-repeat;
   }
 
   [data-skin="agency"].dark {
@@ -443,13 +441,11 @@
     --color-card: 17 24 39;
     --color-accent: 16 185 129;
     --color-accent-light: 52 211 153;
-    --skin-bg-image:
-      radial-gradient(circle at 10% 20%, rgb(16 185 129 / 0.15), transparent 50%),
-      linear-gradient(to right, rgb(31 41 55 / 0.6) 1px, transparent 1px),
-      linear-gradient(to bottom, rgb(31 41 55 / 0.6) 1px, transparent 1px);
-    --skin-bg-size: 100% 100%, 4rem 4rem, 4rem 4rem;
-    --skin-bg-position: top left;
-    --skin-bg-repeat: no-repeat, repeat, repeat;
+    /* Background grid is applied only to HeroBlock, not globally */
+    --skin-bg-image: none;
+    --skin-bg-size: auto;
+    --skin-bg-position: center;
+    --skin-bg-repeat: no-repeat;
   }
 
   /* ===========================================

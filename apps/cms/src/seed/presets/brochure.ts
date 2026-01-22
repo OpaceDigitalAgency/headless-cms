@@ -7,7 +7,6 @@
 
 import type { Payload } from 'payload'
 import { BaseSeeder, createRichText, createRichTextParagraphs, type SeedOptions } from '../base'
-import { ensureShowcasePage } from '../showcase'
 
 export class BrochureSeeder extends BaseSeeder {
   constructor(payload: Payload, options: SeedOptions = {}) {
@@ -447,10 +446,6 @@ export class BrochureSeeder extends BaseSeeder {
       }
     }
 
-    // Blocks Showcase page
-    if (this.shouldSeedItem('blocks-showcase')) {
-      await ensureShowcasePage(this.payload, { updateHeader: true })
-    }
   }
 
   private async seedGlobals(): Promise<void> {

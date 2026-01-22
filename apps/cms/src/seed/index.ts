@@ -2,6 +2,7 @@ import { getPayload } from 'payload'
 import config from '../payload.config'
 import { downloadAllMedia, SAMPLE_IMAGES, getMediaPath, mediaExists } from './download-media'
 import { createSeeder, isValidPresetId, PRESET_IDS, PRESET_METADATA, type PresetId } from './presets'
+import { ensureShowcasePage } from './showcase'
 import type { SeedOptions } from './base'
 
 /**
@@ -58,7 +59,7 @@ async function seed() {
     // Create Admin User (always needed)
     // ===========================================
     console.log('Creating admin user...')
-    
+
     const existingAdmin = await payload.find({
       collection: 'users',
       where: { email: { equals: 'admin@example.com' } },
@@ -112,6 +113,10 @@ async function seed() {
     console.log('Seeding data...')
     await seeder.seed()
 
+    // Global step: Showcase Page
+    console.log('Building Blocks Showcase page...')
+    await ensureShowcasePage(payload, { updateHeader: true })
+
     console.log('')
     console.log('✅ Database seeded successfully!')
     console.log('')
@@ -153,6 +158,9 @@ export async function seedPreset(
     }
 
     await seeder.seed()
+
+    // Global step: Showcase Page
+    await ensureShowcasePage(payload, { updateHeader: true })
 
     return { success: true, message: `Successfully seeded ${presetId}` }
   } catch (error) {
