@@ -1,6 +1,5 @@
 import Link from 'next/link'
 import Image from 'next/image'
-import { getPosts, getArchiveItems, getPeople, getPlaces, getCustomItems } from '@/lib/payload-api'
 
 interface ArchiveBlockProps {
   block: {
@@ -50,28 +49,22 @@ export async function ArchiveBlock({ block }: ArchiveBlockProps) {
   } else {
     // Fetch from collection
     try {
-      switch (relationTo) {
-        case 'posts':
-          const posts = await getPosts(limit)
-          items = posts.docs
-          break
-        case 'archive-items':
-          const archiveItems = await getArchiveItems(limit)
-          items = archiveItems.docs
-          break
-        case 'people':
-          const people = await getPeople(limit)
-          items = people.docs
-          break
-        case 'places':
-          const places = await getPlaces(limit)
-          items = places.docs
-          break
-        case 'custom-items':
-          const contentTypeId = typeof contentType === 'object' ? contentType?.id : contentType
-          const customItems = await getCustomItems(limit, contentTypeId)
-          items = customItems.docs
-          break
+      const params = new URLSearchParams()
+      params.set('limit', limit.toString())
+      params.set('depth', '2')
+
+      let endpoint = `/api/${relationTo}`
+      if (relationTo === 'custom-items') {
+        const contentTypeId = typeof contentType === 'object' ? contentType?.id : contentType
+        if (contentTypeId) {
+          params.set('where[contentType][equals]', contentTypeId)
+        }
+      }
+
+      const response = await fetch(`${endpoint}?${params.toString()}`)
+      if (response.ok) {
+        const data = await response.json()
+        items = data.docs || []
       }
     } catch (error) {
       console.error('Failed to fetch archive items:', error)
