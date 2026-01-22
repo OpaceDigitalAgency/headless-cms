@@ -63,6 +63,7 @@ const nextConfig = {
           'node:async_hooks': 'commonjs async_hooks',
           'node:buffer': 'commonjs buffer',
           'node:crypto': 'commonjs crypto',
+          'node:dgram': 'commonjs dgram',
           'node:events': 'commonjs events',
           'node:fs': 'commonjs fs',
           'node:http': 'commonjs http',
@@ -71,9 +72,15 @@ const nextConfig = {
           'node:net': 'commonjs net',
           'node:os': 'commonjs os',
           'node:path': 'commonjs path',
+          'node:perf_hooks': 'commonjs perf_hooks',
           'node:stream': 'commonjs stream',
+          'node:string_decoder': 'commonjs string_decoder',
+          'node:timers': 'commonjs timers',
+          'node:tls': 'commonjs tls',
           'node:util': 'commonjs util',
           'node:zlib': 'commonjs zlib',
+          payload: 'commonjs payload',
+          undici: 'commonjs undici',
         },
       ]
     }
