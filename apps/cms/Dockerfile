@@ -44,6 +44,12 @@ RUN pnpm build || true
 
 # Build CMS only (filtered build)
 WORKDIR /app
+ARG DATABASE_URL=postgresql://payload:payload@localhost:5432/payload
+ARG PAYLOAD_SECRET=build-placeholder-secret
+ARG PAYLOAD_PUBLIC_SERVER_URL=http://localhost:3000
+ENV DATABASE_URL=$DATABASE_URL
+ENV PAYLOAD_SECRET=$PAYLOAD_SECRET
+ENV PAYLOAD_PUBLIC_SERVER_URL=$PAYLOAD_PUBLIC_SERVER_URL
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
 RUN pnpm --filter @repo/cms build
