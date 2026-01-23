@@ -88,9 +88,15 @@ export default buildConfig({
     pool: {
       connectionString: process.env.DATABASE_URL || 'postgresql://payload:payload_secret@localhost:5432/payload',
     },
-    // Use push mode in development (auto-sync schema), migrations in production
-    // Set PAYLOAD_MIGRATING=true to force migration mode (used by Railway and make db-fresh)
-    push: process.env.NODE_ENV !== 'production' && process.env.PAYLOAD_MIGRATING !== 'true',
+    // Push mode (auto-sync schema) is used when:
+    // - Development environment (NODE_ENV !== 'production')
+    // - Fresh install flag is set (FRESH_INSTALL=true)
+    // Migrations are used when:
+    // - Production AND not a fresh install
+    // - PAYLOAD_MIGRATING=true is explicitly set
+    push: process.env.PAYLOAD_MIGRATING === 'true'
+      ? false
+      : process.env.FRESH_INSTALL === 'true' || process.env.NODE_ENV !== 'production',
     migrationDir: path.resolve(dirname, '../../db/migrations'),
   }),
 

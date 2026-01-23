@@ -3,7 +3,7 @@
 # ===========================================
 # One-command workflows for development, testing, and deployment
 
-.PHONY: help install dev build start stop clean test lint typecheck \
+.PHONY: help install dev dev-fresh build start stop clean test lint typecheck \
         docker-up docker-down docker-build docker-clean \
         db-migrate db-seed db-reset db-fresh \
         railway-provision railway-deploy \
@@ -188,21 +188,29 @@ db-fresh: ## Quick dev database refresh (uses push mode, no migrations)
 	@echo "$(YELLOW)═══════════════════════════════════════════════════════$(NC)"
 	@read -p "Are you sure? [y/N] " confirm && [ "$$confirm" = "y" ]
 	@echo ""
-	@echo "$(CYAN)[1/3] Stopping any running dev servers...$(NC)"
+	@echo "$(CYAN)[1/4] Stopping any running dev servers...$(NC)"
 	@-lsof -ti :3000 | xargs kill -9 2>/dev/null || true
 	@-lsof -ti :3001 | xargs kill -9 2>/dev/null || true
 	@-lsof -ti :4321 | xargs kill -9 2>/dev/null || true
 	@sleep 1
-	@echo "$(CYAN)[2/3] Removing database volume and recreating...$(NC)"
+	@echo "$(CYAN)[2/4] Removing database volume and recreating...$(NC)"
 	@docker compose down -v
 	@docker compose up -d postgres
-	@echo "$(CYAN)[3/3] Waiting for PostgreSQL to be ready...$(NC)"
+	@echo "$(CYAN)[3/4] Waiting for PostgreSQL to be ready...$(NC)"
 	@sleep 5
+	@echo "$(CYAN)[4/4] Clearing old migrations (fresh start)...$(NC)"
+	@rm -f apps/db/migrations/*.ts apps/db/migrations/*.json 2>/dev/null || true
+	@echo 'export const migrations = [];' > apps/db/migrations/index.ts
 	@echo ""
 	@echo "$(GREEN)═══════════════════════════════════════════════════════$(NC)"
-	@echo "$(GREEN)  Database refreshed! Start dev server with 'make dev'$(NC)"
-	@echo "$(GREEN)  Schema will auto-sync on first connection (push mode)$(NC)"
+	@echo "$(GREEN)  Database refreshed! Run 'make dev-fresh' to start$(NC)"
+	@echo "$(GREEN)  This will auto-create schema (answer 'y' to prompts)$(NC)"
 	@echo "$(GREEN)═══════════════════════════════════════════════════════$(NC)"
+
+dev-fresh: ## Start dev with auto-accept for Drizzle prompts (use after db-fresh)
+	@echo "$(CYAN)Starting CMS with auto-accept for schema prompts...$(NC)"
+	@echo "$(YELLOW)Note: This will answer 'y' to all Drizzle prompts$(NC)"
+	@cd apps/cms && yes | pnpm dev
 
 db-fresh-migrations: ## Fresh database with regenerated migrations (for production deployment)
 	@echo "$(YELLOW)═══════════════════════════════════════════════════════$(NC)"
@@ -226,8 +234,9 @@ db-fresh-migrations: ## Fresh database with regenerated migrations (for producti
 	@echo 'export const migrations = [];' > apps/db/migrations/index.ts
 	@echo "$(CYAN)[5/6] Generating fresh migrations from current schema...$(NC)"
 	@pnpm --filter @repo/cms migrate:create
-	@echo "$(CYAN)[6/6] Running migrations...$(NC)"
-	@pnpm --filter @repo/cms migrate
+	@echo "$(CYAN)[6/6] Running migrations (direct SQL mode)...$(NC)"
+	@chmod +x scripts/run-migration-direct.sh
+	@./scripts/run-migration-direct.sh
 	@echo ""
 	@echo "$(GREEN)═══════════════════════════════════════════════════════$(NC)"
 	@echo "$(GREEN)  Database refreshed successfully!$(NC)"
