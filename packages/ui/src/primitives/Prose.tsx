@@ -1,7 +1,7 @@
 import { ReactNode } from 'react'
 
 interface ProseProps {
-  children: ReactNode
+  children: any
   className?: string
   size?: 'sm' | 'base' | 'lg'
 }

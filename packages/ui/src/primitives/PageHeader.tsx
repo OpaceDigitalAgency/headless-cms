@@ -4,7 +4,7 @@ import { Container } from './Container'
 interface PageHeaderProps {
   title: string
   description?: string
-  children?: ReactNode
+  children?: any
   className?: string
 }
 

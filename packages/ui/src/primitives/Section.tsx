@@ -1,7 +1,7 @@
 import { ReactNode } from 'react'
 
 interface SectionProps {
-  children: ReactNode
+  children: any
   className?: string
   spacing?: 'none' | 'sm' | 'md' | 'lg' | 'xl'
   background?: 'default' | 'muted' | 'accent'
