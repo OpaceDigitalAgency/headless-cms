@@ -1,4 +1,5 @@
 # Base image
+# Force rebuild: 2026-01-23 13:10 GMT
 FROM node:20-alpine AS base
 RUN apk add --no-cache libc6-compat
 RUN corepack enable && corepack prepare pnpm@9.1.0 --activate
