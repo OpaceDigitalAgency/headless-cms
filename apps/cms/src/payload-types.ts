@@ -82,6 +82,9 @@ export interface Config {
     'product-collections': ProductCollection;
     'content-types': ContentType;
     'custom-items': CustomItem;
+    orders: Order;
+    carts: Cart;
+    'product-reviews': ProductReview;
     forms: Form;
     'form-submissions': FormSubmission;
     redirects: Redirect;
@@ -120,6 +123,9 @@ export interface Config {
     'product-collections': ProductCollectionsSelect<false> | ProductCollectionsSelect<true>;
     'content-types': ContentTypesSelect<false> | ContentTypesSelect<true>;
     'custom-items': CustomItemsSelect<false> | CustomItemsSelect<true>;
+    orders: OrdersSelect<false> | OrdersSelect<true>;
+    carts: CartsSelect<false> | CartsSelect<true>;
+    'product-reviews': ProductReviewsSelect<false> | ProductReviewsSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
     'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
@@ -527,6 +533,10 @@ export interface Page {
             author?: string | null;
             role?: string | null;
             align?: ('left' | 'center' | 'right') | null;
+            /**
+             * Layout structure (works with any skin)
+             */
+            variant?: ('simple' | 'card' | 'large') | null;
             id?: string | null;
             blockName?: string | null;
             blockType: 'quote';
@@ -553,8 +563,12 @@ export interface Page {
           }
         | {
             heading?: string | null;
-            subheading?: string | null;
-            stats?:
+            description?: string | null;
+            /**
+             * Layout structure (works with any skin)
+             */
+            variant?: ('grid' | 'list' | 'cards') | null;
+            items?:
               | {
                   value: string;
                   label: string;
@@ -641,7 +655,11 @@ export interface Page {
           }
         | {
             heading?: string | null;
-            subheading?: string | null;
+            description?: string | null;
+            /**
+             * Layout structure (works with any skin)
+             */
+            variant?: ('cards' | 'table' | 'comparison') | null;
             plans?:
               | {
                   name: string;
@@ -654,8 +672,15 @@ export interface Page {
                         id?: string | null;
                       }[]
                     | null;
-                  ctaLabel?: string | null;
-                  ctaUrl?: string | null;
+                  links?:
+                    | {
+                        label: string;
+                        url?: string | null;
+                        page?: (number | null) | Page;
+                        variant?: ('primary' | 'secondary' | 'outline') | null;
+                        id?: string | null;
+                      }[]
+                    | null;
                   featured?: boolean | null;
                   id?: string | null;
                 }[]
@@ -666,7 +691,12 @@ export interface Page {
           }
         | {
             heading?: string | null;
-            members?:
+            description?: string | null;
+            /**
+             * Layout structure (works with any skin)
+             */
+            variant?: ('grid' | 'list' | 'cards') | null;
+            items?:
               | {
                   name: string;
                   role?: string | null;
@@ -711,6 +741,7 @@ export interface Page {
                   | 'galleries'
                   | 'testimonials'
                   | 'faqs'
+                  | 'categories'
                   | 'custom-items'
                 )
               | null;
@@ -987,9 +1018,9 @@ export interface Page {
    */
   slug: string;
   /**
-   * Select the page template
+   * Select a template to auto-fill content.
    */
-  template: 'landing' | 'home' | 'detail' | 'article' | 'archive' | 'showcase';
+  template: string;
   publishedAt?: string | null;
   updatedAt: string;
   createdAt: string;
@@ -1312,6 +1343,10 @@ export interface Post {
             author?: string | null;
             role?: string | null;
             align?: ('left' | 'center' | 'right') | null;
+            /**
+             * Layout structure (works with any skin)
+             */
+            variant?: ('simple' | 'card' | 'large') | null;
             id?: string | null;
             blockName?: string | null;
             blockType: 'quote';
@@ -1338,8 +1373,12 @@ export interface Post {
           }
         | {
             heading?: string | null;
-            subheading?: string | null;
-            stats?:
+            description?: string | null;
+            /**
+             * Layout structure (works with any skin)
+             */
+            variant?: ('grid' | 'list' | 'cards') | null;
+            items?:
               | {
                   value: string;
                   label: string;
@@ -1426,7 +1465,11 @@ export interface Post {
           }
         | {
             heading?: string | null;
-            subheading?: string | null;
+            description?: string | null;
+            /**
+             * Layout structure (works with any skin)
+             */
+            variant?: ('cards' | 'table' | 'comparison') | null;
             plans?:
               | {
                   name: string;
@@ -1439,8 +1482,15 @@ export interface Post {
                         id?: string | null;
                       }[]
                     | null;
-                  ctaLabel?: string | null;
-                  ctaUrl?: string | null;
+                  links?:
+                    | {
+                        label: string;
+                        url?: string | null;
+                        page?: (number | null) | Page;
+                        variant?: ('primary' | 'secondary' | 'outline') | null;
+                        id?: string | null;
+                      }[]
+                    | null;
                   featured?: boolean | null;
                   id?: string | null;
                 }[]
@@ -1451,7 +1501,12 @@ export interface Post {
           }
         | {
             heading?: string | null;
-            members?:
+            description?: string | null;
+            /**
+             * Layout structure (works with any skin)
+             */
+            variant?: ('grid' | 'list' | 'cards') | null;
+            items?:
               | {
                   name: string;
                   role?: string | null;
@@ -1496,6 +1551,7 @@ export interface Post {
                   | 'galleries'
                   | 'testimonials'
                   | 'faqs'
+                  | 'categories'
                   | 'custom-items'
                 )
               | null;
@@ -1781,9 +1837,9 @@ export interface Post {
    */
   slug: string;
   /**
-   * Select the display template
+   * Select a template to auto-fill content sections.
    */
-  template?: ('article' | 'feature' | 'brief' | 'longform') | null;
+  template?: string | null;
   author: number | User;
   publishedAt?: string | null;
   /**
@@ -2000,6 +2056,7 @@ export interface ArchiveItem {
                   | 'galleries'
                   | 'testimonials'
                   | 'faqs'
+                  | 'categories'
                   | 'custom-items'
                 )
               | null;
@@ -2471,6 +2528,10 @@ export interface Person {
             author?: string | null;
             role?: string | null;
             align?: ('left' | 'center' | 'right') | null;
+            /**
+             * Layout structure (works with any skin)
+             */
+            variant?: ('simple' | 'card' | 'large') | null;
             id?: string | null;
             blockName?: string | null;
             blockType: 'quote';
@@ -2497,8 +2558,12 @@ export interface Person {
           }
         | {
             heading?: string | null;
-            subheading?: string | null;
-            stats?:
+            description?: string | null;
+            /**
+             * Layout structure (works with any skin)
+             */
+            variant?: ('grid' | 'list' | 'cards') | null;
+            items?:
               | {
                   value: string;
                   label: string;
@@ -2585,7 +2650,11 @@ export interface Person {
           }
         | {
             heading?: string | null;
-            subheading?: string | null;
+            description?: string | null;
+            /**
+             * Layout structure (works with any skin)
+             */
+            variant?: ('cards' | 'table' | 'comparison') | null;
             plans?:
               | {
                   name: string;
@@ -2598,8 +2667,15 @@ export interface Person {
                         id?: string | null;
                       }[]
                     | null;
-                  ctaLabel?: string | null;
-                  ctaUrl?: string | null;
+                  links?:
+                    | {
+                        label: string;
+                        url?: string | null;
+                        page?: (number | null) | Page;
+                        variant?: ('primary' | 'secondary' | 'outline') | null;
+                        id?: string | null;
+                      }[]
+                    | null;
                   featured?: boolean | null;
                   id?: string | null;
                 }[]
@@ -2610,7 +2686,12 @@ export interface Person {
           }
         | {
             heading?: string | null;
-            members?:
+            description?: string | null;
+            /**
+             * Layout structure (works with any skin)
+             */
+            variant?: ('grid' | 'list' | 'cards') | null;
+            items?:
               | {
                   name: string;
                   role?: string | null;
@@ -2655,6 +2736,7 @@ export interface Person {
                   | 'galleries'
                   | 'testimonials'
                   | 'faqs'
+                  | 'categories'
                   | 'custom-items'
                 )
               | null;
@@ -3152,6 +3234,10 @@ export interface Place {
             author?: string | null;
             role?: string | null;
             align?: ('left' | 'center' | 'right') | null;
+            /**
+             * Layout structure (works with any skin)
+             */
+            variant?: ('simple' | 'card' | 'large') | null;
             id?: string | null;
             blockName?: string | null;
             blockType: 'quote';
@@ -3178,8 +3264,12 @@ export interface Place {
           }
         | {
             heading?: string | null;
-            subheading?: string | null;
-            stats?:
+            description?: string | null;
+            /**
+             * Layout structure (works with any skin)
+             */
+            variant?: ('grid' | 'list' | 'cards') | null;
+            items?:
               | {
                   value: string;
                   label: string;
@@ -3266,7 +3356,11 @@ export interface Place {
           }
         | {
             heading?: string | null;
-            subheading?: string | null;
+            description?: string | null;
+            /**
+             * Layout structure (works with any skin)
+             */
+            variant?: ('cards' | 'table' | 'comparison') | null;
             plans?:
               | {
                   name: string;
@@ -3279,8 +3373,15 @@ export interface Place {
                         id?: string | null;
                       }[]
                     | null;
-                  ctaLabel?: string | null;
-                  ctaUrl?: string | null;
+                  links?:
+                    | {
+                        label: string;
+                        url?: string | null;
+                        page?: (number | null) | Page;
+                        variant?: ('primary' | 'secondary' | 'outline') | null;
+                        id?: string | null;
+                      }[]
+                    | null;
                   featured?: boolean | null;
                   id?: string | null;
                 }[]
@@ -3291,7 +3392,12 @@ export interface Place {
           }
         | {
             heading?: string | null;
-            members?:
+            description?: string | null;
+            /**
+             * Layout structure (works with any skin)
+             */
+            variant?: ('grid' | 'list' | 'cards') | null;
+            items?:
               | {
                   name: string;
                   role?: string | null;
@@ -3336,6 +3442,7 @@ export interface Place {
                   | 'galleries'
                   | 'testimonials'
                   | 'faqs'
+                  | 'categories'
                   | 'custom-items'
                 )
               | null;
@@ -3771,6 +3878,10 @@ export interface CustomItem {
             author?: string | null;
             role?: string | null;
             align?: ('left' | 'center' | 'right') | null;
+            /**
+             * Layout structure (works with any skin)
+             */
+            variant?: ('simple' | 'card' | 'large') | null;
             id?: string | null;
             blockName?: string | null;
             blockType: 'quote';
@@ -3797,8 +3908,12 @@ export interface CustomItem {
           }
         | {
             heading?: string | null;
-            subheading?: string | null;
-            stats?:
+            description?: string | null;
+            /**
+             * Layout structure (works with any skin)
+             */
+            variant?: ('grid' | 'list' | 'cards') | null;
+            items?:
               | {
                   value: string;
                   label: string;
@@ -3885,7 +4000,11 @@ export interface CustomItem {
           }
         | {
             heading?: string | null;
-            subheading?: string | null;
+            description?: string | null;
+            /**
+             * Layout structure (works with any skin)
+             */
+            variant?: ('cards' | 'table' | 'comparison') | null;
             plans?:
               | {
                   name: string;
@@ -3898,8 +4017,15 @@ export interface CustomItem {
                         id?: string | null;
                       }[]
                     | null;
-                  ctaLabel?: string | null;
-                  ctaUrl?: string | null;
+                  links?:
+                    | {
+                        label: string;
+                        url?: string | null;
+                        page?: (number | null) | Page;
+                        variant?: ('primary' | 'secondary' | 'outline') | null;
+                        id?: string | null;
+                      }[]
+                    | null;
                   featured?: boolean | null;
                   id?: string | null;
                 }[]
@@ -3910,7 +4036,12 @@ export interface CustomItem {
           }
         | {
             heading?: string | null;
-            members?:
+            description?: string | null;
+            /**
+             * Layout structure (works with any skin)
+             */
+            variant?: ('grid' | 'list' | 'cards') | null;
+            items?:
               | {
                   name: string;
                   role?: string | null;
@@ -4122,6 +4253,7 @@ export interface CustomItem {
                   | 'galleries'
                   | 'testimonials'
                   | 'faqs'
+                  | 'categories'
                   | 'custom-items'
                 )
               | null;
@@ -4638,6 +4770,7 @@ export interface Event {
                   | 'galleries'
                   | 'testimonials'
                   | 'faqs'
+                  | 'categories'
                   | 'custom-items'
                 )
               | null;
@@ -5119,6 +5252,7 @@ export interface Product {
                   | 'galleries'
                   | 'testimonials'
                   | 'faqs'
+                  | 'categories'
                   | 'custom-items'
                 )
               | null;
@@ -5385,10 +5519,7 @@ export interface Product {
    * Product availability status (separate from draft/published)
    */
   availability?: ('active' | 'archived' | 'out-of-stock') | null;
-  /**
-   * Select the display template
-   */
-  template: 'standard' | 'featured' | 'quick';
+  template?: string | null;
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
@@ -5497,6 +5628,61 @@ export interface ProductCategory {
    * Lower numbers appear first
    */
   displayOrder?: number | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "orders".
+ */
+export interface Order {
+  id: number;
+  status: 'pending' | 'processing' | 'shipped' | 'delivered' | 'cancelled';
+  orderedBy?: (number | null) | User;
+  total: number;
+  items: {
+    product: number | Product;
+    price: number;
+    quantity: number;
+    id?: string | null;
+  }[];
+  details: {
+    fullname: string;
+    email: string;
+    address: string;
+    stripePaymentIntentID?: string | null;
+  };
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "carts".
+ */
+export interface Cart {
+  id: number;
+  user?: (number | null) | User;
+  items?:
+    | {
+        product: number | Product;
+        quantity: number;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "product-reviews".
+ */
+export interface ProductReview {
+  id: number;
+  product: number | Product;
+  rating: number;
+  review: string;
+  author: string;
+  status?: ('pending' | 'approved' | 'rejected') | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -5769,6 +5955,18 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'custom-items';
         value: number | CustomItem;
+      } | null)
+    | ({
+        relationTo: 'orders';
+        value: number | Order;
+      } | null)
+    | ({
+        relationTo: 'carts';
+        value: number | Cart;
+      } | null)
+    | ({
+        relationTo: 'product-reviews';
+        value: number | ProductReview;
       } | null)
     | ({
         relationTo: 'forms';
@@ -6159,6 +6357,7 @@ export interface PagesSelect<T extends boolean = true> {
               author?: T;
               role?: T;
               align?: T;
+              variant?: T;
               id?: T;
               blockName?: T;
             };
@@ -6184,8 +6383,9 @@ export interface PagesSelect<T extends boolean = true> {
           | T
           | {
               heading?: T;
-              subheading?: T;
-              stats?:
+              description?: T;
+              variant?: T;
+              items?:
                 | T
                 | {
                     value?: T;
@@ -6253,7 +6453,8 @@ export interface PagesSelect<T extends boolean = true> {
           | T
           | {
               heading?: T;
-              subheading?: T;
+              description?: T;
+              variant?: T;
               plans?:
                 | T
                 | {
@@ -6267,8 +6468,15 @@ export interface PagesSelect<T extends boolean = true> {
                           feature?: T;
                           id?: T;
                         };
-                    ctaLabel?: T;
-                    ctaUrl?: T;
+                    links?:
+                      | T
+                      | {
+                          label?: T;
+                          url?: T;
+                          page?: T;
+                          variant?: T;
+                          id?: T;
+                        };
                     featured?: T;
                     id?: T;
                   };
@@ -6279,7 +6487,9 @@ export interface PagesSelect<T extends boolean = true> {
           | T
           | {
               heading?: T;
-              members?:
+              description?: T;
+              variant?: T;
+              items?:
                 | T
                 | {
                     name?: T;
@@ -6595,6 +6805,7 @@ export interface PostsSelect<T extends boolean = true> {
               author?: T;
               role?: T;
               align?: T;
+              variant?: T;
               id?: T;
               blockName?: T;
             };
@@ -6620,8 +6831,9 @@ export interface PostsSelect<T extends boolean = true> {
           | T
           | {
               heading?: T;
-              subheading?: T;
-              stats?:
+              description?: T;
+              variant?: T;
+              items?:
                 | T
                 | {
                     value?: T;
@@ -6689,7 +6901,8 @@ export interface PostsSelect<T extends boolean = true> {
           | T
           | {
               heading?: T;
-              subheading?: T;
+              description?: T;
+              variant?: T;
               plans?:
                 | T
                 | {
@@ -6703,8 +6916,15 @@ export interface PostsSelect<T extends boolean = true> {
                           feature?: T;
                           id?: T;
                         };
-                    ctaLabel?: T;
-                    ctaUrl?: T;
+                    links?:
+                      | T
+                      | {
+                          label?: T;
+                          url?: T;
+                          page?: T;
+                          variant?: T;
+                          id?: T;
+                        };
                     featured?: T;
                     id?: T;
                   };
@@ -6715,7 +6935,9 @@ export interface PostsSelect<T extends boolean = true> {
           | T
           | {
               heading?: T;
-              members?:
+              description?: T;
+              variant?: T;
+              items?:
                 | T
                 | {
                     name?: T;
@@ -7399,6 +7621,7 @@ export interface PeopleSelect<T extends boolean = true> {
               author?: T;
               role?: T;
               align?: T;
+              variant?: T;
               id?: T;
               blockName?: T;
             };
@@ -7424,8 +7647,9 @@ export interface PeopleSelect<T extends boolean = true> {
           | T
           | {
               heading?: T;
-              subheading?: T;
-              stats?:
+              description?: T;
+              variant?: T;
+              items?:
                 | T
                 | {
                     value?: T;
@@ -7493,7 +7717,8 @@ export interface PeopleSelect<T extends boolean = true> {
           | T
           | {
               heading?: T;
-              subheading?: T;
+              description?: T;
+              variant?: T;
               plans?:
                 | T
                 | {
@@ -7507,8 +7732,15 @@ export interface PeopleSelect<T extends boolean = true> {
                           feature?: T;
                           id?: T;
                         };
-                    ctaLabel?: T;
-                    ctaUrl?: T;
+                    links?:
+                      | T
+                      | {
+                          label?: T;
+                          url?: T;
+                          page?: T;
+                          variant?: T;
+                          id?: T;
+                        };
                     featured?: T;
                     id?: T;
                   };
@@ -7519,7 +7751,9 @@ export interface PeopleSelect<T extends boolean = true> {
           | T
           | {
               heading?: T;
-              members?:
+              description?: T;
+              variant?: T;
+              items?:
                 | T
                 | {
                     name?: T;
@@ -7877,6 +8111,7 @@ export interface PlacesSelect<T extends boolean = true> {
               author?: T;
               role?: T;
               align?: T;
+              variant?: T;
               id?: T;
               blockName?: T;
             };
@@ -7902,8 +8137,9 @@ export interface PlacesSelect<T extends boolean = true> {
           | T
           | {
               heading?: T;
-              subheading?: T;
-              stats?:
+              description?: T;
+              variant?: T;
+              items?:
                 | T
                 | {
                     value?: T;
@@ -7971,7 +8207,8 @@ export interface PlacesSelect<T extends boolean = true> {
           | T
           | {
               heading?: T;
-              subheading?: T;
+              description?: T;
+              variant?: T;
               plans?:
                 | T
                 | {
@@ -7985,8 +8222,15 @@ export interface PlacesSelect<T extends boolean = true> {
                           feature?: T;
                           id?: T;
                         };
-                    ctaLabel?: T;
-                    ctaUrl?: T;
+                    links?:
+                      | T
+                      | {
+                          label?: T;
+                          url?: T;
+                          page?: T;
+                          variant?: T;
+                          id?: T;
+                        };
                     featured?: T;
                     id?: T;
                   };
@@ -7997,7 +8241,9 @@ export interface PlacesSelect<T extends boolean = true> {
           | T
           | {
               heading?: T;
-              members?:
+              description?: T;
+              variant?: T;
+              items?:
                 | T
                 | {
                     name?: T;
@@ -8999,6 +9245,7 @@ export interface CustomItemsSelect<T extends boolean = true> {
               author?: T;
               role?: T;
               align?: T;
+              variant?: T;
               id?: T;
               blockName?: T;
             };
@@ -9024,8 +9271,9 @@ export interface CustomItemsSelect<T extends boolean = true> {
           | T
           | {
               heading?: T;
-              subheading?: T;
-              stats?:
+              description?: T;
+              variant?: T;
+              items?:
                 | T
                 | {
                     value?: T;
@@ -9093,7 +9341,8 @@ export interface CustomItemsSelect<T extends boolean = true> {
           | T
           | {
               heading?: T;
-              subheading?: T;
+              description?: T;
+              variant?: T;
               plans?:
                 | T
                 | {
@@ -9107,8 +9356,15 @@ export interface CustomItemsSelect<T extends boolean = true> {
                           feature?: T;
                           id?: T;
                         };
-                    ctaLabel?: T;
-                    ctaUrl?: T;
+                    links?:
+                      | T
+                      | {
+                          label?: T;
+                          url?: T;
+                          page?: T;
+                          variant?: T;
+                          id?: T;
+                        };
                     featured?: T;
                     id?: T;
                   };
@@ -9119,7 +9375,9 @@ export interface CustomItemsSelect<T extends boolean = true> {
           | T
           | {
               heading?: T;
-              members?:
+              description?: T;
+              variant?: T;
+              items?:
                 | T
                 | {
                     name?: T;
@@ -9339,6 +9597,62 @@ export interface CustomItemsSelect<T extends boolean = true> {
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "orders_select".
+ */
+export interface OrdersSelect<T extends boolean = true> {
+  status?: T;
+  orderedBy?: T;
+  total?: T;
+  items?:
+    | T
+    | {
+        product?: T;
+        price?: T;
+        quantity?: T;
+        id?: T;
+      };
+  details?:
+    | T
+    | {
+        fullname?: T;
+        email?: T;
+        address?: T;
+        stripePaymentIntentID?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "carts_select".
+ */
+export interface CartsSelect<T extends boolean = true> {
+  user?: T;
+  items?:
+    | T
+    | {
+        product?: T;
+        quantity?: T;
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "product-reviews_select".
+ */
+export interface ProductReviewsSelect<T extends boolean = true> {
+  product?: T;
+  rating?: T;
+  review?: T;
+  author?: T;
+  status?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
