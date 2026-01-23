@@ -100,7 +100,7 @@ async function getOrCreateShowcaseForm(payload: Payload) {
   const existing = await payload.find({
     collection: 'forms',
     limit: 1,
-    where: { heading: { equals: 'Showcase Form' } },
+    where: { title: { equals: 'Showcase Form' } },
   })
 
   if (existing.docs[0]) {
