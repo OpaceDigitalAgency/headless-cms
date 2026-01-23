@@ -181,7 +181,30 @@ db-reset: ## Reset database (drop all tables and re-migrate)
 	pnpm --filter @repo/cms migrate:reset
 	@echo "$(GREEN)Database reset!$(NC)"
 
-db-fresh: ## Fresh database with regenerated migrations (use after schema changes)
+db-fresh: ## Quick dev database refresh (uses push mode, no migrations)
+	@echo "$(YELLOW)═══════════════════════════════════════════════════════$(NC)"
+	@echo "$(YELLOW)  Quick Database Refresh (Development)$(NC)"
+	@echo "$(YELLOW)  This will DELETE all data and auto-sync schema$(NC)"
+	@echo "$(YELLOW)═══════════════════════════════════════════════════════$(NC)"
+	@read -p "Are you sure? [y/N] " confirm && [ "$$confirm" = "y" ]
+	@echo ""
+	@echo "$(CYAN)[1/3] Stopping any running dev servers...$(NC)"
+	@-lsof -ti :3000 | xargs kill -9 2>/dev/null || true
+	@-lsof -ti :3001 | xargs kill -9 2>/dev/null || true
+	@-lsof -ti :4321 | xargs kill -9 2>/dev/null || true
+	@sleep 1
+	@echo "$(CYAN)[2/3] Removing database volume and recreating...$(NC)"
+	@docker compose down -v
+	@docker compose up -d postgres
+	@echo "$(CYAN)[3/3] Waiting for PostgreSQL to be ready...$(NC)"
+	@sleep 5
+	@echo ""
+	@echo "$(GREEN)═══════════════════════════════════════════════════════$(NC)"
+	@echo "$(GREEN)  Database refreshed! Start dev server with 'make dev'$(NC)"
+	@echo "$(GREEN)  Schema will auto-sync on first connection (push mode)$(NC)"
+	@echo "$(GREEN)═══════════════════════════════════════════════════════$(NC)"
+
+db-fresh-migrations: ## Fresh database with regenerated migrations (for production deployment)
 	@echo "$(YELLOW)═══════════════════════════════════════════════════════$(NC)"
 	@echo "$(YELLOW)  Fresh Database & Migration Regeneration$(NC)"
 	@echo "$(YELLOW)  This will DELETE all data and regenerate migrations$(NC)"

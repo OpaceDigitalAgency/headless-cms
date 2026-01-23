@@ -88,8 +88,9 @@ export default buildConfig({
     pool: {
       connectionString: process.env.DATABASE_URL || 'postgresql://payload:payload_secret@localhost:5432/payload',
     },
-    // Auto-create tables on first run
-    push: false,
+    // Use push mode in development (auto-sync schema), migrations in production
+    // Set PAYLOAD_MIGRATING=true to force migration mode (used by Railway and make db-fresh)
+    push: process.env.NODE_ENV !== 'production' && process.env.PAYLOAD_MIGRATING !== 'true',
     migrationDir: path.resolve(dirname, '../../db/migrations'),
   }),
 
