@@ -730,7 +730,7 @@ export class CoreSeeder extends BaseSeeder {
           template: 'home',
           _status: 'published',
           hero: {
-            type: 'fullscreen',
+            variant: 'fullscreen',
             heading: 'Discover Our Collection',
             subheading: 'Explore thousands of archive items, artworks, and historical treasures from around the world.',
           },
@@ -784,7 +784,7 @@ export class CoreSeeder extends BaseSeeder {
           template: 'detail',
           _status: 'published',
           hero: {
-            type: 'standard',
+            variant: 'standard',
             heading: 'About Us',
             subheading: 'Preserving and sharing cultural heritage for future generations.',
           },
@@ -816,6 +816,58 @@ export class CoreSeeder extends BaseSeeder {
               ],
             },
           ],
+        })
+      }
+    }
+
+    // Collections Page (Archive)
+    if (this.shouldSeedItem('collections')) {
+      if (await this.checkIfExists('pages', 'collections')) {
+        this.log('Collections page already exists, skipping.')
+      } else {
+        await this.create('pages', {
+          title: 'Collections',
+          slug: 'collections',
+          template: 'default', // Often a custom archive listing
+          _status: 'published',
+          hero: {
+            variant: 'standard',
+            heading: 'Collections',
+            subheading: 'Explore our vast archives by category and theme.',
+          },
+          content: [
+            {
+              blockType: 'archive',
+              heading: 'Browse Collections',
+              relationTo: 'categories', // Or similar taxonomy
+              limit: 12,
+              showFeaturedImage: true,
+            }
+          ]
+        })
+      }
+    }
+
+    // Search Page (Archive)
+    if (this.shouldSeedItem('search')) {
+      if (await this.checkIfExists('pages', 'search')) {
+        this.log('Search page already exists, skipping.')
+      } else {
+        await this.create('pages', {
+          title: 'Search',
+          slug: 'search',
+          template: 'default',
+          _status: 'published',
+          hero: {
+            variant: 'minimal',
+            heading: 'Search Archives',
+          },
+          content: [
+            {
+              blockType: 'content',
+              content: createRichText('Search functionality coming soon.')
+            }
+          ]
         })
       }
     }

@@ -24,6 +24,7 @@ export class BrochureSeeder extends BaseSeeder {
   async seed(): Promise<void> {
     this.log('Starting brochure seed...')
 
+    await this.seedServices()
     await this.seedPages()
 
     await this.seedCustomContentType({
@@ -140,6 +141,9 @@ export class BrochureSeeder extends BaseSeeder {
 
   public async seedCollection(collection: string): Promise<void> {
     switch (collection) {
+      case 'services':
+        await this.seedServices()
+        return
       case 'pages':
         await this.seedPages()
         return
@@ -446,6 +450,29 @@ export class BrochureSeeder extends BaseSeeder {
       }
     }
 
+  }
+
+  private async seedServices() {
+    if (!this.shouldSeedCollection('services')) return
+    this.log('Seeding Services...')
+    const services = [
+      { title: 'Strategy Consulting', excerpt: 'Strategic guidance for sustainable growth.', icon: 'lightbulb' },
+      { title: 'Digital Transformation', excerpt: 'Modernize your operations with tech.', icon: 'code' },
+      { title: 'Growth Marketing', excerpt: 'Data-driven marketing strategies.', icon: 'trending-up' },
+      { title: 'Technology Solutions', excerpt: 'Custom software tailored to your needs.', icon: 'monitor' }
+    ]
+    for (const s of services) {
+      const slug = s.title.toLowerCase().replace(/ /g, '-')
+      if (await this.checkIfExists('services', slug)) continue
+
+      await this.create('services', {
+        title: s.title,
+        slug: slug,
+        excerpt: s.excerpt,
+        icon: s.icon,
+        _status: 'published'
+      })
+    }
   }
 
   private async seedGlobals(): Promise<void> {
