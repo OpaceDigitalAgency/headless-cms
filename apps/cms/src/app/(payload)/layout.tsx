@@ -10,7 +10,7 @@ import configPromise from '@/payload.config'
 import './custom.scss'
 
 type Args = {
-  children: React.ReactNode
+  children: any
 }
 
 const serverFunctions: ServerFunctionClient = async function (args) {
