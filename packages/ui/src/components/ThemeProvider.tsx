@@ -62,6 +62,7 @@ export function ThemeProvider({
       enableSystem
       disableTransitionOnChange
     >
+      {/* @ts-ignore */}
       <SkinContext.Provider value={{ skin, setSkin: setSkinState }}>
         {children}
       </SkinContext.Provider>
