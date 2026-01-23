@@ -5,19 +5,20 @@ import configPromise from '@/payload.config'
 export const revalidate = 3600 // Revalidate every hour
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const payload = await getPayloadHMR({ config: configPromise })
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
 
-  const urls: MetadataRoute.Sitemap = []
-
-  try {
+  const urls: MetadataRoute.Sitemap = [
     // Add homepage
-    urls.push({
+    {
       url: siteUrl,
       lastModified: new Date(),
       changeFrequency: 'daily',
       priority: 1,
-    })
+    }
+  ]
+
+  try {
+    const payload = await getPayloadHMR({ config: configPromise })
 
     // Fetch all pages
     const pages = await payload.find({

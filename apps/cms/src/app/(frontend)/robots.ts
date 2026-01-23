@@ -5,11 +5,12 @@ import configPromise from '@/payload.config'
 export const revalidate = 3600 // Revalidate every hour
 
 export default async function robots(): Promise<MetadataRoute.Robots> {
-  const payload = await getPayloadHMR({ config: configPromise })
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
   const isProduction = process.env.NODE_ENV === 'production'
 
   try {
+    const payload = await getPayloadHMR({ config: configPromise })
+
     // Fetch settings to check for custom robots.txt
     const settings = await payload.findGlobal({
       slug: 'settings',
