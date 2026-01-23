@@ -187,7 +187,7 @@ export async function seedBasicData(payload: Payload): Promise<void> {
         },
         {
           blockType: 'cta',
-          style: 'banner',
+          variant: 'banner',
           heading: 'Call to Action Banner',
           description: 'A short description to prompt action.',
           image: mediaImage.id,
