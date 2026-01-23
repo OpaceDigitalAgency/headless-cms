@@ -75,10 +75,6 @@ ecommerce: ## Create a new ecommerce catalog
 dev: ## Start all services in development mode (requires Docker)
 	@echo "$(CYAN)Starting development environment...$(NC)"
 	docker compose up -d postgres
-	@echo "$(YELLOW)Waiting for PostgreSQL to be ready...$(NC)"
-	@sleep 5
-	@echo "$(CYAN)Running migrations...$(NC)"
-	pnpm --filter @repo/cms migrate
 	@echo "$(CYAN)Starting CMS in development mode...$(NC)"
 	pnpm dev
 
