@@ -332,7 +332,7 @@ export async function ensureShowcasePage(payload: Payload, options?: { updateHea
             variant: 'primary',
           },
         ],
-        backgroundColor: 'primary',
+        backgroundColor: 'accent',
       },
       {
         blockType: 'quote',

@@ -869,7 +869,7 @@ export class BlogSeeder extends BaseSeeder {
             heading: 'Try It Today',
             description: 'Free 14-day trial for new users.',
             links: [{ label: 'Download', url: '/products', variant: 'primary' }],
-            backgroundColor: 'primary',
+            backgroundColor: 'accent',
           },
         ],
       },

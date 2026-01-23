@@ -915,7 +915,7 @@ export class CoreSeeder extends BaseSeeder {
             links: [
               { label: 'Get Tickets', url: '/events/renaissance-art-exhibition', variant: 'primary' },
             ],
-            backgroundColor: 'primary',
+            backgroundColor: 'accent',
           },
         ],
       },
@@ -1132,7 +1132,7 @@ export class CoreSeeder extends BaseSeeder {
             links: [
               { label: 'Register Now', url: 'https://example.com/ancient-workshop', variant: 'primary' },
             ],
-            backgroundColor: 'primary',
+            backgroundColor: 'accent',
           },
         ],
       },
