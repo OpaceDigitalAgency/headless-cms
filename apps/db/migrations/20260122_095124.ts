@@ -1,7 +1,7 @@
-import { sql } from '@payloadcms/db-postgres'
 import type { MigrateDownArgs, MigrateUpArgs } from '@payloadcms/db-postgres'
 
 export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
+  const { sql } = await import('@payloadcms/db-postgres')
   await db.execute(sql`
    CREATE TYPE "public"."enum_users_social_links_platform" AS ENUM('twitter', 'linkedin', 'github', 'website');
   CREATE TYPE "public"."enum_users_role" AS ENUM('admin', 'editor', 'user');
@@ -11512,6 +11512,7 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
 }
 
 export async function down({ db, payload, req }: MigrateDownArgs): Promise<void> {
+  const { sql } = await import('@payloadcms/db-postgres')
   await db.execute(sql`
    DROP TABLE "users_social_links" CASCADE;
   DROP TABLE "users_sessions" CASCADE;
