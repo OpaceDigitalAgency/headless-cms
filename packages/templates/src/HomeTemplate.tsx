@@ -67,12 +67,12 @@ export function HomeTemplate({ hero, sections, className = '' }: HomeTemplatePro
             <h1 className="hero-heading">{hero.heading}</h1>
             {hero.subheading && <p className="hero-subheading">{hero.subheading}</p>}
             {hero.links && hero.links.length > 0 && (
-              <div className="hero-actions">
+              <div className="hero-links">
                 {hero.links.map((link, index) => (
                   <a
                     key={index}
                     href={link.url}
-                    className={`hero-button hero-button--${link.variant || 'primary'}`}
+                    className={`hero-link hero-link--${link.variant || 'primary'}`}
                   >
                     {link.label}
                   </a>

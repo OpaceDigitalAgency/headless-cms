@@ -67,6 +67,22 @@ Your task is to re-seed the database to showcase the best versions of each block
 
 ---
 
+## 🔁 3. Recovery Protocol (DB Wipe)
+**User Question:** "If I wipe the DB, how do I get the Retro page back?"
+
+You must ensure availability via the **Seed System**. The page at `src/seed/retro-page.ts` is NOT automatically included in the default `base.ts` seed logic yet. You must:
+
+1.  **Register the Retro Seed:**
+    *   Import `seedRetroPage` (or equivalent logic) into the main `seed/index.ts` or the relevant `preset` (e.g., `seed/presets/demo.ts`).
+    *   Ensure that running `pnpm seed` **automatically** creates `/retro`.
+
+2.  **The Timeline Block:**
+    *   **Status:** It is a **Core Block** (`apps/cms/src/components/blocks/TimelineBlock.tsx`).
+    *   **Re-creation:** You DO NOT need to re-create the file. It exists. You DO need to ensure your seed data uses `blockType: 'timeline'` with the new variant logic.
+    *   **Audit Check:** Verify `TimelineBlock` isn't accidentally deleted during your "cleanup". It is essential for the Retro skin.
+
+---
+
 ## ⚠️ 3. Technical Trap: Tailwind v4
 **WARNING:** This project uses Tailwind v4.
 *   **Do NOT use:** `@apply` in your CSS for custom utilities unless you are 100% sure they resolve.

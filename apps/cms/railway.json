@@ -6,7 +6,7 @@
     "buildContext": "."
   },
   "deploy": {
-    "startCommand": "node server.js",
+    "startCommand": "sh /app/apps/cms/start.sh",
     "healthcheckPath": "/api/health",
     "healthcheckTimeout": 300,
     "restartPolicyType": "ON_FAILURE",
