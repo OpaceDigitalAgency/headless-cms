@@ -76,8 +76,13 @@ COPY --from=builder --chown=payloadcms:nodejs /app/apps/cms/src ./apps/cms/src
 COPY --from=builder --chown=payloadcms:nodejs /app/apps/db/migrations ./apps/db/migrations
 
 # Copy startup script
+# Copy startup script
 COPY --from=builder /app/apps/cms/start.sh ./apps/cms/start.sh
 RUN chmod +x ./apps/cms/start.sh
+
+# Copy migration scripts
+COPY --from=builder --chown=payloadcms:nodejs /app/scripts ./scripts
+RUN chmod +x ./scripts/*.sh
 
 # Install TS loader for runtime migrations (the migration files are TypeScript).
 # Install into a dedicated folder to avoid mutating Next's standalone node_modules.
