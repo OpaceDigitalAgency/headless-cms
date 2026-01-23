@@ -172,3 +172,21 @@ If the crash persists, the fastest proof is whether the package exists in the co
 
 That single check will confirm whether we need to change Docker packaging vs something else.
 
+## Fix Applied (2026-01-23)
+
+**Problem**: Migration files import `@payloadcms/db-postgres` but this package is not included in the Next.js standalone runtime image.
+
+**Root Cause**: Next.js standalone build only traces dependencies that are imported by the Next.js application code. Migration files are copied separately and their dependencies are not traced.
+
+**Solution**: Install migration dependencies directly in the production Docker image:
+- Added `npm install` step in production stage to install:
+  - `@payloadcms/db-postgres@3.71.1`
+  - `payload@3.71.1`
+  - `drizzle-orm@0.44.7`
+  - `pg@8.16.3`
+
+These packages are now available at runtime when migrations execute, allowing the migration files to successfully import and use `@payloadcms/db-postgres`.
+
+**Files Changed**:
+- `headless-cms/apps/cms/Dockerfile` - Added migration dependency installation in production stage
+

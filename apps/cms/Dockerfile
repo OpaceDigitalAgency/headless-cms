@@ -82,6 +82,14 @@ RUN chmod +x ./apps/cms/start.sh
 # Install into a dedicated folder to avoid mutating Next's standalone node_modules.
 RUN mkdir -p /opt/tsx && cd /opt/tsx && npm install --omit=dev tsx@4.19.2
 
+# Install migration dependencies that aren't included in Next.js standalone build.
+# These are required by the migration files but not traced by Next.js.
+RUN cd /app && npm install --omit=dev --no-save \
+  @payloadcms/db-postgres@3.71.1 \
+  payload@3.71.1 \
+  drizzle-orm@0.44.7 \
+  pg@8.16.3
+
 # Create uploads directory
 RUN mkdir -p /app/apps/cms/uploads && chown -R payloadcms:nodejs /app/apps/cms/uploads
 
