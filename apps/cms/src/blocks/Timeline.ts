@@ -27,7 +27,7 @@ export const timelineBlock: Block = {
       label: 'Section Description',
     },
     {
-      name: 'layout',
+      name: 'variant',
       type: 'select',
       required: true,
       defaultValue: 'vertical',
@@ -82,7 +82,7 @@ export const timelineBlock: Block = {
           },
         },
         {
-          name: 'title',
+          name: 'heading',
           type: 'text',
           required: true,
           label: 'Event Title',
@@ -203,9 +203,9 @@ export const timelineBlock: Block = {
       defaultValue: 'transparent',
       options: [
         { label: 'Transparent', value: 'transparent' },
-        { label: 'Light', value: 'light' },
+        { label: 'Muted', value: 'muted' },
         { label: 'Dark', value: 'dark' },
-        { label: 'Primary', value: 'primary' },
+        { label: 'Accent', value: 'accent' },
       ],
     },
   ],

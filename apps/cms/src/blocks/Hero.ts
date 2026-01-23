@@ -13,17 +13,6 @@ export const heroBlock: Block = {
     {
       name: 'variant',
       type: 'select',
-      label: 'Visual Variant',
-      defaultValue: 'standard',
-      options: [
-        { label: 'Standard', value: 'standard' },
-        { label: 'Agency', value: 'agency' },
-        { label: 'Retro', value: 'retro' },
-      ],
-    },
-    {
-      name: 'type',
-      type: 'select',
       defaultValue: 'standard',
       options: [
         { label: 'Standard', value: 'standard' },
@@ -31,7 +20,11 @@ export const heroBlock: Block = {
         { label: 'Full Screen', value: 'fullscreen' },
         { label: 'Split', value: 'split' },
         { label: 'Video Background', value: 'video' },
+        { label: 'Hero-Led', value: 'hero-led' },
       ],
+      admin: {
+        description: 'Layout structure (works with any skin)',
+      },
     },
     {
       name: 'eyebrow',
@@ -48,9 +41,9 @@ export const heroBlock: Block = {
       label: 'Heading',
     },
     {
-      name: 'subheading',
+      name: 'description',
       type: 'textarea',
-      label: 'Subheading',
+      label: 'Description',
     },
     {
       name: 'image',
@@ -58,7 +51,7 @@ export const heroBlock: Block = {
       relationTo: 'media',
       label: 'Background Image',
       admin: {
-        condition: (_, siblingData) => ['standard', 'fullscreen', 'split'].includes(siblingData?.type),
+        condition: (_, siblingData) => ['standard', 'fullscreen', 'split', 'hero-led'].includes(siblingData?.variant),
       },
     },
     {
@@ -66,7 +59,7 @@ export const heroBlock: Block = {
       type: 'text',
       label: 'Video URL',
       admin: {
-        condition: (_, siblingData) => siblingData?.type === 'video',
+        condition: (_, siblingData) => siblingData?.variant === 'video',
         description: 'YouTube or Vimeo URL',
       },
     },
@@ -82,7 +75,7 @@ export const heroBlock: Block = {
         { label: 'Gradient', value: 'gradient' },
       ],
       admin: {
-        condition: (_, siblingData) => ['standard', 'fullscreen', 'video'].includes(siblingData?.type),
+        condition: (_, siblingData) => ['standard', 'fullscreen', 'video'].includes(siblingData?.variant),
       },
     },
     {

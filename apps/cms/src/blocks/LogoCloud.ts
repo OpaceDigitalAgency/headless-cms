@@ -16,21 +16,39 @@ export const logoCloudBlock: Block = {
       label: 'Heading',
     },
     {
-      name: 'logos',
+      name: 'description',
+      type: 'textarea',
+      label: 'Description',
+    },
+    {
+      name: 'variant',
+      type: 'select',
+      defaultValue: 'grid',
+      options: [
+        { label: 'Grid', value: 'grid' },
+        { label: 'Ticker', value: 'ticker' },
+      ],
+      admin: {
+        description: 'Layout structure (works with any skin)',
+      },
+    },
+    {
+      name: 'items',
       type: 'array',
       label: 'Logos',
       minRows: 1,
       fields: [
         {
-          name: 'logo',
+          name: 'media',
           type: 'upload',
           relationTo: 'media',
           required: true,
+          label: 'Logo Image',
         },
         {
           name: 'label',
           type: 'text',
-          label: 'Alt Text',
+          label: 'Alt Text / Brand Name',
         },
         {
           name: 'url',

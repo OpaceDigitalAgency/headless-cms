@@ -420,14 +420,16 @@ export interface Page {
   content?:
     | (
         | {
-            variant?: ('standard' | 'agency' | 'retro') | null;
-            type?: ('standard' | 'minimal' | 'fullscreen' | 'split' | 'video') | null;
+            /**
+             * Layout structure (works with any skin)
+             */
+            variant?: ('standard' | 'minimal' | 'fullscreen' | 'split' | 'video' | 'hero-led') | null;
             /**
              * Optional badge label displayed above the heading.
              */
             eyebrow?: string | null;
             heading: string;
-            subheading?: string | null;
+            description?: string | null;
             image?: (number | null) | Media;
             /**
              * YouTube or Vimeo URL
@@ -478,7 +480,7 @@ export interface Page {
                   id?: string | null;
                 }[]
               | null;
-            backgroundColor?: ('none' | 'light' | 'dark' | 'primary' | 'secondary') | null;
+            backgroundColor?: ('none' | 'muted' | 'dark' | 'accent') | null;
             paddingTop?: ('none' | 'small' | 'medium' | 'large') | null;
             paddingBottom?: ('none' | 'small' | 'medium' | 'large') | null;
             id?: string | null;
@@ -501,7 +503,7 @@ export interface Page {
             blockType: 'media';
           }
         | {
-            style?: ('standard' | 'banner' | 'card' | 'inline' | 'agency') | null;
+            variant?: ('standard' | 'banner' | 'card' | 'inline') | null;
             heading: string;
             description?: string | null;
             image?: (number | null) | Media;
@@ -515,7 +517,7 @@ export interface Page {
                   id?: string | null;
                 }[]
               | null;
-            backgroundColor?: ('none' | 'light' | 'dark' | 'primary' | 'secondary') | null;
+            backgroundColor?: ('none' | 'muted' | 'dark' | 'accent') | null;
             id?: string | null;
             blockName?: string | null;
             blockType: 'cta';
@@ -531,11 +533,14 @@ export interface Page {
           }
         | {
             heading?: string | null;
-            subheading?: string | null;
-            layout?: ('grid' | 'list') | null;
+            description?: string | null;
+            /**
+             * Layout structure (works with any skin)
+             */
+            variant?: ('grid' | 'list') | null;
             items?:
               | {
-                  title: string;
+                  heading: string;
                   description?: string | null;
                   icon?: string | null;
                   media?: (number | null) | Media;
@@ -563,9 +568,14 @@ export interface Page {
           }
         | {
             heading?: string | null;
-            logos?:
+            description?: string | null;
+            /**
+             * Layout structure (works with any skin)
+             */
+            variant?: ('grid' | 'ticker') | null;
+            items?:
               | {
-                  logo: number | Media;
+                  media: number | Media;
                   label?: string | null;
                   url?: string | null;
                   id?: string | null;
@@ -577,7 +587,11 @@ export interface Page {
           }
         | {
             heading?: string | null;
-            style?: ('standard' | 'agency') | null;
+            description?: string | null;
+            /**
+             * Layout structure (works with any skin)
+             */
+            variant?: ('standard' | 'grid' | 'cards') | null;
             items?:
               | {
                   quote: string;
@@ -595,6 +609,11 @@ export interface Page {
           }
         | {
             heading?: string | null;
+            description?: string | null;
+            /**
+             * Layout structure (works with any skin)
+             */
+            variant?: ('accordion' | 'grid' | 'list') | null;
             items?:
               | {
                   question: string;
@@ -680,7 +699,21 @@ export interface Page {
             heading?: string | null;
             description?: string | null;
             populateBy?: ('collection' | 'selection') | null;
-            relationTo?: ('posts' | 'pages' | 'archive-items' | 'people' | 'places' | 'custom-items') | null;
+            relationTo?:
+              | (
+                  | 'posts'
+                  | 'pages'
+                  | 'archive-items'
+                  | 'people'
+                  | 'places'
+                  | 'events'
+                  | 'services'
+                  | 'galleries'
+                  | 'testimonials'
+                  | 'faqs'
+                  | 'custom-items'
+                )
+              | null;
             /**
              * Filter custom items by content type
              */
@@ -716,7 +749,7 @@ export interface Page {
                     }
                 )[]
               | null;
-            layout?: ('grid' | 'list' | 'cards' | 'carousel') | null;
+            variant?: ('grid' | 'list' | 'cards' | 'carousel') | null;
             columns?: ('2' | '3' | '4') | null;
             showImage?: boolean | null;
             showExcerpt?: boolean | null;
@@ -749,8 +782,8 @@ export interface Page {
               };
               [k: string]: unknown;
             } | null;
-            style?: ('default' | 'card' | 'inline' | 'fullWidth') | null;
-            backgroundColor?: ('none' | 'light' | 'dark') | null;
+            variant?: ('default' | 'card' | 'inline' | 'fullWidth') | null;
+            backgroundColor?: ('none' | 'muted' | 'dark') | null;
             id?: string | null;
             blockName?: string | null;
             blockType: 'form';
@@ -767,7 +800,7 @@ export interface Page {
             /**
              * Choose how images are displayed
              */
-            layout: 'grid' | 'masonry' | 'carousel' | 'lightbox' | 'slider';
+            variant: 'grid' | 'masonry' | 'carousel' | 'lightbox' | 'slider';
             /**
              * Number of columns on desktop
              */
@@ -805,19 +838,9 @@ export interface Page {
             heading?: string | null;
             description?: string | null;
             /**
-             * Choose the visual style of grid items
+             * Layout structure (works with any skin)
              */
-            style:
-              | 'cards'
-              | 'features'
-              | 'icons'
-              | 'stats'
-              | 'team'
-              | 'testimonials'
-              | 'logos'
-              | 'agency-cards'
-              | 'agency-list'
-              | 'retro-cards';
+            variant: 'cards' | 'features' | 'icons' | 'stats' | 'team' | 'testimonials' | 'logos';
             /**
              * Number of columns on desktop
              */
@@ -833,8 +856,8 @@ export interface Page {
                * Lucide icon name (e.g., "star", "heart", "check")
                */
               icon?: string | null;
-              title: string;
-              subtitle?: string | null;
+              heading: string;
+              eyebrow?: string | null;
               description?: string | null;
               /**
                * e.g., "99%", "10K+", "$1M"
@@ -873,7 +896,7 @@ export interface Page {
             /**
              * Choose the timeline layout style
              */
-            layout: 'vertical' | 'alternating' | 'horizontal' | 'compact';
+            variant: 'vertical' | 'alternating' | 'horizontal' | 'compact';
             lineStyle?: ('solid' | 'dashed' | 'dotted' | 'gradient') | null;
             markerStyle?: ('circle' | 'diamond' | 'square' | 'icon' | 'number' | 'image') | null;
             events: {
@@ -881,7 +904,7 @@ export interface Page {
                * e.g., "2024", "Jan 2024", "1500 BCE", "Renaissance Period"
                */
               date: string;
-              title: string;
+              heading: string;
               description?: {
                 root: {
                   type: string;
@@ -927,7 +950,7 @@ export interface Page {
              */
             animateOnScroll?: boolean | null;
             sortOrder?: ('chronological' | 'reverse' | 'manual') | null;
-            backgroundColor?: ('transparent' | 'light' | 'dark' | 'primary') | null;
+            backgroundColor?: ('transparent' | 'muted' | 'dark' | 'accent') | null;
             id?: string | null;
             blockName?: string | null;
             blockType: 'timeline';
@@ -1182,14 +1205,16 @@ export interface Post {
   contentBlocks?:
     | (
         | {
-            variant?: ('standard' | 'agency' | 'retro') | null;
-            type?: ('standard' | 'minimal' | 'fullscreen' | 'split' | 'video') | null;
+            /**
+             * Layout structure (works with any skin)
+             */
+            variant?: ('standard' | 'minimal' | 'fullscreen' | 'split' | 'video' | 'hero-led') | null;
             /**
              * Optional badge label displayed above the heading.
              */
             eyebrow?: string | null;
             heading: string;
-            subheading?: string | null;
+            description?: string | null;
             image?: (number | null) | Media;
             /**
              * YouTube or Vimeo URL
@@ -1240,7 +1265,7 @@ export interface Post {
                   id?: string | null;
                 }[]
               | null;
-            backgroundColor?: ('none' | 'light' | 'dark' | 'primary' | 'secondary') | null;
+            backgroundColor?: ('none' | 'muted' | 'dark' | 'accent') | null;
             paddingTop?: ('none' | 'small' | 'medium' | 'large') | null;
             paddingBottom?: ('none' | 'small' | 'medium' | 'large') | null;
             id?: string | null;
@@ -1263,7 +1288,7 @@ export interface Post {
             blockType: 'media';
           }
         | {
-            style?: ('standard' | 'banner' | 'card' | 'inline' | 'agency') | null;
+            variant?: ('standard' | 'banner' | 'card' | 'inline') | null;
             heading: string;
             description?: string | null;
             image?: (number | null) | Media;
@@ -1277,7 +1302,7 @@ export interface Post {
                   id?: string | null;
                 }[]
               | null;
-            backgroundColor?: ('none' | 'light' | 'dark' | 'primary' | 'secondary') | null;
+            backgroundColor?: ('none' | 'muted' | 'dark' | 'accent') | null;
             id?: string | null;
             blockName?: string | null;
             blockType: 'cta';
@@ -1293,11 +1318,14 @@ export interface Post {
           }
         | {
             heading?: string | null;
-            subheading?: string | null;
-            layout?: ('grid' | 'list') | null;
+            description?: string | null;
+            /**
+             * Layout structure (works with any skin)
+             */
+            variant?: ('grid' | 'list') | null;
             items?:
               | {
-                  title: string;
+                  heading: string;
                   description?: string | null;
                   icon?: string | null;
                   media?: (number | null) | Media;
@@ -1325,9 +1353,14 @@ export interface Post {
           }
         | {
             heading?: string | null;
-            logos?:
+            description?: string | null;
+            /**
+             * Layout structure (works with any skin)
+             */
+            variant?: ('grid' | 'ticker') | null;
+            items?:
               | {
-                  logo: number | Media;
+                  media: number | Media;
                   label?: string | null;
                   url?: string | null;
                   id?: string | null;
@@ -1339,7 +1372,11 @@ export interface Post {
           }
         | {
             heading?: string | null;
-            style?: ('standard' | 'agency') | null;
+            description?: string | null;
+            /**
+             * Layout structure (works with any skin)
+             */
+            variant?: ('standard' | 'grid' | 'cards') | null;
             items?:
               | {
                   quote: string;
@@ -1357,6 +1394,11 @@ export interface Post {
           }
         | {
             heading?: string | null;
+            description?: string | null;
+            /**
+             * Layout structure (works with any skin)
+             */
+            variant?: ('accordion' | 'grid' | 'list') | null;
             items?:
               | {
                   question: string;
@@ -1442,7 +1484,21 @@ export interface Post {
             heading?: string | null;
             description?: string | null;
             populateBy?: ('collection' | 'selection') | null;
-            relationTo?: ('posts' | 'pages' | 'archive-items' | 'people' | 'places' | 'custom-items') | null;
+            relationTo?:
+              | (
+                  | 'posts'
+                  | 'pages'
+                  | 'archive-items'
+                  | 'people'
+                  | 'places'
+                  | 'events'
+                  | 'services'
+                  | 'galleries'
+                  | 'testimonials'
+                  | 'faqs'
+                  | 'custom-items'
+                )
+              | null;
             /**
              * Filter custom items by content type
              */
@@ -1478,7 +1534,7 @@ export interface Post {
                     }
                 )[]
               | null;
-            layout?: ('grid' | 'list' | 'cards' | 'carousel') | null;
+            variant?: ('grid' | 'list' | 'cards' | 'carousel') | null;
             columns?: ('2' | '3' | '4') | null;
             showImage?: boolean | null;
             showExcerpt?: boolean | null;
@@ -1511,8 +1567,8 @@ export interface Post {
               };
               [k: string]: unknown;
             } | null;
-            style?: ('default' | 'card' | 'inline' | 'fullWidth') | null;
-            backgroundColor?: ('none' | 'light' | 'dark') | null;
+            variant?: ('default' | 'card' | 'inline' | 'fullWidth') | null;
+            backgroundColor?: ('none' | 'muted' | 'dark') | null;
             id?: string | null;
             blockName?: string | null;
             blockType: 'form';
@@ -1529,7 +1585,7 @@ export interface Post {
             /**
              * Choose how images are displayed
              */
-            layout: 'grid' | 'masonry' | 'carousel' | 'lightbox' | 'slider';
+            variant: 'grid' | 'masonry' | 'carousel' | 'lightbox' | 'slider';
             /**
              * Number of columns on desktop
              */
@@ -1567,19 +1623,9 @@ export interface Post {
             heading?: string | null;
             description?: string | null;
             /**
-             * Choose the visual style of grid items
+             * Layout structure (works with any skin)
              */
-            style:
-              | 'cards'
-              | 'features'
-              | 'icons'
-              | 'stats'
-              | 'team'
-              | 'testimonials'
-              | 'logos'
-              | 'agency-cards'
-              | 'agency-list'
-              | 'retro-cards';
+            variant: 'cards' | 'features' | 'icons' | 'stats' | 'team' | 'testimonials' | 'logos';
             /**
              * Number of columns on desktop
              */
@@ -1595,8 +1641,8 @@ export interface Post {
                * Lucide icon name (e.g., "star", "heart", "check")
                */
               icon?: string | null;
-              title: string;
-              subtitle?: string | null;
+              heading: string;
+              eyebrow?: string | null;
               description?: string | null;
               /**
                * e.g., "99%", "10K+", "$1M"
@@ -1635,7 +1681,7 @@ export interface Post {
             /**
              * Choose the timeline layout style
              */
-            layout: 'vertical' | 'alternating' | 'horizontal' | 'compact';
+            variant: 'vertical' | 'alternating' | 'horizontal' | 'compact';
             lineStyle?: ('solid' | 'dashed' | 'dotted' | 'gradient') | null;
             markerStyle?: ('circle' | 'diamond' | 'square' | 'icon' | 'number' | 'image') | null;
             events: {
@@ -1643,7 +1689,7 @@ export interface Post {
                * e.g., "2024", "Jan 2024", "1500 BCE", "Renaissance Period"
                */
               date: string;
-              title: string;
+              heading: string;
               description?: {
                 root: {
                   type: string;
@@ -1689,7 +1735,7 @@ export interface Post {
              */
             animateOnScroll?: boolean | null;
             sortOrder?: ('chronological' | 'reverse' | 'manual') | null;
-            backgroundColor?: ('transparent' | 'light' | 'dark' | 'primary') | null;
+            backgroundColor?: ('transparent' | 'muted' | 'dark' | 'accent') | null;
             id?: string | null;
             blockName?: string | null;
             blockType: 'timeline';
@@ -1836,14 +1882,16 @@ export interface ArchiveItem {
   contentBlocks?:
     | (
         | {
-            variant?: ('standard' | 'agency' | 'retro') | null;
-            type?: ('standard' | 'minimal' | 'fullscreen' | 'split' | 'video') | null;
+            /**
+             * Layout structure (works with any skin)
+             */
+            variant?: ('standard' | 'minimal' | 'fullscreen' | 'split' | 'video' | 'hero-led') | null;
             /**
              * Optional badge label displayed above the heading.
              */
             eyebrow?: string | null;
             heading: string;
-            subheading?: string | null;
+            description?: string | null;
             image?: (number | null) | Media;
             /**
              * YouTube or Vimeo URL
@@ -1894,7 +1942,7 @@ export interface ArchiveItem {
                   id?: string | null;
                 }[]
               | null;
-            backgroundColor?: ('none' | 'light' | 'dark' | 'primary' | 'secondary') | null;
+            backgroundColor?: ('none' | 'muted' | 'dark' | 'accent') | null;
             paddingTop?: ('none' | 'small' | 'medium' | 'large') | null;
             paddingBottom?: ('none' | 'small' | 'medium' | 'large') | null;
             id?: string | null;
@@ -1917,7 +1965,7 @@ export interface ArchiveItem {
             blockType: 'media';
           }
         | {
-            style?: ('standard' | 'banner' | 'card' | 'inline' | 'agency') | null;
+            variant?: ('standard' | 'banner' | 'card' | 'inline') | null;
             heading: string;
             description?: string | null;
             image?: (number | null) | Media;
@@ -1931,7 +1979,7 @@ export interface ArchiveItem {
                   id?: string | null;
                 }[]
               | null;
-            backgroundColor?: ('none' | 'light' | 'dark' | 'primary' | 'secondary') | null;
+            backgroundColor?: ('none' | 'muted' | 'dark' | 'accent') | null;
             id?: string | null;
             blockName?: string | null;
             blockType: 'cta';
@@ -1940,7 +1988,21 @@ export interface ArchiveItem {
             heading?: string | null;
             description?: string | null;
             populateBy?: ('collection' | 'selection') | null;
-            relationTo?: ('posts' | 'pages' | 'archive-items' | 'people' | 'places' | 'custom-items') | null;
+            relationTo?:
+              | (
+                  | 'posts'
+                  | 'pages'
+                  | 'archive-items'
+                  | 'people'
+                  | 'places'
+                  | 'events'
+                  | 'services'
+                  | 'galleries'
+                  | 'testimonials'
+                  | 'faqs'
+                  | 'custom-items'
+                )
+              | null;
             /**
              * Filter custom items by content type
              */
@@ -1976,7 +2038,7 @@ export interface ArchiveItem {
                     }
                 )[]
               | null;
-            layout?: ('grid' | 'list' | 'cards' | 'carousel') | null;
+            variant?: ('grid' | 'list' | 'cards' | 'carousel') | null;
             columns?: ('2' | '3' | '4') | null;
             showImage?: boolean | null;
             showExcerpt?: boolean | null;
@@ -2009,8 +2071,8 @@ export interface ArchiveItem {
               };
               [k: string]: unknown;
             } | null;
-            style?: ('default' | 'card' | 'inline' | 'fullWidth') | null;
-            backgroundColor?: ('none' | 'light' | 'dark') | null;
+            variant?: ('default' | 'card' | 'inline' | 'fullWidth') | null;
+            backgroundColor?: ('none' | 'muted' | 'dark') | null;
             id?: string | null;
             blockName?: string | null;
             blockType: 'form';
@@ -2027,7 +2089,7 @@ export interface ArchiveItem {
             /**
              * Choose how images are displayed
              */
-            layout: 'grid' | 'masonry' | 'carousel' | 'lightbox' | 'slider';
+            variant: 'grid' | 'masonry' | 'carousel' | 'lightbox' | 'slider';
             /**
              * Number of columns on desktop
              */
@@ -2065,19 +2127,9 @@ export interface ArchiveItem {
             heading?: string | null;
             description?: string | null;
             /**
-             * Choose the visual style of grid items
+             * Layout structure (works with any skin)
              */
-            style:
-              | 'cards'
-              | 'features'
-              | 'icons'
-              | 'stats'
-              | 'team'
-              | 'testimonials'
-              | 'logos'
-              | 'agency-cards'
-              | 'agency-list'
-              | 'retro-cards';
+            variant: 'cards' | 'features' | 'icons' | 'stats' | 'team' | 'testimonials' | 'logos';
             /**
              * Number of columns on desktop
              */
@@ -2093,8 +2145,8 @@ export interface ArchiveItem {
                * Lucide icon name (e.g., "star", "heart", "check")
                */
               icon?: string | null;
-              title: string;
-              subtitle?: string | null;
+              heading: string;
+              eyebrow?: string | null;
               description?: string | null;
               /**
                * e.g., "99%", "10K+", "$1M"
@@ -2133,7 +2185,7 @@ export interface ArchiveItem {
             /**
              * Choose the timeline layout style
              */
-            layout: 'vertical' | 'alternating' | 'horizontal' | 'compact';
+            variant: 'vertical' | 'alternating' | 'horizontal' | 'compact';
             lineStyle?: ('solid' | 'dashed' | 'dotted' | 'gradient') | null;
             markerStyle?: ('circle' | 'diamond' | 'square' | 'icon' | 'number' | 'image') | null;
             events: {
@@ -2141,7 +2193,7 @@ export interface ArchiveItem {
                * e.g., "2024", "Jan 2024", "1500 BCE", "Renaissance Period"
                */
               date: string;
-              title: string;
+              heading: string;
               description?: {
                 root: {
                   type: string;
@@ -2187,7 +2239,7 @@ export interface ArchiveItem {
              */
             animateOnScroll?: boolean | null;
             sortOrder?: ('chronological' | 'reverse' | 'manual') | null;
-            backgroundColor?: ('transparent' | 'light' | 'dark' | 'primary') | null;
+            backgroundColor?: ('transparent' | 'muted' | 'dark' | 'accent') | null;
             id?: string | null;
             blockName?: string | null;
             blockType: 'timeline';
@@ -2312,14 +2364,16 @@ export interface Person {
   contentBlocks?:
     | (
         | {
-            variant?: ('standard' | 'agency' | 'retro') | null;
-            type?: ('standard' | 'minimal' | 'fullscreen' | 'split' | 'video') | null;
+            /**
+             * Layout structure (works with any skin)
+             */
+            variant?: ('standard' | 'minimal' | 'fullscreen' | 'split' | 'video' | 'hero-led') | null;
             /**
              * Optional badge label displayed above the heading.
              */
             eyebrow?: string | null;
             heading: string;
-            subheading?: string | null;
+            description?: string | null;
             image?: (number | null) | Media;
             /**
              * YouTube or Vimeo URL
@@ -2370,7 +2424,7 @@ export interface Person {
                   id?: string | null;
                 }[]
               | null;
-            backgroundColor?: ('none' | 'light' | 'dark' | 'primary' | 'secondary') | null;
+            backgroundColor?: ('none' | 'muted' | 'dark' | 'accent') | null;
             paddingTop?: ('none' | 'small' | 'medium' | 'large') | null;
             paddingBottom?: ('none' | 'small' | 'medium' | 'large') | null;
             id?: string | null;
@@ -2393,7 +2447,7 @@ export interface Person {
             blockType: 'media';
           }
         | {
-            style?: ('standard' | 'banner' | 'card' | 'inline' | 'agency') | null;
+            variant?: ('standard' | 'banner' | 'card' | 'inline') | null;
             heading: string;
             description?: string | null;
             image?: (number | null) | Media;
@@ -2407,7 +2461,7 @@ export interface Person {
                   id?: string | null;
                 }[]
               | null;
-            backgroundColor?: ('none' | 'light' | 'dark' | 'primary' | 'secondary') | null;
+            backgroundColor?: ('none' | 'muted' | 'dark' | 'accent') | null;
             id?: string | null;
             blockName?: string | null;
             blockType: 'cta';
@@ -2423,11 +2477,14 @@ export interface Person {
           }
         | {
             heading?: string | null;
-            subheading?: string | null;
-            layout?: ('grid' | 'list') | null;
+            description?: string | null;
+            /**
+             * Layout structure (works with any skin)
+             */
+            variant?: ('grid' | 'list') | null;
             items?:
               | {
-                  title: string;
+                  heading: string;
                   description?: string | null;
                   icon?: string | null;
                   media?: (number | null) | Media;
@@ -2455,9 +2512,14 @@ export interface Person {
           }
         | {
             heading?: string | null;
-            logos?:
+            description?: string | null;
+            /**
+             * Layout structure (works with any skin)
+             */
+            variant?: ('grid' | 'ticker') | null;
+            items?:
               | {
-                  logo: number | Media;
+                  media: number | Media;
                   label?: string | null;
                   url?: string | null;
                   id?: string | null;
@@ -2469,7 +2531,11 @@ export interface Person {
           }
         | {
             heading?: string | null;
-            style?: ('standard' | 'agency') | null;
+            description?: string | null;
+            /**
+             * Layout structure (works with any skin)
+             */
+            variant?: ('standard' | 'grid' | 'cards') | null;
             items?:
               | {
                   quote: string;
@@ -2487,6 +2553,11 @@ export interface Person {
           }
         | {
             heading?: string | null;
+            description?: string | null;
+            /**
+             * Layout structure (works with any skin)
+             */
+            variant?: ('accordion' | 'grid' | 'list') | null;
             items?:
               | {
                   question: string;
@@ -2572,7 +2643,21 @@ export interface Person {
             heading?: string | null;
             description?: string | null;
             populateBy?: ('collection' | 'selection') | null;
-            relationTo?: ('posts' | 'pages' | 'archive-items' | 'people' | 'places' | 'custom-items') | null;
+            relationTo?:
+              | (
+                  | 'posts'
+                  | 'pages'
+                  | 'archive-items'
+                  | 'people'
+                  | 'places'
+                  | 'events'
+                  | 'services'
+                  | 'galleries'
+                  | 'testimonials'
+                  | 'faqs'
+                  | 'custom-items'
+                )
+              | null;
             /**
              * Filter custom items by content type
              */
@@ -2608,7 +2693,7 @@ export interface Person {
                     }
                 )[]
               | null;
-            layout?: ('grid' | 'list' | 'cards' | 'carousel') | null;
+            variant?: ('grid' | 'list' | 'cards' | 'carousel') | null;
             columns?: ('2' | '3' | '4') | null;
             showImage?: boolean | null;
             showExcerpt?: boolean | null;
@@ -2641,8 +2726,8 @@ export interface Person {
               };
               [k: string]: unknown;
             } | null;
-            style?: ('default' | 'card' | 'inline' | 'fullWidth') | null;
-            backgroundColor?: ('none' | 'light' | 'dark') | null;
+            variant?: ('default' | 'card' | 'inline' | 'fullWidth') | null;
+            backgroundColor?: ('none' | 'muted' | 'dark') | null;
             id?: string | null;
             blockName?: string | null;
             blockType: 'form';
@@ -2659,7 +2744,7 @@ export interface Person {
             /**
              * Choose how images are displayed
              */
-            layout: 'grid' | 'masonry' | 'carousel' | 'lightbox' | 'slider';
+            variant: 'grid' | 'masonry' | 'carousel' | 'lightbox' | 'slider';
             /**
              * Number of columns on desktop
              */
@@ -2697,19 +2782,9 @@ export interface Person {
             heading?: string | null;
             description?: string | null;
             /**
-             * Choose the visual style of grid items
+             * Layout structure (works with any skin)
              */
-            style:
-              | 'cards'
-              | 'features'
-              | 'icons'
-              | 'stats'
-              | 'team'
-              | 'testimonials'
-              | 'logos'
-              | 'agency-cards'
-              | 'agency-list'
-              | 'retro-cards';
+            variant: 'cards' | 'features' | 'icons' | 'stats' | 'team' | 'testimonials' | 'logos';
             /**
              * Number of columns on desktop
              */
@@ -2725,8 +2800,8 @@ export interface Person {
                * Lucide icon name (e.g., "star", "heart", "check")
                */
               icon?: string | null;
-              title: string;
-              subtitle?: string | null;
+              heading: string;
+              eyebrow?: string | null;
               description?: string | null;
               /**
                * e.g., "99%", "10K+", "$1M"
@@ -2765,7 +2840,7 @@ export interface Person {
             /**
              * Choose the timeline layout style
              */
-            layout: 'vertical' | 'alternating' | 'horizontal' | 'compact';
+            variant: 'vertical' | 'alternating' | 'horizontal' | 'compact';
             lineStyle?: ('solid' | 'dashed' | 'dotted' | 'gradient') | null;
             markerStyle?: ('circle' | 'diamond' | 'square' | 'icon' | 'number' | 'image') | null;
             events: {
@@ -2773,7 +2848,7 @@ export interface Person {
                * e.g., "2024", "Jan 2024", "1500 BCE", "Renaissance Period"
                */
               date: string;
-              title: string;
+              heading: string;
               description?: {
                 root: {
                   type: string;
@@ -2819,7 +2894,7 @@ export interface Person {
              */
             animateOnScroll?: boolean | null;
             sortOrder?: ('chronological' | 'reverse' | 'manual') | null;
-            backgroundColor?: ('transparent' | 'light' | 'dark' | 'primary') | null;
+            backgroundColor?: ('transparent' | 'muted' | 'dark' | 'accent') | null;
             id?: string | null;
             blockName?: string | null;
             blockType: 'timeline';
@@ -2908,11 +2983,6 @@ export interface Place {
     };
     [k: string]: unknown;
   } | null;
-  /**
-   * @minItems 2
-   * @maxItems 2
-   */
-  location?: [number, number] | null;
   address?: {
     street?: string | null;
     street2?: string | null;
@@ -2975,14 +3045,16 @@ export interface Place {
   contentBlocks?:
     | (
         | {
-            variant?: ('standard' | 'agency' | 'retro') | null;
-            type?: ('standard' | 'minimal' | 'fullscreen' | 'split' | 'video') | null;
+            /**
+             * Layout structure (works with any skin)
+             */
+            variant?: ('standard' | 'minimal' | 'fullscreen' | 'split' | 'video' | 'hero-led') | null;
             /**
              * Optional badge label displayed above the heading.
              */
             eyebrow?: string | null;
             heading: string;
-            subheading?: string | null;
+            description?: string | null;
             image?: (number | null) | Media;
             /**
              * YouTube or Vimeo URL
@@ -3033,7 +3105,7 @@ export interface Place {
                   id?: string | null;
                 }[]
               | null;
-            backgroundColor?: ('none' | 'light' | 'dark' | 'primary' | 'secondary') | null;
+            backgroundColor?: ('none' | 'muted' | 'dark' | 'accent') | null;
             paddingTop?: ('none' | 'small' | 'medium' | 'large') | null;
             paddingBottom?: ('none' | 'small' | 'medium' | 'large') | null;
             id?: string | null;
@@ -3056,7 +3128,7 @@ export interface Place {
             blockType: 'media';
           }
         | {
-            style?: ('standard' | 'banner' | 'card' | 'inline' | 'agency') | null;
+            variant?: ('standard' | 'banner' | 'card' | 'inline') | null;
             heading: string;
             description?: string | null;
             image?: (number | null) | Media;
@@ -3070,7 +3142,7 @@ export interface Place {
                   id?: string | null;
                 }[]
               | null;
-            backgroundColor?: ('none' | 'light' | 'dark' | 'primary' | 'secondary') | null;
+            backgroundColor?: ('none' | 'muted' | 'dark' | 'accent') | null;
             id?: string | null;
             blockName?: string | null;
             blockType: 'cta';
@@ -3086,11 +3158,14 @@ export interface Place {
           }
         | {
             heading?: string | null;
-            subheading?: string | null;
-            layout?: ('grid' | 'list') | null;
+            description?: string | null;
+            /**
+             * Layout structure (works with any skin)
+             */
+            variant?: ('grid' | 'list') | null;
             items?:
               | {
-                  title: string;
+                  heading: string;
                   description?: string | null;
                   icon?: string | null;
                   media?: (number | null) | Media;
@@ -3118,9 +3193,14 @@ export interface Place {
           }
         | {
             heading?: string | null;
-            logos?:
+            description?: string | null;
+            /**
+             * Layout structure (works with any skin)
+             */
+            variant?: ('grid' | 'ticker') | null;
+            items?:
               | {
-                  logo: number | Media;
+                  media: number | Media;
                   label?: string | null;
                   url?: string | null;
                   id?: string | null;
@@ -3132,7 +3212,11 @@ export interface Place {
           }
         | {
             heading?: string | null;
-            style?: ('standard' | 'agency') | null;
+            description?: string | null;
+            /**
+             * Layout structure (works with any skin)
+             */
+            variant?: ('standard' | 'grid' | 'cards') | null;
             items?:
               | {
                   quote: string;
@@ -3150,6 +3234,11 @@ export interface Place {
           }
         | {
             heading?: string | null;
+            description?: string | null;
+            /**
+             * Layout structure (works with any skin)
+             */
+            variant?: ('accordion' | 'grid' | 'list') | null;
             items?:
               | {
                   question: string;
@@ -3235,7 +3324,21 @@ export interface Place {
             heading?: string | null;
             description?: string | null;
             populateBy?: ('collection' | 'selection') | null;
-            relationTo?: ('posts' | 'pages' | 'archive-items' | 'people' | 'places' | 'custom-items') | null;
+            relationTo?:
+              | (
+                  | 'posts'
+                  | 'pages'
+                  | 'archive-items'
+                  | 'people'
+                  | 'places'
+                  | 'events'
+                  | 'services'
+                  | 'galleries'
+                  | 'testimonials'
+                  | 'faqs'
+                  | 'custom-items'
+                )
+              | null;
             /**
              * Filter custom items by content type
              */
@@ -3271,7 +3374,7 @@ export interface Place {
                     }
                 )[]
               | null;
-            layout?: ('grid' | 'list' | 'cards' | 'carousel') | null;
+            variant?: ('grid' | 'list' | 'cards' | 'carousel') | null;
             columns?: ('2' | '3' | '4') | null;
             showImage?: boolean | null;
             showExcerpt?: boolean | null;
@@ -3304,8 +3407,8 @@ export interface Place {
               };
               [k: string]: unknown;
             } | null;
-            style?: ('default' | 'card' | 'inline' | 'fullWidth') | null;
-            backgroundColor?: ('none' | 'light' | 'dark') | null;
+            variant?: ('default' | 'card' | 'inline' | 'fullWidth') | null;
+            backgroundColor?: ('none' | 'muted' | 'dark') | null;
             id?: string | null;
             blockName?: string | null;
             blockType: 'form';
@@ -3322,7 +3425,7 @@ export interface Place {
             /**
              * Choose how images are displayed
              */
-            layout: 'grid' | 'masonry' | 'carousel' | 'lightbox' | 'slider';
+            variant: 'grid' | 'masonry' | 'carousel' | 'lightbox' | 'slider';
             /**
              * Number of columns on desktop
              */
@@ -3360,19 +3463,9 @@ export interface Place {
             heading?: string | null;
             description?: string | null;
             /**
-             * Choose the visual style of grid items
+             * Layout structure (works with any skin)
              */
-            style:
-              | 'cards'
-              | 'features'
-              | 'icons'
-              | 'stats'
-              | 'team'
-              | 'testimonials'
-              | 'logos'
-              | 'agency-cards'
-              | 'agency-list'
-              | 'retro-cards';
+            variant: 'cards' | 'features' | 'icons' | 'stats' | 'team' | 'testimonials' | 'logos';
             /**
              * Number of columns on desktop
              */
@@ -3388,8 +3481,8 @@ export interface Place {
                * Lucide icon name (e.g., "star", "heart", "check")
                */
               icon?: string | null;
-              title: string;
-              subtitle?: string | null;
+              heading: string;
+              eyebrow?: string | null;
               description?: string | null;
               /**
                * e.g., "99%", "10K+", "$1M"
@@ -3428,7 +3521,7 @@ export interface Place {
             /**
              * Choose the timeline layout style
              */
-            layout: 'vertical' | 'alternating' | 'horizontal' | 'compact';
+            variant: 'vertical' | 'alternating' | 'horizontal' | 'compact';
             lineStyle?: ('solid' | 'dashed' | 'dotted' | 'gradient') | null;
             markerStyle?: ('circle' | 'diamond' | 'square' | 'icon' | 'number' | 'image') | null;
             events: {
@@ -3436,7 +3529,7 @@ export interface Place {
                * e.g., "2024", "Jan 2024", "1500 BCE", "Renaissance Period"
                */
               date: string;
-              title: string;
+              heading: string;
               description?: {
                 root: {
                   type: string;
@@ -3482,7 +3575,7 @@ export interface Place {
              */
             animateOnScroll?: boolean | null;
             sortOrder?: ('chronological' | 'reverse' | 'manual') | null;
-            backgroundColor?: ('transparent' | 'light' | 'dark' | 'primary') | null;
+            backgroundColor?: ('transparent' | 'muted' | 'dark' | 'accent') | null;
             id?: string | null;
             blockName?: string | null;
             blockType: 'timeline';
@@ -3571,14 +3664,16 @@ export interface CustomItem {
   blocks?:
     | (
         | {
-            variant?: ('standard' | 'agency' | 'retro') | null;
-            type?: ('standard' | 'minimal' | 'fullscreen' | 'split' | 'video') | null;
+            /**
+             * Layout structure (works with any skin)
+             */
+            variant?: ('standard' | 'minimal' | 'fullscreen' | 'split' | 'video' | 'hero-led') | null;
             /**
              * Optional badge label displayed above the heading.
              */
             eyebrow?: string | null;
             heading: string;
-            subheading?: string | null;
+            description?: string | null;
             image?: (number | null) | Media;
             /**
              * YouTube or Vimeo URL
@@ -3629,7 +3724,7 @@ export interface CustomItem {
                   id?: string | null;
                 }[]
               | null;
-            backgroundColor?: ('none' | 'light' | 'dark' | 'primary' | 'secondary') | null;
+            backgroundColor?: ('none' | 'muted' | 'dark' | 'accent') | null;
             paddingTop?: ('none' | 'small' | 'medium' | 'large') | null;
             paddingBottom?: ('none' | 'small' | 'medium' | 'large') | null;
             id?: string | null;
@@ -3652,7 +3747,7 @@ export interface CustomItem {
             blockType: 'media';
           }
         | {
-            style?: ('standard' | 'banner' | 'card' | 'inline' | 'agency') | null;
+            variant?: ('standard' | 'banner' | 'card' | 'inline') | null;
             heading: string;
             description?: string | null;
             image?: (number | null) | Media;
@@ -3666,7 +3761,7 @@ export interface CustomItem {
                   id?: string | null;
                 }[]
               | null;
-            backgroundColor?: ('none' | 'light' | 'dark' | 'primary' | 'secondary') | null;
+            backgroundColor?: ('none' | 'muted' | 'dark' | 'accent') | null;
             id?: string | null;
             blockName?: string | null;
             blockType: 'cta';
@@ -3682,11 +3777,14 @@ export interface CustomItem {
           }
         | {
             heading?: string | null;
-            subheading?: string | null;
-            layout?: ('grid' | 'list') | null;
+            description?: string | null;
+            /**
+             * Layout structure (works with any skin)
+             */
+            variant?: ('grid' | 'list') | null;
             items?:
               | {
-                  title: string;
+                  heading: string;
                   description?: string | null;
                   icon?: string | null;
                   media?: (number | null) | Media;
@@ -3714,9 +3812,14 @@ export interface CustomItem {
           }
         | {
             heading?: string | null;
-            logos?:
+            description?: string | null;
+            /**
+             * Layout structure (works with any skin)
+             */
+            variant?: ('grid' | 'ticker') | null;
+            items?:
               | {
-                  logo: number | Media;
+                  media: number | Media;
                   label?: string | null;
                   url?: string | null;
                   id?: string | null;
@@ -3728,7 +3831,11 @@ export interface CustomItem {
           }
         | {
             heading?: string | null;
-            style?: ('standard' | 'agency') | null;
+            description?: string | null;
+            /**
+             * Layout structure (works with any skin)
+             */
+            variant?: ('standard' | 'grid' | 'cards') | null;
             items?:
               | {
                   quote: string;
@@ -3746,6 +3853,11 @@ export interface CustomItem {
           }
         | {
             heading?: string | null;
+            description?: string | null;
+            /**
+             * Layout structure (works with any skin)
+             */
+            variant?: ('accordion' | 'grid' | 'list') | null;
             items?:
               | {
                   question: string;
@@ -3839,7 +3951,7 @@ export interface CustomItem {
             /**
              * Choose how images are displayed
              */
-            layout: 'grid' | 'masonry' | 'carousel' | 'lightbox' | 'slider';
+            variant: 'grid' | 'masonry' | 'carousel' | 'lightbox' | 'slider';
             /**
              * Number of columns on desktop
              */
@@ -3877,19 +3989,9 @@ export interface CustomItem {
             heading?: string | null;
             description?: string | null;
             /**
-             * Choose the visual style of grid items
+             * Layout structure (works with any skin)
              */
-            style:
-              | 'cards'
-              | 'features'
-              | 'icons'
-              | 'stats'
-              | 'team'
-              | 'testimonials'
-              | 'logos'
-              | 'agency-cards'
-              | 'agency-list'
-              | 'retro-cards';
+            variant: 'cards' | 'features' | 'icons' | 'stats' | 'team' | 'testimonials' | 'logos';
             /**
              * Number of columns on desktop
              */
@@ -3905,8 +4007,8 @@ export interface CustomItem {
                * Lucide icon name (e.g., "star", "heart", "check")
                */
               icon?: string | null;
-              title: string;
-              subtitle?: string | null;
+              heading: string;
+              eyebrow?: string | null;
               description?: string | null;
               /**
                * e.g., "99%", "10K+", "$1M"
@@ -3945,7 +4047,7 @@ export interface CustomItem {
             /**
              * Choose the timeline layout style
              */
-            layout: 'vertical' | 'alternating' | 'horizontal' | 'compact';
+            variant: 'vertical' | 'alternating' | 'horizontal' | 'compact';
             lineStyle?: ('solid' | 'dashed' | 'dotted' | 'gradient') | null;
             markerStyle?: ('circle' | 'diamond' | 'square' | 'icon' | 'number' | 'image') | null;
             events: {
@@ -3953,7 +4055,7 @@ export interface CustomItem {
                * e.g., "2024", "Jan 2024", "1500 BCE", "Renaissance Period"
                */
               date: string;
-              title: string;
+              heading: string;
               description?: {
                 root: {
                   type: string;
@@ -3999,7 +4101,7 @@ export interface CustomItem {
              */
             animateOnScroll?: boolean | null;
             sortOrder?: ('chronological' | 'reverse' | 'manual') | null;
-            backgroundColor?: ('transparent' | 'light' | 'dark' | 'primary') | null;
+            backgroundColor?: ('transparent' | 'muted' | 'dark' | 'accent') | null;
             id?: string | null;
             blockName?: string | null;
             blockType: 'timeline';
@@ -4008,7 +4110,21 @@ export interface CustomItem {
             heading?: string | null;
             description?: string | null;
             populateBy?: ('collection' | 'selection') | null;
-            relationTo?: ('posts' | 'pages' | 'archive-items' | 'people' | 'places' | 'custom-items') | null;
+            relationTo?:
+              | (
+                  | 'posts'
+                  | 'pages'
+                  | 'archive-items'
+                  | 'people'
+                  | 'places'
+                  | 'events'
+                  | 'services'
+                  | 'galleries'
+                  | 'testimonials'
+                  | 'faqs'
+                  | 'custom-items'
+                )
+              | null;
             /**
              * Filter custom items by content type
              */
@@ -4044,7 +4160,7 @@ export interface CustomItem {
                     }
                 )[]
               | null;
-            layout?: ('grid' | 'list' | 'cards' | 'carousel') | null;
+            variant?: ('grid' | 'list' | 'cards' | 'carousel') | null;
             columns?: ('2' | '3' | '4') | null;
             showImage?: boolean | null;
             showExcerpt?: boolean | null;
@@ -4077,8 +4193,8 @@ export interface CustomItem {
               };
               [k: string]: unknown;
             } | null;
-            style?: ('default' | 'card' | 'inline' | 'fullWidth') | null;
-            backgroundColor?: ('none' | 'light' | 'dark') | null;
+            variant?: ('default' | 'card' | 'inline' | 'fullWidth') | null;
+            backgroundColor?: ('none' | 'muted' | 'dark') | null;
             id?: string | null;
             blockName?: string | null;
             blockType: 'form';
@@ -4404,14 +4520,16 @@ export interface Event {
   contentBlocks?:
     | (
         | {
-            variant?: ('standard' | 'agency' | 'retro') | null;
-            type?: ('standard' | 'minimal' | 'fullscreen' | 'split' | 'video') | null;
+            /**
+             * Layout structure (works with any skin)
+             */
+            variant?: ('standard' | 'minimal' | 'fullscreen' | 'split' | 'video' | 'hero-led') | null;
             /**
              * Optional badge label displayed above the heading.
              */
             eyebrow?: string | null;
             heading: string;
-            subheading?: string | null;
+            description?: string | null;
             image?: (number | null) | Media;
             /**
              * YouTube or Vimeo URL
@@ -4462,7 +4580,7 @@ export interface Event {
                   id?: string | null;
                 }[]
               | null;
-            backgroundColor?: ('none' | 'light' | 'dark' | 'primary' | 'secondary') | null;
+            backgroundColor?: ('none' | 'muted' | 'dark' | 'accent') | null;
             paddingTop?: ('none' | 'small' | 'medium' | 'large') | null;
             paddingBottom?: ('none' | 'small' | 'medium' | 'large') | null;
             id?: string | null;
@@ -4485,7 +4603,7 @@ export interface Event {
             blockType: 'media';
           }
         | {
-            style?: ('standard' | 'banner' | 'card' | 'inline' | 'agency') | null;
+            variant?: ('standard' | 'banner' | 'card' | 'inline') | null;
             heading: string;
             description?: string | null;
             image?: (number | null) | Media;
@@ -4499,7 +4617,7 @@ export interface Event {
                   id?: string | null;
                 }[]
               | null;
-            backgroundColor?: ('none' | 'light' | 'dark' | 'primary' | 'secondary') | null;
+            backgroundColor?: ('none' | 'muted' | 'dark' | 'accent') | null;
             id?: string | null;
             blockName?: string | null;
             blockType: 'cta';
@@ -4508,7 +4626,21 @@ export interface Event {
             heading?: string | null;
             description?: string | null;
             populateBy?: ('collection' | 'selection') | null;
-            relationTo?: ('posts' | 'pages' | 'archive-items' | 'people' | 'places' | 'custom-items') | null;
+            relationTo?:
+              | (
+                  | 'posts'
+                  | 'pages'
+                  | 'archive-items'
+                  | 'people'
+                  | 'places'
+                  | 'events'
+                  | 'services'
+                  | 'galleries'
+                  | 'testimonials'
+                  | 'faqs'
+                  | 'custom-items'
+                )
+              | null;
             /**
              * Filter custom items by content type
              */
@@ -4544,7 +4676,7 @@ export interface Event {
                     }
                 )[]
               | null;
-            layout?: ('grid' | 'list' | 'cards' | 'carousel') | null;
+            variant?: ('grid' | 'list' | 'cards' | 'carousel') | null;
             columns?: ('2' | '3' | '4') | null;
             showImage?: boolean | null;
             showExcerpt?: boolean | null;
@@ -4577,8 +4709,8 @@ export interface Event {
               };
               [k: string]: unknown;
             } | null;
-            style?: ('default' | 'card' | 'inline' | 'fullWidth') | null;
-            backgroundColor?: ('none' | 'light' | 'dark') | null;
+            variant?: ('default' | 'card' | 'inline' | 'fullWidth') | null;
+            backgroundColor?: ('none' | 'muted' | 'dark') | null;
             id?: string | null;
             blockName?: string | null;
             blockType: 'form';
@@ -4595,7 +4727,7 @@ export interface Event {
             /**
              * Choose how images are displayed
              */
-            layout: 'grid' | 'masonry' | 'carousel' | 'lightbox' | 'slider';
+            variant: 'grid' | 'masonry' | 'carousel' | 'lightbox' | 'slider';
             /**
              * Number of columns on desktop
              */
@@ -4633,19 +4765,9 @@ export interface Event {
             heading?: string | null;
             description?: string | null;
             /**
-             * Choose the visual style of grid items
+             * Layout structure (works with any skin)
              */
-            style:
-              | 'cards'
-              | 'features'
-              | 'icons'
-              | 'stats'
-              | 'team'
-              | 'testimonials'
-              | 'logos'
-              | 'agency-cards'
-              | 'agency-list'
-              | 'retro-cards';
+            variant: 'cards' | 'features' | 'icons' | 'stats' | 'team' | 'testimonials' | 'logos';
             /**
              * Number of columns on desktop
              */
@@ -4661,8 +4783,8 @@ export interface Event {
                * Lucide icon name (e.g., "star", "heart", "check")
                */
               icon?: string | null;
-              title: string;
-              subtitle?: string | null;
+              heading: string;
+              eyebrow?: string | null;
               description?: string | null;
               /**
                * e.g., "99%", "10K+", "$1M"
@@ -4701,7 +4823,7 @@ export interface Event {
             /**
              * Choose the timeline layout style
              */
-            layout: 'vertical' | 'alternating' | 'horizontal' | 'compact';
+            variant: 'vertical' | 'alternating' | 'horizontal' | 'compact';
             lineStyle?: ('solid' | 'dashed' | 'dotted' | 'gradient') | null;
             markerStyle?: ('circle' | 'diamond' | 'square' | 'icon' | 'number' | 'image') | null;
             events: {
@@ -4709,7 +4831,7 @@ export interface Event {
                * e.g., "2024", "Jan 2024", "1500 BCE", "Renaissance Period"
                */
               date: string;
-              title: string;
+              heading: string;
               description?: {
                 root: {
                   type: string;
@@ -4755,7 +4877,7 @@ export interface Event {
              */
             animateOnScroll?: boolean | null;
             sortOrder?: ('chronological' | 'reverse' | 'manual') | null;
-            backgroundColor?: ('transparent' | 'light' | 'dark' | 'primary') | null;
+            backgroundColor?: ('transparent' | 'muted' | 'dark' | 'accent') | null;
             id?: string | null;
             blockName?: string | null;
             blockType: 'timeline';
@@ -4879,14 +5001,16 @@ export interface Product {
   contentBlocks?:
     | (
         | {
-            variant?: ('standard' | 'agency' | 'retro') | null;
-            type?: ('standard' | 'minimal' | 'fullscreen' | 'split' | 'video') | null;
+            /**
+             * Layout structure (works with any skin)
+             */
+            variant?: ('standard' | 'minimal' | 'fullscreen' | 'split' | 'video' | 'hero-led') | null;
             /**
              * Optional badge label displayed above the heading.
              */
             eyebrow?: string | null;
             heading: string;
-            subheading?: string | null;
+            description?: string | null;
             image?: (number | null) | Media;
             /**
              * YouTube or Vimeo URL
@@ -4937,7 +5061,7 @@ export interface Product {
                   id?: string | null;
                 }[]
               | null;
-            backgroundColor?: ('none' | 'light' | 'dark' | 'primary' | 'secondary') | null;
+            backgroundColor?: ('none' | 'muted' | 'dark' | 'accent') | null;
             paddingTop?: ('none' | 'small' | 'medium' | 'large') | null;
             paddingBottom?: ('none' | 'small' | 'medium' | 'large') | null;
             id?: string | null;
@@ -4960,7 +5084,7 @@ export interface Product {
             blockType: 'media';
           }
         | {
-            style?: ('standard' | 'banner' | 'card' | 'inline' | 'agency') | null;
+            variant?: ('standard' | 'banner' | 'card' | 'inline') | null;
             heading: string;
             description?: string | null;
             image?: (number | null) | Media;
@@ -4974,7 +5098,7 @@ export interface Product {
                   id?: string | null;
                 }[]
               | null;
-            backgroundColor?: ('none' | 'light' | 'dark' | 'primary' | 'secondary') | null;
+            backgroundColor?: ('none' | 'muted' | 'dark' | 'accent') | null;
             id?: string | null;
             blockName?: string | null;
             blockType: 'cta';
@@ -4983,7 +5107,21 @@ export interface Product {
             heading?: string | null;
             description?: string | null;
             populateBy?: ('collection' | 'selection') | null;
-            relationTo?: ('posts' | 'pages' | 'archive-items' | 'people' | 'places' | 'custom-items') | null;
+            relationTo?:
+              | (
+                  | 'posts'
+                  | 'pages'
+                  | 'archive-items'
+                  | 'people'
+                  | 'places'
+                  | 'events'
+                  | 'services'
+                  | 'galleries'
+                  | 'testimonials'
+                  | 'faqs'
+                  | 'custom-items'
+                )
+              | null;
             /**
              * Filter custom items by content type
              */
@@ -5019,7 +5157,7 @@ export interface Product {
                     }
                 )[]
               | null;
-            layout?: ('grid' | 'list' | 'cards' | 'carousel') | null;
+            variant?: ('grid' | 'list' | 'cards' | 'carousel') | null;
             columns?: ('2' | '3' | '4') | null;
             showImage?: boolean | null;
             showExcerpt?: boolean | null;
@@ -5052,8 +5190,8 @@ export interface Product {
               };
               [k: string]: unknown;
             } | null;
-            style?: ('default' | 'card' | 'inline' | 'fullWidth') | null;
-            backgroundColor?: ('none' | 'light' | 'dark') | null;
+            variant?: ('default' | 'card' | 'inline' | 'fullWidth') | null;
+            backgroundColor?: ('none' | 'muted' | 'dark') | null;
             id?: string | null;
             blockName?: string | null;
             blockType: 'form';
@@ -5070,7 +5208,7 @@ export interface Product {
             /**
              * Choose how images are displayed
              */
-            layout: 'grid' | 'masonry' | 'carousel' | 'lightbox' | 'slider';
+            variant: 'grid' | 'masonry' | 'carousel' | 'lightbox' | 'slider';
             /**
              * Number of columns on desktop
              */
@@ -5108,19 +5246,9 @@ export interface Product {
             heading?: string | null;
             description?: string | null;
             /**
-             * Choose the visual style of grid items
+             * Layout structure (works with any skin)
              */
-            style:
-              | 'cards'
-              | 'features'
-              | 'icons'
-              | 'stats'
-              | 'team'
-              | 'testimonials'
-              | 'logos'
-              | 'agency-cards'
-              | 'agency-list'
-              | 'retro-cards';
+            variant: 'cards' | 'features' | 'icons' | 'stats' | 'team' | 'testimonials' | 'logos';
             /**
              * Number of columns on desktop
              */
@@ -5136,8 +5264,8 @@ export interface Product {
                * Lucide icon name (e.g., "star", "heart", "check")
                */
               icon?: string | null;
-              title: string;
-              subtitle?: string | null;
+              heading: string;
+              eyebrow?: string | null;
               description?: string | null;
               /**
                * e.g., "99%", "10K+", "$1M"
@@ -5176,7 +5304,7 @@ export interface Product {
             /**
              * Choose the timeline layout style
              */
-            layout: 'vertical' | 'alternating' | 'horizontal' | 'compact';
+            variant: 'vertical' | 'alternating' | 'horizontal' | 'compact';
             lineStyle?: ('solid' | 'dashed' | 'dotted' | 'gradient') | null;
             markerStyle?: ('circle' | 'diamond' | 'square' | 'icon' | 'number' | 'image') | null;
             events: {
@@ -5184,7 +5312,7 @@ export interface Product {
                * e.g., "2024", "Jan 2024", "1500 BCE", "Renaissance Period"
                */
               date: string;
-              title: string;
+              heading: string;
               description?: {
                 root: {
                   type: string;
@@ -5230,7 +5358,7 @@ export interface Product {
              */
             animateOnScroll?: boolean | null;
             sortOrder?: ('chronological' | 'reverse' | 'manual') | null;
-            backgroundColor?: ('transparent' | 'light' | 'dark' | 'primary') | null;
+            backgroundColor?: ('transparent' | 'muted' | 'dark' | 'accent') | null;
             id?: string | null;
             blockName?: string | null;
             blockType: 'timeline';
@@ -5940,10 +6068,9 @@ export interface PagesSelect<T extends boolean = true> {
           | T
           | {
               variant?: T;
-              type?: T;
               eyebrow?: T;
               heading?: T;
-              subheading?: T;
+              description?: T;
               image?: T;
               videoUrl?: T;
               overlay?: T;
@@ -6007,7 +6134,7 @@ export interface PagesSelect<T extends boolean = true> {
         cta?:
           | T
           | {
-              style?: T;
+              variant?: T;
               heading?: T;
               description?: T;
               image?: T;
@@ -6039,12 +6166,12 @@ export interface PagesSelect<T extends boolean = true> {
           | T
           | {
               heading?: T;
-              subheading?: T;
-              layout?: T;
+              description?: T;
+              variant?: T;
               items?:
                 | T
                 | {
-                    title?: T;
+                    heading?: T;
                     description?: T;
                     icon?: T;
                     media?: T;
@@ -6073,10 +6200,12 @@ export interface PagesSelect<T extends boolean = true> {
           | T
           | {
               heading?: T;
-              logos?:
+              description?: T;
+              variant?: T;
+              items?:
                 | T
                 | {
-                    logo?: T;
+                    media?: T;
                     label?: T;
                     url?: T;
                     id?: T;
@@ -6088,7 +6217,8 @@ export interface PagesSelect<T extends boolean = true> {
           | T
           | {
               heading?: T;
-              style?: T;
+              description?: T;
+              variant?: T;
               items?:
                 | T
                 | {
@@ -6107,6 +6237,8 @@ export interface PagesSelect<T extends boolean = true> {
           | T
           | {
               heading?: T;
+              description?: T;
+              variant?: T;
               items?:
                 | T
                 | {
@@ -6188,7 +6320,7 @@ export interface PagesSelect<T extends boolean = true> {
               tags?: T;
               limit?: T;
               selectedDocs?: T;
-              layout?: T;
+              variant?: T;
               columns?: T;
               showImage?: T;
               showExcerpt?: T;
@@ -6210,7 +6342,7 @@ export interface PagesSelect<T extends boolean = true> {
               form?: T;
               enableIntro?: T;
               introContent?: T;
-              style?: T;
+              variant?: T;
               backgroundColor?: T;
               id?: T;
               blockName?: T;
@@ -6220,7 +6352,7 @@ export interface PagesSelect<T extends boolean = true> {
           | {
               heading?: T;
               description?: T;
-              layout?: T;
+              variant?: T;
               columns?: T;
               gap?: T;
               aspectRatio?: T;
@@ -6250,7 +6382,7 @@ export interface PagesSelect<T extends boolean = true> {
           | {
               heading?: T;
               description?: T;
-              style?: T;
+              variant?: T;
               columns?: T;
               gap?: T;
               alignment?: T;
@@ -6259,8 +6391,8 @@ export interface PagesSelect<T extends boolean = true> {
                 | {
                     image?: T;
                     icon?: T;
-                    title?: T;
-                    subtitle?: T;
+                    heading?: T;
+                    eyebrow?: T;
                     description?: T;
                     stat?: T;
                     link?:
@@ -6292,14 +6424,14 @@ export interface PagesSelect<T extends boolean = true> {
           | {
               heading?: T;
               description?: T;
-              layout?: T;
+              variant?: T;
               lineStyle?: T;
               markerStyle?: T;
               events?:
                 | T
                 | {
                     date?: T;
-                    title?: T;
+                    heading?: T;
                     description?: T;
                     image?: T;
                     icon?: T;
@@ -6372,10 +6504,9 @@ export interface PostsSelect<T extends boolean = true> {
           | T
           | {
               variant?: T;
-              type?: T;
               eyebrow?: T;
               heading?: T;
-              subheading?: T;
+              description?: T;
               image?: T;
               videoUrl?: T;
               overlay?: T;
@@ -6439,7 +6570,7 @@ export interface PostsSelect<T extends boolean = true> {
         cta?:
           | T
           | {
-              style?: T;
+              variant?: T;
               heading?: T;
               description?: T;
               image?: T;
@@ -6471,12 +6602,12 @@ export interface PostsSelect<T extends boolean = true> {
           | T
           | {
               heading?: T;
-              subheading?: T;
-              layout?: T;
+              description?: T;
+              variant?: T;
               items?:
                 | T
                 | {
-                    title?: T;
+                    heading?: T;
                     description?: T;
                     icon?: T;
                     media?: T;
@@ -6505,10 +6636,12 @@ export interface PostsSelect<T extends boolean = true> {
           | T
           | {
               heading?: T;
-              logos?:
+              description?: T;
+              variant?: T;
+              items?:
                 | T
                 | {
-                    logo?: T;
+                    media?: T;
                     label?: T;
                     url?: T;
                     id?: T;
@@ -6520,7 +6653,8 @@ export interface PostsSelect<T extends boolean = true> {
           | T
           | {
               heading?: T;
-              style?: T;
+              description?: T;
+              variant?: T;
               items?:
                 | T
                 | {
@@ -6539,6 +6673,8 @@ export interface PostsSelect<T extends boolean = true> {
           | T
           | {
               heading?: T;
+              description?: T;
+              variant?: T;
               items?:
                 | T
                 | {
@@ -6620,7 +6756,7 @@ export interface PostsSelect<T extends boolean = true> {
               tags?: T;
               limit?: T;
               selectedDocs?: T;
-              layout?: T;
+              variant?: T;
               columns?: T;
               showImage?: T;
               showExcerpt?: T;
@@ -6642,7 +6778,7 @@ export interface PostsSelect<T extends boolean = true> {
               form?: T;
               enableIntro?: T;
               introContent?: T;
-              style?: T;
+              variant?: T;
               backgroundColor?: T;
               id?: T;
               blockName?: T;
@@ -6652,7 +6788,7 @@ export interface PostsSelect<T extends boolean = true> {
           | {
               heading?: T;
               description?: T;
-              layout?: T;
+              variant?: T;
               columns?: T;
               gap?: T;
               aspectRatio?: T;
@@ -6682,7 +6818,7 @@ export interface PostsSelect<T extends boolean = true> {
           | {
               heading?: T;
               description?: T;
-              style?: T;
+              variant?: T;
               columns?: T;
               gap?: T;
               alignment?: T;
@@ -6691,8 +6827,8 @@ export interface PostsSelect<T extends boolean = true> {
                 | {
                     image?: T;
                     icon?: T;
-                    title?: T;
-                    subtitle?: T;
+                    heading?: T;
+                    eyebrow?: T;
                     description?: T;
                     stat?: T;
                     link?:
@@ -6724,14 +6860,14 @@ export interface PostsSelect<T extends boolean = true> {
           | {
               heading?: T;
               description?: T;
-              layout?: T;
+              variant?: T;
               lineStyle?: T;
               markerStyle?: T;
               events?:
                 | T
                 | {
                     date?: T;
-                    title?: T;
+                    heading?: T;
                     description?: T;
                     image?: T;
                     icon?: T;
@@ -6879,10 +7015,9 @@ export interface ArchiveItemsSelect<T extends boolean = true> {
           | T
           | {
               variant?: T;
-              type?: T;
               eyebrow?: T;
               heading?: T;
-              subheading?: T;
+              description?: T;
               image?: T;
               videoUrl?: T;
               overlay?: T;
@@ -6946,7 +7081,7 @@ export interface ArchiveItemsSelect<T extends boolean = true> {
         cta?:
           | T
           | {
-              style?: T;
+              variant?: T;
               heading?: T;
               description?: T;
               image?: T;
@@ -6976,7 +7111,7 @@ export interface ArchiveItemsSelect<T extends boolean = true> {
               tags?: T;
               limit?: T;
               selectedDocs?: T;
-              layout?: T;
+              variant?: T;
               columns?: T;
               showImage?: T;
               showExcerpt?: T;
@@ -6998,7 +7133,7 @@ export interface ArchiveItemsSelect<T extends boolean = true> {
               form?: T;
               enableIntro?: T;
               introContent?: T;
-              style?: T;
+              variant?: T;
               backgroundColor?: T;
               id?: T;
               blockName?: T;
@@ -7008,7 +7143,7 @@ export interface ArchiveItemsSelect<T extends boolean = true> {
           | {
               heading?: T;
               description?: T;
-              layout?: T;
+              variant?: T;
               columns?: T;
               gap?: T;
               aspectRatio?: T;
@@ -7038,7 +7173,7 @@ export interface ArchiveItemsSelect<T extends boolean = true> {
           | {
               heading?: T;
               description?: T;
-              style?: T;
+              variant?: T;
               columns?: T;
               gap?: T;
               alignment?: T;
@@ -7047,8 +7182,8 @@ export interface ArchiveItemsSelect<T extends boolean = true> {
                 | {
                     image?: T;
                     icon?: T;
-                    title?: T;
-                    subtitle?: T;
+                    heading?: T;
+                    eyebrow?: T;
                     description?: T;
                     stat?: T;
                     link?:
@@ -7080,14 +7215,14 @@ export interface ArchiveItemsSelect<T extends boolean = true> {
           | {
               heading?: T;
               description?: T;
-              layout?: T;
+              variant?: T;
               lineStyle?: T;
               markerStyle?: T;
               events?:
                 | T
                 | {
                     date?: T;
-                    title?: T;
+                    heading?: T;
                     description?: T;
                     image?: T;
                     icon?: T;
@@ -7173,10 +7308,9 @@ export interface PeopleSelect<T extends boolean = true> {
           | T
           | {
               variant?: T;
-              type?: T;
               eyebrow?: T;
               heading?: T;
-              subheading?: T;
+              description?: T;
               image?: T;
               videoUrl?: T;
               overlay?: T;
@@ -7240,7 +7374,7 @@ export interface PeopleSelect<T extends boolean = true> {
         cta?:
           | T
           | {
-              style?: T;
+              variant?: T;
               heading?: T;
               description?: T;
               image?: T;
@@ -7272,12 +7406,12 @@ export interface PeopleSelect<T extends boolean = true> {
           | T
           | {
               heading?: T;
-              subheading?: T;
-              layout?: T;
+              description?: T;
+              variant?: T;
               items?:
                 | T
                 | {
-                    title?: T;
+                    heading?: T;
                     description?: T;
                     icon?: T;
                     media?: T;
@@ -7306,10 +7440,12 @@ export interface PeopleSelect<T extends boolean = true> {
           | T
           | {
               heading?: T;
-              logos?:
+              description?: T;
+              variant?: T;
+              items?:
                 | T
                 | {
-                    logo?: T;
+                    media?: T;
                     label?: T;
                     url?: T;
                     id?: T;
@@ -7321,7 +7457,8 @@ export interface PeopleSelect<T extends boolean = true> {
           | T
           | {
               heading?: T;
-              style?: T;
+              description?: T;
+              variant?: T;
               items?:
                 | T
                 | {
@@ -7340,6 +7477,8 @@ export interface PeopleSelect<T extends boolean = true> {
           | T
           | {
               heading?: T;
+              description?: T;
+              variant?: T;
               items?:
                 | T
                 | {
@@ -7421,7 +7560,7 @@ export interface PeopleSelect<T extends boolean = true> {
               tags?: T;
               limit?: T;
               selectedDocs?: T;
-              layout?: T;
+              variant?: T;
               columns?: T;
               showImage?: T;
               showExcerpt?: T;
@@ -7443,7 +7582,7 @@ export interface PeopleSelect<T extends boolean = true> {
               form?: T;
               enableIntro?: T;
               introContent?: T;
-              style?: T;
+              variant?: T;
               backgroundColor?: T;
               id?: T;
               blockName?: T;
@@ -7453,7 +7592,7 @@ export interface PeopleSelect<T extends boolean = true> {
           | {
               heading?: T;
               description?: T;
-              layout?: T;
+              variant?: T;
               columns?: T;
               gap?: T;
               aspectRatio?: T;
@@ -7483,7 +7622,7 @@ export interface PeopleSelect<T extends boolean = true> {
           | {
               heading?: T;
               description?: T;
-              style?: T;
+              variant?: T;
               columns?: T;
               gap?: T;
               alignment?: T;
@@ -7492,8 +7631,8 @@ export interface PeopleSelect<T extends boolean = true> {
                 | {
                     image?: T;
                     icon?: T;
-                    title?: T;
-                    subtitle?: T;
+                    heading?: T;
+                    eyebrow?: T;
                     description?: T;
                     stat?: T;
                     link?:
@@ -7525,14 +7664,14 @@ export interface PeopleSelect<T extends boolean = true> {
           | {
               heading?: T;
               description?: T;
-              layout?: T;
+              variant?: T;
               lineStyle?: T;
               markerStyle?: T;
               events?:
                 | T
                 | {
                     date?: T;
-                    title?: T;
+                    heading?: T;
                     description?: T;
                     image?: T;
                     icon?: T;
@@ -7599,7 +7738,6 @@ export interface PlacesSelect<T extends boolean = true> {
   shortDescription?: T;
   description?: T;
   historicalSignificance?: T;
-  location?: T;
   address?:
     | T
     | {
@@ -7648,10 +7786,9 @@ export interface PlacesSelect<T extends boolean = true> {
           | T
           | {
               variant?: T;
-              type?: T;
               eyebrow?: T;
               heading?: T;
-              subheading?: T;
+              description?: T;
               image?: T;
               videoUrl?: T;
               overlay?: T;
@@ -7715,7 +7852,7 @@ export interface PlacesSelect<T extends boolean = true> {
         cta?:
           | T
           | {
-              style?: T;
+              variant?: T;
               heading?: T;
               description?: T;
               image?: T;
@@ -7747,12 +7884,12 @@ export interface PlacesSelect<T extends boolean = true> {
           | T
           | {
               heading?: T;
-              subheading?: T;
-              layout?: T;
+              description?: T;
+              variant?: T;
               items?:
                 | T
                 | {
-                    title?: T;
+                    heading?: T;
                     description?: T;
                     icon?: T;
                     media?: T;
@@ -7781,10 +7918,12 @@ export interface PlacesSelect<T extends boolean = true> {
           | T
           | {
               heading?: T;
-              logos?:
+              description?: T;
+              variant?: T;
+              items?:
                 | T
                 | {
-                    logo?: T;
+                    media?: T;
                     label?: T;
                     url?: T;
                     id?: T;
@@ -7796,7 +7935,8 @@ export interface PlacesSelect<T extends boolean = true> {
           | T
           | {
               heading?: T;
-              style?: T;
+              description?: T;
+              variant?: T;
               items?:
                 | T
                 | {
@@ -7815,6 +7955,8 @@ export interface PlacesSelect<T extends boolean = true> {
           | T
           | {
               heading?: T;
+              description?: T;
+              variant?: T;
               items?:
                 | T
                 | {
@@ -7896,7 +8038,7 @@ export interface PlacesSelect<T extends boolean = true> {
               tags?: T;
               limit?: T;
               selectedDocs?: T;
-              layout?: T;
+              variant?: T;
               columns?: T;
               showImage?: T;
               showExcerpt?: T;
@@ -7918,7 +8060,7 @@ export interface PlacesSelect<T extends boolean = true> {
               form?: T;
               enableIntro?: T;
               introContent?: T;
-              style?: T;
+              variant?: T;
               backgroundColor?: T;
               id?: T;
               blockName?: T;
@@ -7928,7 +8070,7 @@ export interface PlacesSelect<T extends boolean = true> {
           | {
               heading?: T;
               description?: T;
-              layout?: T;
+              variant?: T;
               columns?: T;
               gap?: T;
               aspectRatio?: T;
@@ -7958,7 +8100,7 @@ export interface PlacesSelect<T extends boolean = true> {
           | {
               heading?: T;
               description?: T;
-              style?: T;
+              variant?: T;
               columns?: T;
               gap?: T;
               alignment?: T;
@@ -7967,8 +8109,8 @@ export interface PlacesSelect<T extends boolean = true> {
                 | {
                     image?: T;
                     icon?: T;
-                    title?: T;
-                    subtitle?: T;
+                    heading?: T;
+                    eyebrow?: T;
                     description?: T;
                     stat?: T;
                     link?:
@@ -8000,14 +8142,14 @@ export interface PlacesSelect<T extends boolean = true> {
           | {
               heading?: T;
               description?: T;
-              layout?: T;
+              variant?: T;
               lineStyle?: T;
               markerStyle?: T;
               events?:
                 | T
                 | {
                     date?: T;
-                    title?: T;
+                    heading?: T;
                     description?: T;
                     image?: T;
                     icon?: T;
@@ -8111,10 +8253,9 @@ export interface EventsSelect<T extends boolean = true> {
           | T
           | {
               variant?: T;
-              type?: T;
               eyebrow?: T;
               heading?: T;
-              subheading?: T;
+              description?: T;
               image?: T;
               videoUrl?: T;
               overlay?: T;
@@ -8178,7 +8319,7 @@ export interface EventsSelect<T extends boolean = true> {
         cta?:
           | T
           | {
-              style?: T;
+              variant?: T;
               heading?: T;
               description?: T;
               image?: T;
@@ -8208,7 +8349,7 @@ export interface EventsSelect<T extends boolean = true> {
               tags?: T;
               limit?: T;
               selectedDocs?: T;
-              layout?: T;
+              variant?: T;
               columns?: T;
               showImage?: T;
               showExcerpt?: T;
@@ -8230,7 +8371,7 @@ export interface EventsSelect<T extends boolean = true> {
               form?: T;
               enableIntro?: T;
               introContent?: T;
-              style?: T;
+              variant?: T;
               backgroundColor?: T;
               id?: T;
               blockName?: T;
@@ -8240,7 +8381,7 @@ export interface EventsSelect<T extends boolean = true> {
           | {
               heading?: T;
               description?: T;
-              layout?: T;
+              variant?: T;
               columns?: T;
               gap?: T;
               aspectRatio?: T;
@@ -8270,7 +8411,7 @@ export interface EventsSelect<T extends boolean = true> {
           | {
               heading?: T;
               description?: T;
-              style?: T;
+              variant?: T;
               columns?: T;
               gap?: T;
               alignment?: T;
@@ -8279,8 +8420,8 @@ export interface EventsSelect<T extends boolean = true> {
                 | {
                     image?: T;
                     icon?: T;
-                    title?: T;
-                    subtitle?: T;
+                    heading?: T;
+                    eyebrow?: T;
                     description?: T;
                     stat?: T;
                     link?:
@@ -8312,14 +8453,14 @@ export interface EventsSelect<T extends boolean = true> {
           | {
               heading?: T;
               description?: T;
-              layout?: T;
+              variant?: T;
               lineStyle?: T;
               markerStyle?: T;
               events?:
                 | T
                 | {
                     date?: T;
-                    title?: T;
+                    heading?: T;
                     description?: T;
                     image?: T;
                     icon?: T;
@@ -8413,10 +8554,9 @@ export interface ProductsSelect<T extends boolean = true> {
           | T
           | {
               variant?: T;
-              type?: T;
               eyebrow?: T;
               heading?: T;
-              subheading?: T;
+              description?: T;
               image?: T;
               videoUrl?: T;
               overlay?: T;
@@ -8480,7 +8620,7 @@ export interface ProductsSelect<T extends boolean = true> {
         cta?:
           | T
           | {
-              style?: T;
+              variant?: T;
               heading?: T;
               description?: T;
               image?: T;
@@ -8510,7 +8650,7 @@ export interface ProductsSelect<T extends boolean = true> {
               tags?: T;
               limit?: T;
               selectedDocs?: T;
-              layout?: T;
+              variant?: T;
               columns?: T;
               showImage?: T;
               showExcerpt?: T;
@@ -8532,7 +8672,7 @@ export interface ProductsSelect<T extends boolean = true> {
               form?: T;
               enableIntro?: T;
               introContent?: T;
-              style?: T;
+              variant?: T;
               backgroundColor?: T;
               id?: T;
               blockName?: T;
@@ -8542,7 +8682,7 @@ export interface ProductsSelect<T extends boolean = true> {
           | {
               heading?: T;
               description?: T;
-              layout?: T;
+              variant?: T;
               columns?: T;
               gap?: T;
               aspectRatio?: T;
@@ -8572,7 +8712,7 @@ export interface ProductsSelect<T extends boolean = true> {
           | {
               heading?: T;
               description?: T;
-              style?: T;
+              variant?: T;
               columns?: T;
               gap?: T;
               alignment?: T;
@@ -8581,8 +8721,8 @@ export interface ProductsSelect<T extends boolean = true> {
                 | {
                     image?: T;
                     icon?: T;
-                    title?: T;
-                    subtitle?: T;
+                    heading?: T;
+                    eyebrow?: T;
                     description?: T;
                     stat?: T;
                     link?:
@@ -8614,14 +8754,14 @@ export interface ProductsSelect<T extends boolean = true> {
           | {
               heading?: T;
               description?: T;
-              layout?: T;
+              variant?: T;
               lineStyle?: T;
               markerStyle?: T;
               events?:
                 | T
                 | {
                     date?: T;
-                    title?: T;
+                    heading?: T;
                     description?: T;
                     image?: T;
                     icon?: T;
@@ -8768,10 +8908,9 @@ export interface CustomItemsSelect<T extends boolean = true> {
           | T
           | {
               variant?: T;
-              type?: T;
               eyebrow?: T;
               heading?: T;
-              subheading?: T;
+              description?: T;
               image?: T;
               videoUrl?: T;
               overlay?: T;
@@ -8835,7 +8974,7 @@ export interface CustomItemsSelect<T extends boolean = true> {
         cta?:
           | T
           | {
-              style?: T;
+              variant?: T;
               heading?: T;
               description?: T;
               image?: T;
@@ -8867,12 +9006,12 @@ export interface CustomItemsSelect<T extends boolean = true> {
           | T
           | {
               heading?: T;
-              subheading?: T;
-              layout?: T;
+              description?: T;
+              variant?: T;
               items?:
                 | T
                 | {
-                    title?: T;
+                    heading?: T;
                     description?: T;
                     icon?: T;
                     media?: T;
@@ -8901,10 +9040,12 @@ export interface CustomItemsSelect<T extends boolean = true> {
           | T
           | {
               heading?: T;
-              logos?:
+              description?: T;
+              variant?: T;
+              items?:
                 | T
                 | {
-                    logo?: T;
+                    media?: T;
                     label?: T;
                     url?: T;
                     id?: T;
@@ -8916,7 +9057,8 @@ export interface CustomItemsSelect<T extends boolean = true> {
           | T
           | {
               heading?: T;
-              style?: T;
+              description?: T;
+              variant?: T;
               items?:
                 | T
                 | {
@@ -8935,6 +9077,8 @@ export interface CustomItemsSelect<T extends boolean = true> {
           | T
           | {
               heading?: T;
+              description?: T;
+              variant?: T;
               items?:
                 | T
                 | {
@@ -9009,7 +9153,7 @@ export interface CustomItemsSelect<T extends boolean = true> {
           | {
               heading?: T;
               description?: T;
-              layout?: T;
+              variant?: T;
               columns?: T;
               gap?: T;
               aspectRatio?: T;
@@ -9039,7 +9183,7 @@ export interface CustomItemsSelect<T extends boolean = true> {
           | {
               heading?: T;
               description?: T;
-              style?: T;
+              variant?: T;
               columns?: T;
               gap?: T;
               alignment?: T;
@@ -9048,8 +9192,8 @@ export interface CustomItemsSelect<T extends boolean = true> {
                 | {
                     image?: T;
                     icon?: T;
-                    title?: T;
-                    subtitle?: T;
+                    heading?: T;
+                    eyebrow?: T;
                     description?: T;
                     stat?: T;
                     link?:
@@ -9081,14 +9225,14 @@ export interface CustomItemsSelect<T extends boolean = true> {
           | {
               heading?: T;
               description?: T;
-              layout?: T;
+              variant?: T;
               lineStyle?: T;
               markerStyle?: T;
               events?:
                 | T
                 | {
                     date?: T;
-                    title?: T;
+                    heading?: T;
                     description?: T;
                     image?: T;
                     icon?: T;
@@ -9126,7 +9270,7 @@ export interface CustomItemsSelect<T extends boolean = true> {
               tags?: T;
               limit?: T;
               selectedDocs?: T;
-              layout?: T;
+              variant?: T;
               columns?: T;
               showImage?: T;
               showExcerpt?: T;
@@ -9148,7 +9292,7 @@ export interface CustomItemsSelect<T extends boolean = true> {
               form?: T;
               enableIntro?: T;
               introContent?: T;
-              style?: T;
+              variant?: T;
               backgroundColor?: T;
               id?: T;
               blockName?: T;

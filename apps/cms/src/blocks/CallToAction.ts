@@ -11,7 +11,7 @@ export const ctaBlock: Block = {
   imageAltText: 'CTA block preview',
   fields: [
     {
-      name: 'style',
+      name: 'variant',
       type: 'select',
       label: 'Style',
       defaultValue: 'standard',
@@ -20,7 +20,6 @@ export const ctaBlock: Block = {
         { label: 'Banner', value: 'banner' },
         { label: 'Card', value: 'card' },
         { label: 'Inline', value: 'inline' },
-        { label: 'Agency', value: 'agency' },
       ],
     },
     {
@@ -40,7 +39,7 @@ export const ctaBlock: Block = {
       relationTo: 'media',
       label: 'Background Image',
       admin: {
-        condition: (_, siblingData) => ['banner', 'card'].includes(siblingData?.style),
+        condition: (_, siblingData) => ['banner', 'card'].includes(siblingData?.variant),
       },
     },
     {
@@ -87,10 +86,9 @@ export const ctaBlock: Block = {
       defaultValue: 'primary',
       options: [
         { label: 'None', value: 'none' },
-        { label: 'Light', value: 'light' },
+        { label: 'Muted', value: 'muted' },
         { label: 'Dark', value: 'dark' },
-        { label: 'Primary', value: 'primary' },
-        { label: 'Secondary', value: 'secondary' },
+        { label: 'Accent', value: 'accent' },
       ],
     },
   ],

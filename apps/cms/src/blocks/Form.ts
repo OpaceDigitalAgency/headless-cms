@@ -31,7 +31,7 @@ export const formBlock: Block = {
       },
     },
     {
-      name: 'style',
+      name: 'variant',
       type: 'select',
       label: 'Form Style',
       defaultValue: 'default',
@@ -49,7 +49,7 @@ export const formBlock: Block = {
       defaultValue: 'none',
       options: [
         { label: 'None', value: 'none' },
-        { label: 'Light', value: 'light' },
+        { label: 'Muted', value: 'muted' },
         { label: 'Dark', value: 'dark' },
       ],
     },

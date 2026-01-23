@@ -16,7 +16,25 @@ export const teamBlock: Block = {
       label: 'Heading',
     },
     {
-      name: 'members',
+      name: 'description',
+      type: 'textarea',
+      label: 'Description',
+    },
+    {
+      name: 'variant',
+      type: 'select',
+      defaultValue: 'grid',
+      options: [
+        { label: 'Grid', value: 'grid' },
+        { label: 'List', value: 'list' },
+        { label: 'Cards', value: 'cards' },
+      ],
+      admin: {
+        description: 'Layout structure (works with any skin)',
+      },
+    },
+    {
+      name: 'items',
       type: 'array',
       label: 'Team Members',
       minRows: 1,

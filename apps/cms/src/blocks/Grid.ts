@@ -27,7 +27,7 @@ export const gridBlock: Block = {
       label: 'Section Description',
     },
     {
-      name: 'style',
+      name: 'variant',
       type: 'select',
       required: true,
       defaultValue: 'cards',
@@ -39,12 +39,9 @@ export const gridBlock: Block = {
         { label: 'Team', value: 'team' },
         { label: 'Testimonials', value: 'testimonials' },
         { label: 'Logos', value: 'logos' },
-        { label: 'Agency Cards', value: 'agency-cards' },
-        { label: 'Agency List', value: 'agency-list' },
-        { label: 'Retro Cards', value: 'retro-cards' },
       ],
       admin: {
-        description: 'Choose the visual style of grid items',
+        description: 'Layout structure (works with any skin)',
       },
     },
     {
@@ -102,7 +99,7 @@ export const gridBlock: Block = {
           label: 'Image',
           admin: {
             condition: (_, siblingData) =>
-              !['stats', 'icons'].includes(siblingData?.style),
+              !['stats', 'icons'].includes(siblingData?.variant),
           },
         },
         {
@@ -112,22 +109,22 @@ export const gridBlock: Block = {
           admin: {
             description: 'Lucide icon name (e.g., "star", "heart", "check")',
             condition: (_, siblingData) =>
-              ['features', 'icons', 'stats'].includes(siblingData?.style),
+              ['features', 'icons', 'stats'].includes(siblingData?.variant),
           },
         },
         {
-          name: 'title',
+          name: 'heading',
           type: 'text',
           required: true,
-          label: 'Title',
+          label: 'Heading',
         },
         {
-          name: 'subtitle',
+          name: 'eyebrow',
           type: 'text',
-          label: 'Subtitle',
+          label: 'Eyebrow',
           admin: {
             condition: (_, siblingData) =>
-              ['team', 'testimonials'].includes(siblingData?.style),
+              ['team', 'testimonials'].includes(siblingData?.variant),
           },
         },
         {
@@ -141,7 +138,7 @@ export const gridBlock: Block = {
           label: 'Stat Value',
           admin: {
             description: 'e.g., "99%", "10K+", "$1M"',
-            condition: (_, siblingData) => siblingData?.style === 'stats',
+            condition: (_, siblingData) => siblingData?.variant === 'stats',
           },
         },
         {
@@ -183,7 +180,7 @@ export const gridBlock: Block = {
       defaultValue: true,
       label: 'Show Card Border',
       admin: {
-        condition: (_, siblingData) => siblingData?.style === 'cards',
+        condition: (_, siblingData) => siblingData?.variant === 'cards',
       },
     },
     {
@@ -192,7 +189,7 @@ export const gridBlock: Block = {
       defaultValue: true,
       label: 'Show Card Shadow',
       admin: {
-        condition: (_, siblingData) => siblingData?.style === 'cards',
+        condition: (_, siblingData) => siblingData?.variant === 'cards',
       },
     },
     {

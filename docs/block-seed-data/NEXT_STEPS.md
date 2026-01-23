@@ -1,17 +1,31 @@
-# NEXT STEPS: Block & Seed Data Completion
+# NEXT STEPS: Complete Seed Data & Block Library Overhaul
 **Date:** 2026-01-23
 **Status:** CANONICAL SOURCE OF TRUTH
 **Supersedes:** All previous audit and planning documents
 
 ---
 
-## 🎯 MISSION
+## 🎯 MISSION: FIX INADEQUATE SEED DATA
 
-Complete the block library and seed data system to showcase the **best possible** implementation of:
-- 20 blocks (all working, consistent, skin-compatible)
-- 5 presets (blog, brochure, archive, ecommerce, + demo/showcase)
-- Multiple layout variations per content type
-- Full skin system compatibility
+**The Problem:** The current seed data is incomplete, inconsistent, and doesn't properly demonstrate what each preset should contain.
+
+**Examples of Current Issues:**
+- **Ecommerce preset** has only 3 generic pages (Home, About, Contact) - missing essential ecommerce pages like Shop, Cart, Checkout, Shipping, Returns
+- **Brochure preset** has a "Services" page but no individual Service items collection
+- **Blog preset** missing Privacy page (Brochure has it, others don't)
+- **Archive preset** missing Contact page
+- **All presets** have only 1 layout variation per content type (need 3 to showcase flexibility)
+- **Custom collections** are minimal (4 total) - need comprehensive demo library
+
+**The Goal:** Create a **rich, complete demo library** that showcases:
+- ✅ **Preset-appropriate pages** - Ecommerce gets shop pages, Blog gets editorial pages, etc.
+- ✅ **Complete page sets** - Every preset has Home, About, Contact, Privacy + preset-specific pages
+- ✅ **3 layout variations** per content type to demonstrate block flexibility
+- ✅ **Comprehensive collections** - Services, Courses, FAQs, Galleries, Testimonials, etc.
+- ✅ **Consistent, working blocks** - All 20 blocks standardized and skin-compatible
+- ✅ **Real-world examples** - Seed data that users would actually want to see in a demo
+
+**Reference:** See [Payload's official ecommerce template](https://github.com/payloadcms/payload/tree/main/templates/ecommerce) for what a complete ecommerce implementation should include.
 
 ---
 
@@ -34,9 +48,30 @@ Complete the block library and seed data system to showcase the **best possible*
 ### Current Block Status
 - ✅ **20 blocks registered** - All blocks exist and render
 - ✅ **18 blocks used in seeds** - Most blocks have examples
-- ⚠️ **Form block** - Defined but never seeded
+- ⚠️ **Form block** - Defined and used in Contact pages (Blog, Brochure, Ecommerce)
 - ⚠️ **Inconsistent field naming** - Some blocks use `heading`, others `title`
 - ⚠️ **Limited variations** - Only 1 layout per content type (need 3)
+
+### Current Page Seed Status (100% Accurate)
+
+**Blog Preset** - 3 pages:
+- Home, About, Contact
+
+**Brochure Preset** - 5 pages:
+- Home, About, Services (plural), Contact, Privacy
+
+**Ecommerce Preset** - 3 pages:
+- Home, About, Contact
+
+**Archive Preset** - 2 pages:
+- Home, About
+
+### Current Custom Collections Seeded
+
+**Blog:** Reviews (product reviews with rating)
+**Brochure:** Case Studies (client success stories)
+**Ecommerce:** Brands (brand information)
+**Archive:** Exhibitions (museum exhibitions)
 
 ---
 
@@ -94,23 +129,99 @@ Fix block foundation BEFORE expanding seed data.
 - Tertiary text: `eyebrow` (optional, for labels above heading)
 - Body content: `content` or `richText`
 
-#### 1.2 Variant Field Implementation
-**Ensure every block has:**
+#### 1.2 Variant Field Implementation ⚠️ CRITICAL ARCHITECTURE FIX
+
+**PROBLEM:** Current variants are hardcoded as skin names (`default`, `minimal`, `agency`, `retro`)
+- This breaks when new skins are added (Glass, SaaS, etc.)
+- **Variants MUST be layout/structure intent, NOT skin names**
+
+**CORRECT ARCHITECTURE:**
+```
+variant = LAYOUT INTENT (skin-agnostic, portable)
+skin = VISUAL TREATMENT (CSS tokens + components)
+```
+
+**How It Works:**
+- Each skin **interprets** layout variants differently using CSS tokens + components
+- Glass skin + `cards` variant = Frosted glass panels with backdrop blur
+- SaaS skin + `cards` variant = Crisp bordered tiles with subtle shadows
+- Bold skin + `cards` variant = Thick borders with strong shadows
+- Agency skin + `cards` variant = Bold gradient cards
+- Neon Grid skin + `cards` variant = Glowing grid-based cards
+- Editorial skin + `cards` variant = Typography-focused cards
+- And so on for ALL installed skins...
+
+**Currently Installed Skins (10 total):**
+1. minimal
+2. editorial
+3. saas
+4. soft
+5. bold
+6. monochrome
+7. glass
+8. high-contrast
+9. neon-grid
+10. agency
+
+**Future skins** (e.g., creative, retail, etc.) will also work because variants are layout intents, not skin names.
+
+**Standard Variant Options (use these across all blocks):**
 ```typescript
 {
   name: 'variant',
   type: 'select',
   admin: {
-    description: 'Visual style variant (works with active skin)',
+    description: 'Layout structure (works with any skin)',
   },
   options: [
-    { label: 'Default', value: 'default' },
+    { label: 'Standard', value: 'standard' },
+    { label: 'Hero-Led', value: 'hero-led' },
+    { label: 'Editorial', value: 'editorial' },
+    { label: 'Split', value: 'split' },
+    { label: 'Grid', value: 'grid' },
+    { label: 'Cards', value: 'cards' },
+    { label: 'List', value: 'list' },
+    { label: 'Fullscreen', value: 'fullscreen' },
     { label: 'Minimal', value: 'minimal' },
-    { label: 'Agency', value: 'agency' },
-    { label: 'Retro', value: 'retro' },
+    { label: 'Stacked', value: 'stacked' },
+    // Add 'timeline' for blocks that support it
   ],
 }
 ```
+
+**Optional Skin Override (rarely used):**
+```typescript
+{
+  name: 'skinOverride',
+  type: 'select',
+  admin: {
+    description: 'Force a specific skin (leave empty to use site default skin)',
+    condition: (data, siblingData) => false, // Hide by default
+  },
+  options: [
+    { label: 'Minimal', value: 'minimal' },
+    { label: 'Editorial', value: 'editorial' },
+    { label: 'SaaS', value: 'saas' },
+    { label: 'Soft', value: 'soft' },
+    { label: 'Bold', value: 'bold' },
+    { label: 'Monochrome', value: 'monochrome' },
+    { label: 'Glass', value: 'glass' },
+    { label: 'High Contrast', value: 'high-contrast' },
+    { label: 'Neon Grid', value: 'neon-grid' },
+    { label: 'Agency', value: 'agency' },
+  ],
+}
+```
+
+**Note:** This list should match the skins defined in `Settings.ts` and `ThemeProvider.tsx`.
+
+**Action Required:**
+- [ ] **REPLACE all skin-name variants with layout-intent variants**
+- [ ] Update all block configs to use new variant options
+- [ ] Ensure each skin's components handle all layout variants
+- [ ] Test all variants work with ALL 10 installed skins (minimal, editorial, saas, soft, bold, monochrome, glass, high-contrast, neon-grid, agency)
+- [ ] Ensure system works with future skins (creative, retail, etc.)
+- [ ] Update seed data to use new variant values
 
 #### 1.3 Semantic Styling Options
 **Add to blocks where appropriate:**
@@ -120,9 +231,9 @@ Fix block foundation BEFORE expanding seed data.
 
 **These are semantic hints for the skin system, NOT hardcoded styles.**
 
-#### 1.4 Missing Block Implementation
-- ✅ Form block exists but never seeded
-- **Action:** Create seed example in at least 2 presets (brochure, blog contact pages)
+#### 1.4 Form Block Verification
+- ✅ Form block is already seeded in Contact pages (Blog, Brochure, Ecommerce)
+- **Action:** Verify form block works correctly and uses semantic tokens
 
 ---
 
@@ -134,32 +245,70 @@ Create 3 layout variations per content type using corrected blocks.
 
 
 
-### 2.1 Pages (15 total = 5 types × 3 variations)
+### 2.1 Core Pages (Expand to 3 variations each)
 
-**Home Page:**
+**IMPORTANT:** Pages are universal across all presets. Each preset should have:
+- Home, About, Contact, Privacy (minimum)
+- Additional pages relevant to preset type
+
+**Current Status:**
+- Blog: Home, About, Contact (missing Privacy)
+- Brochure: Home, About, Services, Contact, Privacy ✅ Complete
+- Ecommerce: Home, About, Contact (missing Privacy)
+- Archive: Home, About (missing Contact, Privacy)
+
+**Target: 3 variations per page type**
+
+**Home Page (3 variations):**
 - Variation A: Hero-Led Brand Statement (Hero + Logo Cloud + Features + Testimonials + CTA + FAQ)
 - Variation B: Content-First Editorial (Hero + Content + Archive + Quote + CTA)
 - Variation C: Product/Service Hub (Hero + Features + Stats + Testimonials + Pricing + CTA)
 
-**About Page:**
+**About Page (3 variations):**
 - Variation A: Story & Mission (Hero + Content + Timeline + Team + CTA)
 - Variation B: People & Culture (Hero + Content + Team + Testimonials + Gallery + CTA)
 - Variation C: Authority Builder (Hero + Stats + Logo Cloud + Quote + Content + CTA)
 
-**Contact Page:**
+**Contact Page (3 variations):**
 - Variation A: Direct Conversion (Hero + Content + Form + FAQ + CTA)
 - Variation B: Multi-Location/Trust-Led (Hero + Places Archive + Stats + Testimonials + Form)
 - Variation C: Consultation-Focused (Hero + Pricing + Content + Form + CTA)
 
-**Service Page:**
-- Variation A: Classic Service Explainer (Hero + Content + Features + Testimonials + FAQ + CTA)
-- Variation B: Outcome-Driven (Hero + Stats + Case Studies Archive + Timeline + CTA)
-- Variation C: Comparison/Decision Support (Hero + Pricing + Features + Testimonials + CTA)
+**Privacy Page (3 variations):**
+- Variation A: Legal Document (Hero + Content + FAQ)
+- Variation B: Trust-Focused (Hero + Content + Stats + Testimonials)
+- Variation C: Interactive (Hero + Content + FAQ + CTA)
 
-**Landing Page:**
-- Variation A: SEO Conversion (Hero + Content + FAQ + Testimonials + CTA)
-- Variation B: Short-Form Paid Traffic (Hero + Features + Stats + CTA)
-- Variation C: Offer-Focused (Hero + Pricing + Features + CTA)
+**Preset-Specific Pages:**
+
+**Blog Preset:**
+- Currently has: Home, About, Contact
+- Missing: Privacy
+- No additional blog-specific pages needed (posts are the main content)
+
+**Brochure Preset:**
+- Currently has: Home, About, Services, Contact, Privacy ✅
+- Services page exists but needs 3 variations
+- Consider adding: Individual Service detail pages (via Services collection)
+
+**Ecommerce Preset:** (Reference: [Payload Ecommerce Template](https://github.com/payloadcms/payload/tree/main/templates/ecommerce))
+- Currently has: Home, About, Contact
+- Missing: Privacy, Shop, Cart, Checkout, Shipping, Returns, Order Tracking
+- **Critical gap:** No ecommerce-specific pages at all!
+- **What Payload's template includes:**
+  - Shop/Products listing page
+  - Cart page
+  - Checkout page
+  - Order confirmation page
+  - Account/Orders page
+  - Shipping & Returns policy pages
+  - Product search page
+- **Action needed:** Add ALL ecommerce pages with 3 variations each
+
+**Archive Preset:**
+- Currently has: Home, About
+- Missing: Contact, Privacy
+- Consider adding: Collections/Exhibitions listing page, Search page
 
 ### 2.2 Posts (15 total = 5 types × 3 variations)
 
@@ -188,29 +337,106 @@ Create 3 layout variations per content type using corrected blocks.
 - Variation B: Visual Showcase (Hero + Gallery + Content + CTA)
 - Variation C: Process-Led (Hero + Timeline + Content + CTA)
 
-### 2.3 Archive Collections (30 total = 10 types × 3 variations)
+### 2.3 Custom Collections (Expand to 3 variations each)
 
-**Priority collections to implement:**
-1. **Case Studies** - Already partially seeded in Brochure preset, expand to 3 variations
-2. **Services** - NEW collection needed (Brochure has "Services" page but not individual service items)
-3. **People** - Already seeded in Archive preset, expand variations
-4. **Places** - Already seeded in Archive preset, expand variations
-5. **Events** - Already seeded in Archive preset, expand variations
-6. **Courses** - NEW collection needed (educational content with lessons/modules)
-7. **FAQs** - NEW collection needed (frequently asked questions)
-8. **Galleries** - Template exists but not installed, needs implementation
-9. **Reviews** - Already seeded in Blog preset as custom content type, expand to 3 variations
-10. **Testimonials** - NEW collection needed (client testimonials)
+**Currently Seeded (4 collections):**
+1. **Reviews** (Blog) - Product reviews with rating field
+2. **Case Studies** (Brochure) - Client success stories with industry/result fields
+3. **Brands** (Ecommerce) - Brand information with country/founded fields
+4. **Exhibitions** (Archive) - Museum exhibitions with start/end date fields
 
-**Each collection needs 3 layout variations** as defined in `payload-seed-layouts-by-content-type.md`.
+**NEW Collections Needed for Complete Demo Library:**
 
-### 2.4 Missing Core Pages
+**Blog Preset:**
+- Reviews ✅ (already seeded)
+- **Authors** - Author profiles with bio, photo, social links
+- **Testimonials** - Client/reader testimonials
 
-**Pages that need to be added:**
-- **Service page** - Add to Blog preset (currently missing)
-- **Service page** - Add to Ecommerce preset (currently missing)
+**Brochure Preset:**
+- Case Studies ✅ (already seeded)
+- **Services** - Individual service offerings (page exists but not collection items)
+- **Team Members** - Staff profiles with roles, expertise
+- **FAQs** - Frequently asked questions (template exists but NOT seeded)
 
-**Note:** Brochure preset has "Services" (plural) page but should also have individual Service collection items.
+**Ecommerce Preset:** (Reference: [Payload Ecommerce Template](https://github.com/payloadcms/payload/tree/main/templates/ecommerce))
+- Brands ✅ (already seeded)
+- Products ✅ (already seeded - 12 items)
+- Product Categories ✅ (already seeded - 5 items)
+- Product Collections ✅ (already seeded - 3 items)
+- **Reviews/Ratings** - Product reviews (different from Blog reviews)
+- **Shipping Zones** - Delivery areas and costs
+- **Payment Methods** - Accepted payment types
+
+**Archive Preset:**
+- Exhibitions ✅ (already seeded)
+- People ✅ (already seeded - 5 items)
+- Places ✅ (already seeded - 5 items)
+- Events ✅ (already seeded - 5 items)
+- Archive Items ✅ (already seeded - 10 items)
+- **Galleries** - Image/media galleries (template exists but NOT seeded)
+
+**Universal Collections (all presets):**
+- **Testimonials** - Client testimonials with rating, company, role
+- **FAQs** - Frequently asked questions (template exists but NOT seeded)
+
+**Each collection needs 3 item variations** with different block layouts to demonstrate flexibility.
+
+### 2.4 Ecommerce-Specific Implementation (Based on Payload Template)
+
+**Reference:** [Payload Ecommerce Template](https://github.com/payloadcms/payload/tree/main/templates/ecommerce)
+
+**Current State:**
+- Ecommerce preset has only 3 generic pages (Home, About, Contact)
+- Missing ALL ecommerce-specific functionality pages
+- Footer links to non-existent pages (Shipping, Returns, FAQ)
+
+**What Payload's Official Template Includes:**
+
+**Pages:**
+1. **Shop/Products** - Main product listing with filters, search, categories
+2. **Cart** - Shopping cart with quantity adjustment, remove items
+3. **Checkout** - Multi-step checkout (shipping, payment, review)
+4. **Order Confirmation** - Post-purchase confirmation with order details
+5. **Account/Orders** - User order history and tracking
+6. **Shipping & Returns** - Policy pages with FAQs
+7. **Product Search** - Dedicated search page with filters
+
+**Collections:**
+- Products (with variants, inventory tracking) ✅ Already have
+- Product Categories ✅ Already have
+- Product Collections ✅ Already have
+- Orders (customer orders with line items)
+- Carts (active shopping carts)
+- Customers (user accounts with addresses)
+
+**Blocks Used in Ecommerce:**
+- Hero (product showcases)
+- Archive (product listings)
+- Features (product features)
+- Stats (product specs, shipping info)
+- CTA (add to cart, checkout)
+- Form (contact, returns)
+- FAQ (product questions, shipping)
+- Testimonials (product reviews)
+
+**Action Required:**
+1. Add missing ecommerce pages (Shop, Cart, Checkout, etc.)
+2. Create 3 variations for each page type
+3. Ensure blocks demonstrate ecommerce use cases
+4. Add ecommerce-specific custom collections (Reviews, Shipping Zones)
+
+### 2.5 Core Collections (Already Installed - Expand Variations)
+
+**Archive Preset Collections:**
+- **People** - Already seeded (5 items), expand to 3 variations per person type
+- **Places** - Already seeded (5 items), expand to 3 variations per place type
+- **Events** - Already seeded (5 items), expand to 3 variations per event type
+- **Archive Items** - Already seeded (10 items), expand to 3 variations
+
+**Ecommerce Preset Collections:**
+- **Products** - Already seeded (12 items), expand to 3 variations per product type
+- **Product Categories** - Already seeded (5 items)
+- **Product Collections** - Already seeded (3 items)
 
 
 ---
@@ -360,16 +586,18 @@ Demonstrate each skin's capabilities with dedicated showcase pages.
 - [ ] All 20 blocks use consistent field naming
 - [ ] All blocks have `variant` field in Payload config
 - [ ] All blocks use semantic tokens (no hardcoded colors)
-- [ ] Form block has seed examples in 2+ presets
+- [ ] Form block verified working with semantic tokens
 - [ ] Block standardization guide documented
 
 ### Phase 2 Complete When:
-- [ ] 15 pages seeded (5 types × 3 variations)
-- [ ] Service page added to Blog preset
-- [ ] Service page added to Ecommerce preset
+- [ ] Core pages completed: Home, About, Contact, Privacy (3 variations each = 12 pages)
+- [ ] Privacy page added to Blog, Ecommerce, Archive presets
+- [ ] Contact page added to Archive preset
+- [ ] Preset-specific pages: Services (Brochure), Shop/Products (Ecommerce), Collections (Archive)
 - [ ] 15 posts seeded (5 types × 3 variations)
-- [ ] 30 archive items seeded (10 types × 3 variations)
-- [ ] All new collections created (Courses, FAQs, Galleries, Services, Testimonials)
+- [ ] Custom collections expanded: Reviews, Case Studies, Brands, Exhibitions (3 variations each)
+- [ ] NEW collections created: Services, Courses, FAQs, Galleries, Testimonials (3 items each)
+- [ ] Core collections expanded: People, Places, Events, Archive Items, Products (3 variations per type)
 - [ ] All seed data uses corrected blocks from Phase 1
 
 ### Phase 3 Complete When:
@@ -394,21 +622,85 @@ Demonstrate each skin's capabilities with dedicated showcase pages.
 2. Block standardization guide
 3. Form block seed examples
 
-**Week 2: Expansion**
-4. Create 3 variations for Pages (15 total)
-5. Create 3 variations for Posts (15 total)
-6. Add missing collections (Courses, FAQs, Galleries, Reviews, Testimonials)
+**Week 2: Core Pages & Posts**
+4. Add missing core pages (Privacy to Blog/Ecommerce/Archive, Contact to Archive)
+5. Create 3 variations for core pages (Home, About, Contact, Privacy = 12 pages)
+6. Create 3 variations for Posts (5 types × 3 = 15 posts)
+7. Add preset-specific pages (Services, Shop, Collections)
 
-**Week 3: Enhancement**
-7. Create 3 variations for archive collections (30 total)
-8. Template selection system
-9. TemplateGallery component
+**Week 3: Collections**
+8. Expand existing custom collections (Reviews, Case Studies, Brands, Exhibitions - 3 variations each)
+9. Create NEW collections (Services, Courses, FAQs, Galleries, Testimonials - 3 items each)
+10. Expand core collections (People, Places, Events, Archive Items, Products - 3 variations per type)
 
-**Week 4: Showcase**
-10. Agency showcase page
-11. Minimal showcase page
-12. Verify Retro page recovery
-13. Final testing and documentation
+**Week 4: Template System & Showcase**
+11. Template selection system
+12. TemplateGallery component
+13. Agency showcase page
+14. Minimal showcase page
+15. Verify Retro page recovery
+16. Final testing and documentation
+
+---
+
+## 🗺️ COLLECTION USAGE MAP (Source of Truth)
+
+**"If I install this collection, where will it actually appear?"**
+
+This section removes ALL ambiguity for future agents.
+
+### Installed Collections → Page Usage
+
+**People** → About pages, Archive preset, Team sections
+**Places** → Contact pages, Events, Archive preset
+**Events** → Archive preset, Home page highlights
+**Services** → Brochure Services index + Service detail pages
+**FAQs** → Contact, Privacy, Product, Service pages
+**Testimonials** → Home, Case Studies, Products
+**Galleries** → Archive Exhibitions, Case Studies
+**Reviews (Blog)** → Blog posts
+**Reviews (Ecommerce)** → Product pages
+**Case Studies** → Brochure Home, Services pages, About pages
+**Brands** → Ecommerce Product pages, About pages
+**Exhibitions** → Archive Home, Collections pages
+**Courses** → Blog/Brochure educational content pages
+**Team Members** → About pages, Contact pages, Brochure preset
+
+### Preset-Specific Collection Requirements
+
+**Blog Preset:**
+- Reviews (Blog) - Used in: Blog posts
+- Authors - Used in: Blog posts, About page
+- Testimonials - Used in: Home page, About page
+
+**Brochure Preset:**
+- Case Studies - Used in: Home page, Services pages, About page
+- Services - Used in: Services index page, individual Service detail pages
+- Team Members - Used in: About page, Contact page
+- FAQs - Used in: Contact page, Service pages
+- Testimonials - Used in: Home page, Case Studies
+
+**Ecommerce Preset:**
+- Products - Used in: Shop page, Home page, Category pages
+- Product Categories - Used in: Shop page navigation, Category pages
+- Product Collections - Used in: Home page, Shop page
+- Brands - Used in: Product pages, About page
+- Reviews (Ecommerce) - Used in: Product pages
+- Shipping Zones - Used in: Checkout page, Shipping page
+- Payment Methods - Used in: Checkout page
+
+**Archive Preset:**
+- Archive Items - Used in: Archive index, Search pages
+- People - Used in: About page, Archive pages, Team sections
+- Places - Used in: Contact page, Events, Archive pages
+- Events - Used in: Home page, Archive pages, Calendar
+- Exhibitions - Used in: Home page, Collections pages
+- Galleries - Used in: Exhibitions, Case Studies
+
+### Universal Collections (All Presets)
+
+**Testimonials** - Used in: Home page, About page, Service pages, Product pages
+**FAQs** - Used in: Contact page, Privacy page, Product pages, Service pages
 
 ---
 
@@ -429,11 +721,15 @@ Demonstrate each skin's capabilities with dedicated showcase pages.
 
 ## ⚠️ CRITICAL WARNINGS
 
-1. **DO NOT break the Retro page** - It's the reference implementation
-2. **DO NOT use hardcoded colors** - Breaks skin system
-3. **DO NOT use Tailwind v3 gradient utilities** - They don't work in v4
-4. **DO NOT create huge JSON blobs** - Keep seed data modular
-5. **DO NOT forget British English** - "Specialise" not "Specialize"
+1. **DO NOT use skin names as variant values** - Use layout intents (`cards`, `grid`, `split`) NOT skin names (`agency`, `glass`, etc.)
+2. **DO NOT assume only 4 skins exist** - System has 10 installed skins (minimal, editorial, saas, soft, bold, monochrome, glass, high-contrast, neon-grid, agency) and must work with future skins (creative, retail, etc.)
+3. **DO NOT break the Retro page** - It's the reference implementation
+4. **DO NOT use hardcoded colors** - Breaks skin system
+5. **DO NOT use Tailwind v3 gradient utilities** - They don't work in v4
+6. **DO NOT create huge JSON blobs** - Keep seed data modular
+7. **DO NOT forget British English** - "Specialise" not "Specialize"
+8. **DO NOT remove museum references from Archive preset** - Archive IS the museum/gallery preset (intentional)
+9. **DO NOT add museum content to Blog/Brochure/Ecommerce presets** - Museum content belongs ONLY in Archive
 
 ---
 
@@ -448,8 +744,9 @@ Before starting work:
 
 After completing each phase:
 - [ ] Test with `make db-fresh`
-- [ ] Verify all skins still work (Minimal, Retro, Agency)
-- [ ] Check Light/Dark mode switching
+- [ ] Verify ALL 10 skins work (minimal, editorial, saas, soft, bold, monochrome, glass, high-contrast, neon-grid, agency)
+- [ ] Test all block variants work with ALL skins
+- [ ] Check Light/Dark mode switching for each skin
 - [ ] Update this document with progress
 - [ ] Document any new patterns discovered
 

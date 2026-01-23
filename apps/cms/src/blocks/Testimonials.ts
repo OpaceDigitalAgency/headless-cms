@@ -16,14 +16,23 @@ export const testimonialsBlock: Block = {
       label: 'Heading',
     },
     {
-      name: 'style',
+      name: 'description',
+      type: 'textarea',
+      label: 'Description',
+    },
+    {
+      name: 'variant',
       type: 'select',
-      label: 'Style',
+      label: 'Layout',
       defaultValue: 'standard',
       options: [
         { label: 'Standard', value: 'standard' },
-        { label: 'Agency', value: 'agency' },
+        { label: 'Grid', value: 'grid' },
+        { label: 'Cards', value: 'cards' },
       ],
+      admin: {
+        description: 'Layout structure (works with any skin)',
+      },
     },
     {
       name: 'items',

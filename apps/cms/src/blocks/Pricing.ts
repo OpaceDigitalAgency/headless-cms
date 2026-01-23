@@ -16,9 +16,22 @@ export const pricingBlock: Block = {
       label: 'Heading',
     },
     {
-      name: 'subheading',
+      name: 'description',
       type: 'textarea',
-      label: 'Subheading',
+      label: 'Description',
+    },
+    {
+      name: 'variant',
+      type: 'select',
+      defaultValue: 'cards',
+      options: [
+        { label: 'Cards', value: 'cards' },
+        { label: 'Table', value: 'table' },
+        { label: 'Comparison', value: 'comparison' },
+      ],
+      admin: {
+        description: 'Layout structure (works with any skin)',
+      },
     },
     {
       name: 'plans',
@@ -59,14 +72,36 @@ export const pricingBlock: Block = {
           ],
         },
         {
-          name: 'ctaLabel',
-          type: 'text',
-          label: 'CTA Label',
-        },
-        {
-          name: 'ctaUrl',
-          type: 'text',
-          label: 'CTA URL',
+          name: 'links',
+          type: 'array',
+          label: 'Buttons',
+          maxRows: 1,
+          fields: [
+            {
+              name: 'label',
+              type: 'text',
+              required: true,
+            },
+            {
+              name: 'url',
+              type: 'text',
+            },
+            {
+              name: 'page',
+              type: 'relationship',
+              relationTo: 'pages',
+            },
+            {
+              name: 'variant',
+              type: 'select',
+              defaultValue: 'primary',
+              options: [
+                { label: 'Primary', value: 'primary' },
+                { label: 'Secondary', value: 'secondary' },
+                { label: 'Outline', value: 'outline' },
+              ],
+            },
+          ],
         },
         {
           name: 'featured',

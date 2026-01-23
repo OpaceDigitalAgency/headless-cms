@@ -16,6 +16,25 @@ export const faqBlock: Block = {
       label: 'Heading',
     },
     {
+      name: 'description',
+      type: 'textarea',
+      label: 'Description',
+    },
+    {
+      name: 'variant',
+      type: 'select',
+      label: 'Layout',
+      defaultValue: 'accordion',
+      options: [
+        { label: 'Accordion', value: 'accordion' },
+        { label: 'Grid', value: 'grid' },
+        { label: 'List', value: 'list' },
+      ],
+      admin: {
+        description: 'Layout structure (works with any skin)',
+      },
+    },
+    {
       name: 'items',
       type: 'array',
       label: 'FAQs',

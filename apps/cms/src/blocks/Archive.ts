@@ -41,6 +41,11 @@ export const archiveBlock: Block = {
         { label: 'Archive Items', value: 'archive-items' },
         { label: 'People', value: 'people' },
         { label: 'Places', value: 'places' },
+        { label: 'Events', value: 'events' },
+        { label: 'Services', value: 'services' },
+        { label: 'Galleries', value: 'galleries' },
+        { label: 'Testimonials', value: 'testimonials' },
+        { label: 'FAQs', value: 'faqs' },
         { label: 'Custom Items', value: 'custom-items' },
       ],
       admin: {
@@ -103,7 +108,7 @@ export const archiveBlock: Block = {
       },
     },
     {
-      name: 'layout',
+      name: 'variant',
       type: 'select',
       label: 'Layout',
       defaultValue: 'grid',
@@ -125,7 +130,7 @@ export const archiveBlock: Block = {
         { label: '4 Columns', value: '4' },
       ],
       admin: {
-        condition: (_, siblingData) => ['grid', 'cards'].includes(siblingData?.layout),
+        condition: (_, siblingData) => ['grid', 'cards'].includes(siblingData?.variant),
       },
     },
     {

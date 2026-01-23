@@ -74,10 +74,9 @@ export const contentBlock: Block = {
       defaultValue: 'none',
       options: [
         { label: 'None', value: 'none' },
-        { label: 'Light Gray', value: 'light' },
+        { label: 'Muted', value: 'muted' },
         { label: 'Dark', value: 'dark' },
-        { label: 'Primary', value: 'primary' },
-        { label: 'Secondary', value: 'secondary' },
+        { label: 'Accent', value: 'accent' },
       ],
     },
     {

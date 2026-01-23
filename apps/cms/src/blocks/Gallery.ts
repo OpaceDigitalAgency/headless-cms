@@ -33,7 +33,7 @@ export const galleryBlock: Block = {
       },
     },
     {
-      name: 'layout',
+      name: 'variant',
       type: 'select',
       required: true,
       defaultValue: 'grid',
@@ -60,7 +60,7 @@ export const galleryBlock: Block = {
         { label: '6 Columns', value: '6' },
       ],
       admin: {
-        condition: (_, siblingData) => ['grid', 'masonry', 'lightbox'].includes(siblingData?.layout),
+        condition: (_, siblingData) => ['grid', 'masonry', 'lightbox'].includes(siblingData?.variant),
         description: 'Number of columns on desktop',
       },
     },
@@ -90,7 +90,7 @@ export const galleryBlock: Block = {
         { label: 'Wide (21:9)', value: 'wide' },
       ],
       admin: {
-        condition: (_, siblingData) => siblingData?.layout !== 'masonry',
+        condition: (_, siblingData) => siblingData?.variant !== 'masonry',
         description: 'Force images to a specific aspect ratio',
       },
     },
@@ -158,7 +158,7 @@ export const galleryBlock: Block = {
       defaultValue: false,
       label: 'Autoplay',
       admin: {
-        condition: (_, siblingData) => ['carousel', 'slider'].includes(siblingData?.layout),
+        condition: (_, siblingData) => ['carousel', 'slider'].includes(siblingData?.variant),
       },
     },
     {
@@ -167,8 +167,8 @@ export const galleryBlock: Block = {
       defaultValue: 5000,
       label: 'Autoplay Speed (ms)',
       admin: {
-        condition: (_, siblingData) => 
-          ['carousel', 'slider'].includes(siblingData?.layout) && siblingData?.autoplay,
+        condition: (_, siblingData) =>
+          ['carousel', 'slider'].includes(siblingData?.variant) && siblingData?.autoplay,
       },
     },
   ],

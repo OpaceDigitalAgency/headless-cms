@@ -16,12 +16,25 @@ export const statsBlock: Block = {
       label: 'Heading',
     },
     {
-      name: 'subheading',
+      name: 'description',
       type: 'textarea',
-      label: 'Subheading',
+      label: 'Description',
     },
     {
-      name: 'stats',
+      name: 'variant',
+      type: 'select',
+      defaultValue: 'grid',
+      options: [
+        { label: 'Grid', value: 'grid' },
+        { label: 'List', value: 'list' },
+        { label: 'Cards', value: 'cards' },
+      ],
+      admin: {
+        description: 'Layout structure (works with any skin)',
+      },
+    },
+    {
+      name: 'items',
       type: 'array',
       label: 'Stats',
       minRows: 1,

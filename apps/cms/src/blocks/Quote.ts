@@ -37,6 +37,19 @@ export const quoteBlock: Block = {
         { label: 'Right', value: 'right' },
       ],
     },
+    {
+      name: 'variant',
+      type: 'select',
+      defaultValue: 'simple',
+      options: [
+        { label: 'Simple', value: 'simple' },
+        { label: 'Card', value: 'card' },
+        { label: 'Large', value: 'large' },
+      ],
+      admin: {
+        description: 'Layout structure (works with any skin)',
+      },
+    },
   ],
 }
 

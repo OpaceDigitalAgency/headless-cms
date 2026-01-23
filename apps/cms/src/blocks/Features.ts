@@ -16,12 +16,12 @@ export const featuresBlock: Block = {
       label: 'Heading',
     },
     {
-      name: 'subheading',
+      name: 'description',
       type: 'textarea',
-      label: 'Subheading',
+      label: 'Description',
     },
     {
-      name: 'layout',
+      name: 'variant',
       type: 'select',
       label: 'Layout',
       defaultValue: 'grid',
@@ -29,6 +29,9 @@ export const featuresBlock: Block = {
         { label: 'Grid', value: 'grid' },
         { label: 'List', value: 'list' },
       ],
+      admin: {
+        description: 'Layout structure (works with any skin)',
+      },
     },
     {
       name: 'items',
@@ -37,7 +40,7 @@ export const featuresBlock: Block = {
       minRows: 1,
       fields: [
         {
-          name: 'title',
+          name: 'heading',
           type: 'text',
           required: true,
         },
