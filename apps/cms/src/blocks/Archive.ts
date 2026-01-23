@@ -46,6 +46,7 @@ export const archiveBlock: Block = {
         { label: 'Galleries', value: 'galleries' },
         { label: 'Testimonials', value: 'testimonials' },
         { label: 'FAQs', value: 'faqs' },
+        { label: 'Categories', value: 'categories' },
         { label: 'Custom Items', value: 'custom-items' },
       ],
       admin: {
