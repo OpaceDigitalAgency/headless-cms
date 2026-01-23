@@ -129,11 +129,13 @@ export const Places: CollectionConfig = {
         {
           label: 'Location',
           fields: [
-            {
-              name: 'location',
-              type: 'point',
-              label: 'Geographic Coordinates',
-            },
+            // Note: 'point' field type requires PostGIS extension
+            // Temporarily disabled for Railway deployment
+            // {
+            //   name: 'location',
+            //   type: 'point',
+            //   label: 'Geographic Coordinates',
+            // },
             {
               name: 'address',
               type: 'group',
