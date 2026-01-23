@@ -4,8 +4,7 @@ import React from 'react'
 // in (payload) route group provides its own <html> and <body>
 export default function RootLayout({
   children,
-}: {
-  children: React.ReactNode
+  children: any
 }) {
   return children
 }

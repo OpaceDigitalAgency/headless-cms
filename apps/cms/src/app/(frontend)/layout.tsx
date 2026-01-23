@@ -35,8 +35,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function FrontendLayout({
   children,
-}: {
-  children: React.ReactNode
+  children: any
 }) {
   let header = null
   let footer = null
