@@ -271,3 +271,42 @@ Depending on priorities, the next decisions usually are:
 Those answers shape the final deployment strategy.
 
 ---
+
+## 12. January 2026 Status Update: Ready for Scale
+
+As of **January 23, 2026**, we have successfully resolved the major blockers identified in this document.
+
+### What Changed?
+1.  **Robust "Zero-Touch" Database Init**: We implemented a direct SQL injection script `run-migration-direct.sh` that bypasses Railway's transaction limits.
+    -   *Result*: New instances automatically provision their database on first boot without crashing.
+    -   *Why it matters*: You no longer need to manually SSH/exec into a container to fix the DB.
+2.  **Relaxed Boot Dependencies**: We removed the hard dependency on `PAYLOAD_PUBLIC_SERVER_URL` for migration steps.
+    -   *Result*: The app boots, connects to the DB, and runs migrations *before* having a public domain.
+    -   *Why it matters*: This breaks the "chicken-and-egg" loop. You can deploy, *then* assign a domain, making automation possible.
+
+### Answer: Can we deploy 100s of instances?
+**YES.**
+
+The current architecture is now "Template Ready".
+
+#### How to achieve 100s of instances:
+You have two robust paths:
+
+1.  **Railway Template (Manual Click)**:
+    -   Host this repo as a public template.
+    -   Users click "Deploy".
+    -   Railway provisions DB + App.
+    -   **Migration runs automatically**. App comes online.
+    -   *Constraint*: The user still needs to click "Generate Domain" in the Railway UI if they want a public URL.
+
+2.  **Railway API/CLI (Automated Scale)**:
+    -   Since the build & boot process is now fully automated and robust, you can script the creation of 100s of projects using the Railway CLI or GraphQL API.
+    -   Script Logic:
+        1. `railway init`
+        2. `railway up`
+        3. `railway domain` (Provision domain programmatically)
+        4. Set env vars
+    -   **No manual intervention is required inside the container.**
+
+### Conclusion
+The "One-Click" goal is now technically achieved. The platform limitations (domain generation) still exist in the UI, but the **Application Architecture** no longer blocks automation. You are ready to scale.

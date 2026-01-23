@@ -59,11 +59,11 @@ export const courseTemplate: CollectionTemplate = {
         {
           blockType: 'features',
           heading: 'Key Topics',
-          layout: 'grid',
+          variant: 'grid',
           items: [
-            { title: 'Workflow', description: 'Editorial stages and QA.' },
-            { title: 'Tooling', description: 'CMS and automation stack.' },
-            { title: 'Governance', description: 'Roles, permissions, and standards.' },
+            { heading: 'Workflow', description: 'Editorial stages and QA.' },
+            { heading: 'Tooling', description: 'CMS and automation stack.' },
+            { heading: 'Governance', description: 'Roles, permissions, and standards.' },
           ],
         },
         {

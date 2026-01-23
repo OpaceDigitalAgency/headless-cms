@@ -59,11 +59,11 @@ export const caseStudyTemplate: CollectionTemplate = {
         {
           blockType: 'features',
           heading: 'What We Delivered',
-          layout: 'grid',
+          variant: 'grid',
           items: [
-            { title: 'Brand System', description: 'Updated identity and guidelines.' },
-            { title: 'Content Model', description: 'Reusable templates and governance.' },
-            { title: 'Launch Plan', description: 'Rollout strategy with milestones.' },
+            { heading: 'Brand System', description: 'Updated identity and guidelines.' },
+            { heading: 'Content Model', description: 'Reusable templates and governance.' },
+            { heading: 'Launch Plan', description: 'Rollout strategy with milestones.' },
           ],
         },
         {

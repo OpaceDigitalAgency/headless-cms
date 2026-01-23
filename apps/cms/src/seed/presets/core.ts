@@ -206,15 +206,15 @@ export class CoreSeeder extends BaseSeeder {
             style: 'cards',
             columns: '3',
             items: [
-              { title: 'Duomo', description: 'Iconic cathedral with Brunelleschi\'s dome.' },
-              { title: 'Uffizi', description: 'Repository of Renaissance art collections.' },
-              { title: 'Medici Legacy', description: 'Patronage that powered artistic revolutions.' },
+              { heading: 'Duomo', description: 'Iconic cathedral with Brunelleschi\'s dome.' },
+              { heading: 'Uffizi', description: 'Repository of Renaissance art collections.' },
+              { heading: 'Medici Legacy', description: 'Patronage that powered artistic revolutions.' },
             ],
           },
           {
             blockType: 'stats',
             heading: 'Cultural Snapshot',
-            stats: [
+            items: [
               { value: '1400s', label: 'Golden Century' },
               { value: '3', label: 'Major Dynasties' },
               { value: '100+', label: 'Notable Works' },
@@ -237,9 +237,9 @@ export class CoreSeeder extends BaseSeeder {
             heading: 'Enduring Influence',
             layout: 'grid',
             items: [
-              { title: 'Architecture', description: 'Engineering feats that defined urban planning.' },
-              { title: 'Religion', description: 'A global center for the Catholic Church.' },
-              { title: 'Politics', description: 'Legacy of empire and governance.' },
+              { heading: 'Architecture', description: 'Engineering feats that defined urban planning.' },
+              { heading: 'Religion', description: 'A global center for the Catholic Church.' },
+              { heading: 'Politics', description: 'Legacy of empire and governance.' },
             ],
           },
         ],
@@ -257,7 +257,7 @@ export class CoreSeeder extends BaseSeeder {
           {
             blockType: 'stats',
             heading: 'Creative Pulse',
-            stats: [
+            items: [
               { value: '1800s', label: 'Impressionist Rise' },
               { value: '2', label: 'World Expos' },
               { value: '12', label: 'Major Museums' },
@@ -270,7 +270,7 @@ export class CoreSeeder extends BaseSeeder {
             links: [
               { label: 'Explore Collections', url: '/collections', variant: 'primary' },
             ],
-            backgroundColor: 'light',
+            backgroundColor: 'muted',
           },
         ],
       },
@@ -290,10 +290,10 @@ export class CoreSeeder extends BaseSeeder {
             style: 'features',
             columns: '2',
             items: [
-              { title: 'Philosophy', description: 'Home to foundational thinkers and schools.' },
-              { title: 'Democracy', description: 'Early experiments in citizen governance.' },
-              { title: 'Theatre', description: 'Origins of dramatic performance traditions.' },
-              { title: 'Architecture', description: 'Temples and civic spaces still studied today.' },
+              { heading: 'Philosophy', description: 'Home to foundational thinkers and schools.' },
+              { heading: 'Democracy', description: 'Early experiments in citizen governance.' },
+              { heading: 'Theatre', description: 'Origins of dramatic performance traditions.' },
+              { heading: 'Architecture', description: 'Temples and civic spaces still studied today.' },
             ],
           },
         ],
@@ -399,7 +399,7 @@ export class CoreSeeder extends BaseSeeder {
             {
               blockType: 'stats',
               heading: 'Visitor Experience',
-              stats: [
+              items: [
                 { value: '45+', label: 'Works' },
                 { value: '8', label: 'Weeks' },
                 { value: '6', label: 'Guided Tours' },
@@ -423,9 +423,9 @@ export class CoreSeeder extends BaseSeeder {
               style: 'cards',
               columns: '3',
               items: [
-                { title: 'Artist Talks', description: 'Weekly conversations with modern artists.' },
-                { title: 'Studio Visits', description: 'Behind-the-scenes views of active studios.' },
-                { title: 'Interactive Labs', description: 'Hands-on creative sessions.' },
+                { heading: 'Artist Talks', description: 'Weekly conversations with modern artists.' },
+                { heading: 'Studio Visits', description: 'Behind-the-scenes views of active studios.' },
+                { heading: 'Interactive Labs', description: 'Hands-on creative sessions.' },
               ],
             },
             {
@@ -451,7 +451,7 @@ export class CoreSeeder extends BaseSeeder {
             {
               blockType: 'stats',
               heading: 'Field Report',
-              stats: [
+              items: [
                 { value: '3', label: 'Sites' },
                 { value: '120', label: 'Artifacts' },
                 { value: '14', label: 'Researchers' },
@@ -508,7 +508,7 @@ export class CoreSeeder extends BaseSeeder {
           {
             blockType: 'stats',
             heading: 'At a Glance',
-            stats: [
+            items: [
               { value: '7', label: 'Major Works' },
               { value: '13k', label: 'Notebook Pages' },
               { value: '4', label: 'Disciplines' },
@@ -542,9 +542,9 @@ export class CoreSeeder extends BaseSeeder {
             heading: 'Creative Milestones',
             layout: 'alternating',
             events: [
-              { date: '1501', title: 'David Commission', description: createRichText('Begins the marble statue that became a symbol of Florence.') },
-              { date: '1508', title: 'Sistine Chapel', description: createRichText('Completes the iconic ceiling frescoes.') },
-              { date: '1546', title: 'St. Peter\'s', description: createRichText('Appointed chief architect of St. Peter\'s Basilica.') },
+              { date: '1501', heading: 'David Commission', description: createRichText('Begins the marble statue that became a symbol of Florence.') },
+              { date: '1508', heading: 'Sistine Chapel', description: createRichText('Completes the iconic ceiling frescoes.') },
+              { date: '1546', heading: 'St. Peter\'s', description: createRichText('Appointed chief architect of St. Peter\'s Basilica.') },
             ],
           },
           {
@@ -581,9 +581,9 @@ export class CoreSeeder extends BaseSeeder {
             style: 'cards',
             columns: '3',
             items: [
-              { title: 'Portraiture', description: 'Balanced compositions with refined color.' },
-              { title: 'Fresco Cycles', description: 'Narrative suites for civic and religious patrons.' },
-              { title: 'Architecture', description: 'Elegant plans influenced by classical forms.' },
+              { heading: 'Portraiture', description: 'Balanced compositions with refined color.' },
+              { heading: 'Fresco Cycles', description: 'Narrative suites for civic and religious patrons.' },
+              { heading: 'Architecture', description: 'Elegant plans influenced by classical forms.' },
             ],
           },
           {
@@ -593,7 +593,7 @@ export class CoreSeeder extends BaseSeeder {
             links: [
               { label: 'View Archive Items', url: '/archive-items', variant: 'primary' },
             ],
-            backgroundColor: 'light',
+            backgroundColor: 'muted',
           },
         ],
       },
@@ -658,7 +658,7 @@ export class CoreSeeder extends BaseSeeder {
           {
             blockType: 'stats',
             heading: 'Legacy Metrics',
-            stats: [
+            items: [
               { value: '2', label: 'Major Temples' },
               { value: '5', label: 'Attributed Works' },
               { value: '1', label: 'Classical Era' },
@@ -744,9 +744,9 @@ export class CoreSeeder extends BaseSeeder {
               gap: 'medium',
               alignment: 'left',
               items: [
-                { title: 'Renaissance Masters', description: 'Masterpieces from the Renaissance era' },
-                { title: 'Ancient Civilizations', description: 'Treasures from the ancient world' },
-                { title: 'Impressionist Gallery', description: 'Light and color captured on canvas' },
+                { heading: 'Renaissance Masters', description: 'Masterpieces from the Renaissance era' },
+                { heading: 'Ancient Civilizations', description: 'Treasures from the ancient world' },
+                { heading: 'Impressionist Gallery', description: 'Light and color captured on canvas' },
               ],
             },
             {
@@ -810,9 +810,9 @@ export class CoreSeeder extends BaseSeeder {
               heading: 'Our History',
               layout: 'vertical',
               events: [
-                { date: '1850', title: 'Foundation', description: createRichText('The archive was founded by a group of passionate collectors.') },
-                { date: '1920', title: 'Major Expansion', description: createRichText('A new wing was added to house the growing collection.') },
-                { date: '2000', title: 'Digital Initiative', description: createRichText('The archive launched its first digital collection.') },
+                { date: '1850', heading: 'Foundation', description: createRichText('The archive was founded by a group of passionate collectors.') },
+                { date: '1920', heading: 'Major Expansion', description: createRichText('A new wing was added to house the growing collection.') },
+                { date: '2000', heading: 'Digital Initiative', description: createRichText('The archive launched its first digital collection.') },
               ],
             },
           ],

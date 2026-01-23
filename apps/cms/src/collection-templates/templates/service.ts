@@ -30,11 +30,11 @@ export const serviceTemplate: CollectionTemplate = {
         {
           blockType: 'features',
           heading: 'Workshop Outcomes',
-          layout: 'grid',
+          variant: 'grid',
           items: [
-            { title: 'Goal Alignment', description: 'Clear objectives agreed by stakeholders.' },
-            { title: 'Scope Definition', description: 'Well-scoped deliverables and timeline.' },
-            { title: 'Opportunity Map', description: 'Prioritized areas for impact.' },
+            { heading: 'Goal Alignment', description: 'Clear objectives agreed by stakeholders.' },
+            { heading: 'Scope Definition', description: 'Well-scoped deliverables and timeline.' },
+            { heading: 'Opportunity Map', description: 'Prioritized areas for impact.' },
           ],
         },
         {
@@ -99,11 +99,11 @@ export const serviceTemplate: CollectionTemplate = {
         {
           blockType: 'features',
           heading: 'What\'s Included',
-          layout: 'list',
+          variant: 'list',
           items: [
-            { title: 'Delivery Plan', description: 'Milestones and dependency tracking.' },
-            { title: 'Weekly Updates', description: 'Transparent progress reporting.' },
-            { title: 'Launch Support', description: 'Go-live assistance and QA.' },
+            { heading: 'Delivery Plan', description: 'Milestones and dependency tracking.' },
+            { heading: 'Weekly Updates', description: 'Transparent progress reporting.' },
+            { heading: 'Launch Support', description: 'Go-live assistance and QA.' },
           ],
         },
         {

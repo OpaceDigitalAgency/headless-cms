@@ -48,11 +48,11 @@ export const testimonialTemplate: CollectionTemplate = {
         {
           blockType: 'features',
           heading: 'Why It Worked',
-          layout: 'grid',
+          variant: 'grid',
           items: [
-            { title: 'Consistent Templates', description: 'Unified layouts across content.' },
-            { title: 'Clear Governance', description: 'Defined roles and reviews.' },
-            { title: 'Reusable Blocks', description: 'Faster publishing cycles.' },
+            { heading: 'Consistent Templates', description: 'Unified layouts across content.' },
+            { heading: 'Clear Governance', description: 'Defined roles and reviews.' },
+            { heading: 'Reusable Blocks', description: 'Faster publishing cycles.' },
           ],
         },
       ],

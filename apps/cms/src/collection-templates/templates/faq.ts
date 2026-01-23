@@ -50,11 +50,11 @@ export const faqTemplate: CollectionTemplate = {
         {
           blockType: 'features',
           heading: 'Custom Field Ideas',
-          layout: 'grid',
+          variant: 'grid',
           items: [
-            { title: 'Metadata', description: 'Add ratings, dates, and tags.' },
-            { title: 'Relationships', description: 'Connect items and collections.' },
-            { title: 'Layout Blocks', description: 'Build rich page sections.' },
+            { heading: 'Metadata', description: 'Add ratings, dates, and tags.' },
+            { heading: 'Relationships', description: 'Connect items and collections.' },
+            { heading: 'Layout Blocks', description: 'Build rich page sections.' },
           ],
         },
       ],

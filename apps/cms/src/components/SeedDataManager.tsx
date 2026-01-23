@@ -53,7 +53,7 @@ export const SeedDataManager: React.FC = () => {
   const [activeView, setActiveView] = useState<'collections' | 'presets'>('collections')
   const [collections, setCollections] = useState<CollectionSeedStatus[]>([])
   const [presets, setPresets] = useState<PresetInfo[]>([])
-  const [selectedPreset, setSelectedPreset] = useState<string>('archive-next')
+  const [selectedPreset, setSelectedPreset] = useState<string>('archive')
   const [loading, setLoading] = useState(true)
   const [actionInProgress, setActionInProgress] = useState<string | null>(null)
   const [message, setMessage] = useState<{ type: 'success' | 'error' | 'info'; text: string } | null>(null)
@@ -192,9 +192,9 @@ export const SeedDataManager: React.FC = () => {
 
       if (response.ok) {
         const actionText = action === 'seed' ? 'seeded' : action === 'clear' ? 'cleared' : 're-seeded'
-        setMessage({ 
-          type: 'success', 
-          text: `Successfully ${actionText} ${slug}! ${data.itemsAffected ? `(${data.itemsAffected} items)` : ''}` 
+        setMessage({
+          type: 'success',
+          text: `Successfully ${actionText} ${slug}! ${data.itemsAffected ? `(${data.itemsAffected} items)` : ''}`
         })
         fetchCollectionStatus()
       } else {
@@ -215,7 +215,7 @@ export const SeedDataManager: React.FC = () => {
 
     if (action === 'clear' || action === 'reseed') {
       const confirmed = window.confirm(
-        action === 'clear' 
+        action === 'clear'
           ? 'This will permanently delete all sample data. Are you sure?'
           : 'This will clear existing sample data and re-seed. Are you sure?'
       )

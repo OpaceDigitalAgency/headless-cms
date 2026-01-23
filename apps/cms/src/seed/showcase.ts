@@ -45,8 +45,8 @@ async function getOrCreateMedia(payload: Payload, filename: string, alt: string,
 
       // Determine mimetype from URL or default to jpeg
       const mimetype = filename.endsWith('.png') ? 'image/png' :
-                      filename.endsWith('.webp') ? 'image/webp' :
-                      'image/jpeg'
+        filename.endsWith('.webp') ? 'image/webp' :
+          'image/jpeg'
 
       payload.logger.info(`Successfully downloaded ${filename} (${buffer.length} bytes)`)
       payload.logger.info(`Uploading to media collection...`)
@@ -488,17 +488,17 @@ export async function ensureShowcasePage(payload: Payload, options?: { updateHea
         events: [
           {
             date: '2021',
-            title: 'Project Kickoff',
+            heading: 'Project Kickoff',
             description: createRichText('Initial planning and discovery.'),
           },
           {
             date: '2022',
-            title: 'First Release',
+            heading: 'First Release',
             description: createRichText('Core features shipped to production.'),
           },
           {
             date: '2023',
-            title: 'Scale Up',
+            heading: 'Scale Up',
             description: createRichText('Expanded team and feature set.'),
           },
         ],

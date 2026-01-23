@@ -50,11 +50,11 @@ export const galleryTemplate: CollectionTemplate = {
         {
           blockType: 'features',
           heading: 'Product Story',
-          layout: 'grid',
+          variant: 'grid',
           items: [
-            { title: 'Hero Shots', description: 'Signature images for landing pages.' },
-            { title: 'Detail Views', description: 'Macro shots for feature callouts.' },
-            { title: 'Lifestyle', description: 'In-context usage scenarios.' },
+            { heading: 'Hero Shots', description: 'Signature images for landing pages.' },
+            { heading: 'Detail Views', description: 'Macro shots for feature callouts.' },
+            { heading: 'Lifestyle', description: 'In-context usage scenarios.' },
           ],
         },
       ],

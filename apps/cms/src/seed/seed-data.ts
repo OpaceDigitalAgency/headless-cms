@@ -354,17 +354,17 @@ export async function seedBasicData(payload: Payload): Promise<void> {
           events: [
             {
               date: '2021',
-              title: 'Project Kickoff',
+              heading: 'Project Kickoff',
               description: createRichText('Initial planning and discovery.'),
             },
             {
               date: '2022',
-              title: 'First Release',
+              heading: 'First Release',
               description: createRichText('Core features shipped to production.'),
             },
             {
               date: '2023',
-              title: 'Scale Up',
+              heading: 'Scale Up',
               description: createRichText('Expanded team and feature set.'),
             },
           ],

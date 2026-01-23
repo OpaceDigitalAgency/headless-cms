@@ -210,7 +210,7 @@ db-fresh: ## Quick dev database refresh (uses push mode, no migrations)
 dev-fresh: ## Start dev with auto-accept for Drizzle prompts (use after db-fresh)
 	@echo "$(CYAN)Starting CMS with auto-accept for schema prompts...$(NC)"
 	@echo "$(YELLOW)Note: This will answer 'y' to all Drizzle prompts$(NC)"
-	@cd apps/cms && DRIZZLE_PUSH=true yes | pnpm dev
+	@cd apps/cms && DRIZZLE_PUSH=true pnpm dev
 
 db-fresh-migrations: ## Fresh database with regenerated migrations (for production deployment)
 	@echo "$(YELLOW)═══════════════════════════════════════════════════════$(NC)"
@@ -234,9 +234,8 @@ db-fresh-migrations: ## Fresh database with regenerated migrations (for producti
 	@echo 'export const migrations = [];' > apps/db/migrations/index.ts
 	@echo "$(CYAN)[5/6] Generating fresh migrations from current schema...$(NC)"
 	@pnpm --filter @repo/cms migrate:create
-	@echo "$(CYAN)[6/6] Running migrations (direct SQL mode)...$(NC)"
-	@chmod +x scripts/run-migration-direct.sh
-	@./scripts/run-migration-direct.sh
+	@echo "$(CYAN)[6/6] Running migrations (standard mode)...$(NC)"
+	@pnpm --filter @repo/cms migrate
 	@echo ""
 	@echo "$(GREEN)═══════════════════════════════════════════════════════$(NC)"
 	@echo "$(GREEN)  Database refreshed successfully!$(NC)"

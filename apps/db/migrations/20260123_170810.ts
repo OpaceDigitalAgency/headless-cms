@@ -991,7 +991,7 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	"heading" varchar,
   	"description" varchar,
   	"image_id" integer,
-  	"background_color" "enum_pages_blocks_cta_background_color" DEFAULT 'primary',
+  	"background_color" "enum_pages_blocks_cta_background_color" DEFAULT 'none',
   	"block_name" varchar
   );
   
@@ -1488,7 +1488,7 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	"heading" varchar,
   	"description" varchar,
   	"image_id" integer,
-  	"background_color" "enum__pages_v_blocks_cta_background_color" DEFAULT 'primary',
+  	"background_color" "enum__pages_v_blocks_cta_background_color" DEFAULT 'none',
   	"_uuid" varchar,
   	"block_name" varchar
   );
@@ -2002,7 +2002,7 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	"heading" varchar,
   	"description" varchar,
   	"image_id" integer,
-  	"background_color" "enum_posts_blocks_cta_background_color" DEFAULT 'primary',
+  	"background_color" "enum_posts_blocks_cta_background_color" DEFAULT 'none',
   	"block_name" varchar
   );
   
@@ -2488,7 +2488,7 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	"heading" varchar,
   	"description" varchar,
   	"image_id" integer,
-  	"background_color" "enum__posts_v_blocks_cta_background_color" DEFAULT 'primary',
+  	"background_color" "enum__posts_v_blocks_cta_background_color" DEFAULT 'none',
   	"_uuid" varchar,
   	"block_name" varchar
   );
@@ -3100,7 +3100,7 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	"heading" varchar,
   	"description" varchar,
   	"image_id" integer,
-  	"background_color" "enum_archive_items_blocks_cta_background_color" DEFAULT 'primary',
+  	"background_color" "enum_archive_items_blocks_cta_background_color" DEFAULT 'none',
   	"block_name" varchar
   );
   
@@ -3389,7 +3389,7 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	"heading" varchar,
   	"description" varchar,
   	"image_id" integer,
-  	"background_color" "enum__archive_items_v_blocks_cta_background_color" DEFAULT 'primary',
+  	"background_color" "enum__archive_items_v_blocks_cta_background_color" DEFAULT 'none',
   	"_uuid" varchar,
   	"block_name" varchar
   );
@@ -3699,7 +3699,7 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	"heading" varchar,
   	"description" varchar,
   	"image_id" integer,
-  	"background_color" "enum_people_blocks_cta_background_color" DEFAULT 'primary',
+  	"background_color" "enum_people_blocks_cta_background_color" DEFAULT 'none',
   	"block_name" varchar
   );
   
@@ -4215,7 +4215,7 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	"heading" varchar,
   	"description" varchar,
   	"image_id" integer,
-  	"background_color" "enum__people_v_blocks_cta_background_color" DEFAULT 'primary',
+  	"background_color" "enum__people_v_blocks_cta_background_color" DEFAULT 'none',
   	"_uuid" varchar,
   	"block_name" varchar
   );
@@ -4762,7 +4762,7 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	"heading" varchar,
   	"description" varchar,
   	"image_id" integer,
-  	"background_color" "enum_places_blocks_cta_background_color" DEFAULT 'primary',
+  	"background_color" "enum_places_blocks_cta_background_color" DEFAULT 'none',
   	"block_name" varchar
   );
   
@@ -5286,7 +5286,7 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	"heading" varchar,
   	"description" varchar,
   	"image_id" integer,
-  	"background_color" "enum__places_v_blocks_cta_background_color" DEFAULT 'primary',
+  	"background_color" "enum__places_v_blocks_cta_background_color" DEFAULT 'none',
   	"_uuid" varchar,
   	"block_name" varchar
   );
@@ -5810,7 +5810,7 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	"heading" varchar,
   	"description" varchar,
   	"image_id" integer,
-  	"background_color" "enum_events_blocks_cta_background_color" DEFAULT 'primary',
+  	"background_color" "enum_events_blocks_cta_background_color" DEFAULT 'none',
   	"block_name" varchar
   );
   
@@ -6098,7 +6098,7 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	"heading" varchar,
   	"description" varchar,
   	"image_id" integer,
-  	"background_color" "enum__events_v_blocks_cta_background_color" DEFAULT 'primary',
+  	"background_color" "enum__events_v_blocks_cta_background_color" DEFAULT 'none',
   	"_uuid" varchar,
   	"block_name" varchar
   );
@@ -6413,7 +6413,7 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	"heading" varchar,
   	"description" varchar,
   	"image_id" integer,
-  	"background_color" "enum_products_blocks_cta_background_color" DEFAULT 'primary',
+  	"background_color" "enum_products_blocks_cta_background_color" DEFAULT 'none',
   	"block_name" varchar
   );
   
@@ -6720,7 +6720,7 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	"heading" varchar,
   	"description" varchar,
   	"image_id" integer,
-  	"background_color" "enum__products_v_blocks_cta_background_color" DEFAULT 'primary',
+  	"background_color" "enum__products_v_blocks_cta_background_color" DEFAULT 'none',
   	"_uuid" varchar,
   	"block_name" varchar
   );
@@ -7156,7 +7156,7 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	"heading" varchar,
   	"description" varchar,
   	"image_id" integer,
-  	"background_color" "enum_custom_items_blocks_cta_background_color" DEFAULT 'primary',
+  	"background_color" "enum_custom_items_blocks_cta_background_color" DEFAULT 'none',
   	"block_name" varchar
   );
   
@@ -7651,7 +7651,7 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	"heading" varchar,
   	"description" varchar,
   	"image_id" integer,
-  	"background_color" "enum__custom_items_v_blocks_cta_background_color" DEFAULT 'primary',
+  	"background_color" "enum__custom_items_v_blocks_cta_background_color" DEFAULT 'none',
   	"_uuid" varchar,
   	"block_name" varchar
   );

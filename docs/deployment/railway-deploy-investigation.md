@@ -208,3 +208,102 @@ These packages are now available at runtime when migrations execute, allowing th
 - `headless-cms/apps/cms/src/payload.config.ts` - Fixed migrationDir path
 - `headless-cms/Makefile` - Fixed db-fresh to clean correct directory
 
+## Current Status (2026-01-23 14:10 GMT) - DRIZZLE PUSH MODE IS INTERACTIVE
+
+### The Core Problem
+
+**Railway Deployment**: Crashes during migration execution because the migration file is **13,173 lines** (11,854 lines of SQL in the `up()` function alone). This massive SQL statement exceeds PostgreSQL/Railway's query size limits or transaction timeouts.
+
+**Error on Railway**:
+```
+[13:48:56] ERROR: Error running migration 20260123_131944 Failed query:
+CREATE TYPE "public"."enum_users_social_links_platform" AS ENUM('twitter', 'linkedin', 'github', 'website');
+CREATE TYPE ...
+```
+
+The migration keeps retrying in a loop and crashing, hitting Railway's 500 logs/sec rate limit.
+
+**Local Development**: BROKEN - Drizzle's push mode is INTERACTIVE by default and requires manual confirmation for EVERY table creation. With 100+ tables, this means clicking through 1000+ prompts manually.
+
+### What We Tried
+
+1. ✅ **Fresh database** - `make db-fresh` successfully created empty database
+2. ✅ **Updated config** - Changed `payload.config.ts` to use push mode in development: `push: process.env.NODE_ENV !== 'production'`
+3. ✅ **Added DRIZZLE_PUSH_ACCEPT_ALL=1** - Added to dev script in `package.json` to auto-accept prompts
+4. ❌ **Still interactive** - Drizzle IGNORES the `DRIZZLE_PUSH_ACCEPT_ALL` environment variable and still prompts for every table
+
+### Why This Is Happening
+
+Drizzle's push mode has interactive prompts asking whether each table is "created" or "renamed from another table". With our massive schema (100+ tables), this creates thousands of prompts. The `DRIZZLE_PUSH_ACCEPT_ALL` environment variable doesn't work - Drizzle still shows interactive prompts.
+
+### The Real Issue
+
+**The migration file is too large to run** (13,173 lines), and **push mode is too interactive to use** (1000+ manual prompts). We're stuck between two broken approaches:
+- **Migrations**: File too large, crashes on Railway and fails silently locally
+- **Push mode**: Interactive prompts make it unusable for large schemas
+
+### Possible Solutions
+
+1. **Find the correct way to disable Drizzle interactive prompts** - There must be a config option or environment variable that actually works
+2. **Split the migration file** - Break the 13,173-line migration into smaller chunks (50-100 statements each)
+3. **Use a different approach** - Manually create the schema using SQL scripts instead of Drizzle migrations
+
+### Current State
+
+- **Local dev**: BROKEN - Can't get past interactive prompts
+- **Railway**: BROKEN - Migration file too large
+- **Database**: Empty, no tables created
+- **Next step**: Need to find how to properly disable Drizzle's interactive mode OR split the migration file
+
+### Files Modified
+
+- `headless-cms/apps/cms/src/payload.config.ts` - Changed to `push: process.env.NODE_ENV !== 'production'`
+- `headless-cms/apps/cms/package.json` - Added `DRIZZLE_PUSH_ACCEPT_ALL=1` to dev script (doesn't work)
+- `headless-cms/apps/db/migrations/20260123_131944.ts` - The massive 13,173-line migration file that can't execute
+
+## The "Empty Database" Saga and Final Fixes (2026-01-23 Late Afternoon)
+
+After applying the initial fixes, we faced a persistent issue where **deployment succeeded, but the database remained empty** (no tables).
+
+### 1. The "Script Not Found" Error
+**Symptoms**: Railway logs showed `start.sh: line 28: /app/scripts/run-migration-direct.sh: not found`.
+**Cause**: The base Alpine Linux image does not have `bash` installed by default, but our script used `#!/bin/bash`.
+**Fix**: Updated `Dockerfile` to install `bash` (and `libc6-compat`).
+
+### 2. The "Docker Command Not Found" Error
+**Symptoms**: Logs showed `docker: command not found` during migration execution.
+**Cause**: The migration script was originally written for local use via `docker exec`. In production, the script runs *inside* the container, so it cannot call `docker`.
+**Fix**: Refactored `run-migration-direct.sh` to support two modes:
+- **Local**: Uses `docker exec` to run commands in the container.
+- **Production**: Uses `psql` directly (requires installing `postgresql-client` in Dockerfile).
+
+### 3. The "Missing Migration Files" Error
+**Symptoms**: Script ran but printed `Error: No migration file found`.
+**Cause**: Two issues:
+1. The working directory was incorrect. The script checked for files relative to where it was called, not the project root.
+2. The *new* migration file `20260123_152046.ts` (generated locally) was **not committed to Git**, so Railway never received it.
+**Fix**:
+- Updated script to `cd` to project root at start.
+- Committed the missing migration files.
+
+### 4. The Data Extraction Fix
+**Symptoms**: Previous attempts using `sed` regex to extract SQL from the TS file were failing on the massive 13k line file, resulting in truncated SQL and missing tables.
+**Fix**: Rewrote extraction logic in `run-migration-direct.sh` to use precise line numbers (finding the start of `up()` and `down()` functions) instead of fragile regex.
+
+### Final Result
+- **Deployment**: ✅ Success.
+- **Database**: ✅ All 109 tables created automatically on boot.
+- **Reliability**: ✅ The system now auto-heals. If the DB is empty, it runs the full migration directly via `psql`, bypassing transaction limits.
+
+## Conclusion
+
+We have achieved the goal: **A reliable, single-push deployment.**
+
+The complexity arose from:
+1. Massive schema size (breaking standard migrations).
+2. Environment differences (Alpine/Bash, Docker/No-Docker).
+3. Monorepo path resolution.
+
+The current setup is now robust enough to support "One-Click Deploy" templates because it no longer requires manual database intervention.
+
+

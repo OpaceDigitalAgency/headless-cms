@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
+import SeedDataManager from '../../components/SeedDataManager'
 import {
   FileTextIcon,
   EditIcon,
@@ -109,7 +110,8 @@ export const Dashboard: React.FC = () => {
             !slug.startsWith('custom:') &&
             slug !== 'dashboard' &&
             slug !== 'tools' &&
-            !slug.endsWith('-manager')
+            !slug.endsWith('-manager') &&
+            !['header', 'footer', 'settings', 'navigation-settings', 'redirects'].includes(slug)
 
           navData.navSections?.forEach((section: any) => {
             section.items?.forEach((item: any) => {
@@ -292,167 +294,169 @@ export const Dashboard: React.FC = () => {
         <p>Welcome back! Here's what's happening with your content.</p>
       </div>
 
+      <SeedDataManager />
+
       {/* Stats Grid */}
       <div className="ra-dashboard__stats">
-            {stats.map((stat) => {
-              const IconComponent = stat.Icon
-              return (
-                <a
-                  key={stat.slug}
-                  href={`/admin/collections/${stat.slug}`}
-                  className="ra-dashboard__stat-card"
-                >
-                  <div className="ra-dashboard__stat-icon" style={{ backgroundColor: `${stat.color}20`, color: stat.color }}>
-                    <IconComponent size={24} />
-                  </div>
-                  <div className="ra-dashboard__stat-content">
-                    <span className="ra-dashboard__stat-count">
-                      {isLoading ? '...' : stat.count}
-                    </span>
-                    <span className="ra-dashboard__stat-label">{stat.label}</span>
-                  </div>
-                </a>
-              )
-            })}
-          </div>
+        {stats.map((stat) => {
+          const IconComponent = stat.Icon
+          return (
+            <a
+              key={stat.slug}
+              href={`/admin/collections/${stat.slug}`}
+              className="ra-dashboard__stat-card"
+            >
+              <div className="ra-dashboard__stat-icon" style={{ backgroundColor: `${stat.color}20`, color: stat.color }}>
+                <IconComponent size={24} />
+              </div>
+              <div className="ra-dashboard__stat-content">
+                <span className="ra-dashboard__stat-count">
+                  {isLoading ? '...' : stat.count}
+                </span>
+                <span className="ra-dashboard__stat-label">{stat.label}</span>
+              </div>
+            </a>
+          )
+        })}
+      </div>
 
       {/* Two-column grid for recent and drafts */}
       <div className="ra-dashboard__grid">
-            {/* Recent Updates */}
-            <div className="ra-dashboard__card">
-              <div className="ra-dashboard__card-header">
-                <h2>Recent Updates</h2>
-                <span className="ra-dashboard__card-badge">{recentItems.length}</span>
-              </div>
-              <div className="ra-dashboard__card-content">
-                {isLoading ? (
-                  <div className="ra-dashboard__loading">Loading...</div>
-                ) : recentItems.length > 0 ? (
-                  <ul className="ra-dashboard__list">
-                    {recentItems.map((item) => (
-                      <li key={`${item.collection}-${item.id}`}>
-                        <a href={`/admin/collections/${item.collection}/${item.id}`} className="ra-dashboard__list-item">
-                          <div className="ra-dashboard__list-item-content">
-                            <span className="ra-dashboard__list-item-title">{item.title}</span>
-                            <span className="ra-dashboard__list-item-meta">
-                              {item.collectionLabel} • {formatDate(item.updatedAt)}
-                            </span>
-                          </div>
-                          <span className={`ra-dashboard__status ra-dashboard__status--${item.status}`}>
-                            {item.status}
-                          </span>
-                        </a>
-                      </li>
-                    ))}
-                  </ul>
-                ) : (
-                  <div className="ra-dashboard__empty">No recent updates</div>
-                )}
-              </div>
-            </div>
-
-            {/* Drafts Needing Review */}
-            <div className="ra-dashboard__card">
-              <div className="ra-dashboard__card-header">
-                <h2>Drafts Needing Review</h2>
-                <span className="ra-dashboard__card-badge ra-dashboard__card-badge--warning">{drafts.length}</span>
-              </div>
-              <div className="ra-dashboard__card-content">
-                {isLoading ? (
-                  <div className="ra-dashboard__loading">Loading...</div>
-                ) : drafts.length > 0 ? (
-                  <ul className="ra-dashboard__list">
-                    {drafts.map((item) => (
-                      <li key={`draft-${item.collection}-${item.id}`}>
-                        <a href={`/admin/collections/${item.collection}/${item.id}`} className="ra-dashboard__list-item">
-                          <div className="ra-dashboard__list-item-content">
-                            <span className="ra-dashboard__list-item-title">{item.title}</span>
-                            <span className="ra-dashboard__list-item-meta">
-                              {item.collectionLabel} • {formatDate(item.updatedAt)}
-                            </span>
-                          </div>
-                        </a>
-                      </li>
-                    ))}
-                  </ul>
-                ) : (
-                  <div className="ra-dashboard__empty">No drafts pending</div>
-                )}
-              </div>
-            </div>
+        {/* Recent Updates */}
+        <div className="ra-dashboard__card">
+          <div className="ra-dashboard__card-header">
+            <h2>Recent Updates</h2>
+            <span className="ra-dashboard__card-badge">{recentItems.length}</span>
           </div>
+          <div className="ra-dashboard__card-content">
+            {isLoading ? (
+              <div className="ra-dashboard__loading">Loading...</div>
+            ) : recentItems.length > 0 ? (
+              <ul className="ra-dashboard__list">
+                {recentItems.map((item) => (
+                  <li key={`${item.collection}-${item.id}`}>
+                    <a href={`/admin/collections/${item.collection}/${item.id}`} className="ra-dashboard__list-item">
+                      <div className="ra-dashboard__list-item-content">
+                        <span className="ra-dashboard__list-item-title">{item.title}</span>
+                        <span className="ra-dashboard__list-item-meta">
+                          {item.collectionLabel} • {formatDate(item.updatedAt)}
+                        </span>
+                      </div>
+                      <span className={`ra-dashboard__status ra-dashboard__status--${item.status}`}>
+                        {item.status}
+                      </span>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <div className="ra-dashboard__empty">No recent updates</div>
+            )}
+          </div>
+        </div>
+
+        {/* Drafts Needing Review */}
+        <div className="ra-dashboard__card">
+          <div className="ra-dashboard__card-header">
+            <h2>Drafts Needing Review</h2>
+            <span className="ra-dashboard__card-badge ra-dashboard__card-badge--warning">{drafts.length}</span>
+          </div>
+          <div className="ra-dashboard__card-content">
+            {isLoading ? (
+              <div className="ra-dashboard__loading">Loading...</div>
+            ) : drafts.length > 0 ? (
+              <ul className="ra-dashboard__list">
+                {drafts.map((item) => (
+                  <li key={`draft-${item.collection}-${item.id}`}>
+                    <a href={`/admin/collections/${item.collection}/${item.id}`} className="ra-dashboard__list-item">
+                      <div className="ra-dashboard__list-item-content">
+                        <span className="ra-dashboard__list-item-title">{item.title}</span>
+                        <span className="ra-dashboard__list-item-meta">
+                          {item.collectionLabel} • {formatDate(item.updatedAt)}
+                        </span>
+                      </div>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <div className="ra-dashboard__empty">No drafts pending</div>
+            )}
+          </div>
+        </div>
+      </div>
 
       {/* Quick Create */}
       <div className="ra-dashboard__section">
-            <h2>Quick Create</h2>
-            <div className="ra-dashboard__quick-actions">
-              {collectionSlugs.includes('pages') && (
-                <a href="/admin/collections/pages/create" className="ra-dashboard__quick-btn">
-                  <FileTextIcon size={18} /> New Page
-                </a>
-              )}
-              {collectionSlugs.includes('posts') && (
-                <a href="/admin/collections/posts/create" className="ra-dashboard__quick-btn">
-                  <EditIcon size={18} /> New Post
-                </a>
-              )}
-              {collectionSlugs.includes('archive-items') && (
-                <a href="/admin/collections/archive-items/create" className="ra-dashboard__quick-btn">
-                  <ArtifactIcon size={18} /> New Archive Item
-                </a>
-              )}
-              {collectionSlugs.includes('events') && (
-                <a href="/admin/collections/events/create" className="ra-dashboard__quick-btn">
-                  <EditIcon size={18} /> New Event
-                </a>
-              )}
-              {collectionSlugs.includes('products') && (
-                <a href="/admin/collections/products/create" className="ra-dashboard__quick-btn">
-                  <PackageIcon size={18} /> New Product
-                </a>
-              )}
-              {collectionSlugs.includes('media') && (
-                <a href="/admin/collections/media/create" className="ra-dashboard__quick-btn">
-                  <UploadIcon size={18} /> Upload Media
-                </a>
-              )}
-            </div>
-          </div>
+        <h2>Quick Create</h2>
+        <div className="ra-dashboard__quick-actions">
+          {collectionSlugs.includes('pages') && (
+            <a href="/admin/collections/pages/create" className="ra-dashboard__quick-btn">
+              <FileTextIcon size={18} /> New Page
+            </a>
+          )}
+          {collectionSlugs.includes('posts') && (
+            <a href="/admin/collections/posts/create" className="ra-dashboard__quick-btn">
+              <EditIcon size={18} /> New Post
+            </a>
+          )}
+          {collectionSlugs.includes('archive-items') && (
+            <a href="/admin/collections/archive-items/create" className="ra-dashboard__quick-btn">
+              <ArtifactIcon size={18} /> New Archive Item
+            </a>
+          )}
+          {collectionSlugs.includes('events') && (
+            <a href="/admin/collections/events/create" className="ra-dashboard__quick-btn">
+              <EditIcon size={18} /> New Event
+            </a>
+          )}
+          {collectionSlugs.includes('products') && (
+            <a href="/admin/collections/products/create" className="ra-dashboard__quick-btn">
+              <PackageIcon size={18} /> New Product
+            </a>
+          )}
+          {collectionSlugs.includes('media') && (
+            <a href="/admin/collections/media/create" className="ra-dashboard__quick-btn">
+              <UploadIcon size={18} /> Upload Media
+            </a>
+          )}
+        </div>
+      </div>
 
       {/* Site Configuration */}
       <div className="ra-dashboard__section">
-            <h2>Site Configuration</h2>
-            <div className="ra-dashboard__config-grid">
-              <a href="/admin/globals/header" className="ra-dashboard__config-card">
-                <span className="ra-dashboard__config-icon"><ChevronUpIcon size={20} /></span>
-                <div>
-                  <h3>Header</h3>
-                  <p>Navigation & branding</p>
-                </div>
-              </a>
-              <a href="/admin/globals/footer" className="ra-dashboard__config-card">
-                <span className="ra-dashboard__config-icon"><ChevronDownIcon size={20} /></span>
-                <div>
-                  <h3>Footer</h3>
-                  <p>Links & social</p>
-                </div>
-              </a>
-              <a href="/admin/globals/settings" className="ra-dashboard__config-card">
-                <span className="ra-dashboard__config-icon"><SettingsIcon size={20} /></span>
-                <div>
-                  <h3>Settings</h3>
-                  <p>Site-wide config</p>
-                </div>
-              </a>
-              <a href="/admin/collections/users" className="ra-dashboard__config-card">
-                <span className="ra-dashboard__config-icon"><UsersIcon size={20} /></span>
-                <div>
-                  <h3>Users</h3>
-                  <p>Manage admins</p>
-                </div>
-              </a>
+        <h2>Site Configuration</h2>
+        <div className="ra-dashboard__config-grid">
+          <a href="/admin/globals/header" className="ra-dashboard__config-card">
+            <span className="ra-dashboard__config-icon"><ChevronUpIcon size={20} /></span>
+            <div>
+              <h3>Header</h3>
+              <p>Navigation & branding</p>
             </div>
-          </div>
+          </a>
+          <a href="/admin/globals/footer" className="ra-dashboard__config-card">
+            <span className="ra-dashboard__config-icon"><ChevronDownIcon size={20} /></span>
+            <div>
+              <h3>Footer</h3>
+              <p>Links & social</p>
+            </div>
+          </a>
+          <a href="/admin/globals/settings" className="ra-dashboard__config-card">
+            <span className="ra-dashboard__config-icon"><SettingsIcon size={20} /></span>
+            <div>
+              <h3>Settings</h3>
+              <p>Site-wide config</p>
+            </div>
+          </a>
+          <a href="/admin/collections/users" className="ra-dashboard__config-card">
+            <span className="ra-dashboard__config-icon"><UsersIcon size={20} /></span>
+            <div>
+              <h3>Users</h3>
+              <p>Manage admins</p>
+            </div>
+          </a>
+        </div>
+      </div>
     </div>
   )
 }

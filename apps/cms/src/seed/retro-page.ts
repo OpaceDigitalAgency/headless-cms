@@ -113,7 +113,7 @@ const retroPageData = {
             events: [
                 {
                     date: '01',
-                    title: 'Consultation',
+                    heading: 'Consultation',
                     description: [
                         {
                             children: [{ text: "We discuss your vision, references, and the vibe you're going for." }]
@@ -122,7 +122,7 @@ const retroPageData = {
                 },
                 {
                     date: '02',
-                    title: 'Sketch & Concept',
+                    heading: 'Sketch & Concept',
                     description: [
                         {
                             children: [{ text: "I create initial concepts and mood boards for your approval." }]
@@ -131,7 +131,7 @@ const retroPageData = {
                 },
                 {
                     date: '03',
-                    title: 'Creation',
+                    heading: 'Creation',
                     description: [
                         {
                             children: [{ text: "The magic happens. Digital or physical, every detail is crafted with care." }]
@@ -140,7 +140,7 @@ const retroPageData = {
                 },
                 {
                     date: '04',
-                    title: 'Delivery',
+                    heading: 'Delivery',
                     description: [
                         {
                             children: [{ text: "High-res files delivered instantly, or prints shipped worldwide with tracking." }]

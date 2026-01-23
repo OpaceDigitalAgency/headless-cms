@@ -38,11 +38,11 @@ const BLOCK_CONTENT_Lorem = {
 const BLOCK_FEATURES_3Col = {
     blockType: 'features',
     heading: 'Key Features',
-    layout: 'grid',
+    variant: 'grid',
     items: [
-        { title: 'Feature 1', description: 'Description of feature 1.' },
-        { title: 'Feature 2', description: 'Description of feature 2.' },
-        { title: 'Feature 3', description: 'Description of feature 3.' },
+        { heading: 'Feature 1', description: 'Description of feature 1.' },
+        { heading: 'Feature 2', description: 'Description of feature 2.' },
+        { heading: 'Feature 3', description: 'Description of feature 3.' },
     ],
 }
 
@@ -210,10 +210,10 @@ export const PRODUCT_TEMPLATES: TemplateDefinition[] = [
             {
                 blockType: 'features',
                 heading: 'Product Features',
-                layout: 'list',
+                variant: 'list',
                 items: [
-                    { title: 'Quality Material', description: 'Built to last.' },
-                    { title: 'Versatile', description: 'Perfect for any occasion.' }
+                    { heading: 'Quality Material', description: 'Built to last.' },
+                    { heading: 'Versatile', description: 'Perfect for any occasion.' }
                 ]
             }
         ]
@@ -250,11 +250,11 @@ export const PRODUCT_TEMPLATES: TemplateDefinition[] = [
             {
                 blockType: 'features',
                 heading: 'What\'s Inside',
-                layout: 'grid',
+                variant: 'grid',
                 items: [
-                    { title: 'Main Item', description: 'The core product.' },
-                    { title: 'Bonus 1', description: 'Exclusive add-on.' },
-                    { title: 'Bonus 2', description: 'Extended warranty.' }
+                    { heading: 'Main Item', description: 'The core product.' },
+                    { heading: 'Bonus 1', description: 'Exclusive add-on.' },
+                    { heading: 'Bonus 2', description: 'Extended warranty.' }
                 ]
             },
             {

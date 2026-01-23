@@ -240,7 +240,7 @@ export const Pages: CollectionConfig = {
       type: 'ui',
       admin: {
         components: {
-          Cell: '/components/PreviewButtonCells/PagesPreviewCell',
+          // Cell: '/components/PreviewButtonCells/PagesPreviewCell',
         },
         condition: () => false, // Hide from form, only show in list
       },
