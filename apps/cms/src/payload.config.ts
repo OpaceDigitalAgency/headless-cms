@@ -85,8 +85,8 @@ export default buildConfig({
     pool: {
       connectionString: process.env.DATABASE_URL || 'postgresql://payload:payload_secret@localhost:5432/payload',
     },
-    // In production, disable auto-push and use migrations
-    push: process.env.NODE_ENV !== 'production',
+    // Auto-create tables on first run
+    push: true,
     migrationDir: path.resolve(dirname, '../../db/migrations'),
   }),
 
