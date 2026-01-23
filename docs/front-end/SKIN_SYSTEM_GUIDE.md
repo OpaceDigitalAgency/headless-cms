@@ -100,3 +100,109 @@ If a skin isn't properly scoped or if global styles are added without `[data-ski
 Ensure EVERY custom style for a skin is prefixed with `[data-skin="skin-name"]`.
 
 ---
+
+## 🚀 ADVANCED: THE "BOLT" HIGH-FIDELITY WORKFLOW
+
+*Use this workflow when implementing complex, animated skins (like Retro, Cyberpunk, Agency) that must match a reference design pixel-perfectly.*
+
+### 🏗️ Phase 1: The "Deep Read" (Before You Code)
+**Goal:** Understand *why* the reference looks the way it does.
+
+1.  **Identify Global Animations:**
+    *   Open the reference `index.css`.
+    *   Search for `@keyframes`.
+    *   **Action:** These MUST be ported to `src/styles/globals.css` immediately. Do not rely on local block styles for global effects like scanlines, shimmers, or floating elements.
+    *   **Naming:** Prefix with the skin name if specific (e.g., `scanline` is generic, but `retro-pulse` is better if unique).
+
+2.  **Identify "Magic" Assets:**
+    *   Look for data URIs (SVG background noise, grain, patterns) in the CSS.
+    *   **Action:** Add these to `globals.css` under the `[data-skin="your-skin"]` selector using variables like `--skin-bg-image`.
+
+3.  **Map the DOM Structure:**
+    *   Look at the reference HTML/TSX.
+    *   Does it use standard Tailwind classes?
+    *   **Crucial:** Does it have *extra* DOM elements for decoration (e.g., pulsing circles, absolute positioned stars, glow effects)?
+    *   *If YES:* You CANNOT just use CSS variables. You MUST create a **Variant** in the React Block component (see Phase 3).
+
+---
+
+### 🎨 Phase 2: Global Foundations (`globals.css`)
+**Goal:** Make the "canvas" ready before painting.
+
+1.  **Define the Skin Scope:**
+    ```css
+    [data-skin="retro"] {
+      /* Map Reference Colors to System Tokens */
+      --color-background: 15 23 42; /* Convert hex to R G B */
+      --color-accent: 124 58 237;   /* Your primary brand color */
+      
+      /* Define Custom Hooks for Blocks */
+      --skin-bg-image: url('...'); 
+      --radius: 0px;                /* Match border-radius strategy */
+    }
+    ```
+
+2.  **Port Keyframes & Utilities:**
+    *   Copy all `@keyframes` from reference to the root of `globals.css` (or `theme` config).
+    *   Create scoped utility classes if the reference uses them:
+        ```css
+        [data-skin="retro"] .text-shimmer {
+          animation: text-shimmer 2s infinite;
+        }
+        ```
+
+3.  **Typography & Base Elements:**
+    *   Force font families and heading sizes if the skin deviates significantly from the system default.
+    *   Override `.btn` and `.card` styles globally within the scope.
+
+---
+
+### 🧩 Phase 3: Block Configuration (`HeroBlock`, `GridBlock`)
+**Goal:** Match the DOM structure exactly.
+
+**Rule of Thumb:** If the reference design has decorative elements (stars, textures, complex hover layouts) that are *not* in the standard block, **DO NOT** try to hack the standard block with CSS.
+
+1.  **Create a Structural Variant:**
+    *   Inside `HeroBlock.tsx` or `GridBlock.tsx`, add a specific check:
+        ```tsx
+        const isRetro = variant === 'retro';
+        
+        if (isRetro) {
+          return (
+             // COMPELTE COPY-PASTE OF REFERENCE HTML STRUCTURE
+             // Replace hardcoded text with props ({heading}, {description})
+             // Keep all decorative <div>s and <svg>s
+          );
+        }
+        ```
+    *   This ensures 100% fidelity to the reference design animations and interactions.
+
+2.  **Handle "None" Hero:**
+    *   If the skin needs a custom Hero block (not the page default), ensure `PageRenderer.tsx` respects `hero.type: 'none'` to avoid layout gaps.
+
+---
+
+### 💾 Phase 4: Seed Data & Content
+**Goal:** Populate the page with the exact content structure.
+
+1.  **Block Type Matching:**
+    *   Does the reference use a generic list or a specific "Process" flow?
+    *   If it's a specific flow, use the `TimelineBlock` or `FeaturesBlock` and ensure your new Variant (Phase 3) handles it.
+
+2.  **Exact Text & Assets:**
+    *   In your seed script (`src/seed/retro-page.ts`):
+    *   Use the exact headings ("Creative Process", "Services").
+    *   **Crucial:** Hardcode the `variant: 'retro'` prop for every block that needs your custom structure.
+
+3.  **Color Variables in Blocks:**
+    *   Ensure your custom variants use `rgb(var(--color-accent))` instead of hardcoded hex values like `#7c3aed`. This keeps them compatible if you tweak `globals.css` later.
+
+---
+
+### ✅ Phase 5: The "One-Shot" Verification
+Before submitting:
+
+1.  **The "Gap" Check:** Is there unwanted white space at the top? (Check `hero.type`).
+2.  **The "Color" Check:** Does the hover state use the right neon glow? (Check `globals.css` variables).
+3.  **The "Animation" Check:** Do the scanlines/stars move? (Check Keyframes in `globals.css`).
+4.  **The "Missing Content" Check:** Did you forget a section like "Testimonials" or "Process"? (Check the Seed script).

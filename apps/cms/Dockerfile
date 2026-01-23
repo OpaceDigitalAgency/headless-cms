@@ -70,6 +70,10 @@ COPY --from=builder /app/apps/cms/public ./apps/cms/public
 COPY --from=builder --chown=payloadcms:nodejs /app/apps/cms/.next/standalone ./
 COPY --from=builder --chown=payloadcms:nodejs /app/apps/cms/.next/static ./apps/cms/.next/static
 
+# Copy startup script
+COPY --from=builder /app/apps/cms/start.sh ./apps/cms/start.sh
+RUN chmod +x ./apps/cms/start.sh
+
 # Create uploads directory
 RUN mkdir -p /app/apps/cms/uploads && chown -R payloadcms:nodejs /app/apps/cms/uploads
 
@@ -78,4 +82,4 @@ WORKDIR /app/apps/cms
 EXPOSE 3000
 ENV PORT=3000
 ENV HOSTNAME="0.0.0.0"
-CMD ["node", "server.js"]
+CMD ["sh", "start.sh"]
