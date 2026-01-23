@@ -383,3 +383,29 @@ The following environment variables are automatically configured when using the 
 ## License
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+
+
+---
+
+## About Opace Digital Agency
+
+This project is developed and maintained by **Opace Digital Agency**, a Birmingham-based digital agency specializing in open-source solutions and custom developments.
+
+We provide expert [decoupled Next.js and Astro development](https://opace.agency/services/web-design/next-js-react-development) services, creating modern, high-performance web applications and headless CMS solutions.
+
+### Our Services
+
+- **Next.js & React Development** - Custom web applications and JAMstack solutions
+- **Headless CMS Solutions** - Payload CMS, Strapi, and custom implementations
+- **Frontend Development** - Modern frameworks including Astro, React, and Vue
+- **WordPress Development** - Custom themes, plugins, and headless WordPress
+- **E-commerce Solutions** - Magento, WooCommerce, and custom platforms
+
+### Get in Touch
+
+- **Website**: [https://opace.agency](https://opace.agency)
+- **Services**: [Web Design & Development](https://opace.agency/services/web-design)
+- **Location**: Birmingham, UK
+- **GitHub**: [@OpaceDigitalAgency](https://github.com/OpaceDigitalAgency)
+
+For project inquiries, technical support, or collaboration opportunities, visit our website or reach out through our contact page.
