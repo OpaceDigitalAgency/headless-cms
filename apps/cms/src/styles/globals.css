@@ -1857,6 +1857,86 @@
   @apply mt-8 text-center;
 }
 
+.section-cta-link {
+  @apply inline-flex items-center justify-center rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50 dark:border-slate-600 dark:text-slate-200 dark:hover:bg-slate-800;
+}
+
+.grid-items {
+  @apply grid gap-6 sm:grid-cols-2 lg:grid-cols-3;
+}
+
+.grid-item {
+  @apply rounded-xl bg-white shadow-sm ring-1 ring-gray-200 dark:bg-slate-800 dark:ring-slate-700 overflow-hidden transition-shadow hover:shadow-md;
+}
+
+.grid-image img {
+  @apply h-48 w-full object-cover;
+}
+
+.grid-content {
+  @apply p-4;
+}
+
+.grid-content h3 {
+  @apply font-semibold text-gray-900 dark:text-white;
+}
+
+.grid-content p {
+  @apply mt-2 text-sm text-gray-600 dark:text-slate-300 line-clamp-2;
+}
+
+.grid-content time {
+  @apply mt-2 block text-xs font-medium text-gray-500 dark:text-slate-400;
+}
+
+.home-section--cta {
+  @apply rounded-2xl bg-gray-50 dark:bg-slate-900/60;
+}
+
+.home-section--content .section-content {
+  @apply mt-6;
+}
+
+.setup-grid {
+  @apply grid gap-6 md:grid-cols-2;
+}
+
+.setup-card {
+  @apply rounded-2xl border border-gray-200 bg-white p-6 shadow-sm dark:border-slate-700 dark:bg-slate-900;
+}
+
+.setup-kicker {
+  @apply text-xs font-semibold uppercase tracking-widest text-gray-500 dark:text-slate-400;
+}
+
+.setup-status {
+  @apply mt-2 text-2xl font-semibold text-gray-900 dark:text-white;
+}
+
+.setup-note {
+  @apply mt-3 text-sm text-gray-600 dark:text-slate-300;
+}
+
+.setup-list {
+  @apply mt-3 list-decimal space-y-2 pl-5 text-sm text-gray-600 dark:text-slate-300;
+}
+
+.cta-container {
+  @apply mx-auto flex max-w-3xl flex-col items-center gap-4 px-6 py-12 text-center;
+}
+
+.cta-container h2 {
+  @apply text-3xl font-bold tracking-tight text-gray-900 dark:text-white;
+}
+
+.cta-container p {
+  @apply text-lg text-gray-600 dark:text-slate-300;
+}
+
+.cta-button {
+  @apply inline-flex items-center justify-center rounded-lg bg-primary-600 px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-primary-700;
+}
+
 /* Archive Template */
 .archive-template {
   @apply container py-12;
