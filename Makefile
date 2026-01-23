@@ -210,7 +210,7 @@ db-fresh: ## Quick dev database refresh (uses push mode, no migrations)
 dev-fresh: ## Start dev with auto-accept for Drizzle prompts (use after db-fresh)
 	@echo "$(CYAN)Starting CMS with auto-accept for schema prompts...$(NC)"
 	@echo "$(YELLOW)Note: This will answer 'y' to all Drizzle prompts$(NC)"
-	@cd apps/cms && yes | pnpm dev
+	@cd apps/cms && DRIZZLE_PUSH=true yes | pnpm dev
 
 db-fresh-migrations: ## Fresh database with regenerated migrations (for production deployment)
 	@echo "$(YELLOW)═══════════════════════════════════════════════════════$(NC)"
