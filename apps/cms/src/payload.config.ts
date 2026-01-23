@@ -60,14 +60,14 @@ const dirname = path.dirname(filename)
 // ===========================================
 const emailTransport = process.env.SMTP_HOST
   ? nodemailer.createTransport({
-      host: process.env.SMTP_HOST,
-      port: parseInt(process.env.SMTP_PORT || '587'),
-      secure: process.env.SMTP_SECURE === 'true',
-      auth: {
-        user: process.env.SMTP_USER,
-        pass: process.env.SMTP_PASS,
-      },
-    })
+    host: process.env.SMTP_HOST,
+    port: parseInt(process.env.SMTP_PORT || '587'),
+    secure: process.env.SMTP_SECURE === 'true',
+    auth: {
+      user: process.env.SMTP_USER,
+      pass: process.env.SMTP_PASS,
+    },
+  })
   : undefined
 
 export default buildConfig({
@@ -75,7 +75,7 @@ export default buildConfig({
   // Core Configuration
   // ===========================================
   secret: process.env.PAYLOAD_SECRET || 'CHANGE-ME-IN-PRODUCTION',
-  
+
   serverURL: process.env.PAYLOAD_PUBLIC_SERVER_URL || 'http://localhost:3000',
 
   // ===========================================
@@ -86,7 +86,7 @@ export default buildConfig({
       connectionString: process.env.DATABASE_URL || 'postgresql://payload:payload_secret@localhost:5432/payload',
     },
     // Auto-create tables on first run
-    push: true,
+    push: false,
     migrationDir: path.resolve(dirname, '../../db/migrations'),
   }),
 
@@ -95,10 +95,10 @@ export default buildConfig({
   // ===========================================
   email: emailTransport
     ? {
-        transport: emailTransport,
-        fromName: process.env.EMAIL_FROM_NAME || 'Payload CMS',
-        fromAddress: process.env.EMAIL_FROM_ADDRESS || 'noreply@example.com',
-      }
+      transport: emailTransport,
+      fromName: process.env.EMAIL_FROM_NAME || 'Payload CMS',
+      fromAddress: process.env.EMAIL_FROM_ADDRESS || 'noreply@example.com',
+    }
     : undefined,
 
   // ===========================================
@@ -106,7 +106,7 @@ export default buildConfig({
   // ===========================================
   admin: {
     user: Users.slug,
-    
+
     meta: {
       titleSuffix: '- Payload CMS',
       favicon: '/favicon.ico',
@@ -426,26 +426,26 @@ export default buildConfig({
     // S3 Storage Plugin (optional, configured via env vars)
     ...(process.env.S3_BUCKET
       ? [
-          s3Storage({
-            collections: {
-              media: {
-                prefix: 'media',
-                generateFileURL: ({ filename }) => {
-                  return `${process.env.S3_CDN_URL || `https://${process.env.S3_BUCKET}.s3.${process.env.S3_REGION || 'us-east-1'}.amazonaws.com`}/media/${filename}`
-                },
+        s3Storage({
+          collections: {
+            media: {
+              prefix: 'media',
+              generateFileURL: ({ filename }) => {
+                return `${process.env.S3_CDN_URL || `https://${process.env.S3_BUCKET}.s3.${process.env.S3_REGION || 'us-east-1'}.amazonaws.com`}/media/${filename}`
               },
             },
-            bucket: process.env.S3_BUCKET,
-            config: {
-              credentials: {
-                accessKeyId: process.env.S3_ACCESS_KEY_ID || '',
-                secretAccessKey: process.env.S3_SECRET_ACCESS_KEY || '',
-              },
-              region: process.env.S3_REGION || 'us-east-1',
-              ...(process.env.S3_ENDPOINT && { endpoint: process.env.S3_ENDPOINT }),
+          },
+          bucket: process.env.S3_BUCKET,
+          config: {
+            credentials: {
+              accessKeyId: process.env.S3_ACCESS_KEY_ID || '',
+              secretAccessKey: process.env.S3_SECRET_ACCESS_KEY || '',
             },
-          }),
-        ]
+            region: process.env.S3_REGION || 'us-east-1',
+            ...(process.env.S3_ENDPOINT && { endpoint: process.env.S3_ENDPOINT }),
+          },
+        }),
+      ]
       : []),
   ],
 
@@ -573,15 +573,15 @@ export default buildConfig({
     payload.logger.info(`Admin URL: ${payload.config.serverURL}/admin`)
     payload.logger.info(`GraphQL: ${payload.config.serverURL}/api/graphql`)
     payload.logger.info(`Environment: ${process.env.NODE_ENV || 'development'}`)
-    
+
     if (process.env.S3_BUCKET) {
       payload.logger.info(`S3 Storage: Enabled (${process.env.S3_BUCKET})`)
     }
-    
+
     if (emailTransport) {
       payload.logger.info(`Email: Enabled (${process.env.SMTP_HOST})`)
     }
-    
+
     payload.logger.info('═══════════════════════════════════════════════════════')
   },
 })
