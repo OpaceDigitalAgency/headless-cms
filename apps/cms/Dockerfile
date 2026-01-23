@@ -40,7 +40,7 @@ COPY . .
 
 # Build shared packages first
 WORKDIR /app/packages/shared
-RUN pnpm build || true
+RUN pnpm --filter @repo/shared build --if-present
 
 # Build CMS only (filtered build)
 WORKDIR /app
