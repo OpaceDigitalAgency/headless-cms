@@ -37,7 +37,7 @@ services:
         condition: service_healthy
     environment:
       NODE_ENV: development
-      DATABASE_URI: postgres://${POSTGRES_USER:-payload}:${POSTGRES_PASSWORD:-payload_secret}@postgres:5432/${POSTGRES_DB:-payload}
+      DATABASE_URL: postgres://${POSTGRES_USER:-payload}:${POSTGRES_PASSWORD:-payload_secret}@postgres:5432/${POSTGRES_DB:-payload}
       PAYLOAD_SECRET: ${PAYLOAD_SECRET:-your-secret-key-change-in-production}
       PAYLOAD_PUBLIC_SERVER_URL: ${PAYLOAD_PUBLIC_SERVER_URL:-http://localhost:3000}
       NEXT_PUBLIC_SITE_URL: ${NEXT_PUBLIC_SITE_URL:-http://localhost:3000}

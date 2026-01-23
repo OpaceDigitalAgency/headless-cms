@@ -25,15 +25,15 @@ const requiredEnvVars: EnvVar[] = [
     description: 'Secret key for JWT signing and encryption',
     example: 'Generate with: openssl rand -base64 32',
   },
-  {
-    name: 'PAYLOAD_PUBLIC_SERVER_URL',
-    required: true,
-    description: 'Public URL of the CMS server',
-    example: 'http://localhost:3000',
-  },
 ]
 
 const optionalEnvVars: EnvVar[] = [
+  {
+    name: 'PAYLOAD_PUBLIC_SERVER_URL',
+    required: false,
+    description: 'Public URL of the CMS server (recommended but not required to boot)',
+    example: 'http://localhost:3000',
+  },
   {
     name: 'NEXT_PUBLIC_SITE_URL',
     required: false,
@@ -109,4 +109,3 @@ export function validateEnv(): void {
     console.log('✅ Environment variables validated successfully\n')
   }
 }
-

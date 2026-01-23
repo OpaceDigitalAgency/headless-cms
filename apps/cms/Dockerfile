@@ -70,9 +70,17 @@ COPY --from=builder /app/apps/cms/public ./apps/cms/public
 COPY --from=builder --chown=payloadcms:nodejs /app/apps/cms/.next/standalone ./
 COPY --from=builder --chown=payloadcms:nodejs /app/apps/cms/.next/static ./apps/cms/.next/static
 
+# Include config + migrations so we can run `payload migrate` at runtime.
+COPY --from=builder --chown=payloadcms:nodejs /app/apps/cms/src ./apps/cms/src
+COPY --from=builder --chown=payloadcms:nodejs /app/apps/db/migrations ./apps/db/migrations
+
 # Copy startup script
 COPY --from=builder /app/apps/cms/start.sh ./apps/cms/start.sh
 RUN chmod +x ./apps/cms/start.sh
+
+# Install TS loader for runtime migrations (the migration files are TypeScript).
+# Install into a dedicated folder to avoid mutating Next's standalone node_modules.
+RUN mkdir -p /opt/tsx && cd /opt/tsx && npm install --omit=dev tsx@4.19.2
 
 # Create uploads directory
 RUN mkdir -p /app/apps/cms/uploads && chown -R payloadcms:nodejs /app/apps/cms/uploads
