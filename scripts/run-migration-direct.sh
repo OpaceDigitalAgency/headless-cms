@@ -4,8 +4,8 @@
 
 set -e
 
-# Find the latest migration file
-MIGRATION_FILE=$(ls -t apps/db/migrations/*.ts | head -1)
+# Find the latest migration file (ignoring index.ts)
+MIGRATION_FILE=$(ls -t apps/db/migrations/*.ts | grep -v "index.ts" | head -1)
 
 if [ -z "$MIGRATION_FILE" ]; then
   echo "Error: No migration file found in apps/db/migrations/"
@@ -19,21 +19,48 @@ echo "======================================================"
 
 cd "$(dirname "$0")/.."
 
-# Extract SQL:
-# 1. Start from line 4 (skip imports/func def)
-# 2. Remove the opening `  await db.execute(sql`
-# 3. Remove the closing `  `);` and everything after
-# 4. Remove the closing `}` at the end
-# 5. Pipe result to psql
+# Extract SQL using robust line-number calculation
+# This is safer than regex which might fail on large files or special chars
 
-echo "Extracting and executing SQL..."
+echo "Calculating extraction range..."
+UP_START=$(grep -n "export async function up" "$MIGRATION_FILE" | cut -d: -f1)
+DOWN_START=$(grep -n "export async function down" "$MIGRATION_FILE" | cut -d: -f1)
 
-# Use sed to extract the SQL content
-# The pattern matches between sql` and `);
-cat "$MIGRATION_FILE" | \
-  sed -n '/await db.execute(sql`/,/`);/p' | \
+if [ -z "$UP_START" ] || [ -z "$DOWN_START" ]; then
+  echo "Error: Could not find up/down functions in migration file"
+  exit 1
+fi
+
+# We want from the line after 'up' start, to a few lines before 'down' start
+# 'up' starts at X. 'await db.execute' is at X+1.
+# 'down' starts at Y. Closing brace '}' is at Y-2. Closing ');' is at Y-3.
+START_LINE=$((UP_START + 1))
+END_LINE=$((DOWN_START - 2))
+
+echo "Extracting SQL from lines $START_LINE to $END_LINE..."
+
+# Extract lines and clean up start/end markers
+sed -n "${START_LINE},${END_LINE}p" "$MIGRATION_FILE" | \
   sed '1s/.*await db.execute(sql`//' | \
-  sed '$s/`);.*//' > /tmp/migration_run.sql
+  sed '$s/`);.*//' | \
+  sed '$s/}$//' > /tmp/migration_run.sql
+
+# Verify extraction wasn't empty
+if [ ! -s /tmp/migration_run.sql ]; then
+  echo "Error: Extracted SQL file is empty!"
+  exit 1
+fi
+
+echo "SQL extracted size: $(wc -l < /tmp/migration_run.sql) lines"
+
+# Inspect first and last few lines to verify correctness
+echo "--- SQL Start ---"
+head -3 /tmp/migration_run.sql
+echo "..."
+echo "--- SQL End ---"
+tail -3 /tmp/migration_run.sql
+
+echo "Executing SQL..."
 
 # Execute via docker psql
 if docker exec -i headless-cms-postgres psql -U payload -d payload < /tmp/migration_run.sql; then
@@ -59,5 +86,9 @@ if docker exec -i headless-cms-postgres psql -U payload -d payload < /tmp/migrat
   echo "✅ Migration recorded successfully"
 else
   echo "❌ SQL execution failed"
+  # Show last few lines of log if possible
+  rm -f /tmp/migration_run.sql
   exit 1
 fi
+
+rm -f /tmp/migration_run.sql
