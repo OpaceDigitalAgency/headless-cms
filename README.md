@@ -310,7 +310,8 @@ You can choose your frontend framework in the admin panel:
 | `make build` | Build all applications for production |
 | `make up` | Start services via Docker Compose |
 | `make down` | Stop all running services |
-| `make db-fresh` | **Fresh database with regenerated migrations** (use after schema changes) |
+| `make db-fresh` | **Quick dev database refresh** (uses push mode, no migrations) |
+| `make db-fresh-migrations` | **Fresh database with regenerated migrations** (for production deployment) |
 | `make db-migrate` | Run database migrations |
 | `make db-reset` | Reset database (drop all tables and re-migrate) |
 | `make db-seed` | Seed database with sample data |
@@ -326,10 +327,32 @@ You can choose your frontend framework in the admin panel:
 
 ### Database Management
 
-When making **core schema changes** (adding/removing/renaming collections, fields, etc.), use:
+#### Quick Development Refresh
+
+For daily development work (fastest option):
 
 ```bash
 make db-fresh
+```
+
+This will:
+1. Stop any running dev servers
+2. Remove the database volume and recreate PostgreSQL
+3. Schema auto-syncs on first connection (push mode)
+
+Then start the dev server:
+```bash
+make dev
+```
+
+Create your admin user at http://localhost:3000/admin/create-first-user and run seed scripts from within the CMS.
+
+#### Production Migration Generation
+
+When making **core schema changes** that need to be deployed to production:
+
+```bash
+make db-fresh-migrations
 ```
 
 This will:
@@ -339,12 +362,7 @@ This will:
 4. Generate fresh migrations from your current Payload schema
 5. Run the new migrations
 
-Then:
-```bash
-make dev
-```
-
-Create your admin user at http://localhost:3000/admin/create-first-user and run seed scripts from within the CMS.
+Then commit and push the new migration files to deploy to Railway.
 
 ### Preset Commands
 
