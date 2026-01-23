@@ -4,11 +4,18 @@
 
 set -e
 
+# Find location of this script
+cd "$(dirname "$0")/.."
+echo "Current directory: $(pwd)"
+echo "Listing apps/db/migrations directory content:"
+ls -la apps/db/migrations || echo "Directory not found"
+
 # Find the latest migration file (ignoring index.ts)
 MIGRATION_FILE=$(ls -t apps/db/migrations/*.ts | grep -v "index.ts" | head -1)
 
 if [ -z "$MIGRATION_FILE" ]; then
   echo "Error: No migration file found in apps/db/migrations/"
+  ls -R apps/db
   exit 1
 fi
 
@@ -17,7 +24,7 @@ echo "  Running migration via psql (direct)"
 echo "  File: $MIGRATION_FILE"
 echo "======================================================"
 
-cd "$(dirname "$0")/.."
+# Extract SQL using robust line-number calculation
 
 # Extract SQL using robust line-number calculation
 # This is safer than regex which might fail on large files or special chars
