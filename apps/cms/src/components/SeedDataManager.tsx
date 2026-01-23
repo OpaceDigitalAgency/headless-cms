@@ -53,7 +53,7 @@ export const SeedDataManager: React.FC = () => {
   const [activeView, setActiveView] = useState<'collections' | 'presets'>('collections')
   const [collections, setCollections] = useState<CollectionSeedStatus[]>([])
   const [presets, setPresets] = useState<PresetInfo[]>([])
-  const [selectedPreset, setSelectedPreset] = useState<string>('archive')
+  const [selectedPreset, setSelectedPreset] = useState<string>('')
   const [loading, setLoading] = useState(true)
   const [actionInProgress, setActionInProgress] = useState<string | null>(null)
   const [message, setMessage] = useState<{ type: 'success' | 'error' | 'info'; text: string } | null>(null)
@@ -63,6 +63,7 @@ export const SeedDataManager: React.FC = () => {
   useEffect(() => {
     fetchCollectionStatus()
     fetchPresets()
+    fetchActivePreset()
   }, [])
 
   const getIconForCollection = (slug: string): React.FC<IconProps> => {
@@ -125,6 +126,22 @@ export const SeedDataManager: React.FC = () => {
       }
     } catch (error) {
       setPresets(getDefaultPresets())
+    }
+  }
+
+  const fetchActivePreset = async () => {
+    try {
+      const response = await fetch('/api/globals/settings')
+      if (response.ok) {
+        const data = await response.json()
+        const activePreset = data.activePreset || 'blog'
+        setSelectedPreset(activePreset)
+      } else {
+        setSelectedPreset('blog') // Fallback to blog if Settings fetch fails
+      }
+    } catch (error) {
+      console.error('Failed to fetch activePreset from Settings:', error)
+      setSelectedPreset('blog') // Fallback to blog
     }
   }
 
