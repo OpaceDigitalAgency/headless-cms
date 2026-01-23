@@ -190,3 +190,21 @@ These packages are now available at runtime when migrations execute, allowing th
 **Files Changed**:
 - `headless-cms/apps/cms/Dockerfile` - Added migration dependency installation in production stage
 
+## Critical Fix #2: Migration Directory Path Mismatch (2026-01-23 13:15 GMT)
+
+**Problem**: Even after installing migration dependencies, Railway was still trying to run the OLD migration file (`20260122_095124`) that had been deleted.
+
+**Root Cause**: The `payload.config.ts` was configured to look for migrations in `apps/cms/migrations` (via `../migrations` relative path), but the actual migrations were in `apps/db/migrations`. This caused:
+- Payload to not find the new migration file
+- Railway to potentially cache or reference old migration locations
+- Local `make db-fresh` to fail because it was cleaning the wrong directory
+
+**Solution**: Updated the migration directory configuration to be consistent:
+- Changed `payload.config.ts` migrationDir from `../migrations` to `../../db/migrations`
+- Updated `Makefile` db-fresh target to clean `apps/db/migrations` instead of `apps/cms/migrations`
+- Both main config and migrate config now point to the same location: `apps/db/migrations`
+
+**Files Changed**:
+- `headless-cms/apps/cms/src/payload.config.ts` - Fixed migrationDir path
+- `headless-cms/Makefile` - Fixed db-fresh to clean correct directory
+
