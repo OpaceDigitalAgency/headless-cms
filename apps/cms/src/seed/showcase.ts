@@ -299,7 +299,7 @@ export async function ensureShowcasePage(payload: Payload, options?: { updateHea
       },
       {
         blockType: 'content',
-        backgroundColor: 'light',
+        backgroundColor: 'muted',
         paddingTop: 'medium',
         paddingBottom: 'medium',
         columns: [
@@ -544,7 +544,7 @@ export async function ensureShowcasePage(payload: Payload, options?: { updateHea
         enableIntro: true,
         introContent: createRichText('Fill out the demo form below to see layout styling.'),
         style: 'card',
-        backgroundColor: 'light',
+        backgroundColor: 'muted',
       },
       {
         blockType: 'spacer',

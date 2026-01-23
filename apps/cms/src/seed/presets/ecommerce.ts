@@ -499,7 +499,7 @@ export class EcommerceSeeder extends BaseSeeder {
             links: [
               { label: 'Add to Cart', url: '/products/bestselling-novel-collection', variant: 'primary' },
             ],
-            backgroundColor: 'secondary',
+            backgroundColor: 'accent',
           },
         ],
       },

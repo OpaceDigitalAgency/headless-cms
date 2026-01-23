@@ -92,7 +92,7 @@ export class MinimalPageSeeder extends BaseSeeder {
                     blockType: 'form',
                     formType: 'contact', // Simple contact form
                     heading: 'Get in Touch',
-                    backgroundColor: 'light',
+                    backgroundColor: 'muted',
                 },
             ],
         })

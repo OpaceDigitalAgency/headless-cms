@@ -272,7 +272,7 @@ export class BlogSeeder extends BaseSeeder {
             // Featured content section with intro
             {
               blockType: 'content',
-              backgroundColor: 'light',
+              backgroundColor: 'muted',
               paddingTop: 'large',
               paddingBottom: 'large',
               columns: [
@@ -434,7 +434,7 @@ export class BlogSeeder extends BaseSeeder {
             // Values section
             {
               blockType: 'content',
-              backgroundColor: 'light',
+              backgroundColor: 'muted',
               paddingTop: 'large',
               paddingBottom: 'large',
               columns: [
@@ -507,7 +507,7 @@ export class BlogSeeder extends BaseSeeder {
             // Contact info section
             {
               blockType: 'content',
-              backgroundColor: 'light',
+              backgroundColor: 'muted',
               paddingTop: 'large',
               paddingBottom: 'large',
               columns: [
@@ -632,7 +632,7 @@ export class BlogSeeder extends BaseSeeder {
             heading: 'Take the Pledge',
             description: 'Join thousands of others in committing to a greener future.',
             links: [{ label: 'Join Now', url: '/contact', variant: 'primary' }],
-            backgroundColor: 'light',
+            backgroundColor: 'muted',
           },
         ],
       },

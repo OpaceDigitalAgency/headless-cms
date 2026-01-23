@@ -118,7 +118,7 @@ export class BrochureSeeder extends BaseSeeder {
               links: [
                 { label: 'Book a Consultation', url: '/contact', variant: 'primary' },
               ],
-              backgroundColor: 'light',
+              backgroundColor: 'muted',
             },
           ],
           customData: { industry: 'Manufacturing', result: '22% cycle time reduction' },
