@@ -6,7 +6,7 @@
     "buildContext": "."
   },
   "deploy": {
-    "startCommand": "sh /app/apps/cms/start.sh",
+    "startCommand": "pnpm --filter @repo/cms migrate && pnpm start:cms",
     "healthcheckPath": "/api/health",
     "healthcheckTimeout": 300,
     "restartPolicyType": "ON_FAILURE",

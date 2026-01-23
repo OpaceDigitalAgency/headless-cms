@@ -10,4 +10,4 @@ cmds = ["pnpm install --frozen-lockfile"]
 cmds = ["pnpm build:cms"]
 
 [start]
-cmd = "pnpm start:cms"
+cmd = "pnpm --filter @repo/cms migrate && pnpm start:cms"
