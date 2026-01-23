@@ -1802,7 +1802,9 @@
 }
 
 .home-section {
-  @apply container;
+  @apply mx-auto px-4 sm:px-6 lg:px-8;
+  max-width: var(--container-max) !important;
+  width: 100%;
 }
 
 .section-header {
