@@ -165,7 +165,7 @@ export async function seedBasicData(payload: Payload): Promise<void> {
         },
         {
           blockType: 'content',
-          backgroundColor: 'light',
+          backgroundColor: 'muted',
           paddingTop: 'medium',
           paddingBottom: 'medium',
           columns: [
@@ -198,7 +198,7 @@ export async function seedBasicData(payload: Payload): Promise<void> {
               variant: 'primary',
             },
           ],
-          backgroundColor: 'primary',
+          backgroundColor: 'accent',
         },
         {
           blockType: 'quote',
@@ -410,7 +410,7 @@ export async function seedBasicData(payload: Payload): Promise<void> {
           enableIntro: true,
           introContent: createRichText('Fill out the demo form below to see layout styling.'),
           style: 'card',
-          backgroundColor: 'light',
+          backgroundColor: 'muted',
         },
         {
           blockType: 'spacer',

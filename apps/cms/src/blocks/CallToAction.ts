@@ -83,7 +83,7 @@ export const ctaBlock: Block = {
       name: 'backgroundColor',
       type: 'select',
       label: 'Background Color',
-      defaultValue: 'primary',
+      defaultValue: 'none',
       options: [
         { label: 'None', value: 'none' },
         { label: 'Muted', value: 'muted' },
