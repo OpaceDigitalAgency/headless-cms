@@ -35,6 +35,9 @@ import { Events } from './collections/Events'
 import { ArchiveItems } from './collections/ArchiveItems'
 import { ContentTypes } from './collections/ContentTypes'
 import { CustomItems } from './collections/CustomItems'
+import { Orders } from './collections/Orders'
+import { Carts } from './collections/Carts'
+import { ProductReviews } from './collections/ProductReviews'
 
 // Globals
 import { Header } from './globals/Header'
@@ -296,6 +299,9 @@ export default buildConfig({
     // Dynamic content types system
     ContentTypes,
     CustomItems,
+    Orders,
+    Carts,
+    ProductReviews,
   ],
 
   // ===========================================

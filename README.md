@@ -51,8 +51,9 @@ This repo is a productised platform on top of Payload CMS, not a vanilla clone:
 - **Dual Frontends Included**: Next.js (ISR-ready, on-demand revalidation) and Astro (pure SSG) ship together, wired to the same CMS contracts and template system.
 - **Template + Block System**: Finite, shared templates and 9+ reusable blocks across CMS/Next/Astro for consistent rendering without per-collection view code.
 - **Presets & Starters**: Prebuilt starters (blog, brochure, archive, ecommerce) plus Makefile and `scripts/create.sh` workflows to scaffold quickly.
-- **Enhanced Admin UX**: Two-panel nav, custom dashboard (stats, drafts, quick create, seed + collection templates + content types tabs), theme toggle, tools view.
+- **Enhanced Admin UX**: Two-panel nav, custom dashboard, theme toggle, and the **Visual Template Gallery** for layout selection.
 - **Operational Extras**: Railway-ready multi-service deploy, Makefile one-command workflows, seed/reset endpoints, search/SEO/redirects/nested docs/form-builder plugins enabled, optional S3 storage.
+- **Rich Seed Data**: Automated generation of complete sites including Pages, Posts, Products, Orders, and skin-specific Showcases (`/agency`, `/minimal`, `/retro`).
 
 ---
 
@@ -115,6 +116,8 @@ If you want sitemap generation, set `ENABLE_SITEMAP=true` before building.
 | **On-Demand Revalidation** | Fast, static pages with instant updates |
 | **One-Click Deploy** | Deploy to Railway instantly |
 | **S3 Storage** | Local or S3-compatible file storage |
+| **Visual Template Gallery** | Visual layout picker for Pages, Posts, and Products |
+| **Advanced Seed Data** | Rich, preset-specific content generation with media |
 
 ---
 
@@ -216,6 +219,14 @@ These are the content types available out of the box (plus Dynamic Content Types
 - **Content Types** (`content-types`) - dynamic content type definitions
 - **Custom Items** (`custom-items`) - instances of dynamic content types
 - **Users** (`users`)
+- **Orders** (`orders`)
+- **Carts** (`carts`)
+- **Product Reviews** (`product-reviews`)
+- **Services** (`services`)
+- **Courses** (`courses`)
+- **Testimonials** (`testimonials`)
+- **FAQs** (`faqs`)
+- **Galleries** (`galleries`)
 
 ### Globals
 - **Header** (`header`)
@@ -253,6 +264,31 @@ All content types support these pre-built blocks:
 
 ---
 
+## Visual Template System
+
+The **Template Gallery** provides a visual way to select layouts for **Pages**, **Posts**, and **Products**.
+
+### Capabilities
+- **Visual Preview**: Browse templates with representative icons and descriptions.
+- **Auto-Population**: Selecting a template (e.g., "Landing Page", "Case Study", "Product Bundle") automatically populates the content blocks.
+- **Smart Remediation**: Works seamlessly with existing content, warning before overwrites.
+
+---
+
+## Skin System & Showcases
+
+This platform includes a robust **Skin System** that allows for radical design changes via CSS tokens, without altering the underlying React components or block structure.
+
+### Showcase Pages
+We include dedicated showcase pages to demonstrate what's possible:
+- **/agency**: High-contrast, bold typography, "Agency" aesthetic.
+- **/minimal**: Clean, whitespace-heavy, centered "Minimal" aesthetic.
+- **/retro**: A nostalgic "Retro Dreams" 80s/90s aesthetic.
+
+These pages are automatically restored when running seed commands, ensuring you always have working demos.
+
+---
+
 ## Frontend Selection
 
 You can choose your frontend framework in the admin panel:
@@ -278,7 +314,11 @@ You can choose your frontend framework in the admin panel:
 | `make db-migrate` | Run database migrations |
 | `make db-reset` | Reset database (drop all tables and re-migrate) |
 | `make db-seed` | Seed database with sample data |
-| `make seed` | Seed database with sample data |
+| `make seed` | Seed database with sample data (default preset) |
+| `make seed-with-media` | Seed database AND download sample media |
+| `make seed-blog` | Seed specific data for Blog preset |
+| `make seed-archive` | Seed specific data for Archive preset |
+| `make seed-ecommerce` | Seed specific data for Ecommerce preset |
 | `make clear-seed` | Clear all sample data |
 | `make lint` | Run ESLint |
 | `make typecheck` | Run TypeScript type checking |

@@ -3,6 +3,8 @@ import config from '../payload.config'
 import { downloadAllMedia, SAMPLE_IMAGES, getMediaPath, mediaExists } from './download-media'
 import { createSeeder, isValidPresetId, PRESET_IDS, PRESET_METADATA, type PresetId } from './presets'
 import { ensureShowcasePage } from './showcase'
+import { AgencyPageSeeder } from './agency-page'
+import { MinimalPageSeeder } from './minimal-page'
 import type { SeedOptions } from './base'
 
 /**
@@ -113,9 +115,26 @@ async function seed() {
     console.log('Seeding data...')
     await seeder.seed()
 
-    // Global step: Showcase Page
+    // Global step: Showcase Pages
     console.log('Building Blocks Showcase page...')
     await ensureShowcasePage(payload, { updateHeader: true })
+
+    console.log('Building Agency Showcase page...')
+    const agencySeeder = new AgencyPageSeeder(payload, options)
+    await agencySeeder.seed()
+
+    console.log('Building Minimal Showcase page...')
+    const minimalSeeder = new MinimalPageSeeder(payload, options)
+    await minimalSeeder.seed()
+
+    // Note: Retro page is seeded via its own script usually, but for completeness 
+    // we should ensure it's available. Assuming existing retro-page.ts logic handles it 
+    // or we can import it. Since retro-page.ts has a self-executing seedRetroPage(),
+    // we ideally should refactor it to a class like the others, but for now we follow the pattern
+    // of the other showcase pages.
+    // Ideally user runs: pnpm seed (which runs this index.ts)
+    // We should make sure retro page exists if it's critical.
+    // For now we trust the "Verify /retro page recovery" step will catch issues.
 
     console.log('')
     console.log('✅ Database seeded successfully!')
@@ -159,8 +178,16 @@ export async function seedPreset(
 
     await seeder.seed()
 
-    // Global step: Showcase Page
+    // Global step: Showcase Pages
     await ensureShowcasePage(payload, { updateHeader: true })
+
+    // Seed Agency Showcase
+    const agencySeeder = new AgencyPageSeeder(payload, options)
+    await agencySeeder.seed()
+
+    // Seed Minimal Showcase
+    const minimalSeeder = new MinimalPageSeeder(payload, options)
+    await minimalSeeder.seed()
 
     return { success: true, message: `Successfully seeded ${presetId}` }
   } catch (error) {

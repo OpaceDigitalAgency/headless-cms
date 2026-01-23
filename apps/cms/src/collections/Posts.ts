@@ -194,18 +194,22 @@ export const Posts: CollectionConfig = {
     slugField('title', '/blog'),
     {
       name: 'template',
-      type: 'select',
-      label: 'Post Template',
+      type: 'text',
       defaultValue: 'article',
-      options: [
-        { label: 'Standard Article', value: 'article' },
-        { label: 'Feature Story', value: 'feature' },
-        { label: 'News Brief', value: 'brief' },
-        { label: 'Long Form', value: 'longform' },
-      ],
       admin: {
         position: 'sidebar',
-        description: 'Select the display template',
+        components: {
+          Field: '/components/TemplateGallery',
+        },
+        custom: {
+          collectionSlug: 'posts',
+          targetField: 'contentBlocks', // Populates 'contentBlocks' for posts
+          // Posts don't usually have a complex 'hero' field group like Pages, 
+          // usually just title/image/excerpt which are standard. 
+          // But we can add heroField if we change Posts to have one.
+          // For now, we'll just populate blocks.
+        },
+        description: 'Select a template to auto-fill content sections.',
       },
     },
     {

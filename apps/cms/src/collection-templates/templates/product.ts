@@ -60,7 +60,7 @@ export const productTemplate: CollectionTemplate = {
       status: 'published',
     },
   ],
-  
+
   fields: [
     {
       type: 'tabs',
@@ -288,11 +288,21 @@ export const productTemplate: CollectionTemplate = {
         description: 'Product availability status (separate from draft/published)',
       },
     },
-    templateField([
-      { label: 'Standard Product', value: 'standard' },
-      { label: 'Featured Product', value: 'featured' },
-      { label: 'Quick View', value: 'quick' },
-    ]),
+    {
+      name: 'template',
+      type: 'text',
+      label: 'Layout Template',
+      admin: {
+        position: 'sidebar',
+        components: {
+          Field: '/components/TemplateGallery#TemplateGallery',
+        },
+        custom: {
+          collectionSlug: 'products',
+          targetField: 'contentBlocks',
+        }
+      }
+    },
   ],
 }
 

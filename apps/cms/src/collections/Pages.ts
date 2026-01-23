@@ -209,20 +209,20 @@ export const Pages: CollectionConfig = {
     slugField('title', ''),
     {
       name: 'template',
-      type: 'select',
+      type: 'text',
       required: true,
-      defaultValue: 'landing',
-      options: [
-        { label: 'Landing Page', value: 'landing' },
-        { label: 'Home Page', value: 'home' },
-        { label: 'Detail Page', value: 'detail' },
-        { label: 'Article Page', value: 'article' },
-        { label: 'Archive Page', value: 'archive' },
-        { label: 'Blocks Showcase', value: 'showcase' },
-      ],
+      defaultValue: 'default',
       admin: {
         position: 'sidebar',
-        description: 'Select the page template',
+        components: {
+          Field: '/components/TemplateGallery',
+        },
+        custom: {
+          collectionSlug: 'pages',
+          targetField: 'content', // Populates the 'content' blocks field
+          heroField: 'hero',      // Populates the 'hero' group field
+        },
+        description: 'Select a template to auto-fill content.',
       },
     },
     {

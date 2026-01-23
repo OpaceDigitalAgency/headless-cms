@@ -447,6 +447,59 @@ export abstract class BaseSeeder {
       return false
     }
   }
+  /**
+   * Download media helper
+   */
+  protected async downloadMedia(url: string, filename: string, alt: string): Promise<any> {
+    if (!this.options.downloadMedia) {
+      return this.createPlaceholderMedia(filename, alt)
+    }
+
+    try {
+      this.log(`Downloading media: ${url}`)
+      const response = await fetch(url)
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`)
+      }
+
+      const arrayBuffer = await response.arrayBuffer()
+      const buffer = Buffer.from(arrayBuffer)
+
+      // Determine mimetype from URL or default to jpeg
+      const mimetype = filename.endsWith('.png') ? 'image/png' :
+        filename.endsWith('.webp') ? 'image/webp' :
+          'image/jpeg'
+
+      // Check if media already exists to avoid duplicates
+      const existing = await this.payload.find({
+        collection: 'media',
+        where: { filename: { equals: filename } },
+        limit: 1,
+        depth: 0,
+      })
+
+      if (existing.docs.length > 0) {
+        return existing.docs[0]
+      }
+
+      const media = await this.payload.create({
+        collection: 'media',
+        data: { alt },
+        file: {
+          data: buffer,
+          mimetype,
+          name: filename,
+          size: buffer.length,
+        },
+        overrideAccess: true,
+      })
+
+      return media
+    } catch (error) {
+      this.error(`Failed to download media ${url}: ${error}`)
+      return this.createPlaceholderMedia(filename, alt)
+    }
+  }
 }
 
 /**

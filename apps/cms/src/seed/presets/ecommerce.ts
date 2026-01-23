@@ -719,6 +719,159 @@ export class EcommerceSeeder extends BaseSeeder {
       }
     }
 
+    // Shop Page
+    if (this.shouldSeedItem('shop')) {
+      if (!await this.checkIfExists('pages', 'shop')) {
+        await this.create('pages', {
+          title: 'Shop',
+          slug: 'products', // Using 'products' to match standard URL structure
+          template: 'standard',
+          _status: 'published',
+          hero: {
+            type: 'standard',
+            heading: 'Shop All Products',
+            subheading: 'Explore our full catalog.',
+          },
+          content: [
+            {
+              blockType: 'archive',
+              heading: 'All Products',
+              collection: 'products',
+              limit: 12,
+              showFeaturedImage: true,
+              layout: 'grid',
+            },
+          ],
+        })
+      }
+    }
+
+    // Cart Page
+    if (this.shouldSeedItem('cart')) {
+      if (!await this.checkIfExists('pages', 'cart')) {
+        await this.create('pages', {
+          title: 'Cart',
+          slug: 'cart',
+          template: 'detail',
+          _status: 'published',
+          hero: {
+            type: 'minimal',
+            heading: 'Your Cart',
+          },
+          content: [
+            {
+              // In a real app this would be a specialized "Cart" block
+              // For now we simulate with a placeholder content message
+              blockType: 'content',
+              columns: 'oneColumn',
+              content: createRichText('Your cart is currently empty. Start shopping to add items.'),
+            },
+            {
+              blockType: 'cta',
+              heading: 'Continue Shopping',
+              links: [{ label: 'Browse Products', url: '/products', variant: 'primary' }],
+            },
+          ],
+        })
+      }
+    }
+
+    // Checkout Page
+    if (this.shouldSeedItem('checkout')) {
+      if (!await this.checkIfExists('pages', 'checkout')) {
+        await this.create('pages', {
+          title: 'Checkout',
+          slug: 'checkout',
+          template: 'detail',
+          _status: 'published',
+          hero: {
+            type: 'minimal',
+            heading: 'Checkout',
+          },
+          content: [
+            {
+              // Simplified checkout placeholder
+              blockType: 'content',
+              columns: 'oneColumn',
+              content: createRichText('Secure checkout implementation would appear here in the production frontend.'),
+            },
+          ],
+        })
+      }
+    }
+
+    // Account Page
+    if (this.shouldSeedItem('account')) {
+      if (!await this.checkIfExists('pages', 'account')) {
+        await this.create('pages', {
+          title: 'My Account',
+          slug: 'account',
+          template: 'detail',
+          _status: 'published',
+          hero: {
+            type: 'minimal',
+            heading: 'My Account',
+          },
+          content: [
+            {
+              // Account dashboard placeholder
+              blockType: 'content',
+              columns: 'oneColumn',
+              content: createRichText('Manage your orders and profile settings.'),
+            },
+          ],
+        })
+      }
+    }
+
+    // Policy Pages
+    const policies = [
+      {
+        title: 'Shipping Policy',
+        slug: 'shipping',
+        content: 'Currently we ship to USA, Canada, and EU. Standard shipping takes 3-5 business days.',
+      },
+      {
+        title: 'Returns Policy',
+        slug: 'returns',
+        content: 'We accept returns within 30 days of purchase. Items must be unused and in original packaging.',
+      },
+      {
+        title: 'Terms of Service',
+        slug: 'terms',
+        content: 'By using this site, you agree to our terms of service.',
+      },
+      {
+        title: 'Privacy Policy',
+        slug: 'privacy',
+        content: 'We respect your privacy and protect your personal data.',
+      },
+    ]
+
+    for (const policy of policies) {
+      if (this.shouldSeedItem(policy.slug)) {
+        if (!await this.checkIfExists('pages', policy.slug)) {
+          await this.create('pages', {
+            title: policy.title,
+            slug: policy.slug,
+            template: 'detail',
+            _status: 'published',
+            hero: {
+              type: 'minimal',
+              heading: policy.title,
+            },
+            content: [
+              {
+                blockType: 'content',
+                columns: 'oneColumn',
+                content: createRichText(policy.content),
+              },
+            ],
+          })
+        }
+      }
+    }
+
   }
 
   private async seedGlobals(): Promise<void> {
@@ -756,7 +909,15 @@ export class EcommerceSeeder extends BaseSeeder {
             { link: { type: 'custom', label: 'Contact Us', url: '/contact' } },
             { link: { type: 'custom', label: 'Shipping Info', url: '/shipping' } },
             { link: { type: 'custom', label: 'Returns', url: '/returns' } },
-            { link: { type: 'custom', label: 'FAQ', url: '/faq' } },
+            { link: { type: 'custom', label: 'FAQ', url: '/contact' } }, // Pointing FAQ to contact for now as we didn't seed standalone FAQ
+          ],
+        },
+        {
+          label: 'My Account',
+          navItems: [
+            { link: { type: 'custom', label: 'Sign In', url: '/account' } },
+            { link: { type: 'custom', label: 'View Cart', url: '/cart' } },
+            { link: { type: 'custom', label: 'Order Status', url: '/account' } },
           ],
         },
         {
