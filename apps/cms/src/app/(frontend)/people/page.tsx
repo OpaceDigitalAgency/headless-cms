@@ -5,15 +5,22 @@ import { generateEnhancedMetadata } from '@/lib/seo/metadata'
 import { Container, Section } from '@repo/ui/primitives'
 
 export async function generateMetadata(): Promise<Metadata> {
-  const settings = await getSettings()
-  return generateEnhancedMetadata(
-    {
+  try {
+    const settings = await getSettings()
+    return generateEnhancedMetadata(
+      {
+        title: 'People',
+        description: 'Historical figures, artists, team members, and notable people',
+      },
+      settings,
+      '/people'
+    )
+  } catch {
+    return {
       title: 'People',
       description: 'Historical figures, artists, team members, and notable people',
-    },
-    settings,
-    '/people'
-  )
+    }
+  }
 }
 
 export const revalidate = 60

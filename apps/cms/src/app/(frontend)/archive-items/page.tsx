@@ -6,15 +6,22 @@ import Image from 'next/image'
 import { Container, Section } from '@repo/ui/primitives'
 
 export async function generateMetadata(): Promise<Metadata> {
-  const settings = await getSettings()
-  return generateEnhancedMetadata(
-    {
+  try {
+    const settings = await getSettings()
+    return generateEnhancedMetadata(
+      {
+        title: 'Archive Items',
+        description: 'Explore curated archive items',
+      },
+      settings,
+      '/archive-items'
+    )
+  } catch {
+    return {
       title: 'Archive Items',
       description: 'Explore curated archive items',
-    },
-    settings,
-    '/archive-items'
-  )
+    }
+  }
 }
 
 export default async function ArchiveItemsPage() {

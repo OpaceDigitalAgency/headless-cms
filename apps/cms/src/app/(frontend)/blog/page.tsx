@@ -6,15 +6,22 @@ import { generateEnhancedMetadata } from '@/lib/seo/metadata'
 import { Container, Section } from '@repo/ui/primitives'
 
 export async function generateMetadata(): Promise<Metadata> {
-  const settings = await getSettings()
-  return generateEnhancedMetadata(
-    {
+  try {
+    const settings = await getSettings()
+    return generateEnhancedMetadata(
+      {
+        title: 'Blog',
+        description: 'Latest news, articles, and updates',
+      },
+      settings,
+      '/blog'
+    )
+  } catch {
+    return {
       title: 'Blog',
       description: 'Latest news, articles, and updates',
-    },
-    settings,
-    '/blog'
-  )
+    }
+  }
 }
 
 export default async function BlogPage() {
