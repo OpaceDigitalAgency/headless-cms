@@ -150,9 +150,9 @@ export class CoreSeeder extends BaseSeeder {
     this.log('Seeding tags...')
 
     const tagData = [
-      { title: 'Restoration', slug: 'restoration', description: 'Updates on preservation work and conservation projects' },
-      { title: 'Behind the Scenes', slug: 'behind-the-scenes', description: 'Process notes from the archive team' },
-      { title: 'New Acquisition', slug: 'new-acquisition', description: 'Recently acquired items and collections' },
+      { heading: 'Restoration', slug: 'restoration', description: 'Updates on preservation work and conservation projects' },
+      { heading: 'Behind the Scenes', slug: 'behind-the-scenes', description: 'Process notes from the archive team' },
+      { heading: 'New Acquisition', slug: 'new-acquisition', description: 'Recently acquired items and collections' },
     ]
 
     const tags: Record<string, string> = {}
@@ -313,9 +313,9 @@ export class CoreSeeder extends BaseSeeder {
             heading: 'Cultural Threads',
             layout: 'list',
             items: [
-              { title: 'Nile Heritage', description: 'Lifeblood of trade and settlement.' },
-              { title: 'Dynastic Legacy', description: 'Connections to ancient royal sites.' },
-              { title: 'Craft Traditions', description: 'Artisan techniques passed through generations.' },
+              { heading: 'Nile Heritage', description: 'Lifeblood of trade and settlement.' },
+              { heading: 'Dynastic Legacy', description: 'Connections to ancient royal sites.' },
+              { heading: 'Craft Traditions', description: 'Artisan techniques passed through generations.' },
             ],
           },
         ],
@@ -391,9 +391,9 @@ export class CoreSeeder extends BaseSeeder {
               heading: 'Exhibition Focus',
               layout: 'grid',
               items: [
-                { title: 'Masterworks', description: 'Signature pieces from leading artists.' },
-                { title: 'Techniques', description: 'Hands-on demos of period methods.' },
-                { title: 'Context', description: 'Social and cultural background panels.' },
+                { heading: 'Masterworks', description: 'Signature pieces from leading artists.' },
+                { heading: 'Techniques', description: 'Hands-on demos of period methods.' },
+                { heading: 'Context', description: 'Social and cultural background panels.' },
               ],
             },
             {
@@ -500,9 +500,9 @@ export class CoreSeeder extends BaseSeeder {
             heading: 'Signature Contributions',
             layout: 'grid',
             items: [
-              { title: 'Anatomical Studies', description: 'Precision drawings that advanced medical understanding.' },
-              { title: 'Flight Concepts', description: 'Early studies of lift, gliding, and aerial devices.' },
-              { title: 'Workshop Mastery', description: 'Large-scale works with complex production techniques.' },
+              { heading: 'Anatomical Studies', description: 'Precision drawings that advanced medical understanding.' },
+              { heading: 'Flight Concepts', description: 'Early studies of lift, gliding, and aerial devices.' },
+              { heading: 'Workshop Mastery', description: 'Large-scale works with complex production techniques.' },
             ],
           },
           {
@@ -552,9 +552,9 @@ export class CoreSeeder extends BaseSeeder {
             heading: 'Primary Mediums',
             layout: 'list',
             items: [
-              { title: 'Sculpture', description: 'Marble forms with intense anatomical realism.' },
-              { title: 'Painting', description: 'Narrative frescoes with bold composition.' },
-              { title: 'Architecture', description: 'Grand civic and religious structures.' },
+              { heading: 'Sculpture', description: 'Marble forms with intense anatomical realism.' },
+              { heading: 'Painting', description: 'Narrative frescoes with bold composition.' },
+              { heading: 'Architecture', description: 'Grand civic and religious structures.' },
             ],
           },
         ],
@@ -617,9 +617,9 @@ export class CoreSeeder extends BaseSeeder {
             heading: 'Series Themes',
             layout: 'grid',
             items: [
-              { title: 'Water Lilies', description: 'A long-running exploration of reflection and light.' },
-              { title: 'Cathedrals', description: 'Shifting tonal studies of stone and shadow.' },
-              { title: 'Haystacks', description: 'Seasonal variations rendered in quick strokes.' },
+              { heading: 'Water Lilies', description: 'A long-running exploration of reflection and light.' },
+              { heading: 'Cathedrals', description: 'Shifting tonal studies of stone and shadow.' },
+              { heading: 'Haystacks', description: 'Seasonal variations rendered in quick strokes.' },
             ],
           },
           {
@@ -903,9 +903,9 @@ export class CoreSeeder extends BaseSeeder {
             style: 'cards',
             columns: '3',
             items: [
-              { title: 'Curator Tour', description: 'A guided tour through the new galleries.' },
-              { title: 'Live Music', description: 'String quartet in the main hall.' },
-              { title: 'Reception', description: 'Light refreshments and networking.' },
+              { heading: 'Curator Tour', description: 'A guided tour through the new galleries.' },
+              { heading: 'Live Music', description: 'String quartet in the main hall.' },
+              { heading: 'Reception', description: 'Light refreshments and networking.' },
             ],
           },
           {
@@ -944,9 +944,9 @@ export class CoreSeeder extends BaseSeeder {
             heading: 'Key Insights',
             layout: 'list',
             items: [
-              { title: 'Trade Routes', description: 'Evidence of cross-region commerce.' },
-              { title: 'Material Studies', description: 'New pigment analysis techniques.' },
-              { title: 'Cultural Exchange', description: 'Shared motifs across regions.' },
+              { heading: 'Trade Routes', description: 'Evidence of cross-region commerce.' },
+              { heading: 'Material Studies', description: 'New pigment analysis techniques.' },
+              { heading: 'Cultural Exchange', description: 'Shared motifs across regions.' },
             ],
           },
         ],
@@ -968,10 +968,10 @@ export class CoreSeeder extends BaseSeeder {
             style: 'cards',
             columns: '2',
             items: [
-              { title: '10:00 AM', description: 'Interactive gallery tour.' },
-              { title: '12:00 PM', description: 'Storytelling in the courtyard.' },
-              { title: '2:00 PM', description: 'Hands-on art workshop.' },
-              { title: '4:00 PM', description: 'Live performance.' },
+              { heading: '10:00 AM', description: 'Interactive gallery tour.' },
+              { heading: '12:00 PM', description: 'Storytelling in the courtyard.' },
+              { heading: '2:00 PM', description: 'Hands-on art workshop.' },
+              { heading: '4:00 PM', description: 'Live performance.' },
             ],
           },
         ],
@@ -1078,9 +1078,9 @@ export class CoreSeeder extends BaseSeeder {
             heading: 'Exhibition Highlights',
             layout: 'grid',
             items: [
-              { title: 'Restored Panels', description: 'Recently conserved works revealed to the public.' },
-              { title: 'Expert Talks', description: 'Weekly curator-led walkthroughs.' },
-              { title: 'Interactive Stations', description: 'Hands-on exploration of technique.' },
+              { heading: 'Restored Panels', description: 'Recently conserved works revealed to the public.' },
+              { heading: 'Expert Talks', description: 'Weekly curator-led walkthroughs.' },
+              { heading: 'Interactive Stations', description: 'Hands-on exploration of technique.' },
             ],
           },
           {
@@ -1119,10 +1119,10 @@ export class CoreSeeder extends BaseSeeder {
             style: 'cards',
             columns: '2',
             items: [
-              { title: 'Clay & Pigments', description: 'Mix and apply natural pigments.' },
-              { title: 'Pattern Studies', description: 'Recreate common ancient motifs.' },
-              { title: 'Artifact Handling', description: 'Learn safe handling practices.' },
-              { title: 'Takeaway Guide', description: 'Templates and resources for later study.' },
+              { heading: 'Clay & Pigments', description: 'Mix and apply natural pigments.' },
+              { heading: 'Pattern Studies', description: 'Recreate common ancient motifs.' },
+              { heading: 'Artifact Handling', description: 'Learn safe handling practices.' },
+              { heading: 'Takeaway Guide', description: 'Templates and resources for later study.' },
             ],
           },
           {
@@ -1197,9 +1197,9 @@ export class CoreSeeder extends BaseSeeder {
             heading: 'What\'s Included',
             layout: 'grid',
             items: [
-              { title: 'Interactive Tours', description: 'Guided walks with kid-friendly stories.' },
-              { title: 'Creative Stations', description: 'Hands-on art activities throughout the day.' },
-              { title: 'Live Performances', description: 'Short performances in the main hall.' },
+              { heading: 'Interactive Tours', description: 'Guided walks with kid-friendly stories.' },
+              { heading: 'Creative Stations', description: 'Hands-on art activities throughout the day.' },
+              { heading: 'Live Performances', description: 'Short performances in the main hall.' },
             ],
           },
         ],
@@ -1302,9 +1302,9 @@ export class CoreSeeder extends BaseSeeder {
             heading: 'Notebook Highlights',
             layout: 'grid',
             items: [
-              { title: 'Anatomy Studies', description: 'Detailed muscle and skeletal drawings.' },
-              { title: 'Flight Concepts', description: 'Early glider and wing experiments.' },
-              { title: 'Hydraulic Designs', description: 'Schematics for pumps and canals.' },
+              { heading: 'Anatomy Studies', description: 'Detailed muscle and skeletal drawings.' },
+              { heading: 'Flight Concepts', description: 'Early glider and wing experiments.' },
+              { heading: 'Hydraulic Designs', description: 'Schematics for pumps and canals.' },
             ],
           },
           {
@@ -1344,9 +1344,9 @@ export class CoreSeeder extends BaseSeeder {
             style: 'cards',
             columns: '3',
             items: [
-              { title: 'Gesso Prep', description: 'Preparing surfaces for paint layers.' },
-              { title: 'Glazing', description: 'Building depth through transparent layers.' },
-              { title: 'Pigment Mixing', description: 'Balancing mineral pigments and binders.' },
+              { heading: 'Gesso Prep', description: 'Preparing surfaces for paint layers.' },
+              { heading: 'Glazing', description: 'Building depth through transparent layers.' },
+              { heading: 'Pigment Mixing', description: 'Balancing mineral pigments and binders.' },
             ],
           },
         ],
@@ -1408,9 +1408,9 @@ export class CoreSeeder extends BaseSeeder {
             heading: 'Manuscript Details',
             layout: 'list',
             items: [
-              { title: 'Illumination', description: 'Gold leaf and vibrant pigments throughout.' },
-              { title: 'Script', description: 'Gothic textura with rubricated headings.' },
-              { title: 'Marginalia', description: 'Decorative and narrative motifs.' },
+              { heading: 'Illumination', description: 'Gold leaf and vibrant pigments throughout.' },
+              { heading: 'Script', description: 'Gothic textura with rubricated headings.' },
+              { heading: 'Marginalia', description: 'Decorative and narrative motifs.' },
             ],
           },
         ],
@@ -1440,9 +1440,9 @@ export class CoreSeeder extends BaseSeeder {
             style: 'cards',
             columns: '3',
             items: [
-              { title: 'Portraits', description: 'Studio photography and formal attire.' },
-              { title: 'Industry', description: 'Factories, rail lines, and urban growth.' },
-              { title: 'Architecture', description: 'Public buildings and civic design.' },
+              { heading: 'Portraits', description: 'Studio photography and formal attire.' },
+              { heading: 'Industry', description: 'Factories, rail lines, and urban growth.' },
+              { heading: 'Architecture', description: 'Public buildings and civic design.' },
             ],
           },
         ],
@@ -1473,9 +1473,9 @@ export class CoreSeeder extends BaseSeeder {
             heading: 'Mask Details',
             layout: 'grid',
             items: [
-              { title: 'Craftsmanship', description: 'Layered gilding with carved detailing.' },
-              { title: 'Symbolism', description: 'Protective motifs and dynastic markings.' },
-              { title: 'Preservation', description: 'Stable despite minor pigment loss.' },
+              { heading: 'Craftsmanship', description: 'Layered gilding with carved detailing.' },
+              { heading: 'Symbolism', description: 'Protective motifs and dynastic markings.' },
+              { heading: 'Preservation', description: 'Stable despite minor pigment loss.' },
             ],
           },
         ],
@@ -1539,9 +1539,9 @@ export class CoreSeeder extends BaseSeeder {
             style: 'cards',
             columns: '3',
             items: [
-              { title: 'Constellations', description: 'Named star groupings with annotations.' },
-              { title: 'Instruments', description: 'Referenced astrolabe markings.' },
-              { title: 'Margins', description: 'Notes on seasonal observations.' },
+              { heading: 'Constellations', description: 'Named star groupings with annotations.' },
+              { heading: 'Instruments', description: 'Referenced astrolabe markings.' },
+              { heading: 'Margins', description: 'Notes on seasonal observations.' },
             ],
           },
         ],
@@ -1572,9 +1572,9 @@ export class CoreSeeder extends BaseSeeder {
             heading: 'Print Highlights',
             layout: 'list',
             items: [
-              { title: 'Landscape', description: 'Seasonal scenes with atmospheric color.' },
-              { title: 'Portraiture', description: 'Depictions of theater and city life.' },
-              { title: 'Technique', description: 'Multiple blocks for layered pigment.' },
+              { heading: 'Landscape', description: 'Seasonal scenes with atmospheric color.' },
+              { heading: 'Portraiture', description: 'Depictions of theater and city life.' },
+              { heading: 'Technique', description: 'Multiple blocks for layered pigment.' },
             ],
           },
         ],

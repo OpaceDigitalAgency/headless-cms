@@ -62,9 +62,9 @@ export class BrochureSeeder extends BaseSeeder {
               heading: 'Key Initiatives',
               layout: 'grid',
               items: [
-                { title: 'Merchandising', description: 'Rebuilt category structure for discovery.' },
-                { title: 'Retention', description: 'Lifecycle programs for repeat revenue.' },
-                { title: 'Paid Media', description: 'Full-funnel testing and optimization.' },
+                { heading: 'Merchandising', description: 'Rebuilt category structure for discovery.' },
+                { heading: 'Retention', description: 'Lifecycle programs for repeat revenue.' },
+                { heading: 'Paid Media', description: 'Full-funnel testing and optimization.' },
               ],
             },
           ],
@@ -85,9 +85,9 @@ export class BrochureSeeder extends BaseSeeder {
               style: 'cards',
               columns: '3',
               items: [
-                { title: 'Guided Setup', description: 'Step-by-step activation checklist.' },
-                { title: 'In-App Tips', description: 'Contextual nudges at key moments.' },
-                { title: 'Success Metrics', description: 'Clear progress milestones.' },
+                { heading: 'Guided Setup', description: 'Step-by-step activation checklist.' },
+                { heading: 'In-App Tips', description: 'Contextual nudges at key moments.' },
+                { heading: 'Success Metrics', description: 'Clear progress milestones.' },
               ],
             },
           ],
@@ -305,9 +305,9 @@ export class BrochureSeeder extends BaseSeeder {
               style: 'cards',
               columns: '3',
               items: [
-                { title: 'Excellence', description: 'We strive for excellence in everything we do.' },
-                { title: 'Innovation', description: 'We embrace new ideas and creative solutions.' },
-                { title: 'Integrity', description: 'We act with honesty and transparency.' },
+                { heading: 'Excellence', description: 'We strive for excellence in everything we do.' },
+                { heading: 'Innovation', description: 'We embrace new ideas and creative solutions.' },
+                { heading: 'Integrity', description: 'We act with honesty and transparency.' },
               ],
             },
             {
@@ -456,10 +456,10 @@ export class BrochureSeeder extends BaseSeeder {
     if (!this.shouldSeedCollection('services')) return
     this.log('Seeding Services...')
     const services = [
-      { title: 'Strategy Consulting', excerpt: 'Strategic guidance for sustainable growth.', icon: 'lightbulb' },
-      { title: 'Digital Transformation', excerpt: 'Modernize your operations with tech.', icon: 'code' },
-      { title: 'Growth Marketing', excerpt: 'Data-driven marketing strategies.', icon: 'trending-up' },
-      { title: 'Technology Solutions', excerpt: 'Custom software tailored to your needs.', icon: 'monitor' }
+      { heading: 'Strategy Consulting', excerpt: 'Strategic guidance for sustainable growth.', icon: 'lightbulb' },
+      { heading: 'Digital Transformation', excerpt: 'Modernize your operations with tech.', icon: 'code' },
+      { heading: 'Growth Marketing', excerpt: 'Data-driven marketing strategies.', icon: 'trending-up' },
+      { heading: 'Technology Solutions', excerpt: 'Custom software tailored to your needs.', icon: 'monitor' }
     ]
     for (const s of services) {
       const slug = s.title.toLowerCase().replace(/ /g, '-')

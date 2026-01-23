@@ -83,9 +83,9 @@ export class MinimalPageSeeder extends BaseSeeder {
                     style: 'list', // List view suits minimal aesthetic
                     columns: '1',
                     items: [
-                        { title: 'Project Alpha', description: 'Brand Identity', icon: 'arrow-right' },
-                        { title: 'Project Beta', description: 'Editorial Design', icon: 'arrow-right' },
-                        { title: 'Project Gamma', description: 'Spatial Design', icon: 'arrow-right' },
+                        { heading: 'Project Alpha', description: 'Brand Identity', icon: 'arrow-right' },
+                        { heading: 'Project Beta', description: 'Editorial Design', icon: 'arrow-right' },
+                        { heading: 'Project Gamma', description: 'Spatial Design', icon: 'arrow-right' },
                     ],
                 },
                 {

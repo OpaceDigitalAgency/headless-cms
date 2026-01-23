@@ -81,9 +81,9 @@ export class AgencyPageSeeder extends BaseSeeder {
                     heading: 'Our Expertise',
                     layout: 'grid',
                     items: [
-                        { title: 'Digital Strategy', description: 'Data-driven roadmaps for growth.', icon: 'zap' },
-                        { title: 'UX/UI Design', description: 'Immersive experiences that convert.', icon: 'layout' },
-                        { title: 'Development', description: 'Scalable architecture for the web.', icon: 'code' },
+                        { heading: 'Digital Strategy', description: 'Data-driven roadmaps for growth.', icon: 'zap' },
+                        { heading: 'UX/UI Design', description: 'Immersive experiences that convert.', icon: 'layout' },
+                        { heading: 'Development', description: 'Scalable architecture for the web.', icon: 'code' },
                     ],
                 },
                 {
@@ -101,9 +101,9 @@ export class AgencyPageSeeder extends BaseSeeder {
                     style: 'cards', // Agency skin interprets this boldly
                     columns: '3',
                     items: [
-                        { title: 'FinTech Revolution', description: 'Reinventing banking for Gen Z.', image: projectImage1?.id },
-                        { title: 'HealthPlus App', description: 'Telemedicine made simple.', image: projectImage2?.id },
-                        { title: 'EcoBrand Launch', description: 'Sustainable fashion identity.', image: projectImage3?.id },
+                        { heading: 'FinTech Revolution', description: 'Reinventing banking for Gen Z.', image: projectImage1?.id },
+                        { heading: 'HealthPlus App', description: 'Telemedicine made simple.', image: projectImage2?.id },
+                        { heading: 'EcoBrand Launch', description: 'Sustainable fashion identity.', image: projectImage3?.id },
                     ],
                 },
                 {

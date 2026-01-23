@@ -213,9 +213,9 @@ export async function seedBasicData(payload: Payload): Promise<void> {
           subheading: 'Quick summaries of the most important benefits.',
           layout: 'grid',
           items: [
-            { title: 'Fast Setup', description: 'Spin up a new site in minutes.', icon: '⚡' },
-            { title: 'Flexible', description: 'Add or remove blocks as needed.', icon: '🧩' },
-            { title: 'Scalable', description: 'Designed for growth and performance.', icon: '📈' },
+            { heading: 'Fast Setup', description: 'Spin up a new site in minutes.', icon: '⚡' },
+            { heading: 'Flexible', description: 'Add or remove blocks as needed.', icon: '🧩' },
+            { heading: 'Scalable', description: 'Designed for growth and performance.', icon: '📈' },
           ],
         },
         {
@@ -336,9 +336,9 @@ export async function seedBasicData(payload: Payload): Promise<void> {
           gap: 'medium',
           alignment: 'left',
           items: [
-            { title: 'Card One', description: 'Short description for card one.' },
-            { title: 'Card Two', description: 'Short description for card two.' },
-            { title: 'Card Three', description: 'Short description for card three.' },
+            { heading: 'Card One', description: 'Short description for card one.' },
+            { heading: 'Card Two', description: 'Short description for card two.' },
+            { heading: 'Card Three', description: 'Short description for card three.' },
           ],
           showBorder: true,
           showShadow: true,
