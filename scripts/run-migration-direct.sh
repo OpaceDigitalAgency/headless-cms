@@ -67,10 +67,38 @@ echo "..."
 echo "--- SQL End ---"
 tail -3 /tmp/migration_run.sql
 
+# Helper function to execute SQL
+execute_sql() {
+  local QUERY="$1"
+  local FILE_INPUT="$2"
+  
+  if command -v docker >/dev/null 2>&1; then
+    # Local mode: Run via docker exec
+    if [ -n "$FILE_INPUT" ]; then
+      docker exec -i headless-cms-postgres psql -U payload -d payload < "$FILE_INPUT"
+    else
+      docker exec headless-cms-postgres psql -U payload -d payload -c "$QUERY"
+    fi
+  else
+    # Production mode: Run directly via psql
+    # Expects DATABASE_URL to be set
+    if [ -z "$DATABASE_URL" ]; then
+      echo "Error: DATABASE_URL is not set and docker is not available."
+      exit 1
+    fi
+    
+    if [ -n "$FILE_INPUT" ]; then
+      psql "$DATABASE_URL" < "$FILE_INPUT"
+    else
+      psql "$DATABASE_URL" -c "$QUERY"
+    fi
+  fi
+}
+
 echo "Executing SQL..."
 
-# Execute via docker psql
-if docker exec -i headless-cms-postgres psql -U payload -d payload < /tmp/migration_run.sql; then
+# Execute SQL file
+if execute_sql "" "/tmp/migration_run.sql"; then
   echo ""
   echo "✅ SQL execution successful"
   
@@ -78,7 +106,7 @@ if docker exec -i headless-cms-postgres psql -U payload -d payload < /tmp/migrat
   MIGRATION_NAME=$(basename "$MIGRATION_FILE" .ts)
   echo "Recording migration '$MIGRATION_NAME' in payload_migrations table..."
   
-  docker exec headless-cms-postgres psql -U payload -d payload -c "
+  RECORD_QUERY="
     CREATE TABLE IF NOT EXISTS payload_migrations (
       id SERIAL PRIMARY KEY,
       name VARCHAR NOT NULL,
@@ -90,10 +118,11 @@ if docker exec -i headless-cms-postgres psql -U payload -d payload < /tmp/migrat
     ON CONFLICT DO NOTHING;
   "
   
+  execute_sql "$RECORD_QUERY" ""
+  
   echo "✅ Migration recorded successfully"
 else
   echo "❌ SQL execution failed"
-  # Show last few lines of log if possible
   rm -f /tmp/migration_run.sql
   exit 1
 fi
