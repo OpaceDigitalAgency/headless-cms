@@ -569,6 +569,136 @@ export class BlogSeeder extends BaseSeeder {
       }
     }
 
+    // Privacy page - Privacy policy page
+    if (this.shouldSeedItem('privacy')) {
+      if (await this.checkIfExists('pages', 'privacy')) {
+        this.log('Privacy page already exists, skipping.')
+      } else {
+        await this.create('pages', {
+          title: 'Privacy Policy',
+          slug: 'privacy',
+          template: 'detail',
+          _status: 'published',
+          hero: {
+            type: 'minimal',
+            heading: 'Privacy Policy',
+            subheading: 'How we collect, use, and protect your personal information.',
+          },
+          content: [
+            {
+              blockType: 'content',
+              backgroundColor: 'none',
+              paddingTop: 'large',
+              paddingBottom: 'large',
+              columns: [
+                {
+                  size: 'full',
+                  richText: createRichTextParagraphs([
+                    'Last updated: ' + new Date().toLocaleDateString('en-GB', { year: 'numeric', month: 'long', day: 'numeric' }),
+                    'This Privacy Policy describes how we collect, use, and share your personal information when you visit or use our website.',
+                  ]),
+                },
+              ],
+            },
+            {
+              blockType: 'content',
+              backgroundColor: 'muted',
+              paddingTop: 'large',
+              paddingBottom: 'large',
+              columns: [
+                {
+                  size: 'full',
+                  richText: createRichText('Information We Collect'),
+                },
+                {
+                  size: 'full',
+                  richText: createRichTextParagraphs([
+                    'We collect information you provide directly to us, such as when you create an account, subscribe to our newsletter, or contact us for support.',
+                    'We also automatically collect certain information about your device when you use our website, including your IP address, browser type, and usage data.',
+                  ]),
+                },
+              ],
+            },
+            {
+              blockType: 'content',
+              backgroundColor: 'none',
+              paddingTop: 'large',
+              paddingBottom: 'large',
+              columns: [
+                {
+                  size: 'full',
+                  richText: createRichText('How We Use Your Information'),
+                },
+                {
+                  size: 'full',
+                  richText: createRichTextParagraphs([
+                    'We use the information we collect to provide, maintain, and improve our services, to communicate with you, and to personalise your experience.',
+                    'We may also use your information to send you marketing communications, but you can opt out at any time.',
+                  ]),
+                },
+              ],
+            },
+            {
+              blockType: 'content',
+              backgroundColor: 'muted',
+              paddingTop: 'large',
+              paddingBottom: 'large',
+              columns: [
+                {
+                  size: 'full',
+                  richText: createRichText('Information Sharing'),
+                },
+                {
+                  size: 'full',
+                  richText: createRichTextParagraphs([
+                    'We do not sell your personal information. We may share your information with service providers who help us operate our website and provide our services.',
+                    'We may also share information when required by law or to protect our rights and safety.',
+                  ]),
+                },
+              ],
+            },
+            {
+              blockType: 'content',
+              backgroundColor: 'none',
+              paddingTop: 'large',
+              paddingBottom: 'large',
+              columns: [
+                {
+                  size: 'full',
+                  richText: createRichText('Your Rights'),
+                },
+                {
+                  size: 'full',
+                  richText: createRichTextParagraphs([
+                    'You have the right to access, update, or delete your personal information at any time. You can also object to certain processing of your data.',
+                    'To exercise these rights, please contact us using the information provided below.',
+                  ]),
+                },
+              ],
+            },
+            {
+              blockType: 'content',
+              backgroundColor: 'muted',
+              paddingTop: 'large',
+              paddingBottom: 'large',
+              columns: [
+                {
+                  size: 'full',
+                  richText: createRichText('Contact Us'),
+                },
+                {
+                  size: 'full',
+                  richText: createRichTextParagraphs([
+                    'If you have any questions about this Privacy Policy or our data practices, please contact us at privacy@myblog.com.',
+                  ]),
+                },
+              ],
+            },
+          ],
+        })
+      }
+    }
+
   }
 
   private async seedPosts(categories: Record<string, string>): Promise<void> {

@@ -573,6 +573,7 @@ export async function ensureShowcasePage(payload: Payload, options?: { updateHea
       collection: 'pages',
       id: existingPage.docs[0].id,
       data: pageData,
+      overrideAccess: true, // Bypass access control for seeding
     })
     if (options?.updateHeader) {
       await ensureHeaderLink(payload)
@@ -583,6 +584,7 @@ export async function ensureShowcasePage(payload: Payload, options?: { updateHea
   const created = await payload.create({
     collection: 'pages',
     data: pageData,
+    overrideAccess: true, // Bypass access control for seeding
   })
 
   if (options?.updateHeader) {

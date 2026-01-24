@@ -30,6 +30,7 @@ import { MetaDescriptionComponent as MetaDescriptionComponent_a8a977ebc872c5d5ea
 import { MetaImageComponent as MetaImageComponent_a8a977ebc872c5d5ea7ee689724c0860 } from '@payloadcms/plugin-seo/client'
 import { PreviewComponent as PreviewComponent_a8a977ebc872c5d5ea7ee689724c0860 } from '@payloadcms/plugin-seo/client'
 import { default as default_af9653989531dda28e4f7c6779fff3cb } from '../../../components/TemplateGallery'
+import { default as default_f816ad831d1914fda4b2fda5a8a5abff } from '../../../components/PreviewButtonCells/PagesPreviewCell'
 import { default as default_2287ff956e96a8539b853bf429423292 } from '../../../components/PreviewButtonCells/PostsPreviewCell'
 import { default as default_f7ea1d98364ee50d9b03b0f1a144bd53 } from '../../../components/PreviewButtonCells/ArchiveItemsPreviewCell'
 import { default as default_a746c4e0133cbe976185d2f319037704 } from '../../../components/PreviewButtonCells/PeoplePreviewCell'
@@ -95,6 +96,7 @@ export const importMap = {
   "@payloadcms/plugin-seo/client#MetaImageComponent": MetaImageComponent_a8a977ebc872c5d5ea7ee689724c0860,
   "@payloadcms/plugin-seo/client#PreviewComponent": PreviewComponent_a8a977ebc872c5d5ea7ee689724c0860,
   "/components/TemplateGallery#default": default_af9653989531dda28e4f7c6779fff3cb,
+  "/components/PreviewButtonCells/PagesPreviewCell#default": default_f816ad831d1914fda4b2fda5a8a5abff,
   "/components/PreviewButtonCells/PostsPreviewCell#default": default_2287ff956e96a8539b853bf429423292,
   "/components/PreviewButtonCells/ArchiveItemsPreviewCell#default": default_f7ea1d98364ee50d9b03b0f1a144bd53,
   "/components/PreviewButtonCells/PeoplePreviewCell#default": default_a746c4e0133cbe976185d2f319037704,
