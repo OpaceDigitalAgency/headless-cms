@@ -63,22 +63,28 @@ CMS_PORT_BASE=3000
 CMS_PORT=$CMS_PORT_BASE
 
 # Find available database port if 5432 is taken
-while netstat -tuln 2>/dev/null | grep -q ":$POSTGRES_PORT " || lsof -Pi :$POSTGRES_PORT -sTCP:LISTEN -t >/dev/null 2>&1 ; do
+echo -e "${BLUE}Checking for available ports...${NC}"
+while lsof -Pi :$POSTGRES_PORT -sTCP:LISTEN -t >/dev/null 2>&1 || nc -z localhost $POSTGRES_PORT >/dev/null 2>&1 ; do
     POSTGRES_PORT=$((POSTGRES_PORT + 1))
 done
 
 if [ $POSTGRES_PORT -ne $POSTGRES_PORT_BASE ]; then
     echo -e "${YELLOW}⚠${NC}  Database port 5432 is in use, using port ${POSTGRES_PORT} instead"
+else
+    echo -e "${GREEN}✓${NC}  Database port: ${YELLOW}${POSTGRES_PORT}${NC}"
 fi
 
 # Find available CMS port if 3000 is taken
-while netstat -tuln 2>/dev/null | grep -q ":$CMS_PORT " || lsof -Pi :$CMS_PORT -sTCP:LISTEN -t >/dev/null 2>&1 ; do
+while lsof -Pi :$CMS_PORT -sTCP:LISTEN -t >/dev/null 2>&1 || nc -z localhost $CMS_PORT >/dev/null 2>&1 ; do
     CMS_PORT=$((CMS_PORT + 1))
 done
 
 if [ $CMS_PORT -ne $CMS_PORT_BASE ]; then
     echo -e "${YELLOW}⚠${NC}  CMS port 3000 is in use, using port ${CMS_PORT} instead"
+else
+    echo -e "${GREEN}✓${NC}  CMS port: ${YELLOW}${CMS_PORT}${NC}"
 fi
+echo ""
 
 # Step 1: Install dependencies
 echo ""
@@ -178,6 +184,18 @@ ENDOFENV
 
 echo -e "${GREEN}✓${NC} .env file created at apps/cms/.env"
 echo -e "${BLUE}   Database: ${YELLOW}${POSTGRES_DB}${NC}"
+
+# Also create .env in root for docker-compose
+cat > .env << ENDOFENV
+POSTGRES_USER=payload
+POSTGRES_PASSWORD=payload_secret
+POSTGRES_DB=${POSTGRES_DB}
+POSTGRES_PORT=${POSTGRES_PORT}
+CMS_PORT=${CMS_PORT}
+COMPOSE_PROJECT_NAME=${PROJECT_NAME}
+ENDOFENV
+
+echo -e "${GREEN}✓${NC} .env file created at .env for docker-compose"
 echo -e "${BLUE}   Port: ${YELLOW}${POSTGRES_PORT}${NC}"
 echo -e "${BLUE}   Container: ${YELLOW}${POSTGRES_CONTAINER}${NC}"
 
