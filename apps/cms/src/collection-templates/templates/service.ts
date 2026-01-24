@@ -81,7 +81,7 @@ export const serviceTemplate: CollectionTemplate = {
         {
           blockType: 'stats',
           heading: 'Typical Sprint',
-          stats: [
+          items: [
             { value: '5', label: 'Days' },
             { value: '3', label: 'Concepts' },
             { value: '1', label: 'Prototype' },

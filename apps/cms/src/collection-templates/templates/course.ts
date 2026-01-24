@@ -41,7 +41,7 @@ export const courseTemplate: CollectionTemplate = {
         {
           blockType: 'stats',
           heading: 'Course Details',
-          stats: [
+          items: [
             { value: '4', label: 'Modules' },
             { value: '6h', label: 'Video' },
             { value: '3', label: 'Exercises' },
