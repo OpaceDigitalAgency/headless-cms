@@ -26,7 +26,7 @@ export const pageTemplate: CollectionTemplate = {
   status: 'core', // Pages are a core collection
   hasSeedData: true,
   hasSeedMedia: false,
-  seedDataCount: 4,
+  seedDataCount: 5,
   seedItems: [
     {
       title: 'Home',
@@ -50,66 +50,6 @@ export const pageTemplate: CollectionTemplate = {
       title: 'Privacy Policy',
       slug: 'privacy',
       excerpt: 'How we collect, use, and protect your personal information',
-      status: 'published',
-    },
-    {
-      title: 'Services',
-      slug: 'services',
-      excerpt: 'Comprehensive solutions for modern businesses (Brochure preset)',
-      status: 'published',
-    },
-    {
-      title: 'Collections',
-      slug: 'collections',
-      excerpt: 'Browse our archives by category and theme (Archive preset)',
-      status: 'published',
-    },
-    {
-      title: 'Search',
-      slug: 'search',
-      excerpt: 'Search archives (Archive preset)',
-      status: 'published',
-    },
-    {
-      title: 'Shop',
-      slug: 'shop',
-      excerpt: 'Browse all products (Ecommerce preset)',
-      status: 'published',
-    },
-    {
-      title: 'Cart',
-      slug: 'cart',
-      excerpt: 'Shopping cart (Ecommerce preset)',
-      status: 'published',
-    },
-    {
-      title: 'Checkout',
-      slug: 'checkout',
-      excerpt: 'Secure checkout (Ecommerce preset)',
-      status: 'published',
-    },
-    {
-      title: 'My Account',
-      slug: 'account',
-      excerpt: 'Manage orders and profile (Ecommerce preset)',
-      status: 'published',
-    },
-    {
-      title: 'Shipping Policy',
-      slug: 'shipping',
-      excerpt: 'Shipping information (Ecommerce preset)',
-      status: 'published',
-    },
-    {
-      title: 'Returns Policy',
-      slug: 'returns',
-      excerpt: 'Returns and refunds (Ecommerce preset)',
-      status: 'published',
-    },
-    {
-      title: 'Terms of Service',
-      slug: 'terms',
-      excerpt: 'Terms and conditions (Ecommerce preset)',
       status: 'published',
     },
     {

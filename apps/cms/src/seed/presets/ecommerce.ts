@@ -7,6 +7,7 @@
 
 import type { Payload } from 'payload'
 import { BaseSeeder, createRichText, createRichTextParagraphs, type SeedOptions } from '../base'
+import { ensureShowcasePage } from '../showcase'
 
 export class EcommerceSeeder extends BaseSeeder {
   constructor(payload: Payload, options: SeedOptions = {}) {
@@ -870,6 +871,13 @@ export class EcommerceSeeder extends BaseSeeder {
           })
         }
       }
+    }
+
+    // Blocks Showcase Page
+    if (this.shouldSeedItem('blocks-showcase')) {
+      this.log('Creating Blocks Showcase page...')
+      await ensureShowcasePage(this.payload, { updateHeader: false })
+      this.log('Blocks Showcase page created successfully!')
     }
 
   }

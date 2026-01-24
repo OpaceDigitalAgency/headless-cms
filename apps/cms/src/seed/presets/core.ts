@@ -872,6 +872,13 @@ export class CoreSeeder extends BaseSeeder {
       }
     }
 
+    // Blocks Showcase Page
+    if (this.shouldSeedItem('blocks-showcase')) {
+      this.log('Creating Blocks Showcase page...')
+      await ensureShowcasePage(this.payload, { updateHeader: false })
+      this.log('Blocks Showcase page created successfully!')
+    }
+
   }
 
   private async seedPosts(categories: Record<string, string>): Promise<void> {
