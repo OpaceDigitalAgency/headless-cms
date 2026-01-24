@@ -2,8 +2,11 @@ import type { Endpoint } from 'payload'
 import { createSeeder, isValidPresetId, PRESET_IDS, PRESET_METADATA, type PresetId } from '../seed/presets'
 import { ensureShowcasePage } from '../seed/showcase'
 import { isCollectionEnabled } from '../lib/collectionVisibility'
-import { getTemplateById, allTemplates } from '../collection-templates'
 import { createRichText } from '../seed/base'
+
+// Stub functions for removed collection-templates
+const getTemplateById = (id: string) => undefined
+const allTemplates: any[] = []
 
 /**
  * Seed API Endpoints
@@ -30,24 +33,9 @@ const COLLECTION_SEED_CONFIG: Record<string, {
   posts: { label: 'Posts', icon: 'edit', hasSeedData: true, hasSeedMedia: false },
   categories: { label: 'Categories', icon: 'tag', hasSeedData: true, hasSeedMedia: false },
   tags: { label: 'Tags', icon: 'tag', hasSeedData: true, hasSeedMedia: false },
-  'archive-items': { label: 'Archive Items', icon: 'archive', hasSeedData: true, hasSeedMedia: true },
-  people: { label: 'People', icon: 'user', hasSeedData: true, hasSeedMedia: true },
-  places: { label: 'Places', icon: 'map-pin', hasSeedData: true, hasSeedMedia: true },
-  'content-types': { label: 'Content Types', icon: 'archive', hasSeedData: true, hasSeedMedia: false },
-  'custom-items': { label: 'Custom Items', icon: 'box', hasSeedData: true, hasSeedMedia: false },
-  products: { label: 'Products', icon: 'shopping-bag', hasSeedData: true, hasSeedMedia: true },
-  'product-categories': { label: 'Product Categories', icon: 'box', hasSeedData: true, hasSeedMedia: false },
-  'product-collections': { label: 'Product Collections', icon: 'shopping-bag', hasSeedData: true, hasSeedMedia: false },
-  events: { label: 'Events', icon: 'calendar', hasSeedData: true, hasSeedMedia: true },
 }
 
 const COLLECTION_PRESET_OVERRIDES: Record<string, PresetId> = {
-  products: 'ecommerce',
-  'product-categories': 'ecommerce',
-  'product-collections': 'ecommerce',
-  'archive-items': 'archive',
-  people: 'archive',
-  places: 'archive',
   events: 'archive',
 }
 

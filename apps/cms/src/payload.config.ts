@@ -38,9 +38,7 @@ import { NavigationSettings } from './globals/NavigationSettings'
 import { revalidateEndpoint } from './endpoints/revalidate'
 import { resetDataHandler } from './endpoints/resetData'
 import { seedEndpoints } from './endpoints/seed'
-import { collectionTemplateEndpoints } from './endpoints/collectionTemplates'
 import { navigationEndpoint } from './endpoints/navigation'
-import { collectionManagerEndpoint } from './endpoints/collectionManager'
 import { toolsEndpoints } from './endpoints/tools'
 import { taxonomyEndpoints } from './endpoints/taxonomy'
 import { seoEndpoints } from './endpoints/seo'
@@ -122,22 +120,6 @@ export default buildConfig({
       views: {
         dashboard: {
           Component: '/admin/views/Dashboard',
-        },
-        'content-manager': {
-          Component: '/admin/views/ContentManager',
-          path: '/content-manager',
-        },
-        'collection-manager': {
-          Component: '/admin/views/Collections',
-          path: '/collection-manager',
-        },
-        'shop-manager': {
-          Component: '/admin/views/ShopManager',
-          path: '/shop-manager',
-        },
-        'taxonomy-manager': {
-          Component: '/admin/views/TaxonomyManager',
-          path: '/taxonomy-manager',
         },
         tools: {
           Component: '/admin/views/Tools',
@@ -463,12 +445,8 @@ export default buildConfig({
     },
     // Dynamic navigation endpoint
     navigationEndpoint,
-    // Collection manager endpoint for admin UI
-    collectionManagerEndpoint,
     // Seed data endpoints for admin panel
     ...seedEndpoints,
-    // Collection template endpoints for admin panel
-    ...collectionTemplateEndpoints,
     // Admin tools endpoints
     ...toolsEndpoints,
     // Taxonomy filtering endpoints

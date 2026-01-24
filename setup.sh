@@ -232,21 +232,27 @@ else
     exit 1
 fi
 
-# Step 6: Update package.json scripts to use environment variables
+# Step 6: Verify package.json scripts use environment variables
 echo ""
-echo -e "${BLUE}Step 6: Configuring dev scripts for dynamic ports...${NC}"
+echo -e "${BLUE}Step 6: Verifying dev scripts for dynamic ports...${NC}"
 
-# Update CMS package.json to use PORT environment variable
+# Check if CMS package.json already uses PORT variable
 if [ -f "apps/cms/package.json" ]; then
-    # Replace hardcoded port with PORT environment variable
-    sed -i '' 's/"dev": "next dev -p 3000"/"dev": "PORT=$CMS_PORT next dev"/g' apps/cms/package.json
-    echo -e "${GREEN}✓${NC} Updated apps/cms/package.json to use CMS_PORT"
+    if grep -q 'PORT=\${CMS_PORT' apps/cms/package.json; then
+        echo -e "${GREEN}✓${NC} apps/cms/package.json already configured for dynamic ports"
+    else
+        echo -e "${YELLOW}⚠${NC}  apps/cms/package.json needs manual update to use PORT=\${CMS_PORT:-3000}"
+        echo -e "${YELLOW}   This should be fixed in the repository${NC}"
+    fi
 fi
 
-# Update Astro package.json to use PORT environment variable if it exists
+# Check if Astro package.json exists and uses PORT variable
 if [ -f "apps/astro/package.json" ]; then
-    sed -i '' 's/"dev": "astro dev --port 4321"/"dev": "astro dev --port ${ASTRO_PORT:-4321}"/g' apps/astro/package.json
-    echo -e "${GREEN}✓${NC} Updated apps/astro/package.json to use ASTRO_PORT"
+    if grep -q 'ASTRO_PORT' apps/astro/package.json; then
+        echo -e "${GREEN}✓${NC} apps/astro/package.json already configured for dynamic ports"
+    else
+        echo -e "${YELLOW}⚠${NC}  apps/astro/package.json may need update for dynamic ports"
+    fi
 fi
 
 # Success!

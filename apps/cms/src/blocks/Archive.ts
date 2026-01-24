@@ -38,31 +38,11 @@ export const archiveBlock: Block = {
       options: [
         { label: 'Posts', value: 'posts' },
         { label: 'Pages', value: 'pages' },
-        { label: 'Archive Items', value: 'archive-items' },
-        { label: 'People', value: 'people' },
-        { label: 'Places', value: 'places' },
-        { label: 'Events', value: 'events' },
-        { label: 'Services', value: 'services' },
-        { label: 'Galleries', value: 'galleries' },
-        { label: 'Testimonials', value: 'testimonials' },
-        { label: 'FAQs', value: 'faqs' },
         { label: 'Categories', value: 'categories' },
-        { label: 'Custom Items', value: 'custom-items' },
+        { label: 'Tags', value: 'tags' },
       ],
       admin: {
         condition: (_, siblingData) => siblingData?.populateBy === 'collection',
-      },
-    },
-    {
-      name: 'contentType',
-      type: 'relationship',
-      relationTo: 'content-types',
-      hasMany: false,
-      label: 'Content Type',
-      admin: {
-        condition: (_, siblingData) =>
-          siblingData?.populateBy === 'collection' && siblingData?.relationTo === 'custom-items',
-        description: 'Filter custom items by content type',
       },
     },
     {
@@ -74,7 +54,7 @@ export const archiveBlock: Block = {
       admin: {
         condition: (_, siblingData) =>
           siblingData?.populateBy === 'collection' &&
-          ['posts', 'archive-items', 'events', 'people', 'custom-items'].includes(siblingData?.relationTo),
+          ['posts', 'pages'].includes(siblingData?.relationTo),
       },
     },
     {
@@ -86,7 +66,7 @@ export const archiveBlock: Block = {
       admin: {
         condition: (_, siblingData) =>
           siblingData?.populateBy === 'collection' &&
-          ['posts', 'archive-items', 'events', 'people', 'custom-items'].includes(siblingData?.relationTo),
+          ['posts', 'pages'].includes(siblingData?.relationTo),
       },
     },
     {
@@ -101,7 +81,7 @@ export const archiveBlock: Block = {
     {
       name: 'selectedDocs',
       type: 'relationship',
-      relationTo: ['posts', 'pages', 'archive-items', 'people', 'places', 'custom-items'],
+      relationTo: ['posts', 'pages'],
       hasMany: true,
       label: 'Selected Documents',
       admin: {

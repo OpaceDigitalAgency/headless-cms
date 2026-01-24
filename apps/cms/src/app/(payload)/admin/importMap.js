@@ -32,24 +32,11 @@ import { PreviewComponent as PreviewComponent_a8a977ebc872c5d5ea7ee689724c0860 }
 import { default as default_af9653989531dda28e4f7c6779fff3cb } from '../../../components/TemplateGallery'
 import { default as default_f816ad831d1914fda4b2fda5a8a5abff } from '../../../components/PreviewButtonCells/PagesPreviewCell'
 import { default as default_2287ff956e96a8539b853bf429423292 } from '../../../components/PreviewButtonCells/PostsPreviewCell'
-import { default as default_f7ea1d98364ee50d9b03b0f1a144bd53 } from '../../../components/PreviewButtonCells/ArchiveItemsPreviewCell'
-import { default as default_a746c4e0133cbe976185d2f319037704 } from '../../../components/PreviewButtonCells/PeoplePreviewCell'
-import { default as default_a4d16b5eab717834fbd80608db478375 } from '../../../components/PreviewButtonCells/PlacesPreviewCell'
-import { default as default_cf5a718e85812f01f14fb7dcb4e9ad4b } from '../../../components/PreviewButtonCells/EventsPreviewCell'
-import { TemplateGallery as TemplateGallery_af9653989531dda28e4f7c6779fff3cb } from '../../../components/TemplateGallery'
-import { default as default_8e3a81edd9c3a515e585367aa801ee42 } from '../../../components/PreviewButtonCells/ContentTypesPreviewCell'
-import { default as default_78d34716f26bbc38d2d51d55b25955ba } from '../../../components/CustomDataField'
-import { default as default_b9ab8409b759872b73c0031ce9ca8d48 } from '../../../components/PreviewButtonCells/CustomItemsPreviewCell'
-import { default as default_d41b387b5a3a4784ca7aa9e406680bf1 } from '../../../components/CustomItemsListHeader'
 import { LinkToDoc as LinkToDoc_aead06e4cbf6b2620c5c51c9ab283634 } from '@payloadcms/plugin-search/client'
 import { ReindexButton as ReindexButton_aead06e4cbf6b2620c5c51c9ab283634 } from '@payloadcms/plugin-search/client'
 import { default as default_1723744e6ae59cf3653e63611d4cba7a } from '../../../components/CollectionManagerField'
 import { default as default_81e915c9ba204d29f7fc1265572ed8be } from '../../../admin/TwoPanelNav'
 import { default as default_c7d7fc284b3b0552574b75a0421f4260 } from '../../../admin/views/Dashboard'
-import { default as default_783614df4cac7352f73020b1bdb682ea } from '../../../admin/views/ContentManager'
-import { default as default_23bada0f25692cad9c66cb3206a00238 } from '../../../admin/views/Collections'
-import { default as default_6e7595eb3cd4ce649239c937468547b9 } from '../../../admin/views/ShopManager'
-import { default as default_45b26abec510d85d30350dfc51f64933 } from '../../../admin/views/TaxonomyManager'
 import { default as default_a30289e25b7b0ddf21b0d6206ba3514b } from '../../../admin/views/Tools'
 import { default as default_e5bd8752a00af3fd20230fe595cc35df } from '../../../admin/views/tools/PublishingCalendar'
 import { default as default_da651b1d7f0d7858931f56e85dc055ee } from '../../../admin/views/tools/DraftReview'
@@ -100,24 +87,11 @@ export const importMap = {
   "/components/TemplateGallery#default": default_af9653989531dda28e4f7c6779fff3cb,
   "/components/PreviewButtonCells/PagesPreviewCell#default": default_f816ad831d1914fda4b2fda5a8a5abff,
   "/components/PreviewButtonCells/PostsPreviewCell#default": default_2287ff956e96a8539b853bf429423292,
-  "/components/PreviewButtonCells/ArchiveItemsPreviewCell#default": default_f7ea1d98364ee50d9b03b0f1a144bd53,
-  "/components/PreviewButtonCells/PeoplePreviewCell#default": default_a746c4e0133cbe976185d2f319037704,
-  "/components/PreviewButtonCells/PlacesPreviewCell#default": default_a4d16b5eab717834fbd80608db478375,
-  "/components/PreviewButtonCells/EventsPreviewCell#default": default_cf5a718e85812f01f14fb7dcb4e9ad4b,
-  "/components/TemplateGallery#TemplateGallery": TemplateGallery_af9653989531dda28e4f7c6779fff3cb,
-  "/components/PreviewButtonCells/ContentTypesPreviewCell#default": default_8e3a81edd9c3a515e585367aa801ee42,
-  "/components/CustomDataField#default": default_78d34716f26bbc38d2d51d55b25955ba,
-  "/components/PreviewButtonCells/CustomItemsPreviewCell#default": default_b9ab8409b759872b73c0031ce9ca8d48,
-  "/components/CustomItemsListHeader#default": default_d41b387b5a3a4784ca7aa9e406680bf1,
   "@payloadcms/plugin-search/client#LinkToDoc": LinkToDoc_aead06e4cbf6b2620c5c51c9ab283634,
   "@payloadcms/plugin-search/client#ReindexButton": ReindexButton_aead06e4cbf6b2620c5c51c9ab283634,
   "/components/CollectionManagerField#default": default_1723744e6ae59cf3653e63611d4cba7a,
   "/admin/TwoPanelNav#default": default_81e915c9ba204d29f7fc1265572ed8be,
   "/admin/views/Dashboard#default": default_c7d7fc284b3b0552574b75a0421f4260,
-  "/admin/views/ContentManager#default": default_783614df4cac7352f73020b1bdb682ea,
-  "/admin/views/Collections#default": default_23bada0f25692cad9c66cb3206a00238,
-  "/admin/views/ShopManager#default": default_6e7595eb3cd4ce649239c937468547b9,
-  "/admin/views/TaxonomyManager#default": default_45b26abec510d85d30350dfc51f64933,
   "/admin/views/Tools#default": default_a30289e25b7b0ddf21b0d6206ba3514b,
   "/admin/views/tools/PublishingCalendar#default": default_e5bd8752a00af3fd20230fe595cc35df,
   "/admin/views/tools/DraftReview#default": default_da651b1d7f0d7858931f56e85dc055ee,

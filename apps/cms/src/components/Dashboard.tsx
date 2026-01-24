@@ -2,7 +2,6 @@
 
 import React, { useState } from 'react'
 import { SeedDataManager } from './SeedDataManager'
-import { CollectionTemplates } from './CollectionTemplates'
 import {
   FileTextIcon,
   EditIcon,
@@ -22,7 +21,7 @@ import {
  * including collection templates browser and sample data management.
  */
 export const Dashboard: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<'overview' | 'templates' | 'seed'>('overview')
+  const [activeTab, setActiveTab] = useState<'overview' | 'seed'>('overview')
 
   return (
     <div style={{ padding: '24px' }}>
@@ -48,13 +47,6 @@ export const Dashboard: React.FC = () => {
           icon={<FileTextIcon size={18} />}
         >
           Overview
-        </TabButton>
-        <TabButton
-          active={activeTab === 'templates'}
-          onClick={() => setActiveTab('templates')}
-          icon={<ImageIcon size={18} />}
-        >
-          Collection Templates
         </TabButton>
         <TabButton
           active={activeTab === 'seed'}
@@ -163,11 +155,6 @@ export const Dashboard: React.FC = () => {
             />
           </div>
         </>
-      )}
-
-      {/* Collection Templates Tab */}
-      {activeTab === 'templates' && (
-        <CollectionTemplates />
       )}
 
       {/* Sample Data Tab */}
