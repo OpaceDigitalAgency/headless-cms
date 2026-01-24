@@ -768,6 +768,7 @@ export const SectionCollectionTemplates: React.FC<SectionCollectionTemplatesProp
         })
         fetchSeedStatus()
         fetchCustomCollectionCounts()
+        fetchContentTypes() // Refresh content types list to remove deleted content type
         clearSeededItemsForKey(seededKey)
       } else {
         throw new Error(data.message || `Failed to clear ${collectionLabel}`)
