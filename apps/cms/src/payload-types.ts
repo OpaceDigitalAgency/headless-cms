@@ -10096,78 +10096,6 @@ export interface Setting {
     country?: string | null;
   };
   /**
-   * Configure default SEO metadata that will be used as fallbacks across your site
-   */
-  seo?: {
-    /**
-     * Template for meta titles. Use {title} for page title, {siteName} for site name. Example: "{title} | {siteName}"
-     */
-    defaultMetaTitle?: string | null;
-    /**
-     * Fallback description when pages don't have custom descriptions (max 160 characters)
-     */
-    defaultMetaDescription?: string | null;
-    /**
-     * Fallback image for social media sharing (recommended: 1200x630px)
-     */
-    defaultOgImage?: (number | null) | Media;
-    /**
-     * Character used to separate parts of the page title
-     */
-    separator?: ('|' | '-' | '·' | '/' | '::') | null;
-  };
-  /**
-   * Configure default social media metadata
-   */
-  socialMeta?: {
-    twitterCardType?: ('summary' | 'summary_large_image' | 'app' | 'player') | null;
-    /**
-     * Your Facebook App ID for Facebook Insights and Open Graph
-     */
-    facebookAppId?: string | null;
-    /**
-     * Meta tag content for Facebook domain verification
-     */
-    facebookVerification?: string | null;
-  };
-  searchEngines?: {
-    /**
-     * Default robots directive for pages without custom settings
-     */
-    defaultRobots?: ('index,follow' | 'noindex,follow' | 'index,nofollow' | 'noindex,nofollow') | null;
-    /**
-     * Meta tag content for Google Search Console verification
-     */
-    googleSiteVerification?: string | null;
-    /**
-     * Meta tag content for Bing Webmaster Tools verification
-     */
-    bingVerification?: string | null;
-  };
-  /**
-   * Organization schema for rich search results
-   */
-  schema?: {
-    organizationType?:
-      | (
-          | 'Organization'
-          | 'LocalBusiness'
-          | 'Corporation'
-          | 'EducationalOrganization'
-          | 'GovernmentOrganization'
-          | 'NGO'
-        )
-      | null;
-    /**
-     * Your organization or company name
-     */
-    organizationName?: string | null;
-    /**
-     * Logo for structured data (recommended: square, min 112x112px)
-     */
-    organizationLogo?: (number | null) | Media;
-  };
-  /**
    * Add custom CSS to the site
    */
   customCss?: string | null;
@@ -10382,35 +10310,6 @@ export interface SettingsSelect<T extends boolean = true> {
         state?: T;
         postalCode?: T;
         country?: T;
-      };
-  seo?:
-    | T
-    | {
-        defaultMetaTitle?: T;
-        defaultMetaDescription?: T;
-        defaultOgImage?: T;
-        separator?: T;
-      };
-  socialMeta?:
-    | T
-    | {
-        twitterCardType?: T;
-        facebookAppId?: T;
-        facebookVerification?: T;
-      };
-  searchEngines?:
-    | T
-    | {
-        defaultRobots?: T;
-        googleSiteVerification?: T;
-        bingVerification?: T;
-      };
-  schema?:
-    | T
-    | {
-        organizationType?: T;
-        organizationName?: T;
-        organizationLogo?: T;
       };
   customCss?: T;
   headScripts?: T;
