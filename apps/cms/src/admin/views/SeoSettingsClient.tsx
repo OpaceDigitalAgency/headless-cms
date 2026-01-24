@@ -1,8 +1,6 @@
 'use client'
 
-import React, { useEffect, useMemo, useState } from 'react'
-import Link from 'next/link'
-import { usePathname, useRouter } from 'next/navigation'
+import React, { useEffect, useState } from 'react'
 import SeoBulkEditor from './SeoBulkEditor'
 
 const tabs = [
@@ -12,25 +10,9 @@ const tabs = [
   { id: 'advanced', label: 'Advanced' },
 ]
 
-const resolveActiveTab = (pathname: string) => {
-  const parts = pathname.split('/').filter(Boolean)
-  const last = parts[parts.length - 1]
-  if (last === 'seo') return 'overview'
-  if (tabs.some((tab) => tab.id === last)) return last
-  return 'overview'
-}
-
 const SeoSettingsClient: React.FC = () => {
-  const pathname = usePathname()
-  const router = useRouter()
-  const activeTab = useMemo(() => resolveActiveTab(pathname || ''), [pathname])
+  const [activeTab, setActiveTab] = useState('overview')
   const [authState, setAuthState] = useState<'loading' | 'admin' | 'forbidden'>('loading')
-
-  useEffect(() => {
-    if (pathname === '/admin/seo' || pathname === '/admin/seo/') {
-      router.replace('/admin/seo/overview')
-    }
-  }, [pathname, router])
 
   useEffect(() => {
     const checkAccess = async () => {
@@ -67,13 +49,13 @@ const SeoSettingsClient: React.FC = () => {
     <div className="ra-seo-settings__body">
       <nav className="ra-seo-tabs">
         {tabs.map((tab) => (
-          <Link
+          <button
             key={tab.id}
-            href={`/admin/seo/${tab.id}`}
+            onClick={() => setActiveTab(tab.id)}
             className={`ra-seo-tab${activeTab === tab.id ? ' is-active' : ''}`}
           >
             {tab.label}
-          </Link>
+          </button>
         ))}
       </nav>
 
@@ -83,23 +65,23 @@ const SeoSettingsClient: React.FC = () => {
             <div className="ra-seo-card">
               <h2>Bulk SEO editing</h2>
               <p>Update meta titles, descriptions, and types across every indexable content item.</p>
-              <Link href="/admin/seo/bulk" className="ra-tool-button">
+              <button onClick={() => setActiveTab('bulk')} className="ra-tool-button">
                 Go to Bulk Update
-              </Link>
+              </button>
             </div>
             <div className="ra-seo-card">
               <h2>Templates</h2>
               <p>Define global title and description patterns (coming soon).</p>
-              <Link href="/admin/seo/templates" className="ra-tool-button ra-tool-button--secondary">
+              <button onClick={() => setActiveTab('templates')} className="ra-tool-button ra-tool-button--secondary">
                 View Templates
-              </Link>
+              </button>
             </div>
             <div className="ra-seo-card">
               <h2>Advanced defaults</h2>
               <p>Configure robots rules, noindex defaults, and future overrides.</p>
-              <Link href="/admin/seo/advanced" className="ra-tool-button ra-tool-button--secondary">
+              <button onClick={() => setActiveTab('advanced')} className="ra-tool-button ra-tool-button--secondary">
                 Open Advanced
-              </Link>
+              </button>
             </div>
           </div>
         )}
