@@ -280,9 +280,16 @@ export abstract class BaseSeeder {
 
   /**
    * Clear a specific collection (public method)
+   * Special handling for custom-items: also clears associated content-types
    */
   public async clearCollection(collection: string): Promise<void> {
     try {
+      // Special case: when clearing custom-items, also clear content-types
+      if (collection === 'custom-items') {
+        this.log('Clearing custom-items and associated content-types...')
+        await this.clearCollection('content-types')
+      }
+
       let totalCleared = 0
       let hasMore = true
 

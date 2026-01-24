@@ -344,6 +344,182 @@ export const Settings: GlobalConfig = {
           ],
         },
         {
+          label: 'SEO',
+          description: 'Default SEO metadata and search engine settings',
+          fields: [
+            {
+              name: 'seo',
+              type: 'group',
+              label: 'SEO Defaults',
+              admin: {
+                description: 'Configure default SEO metadata that will be used as fallbacks across your site',
+              },
+              fields: [
+                {
+                  name: 'defaultMetaTitle',
+                  type: 'text',
+                  label: 'Default Meta Title Pattern',
+                  admin: {
+                    description: 'Template for meta titles. Use {title} for page title, {siteName} for site name. Example: "{title} | {siteName}"',
+                    placeholder: '{title} | {siteName}',
+                  },
+                },
+                {
+                  name: 'defaultMetaDescription',
+                  type: 'textarea',
+                  label: 'Default Meta Description',
+                  maxLength: 160,
+                  admin: {
+                    description: 'Fallback description when pages don\'t have custom descriptions (max 160 characters)',
+                  },
+                },
+                {
+                  name: 'defaultOgImage',
+                  type: 'upload',
+                  relationTo: 'media',
+                  label: 'Default Open Graph Image',
+                  admin: {
+                    description: 'Fallback image for social media sharing (recommended: 1200x630px)',
+                  },
+                },
+                {
+                  name: 'separator',
+                  type: 'select',
+                  label: 'Title Separator',
+                  defaultValue: '|',
+                  options: [
+                    { label: 'Pipe (|)', value: '|' },
+                    { label: 'Dash (-)', value: '-' },
+                    { label: 'Dot (·)', value: '·' },
+                    { label: 'Forward Slash (/)', value: '/' },
+                    { label: 'Double Colon (::)', value: '::' },
+                  ],
+                  admin: {
+                    description: 'Character used to separate parts of the page title',
+                  },
+                },
+              ],
+            },
+            {
+              name: 'socialMeta',
+              type: 'group',
+              label: 'Social Media Metadata',
+              admin: {
+                description: 'Configure default social media metadata',
+              },
+              fields: [
+                {
+                  name: 'twitterCardType',
+                  type: 'select',
+                  label: 'Default Twitter Card Type',
+                  defaultValue: 'summary_large_image',
+                  options: [
+                    { label: 'Summary', value: 'summary' },
+                    { label: 'Summary with Large Image', value: 'summary_large_image' },
+                    { label: 'App', value: 'app' },
+                    { label: 'Player', value: 'player' },
+                  ],
+                },
+                {
+                  name: 'facebookAppId',
+                  type: 'text',
+                  label: 'Facebook App ID',
+                  admin: {
+                    description: 'Your Facebook App ID for Facebook Insights and Open Graph',
+                  },
+                },
+                {
+                  name: 'facebookVerification',
+                  type: 'text',
+                  label: 'Facebook Domain Verification',
+                  admin: {
+                    description: 'Meta tag content for Facebook domain verification',
+                  },
+                },
+              ],
+            },
+            {
+              name: 'searchEngines',
+              type: 'group',
+              label: 'Search Engine Settings',
+              fields: [
+                {
+                  name: 'defaultRobots',
+                  type: 'select',
+                  label: 'Default Robots Meta',
+                  defaultValue: 'index,follow',
+                  options: [
+                    { label: 'Index, Follow (Default)', value: 'index,follow' },
+                    { label: 'No Index, Follow', value: 'noindex,follow' },
+                    { label: 'Index, No Follow', value: 'index,nofollow' },
+                    { label: 'No Index, No Follow', value: 'noindex,nofollow' },
+                  ],
+                  admin: {
+                    description: 'Default robots directive for pages without custom settings',
+                  },
+                },
+                {
+                  name: 'googleSiteVerification',
+                  type: 'text',
+                  label: 'Google Site Verification',
+                  admin: {
+                    description: 'Meta tag content for Google Search Console verification',
+                  },
+                },
+                {
+                  name: 'bingVerification',
+                  type: 'text',
+                  label: 'Bing Site Verification',
+                  admin: {
+                    description: 'Meta tag content for Bing Webmaster Tools verification',
+                  },
+                },
+              ],
+            },
+            {
+              name: 'schema',
+              type: 'group',
+              label: 'Schema.org (Structured Data)',
+              admin: {
+                description: 'Organization schema for rich search results',
+              },
+              fields: [
+                {
+                  name: 'organizationType',
+                  type: 'select',
+                  label: 'Organization Type',
+                  defaultValue: 'Organization',
+                  options: [
+                    { label: 'Organization', value: 'Organization' },
+                    { label: 'Local Business', value: 'LocalBusiness' },
+                    { label: 'Corporation', value: 'Corporation' },
+                    { label: 'Educational Organization', value: 'EducationalOrganization' },
+                    { label: 'Government Organization', value: 'GovernmentOrganization' },
+                    { label: 'Non-Profit Organization', value: 'NGO' },
+                  ],
+                },
+                {
+                  name: 'organizationName',
+                  type: 'text',
+                  label: 'Organization Name',
+                  admin: {
+                    description: 'Your organization or company name',
+                  },
+                },
+                {
+                  name: 'organizationLogo',
+                  type: 'upload',
+                  relationTo: 'media',
+                  label: 'Organization Logo',
+                  admin: {
+                    description: 'Logo for structured data (recommended: square, min 112x112px)',
+                  },
+                },
+              ],
+            },
+          ],
+        },
+        {
           label: 'Advanced',
           fields: [
             {
