@@ -1,14 +1,8 @@
 'use client'
 
 import React, { useEffect, useState } from 'react'
+import { Gutter } from '@payloadcms/ui'
 import SeoBulkEditor from './SeoBulkEditor'
-
-const tabs = [
-  { id: 'overview', label: 'Overview' },
-  { id: 'templates', label: 'Templates' },
-  { id: 'bulk', label: 'Bulk Update' },
-  { id: 'advanced', label: 'Advanced' },
-]
 
 const SeoSettingsClient: React.FC = () => {
   const [activeTab, setActiveTab] = useState('overview')
@@ -35,74 +29,131 @@ const SeoSettingsClient: React.FC = () => {
 
   if (authState === 'forbidden') {
     return (
-      <div className="ra-tool-error">
-        You do not have permission to access SEO Settings.
-      </div>
+      <Gutter>
+        <div style={{ padding: '2rem 0', color: 'var(--theme-error-500)' }}>
+          You do not have permission to access SEO Settings.
+        </div>
+      </Gutter>
     )
   }
 
   if (authState === 'loading') {
-    return <p className="ra-tool-muted">Checking permissions...</p>
+    return (
+      <Gutter>
+        <div style={{ padding: '2rem 0', color: 'var(--theme-elevation-500)' }}>
+          Loading...
+        </div>
+      </Gutter>
+    )
   }
 
   return (
-    <div className="ra-seo-settings__body">
-      <nav className="ra-seo-tabs">
-        {tabs.map((tab) => (
-          <button
-            key={tab.id}
-            onClick={() => setActiveTab(tab.id)}
-            className={`ra-seo-tab${activeTab === tab.id ? ' is-active' : ''}`}
-          >
-            {tab.label}
-          </button>
-        ))}
-      </nav>
-
-      <div className="ra-seo-panel">
-        {activeTab === 'overview' && (
-          <div className="ra-seo-overview">
-            <div className="ra-seo-card">
-              <h2>Bulk SEO editing</h2>
-              <p>Update meta titles, descriptions, and types across every indexable content item.</p>
-              <button onClick={() => setActiveTab('bulk')} className="ra-tool-button">
-                Go to Bulk Update
-              </button>
-            </div>
-            <div className="ra-seo-card">
-              <h2>Templates</h2>
-              <p>Define global title and description patterns (coming soon).</p>
-              <button onClick={() => setActiveTab('templates')} className="ra-tool-button ra-tool-button--secondary">
-                View Templates
-              </button>
-            </div>
-            <div className="ra-seo-card">
-              <h2>Advanced defaults</h2>
-              <p>Configure robots rules, noindex defaults, and future overrides.</p>
-              <button onClick={() => setActiveTab('advanced')} className="ra-tool-button ra-tool-button--secondary">
-                Open Advanced
-              </button>
-            </div>
+    <Gutter>
+      <div className="tabs-field">
+        <div className="tabs-field__tabs-wrap">
+          <div className="tabs-field__tabs">
+            <button
+              type="button"
+              className={`tabs-field__tab-button${activeTab === 'overview' ? ' tabs-field__tab-button--active' : ''}`}
+              onClick={() => setActiveTab('overview')}
+            >
+              Overview
+            </button>
+            <button
+              type="button"
+              className={`tabs-field__tab-button${activeTab === 'templates' ? ' tabs-field__tab-button--active' : ''}`}
+              onClick={() => setActiveTab('templates')}
+            >
+              Templates
+            </button>
+            <button
+              type="button"
+              className={`tabs-field__tab-button${activeTab === 'bulk' ? ' tabs-field__tab-button--active' : ''}`}
+              onClick={() => setActiveTab('bulk')}
+            >
+              Bulk Update
+            </button>
+            <button
+              type="button"
+              className={`tabs-field__tab-button${activeTab === 'advanced' ? ' tabs-field__tab-button--active' : ''}`}
+              onClick={() => setActiveTab('advanced')}
+            >
+              Advanced
+            </button>
           </div>
-        )}
+        </div>
 
-        {activeTab === 'templates' && (
-          <div className="ra-seo-placeholder">
-            <h2>Templates</h2>
-            <p>Placeholder for global title and description templates.</p>
-          </div>
-        )}
+        <div className="tabs-field__content-wrap">
+          {activeTab === 'overview' && (
+            <div className="tabs-field__tab" style={{ display: 'block', padding: '2rem 0' }}>
+              <div style={{ marginBottom: '1.5rem' }}>
+                <h3 style={{ marginBottom: '0.5rem', fontSize: '1rem', fontWeight: 600 }}>Bulk SEO Editing</h3>
+                <p style={{ marginBottom: '1rem', color: 'var(--theme-elevation-500)', fontSize: '0.875rem' }}>
+                  Update meta titles, descriptions, and types across every indexable content item.
+                </p>
+                <button
+                  type="button"
+                  onClick={() => setActiveTab('bulk')}
+                  className="btn btn--style-primary btn--size-medium"
+                >
+                  Go to Bulk Update
+                </button>
+              </div>
+              <div style={{ marginBottom: '1.5rem' }}>
+                <h3 style={{ marginBottom: '0.5rem', fontSize: '1rem', fontWeight: 600 }}>Templates</h3>
+                <p style={{ marginBottom: '1rem', color: 'var(--theme-elevation-500)', fontSize: '0.875rem' }}>
+                  Define global title and description patterns (coming soon).
+                </p>
+                <button
+                  type="button"
+                  onClick={() => setActiveTab('templates')}
+                  className="btn btn--style-secondary btn--size-medium"
+                >
+                  View Templates
+                </button>
+              </div>
+              <div>
+                <h3 style={{ marginBottom: '0.5rem', fontSize: '1rem', fontWeight: 600 }}>Advanced Defaults</h3>
+                <p style={{ marginBottom: '1rem', color: 'var(--theme-elevation-500)', fontSize: '0.875rem' }}>
+                  Configure robots rules, noindex defaults, and future overrides.
+                </p>
+                <button
+                  type="button"
+                  onClick={() => setActiveTab('advanced')}
+                  className="btn btn--style-secondary btn--size-medium"
+                >
+                  Open Advanced
+                </button>
+              </div>
+            </div>
+          )}
 
-        {activeTab === 'bulk' && <SeoBulkEditor />}
+          {activeTab === 'templates' && (
+            <div className="tabs-field__tab" style={{ display: 'block', padding: '2rem 0' }}>
+              <h3 style={{ marginBottom: '0.5rem', fontSize: '1rem', fontWeight: 600 }}>Templates</h3>
+              <p style={{ color: 'var(--theme-elevation-500)', fontSize: '0.875rem' }}>
+                Placeholder for global title and description templates.
+              </p>
+            </div>
+          )}
 
-        {activeTab === 'advanced' && (
-          <div className="ra-seo-placeholder">
-            <h2>Advanced</h2>
-            <p>Placeholder for robots defaults, noindex rules, and overrides.</p>
-          </div>
-        )}
+          {activeTab === 'bulk' && (
+            <div className="tabs-field__tab" style={{ display: 'block', padding: '2rem 0' }}>
+              <SeoBulkEditor />
+            </div>
+          )}
+
+          {activeTab === 'advanced' && (
+            <div className="tabs-field__tab" style={{ display: 'block', padding: '2rem 0' }}>
+              <h3 style={{ marginBottom: '0.5rem', fontSize: '1rem', fontWeight: 600 }}>Advanced</h3>
+              <p style={{ color: 'var(--theme-elevation-500)', fontSize: '0.875rem' }}>
+                Placeholder for robots defaults, noindex rules, and overrides.
+              </p>
+            </div>
+          )}
+        </div>
       </div>
-    </div>
+    </Gutter>
   )
 }
 
