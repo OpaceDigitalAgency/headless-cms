@@ -321,6 +321,7 @@ export const seedCollectionEndpoint: Endpoint = {
       const seeder = createSeeder(presetId, payload, {
         downloadMedia: includeMedia && config.hasSeedMedia,
         clearExisting: action === 'reseed',
+        collections: [slug], // Only seed this specific collection, not dependencies
       })
 
       let itemsAffected = 0
