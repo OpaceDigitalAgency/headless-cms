@@ -8553,6 +8553,16 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	"body_scripts" varchar,
   	"maintenance_mode" boolean,
   	"maintenance_message" varchar DEFAULT 'We''re currently performing scheduled maintenance. We''ll be back shortly!',
+  	"seo_default_meta_title_pattern" varchar,
+  	"seo_default_meta_description" varchar,
+  	"seo_title_separator" varchar,
+  	"seo_twitter_card_type" varchar,
+  	"seo_advanced_default_robots_meta" varchar,
+  	"seo_advanced_google_site_verification" varchar,
+  	"seo_advanced_bing_site_verification" varchar,
+  	"seo_advanced_facebook_domain_verification" varchar,
+  	"seo_advanced_organization_type" varchar,
+  	"seo_advanced_organization_name" varchar,
   	"updated_at" timestamp(3) with time zone,
   	"created_at" timestamp(3) with time zone
   );

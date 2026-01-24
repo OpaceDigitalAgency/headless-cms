@@ -40,6 +40,7 @@ import { TemplateGallery as TemplateGallery_af9653989531dda28e4f7c6779fff3cb } f
 import { default as default_8e3a81edd9c3a515e585367aa801ee42 } from '../../../components/PreviewButtonCells/ContentTypesPreviewCell'
 import { default as default_78d34716f26bbc38d2d51d55b25955ba } from '../../../components/CustomDataField'
 import { default as default_b9ab8409b759872b73c0031ce9ca8d48 } from '../../../components/PreviewButtonCells/CustomItemsPreviewCell'
+import { default as default_d41b387b5a3a4784ca7aa9e406680bf1 } from '../../../components/CustomItemsListHeader'
 import { LinkToDoc as LinkToDoc_aead06e4cbf6b2620c5c51c9ab283634 } from '@payloadcms/plugin-search/client'
 import { ReindexButton as ReindexButton_aead06e4cbf6b2620c5c51c9ab283634 } from '@payloadcms/plugin-search/client'
 import { default as default_1723744e6ae59cf3653e63611d4cba7a } from '../../../components/CollectionManagerField'
@@ -107,6 +108,7 @@ export const importMap = {
   "/components/PreviewButtonCells/ContentTypesPreviewCell#default": default_8e3a81edd9c3a515e585367aa801ee42,
   "/components/CustomDataField#default": default_78d34716f26bbc38d2d51d55b25955ba,
   "/components/PreviewButtonCells/CustomItemsPreviewCell#default": default_b9ab8409b759872b73c0031ce9ca8d48,
+  "/components/CustomItemsListHeader#default": default_d41b387b5a3a4784ca7aa9e406680bf1,
   "@payloadcms/plugin-search/client#LinkToDoc": LinkToDoc_aead06e4cbf6b2620c5c51c9ab283634,
   "@payloadcms/plugin-search/client#ReindexButton": ReindexButton_aead06e4cbf6b2620c5c51c9ab283634,
   "/components/CollectionManagerField#default": default_1723744e6ae59cf3653e63611d4cba7a,

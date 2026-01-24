@@ -93716,6 +93716,66 @@
           "notNull": false,
           "default": "'We''re currently performing scheduled maintenance. We''ll be back shortly!'"
         },
+        "seo_default_meta_title_pattern": {
+          "name": "seo_default_meta_title_pattern",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "seo_default_meta_description": {
+          "name": "seo_default_meta_description",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "seo_title_separator": {
+          "name": "seo_title_separator",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "seo_twitter_card_type": {
+          "name": "seo_twitter_card_type",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "seo_advanced_default_robots_meta": {
+          "name": "seo_advanced_default_robots_meta",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "seo_advanced_google_site_verification": {
+          "name": "seo_advanced_google_site_verification",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "seo_advanced_bing_site_verification": {
+          "name": "seo_advanced_bing_site_verification",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "seo_advanced_facebook_domain_verification": {
+          "name": "seo_advanced_facebook_domain_verification",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "seo_advanced_organization_type": {
+          "name": "seo_advanced_organization_type",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "seo_advanced_organization_name": {
+          "name": "seo_advanced_organization_name",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
         "updated_at": {
           "name": "updated_at",
           "type": "timestamp(3) with time zone",
@@ -101408,6 +101468,6 @@
     "tables": {},
     "columns": {}
   },
-  "id": "f984212a-51b4-4425-9baa-62d31a3073a2",
+  "id": "596ef337-a4e4-4769-9a14-ecf2b374024f",
   "prevId": "00000000-0000-0000-0000-000000000000"
 }
