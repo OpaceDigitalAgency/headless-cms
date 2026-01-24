@@ -26,6 +26,18 @@ import { Pages } from './collections/Pages'
 import { Posts } from './collections/Posts'
 import { Categories } from './collections/Categories'
 import { Tags } from './collections/Tags'
+import { People } from './collections/People'
+import { Places } from './collections/Places'
+import { Products } from './collections/Products'
+import { ProductCategories } from './collections/ProductCategories'
+import { ProductCollections } from './collections/ProductCollections'
+import { Events } from './collections/Events'
+import { ArchiveItems } from './collections/ArchiveItems'
+import { ContentTypes } from './collections/ContentTypes'
+import { CustomItems } from './collections/CustomItems'
+import { Orders } from './collections/Orders'
+import { Carts } from './collections/Carts'
+import { ProductReviews } from './collections/ProductReviews'
 import { seoCollectionSlugs } from './lib/seo/seoCollections'
 
 // Globals
@@ -245,7 +257,7 @@ export default buildConfig({
         }),
         // Link feature with custom rel attribute field
         LinkFeature({
-          enabledCollections: ['pages', 'posts'],
+          enabledCollections: ['pages', 'posts', 'archive-items'],
           fields: [
             {
               name: 'rel',
@@ -288,6 +300,21 @@ export default buildConfig({
     Posts,
     Categories,
     Tags,
+    // Base collections
+    ArchiveItems,
+    People,
+    Places,
+    Events,
+    // Ecommerce
+    Products,
+    ProductCategories,
+    ProductCollections,
+    // Dynamic content types system
+    ContentTypes,
+    CustomItems,
+    Orders,
+    Carts,
+    ProductReviews,
   ],
 
   // ===========================================
