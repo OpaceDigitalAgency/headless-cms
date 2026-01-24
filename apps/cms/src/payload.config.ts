@@ -26,6 +26,18 @@ import { Pages } from './collections/Pages'
 import { Posts } from './collections/Posts'
 import { Categories } from './collections/Categories'
 import { Tags } from './collections/Tags'
+import { People } from './collections/People'
+import { Places } from './collections/Places'
+import { Products } from './collections/Products'
+import { ProductCategories } from './collections/ProductCategories'
+import { ProductCollections } from './collections/ProductCollections'
+import { Events } from './collections/Events'
+import { ArchiveItems } from './collections/ArchiveItems'
+import { ContentTypes } from './collections/ContentTypes'
+import { CustomItems } from './collections/CustomItems'
+import { Orders } from './collections/Orders'
+import { Carts } from './collections/Carts'
+import { ProductReviews } from './collections/ProductReviews'
 import { seoCollectionSlugs } from './lib/seo/seoCollections'
 
 // Globals
@@ -36,7 +48,11 @@ import { NavigationSettings } from './globals/NavigationSettings'
 
 // Revalidation endpoint
 import { revalidateEndpoint } from './endpoints/revalidate'
+import { resetDataHandler } from './endpoints/resetData'
+import { seedEndpoints } from './endpoints/seed'
+import { collectionTemplateEndpoints } from './endpoints/collectionTemplates'
 import { navigationEndpoint } from './endpoints/navigation'
+import { collectionManagerEndpoint } from './endpoints/collectionManager'
 import { toolsEndpoints } from './endpoints/tools'
 import { taxonomyEndpoints } from './endpoints/taxonomy'
 import { seoEndpoints } from './endpoints/seo'
@@ -121,6 +137,14 @@ export default buildConfig({
         'content-manager': {
           Component: '/admin/views/ContentManager',
           path: '/content-manager',
+        },
+        'collection-manager': {
+          Component: '/admin/views/Collections',
+          path: '/collection-manager',
+        },
+        'shop-manager': {
+          Component: '/admin/views/ShopManager',
+          path: '/shop-manager',
         },
         'taxonomy-manager': {
           Component: '/admin/views/TaxonomyManager',
@@ -232,7 +256,7 @@ export default buildConfig({
         }),
         // Link feature with custom rel attribute field
         LinkFeature({
-          enabledCollections: ['pages', 'posts'],
+          enabledCollections: ['pages', 'posts', 'archive-items'],
           fields: [
             {
               name: 'rel',
@@ -275,6 +299,21 @@ export default buildConfig({
     Posts,
     Categories,
     Tags,
+    // Base collections
+    ArchiveItems,
+    People,
+    Places,
+    Events,
+    // Ecommerce
+    Products,
+    ProductCategories,
+    ProductCollections,
+    // Dynamic content types system
+    ContentTypes,
+    CustomItems,
+    Orders,
+    Carts,
+    ProductReviews,
   ],
 
   // ===========================================
@@ -374,7 +413,7 @@ export default buildConfig({
 
     // Redirects Plugin - URL redirects management
     redirectsPlugin({
-      collections: ['pages', 'posts', 'archive-items'],
+      collections: ['pages', 'posts'],
       overrides: {
         admin: {
           group: 'Settings',
@@ -384,17 +423,10 @@ export default buildConfig({
 
     // Search Plugin - Full-text search across collections
     searchPlugin({
-      collections: ['pages', 'posts', 'archive-items', 'people', 'places', 'events', 'products', 'custom-items', 'content-types'],
+      collections: ['pages', 'posts'],
       defaultPriorities: {
         pages: 10,
         posts: 20,
-        'archive-items': 30,
-        people: 40,
-        places: 50,
-        events: 35,
-        products: 45,
-        'custom-items': 25,
-        'content-types': 5,
       },
       beforeSync: ({ originalDoc, searchDoc }) => ({
         ...searchDoc,
@@ -449,8 +481,20 @@ export default buildConfig({
   // ===========================================
   endpoints: [
     revalidateEndpoint,
+    // Reset data endpoint for admin panel
+    {
+      path: '/admin/reset-data',
+      method: 'post',
+      handler: resetDataHandler,
+    },
     // Dynamic navigation endpoint
     navigationEndpoint,
+    // Collection manager endpoint for admin UI
+    collectionManagerEndpoint,
+    // Seed data endpoints for admin panel
+    ...seedEndpoints,
+    // Collection template endpoints for admin panel
+    ...collectionTemplateEndpoints,
     // Admin tools endpoints
     ...toolsEndpoints,
     // Taxonomy filtering endpoints
