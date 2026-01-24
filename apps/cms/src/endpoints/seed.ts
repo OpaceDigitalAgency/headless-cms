@@ -583,6 +583,13 @@ export const seedContentTypeEndpoint: Endpoint = {
             }
           }
 
+          // Also delete the content-type definition to remove it from navigation
+          await payload.delete({
+            collection: 'content-types',
+            id: contentTypeDoc.id,
+            overrideAccess: true,
+          })
+
           const clearDisplayName = contentTypeDoc?.pluralLabel || contentTypeDoc?.name || template.name
           return Response.json({
             success: true,
