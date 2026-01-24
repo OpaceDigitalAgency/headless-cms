@@ -395,34 +395,6 @@ export const Settings: GlobalConfig = {
       ],
     },
   ],
-
-  // Hidden field to store SEO templates data (managed from SEO Settings page)
-  {
-  name: 'seo',
-    type: 'group',
-      admin: {
-    hidden: true,
-    },
-  fields: [
-    {
-      name: 'defaultMetaTitlePattern',
-      type: 'text',
-    },
-    {
-      name: 'defaultMetaDescription',
-      type: 'textarea',
-    },
-    {
-      name: 'titleSeparator',
-      type: 'text',
-    },
-    {
-      name: 'twitterCardType',
-      type: 'text',
-    },
-  ],
-  },
-],
 }
 
 export default Settings
