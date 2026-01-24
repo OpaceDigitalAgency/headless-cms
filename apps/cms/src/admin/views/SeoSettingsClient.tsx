@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react'
 import { Gutter } from '@payloadcms/ui'
 import SeoBulkEditor from './SeoBulkEditor'
+import SeoTemplatesTab from './SeoTemplatesTab'
 
 const SeoSettingsClient: React.FC = () => {
   const [activeTab, setActiveTab] = useState('overview')
@@ -129,11 +130,8 @@ const SeoSettingsClient: React.FC = () => {
           )}
 
           {activeTab === 'templates' && (
-            <div className="tabs-field__tab" style={{ display: 'block', padding: '2rem 0' }}>
-              <h3 style={{ marginBottom: '0.5rem', fontSize: '1rem', fontWeight: 600 }}>Templates</h3>
-              <p style={{ color: 'var(--theme-elevation-500)', fontSize: '0.875rem' }}>
-                Placeholder for global title and description templates.
-              </p>
+            <div className="tabs-field__tab" style={{ display: 'block' }}>
+              <SeoTemplatesTab />
             </div>
           )}
 

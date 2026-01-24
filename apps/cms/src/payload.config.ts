@@ -56,6 +56,7 @@ import { collectionManagerEndpoint } from './endpoints/collectionManager'
 import { toolsEndpoints } from './endpoints/tools'
 import { taxonomyEndpoints } from './endpoints/taxonomy'
 import { seoEndpoints } from './endpoints/seo'
+import { seoTemplatesEndpoints } from './endpoints/seo-templates'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -506,6 +507,7 @@ export default buildConfig({
     ...taxonomyEndpoints,
     // SEO bulk update endpoints
     ...seoEndpoints,
+    ...seoTemplatesEndpoints,
   ],
 
   // ===========================================
