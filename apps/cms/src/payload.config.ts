@@ -208,6 +208,11 @@ export default buildConfig({
           path: '/tools/search-index',
           exact: true,
         },
+        'seo-settings': {
+          Component: '/admin/views/SeoSettings',
+          path: '/seo',
+          exact: true,
+        },
       },
       // graphics: {
       //   Logo: '/components/Logo',

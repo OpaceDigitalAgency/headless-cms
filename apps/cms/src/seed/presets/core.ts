@@ -183,11 +183,13 @@ export class CoreSeeder extends BaseSeeder {
   }
 
   private async seedPlaces(): Promise<Record<string, string>> {
-    if (!this.shouldSeedCollection('places')) {
-      return {}
-    }
+    const shouldSeed = this.shouldSeedCollection('places')
 
-    this.log('Seeding places...')
+    if (shouldSeed) {
+      this.log('Seeding places...')
+    } else {
+      this.log('Fetching existing places for dependencies...')
+    }
 
     const placesData = [
       {
@@ -329,8 +331,9 @@ export class CoreSeeder extends BaseSeeder {
       if (!this.shouldSeedItem(data.slug)) {
         continue
       }
+
+      // Always check if place exists and fetch its ID
       if (await this.checkIfExists('places', data.slug)) {
-        this.log(`Place "${data.name}" already exists, skipping.`)
         const existing = await this.payload.find({
           collection: 'places',
           where: { slug: { equals: data.slug } },
@@ -342,6 +345,12 @@ export class CoreSeeder extends BaseSeeder {
         }
         continue
       }
+
+      // Only create new places if this collection should be seeded
+      if (!shouldSeed) {
+        continue
+      }
+
       const place = await this.create('places', {
         name: data.name,
         slug: data.slug,
@@ -474,11 +483,13 @@ export class CoreSeeder extends BaseSeeder {
   }
 
   private async seedPeople(places: Record<string, string>): Promise<Record<string, string>> {
-    if (!this.shouldSeedCollection('people')) {
-      return {}
-    }
+    const shouldSeed = this.shouldSeedCollection('people')
 
-    this.log('Seeding people...')
+    if (shouldSeed) {
+      this.log('Seeding people...')
+    } else {
+      this.log('Fetching existing people for dependencies...')
+    }
 
     const peopleData = [
       {
@@ -681,8 +692,9 @@ export class CoreSeeder extends BaseSeeder {
       if (!this.shouldSeedItem(data.slug)) {
         continue
       }
+
+      // Always check if person exists and fetch their ID
       if (await this.checkIfExists('people', data.slug)) {
-        this.log(`Person "${data.name}" already exists, skipping.`)
         const existing = await this.payload.find({
           collection: 'people',
           where: { slug: { equals: data.slug } },
@@ -694,6 +706,12 @@ export class CoreSeeder extends BaseSeeder {
         }
         continue
       }
+
+      // Only create new people if this collection should be seeded
+      if (!shouldSeed) {
+        continue
+      }
+
       const person = await this.create('people', {
         name: data.name,
         slug: data.slug,
