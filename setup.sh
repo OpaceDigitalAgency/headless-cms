@@ -21,6 +21,18 @@ echo -e "${BLUE}  Payload CMS Client Project Setup${NC}"
 echo -e "${BLUE}============================================${NC}"
 echo ""
 
+# Clean up any existing Docker containers and volumes from previous runs
+echo -e "${BLUE}Cleaning up Docker resources...${NC}"
+docker compose down -v 2>/dev/null || true
+# Also try to remove any orphaned volumes
+if [ -f ../.project-name ]; then
+    PROJECT_NAME_TEMP=$(cat ../.project-name | tr '[:upper:]' '[:lower:]' | tr ' ' '-')
+    VOLUME_NAME="${PROJECT_NAME_TEMP}_postgres_data"
+    docker volume rm "$VOLUME_NAME" 2>/dev/null || true
+fi
+echo -e "${GREEN}✓${NC} Docker cleanup complete"
+echo ""
+
 # Detect project name from parent directory or .project-name file
 if [ -f ../.project-name ]; then
     PROJECT_NAME=$(cat ../.project-name | tr '[:upper:]' '[:lower:]' | tr ' ' '-')
