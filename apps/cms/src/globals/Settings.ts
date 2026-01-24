@@ -396,7 +396,7 @@ export const Settings: GlobalConfig = {
     },
   ],
 
-  // Hidden field to store SEO templates data (managed from SEO Settings page)
+  // Hidden fields to store SEO data (managed from SEO Settings page)
   {
   name: 'seo',
     type: 'group',
@@ -418,6 +418,39 @@ export const Settings: GlobalConfig = {
     },
     {
       name: 'twitterCardType',
+      type: 'text',
+    },
+  ],
+  },
+{
+  name: 'seoAdvanced',
+    type: 'group',
+      admin: {
+    hidden: true,
+    },
+  fields: [
+    {
+      name: 'defaultRobotsMeta',
+      type: 'text',
+    },
+    {
+      name: 'googleSiteVerification',
+      type: 'text',
+    },
+    {
+      name: 'bingSiteVerification',
+      type: 'text',
+    },
+    {
+      name: 'facebookDomainVerification',
+      type: 'text',
+    },
+    {
+      name: 'organizationType',
+      type: 'text',
+    },
+    {
+      name: 'organizationName',
       type: 'text',
     },
   ],
