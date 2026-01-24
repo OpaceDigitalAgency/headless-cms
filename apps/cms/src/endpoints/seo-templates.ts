@@ -31,7 +31,7 @@ export const seoTemplatesSaveEndpoint: Endpoint = {
     method: 'post',
     handler: async (req) => {
         try {
-            const body = await req.json()
+            const body = req.json ? await req.json() : {}
             const { templates } = body
 
             // Save to settings global
