@@ -76,11 +76,11 @@ dev: ## Start all services in development mode (requires Docker)
 	@echo "$(CYAN)Starting development environment...$(NC)"
 	docker compose up -d postgres
 	@echo "$(CYAN)Starting CMS in development mode...$(NC)"
-	pnpm dev
+	@bash -c 'set -a; [ -f apps/cms/.env ] && source apps/cms/.env; set +a; pnpm dev'
 
 dev-cms: ## Start only the CMS in development mode
 	@echo "$(CYAN)Starting CMS development server...$(NC)"
-	pnpm --filter @repo/cms dev
+	@bash -c 'set -a; [ -f apps/cms/.env ] && source apps/cms/.env; set +a; pnpm --filter @repo/cms dev'
 
 dev-astro: ## Start only the Astro frontend in development mode
 	@echo "$(CYAN)Starting Astro development server...$(NC)"

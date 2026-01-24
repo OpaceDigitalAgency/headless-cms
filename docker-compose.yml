@@ -2,9 +2,9 @@ version: '3.8'
 
 services:
   # PostgreSQL Database with PostGIS
+  # Container name is auto-generated based on COMPOSE_PROJECT_NAME
   postgres:
     image: postgis/postgis:16-3.4
-    container_name: headless-cms-postgres
     restart: unless-stopped
     environment:
       POSTGRES_USER: ${POSTGRES_USER:-payload}
@@ -30,7 +30,6 @@ services:
       context: .
       dockerfile: ./apps/cms/Dockerfile
       target: development
-    container_name: headless-cms-payload
     restart: unless-stopped
     depends_on:
       postgres:
