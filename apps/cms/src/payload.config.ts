@@ -46,6 +46,7 @@ import { taxonomyEndpoints } from './endpoints/taxonomy'
 import { seoEndpoints } from './endpoints/seo'
 import { seoTemplatesEndpoints } from './endpoints/seo-templates'
 import { seoAdvancedEndpoints } from './endpoints/seo-advanced'
+import { versionEndpoint } from './endpoints/version'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -483,6 +484,8 @@ export default buildConfig({
     ...seoEndpoints,
     ...seoTemplatesEndpoints,
     ...seoAdvancedEndpoints,
+    // Version display endpoint
+    versionEndpoint,
   ],
 
   // ===========================================

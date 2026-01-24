@@ -4,6 +4,7 @@ import React, { useState, useEffect, useRef, useCallback } from 'react'
 import Link from 'next/link'
 import { useRouter, usePathname, useSearchParams } from 'next/navigation'
 import { ThemeToggle } from './ThemeToggle'
+import { VersionDisplay } from './VersionDisplay'
 import type { NavSection } from './navData'
 
 /**
@@ -741,6 +742,7 @@ export const TwoPanelNav: React.FC = () => {
           globalLinks={globalLinks}
           collectionSearchConfig={collectionSearchConfig}
         />
+        <VersionDisplay />
         <button
           type="button"
           className={`ra-top-nav__density ${isCompact ? 'ra-top-nav__density--active' : ''}`}
