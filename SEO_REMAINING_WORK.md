@@ -1,249 +1,133 @@
-# SEO Settings - Remaining Work
+# SEO Remaining Work
 
-## Status: 90% Complete ✅
+## ⚠️ CRITICAL: Settings Schema Issues (2026-01-24)
 
-All critical SEO Settings features are implemented and working. The admin panel loads successfully. Only 2 optional items remain.
+### Problem
+The Settings.ts schema had a **critical syntax error** that broke Railway deployments:
+- SEO field groups (`seo` and `seoAdvanced`) were placed **outside** the fields array
+- This caused webpack compilation errors: "Unexpected token `{`"
 
----
-
-## ✅ What's Working Now
-
-### 1. Bulk SEO Editor (Fully Functional)
-- ✅ Editable H1 and Slug fields
-- ✅ Type dropdown shows all content types
-- ✅ Auto-generate buttons for Title & Description
-- ✅ Red "Missing" warnings for empty fields
-- ✅ Green checkmarks for ideal character counts
-- ✅ Orange warnings for suboptimal ranges
-- ✅ Save all changes functionality
-
-### 2. Templates Tab (UI Complete, Data Not Persisting)
-- ✅ Form renders correctly
-- ✅ All fields functional (meta title pattern, separator, description, Twitter card)
-- ⚠️ **Data doesn't save** - requires Settings.ts fix below
-
-### 3. Advanced Tab (UI Complete, Data Not Persisting)
-- ✅ Form renders correctly
-- ✅ All fields functional (verification codes, robots meta, organization schema)
-- ⚠️ **Data doesn't save** - requires Settings.ts fix below
-
-### 4. API Endpoints
-- ✅ `/api/admin/seo/content` - Bulk editor data
-- ✅ `/api/admin/seo/content/:id` - Single item update
-- ✅ `/api/admin/seo/content/bulk` - Bulk save
-- ✅ `/api/admin/seo/templates` - Templates GET/POST
-- ✅ `/api/admin/seo/advanced` - Advanced GET/POST
-
----
-
-## ⚠️ Remaining Items
-
-### 1. Fix Settings.ts to Store SEO Data (CRITICAL for Templates/Advanced tabs)
-
-**Problem**: Every attempt to add `seo` and `seoAdvanced` fields to Settings.ts produces syntax errors due to indentation issues.
-
-**Files to Edit**:
-- `apps/cms/src/globals/Settings.ts`
-
-**What to Add**: Add these two field objects inside the `fields: [` array (after line 397, before the closing `],`):
-
+### Fix Applied
+**Moved SEO groups into the tabs array as a new "SEO" tab:**
 ```typescript
-  {
-    name: 'seo',
-    type: 'group',
-    admin: {
-      hidden: true,
-    },
-    fields: [
-      { name: 'defaultMetaTitlePattern', type: 'text' },
-      { name: 'defaultMetaDescription', type: 'textarea' },
-      { name: 'titleSeparator', type: 'text' },
-      { name: 'twitterCardType', type: 'text' },
-    ],
-  },
-  {
-    name: 'seoAdvanced',
-    type: 'group',
-    admin: {
-      hidden: true,
-    },
-    fields: [
-      { name: 'defaultRobotsMeta', type: 'text' },
-      { name: 'googleSiteVerification', type: 'text' },
-      { name: 'bingSiteVerification', type: 'text' },
-      { name: 'facebookDomainVerification', type: 'text' },
-      { name: 'organizationType', type: 'text' },
-      { name: 'organizationName', type: 'text' },
-    ],
-  },
-```
-
-**CRITICAL**: 
-- Must use EXACTLY 2 spaces for indentation
-- Must be placed INSIDE the `fields: [` array
-- Must maintain consistent spacing (look at lines 51-395 for reference)
-
-**How to Verify**: 
-```bash
-cd apps/cms
-npx tsc --noEmit src/globals/Settings.ts
-# Should show no errors
-```
-
-**After Fix**: Templates and Advanced tabs will save/load data correctly from Settings global.
-
----
-
-### 2. Implement 301 Redirects (OPTIONAL Enhancement)
-
-**Goal**: Automatically create 301 redirects when slugs are changed in the bulk editor.
-
-**What's Needed**:
-
-#### A. Create Redirects Collection
-Create `apps/cms/src/collections/Redirects.ts`:
-
-```typescript
-import type { CollectionConfig } from 'payload'
-
-export const Redirects: CollectionConfig = {
-  slug: 'redirects',
-  admin: {
-    useAsTitle: 'from',
-    group: 'SEO',
-    defaultColumns: ['from', 'to', 'type', 'createdAt'],
-  },
-  access: {
-    read: () => true,
-    create: ({ req: { user } }) => user?.role === 'admin',
-    update: ({ req: { user } }) => user?.role === 'admin',
-    delete: ({ req: { user } }) => user?.role === 'admin',
-  },
+{
+  label: 'SEO',
   fields: [
     {
-      name: 'from',
+      name: 'seo',
+      type: 'group',
+      admin: { hidden: true },
+      fields: [...]
+    },
+    {
+      name: 'seoAdvanced',
+      type: 'group',
+      admin: { hidden: true },
+      fields: [...]
+    }
+  ]
+}
+```
+
+### Features Temporarily Disabled
+
+#### 1. **defaultMeta Image Support**
+- **What broke:** Frontend pages referenced `settings.defaultMeta` which no longer exists
+- **Files affected:**
+  - `apps/cms/src/app/(frontend)/page.tsx`
+  - `apps/cms/src/app/(frontend)/[slug]/page.tsx`
+  - `apps/cms/src/app/(frontend)/archive-items/[slug]/page.tsx`
+- **Fix applied:** Removed all `settings.defaultMeta` references
+- **To restore:** Need to add a proper `defaultMeta` group with image field to Settings schema
+
+#### 2. **Custom robots.txt Support**
+- **What broke:** `apps/cms/src/app/(frontend)/robots.ts` referenced `settings.robotsTxt`
+- **Fix applied:** Commented out the custom robotsTxt logic (lines 20-27)
+- **To restore:** 
+  1. Add `robotsTxt` field to Settings schema (likely in SEO or Advanced tab)
+  2. Uncomment the logic in `robots.ts`
+
+### Schema Restructure Summary
+
+**Before (BROKEN):**
+```typescript
+fields: [
+  { type: 'tabs', tabs: [...] }
+],
+{ name: 'seo', ... },      // ❌ Outside fields array!
+{ name: 'seoAdvanced', ... } // ❌ Outside fields array!
+```
+
+**After (WORKING):**
+```typescript
+fields: [
+  {
+    type: 'tabs',
+    tabs: [
+      ...existing tabs,
+      { label: 'SEO', fields: [seo, seoAdvanced] }
+    ]
+  }
+]
+```
+
+### Other Fixes
+- Fixed `CustomItems.ts`: `BeforeList` → `beforeList` (Payload naming convention)
+- Fixed `seo-templates.ts`: Added null check for `req.json()`
+
+---
+
+## Next Steps to Fully Restore SEO Features
+
+### 1. Add Missing Fields to Settings Schema
+Add to the appropriate tab in `apps/cms/src/globals/Settings.ts`:
+
+```typescript
+{
+  name: 'defaultMeta',
+  type: 'group',
+  label: 'Default Meta',
+  fields: [
+    {
+      name: 'title',
       type: 'text',
-      required: true,
-      unique: true,
-      admin: {
-        description: 'The old URL path (e.g., /old-page)',
-      },
+      label: 'Default Meta Title',
     },
     {
-      name: 'to',
-      type: 'text',
-      required: true,
-      admin: {
-        description: 'The new URL path (e.g., /new-page)',
-      },
+      name: 'description',
+      type: 'textarea',
+      label: 'Default Meta Description',
     },
     {
-      name: 'type',
-      type: 'select',
-      required: true,
-      defaultValue: '301',
-      options: [
-        { label: '301 (Permanent)', value: '301' },
-        { label: '302 (Temporary)', value: '302' },
-      ],
-    },
-    {
-      name: 'enabled',
-      type: 'checkbox',
-      defaultValue: true,
+      name: 'image',
+      type: 'upload',
+      relationTo: 'media',
+      label: 'Default OG Image',
     },
   ],
+},
+{
+  name: 'robotsTxt',
+  type: 'textarea',
+  label: 'Custom robots.txt',
+  admin: {
+    description: 'Custom robots.txt content (advanced users only)',
+  },
 }
 ```
 
-#### B. Register Redirects Collection
-In `apps/cms/src/payload.config.ts`:
-```typescript
-import { Redirects } from './collections/Redirects'
+### 2. Restore Frontend Code
+Once fields are added:
+1. Uncomment robotsTxt logic in `apps/cms/src/app/(frontend)/robots.ts`
+2. Add back defaultMeta image handling in frontend pages if needed
 
-// Add to collections array:
-collections: [
-  // ... existing collections
-  Redirects,
-],
+### 3. Test Build Before Deploying
+```bash
+pnpm --filter @repo/cms build
 ```
 
-#### C. Track Slug Changes in Bulk Editor
-Modify `apps/cms/src/admin/views/SeoBulkEditor.tsx` around line 300-350 (in the bulk save function):
-
-```typescript
-// Before updating, store old slug
-const oldSlug = item.slug
-const newSlug = draft.slug
-
-// After successful update, create redirect if slug changed
-if (oldSlug && newSlug && oldSlug !== newSlug) {
-  try {
-    await fetch('/api/redirects', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        from: oldSlug,
-        to: newSlug,
-        type: '301',
-        enabled: true,
-      }),
-    })
-  } catch (err) {
-    console.warn('Failed to create redirect:', err)
-  }
-}
-```
-
-#### D. Frontend Middleware (Optional)
-To actually handle the redirects on the frontend, you'd need to add middleware in the Astro app to check the Redirects collection and perform redirects. This is beyond CMS scope but would complete the feature.
-
 ---
 
-## Testing Checklist
+## Original SEO Work Items
 
-Once Settings.ts is fixed:
-
-- [ ] Navigate to `/admin/seo`
-- [ ] Click "Templates" tab
-- [ ] Fill in meta title pattern, separator, etc.
-- [ ] Click "Save Changes"
-- [ ] Refresh page - verify data persists
-- [ ] Click "Advanced" tab
-- [ ] Fill in verification codes
-- [ ] Click "Save Changes"
-- [ ] Refresh page - verify data persists
-- [ ] Go to "Bulk Update" tab
-- [ ] Edit some meta titles/descriptions
-- [ ] Click "Save All"
-- [ ] Verify changes saved
-
----
-
-## Files Reference
-
-**SEO Settings Components**:
-- `apps/cms/src/admin/views/SeoSettings.tsx` - Main container
-- `apps/cms/src/admin/views/SeoSettingsClient.tsx` - Tabs wrapper
-- `apps/cms/src/admin/views/SeoBulkEditor.tsx` - Bulk editor
-- `apps/cms/src/admin/views/SeoTemplatesTab.tsx` - Templates form
-- `apps/cms/src/admin/views/SeoAdvancedTab.tsx` - Advanced form
-
-**API Endpoints**:
-- `apps/cms/src/endpoints/seo.ts` - Bulk editor endpoints
-- `apps/cms/src/endpoints/seo-templates.ts` - Templates endpoints
-- `apps/cms/src/endpoints/seo-advanced.ts` - Advanced endpoints
-
-**Configuration**:
-- `apps/cms/src/payload.config.ts` - Route & endpoint registration
-- `apps/cms/src/globals/Settings.ts` - **NEEDS FIX** for seo fields
-
----
-
-## Summary
-
-**To complete 100%**:
-1. Manually add the seo fields to Settings.ts (5 minutes)
-2. (Optional) Implement 301 redirects system (30-60 minutes)
-
-**Everything else is done and working!** 🎉
+*(Keep existing items below this section)*
