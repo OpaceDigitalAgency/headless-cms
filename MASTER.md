@@ -209,7 +209,60 @@ To ensure stability and safe development, especially by AI agents, the project i
 *   ### **[docs/VERSIONING_POLICY.md](./docs/VERSIONING_POLICY.md)**
     > This document outlines the project's versioning strategy, dependency management, and release process.
 
-## 10. Appendices
+## 10. Safe Branch Switching
+
+**⚠️ CRITICAL:** Never use `git checkout` directly when the dev server is running. This causes the server to reload with different code, leading to errors and confusion.
+
+### The Problem
+
+Switching branches while `make dev` is running causes:
+- Runtime errors from code/database mismatches
+- Collection errors (main branch doesn't have experimental collections)
+- Wasted time debugging phantom issues
+
+### The Solution
+
+**Always use the safe checkout command:**
+
+```bash
+# Switch to main branch
+make checkout BRANCH=main
+
+# Switch to development branch
+make checkout BRANCH=development
+```
+
+The script will:
+1. Check if dev server is running
+2. Block the switch if it is
+3. Show you how to proceed safely
+
+### Safe Workflow
+
+```bash
+# 1. Stop dev server (Ctrl+C)
+# 2. Switch branches
+make checkout BRANCH=main
+# 3. Restart dev server
+make dev
+```
+
+### For AI Agents
+
+**Instead of switching branches, use:**
+```bash
+# View file from another branch
+git show main:path/to/file.ts
+
+# Compare branches
+git diff main development -- path/to/file.ts
+```
+
+See [docs/SAFE_BRANCH_SWITCHING.md](./docs/SAFE_BRANCH_SWITCHING.md) for complete guide.
+
+---
+
+## 11. Appendices
 
 *For a complete, up-to-date list of all collections, globals, blocks, and commands, please refer to the source code and the `Makefile`.* The information provided in this master guide is intended to be a comprehensive starting point.
 
