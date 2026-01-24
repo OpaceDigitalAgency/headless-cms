@@ -81,12 +81,16 @@ const SeoBulkEditor: React.FC = () => {
       const draft = edited[id]
       if (!baseline || !draft) return Boolean(draft)
 
+      const nextH1 = normalizeEmpty(draft.h1 ?? baseline.h1)
+      const nextSlug = normalizeEmpty(draft.slug ?? baseline.slug)
       const nextTitle = normalizeEmpty(draft.metaTitle ?? baseline.metaTitle)
       const nextDesc = normalizeEmpty(draft.metaDescription ?? baseline.metaDescription)
       const nextType = draft.type ?? baseline.type
 
       return (
-        nextTitle !== normalizeEmpty(baseline.metaTitle)
+        nextH1 !== normalizeEmpty(baseline.h1)
+        || nextSlug !== normalizeEmpty(baseline.slug)
+        || nextTitle !== normalizeEmpty(baseline.metaTitle)
         || nextDesc !== normalizeEmpty(baseline.metaDescription)
         || nextType !== baseline.type
       )
@@ -487,19 +491,30 @@ const SeoBulkEditor: React.FC = () => {
           const titleCount = metaTitle?.length || 0
           const descCount = metaDescription?.length || 0
           const collection = getCollectionFromId(item.id)
-          const canEditType = collection === 'custom-items'
-          const typeOptions = canEditType
-            ? Array.from(new Set([typeValue, ...customTypeOptions]))
-            : [typeValue]
+          // Allow all items to change type, not just custom-items
+          const typeOptions = Array.from(new Set([typeValue, ...types]))
           const dirty = isDirty(item.id)
 
           return (
             <div key={item.id} className={`ra-seo-row${dirty ? ' is-dirty' : ''}`}>
               <div className="ra-seo-cell">
-                <span>{item.h1}</span>
+                <input
+                  type="text"
+                  className="ra-seo-input"
+                  value={draft.h1 ?? item.h1 ?? ''}
+                  onChange={(event) => updateDraft(item.id, { h1: event.target.value })}
+                  placeholder="H1 Title"
+                />
               </div>
               <div className="ra-seo-cell" title={item.updatedAt ? `Last updated: ${formatDateTime(item.updatedAt)}` : undefined}>
-                <code>{item.slug}</code>
+                <input
+                  type="text"
+                  className="ra-seo-input"
+                  value={draft.slug ?? item.slug ?? ''}
+                  onChange={(event) => updateDraft(item.id, { slug: event.target.value })}
+                  placeholder="/slug"
+                  style={{ fontFamily: 'monospace', fontSize: '0.85em' }}
+                />
               </div>
               <div className="ra-seo-cell">
                 <input
@@ -528,7 +543,6 @@ const SeoBulkEditor: React.FC = () => {
                   className="ra-seo-select"
                   value={typeValue}
                   onChange={(event) => updateDraft(item.id, { type: event.target.value })}
-                  disabled={!canEditType}
                 >
                   {typeOptions.map((type) => (
                     <option key={type} value={type}>
