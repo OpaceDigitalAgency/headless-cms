@@ -199,6 +199,22 @@ export class BlogSeeder extends BaseSeeder {
     }
   }
 
+  public async seedItem(collection: string, slug: string): Promise<void> {
+    switch (collection) {
+      case 'posts':
+        await this.seedSinglePost(slug)
+        return
+      case 'pages':
+        await this.seedSinglePage(slug)
+        return
+      case 'categories':
+        await this.seedSingleCategory(slug)
+        return
+      default:
+        this.log(`No seed item handler for collection: ${collection}`)
+    }
+  }
+
   private async seedCategories(): Promise<Record<string, string>> {
     if (!this.shouldSeedCollection('categories')) {
       return {}
@@ -1112,6 +1128,216 @@ export class BlogSeeder extends BaseSeeder {
     await this.updateGlobal('settings', {
       siteName: 'My Blog',
       siteDescription: 'A blog about technology, design, business, and lifestyle.',
+    })
+  }
+
+  private async seedSinglePost(slug: string): Promise<void> {
+    this.log(`Seeding single post: ${slug}`)
+
+    // Get admin user to use as author
+    const adminId = await this.getOrCreateAdminUser()
+
+    // Ensure we have categories
+    const categories = await this.seedCategories()
+
+    // Create placeholder featured images
+    const heroImage = await this.createPlaceholderMedia('post-hero.png', 'Standard article hero image')
+    const gridImage = await this.createPlaceholderMedia('post-grid.png', 'Feature story grid layout')
+    const guideImage = await this.createPlaceholderMedia('post-guide.png', 'In-depth guide image')
+    const caseStudyImage = await this.createPlaceholderMedia('post-case-study.png', 'Case study timeline')
+    const newsImage = await this.createPlaceholderMedia('post-news.png', 'News brief media gallery')
+
+    // Define all posts
+    const allPosts = [
+      {
+        title: 'Standard Article with Hero',
+        slug: 'standard-article-with-hero',
+        excerpt: 'Classic single-column layout with hero image, rich text content, and call-to-action.',
+        category: 'technology',
+        featuredImage: heroImage?.id,
+        content: createRichTextParagraphs([
+          'This is a standard article layout showcasing the classic single-column design pattern.',
+          'Perfect for blog posts, news articles, and long-form content that benefits from a clean, focused reading experience.',
+          'The hero section at the top draws attention, whilst the rich text content below provides the main narrative.',
+          'This layout is ideal for articles that prioritise readability and engagement with minimal distractions.',
+        ]),
+        contentBlocks: [
+          {
+            blockType: 'cta',
+            heading: 'Ready to Get Started?',
+            description: 'Join thousands of readers who trust our content.',
+            links: [{ label: 'Subscribe Now', url: '/subscribe', variant: 'primary' }],
+          },
+        ],
+      },
+      {
+        title: 'Feature Story with Grid Layout',
+        slug: 'feature-story-with-grid-layout',
+        excerpt: 'Multi-column layout showcasing grid blocks, image galleries, and featured content sections.',
+        category: 'design',
+        featuredImage: gridImage?.id,
+        content: createRichTextParagraphs([
+          'Feature stories benefit from dynamic layouts that break up content into digestible sections.',
+          'Grid-based designs allow for visual variety whilst maintaining structure and hierarchy.',
+          'This approach works well for visual storytelling, product showcases, and content-rich articles.',
+        ]),
+        contentBlocks: [
+          {
+            blockType: 'grid',
+            heading: 'Key Features',
+            columns: 3,
+            items: [
+              {
+                heading: 'Responsive Design',
+                description: 'Adapts seamlessly to any screen size',
+              },
+              {
+                heading: 'Visual Hierarchy',
+                description: 'Guides readers through content naturally',
+              },
+              {
+                heading: 'Flexible Layouts',
+                description: 'Mix and match content types easily',
+              },
+            ],
+          },
+        ],
+      },
+      {
+        title: 'In-Depth Guide with FAQ Section',
+        slug: 'in-depth-guide-with-faq-section',
+        excerpt: 'Comprehensive article with table of contents, multiple sections, and FAQ block for common questions.',
+        category: 'tutorials',
+        featuredImage: guideImage?.id,
+        content: createRichTextParagraphs([
+          'Comprehensive guides require thoughtful structure to help readers navigate complex topics.',
+          'Breaking content into clear sections with headings makes information easier to scan and digest.',
+          'Adding an FAQ section addresses common questions and improves the overall user experience.',
+        ]),
+        contentBlocks: [
+          {
+            blockType: 'faq',
+            heading: 'Frequently Asked Questions',
+            items: [
+              {
+                question: 'How do I get started?',
+                answer: createRichText('Begin by reading through the introduction and following the step-by-step instructions.'),
+              },
+              {
+                question: 'What if I get stuck?',
+                answer: createRichText('Check our troubleshooting section or reach out to our support team for assistance.'),
+              },
+            ],
+          },
+        ],
+      },
+      {
+        title: 'Case Study with Timeline',
+        slug: 'case-study-with-timeline',
+        excerpt: 'Narrative-driven post with timeline block showing project progression and key milestones.',
+        category: 'case-studies',
+        featuredImage: caseStudyImage?.id,
+        content: createRichTextParagraphs([
+          'Case studies tell the story of real-world projects and their outcomes.',
+          'Timeline blocks help visualise project progression and highlight key milestones.',
+          'This format is perfect for showcasing client work, project retrospectives, and success stories.',
+        ]),
+        contentBlocks: [
+          {
+            blockType: 'timeline',
+            heading: 'Project Timeline',
+            items: [
+              { date: '2024-01', title: 'Discovery Phase', description: 'Initial research and planning' },
+              { date: '2024-03', title: 'Design Sprint', description: 'Wireframes and prototypes' },
+              { date: '2024-06', title: 'Development', description: 'Building and testing' },
+              { date: '2024-09', title: 'Launch', description: 'Going live and monitoring' },
+            ],
+          },
+        ],
+      },
+      {
+        title: 'News Brief with Media Gallery',
+        slug: 'news-brief-with-media-gallery',
+        excerpt: 'Concise update with embedded media gallery, multiple images, and quick-reference callouts.',
+        category: 'news',
+        featuredImage: newsImage?.id,
+        content: createRichTextParagraphs([
+          'News briefs deliver timely updates in a concise, scannable format.',
+          'Media galleries add visual context and allow readers to explore related images.',
+          'Callout blocks highlight key information and important takeaways.',
+        ]),
+        contentBlocks: [
+          {
+            blockType: 'callout',
+            type: 'info',
+            content: createRichText('This is a sample callout highlighting important information from the news brief.'),
+          },
+        ],
+      },
+    ]
+
+    // Find the post to seed
+    const postToSeed = allPosts.find(p => p.slug === slug)
+    if (!postToSeed) {
+      this.log(`Post with slug "${slug}" not found in seed data`)
+      return
+    }
+
+    // Check if it already exists
+    if (await this.checkIfExists('posts', slug)) {
+      this.log(`Post "${postToSeed.title}" already exists, skipping.`)
+      return
+    }
+
+    // Create the post
+    this.log(`Creating post "${postToSeed.title}" with category slug "${postToSeed.category}" -> ID "${categories[postToSeed.category]}"`)
+    await this.create('posts', {
+      title: postToSeed.title,
+      slug: postToSeed.slug,
+      excerpt: postToSeed.excerpt,
+      content: postToSeed.content,
+      contentBlocks: postToSeed.contentBlocks,
+      featuredImage: postToSeed.featuredImage,
+      categories: categories[postToSeed.category] ? [categories[postToSeed.category]] : [],
+      author: adminId,
+      _status: 'published',
+      publishedAt: new Date().toISOString(),
+    })
+  }
+
+  private async seedSinglePage(slug: string): Promise<void> {
+    this.log(`Seeding single page: ${slug}`)
+
+    // For now, just seed all pages since we only have a few
+    await this.seedPages()
+  }
+
+  private async seedSingleCategory(slug: string): Promise<void> {
+    this.log(`Seeding single category: ${slug}`)
+
+    const categoryData = [
+      { name: 'Technology', slug: 'technology', description: 'Latest tech news and insights' },
+      { name: 'Design', slug: 'design', description: 'Design trends and best practices' },
+      { name: 'Tutorials', slug: 'tutorials', description: 'Step-by-step guides and how-tos' },
+      { name: 'Case Studies', slug: 'case-studies', description: 'Real-world project examples' },
+      { name: 'News', slug: 'news', description: 'Company updates and announcements' },
+    ]
+
+    const categoryToSeed = categoryData.find(c => c.slug === slug)
+    if (!categoryToSeed) {
+      this.log(`Category with slug "${slug}" not found in seed data`)
+      return
+    }
+
+    if (await this.checkIfExists('categories', slug)) {
+      this.log(`Category "${categoryToSeed.name}" already exists, skipping.`)
+      return
+    }
+
+    await this.create('categories', {
+      title: categoryToSeed.name,
+      slug: categoryToSeed.slug,
+      description: categoryToSeed.description,
     })
   }
 }

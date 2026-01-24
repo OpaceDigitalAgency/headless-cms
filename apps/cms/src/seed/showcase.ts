@@ -189,19 +189,19 @@ async function ensureSamplePosts(payload: Payload) {
   // Create sample posts for the Archive block to display
   const posts = [
     {
-      title: 'Getting Started with Headless CMS',
+      title: 'Getting Started with Headless CMS (Blocks Showcase)',
       slug: 'getting-started-headless-cms',
       excerpt: 'Learn the fundamentals of headless CMS architecture and why it matters for modern web development.',
       imageKey: 'postImage1' as const,
     },
     {
-      title: 'Building Scalable Content Models',
+      title: 'Building Scalable Content Models (Blocks Showcase)',
       slug: 'building-scalable-content-models',
       excerpt: 'Best practices for designing flexible and maintainable content structures that grow with your needs.',
       imageKey: 'postImage2' as const,
     },
     {
-      title: 'Optimising Performance with Static Generation',
+      title: 'Optimising Performance with Static Generation (Blocks Showcase)',
       slug: 'optimising-performance-static-generation',
       excerpt: 'Discover how static site generation can dramatically improve your site speed and user experience.',
       imageKey: 'postImage3' as const,
