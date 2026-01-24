@@ -42,14 +42,25 @@ POSTGRES_CONTAINER="${PROJECT_NAME}-postgres"
 POSTGRES_DB="${PROJECT_NAME}_db"
 POSTGRES_PORT_BASE=5432
 POSTGRES_PORT=$POSTGRES_PORT_BASE
+CMS_PORT_BASE=3000
+CMS_PORT=$CMS_PORT_BASE
 
-# Find available port if 5432 is taken
+# Find available database port if 5432 is taken
 while lsof -Pi :$POSTGRES_PORT -sTCP:LISTEN -t >/dev/null 2>&1 ; do
     POSTGRES_PORT=$((POSTGRES_PORT + 1))
 done
 
 if [ $POSTGRES_PORT -ne $POSTGRES_PORT_BASE ]; then
-    echo -e "${YELLOW}⚠${NC}  Port 5432 is in use, using port ${POSTGRES_PORT} instead"
+    echo -e "${YELLOW}⚠${NC}  Database port 5432 is in use, using port ${POSTGRES_PORT} instead"
+fi
+
+# Find available CMS port if 3000 is taken
+while lsof -Pi :$CMS_PORT -sTCP:LISTEN -t >/dev/null 2>&1 ; do
+    CMS_PORT=$((CMS_PORT + 1))
+done
+
+if [ $CMS_PORT -ne $CMS_PORT_BASE ]; then
+    echo -e "${YELLOW}⚠${NC}  CMS port 3000 is in use, using port ${CMS_PORT} instead"
 fi
 
 # Step 1: Install dependencies
@@ -95,16 +106,16 @@ DATABASE_URL=postgresql://payload:payload_secret@localhost:${POSTGRES_PORT}/${PO
 PAYLOAD_SECRET=${PAYLOAD_SECRET}
 
 # Public URL of the CMS server
-PAYLOAD_PUBLIC_SERVER_URL=http://localhost:3000
+PAYLOAD_PUBLIC_SERVER_URL=http://localhost:${CMS_PORT}
 
 # -------------------------------------------
 # Frontend Configuration (REQUIRED)
 # -------------------------------------------
 # Public URL of the frontend site
-NEXT_PUBLIC_SITE_URL=http://localhost:3000
+NEXT_PUBLIC_SITE_URL=http://localhost:${CMS_PORT}
 
 # Internal CMS URL for server-side requests
-CMS_URL=http://localhost:3000
+CMS_URL=http://localhost:${CMS_PORT}
 
 # Secret for on-demand revalidation (ISR)
 REVALIDATION_SECRET=${REVALIDATION_SECRET}
@@ -128,6 +139,12 @@ POSTGRES_PASSWORD=payload_secret
 POSTGRES_DB=${POSTGRES_DB}
 POSTGRES_PORT=${POSTGRES_PORT}
 COMPOSE_PROJECT_NAME=${PROJECT_NAME}
+
+# -------------------------------------------
+# CMS Server Port
+# -------------------------------------------
+# Auto-assigned to avoid conflicts with other running projects
+CMS_PORT=${CMS_PORT}
 
 # -------------------------------------------
 # Email Configuration (Optional)
@@ -189,7 +206,8 @@ echo ""
 echo -e "${BLUE}Project Configuration:${NC}"
 echo -e "  Name: ${YELLOW}${PROJECT_NAME}${NC}"
 echo -e "  Database: ${YELLOW}${POSTGRES_DB}${NC}"
-echo -e "  Port: ${YELLOW}${POSTGRES_PORT}${NC}"
+echo -e "  Database Port: ${YELLOW}${POSTGRES_PORT}${NC}"
+echo -e "  CMS Port: ${YELLOW}${CMS_PORT}${NC}"
 echo -e "  Container: ${YELLOW}${PROJECT_NAME}-postgres-1${NC}"
 echo ""
 echo -e "${BLUE}Next steps:${NC}"
@@ -198,7 +216,7 @@ echo -e "  1. Start the development server:"
 echo -e "     ${YELLOW}make dev${NC}"
 echo ""
 echo -e "  2. Open your browser:"
-echo -e "     ${YELLOW}http://localhost:3000/admin${NC}"
+echo -e "     ${YELLOW}http://localhost:${CMS_PORT}/admin${NC}"
 echo ""
 echo -e "  3. Create your first admin user"
 echo ""
