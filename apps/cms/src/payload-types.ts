@@ -10071,11 +10071,6 @@ export interface Setting {
     newsletter?: boolean | null;
     multiLanguage?: boolean | null;
   };
-  defaultMeta?: {
-    title?: string | null;
-    description?: string | null;
-    image?: (number | null) | Media;
-  };
   socialProfiles?:
     | {
         platform: 'facebook' | 'twitter' | 'instagram' | 'linkedin' | 'youtube' | 'tiktok' | 'github';
@@ -10295,13 +10290,6 @@ export interface SettingsSelect<T extends boolean = true> {
         comments?: T;
         newsletter?: T;
         multiLanguage?: T;
-      };
-  defaultMeta?:
-    | T
-    | {
-        title?: T;
-        description?: T;
-        image?: T;
       };
   socialProfiles?:
     | T

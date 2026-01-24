@@ -1417,6 +1417,7 @@
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
+  padding: 1.5rem 0 2rem;
 }
 
 .ra-seo-settings__header h1 {
@@ -1460,19 +1461,15 @@
 }
 
 .ra-seo-overview {
-  display: grid;
-  gap: 1rem;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
 }
 
 .ra-seo-card {
-  background: var(--theme-elevation-0);
-  border: 1px solid var(--theme-elevation-150);
-  border-radius: var(--border-radius-lg);
-  padding: 1rem;
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: 0.5rem;
 }
 
 .ra-seo-card h2 {
@@ -1483,7 +1480,7 @@
 
 .ra-seo-card p {
   margin: 0;
-  font-size: 0.8rem;
+  font-size: 0.85rem;
   color: var(--theme-elevation-500);
 }
 

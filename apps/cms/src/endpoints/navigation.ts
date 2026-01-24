@@ -294,13 +294,19 @@ export const navigationEndpoint: Endpoint = {
 
     const settingsSection = navSections.find((section) => section.id === 'settings')
     if (settingsSection && req.user?.role === 'admin') {
-      settingsSection.items.unshift({
+      const seoItem = {
         label: 'SEO Settings',
         href: '/admin/seo',
         icon: 'search',
         slug: 'seo-settings',
         _order: -2,
-      })
+      }
+      const settingsIndex = settingsSection.items.findIndex((item) => item.slug === 'settings' || item.href === '/admin/globals/settings')
+      if (settingsIndex >= 0) {
+        settingsSection.items.splice(settingsIndex + 1, 0, seoItem)
+      } else {
+        settingsSection.items.push(seoItem)
+      }
     }
 
     // Build globals list for search + navigation

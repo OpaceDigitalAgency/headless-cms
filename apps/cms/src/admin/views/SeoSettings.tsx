@@ -1,5 +1,6 @@
 import React from 'react'
 import { DefaultTemplate, type DefaultTemplateProps } from '@payloadcms/next/templates'
+import { Gutter } from '@payloadcms/ui'
 import type { VisibleEntities } from 'payload'
 import SeoSettingsClient from './SeoSettingsClient'
 
@@ -14,13 +15,13 @@ export const SeoSettings: React.FC<SeoSettingsProps> = (props) => {
   const visibleEntities = initPageResult?.visibleEntities ?? propsVisibleEntities
 
   const content = (
-    <div className="ra-seo-settings">
+    <Gutter className="ra-seo-settings">
       <div className="ra-seo-settings__header">
         <h1>SEO Settings</h1>
         <p>Manage SEO templates, bulk metadata updates, and advanced defaults.</p>
       </div>
       <SeoSettingsClient />
-    </div>
+    </Gutter>
   )
 
   if (!visibleEntities) {

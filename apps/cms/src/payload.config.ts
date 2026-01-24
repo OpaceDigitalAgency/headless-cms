@@ -211,6 +211,7 @@ export default buildConfig({
         'seo-settings': {
           Component: '/admin/views/SeoSettings',
           path: '/seo',
+          exact: true,
         },
       },
       // graphics: {

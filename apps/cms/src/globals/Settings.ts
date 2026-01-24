@@ -256,60 +256,6 @@ export const Settings: GlobalConfig = {
           ],
         },
         {
-          label: 'SEO',
-          fields: [
-            {
-              name: 'defaultMeta',
-              type: 'group',
-              label: 'Default Meta Tags',
-              fields: [
-                {
-                  name: 'title',
-                  type: 'text',
-                  label: 'Default Title',
-                },
-                {
-                  name: 'description',
-                  type: 'textarea',
-                  label: 'Default Description',
-                },
-                {
-                  name: 'image',
-                  type: 'upload',
-                  relationTo: 'media',
-                  label: 'Default OG Image',
-                },
-              ],
-            },
-            {
-              name: 'googleAnalyticsId',
-              type: 'text',
-              label: 'Google Analytics ID',
-              admin: {
-                description: 'e.g., G-XXXXXXXXXX',
-              },
-            },
-            {
-              name: 'googleTagManagerId',
-              type: 'text',
-              label: 'Google Tag Manager ID',
-              admin: {
-                description: 'e.g., GTM-XXXXXXX',
-              },
-            },
-            {
-              name: 'robotsTxt',
-              type: 'code',
-              label: 'robots.txt',
-              defaultValue: `User-agent: *\nAllow: /\n\nSitemap: https://yoursite.com/sitemap.xml`,
-              admin: {
-                language: 'plaintext',
-                description: 'Custom robots.txt content',
-              },
-            },
-          ],
-        },
-        {
           label: 'Social',
           fields: [
             {
