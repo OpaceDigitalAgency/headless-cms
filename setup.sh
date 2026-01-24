@@ -46,7 +46,7 @@ CMS_PORT_BASE=3000
 CMS_PORT=$CMS_PORT_BASE
 
 # Find available database port if 5432 is taken
-while lsof -Pi :$POSTGRES_PORT -sTCP:LISTEN -t >/dev/null 2>&1 ; do
+while netstat -tuln 2>/dev/null | grep -q ":$POSTGRES_PORT " || lsof -Pi :$POSTGRES_PORT -sTCP:LISTEN -t >/dev/null 2>&1 ; do
     POSTGRES_PORT=$((POSTGRES_PORT + 1))
 done
 
@@ -55,7 +55,7 @@ if [ $POSTGRES_PORT -ne $POSTGRES_PORT_BASE ]; then
 fi
 
 # Find available CMS port if 3000 is taken
-while lsof -Pi :$CMS_PORT -sTCP:LISTEN -t >/dev/null 2>&1 ; do
+while netstat -tuln 2>/dev/null | grep -q ":$CMS_PORT " || lsof -Pi :$CMS_PORT -sTCP:LISTEN -t >/dev/null 2>&1 ; do
     CMS_PORT=$((CMS_PORT + 1))
 done
 
