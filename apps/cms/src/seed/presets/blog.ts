@@ -735,12 +735,32 @@ export class BlogSeeder extends BaseSeeder {
     // Get admin user to use as author
     const adminId = await this.getOrCreateAdminUser()
 
-    // Create placeholder featured images
-    const heroImage = await this.createPlaceholderMedia('post-hero.png', 'Standard article hero image')
-    const gridImage = await this.createPlaceholderMedia('post-grid.png', 'Feature story grid layout')
-    const guideImage = await this.createPlaceholderMedia('post-guide.png', 'In-depth guide image')
-    const caseStudyImage = await this.createPlaceholderMedia('post-case-study.png', 'Case study timeline')
-    const newsImage = await this.createPlaceholderMedia('post-news.png', 'News brief media gallery')
+    // Download real featured images from Unsplash
+    const heroImage = await this.downloadMedia(
+      'https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=1200&h=600&fit=crop&q=80',
+      'blog-post-hero.webp',
+      'Standard article hero image'
+    )
+    const gridImage = await this.downloadMedia(
+      'https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?w=1200&h=600&fit=crop&q=80',
+      'blog-post-grid.webp',
+      'Feature story grid layout'
+    )
+    const guideImage = await this.downloadMedia(
+      'https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?w=1200&h=600&fit=crop&q=80',
+      'blog-post-guide.webp',
+      'In-depth guide image'
+    )
+    const caseStudyImage = await this.downloadMedia(
+      'https://images.unsplash.com/photo-1551434678-e076c223a692?w=1200&h=600&fit=crop&q=80',
+      'blog-post-case-study.webp',
+      'Case study timeline'
+    )
+    const newsImage = await this.downloadMedia(
+      'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=1200&h=600&fit=crop&q=80',
+      'blog-post-news.webp',
+      'News brief media gallery'
+    )
 
     // Define the 5 posts that match the template seed items
     const posts = [
@@ -948,12 +968,32 @@ export class BlogSeeder extends BaseSeeder {
     // Ensure we have categories
     const categories = await this.seedCategories()
 
-    // Create placeholder featured images
-    const heroImage = await this.createPlaceholderMedia('post-hero.png', 'Standard article hero image')
-    const gridImage = await this.createPlaceholderMedia('post-grid.png', 'Feature story grid layout')
-    const guideImage = await this.createPlaceholderMedia('post-guide.png', 'In-depth guide image')
-    const caseStudyImage = await this.createPlaceholderMedia('post-case-study.png', 'Case study timeline')
-    const newsImage = await this.createPlaceholderMedia('post-news.png', 'News brief media gallery')
+    // Download real featured images from Unsplash
+    const heroImage = await this.downloadMedia(
+      'https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=1200&h=600&fit=crop&q=80',
+      'blog-post-hero.webp',
+      'Standard article hero image'
+    )
+    const gridImage = await this.downloadMedia(
+      'https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?w=1200&h=600&fit=crop&q=80',
+      'blog-post-grid.webp',
+      'Feature story grid layout'
+    )
+    const guideImage = await this.downloadMedia(
+      'https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?w=1200&h=600&fit=crop&q=80',
+      'blog-post-guide.webp',
+      'In-depth guide image'
+    )
+    const caseStudyImage = await this.downloadMedia(
+      'https://images.unsplash.com/photo-1551434678-e076c223a692?w=1200&h=600&fit=crop&q=80',
+      'blog-post-case-study.webp',
+      'Case study timeline'
+    )
+    const newsImage = await this.downloadMedia(
+      'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=1200&h=600&fit=crop&q=80',
+      'blog-post-news.webp',
+      'News brief media gallery'
+    )
 
     // Define all posts
     const allPosts = [
