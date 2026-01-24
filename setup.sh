@@ -21,20 +21,25 @@ echo -e "${BLUE}  Payload CMS Client Project Setup${NC}"
 echo -e "${BLUE}============================================${NC}"
 echo ""
 
-# Detect project name from parent directory
-PARENT_DIR=$(basename "$(dirname "$(pwd)")")
-PROJECT_NAME=$(echo "$PARENT_DIR" | tr '[:upper:]' '[:lower:]' | tr ' ' '-')
+# Detect project name from parent directory or .project-name file
+if [ -f ../.project-name ]; then
+    PROJECT_NAME=$(cat ../.project-name | tr '[:upper:]' '[:lower:]' | tr ' ' '-')
+    echo -e "${GREEN}✓${NC} Using project name from .project-name file: ${YELLOW}${PROJECT_NAME}${NC}"
+else
+    PARENT_DIR=$(basename "$(dirname "$(pwd)")")
+    PROJECT_NAME=$(echo "$PARENT_DIR" | tr '[:upper:]' '[:lower:]' | tr ' ' '-')
 
-echo -e "${BLUE}Detected project name: ${YELLOW}${PROJECT_NAME}${NC}"
-echo ""
+    echo -e "${BLUE}Detected project name: ${YELLOW}${PROJECT_NAME}${NC}"
+    echo ""
 
-# Ask user to confirm or change project name
-read -p "Press Enter to use this name, or type a different name: " USER_INPUT
-if [ ! -z "$USER_INPUT" ]; then
-    PROJECT_NAME=$(echo "$USER_INPUT" | tr '[:upper:]' '[:lower:]' | tr ' ' '-')
+    # Ask user to confirm or change project name
+    read -p "Press Enter to use this name, or type a different name: " USER_INPUT
+    if [ ! -z "$USER_INPUT" ]; then
+        PROJECT_NAME=$(echo "$USER_INPUT" | tr '[:upper:]' '[:lower:]' | tr ' ' '-')
+    fi
+
+    echo -e "${GREEN}✓${NC} Using project name: ${YELLOW}${PROJECT_NAME}${NC}"
 fi
-
-echo -e "${GREEN}✓${NC} Using project name: ${YELLOW}${PROJECT_NAME}${NC}"
 echo ""
 
 # Create project-specific environment variables
