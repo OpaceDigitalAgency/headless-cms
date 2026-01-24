@@ -7,6 +7,7 @@
 
 import type { Payload } from 'payload'
 import { BaseSeeder, createRichText, createRichTextParagraphs, type SeedOptions } from '../base'
+import { ensureShowcasePage } from '../showcase'
 
 export class CoreSeeder extends BaseSeeder {
   constructor(payload: Payload, options: SeedOptions = {}) {
