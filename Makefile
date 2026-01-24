@@ -181,36 +181,12 @@ db-reset: ## Reset database (drop all tables and re-migrate)
 	pnpm --filter @repo/cms migrate:reset
 	@echo "$(GREEN)Database reset!$(NC)"
 
-db-fresh: ## Quick dev database refresh (uses push mode, no migrations)
-	@echo "$(YELLOW)═══════════════════════════════════════════════════════$(NC)"
-	@echo "$(YELLOW)  Quick Database Refresh (Development)$(NC)"
-	@echo "$(YELLOW)  This will DELETE all data and auto-sync schema$(NC)"
-	@echo "$(YELLOW)═══════════════════════════════════════════════════════$(NC)"
-	@read -p "Are you sure? [y/N] " confirm && [ "$$confirm" = "y" ]
-	@echo ""
-	@echo "$(CYAN)[1/4] Stopping any running dev servers...$(NC)"
-	@-lsof -ti :3000 | xargs kill -9 2>/dev/null || true
-	@-lsof -ti :3001 | xargs kill -9 2>/dev/null || true
-	@-lsof -ti :4321 | xargs kill -9 2>/dev/null || true
-	@sleep 1
-	@echo "$(CYAN)[2/4] Removing database volume and recreating...$(NC)"
-	@docker compose down -v
-	@docker compose up -d postgres
-	@echo "$(CYAN)[3/4] Waiting for PostgreSQL to be ready...$(NC)"
-	@sleep 5
-	@echo "$(CYAN)[4/4] Clearing old migrations (fresh start)...$(NC)"
-	@rm -f apps/db/migrations/*.ts apps/db/migrations/*.json 2>/dev/null || true
-	@echo 'export const migrations = [];' > apps/db/migrations/index.ts
-	@echo ""
-	@echo "$(GREEN)═══════════════════════════════════════════════════════$(NC)"
-	@echo "$(GREEN)  Database refreshed! Run 'make dev-fresh' to start$(NC)"
-	@echo "$(GREEN)  This will auto-create schema (answer 'y' to prompts)$(NC)"
-	@echo "$(GREEN)═══════════════════════════════════════════════════════$(NC)"
+db-fresh: ## Fresh database reset using migrations (non-interactive, safe default)
+	@$(MAKE) db-fresh-migrations
 
-dev-fresh: ## Start dev with auto-accept for Drizzle prompts (use after db-fresh)
-	@echo "$(CYAN)Starting CMS with auto-accept for schema prompts...$(NC)"
-	@echo "$(YELLOW)Note: This will answer 'y' to all Drizzle prompts$(NC)"
-	@cd apps/cms && DRIZZLE_PUSH=true pnpm dev
+dev-fresh: ## Start CMS dev server after a fresh reset (no push mode)
+	@echo "$(CYAN)Starting CMS development server...$(NC)"
+	@cd apps/cms && pnpm dev
 
 db-fresh-migrations: ## Fresh database with regenerated migrations (for production deployment)
 	@echo "$(YELLOW)═══════════════════════════════════════════════════════$(NC)"
