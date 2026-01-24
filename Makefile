@@ -325,6 +325,15 @@ clean-docker: ## Clean Docker resources
 # Utilities
 # ===========================================
 
+checkout: ## Safely switch git branches (prevents switching while dev server is running)
+	@if [ -z "$(BRANCH)" ]; then \
+		echo "$(RED)Error: Please specify a branch name$(NC)"; \
+		echo "Usage: make checkout BRANCH=<branch-name>"; \
+		echo "Example: make checkout BRANCH=main"; \
+		exit 1; \
+	fi
+	@./scripts/safe-checkout.sh $(BRANCH)
+
 env-setup: ## Create .env files from examples
 	@echo "$(CYAN)Setting up environment...$(NC)"
 	@if [ ! -f .env ]; then \
