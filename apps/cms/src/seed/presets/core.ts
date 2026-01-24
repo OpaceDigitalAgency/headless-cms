@@ -171,7 +171,7 @@ export class CoreSeeder extends BaseSeeder {
         continue
       }
       const tag = await this.create('tags', {
-        title: data.title,
+        title: data.heading,
         slug: data.slug,
         description: data.description,
       })
