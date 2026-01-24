@@ -57,6 +57,7 @@ import { toolsEndpoints } from './endpoints/tools'
 import { taxonomyEndpoints } from './endpoints/taxonomy'
 import { seoEndpoints } from './endpoints/seo'
 import { seoTemplatesEndpoints } from './endpoints/seo-templates'
+import { seoAdvancedEndpoints } from './endpoints/seo-advanced'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -508,6 +509,7 @@ export default buildConfig({
     // SEO bulk update endpoints
     ...seoEndpoints,
     ...seoTemplatesEndpoints,
+    ...seoAdvancedEndpoints,
   ],
 
   // ===========================================
