@@ -232,6 +232,23 @@ else
     exit 1
 fi
 
+# Step 6: Update package.json scripts to use environment variables
+echo ""
+echo -e "${BLUE}Step 6: Configuring dev scripts for dynamic ports...${NC}"
+
+# Update CMS package.json to use PORT environment variable
+if [ -f "apps/cms/package.json" ]; then
+    # Replace hardcoded port with PORT environment variable
+    sed -i '' 's/"dev": "next dev -p 3000"/"dev": "PORT=$CMS_PORT next dev"/g' apps/cms/package.json
+    echo -e "${GREEN}✓${NC} Updated apps/cms/package.json to use CMS_PORT"
+fi
+
+# Update Astro package.json to use PORT environment variable if it exists
+if [ -f "apps/astro/package.json" ]; then
+    sed -i '' 's/"dev": "astro dev --port 4321"/"dev": "astro dev --port ${ASTRO_PORT:-4321}"/g' apps/astro/package.json
+    echo -e "${GREEN}✓${NC} Updated apps/astro/package.json to use ASTRO_PORT"
+fi
+
 # Success!
 echo ""
 echo -e "${GREEN}============================================${NC}"
@@ -260,6 +277,7 @@ echo -e "  PAYLOAD_SECRET: ${YELLOW}${PAYLOAD_SECRET}${NC}"
 echo ""
 echo -e "${YELLOW}Note: This project has its own isolated database.${NC}"
 echo -e "${YELLOW}You can run multiple client projects simultaneously!${NC}"
+echo -e "${YELLOW}Dev scripts automatically configured to use dynamic ports.${NC}"
 echo ""
 echo -e "${GREEN}Happy coding! 🚀${NC}"
 echo ""
