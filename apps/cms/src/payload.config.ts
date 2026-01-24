@@ -55,6 +55,7 @@ import { navigationEndpoint } from './endpoints/navigation'
 import { collectionManagerEndpoint } from './endpoints/collectionManager'
 import { toolsEndpoints } from './endpoints/tools'
 import { taxonomyEndpoints } from './endpoints/taxonomy'
+import { seoEndpoints } from './endpoints/seo'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -206,6 +207,10 @@ export default buildConfig({
           Component: '/admin/views/tools/SearchIndex',
           path: '/tools/search-index',
           exact: true,
+        },
+        'seo-settings': {
+          Component: '/admin/views/SeoSettings',
+          path: '/seo',
         },
       },
       // graphics: {
@@ -498,6 +503,8 @@ export default buildConfig({
     ...toolsEndpoints,
     // Taxonomy filtering endpoints
     ...taxonomyEndpoints,
+    // SEO bulk update endpoints
+    ...seoEndpoints,
   ],
 
   // ===========================================

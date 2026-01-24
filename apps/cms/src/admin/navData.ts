@@ -93,6 +93,7 @@ export const navSections: NavSection[] = [
     items: [
       { label: 'Header', href: '/admin/globals/header', icon: 'header' },
       { label: 'Footer', href: '/admin/globals/footer', icon: 'footer' },
+      { label: 'SEO Settings', href: '/admin/seo', icon: 'search' },
       { label: 'Site Settings', href: '/admin/globals/settings', icon: 'gear' },
       { label: 'Forms', href: '/admin/collections/forms', icon: 'form' },
       { label: 'Redirects', href: '/admin/collections/redirects', icon: 'redirect' },

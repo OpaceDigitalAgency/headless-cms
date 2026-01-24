@@ -15,8 +15,27 @@ export const Header: GlobalConfig = {
     update: ({ req: { user } }) => Boolean(user),
   },
 
-  // Hooks for revalidation - direct calls since we're in the same Next.js app
+  // Hooks for revalidation and auto-population
   hooks: {
+    beforeValidate: [
+      async ({ data, req }) => {
+        // Auto-populate logoText from settings.siteName if empty
+        if (!data?.logoText) {
+          try {
+            const settings = await req.payload.findGlobal({
+              slug: 'settings',
+              depth: 0,
+            })
+            if (settings?.siteName) {
+              data.logoText = settings.siteName
+            }
+          } catch (error) {
+            // Silently fail if settings not available
+          }
+        }
+        return data
+      },
+    ],
     afterChange: [
       async ({ doc, req }) => {
         // Direct revalidation - no webhook needed

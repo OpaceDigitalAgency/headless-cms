@@ -762,6 +762,23 @@ export class BlogSeeder extends BaseSeeder {
       'News brief media gallery'
     )
 
+    // Download gallery images for News Brief post
+    const galleryImage1 = await this.downloadMedia(
+      'https://images.unsplash.com/photo-1557804506-669a67965ba0?w=800&h=600&fit=crop&q=80',
+      'gallery-image-1.webp',
+      'Gallery image 1'
+    )
+    const galleryImage2 = await this.downloadMedia(
+      'https://images.unsplash.com/photo-1556761175-b413da4baf72?w=800&h=600&fit=crop&q=80',
+      'gallery-image-2.webp',
+      'Gallery image 2'
+    )
+    const galleryImage3 = await this.downloadMedia(
+      'https://images.unsplash.com/photo-1553877522-43269d4ea984?w=800&h=600&fit=crop&q=80',
+      'gallery-image-3.webp',
+      'Gallery image 3'
+    )
+
     // Define the 5 posts that match the template seed items
     const posts = [
       {
@@ -777,6 +794,18 @@ export class BlogSeeder extends BaseSeeder {
           'This layout is ideal for articles that prioritise readability and engagement with minimal distractions.',
         ]),
         contentBlocks: [
+          {
+            blockType: 'hero',
+            type: 'standard',
+            heading: 'Welcome to Our Blog',
+            subheading: 'Discover insights, tutorials, and stories from our team',
+            image: heroImage?.id,
+            overlay: 'dark',
+            textAlign: 'center',
+            links: [
+              { label: 'Read More', url: '#content', variant: 'primary' },
+            ],
+          },
           {
             blockType: 'cta',
             heading: 'Ready to Get Started?',
@@ -886,6 +915,21 @@ export class BlogSeeder extends BaseSeeder {
             blockType: 'callout',
             type: 'info',
             content: createRichText('This is a sample callout highlighting important information from the news brief.'),
+          },
+          {
+            blockType: 'gallery',
+            heading: 'Event Gallery',
+            description: 'Photos from our recent team event',
+            variant: 'grid',
+            columns: '3',
+            gap: 'medium',
+            images: [
+              { image: galleryImage1?.id, caption: 'Team collaboration' },
+              { image: galleryImage2?.id, caption: 'Workspace setup' },
+              { image: galleryImage3?.id, caption: 'Project planning' },
+            ],
+            showCaptions: true,
+            enableLightbox: true,
           },
         ],
       },
@@ -995,6 +1039,23 @@ export class BlogSeeder extends BaseSeeder {
       'News brief media gallery'
     )
 
+    // Download gallery images for News Brief post
+    const galleryImage1 = await this.downloadMedia(
+      'https://images.unsplash.com/photo-1557804506-669a67965ba0?w=800&h=600&fit=crop&q=80',
+      'gallery-image-1.webp',
+      'Gallery image 1'
+    )
+    const galleryImage2 = await this.downloadMedia(
+      'https://images.unsplash.com/photo-1556761175-b413da4baf72?w=800&h=600&fit=crop&q=80',
+      'gallery-image-2.webp',
+      'Gallery image 2'
+    )
+    const galleryImage3 = await this.downloadMedia(
+      'https://images.unsplash.com/photo-1553877522-43269d4ea984?w=800&h=600&fit=crop&q=80',
+      'gallery-image-3.webp',
+      'Gallery image 3'
+    )
+
     // Define all posts
     const allPosts = [
       {
@@ -1010,6 +1071,18 @@ export class BlogSeeder extends BaseSeeder {
           'This layout is ideal for articles that prioritise readability and engagement with minimal distractions.',
         ]),
         contentBlocks: [
+          {
+            blockType: 'hero',
+            type: 'standard',
+            heading: 'Welcome to Our Blog',
+            subheading: 'Discover insights, tutorials, and stories from our team',
+            image: heroImage?.id,
+            overlay: 'dark',
+            textAlign: 'center',
+            links: [
+              { label: 'Read More', url: '#content', variant: 'primary' },
+            ],
+          },
           {
             blockType: 'cta',
             heading: 'Ready to Get Started?',
@@ -1119,6 +1192,21 @@ export class BlogSeeder extends BaseSeeder {
             blockType: 'callout',
             type: 'info',
             content: createRichText('This is a sample callout highlighting important information from the news brief.'),
+          },
+          {
+            blockType: 'gallery',
+            heading: 'Event Gallery',
+            description: 'Photos from our recent team event',
+            variant: 'grid',
+            columns: '3',
+            gap: 'medium',
+            images: [
+              { image: galleryImage1?.id, caption: 'Team collaboration' },
+              { image: galleryImage2?.id, caption: 'Workspace setup' },
+              { image: galleryImage3?.id, caption: 'Project planning' },
+            ],
+            showCaptions: true,
+            enableLightbox: true,
           },
         ],
       },

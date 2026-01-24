@@ -16,6 +16,7 @@
     "migrate:down": "cross-env NODE_PATH=./node_modules node --import tsx ./node_modules/payload/bin.js migrate:down",
     "migrate:status": "cross-env NODE_PATH=./node_modules node --import tsx ./node_modules/payload/bin.js migrate:status",
     "seed": "tsx src/seed/index.ts",
+    "test": "node --import tsx --test \"tests/**/*.test.ts\"",
     "clean": "rm -rf .next .payload node_modules"
   },
   "dependencies": {

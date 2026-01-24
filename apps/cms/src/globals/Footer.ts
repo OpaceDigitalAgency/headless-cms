@@ -15,8 +15,27 @@ export const Footer: GlobalConfig = {
     update: ({ req: { user } }) => Boolean(user),
   },
 
-  // Hooks for revalidation - direct calls since we're in the same Next.js app
+  // Hooks for revalidation and auto-population
   hooks: {
+    beforeValidate: [
+      async ({ data, req }) => {
+        // Auto-populate description from settings.siteDescription if empty
+        if (!data?.description) {
+          try {
+            const settings = await req.payload.findGlobal({
+              slug: 'settings',
+              depth: 0,
+            })
+            if (settings?.siteDescription) {
+              data.description = settings.siteDescription
+            }
+          } catch (error) {
+            // Silently fail if settings not available
+          }
+        }
+        return data
+      },
+    ],
     afterChange: [
       async ({ doc, req }) => {
         // Direct revalidation - no webhook needed

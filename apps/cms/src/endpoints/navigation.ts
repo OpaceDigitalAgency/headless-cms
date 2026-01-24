@@ -292,6 +292,17 @@ export const navigationEndpoint: Endpoint = {
       navSections.push(toolsSection)
     }
 
+    const settingsSection = navSections.find((section) => section.id === 'settings')
+    if (settingsSection && req.user?.role === 'admin') {
+      settingsSection.items.unshift({
+        label: 'SEO Settings',
+        href: '/admin/seo',
+        icon: 'search',
+        slug: 'seo-settings',
+        _order: -2,
+      })
+    }
+
     // Build globals list for search + navigation
     console.log('[Navigation] Building globals list')
     console.log('[Navigation] Total globals in config:', payload.config.globals.length)

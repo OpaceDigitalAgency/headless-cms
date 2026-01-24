@@ -10010,6 +10010,9 @@ export interface Setting {
    */
   activePreset: 'blog' | 'brochure' | 'archive' | 'ecommerce';
   siteName: string;
+  /**
+   * Brief description of your site for SEO and about sections
+   */
   siteDescription?: string | null;
   /**
    * The public URL of your site
@@ -10047,7 +10050,7 @@ export interface Setting {
     /**
      * This determines which collection templates are recommended
      */
-    siteType?: ('brochure' | 'blog' | 'museum' | 'ecommerce' | 'portfolio' | 'custom') | null;
+    siteType?: ('brochure' | 'blog' | 'archive' | 'ecommerce' | 'portfolio' | 'custom') | null;
     /**
      * URL where your frontend is deployed (for preview links)
      */
@@ -10073,18 +10076,6 @@ export interface Setting {
     description?: string | null;
     image?: (number | null) | Media;
   };
-  /**
-   * e.g., G-XXXXXXXXXX
-   */
-  googleAnalyticsId?: string | null;
-  /**
-   * e.g., GTM-XXXXXXX
-   */
-  googleTagManagerId?: string | null;
-  /**
-   * Custom robots.txt content
-   */
-  robotsTxt?: string | null;
   socialProfiles?:
     | {
         platform: 'facebook' | 'twitter' | 'instagram' | 'linkedin' | 'youtube' | 'tiktok' | 'github';
@@ -10312,9 +10303,6 @@ export interface SettingsSelect<T extends boolean = true> {
         description?: T;
         image?: T;
       };
-  googleAnalyticsId?: T;
-  googleTagManagerId?: T;
-  robotsTxt?: T;
   socialProfiles?:
     | T
     | {

@@ -15,8 +15,28 @@ export const Settings: GlobalConfig = {
     update: ({ req: { user } }) => user?.role === 'admin',
   },
 
-  // Hooks for revalidation - direct calls since we're in the same Next.js app
+  // Hooks for revalidation and auto-population
   hooks: {
+    beforeValidate: [
+      async ({ data }) => {
+        // Auto-populate frontendUrl from siteUrl if empty
+        if (!data?.frontend?.frontendUrl && data?.siteUrl) {
+          if (!data.frontend) data.frontend = {}
+          data.frontend.frontendUrl = data.siteUrl
+        }
+
+        // Auto-generate revalidation secret if empty
+        if (!data?.frontend?.revalidationSecret) {
+          if (!data.frontend) data.frontend = {}
+          // Generate cryptographically secure 32-character random string
+          const array = new Uint8Array(24)
+          crypto.getRandomValues(array)
+          data.frontend.revalidationSecret = Array.from(array, byte => byte.toString(16).padStart(2, '0')).join('')
+        }
+
+        return data
+      },
+    ],
     afterChange: [
       async ({ doc, req }) => {
         // Direct revalidation - no webhook needed
@@ -39,7 +59,7 @@ export const Settings: GlobalConfig = {
               type: 'select',
               required: true,
               defaultValue: 'blog',
-              label: 'Site Type',
+              label: 'Seed Preset',
               admin: {
                 description: 'The type of site you are building. This determines which seed data and collections are used.',
               },
@@ -54,12 +74,17 @@ export const Settings: GlobalConfig = {
               name: 'siteName',
               type: 'text',
               required: true,
+              defaultValue: 'My Site',
               label: 'Site Name',
             },
             {
               name: 'siteDescription',
               type: 'textarea',
               label: 'Site Description',
+              defaultValue: 'A blog about technology, design, business, and lifestyle.',
+              admin: {
+                description: 'Brief description of your site for SEO and about sections',
+              },
             },
             {
               name: 'siteUrl',
@@ -155,7 +180,7 @@ export const Settings: GlobalConfig = {
                   options: [
                     { label: 'Brochure / Marketing Site', value: 'brochure' },
                     { label: 'Blog / Content Site', value: 'blog' },
-                    { label: 'Archive / Gallery', value: 'museum' },
+                    { label: 'Archive / Gallery', value: 'archive' },
                     { label: 'Ecommerce / Product Catalog', value: 'ecommerce' },
                     { label: 'Portfolio / Showcase', value: 'portfolio' },
                     { label: 'Custom', value: 'custom' },
@@ -276,6 +301,7 @@ export const Settings: GlobalConfig = {
               name: 'robotsTxt',
               type: 'code',
               label: 'robots.txt',
+              defaultValue: `User-agent: *\nAllow: /\n\nSitemap: https://yoursite.com/sitemap.xml`,
               admin: {
                 language: 'plaintext',
                 description: 'Custom robots.txt content',
@@ -413,6 +439,7 @@ export const Settings: GlobalConfig = {
               name: 'maintenanceMessage',
               type: 'textarea',
               label: 'Maintenance Message',
+              defaultValue: 'We\'re currently performing scheduled maintenance. We\'ll be back shortly!',
               admin: {
                 condition: (data) => data?.maintenanceMode,
               },
