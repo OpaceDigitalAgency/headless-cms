@@ -58,7 +58,7 @@ export class BlogSeeder extends BaseSeeder {
             {
               blockType: 'stats',
               heading: 'Review Snapshot',
-              stats: [
+              items: [
                 { value: '4.5/5', label: 'Overall' },
                 { value: '5/5', label: 'Flexibility' },
                 { value: '4/5', label: 'UX' },
@@ -181,7 +181,7 @@ export class BlogSeeder extends BaseSeeder {
                 {
                   blockType: 'stats',
                   heading: 'Review Snapshot',
-                  stats: [
+                  items: [
                     { value: '4.5/5', label: 'Overall' },
                     { value: '5/5', label: 'Flexibility' },
                     { value: '4/5', label: 'UX' },
@@ -289,7 +289,7 @@ export class BlogSeeder extends BaseSeeder {
             {
               blockType: 'stats',
               heading: 'By The Numbers',
-              stats: [
+              items: [
                 { label: 'Articles Published', value: '150+' },
                 { label: 'Active Readers', value: '50K+' },
                 { label: 'Categories', value: '12' },
@@ -761,7 +761,7 @@ export class BlogSeeder extends BaseSeeder {
           {
             blockType: 'stats',
             heading: 'UX Impact',
-            stats: [
+            items: [
               { value: '$100', label: 'Return on $1 UX Investment' },
               { value: '400%', label: 'Conversion Lift' },
               { value: '50%', label: 'Less Dev Time' },
@@ -820,7 +820,7 @@ export class BlogSeeder extends BaseSeeder {
           {
             blockType: 'stats',
             heading: 'Growth Metrics',
-            stats: [
+            items: [
               { value: '1M', label: 'Users' },
               { value: '5k', label: 'Req/Sec' },
               { value: '99.9%', label: 'Uptime' },
@@ -899,7 +899,7 @@ export class BlogSeeder extends BaseSeeder {
           {
             blockType: 'stats',
             heading: 'Q3 Highlights',
-            stats: [
+            items: [
               { value: '+15%', label: 'Revenue' },
               { value: '+8%', label: 'Margins' },
               { value: 'Zero', label: 'Debt' },

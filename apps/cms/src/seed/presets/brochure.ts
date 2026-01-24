@@ -51,7 +51,7 @@ export class BrochureSeeder extends BaseSeeder {
             {
               blockType: 'stats',
               heading: 'Outcome Summary',
-              stats: [
+              items: [
                 { value: '120%', label: 'YoY Growth' },
                 { value: '3.2x', label: 'ROAS' },
                 { value: '18%', label: 'CVR Lift' },
@@ -105,7 +105,7 @@ export class BrochureSeeder extends BaseSeeder {
             {
               blockType: 'stats',
               heading: 'Operational Impact',
-              stats: [
+              items: [
                 { value: '22%', label: 'Cycle Time Cut' },
                 { value: '15%', label: 'Cost Reduction' },
                 { value: '9%', label: 'Throughput Gain' },
@@ -173,7 +173,7 @@ export class BrochureSeeder extends BaseSeeder {
                 {
                   blockType: 'stats',
                   heading: 'Operational Impact',
-                  stats: [
+                  items: [
                     { value: '22%', label: 'Cycle Time Cut' },
                     { value: '15%', label: 'Cost Reduction' },
                     { value: '9%', label: 'Throughput Gain' },
@@ -226,17 +226,17 @@ export class BrochureSeeder extends BaseSeeder {
               items: [
                 {
                   icon: 'lightbulb',
-                  title: 'Strategy Consulting',
+                  heading: 'Strategy Consulting',
                   description: 'Develop winning strategies that drive growth and competitive advantage.'
                 },
                 {
                   icon: 'code',
-                  title: 'Digital Transformation',
+                  heading: 'Digital Transformation',
                   description: 'Modernize your operations with cutting-edge technology solutions.'
                 },
                 {
                   icon: 'trending-up',
-                  title: 'Growth Marketing',
+                  heading: 'Growth Marketing',
                   description: 'Accelerate your growth with data-driven marketing strategies.'
                 },
               ],
@@ -255,10 +255,10 @@ export class BrochureSeeder extends BaseSeeder {
               style: 'stats',
               columns: '4',
               items: [
-                { stat: '500+', title: 'Clients Served' },
-                { stat: '98%', title: 'Client Satisfaction' },
-                { stat: '50M+', title: 'Revenue Generated' },
-                { stat: '15+', title: 'Years Experience' },
+                { stat: '500+', heading: 'Clients Served' },
+                { stat: '98%', heading: 'Client Satisfaction' },
+                { stat: '50M+', heading: 'Revenue Generated' },
+                { stat: '15+', heading: 'Years Experience' },
               ],
             },
             {
@@ -349,19 +349,19 @@ export class BrochureSeeder extends BaseSeeder {
               gap: 'large',
               items: [
                 {
-                  title: 'Strategy Consulting',
+                  heading: 'Strategy Consulting',
                   description: 'We help you develop and execute strategies that drive sustainable growth and competitive advantage in your market.'
                 },
                 {
-                  title: 'Digital Transformation',
+                  heading: 'Digital Transformation',
                   description: 'Modernize your business with our comprehensive digital transformation services, from cloud migration to process automation.'
                 },
                 {
-                  title: 'Growth Marketing',
+                  heading: 'Growth Marketing',
                   description: 'Accelerate your growth with data-driven marketing strategies that deliver measurable results and ROI.'
                 },
                 {
-                  title: 'Technology Solutions',
+                  heading: 'Technology Solutions',
                   description: 'Custom software development and technology solutions designed to solve your unique business challenges.'
                 },
               ],
@@ -410,9 +410,9 @@ export class BrochureSeeder extends BaseSeeder {
               style: 'icons',
               columns: '3',
               items: [
-                { icon: 'mail', title: 'Email', description: 'hello@example.com' },
-                { icon: 'phone', title: 'Phone', description: '+1 (555) 123-4567' },
-                { icon: 'map-pin', title: 'Address', description: '123 Business St, City, ST 12345' },
+                { icon: 'mail', heading: 'Email', description: 'hello@example.com' },
+                { icon: 'phone', heading: 'Phone', description: '+1 (555) 123-4567' },
+                { icon: 'map-pin', heading: 'Address', description: '123 Business St, City, ST 12345' },
               ],
             },
           ],
@@ -462,11 +462,11 @@ export class BrochureSeeder extends BaseSeeder {
       { heading: 'Technology Solutions', excerpt: 'Custom software tailored to your needs.', icon: 'monitor' }
     ]
     for (const s of services) {
-      const slug = s.title.toLowerCase().replace(/ /g, '-')
+      const slug = s.heading.toLowerCase().replace(/ /g, '-')
       if (await this.checkIfExists('services', slug)) continue
 
       await this.create('services', {
-        title: s.title,
+        title: s.heading,
         slug: slug,
         excerpt: s.excerpt,
         icon: s.icon,

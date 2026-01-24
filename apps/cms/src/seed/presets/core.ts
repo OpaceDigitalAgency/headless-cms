@@ -933,7 +933,7 @@ export class CoreSeeder extends BaseSeeder {
           {
             blockType: 'stats',
             heading: 'Field Notes',
-            stats: [
+            items: [
               { value: '38', label: 'Artifacts' },
               { value: '12', label: 'Team Members' },
               { value: '4', label: 'Sites' },
@@ -1086,7 +1086,7 @@ export class CoreSeeder extends BaseSeeder {
           {
             blockType: 'stats',
             heading: 'Visitor Snapshot',
-            stats: [
+            items: [
               { value: '50+', label: 'Works Displayed' },
               { value: '12', label: 'Guest Lectures' },
               { value: '8', label: 'Weeks' },
@@ -1158,7 +1158,7 @@ export class CoreSeeder extends BaseSeeder {
           {
             blockType: 'stats',
             heading: 'Series Overview',
-            stats: [
+            items: [
               { value: '6', label: 'Sessions' },
               { value: '3', label: 'Guest Speakers' },
               { value: '90m', label: 'Per Session' },
@@ -1374,7 +1374,7 @@ export class CoreSeeder extends BaseSeeder {
           {
             blockType: 'stats',
             heading: 'Collection Scope',
-            stats: [
+            items: [
               { value: '120', label: 'Coins' },
               { value: '18', label: 'Emperors' },
               { value: '5', label: 'Mints' },
@@ -1504,7 +1504,7 @@ export class CoreSeeder extends BaseSeeder {
           {
             blockType: 'stats',
             heading: 'Panel Summary',
-            stats: [
+            items: [
               { value: '2', label: 'Restoration Passes' },
               { value: '18k', label: 'Tesserae' },
               { value: '1', label: 'Fragment' },

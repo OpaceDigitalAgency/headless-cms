@@ -54,7 +54,7 @@ export class EcommerceSeeder extends BaseSeeder {
             {
               blockType: 'stats',
               heading: 'Brand Snapshot',
-              stats: [
+              items: [
                 { value: '1986', label: 'Founded' },
                 { value: '40+', label: 'Countries' },
                 { value: '2M', label: 'Customers' },
@@ -173,7 +173,7 @@ export class EcommerceSeeder extends BaseSeeder {
                 {
                   blockType: 'stats',
                   heading: 'Brand Snapshot',
-                  stats: [
+                  items: [
                     { value: '1986', label: 'Founded' },
                     { value: '40+', label: 'Countries' },
                     { value: '2M', label: 'Customers' },
@@ -324,7 +324,7 @@ export class EcommerceSeeder extends BaseSeeder {
           {
             blockType: 'stats',
             heading: 'Performance',
-            stats: [
+            items: [
               { value: '30h', label: 'Battery Life' },
               { value: '3', label: 'EQ Modes' },
               { value: '12m', label: 'Range' },
@@ -395,7 +395,7 @@ export class EcommerceSeeder extends BaseSeeder {
           {
             blockType: 'stats',
             heading: 'Compatibility',
-            stats: [
+            items: [
               { value: '1000+', label: 'Devices' },
               { value: '3', label: 'Assistants' },
               { value: '10m', label: 'Setup' },
@@ -486,7 +486,7 @@ export class EcommerceSeeder extends BaseSeeder {
           {
             blockType: 'stats',
             heading: 'Bundle Value',
-            stats: [
+            items: [
               { value: '5', label: 'Titles' },
               { value: '2', label: 'Exclusive Editions' },
               { value: '1', label: 'Gift Box' },
@@ -563,7 +563,7 @@ export class EcommerceSeeder extends BaseSeeder {
           {
             blockType: 'stats',
             heading: 'Runner Metrics',
-            stats: [
+            items: [
               { value: '240g', label: 'Weight' },
               { value: '8mm', label: 'Drop' },
               { value: '500+', label: 'KM Durability' },
