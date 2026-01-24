@@ -10112,6 +10112,20 @@ export interface Setting {
    */
   maintenanceMode?: boolean | null;
   maintenanceMessage?: string | null;
+  seo?: {
+    defaultMetaTitlePattern?: string | null;
+    defaultMetaDescription?: string | null;
+    titleSeparator?: string | null;
+    twitterCardType?: string | null;
+  };
+  seoAdvanced?: {
+    defaultRobotsMeta?: string | null;
+    googleSiteVerification?: string | null;
+    bingSiteVerification?: string | null;
+    facebookDomainVerification?: string | null;
+    organizationType?: string | null;
+    organizationName?: string | null;
+  };
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -10316,6 +10330,24 @@ export interface SettingsSelect<T extends boolean = true> {
   bodyScripts?: T;
   maintenanceMode?: T;
   maintenanceMessage?: T;
+  seo?:
+    | T
+    | {
+        defaultMetaTitlePattern?: T;
+        defaultMetaDescription?: T;
+        titleSeparator?: T;
+        twitterCardType?: T;
+      };
+  seoAdvanced?:
+    | T
+    | {
+        defaultRobotsMeta?: T;
+        googleSiteVerification?: T;
+        bingSiteVerification?: T;
+        facebookDomainVerification?: T;
+        organizationType?: T;
+        organizationName?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;

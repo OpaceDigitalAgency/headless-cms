@@ -17,10 +17,11 @@ export default async function robots(): Promise<MetadataRoute.Robots> {
       depth: 0,
     })
 
-    // If custom robots.txt is provided, parse and return it
-    if (settings?.robotsTxt) {
-      return parseCustomRobotsTxt(settings.robotsTxt)
-    }
+    // Custom robots.txt support was removed during Settings schema restructure
+    // TODO: Re-add this feature if needed
+    // if (settings?.robotsTxt) {
+    //   return parseCustomRobotsTxt(settings.robotsTxt)
+    // }
   } catch (error) {
     console.error('Error fetching settings for robots.txt:', error)
   }

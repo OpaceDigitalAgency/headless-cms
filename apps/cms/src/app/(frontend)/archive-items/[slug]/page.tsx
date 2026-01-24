@@ -39,15 +39,7 @@ export async function generateMetadata({ params }: ArchiveItemPageProps): Promis
       return { title: 'Archive Item Not Found' }
     }
 
-    // Transform settings defaultMeta image if it's a Media object
-    const defaultMetaImage = settings.defaultMeta?.image && typeof settings.defaultMeta.image === 'object'
-      ? {
-          url: settings.defaultMeta.image.url || null,
-          alt: settings.defaultMeta.image.alt || null,
-          width: settings.defaultMeta.image.width || null,
-          height: settings.defaultMeta.image.height || null,
-        }
-      : null
+
 
     return generateEnhancedMetadata(
       {
@@ -55,13 +47,7 @@ export async function generateMetadata({ params }: ArchiveItemPageProps): Promis
         description: (item as any).description || (item as any).shortDescription || `Archive item: ${item.title}`,
         image: undefined,
       },
-      {
-        ...settings,
-        defaultMeta: settings.defaultMeta ? {
-          ...settings.defaultMeta,
-          image: defaultMetaImage,
-        } : null,
-      },
+      settings,
       `/archive-items/${slug}`
     )
   } catch (error) {

@@ -392,68 +392,72 @@ export const Settings: GlobalConfig = {
             },
           ],
         },
+        {
+          label: 'SEO',
+          fields: [
+            {
+              name: 'seo',
+              type: 'group',
+              admin: {
+                hidden: true,
+              },
+              fields: [
+                {
+                  name: 'defaultMetaTitlePattern',
+                  type: 'text',
+                },
+                {
+                  name: 'defaultMetaDescription',
+                  type: 'textarea',
+                },
+                {
+                  name: 'titleSeparator',
+                  type: 'text',
+                },
+                {
+                  name: 'twitterCardType',
+                  type: 'text',
+                },
+              ],
+            },
+            {
+              name: 'seoAdvanced',
+              type: 'group',
+              admin: {
+                hidden: true,
+              },
+              fields: [
+                {
+                  name: 'defaultRobotsMeta',
+                  type: 'text',
+                },
+                {
+                  name: 'googleSiteVerification',
+                  type: 'text',
+                },
+                {
+                  name: 'bingSiteVerification',
+                  type: 'text',
+                },
+                {
+                  name: 'facebookDomainVerification',
+                  type: 'text',
+                },
+                {
+                  name: 'organizationType',
+                  type: 'text',
+                },
+                {
+                  name: 'organizationName',
+                  type: 'text',
+                },
+              ],
+            },
+          ],
+        },
       ],
     },
   ],
-  {
-  name: 'seo',
-    type: 'group',
-      admin: {
-    hidden: true,
-    },
-  fields: [
-    {
-      name: 'defaultMetaTitlePattern',
-      type: 'text',
-    },
-    {
-      name: 'defaultMetaDescription',
-      type: 'textarea',
-    },
-    {
-      name: 'titleSeparator',
-      type: 'text',
-    },
-    {
-      name: 'twitterCardType',
-      type: 'text',
-    },
-  ],
-  },
-{
-  name: 'seoAdvanced',
-    type: 'group',
-      admin: {
-    hidden: true,
-    },
-  fields: [
-    {
-      name: 'defaultRobotsMeta',
-      type: 'text',
-    },
-    {
-      name: 'googleSiteVerification',
-      type: 'text',
-    },
-    {
-      name: 'bingSiteVerification',
-      type: 'text',
-    },
-    {
-      name: 'facebookDomainVerification',
-      type: 'text',
-    },
-    {
-      name: 'organizationType',
-      type: 'text',
-    },
-    {
-      name: 'organizationName',
-      type: 'text',
-    },
-  ],
-  },
-],
 }
 
 export default Settings

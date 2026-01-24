@@ -15,11 +15,11 @@ export async function generateMetadata(): Promise<Metadata> {
     if (page?.meta) {
       const metaImage = page.meta.image && typeof page.meta.image === 'object'
         ? {
-            url: page.meta.image.url || null,
-            alt: page.meta.image.alt || null,
-            width: page.meta.image.width || null,
-            height: page.meta.image.height || null,
-          }
+          url: page.meta.image.url || null,
+          alt: page.meta.image.alt || null,
+          width: page.meta.image.width || null,
+          height: page.meta.image.height || null,
+        }
         : null
 
       return generateEnhancedMetadata(
@@ -33,20 +33,12 @@ export async function generateMetadata(): Promise<Metadata> {
     }
 
     // Fallback metadata
-    const defaultImage = settings.defaultMeta?.image && typeof settings.defaultMeta.image === 'object'
-      ? {
-          url: settings.defaultMeta.image.url || null,
-          alt: settings.defaultMeta.image.alt || null,
-          width: settings.defaultMeta.image.width || null,
-          height: settings.defaultMeta.image.height || null,
-        }
-      : null
+
 
     return generateEnhancedMetadata(
       {
         title: settings.siteName || 'Home',
         description: settings.siteDescription || 'Welcome to our site',
-        image: defaultImage,
       },
       settings,
       '/'
@@ -85,32 +77,32 @@ export default async function HomePage() {
   const sections = [
     ...(showSetupState
       ? [
-          {
-            id: 'setup-state',
-            type: 'content' as const,
-            heading: 'Setup required',
-            content: (
-              <div className="setup-grid">
-                <div className="setup-card">
-                  <p className="setup-kicker">Status</p>
-                  <p className="setup-status">CMS globals are missing</p>
-                  <p className="setup-note">
-                    The admin and API rely on a database connection. This page is a safe fallback
-                    while your CMS is still bootstrapping.
-                  </p>
-                </div>
-                <div className="setup-card">
-                  <p className="setup-kicker">Next steps</p>
-                  <ol className="setup-list">
-                    <li>Provision the database and run migrations.</li>
-                    <li>Open the admin panel to create site settings.</li>
-                    <li>Publish a homepage to replace this fallback.</li>
-                  </ol>
-                </div>
+        {
+          id: 'setup-state',
+          type: 'content' as const,
+          heading: 'Setup required',
+          content: (
+            <div className="setup-grid">
+              <div className="setup-card">
+                <p className="setup-kicker">Status</p>
+                <p className="setup-status">CMS globals are missing</p>
+                <p className="setup-note">
+                  The admin and API rely on a database connection. This page is a safe fallback
+                  while your CMS is still bootstrapping.
+                </p>
               </div>
-            ),
-          },
-        ]
+              <div className="setup-card">
+                <p className="setup-kicker">Next steps</p>
+                <ol className="setup-list">
+                  <li>Provision the database and run migrations.</li>
+                  <li>Open the admin panel to create site settings.</li>
+                  <li>Publish a homepage to replace this fallback.</li>
+                </ol>
+              </div>
+            </div>
+          ),
+        },
+      ]
       : []),
     {
       id: 'posts',

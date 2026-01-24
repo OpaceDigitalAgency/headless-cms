@@ -50,7 +50,7 @@ export const CustomItems: CollectionConfig = {
     description: 'Items belonging to your custom collections',
     listSearchableFields: ['title', 'slug'],
     components: {
-      BeforeList: ['/components/CustomItemsListHeader'],
+      beforeList: ['/components/CustomItemsListHeader'],
     },
     preview: (doc) => {
       // Build preview URL with content type
