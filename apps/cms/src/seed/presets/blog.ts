@@ -1094,11 +1094,11 @@ export class BlogSeeder extends BaseSeeder {
           {
             blockType: 'timeline',
             heading: 'Project Timeline',
-            items: [
-              { date: '2024-01', title: 'Discovery Phase', description: 'Initial research and planning' },
-              { date: '2024-03', title: 'Design Sprint', description: 'Wireframes and prototypes' },
-              { date: '2024-06', title: 'Development', description: 'Building and testing' },
-              { date: '2024-09', title: 'Launch', description: 'Going live and monitoring' },
+            events: [
+              { date: '2024-01', title: 'Discovery Phase', description: createRichText('Initial research and planning') },
+              { date: '2024-03', title: 'Design Sprint', description: createRichText('Wireframes and prototypes') },
+              { date: '2024-06', title: 'Development', description: createRichText('Building and testing') },
+              { date: '2024-09', title: 'Launch', description: createRichText('Going live and monitoring') },
             ],
           },
         ],
