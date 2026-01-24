@@ -517,26 +517,88 @@ const SeoBulkEditor: React.FC = () => {
                 />
               </div>
               <div className="ra-seo-cell">
-                <input
-                  type="text"
-                  className="ra-seo-input"
-                  value={metaTitle || ''}
-                  onChange={(event) => updateDraft(item.id, { metaTitle: event.target.value })}
-                />
-                <span className={`ra-seo-counter${titleCount > TITLE_LIMIT ? ' is-warning' : ''}`}>
-                  {titleCount}/{TITLE_LIMIT}
-                </span>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                  <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+                    <input
+                      type="text"
+                      className="ra-seo-input"
+                      value={metaTitle || ''}
+                      onChange={(event) => updateDraft(item.id, { metaTitle: event.target.value })}
+                      placeholder="Meta title"
+                    />
+                    <button
+                      type="button"
+                      className="btn btn--size-small btn--style-secondary"
+                      style={{ whiteSpace: 'nowrap', fontSize: '0.75rem', padding: '0.25rem 0.5rem' }}
+                      title="Auto-generate meta title from H1"
+                      onClick={() => {
+                        if (item.h1) {
+                          updateDraft(item.id, { metaTitle: item.h1 })
+                        }
+                      }}
+                    >
+                      Auto
+                    </button>
+                  </div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    {!metaTitle || metaTitle.trim().length === 0 ? (
+                      <span style={{ color: 'var(--theme-error-600)', fontSize: '0.75rem', fontWeight: 600 }}>
+                        Missing
+                      </span>
+                    ) : titleCount < 50 || titleCount > TITLE_LIMIT ? (
+                      <span className={`ra-seo-counter is-warning`}>
+                        {titleCount}/{TITLE_LIMIT}
+                      </span>
+                    ) : (
+                      <span style={{ color: 'var(--theme-success-600)', fontSize: '0.75rem' }}>
+                        ✓ {titleCount}/{TITLE_LIMIT}
+                      </span>
+                    )}
+                  </div>
+                </div>
               </div>
               <div className="ra-seo-cell">
-                <textarea
-                  className="ra-seo-textarea"
-                  rows={3}
-                  value={metaDescription || ''}
-                  onChange={(event) => updateDraft(item.id, { metaDescription: event.target.value })}
-                />
-                <span className={`ra-seo-counter${descCount > DESC_LIMIT ? ' is-warning' : ''}`}>
-                  {descCount}/{DESC_LIMIT}
-                </span>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                  <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'flex-start' }}>
+                    <textarea
+                      className="ra-seo-textarea"
+                      rows={3}
+                      value={metaDescription || ''}
+                      onChange={(event) => updateDraft(item.id, { metaDescription: event.target.value })}
+                      placeholder="Meta description"
+                    />
+                    <button
+                      type="button"
+                      className="btn btn--size-small btn--style-secondary"
+                      style={{ whiteSpace: 'nowrap', fontSize: '0.75rem', padding: '0.25rem 0.5rem', marginTop: '0.25rem' }}
+                      title="Auto-generate meta description"
+                      onClick={() => {
+                        // Simple auto-generate: use first 150 chars of content or H1
+                        const autoDesc = item.h1 ? `Learn more about ${item.h1}` : ''
+                        if (autoDesc) {
+                          updateDraft(item.id, { metaDescription: autoDesc })
+                        }
+                      }}
+                    >
+                      Auto
+                    </button>
+                  </div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    {!metaDescription || metaDescription.trim().length === 0 ? (
+                      <span style={{ color: 'var(--theme-error-600)', fontSize: '0.75rem', fontWeight: 600 }}>
+                        Missing
+                      </span>
+                    ) : descCount < 100 || descCount > DESC_LIMIT ? (
+                      <span className={`ra-seo-counter is-warning`}>
+                        {descCount}/{DESC_LIMIT}
+                      </span>
+                    ) : (
+                      <span style={{ color: 'var(--theme-success-600)', fontSize: '0.75rem' }}>
+                        ✓ {descCount}/{DESC_LIMIT}
+                      </span>
+                    )}
+                  </div>
+                </div>
               </div>
               <div className="ra-seo-cell">
                 <select
