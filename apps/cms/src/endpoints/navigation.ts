@@ -18,24 +18,15 @@ export const navigationEndpoint: Endpoint = {
       // Get all collections from the config
       const collections = payload.config.collections
 
-      // Define icon mapping for collections
+      // Define icon mapping for collections (core collections only)
       const iconMap: Record<string, string> = {
         // Content
         pages: 'page',
         posts: 'post',
+
+        // Taxonomy
         categories: 'category',
         tags: 'tags',
-
-        // Collections
-        'archive-items': 'archive',
-        people: 'person',
-        places: 'place',
-        events: 'post',
-        products: 'collection',
-        'product-categories': 'category',
-        'product-collections': 'collection',
-        'custom-items': 'customItem',
-        'content-types': 'contentType',
 
         // Media
         media: 'image',
@@ -71,7 +62,7 @@ export const navigationEndpoint: Endpoint = {
       // Build collection items map
       const collectionItems: Record<string, any> = {}
       const collectionSections: Record<string, SectionId> = {}
-      const navHiddenSlugs = new Set(['custom-items', 'content-types'])
+      const navHiddenSlugs = new Set<string>([])
 
       collections.forEach((collection) => {
         const slug = collection.slug
@@ -129,54 +120,7 @@ export const navigationEndpoint: Endpoint = {
         sectionItemsMap[section].push(item)
       })
 
-      const resolveCustomTypeEnabled = (slug: string, doc: any) => {
-        if (doc?.uninstalled) return false
-        const override = overridesBySlug.get(slug)
-        if (typeof override?.enabled === 'boolean') return override.enabled
-        return true
-      }
-
-      // Add custom collections (content types) under Collections
-      const contentTypeDocs = await payload
-        .find({
-          collection: 'content-types',
-          limit: 200,
-          depth: 0,
-          overrideAccess: true,
-        })
-        .then((result) => result?.docs || [])
-        .catch(() => [])
-
-      if (contentTypeDocs.length > 0) {
-        const customTypeItems = contentTypeDocs
-          .filter((doc: any) => !doc?.uninstalled)
-          .map((doc: any) => {
-            const customSlug = `custom:${doc?.slug || doc?.id}`
-            const override = overridesBySlug.get(customSlug)
-            if (!resolveCustomTypeEnabled(customSlug, doc)) return null
-            const labelOverride = typeof override?.label === 'string' ? override.label.trim() : ''
-            const label = labelOverride || doc?.pluralLabel || doc?.name || doc?.slug
-            const overrideSection = override?.section as SectionId | undefined
-            const section = overrideSection && sectionOrder.includes(overrideSection)
-              ? overrideSection
-              : 'collections'
-
-            return {
-              label,
-              href: `/admin/collections/custom-items?where[contentType][equals]=${doc.id}`,
-              icon: 'customCollection',
-              slug: customSlug,
-              _order: orderBySlug.has(customSlug) ? orderBySlug.get(customSlug) : Number.MAX_SAFE_INTEGER,
-              _section: section,
-            }
-          })
-          .filter(Boolean)
-
-        customTypeItems.forEach((item: any) => {
-          const section = item._section as SectionId
-          sectionItemsMap[section].push(item)
-        })
-      }
+      // Custom collections removed - main branch only has core collections
 
       const nestedChildrenBySection = new Map<SectionId, Set<string>>()
       sectionOrder.forEach((sectionId) => nestedChildrenBySection.set(sectionId, new Set()))

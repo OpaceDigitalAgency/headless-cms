@@ -22,32 +22,17 @@ export const sectionLabels: Record<SectionId, string> = {
   admin: 'Admin',
 }
 
-export const nestedCollections: Record<string, string[]> = {
-  products: ['product-categories', 'product-collections'],
-}
+export const nestedCollections: Record<string, string[]> = {}
 
 export const taxonomySlugs = ['categories', 'tags']
-export const shopSlugs = ['products', 'product-categories', 'product-collections']
-export const collectionsSectionSlugs = [
-  'archive-items',
-  'people',
-  'places',
-  'events',
-  'custom-items',
-  'content-types',
-]
+export const shopSlugs: string[] = []
+export const collectionsSectionSlugs: string[] = []
 
 export const defaultEnabledSlugs = new Set<string>([
   'pages',
   'posts',
   'categories',
   'tags',
-  'archive-items',
-  'people',
-  'places',
-  'events',
-  'custom-items',
-  'content-types',
   'media',
   'forms',
   'form-submissions',
