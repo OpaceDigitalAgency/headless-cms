@@ -93523,13 +93523,15 @@
           "name": "site_name",
           "type": "varchar",
           "primaryKey": false,
-          "notNull": true
+          "notNull": true,
+          "default": "'My Site'"
         },
         "site_description": {
           "name": "site_description",
           "type": "varchar",
           "primaryKey": false,
-          "notNull": false
+          "notNull": false,
+          "default": "'A blog about technology, design, business, and lifestyle.'"
         },
         "site_url": {
           "name": "site_url",
@@ -93635,42 +93637,6 @@
           "notNull": false,
           "default": false
         },
-        "default_meta_title": {
-          "name": "default_meta_title",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "default_meta_description": {
-          "name": "default_meta_description",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "default_meta_image_id": {
-          "name": "default_meta_image_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "google_analytics_id": {
-          "name": "google_analytics_id",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "google_tag_manager_id": {
-          "name": "google_tag_manager_id",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "robots_txt": {
-          "name": "robots_txt",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": false
-        },
         "twitter_handle": {
           "name": "twitter_handle",
           "type": "varchar",
@@ -93719,6 +93685,92 @@
           "primaryKey": false,
           "notNull": false
         },
+        "seo_default_meta_title": {
+          "name": "seo_default_meta_title",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "seo_default_meta_description": {
+          "name": "seo_default_meta_description",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "seo_default_og_image_id": {
+          "name": "seo_default_og_image_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "seo_separator": {
+          "name": "seo_separator",
+          "type": "enum_settings_seo_separator",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'|'"
+        },
+        "social_meta_twitter_card_type": {
+          "name": "social_meta_twitter_card_type",
+          "type": "enum_settings_social_meta_twitter_card_type",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'summary_large_image'"
+        },
+        "social_meta_facebook_app_id": {
+          "name": "social_meta_facebook_app_id",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "social_meta_facebook_verification": {
+          "name": "social_meta_facebook_verification",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "search_engines_default_robots": {
+          "name": "search_engines_default_robots",
+          "type": "enum_settings_search_engines_default_robots",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'index,follow'"
+        },
+        "search_engines_google_site_verification": {
+          "name": "search_engines_google_site_verification",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "search_engines_bing_verification": {
+          "name": "search_engines_bing_verification",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "schema_organization_type": {
+          "name": "schema_organization_type",
+          "type": "enum_settings_schema_organization_type",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'Organization'"
+        },
+        "schema_organization_name": {
+          "name": "schema_organization_name",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "schema_organization_logo_id": {
+          "name": "schema_organization_logo_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
         "custom_css": {
           "name": "custom_css",
           "type": "varchar",
@@ -93747,7 +93799,8 @@
           "name": "maintenance_message",
           "type": "varchar",
           "primaryKey": false,
-          "notNull": false
+          "notNull": false,
+          "default": "'We''re currently performing scheduled maintenance. We''ll be back shortly!'"
         },
         "updated_at": {
           "name": "updated_at",
@@ -93793,11 +93846,26 @@
           "method": "btree",
           "with": {}
         },
-        "settings_default_meta_default_meta_image_idx": {
-          "name": "settings_default_meta_default_meta_image_idx",
+        "settings_seo_seo_default_og_image_idx": {
+          "name": "settings_seo_seo_default_og_image_idx",
           "columns": [
             {
-              "expression": "default_meta_image_id",
+              "expression": "seo_default_og_image_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "settings_schema_schema_organization_logo_idx": {
+          "name": "settings_schema_schema_organization_logo_idx",
+          "columns": [
+            {
+              "expression": "schema_organization_logo_id",
               "isExpression": false,
               "asc": true,
               "nulls": "last"
@@ -93836,12 +93904,25 @@
           "onDelete": "set null",
           "onUpdate": "no action"
         },
-        "settings_default_meta_image_id_media_id_fk": {
-          "name": "settings_default_meta_image_id_media_id_fk",
+        "settings_seo_default_og_image_id_media_id_fk": {
+          "name": "settings_seo_default_og_image_id_media_id_fk",
           "tableFrom": "settings",
           "tableTo": "media",
           "columnsFrom": [
-            "default_meta_image_id"
+            "seo_default_og_image_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        },
+        "settings_schema_organization_logo_id_media_id_fk": {
+          "name": "settings_schema_organization_logo_id_media_id_fk",
+          "tableFrom": "settings",
+          "tableTo": "media",
+          "columnsFrom": [
+            "schema_organization_logo_id"
           ],
           "columnsTo": [
             "id"
@@ -101435,10 +101516,53 @@
       "values": [
         "brochure",
         "blog",
-        "museum",
+        "archive",
         "ecommerce",
         "portfolio",
         "custom"
+      ]
+    },
+    "public.enum_settings_seo_separator": {
+      "name": "enum_settings_seo_separator",
+      "schema": "public",
+      "values": [
+        "|",
+        "-",
+        "·",
+        "/",
+        "::"
+      ]
+    },
+    "public.enum_settings_social_meta_twitter_card_type": {
+      "name": "enum_settings_social_meta_twitter_card_type",
+      "schema": "public",
+      "values": [
+        "summary",
+        "summary_large_image",
+        "app",
+        "player"
+      ]
+    },
+    "public.enum_settings_search_engines_default_robots": {
+      "name": "enum_settings_search_engines_default_robots",
+      "schema": "public",
+      "values": [
+        "index,follow",
+        "noindex,follow",
+        "index,nofollow",
+        "noindex,nofollow"
+      ]
+    },
+    "public.enum_settings_schema_organization_type": {
+      "name": "enum_settings_schema_organization_type",
+      "schema": "public",
+      "values": [
+        "Organization",
+        "LocalBusiness",
+        "Corporation",
+        "EducationalOrganization",
+        "GovernmentOrganization",
+        "NGO"
       ]
     },
     "public.enum_navigation_settings_custom_links_insert_position": {
@@ -101469,6 +101593,6 @@
     "tables": {},
     "columns": {}
   },
-  "id": "5a6be494-8a92-44a2-b0f2-818a7dd77f77",
+  "id": "f8fc1766-104f-4a50-920e-0dd6e61d0b14",
   "prevId": "00000000-0000-0000-0000-000000000000"
 }
