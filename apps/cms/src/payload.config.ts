@@ -38,6 +38,7 @@ import { CustomItems } from './collections/CustomItems'
 import { Orders } from './collections/Orders'
 import { Carts } from './collections/Carts'
 import { ProductReviews } from './collections/ProductReviews'
+import { seoCollectionSlugs } from './lib/seo/seoCollections'
 
 // Globals
 import { Header } from './globals/Header'
@@ -339,7 +340,7 @@ export default buildConfig({
     // Note: tabbedUI is set to true, which means SEO fields will be injected
     // into the 'meta' field group defined in each collection's tabs
     seoPlugin({
-      collections: ['pages', 'posts', 'archive-items', 'people', 'places', 'events', 'products', 'custom-items', 'content-types'],
+      collections: [...seoCollectionSlugs],
       tabbedUI: true,
       uploadsCollection: 'media',
       generateTitle: ({ doc }) => `${doc?.title || doc?.name || 'Untitled'} | CMS`,

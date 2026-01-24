@@ -543,9 +543,9 @@ export class CoreSeeder extends BaseSeeder {
             heading: 'Creative Milestones',
             layout: 'alternating',
             events: [
-              { date: '1501', title: 'David Commission', description: createRichText('Begins the marble statue that became a symbol of Florence.') },
-              { date: '1508', title: 'Sistine Chapel', description: createRichText('Completes the iconic ceiling frescoes.') },
-              { date: '1546', title: 'St. Peter\'s', description: createRichText('Appointed chief architect of St. Peter\'s Basilica.') },
+              { date: '1501', heading: 'David Commission', description: createRichText('Begins the marble statue that became a symbol of Florence.') },
+              { date: '1508', heading: 'Sistine Chapel', description: createRichText('Completes the iconic ceiling frescoes.') },
+              { date: '1546', heading: 'St. Peter\'s', description: createRichText('Appointed chief architect of St. Peter\'s Basilica.') },
             ],
           },
           {
@@ -811,9 +811,9 @@ export class CoreSeeder extends BaseSeeder {
               heading: 'Our History',
               layout: 'vertical',
               events: [
-                { date: '1850', title: 'Foundation', description: createRichText('The archive was founded by a group of passionate collectors.') },
-                { date: '1920', title: 'Major Expansion', description: createRichText('A new wing was added to house the growing collection.') },
-                { date: '2000', title: 'Digital Initiative', description: createRichText('The archive launched its first digital collection.') },
+                { date: '1850', heading: 'Foundation', description: createRichText('The archive was founded by a group of passionate collectors.') },
+                { date: '1920', heading: 'Major Expansion', description: createRichText('A new wing was added to house the growing collection.') },
+                { date: '2000', heading: 'Digital Initiative', description: createRichText('The archive launched its first digital collection.') },
               ],
             },
           ],
