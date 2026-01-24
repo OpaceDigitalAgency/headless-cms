@@ -178,40 +178,7 @@ export const navigationEndpoint: Endpoint = {
         // Skip other empty sections (no collections enabled)
         if (items.length === 0 && sectionId !== 'settings') return
 
-        // Add manager links at the top of each section (only if section has items)
-        if (sectionId === 'content') {
-          items.unshift({
-            label: 'Manage Content',
-            href: '/admin/content-manager',
-            icon: 'settings',
-            slug: 'content-manager',
-            _order: -1,
-          })
-        } else if (sectionId === 'collections') {
-          items.unshift({
-            label: 'Manage Collections',
-            href: '/admin/collection-manager',
-            icon: 'settings',
-            slug: 'collection-manager',
-            _order: -1,
-          })
-        } else if (sectionId === 'shop') {
-          items.unshift({
-            label: 'Manage Shop',
-            href: '/admin/shop-manager',
-            icon: 'settings',
-            slug: 'shop-manager',
-            _order: -1,
-          })
-        } else if (sectionId === 'taxonomy') {
-          items.unshift({
-            label: 'Manage Taxonomy',
-            href: '/admin/taxonomy-manager',
-            icon: 'settings',
-            slug: 'taxonomy-manager',
-            _order: -1,
-          })
-        }
+        // Manager links removed - custom admin views don't exist in clean main branch
 
         navSections.push({
           id: sectionId,
