@@ -192,22 +192,35 @@ export abstract class BaseSeeder {
     }>
   }): Promise<string | null> {
     try {
-      const contentType = await this.payload.create({
+      // Check if content type already exists
+      const existing = await this.payload.find({
         collection: 'content-types',
-        data: {
-          name: data.name,
-          slug: data.slug,
-          singularLabel: data.singularLabel,
-          pluralLabel: data.pluralLabel,
-          icon: (data.icon as any) || 'box',
-          template: data.template as any,
-          hasArchive: true,
-          archiveSlug: `items/${data.slug}`,
-          customFields: (data.customFields as any) || [],
-        },
+        where: { slug: { equals: data.slug } },
+        limit: 1,
+        depth: 0,
       })
 
-      this.trackId('content-types', contentType.id)
+      let contentType: any
+      if (existing.docs.length > 0) {
+        this.log(`Content type "${data.name}" already exists, skipping creation.`)
+        contentType = existing.docs[0]
+      } else {
+        contentType = await this.payload.create({
+          collection: 'content-types',
+          data: {
+            name: data.name,
+            slug: data.slug,
+            singularLabel: data.singularLabel,
+            pluralLabel: data.pluralLabel,
+            icon: (data.icon as any) || 'box',
+            template: data.template as any,
+            hasArchive: true,
+            archiveSlug: `items/${data.slug}`,
+            customFields: (data.customFields as any) || [],
+          },
+        })
+        this.trackId('content-types', contentType.id)
+      }
 
       if (data.items && data.items.length > 0) {
         for (const item of data.items) {

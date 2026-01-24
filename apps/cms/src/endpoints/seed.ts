@@ -684,7 +684,7 @@ export const seedAllEndpoint: Endpoint = {
       const body = await req.json?.() || {}
       const { action } = body
 
-      // Use the core preset (archive-next) as it has the most collections
+      // Get enabled collections
       const enabledCollections: string[] = []
       for (const slug of Object.keys(COLLECTION_SEED_CONFIG)) {
         if (await isCollectionEnabled(payload, slug)) {
@@ -699,7 +699,9 @@ export const seedAllEndpoint: Endpoint = {
         )
       }
 
-      const seeder = createSeeder('archive', payload, {
+      // Use the active preset from Settings (respects user's choice)
+      const activePreset = await getActivePreset(payload)
+      const seeder = createSeeder(activePreset, payload, {
         downloadMedia: false,
         clearExisting: false,
         collections: enabledCollections,
