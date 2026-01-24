@@ -61,6 +61,7 @@ import { default as default_ff20ba5d9db32499007dc349f798b465 } from '../../../ad
 import { default as default_b480197be7e98c44a03522826851780a } from '../../../admin/views/tools/Forms'
 import { default as default_0a7be85538d863e8c28b8169cf8274c7 } from '../../../admin/views/tools/UserManagement'
 import { default as default_db48d3eba7acaf851d0ae6b08c07e0d8 } from '../../../admin/views/tools/SearchIndex'
+import { default as default_73348a8666ddbef292061521017121d1 } from '../../../admin/views/SeoSettings'
 import { CollectionCards as CollectionCards_ab83ff7e88da8d3530831f296ec4756a } from '@payloadcms/ui/rsc'
 
 export const importMap = {
@@ -127,5 +128,6 @@ export const importMap = {
   "/admin/views/tools/Forms#default": default_b480197be7e98c44a03522826851780a,
   "/admin/views/tools/UserManagement#default": default_0a7be85538d863e8c28b8169cf8274c7,
   "/admin/views/tools/SearchIndex#default": default_db48d3eba7acaf851d0ae6b08c07e0d8,
+  "/admin/views/SeoSettings#default": default_73348a8666ddbef292061521017121d1,
   "@payloadcms/ui/rsc#CollectionCards": CollectionCards_ab83ff7e88da8d3530831f296ec4756a
 }

@@ -36,7 +36,7 @@ export const personTemplate: CollectionTemplate = {
   status: 'installed', // Currently installed
   hasSeedData: true,
   hasSeedMedia: true,
-  seedDataCount: 6,
+  seedDataCount: 5,
   seedItems: [
     {
       title: 'Leonardo da Vinci',
@@ -53,10 +53,24 @@ export const personTemplate: CollectionTemplate = {
       status: 'published',
     },
     {
+      title: 'Raphael Sanzio',
+      slug: 'raphael-sanzio',
+      excerpt: 'Italian painter and architect of the High Renaissance.',
+      content: 'Profile highlighting collaborative process and stylistic influence.',
+      status: 'published',
+    },
+    {
       title: 'Claude Monet',
       slug: 'claude-monet',
       excerpt: 'French painter and founder of Impressionism.',
       content: 'Overview of series paintings and influence on modern art.',
+      status: 'published',
+    },
+    {
+      title: 'Phidias',
+      slug: 'phidias',
+      excerpt: 'Ancient Greek sculptor, painter, and architect.',
+      content: 'Profile focusing on techniques and cultural legacy.',
       status: 'published',
     },
   ],

@@ -60,6 +60,20 @@ export const placeTemplate: CollectionTemplate = {
       content: 'Museums, galleries, and a long tradition of modern art movements.',
       status: 'published',
     },
+    {
+      title: 'Athens, Greece',
+      slug: 'athens-greece',
+      excerpt: 'Cradle of Western civilization and birthplace of democracy.',
+      content: 'Classical foundations in philosophy, governance, and art.',
+      status: 'published',
+    },
+    {
+      title: 'Cairo, Egypt',
+      slug: 'cairo-egypt',
+      excerpt: 'Gateway to ancient wonders and the Nile.',
+      content: 'Connections to ancient royal sites and craft traditions.',
+      status: 'published',
+    },
   ],
   
   fields: [
