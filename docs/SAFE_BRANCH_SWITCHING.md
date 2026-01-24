@@ -8,10 +8,15 @@ Switching Git branches while the development server is running causes the server
 - **Collection mismatches** - Main branch doesn't have experimental collections that development has
 - **Confusing debugging** - You think you're on one branch but the server is running different code
 - **Time wasted** - Resolving errors that wouldn't exist if branches were switched safely
+- **Silent failures** - The switch happens in the background, you just see things break
 
-## The Solution
+## The Solution: Two Layers of Protection
 
-We've created a safe checkout script that prevents branch switching when dev servers are running.
+### Layer 1: Proactive Prevention (Recommended)
+Use the safe checkout script that **blocks** branch switching when dev servers are running.
+
+### Layer 2: Automatic Warning (Fallback)
+A Git hook that **warns** you immediately after any branch switch if dev server is running.
 
 ### Method 1: Using Make (Recommended)
 
@@ -142,19 +147,39 @@ git checkout development  # or main
 make dev
 ```
 
+## Installation
+
+### First Time Setup
+
+If you just cloned the repository, install the Git hooks:
+
+```bash
+./scripts/install-git-hooks.sh
+```
+
+This installs the `post-checkout` hook that warns you when you switch branches while dev server is running.
+
+### What Gets Installed
+
+- **Git post-checkout hook** - Runs automatically after every `git checkout`
+- **Automatic warning** - Shows clear message if dev server is running
+- **No blocking** - The hook can't prevent the switch, but it alerts you immediately
+
 ## For Repository Maintainers
 
 ### Adding to New Projects
 
-The safe checkout script is automatically included when you:
+The safe checkout system is automatically included when you:
 
 1. Clone the repository
-2. Run `make quickstart` or `./setup.sh`
+2. Run `./scripts/install-git-hooks.sh` (one-time setup)
+3. Use `make checkout BRANCH=<name>` for all branch switches
 
-### Updating the Script
+### Files Involved
 
-The script is located at:
-- `scripts/safe-checkout.sh` - Main script
+- `scripts/safe-checkout.sh` - Proactive prevention script
+- `scripts/git-hooks/post-checkout` - Git hook template
+- `scripts/install-git-hooks.sh` - Hook installer
 - `Makefile` - Make command wrapper
 
 To update, edit these files and commit to both main and development branches.

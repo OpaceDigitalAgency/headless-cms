@@ -1,0 +1,79 @@
+#!/bin/bash
+# Git post-checkout hook
+# Warns when branch was switched while dev server is running
+# Note: This runs AFTER checkout, so we can't prevent it, only warn
+
+# Colors
+RED='\033[0;31m'
+YELLOW='\033[1;33m'
+GREEN='\033[0;32m'
+NC='\033[0m' # No Color
+
+# Hook receives: previous-HEAD new-HEAD branch-flag
+PREV_HEAD=$1
+NEW_HEAD=$2
+BRANCH_FLAG=$3
+
+# Only proceed if this was a branch checkout (flag=1)
+if [ "$BRANCH_FLAG" != "1" ]; then
+    exit 0
+fi
+
+# Get branch names
+PREV_BRANCH=$(git name-rev --name-only "$PREV_HEAD" 2>/dev/null | sed 's/^remotes\/origin\///')
+NEW_BRANCH=$(git rev-parse --abbrev-ref HEAD 2>/dev/null)
+
+# Check if any dev processes are running
+check_dev_processes() {
+    # Check for Next.js dev server (CMS)
+    if lsof -ti:3000 >/dev/null 2>&1; then
+        return 0
+    fi
+    
+    # Check for Astro dev server
+    if lsof -ti:4321 >/dev/null 2>&1; then
+        return 0
+    fi
+    
+    # Check for make dev process
+    if pgrep -f "make dev" >/dev/null 2>&1; then
+        return 0
+    fi
+    
+    # Check for pnpm dev processes
+    if pgrep -f "pnpm.*dev" >/dev/null 2>&1; then
+        return 0
+    fi
+    
+    return 1
+}
+
+# If dev server is running, show urgent warning
+if check_dev_processes; then
+    echo ""
+    echo -e "${RED}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+    echo -e "${RED}⚠️  WARNING: DEV SERVER IS RUNNING!${NC}"
+    echo -e "${RED}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+    echo ""
+    echo -e "${YELLOW}You just switched from '${PREV_BRANCH}' to '${NEW_BRANCH}'${NC}"
+    echo -e "${YELLOW}while the development server is running!${NC}"
+    echo ""
+    echo "Your dev server will now reload with ${NEW_BRANCH} code."
+    echo "This can cause errors if the branches have different:"
+    echo "  • Collections (main doesn't have ContentTypes, CustomItems, etc.)"
+    echo "  • Database schemas"
+    echo "  • Dependencies"
+    echo ""
+    echo -e "${RED}RECOMMENDED ACTION:${NC}"
+    echo "  1. Stop the dev server NOW (Ctrl+C)"
+    echo "  2. Restart it: make dev"
+    echo ""
+    echo -e "${YELLOW}To prevent this in the future, use:${NC}"
+    echo "  make checkout BRANCH=<name>  # Safe checkout that checks first"
+    echo ""
+    echo -e "${RED}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+    echo ""
+fi
+
+exit 0
+

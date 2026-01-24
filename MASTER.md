@@ -219,10 +219,19 @@ Switching branches while `make dev` is running causes:
 - Runtime errors from code/database mismatches
 - Collection errors (main branch doesn't have experimental collections)
 - Wasted time debugging phantom issues
+- **Silent failures** - happens in background, you just see things break
 
-### The Solution
+### The Solution: Two Layers of Protection
 
-**Always use the safe checkout command:**
+#### First Time Setup
+```bash
+# Install Git hooks (one-time setup)
+./scripts/install-git-hooks.sh
+```
+
+This installs a Git hook that **automatically warns you** whenever you switch branches while dev server is running.
+
+#### Daily Use: Always Use Safe Checkout
 
 ```bash
 # Switch to main branch
@@ -236,6 +245,8 @@ The script will:
 1. Check if dev server is running
 2. Block the switch if it is
 3. Show you how to proceed safely
+
+**If you forget and use `git checkout` directly**, the Git hook will immediately warn you and tell you to restart the dev server.
 
 ### Safe Workflow
 
