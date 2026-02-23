@@ -81,67 +81,12 @@ interface RecentItem {
 }
 
 /**
- * Collapsible wrapper for SeedDataManager.
- * Auto-expands when CMS is completely empty (fresh install).
- * Collapses by default once any data exists, removing the visual
- * duplication between the seed cards and the stats grid below.
- */
-const SeedDataManagerPanel: React.FC = () => {
-  const [isOpen, setIsOpen] = useState<boolean | null>(null) // null = not yet determined
-
-  useEffect(() => {
-    // Check if there's any data at all to decide default open state
-    fetch('/api/pages?limit=0')
-      .then(r => r.ok ? r.json() : null)
-      .then(data => {
-        // If no pages exist, assume fresh install — expand by default
-        setIsOpen((data?.totalDocs ?? 0) === 0)
-      })
-      .catch(() => setIsOpen(false))
-  }, [])
-
-  if (isOpen === null) return null // Wait until we know
-
-  return (
-    <div style={{ marginBottom: '24px', border: '1px solid var(--theme-elevation-200)', borderRadius: '8px', overflow: 'hidden' }}>
-      <button
-        onClick={() => setIsOpen(o => !o)}
-        style={{
-          width: '100%',
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          padding: '14px 20px',
-          background: 'var(--theme-elevation-50)',
-          border: 'none',
-          cursor: 'pointer',
-          fontSize: '14px',
-          fontWeight: 600,
-          color: 'var(--theme-text)',
-        }}
-      >
-        <span>🌱 Sample Data Manager</span>
-        <span style={{ fontSize: '11px', fontWeight: 400, color: 'var(--theme-elevation-600)' }}>
-          {isOpen ? '▲ Hide' : '▼ Show — seed, re-seed or clear sample content'}
-        </span>
-      </button>
-      {isOpen && (
-        <div style={{ padding: '20px', borderTop: '1px solid var(--theme-elevation-200)' }}>
-          <SeedDataManager />
-        </div>
-      )}
-    </div>
-  )
-}
-
-/**
  * Custom Dashboard Component
  *
  * Enhanced dashboard with collection stats, recent updates, drafts,
  * quick-create buttons, and site configuration shortcuts.
  */
 export const Dashboard: React.FC = () => {
-  const [stats, setStats] = useState<CollectionStat[]>([])
   const [recentItems, setRecentItems] = useState<RecentItem[]>([])
   const [drafts, setDrafts] = useState<RecentItem[]>([])
   const [isLoading, setIsLoading] = useState(true)
@@ -305,13 +250,11 @@ export const Dashboard: React.FC = () => {
             return []
           })
 
-          const [statsResults, recentResults, draftsResults] = await Promise.all([
-            Promise.all(statsPromises),
+          const [recentResults, draftsResults] = await Promise.all([
             Promise.all(recentPromises),
             Promise.all(draftsPromises),
           ])
 
-          setStats(statsResults.filter(Boolean) as CollectionStat[])
           setRecentItems(recentResults.flat().sort((a, b) =>
             new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
           ).slice(0, 5))
@@ -325,68 +268,6 @@ export const Dashboard: React.FC = () => {
     }
 
     fetchData()
-  }, [])
-
-  // Re-fetch stats whenever the seed manager seeds or clears data
-  useEffect(() => {
-    const handleSeedChange = () => {
-      const fetchData = async () => {
-        setIsLoading(true)
-
-        try {
-          const navResponse = await fetch('/api/admin/navigation')
-          if (navResponse.ok) {
-            const navData = await navResponse.json()
-            const slugs: string[] = []
-            const isStatsSlug = (slug: string) =>
-              slug &&
-              !slug.startsWith('custom:') &&
-              slug !== 'dashboard' &&
-              slug !== 'tools' &&
-              !slug.endsWith('-manager') &&
-              !['header', 'footer', 'settings', 'navigation-settings', 'redirects'].includes(slug)
-
-            navData.navSections?.forEach((section: any) => {
-              section.items?.forEach((item: any) => {
-                if (item.slug && isStatsSlug(item.slug)) slugs.push(item.slug)
-                if (item.items) {
-                  item.items.forEach((nestedItem: any) => {
-                    if (nestedItem.slug && isStatsSlug(nestedItem.slug)) slugs.push(nestedItem.slug)
-                  })
-                }
-              })
-            })
-
-            const statsPromises = slugs.map(async (slug) => {
-              try {
-                const response = await fetch(`/api/${slug}?limit=0`)
-                if (response.ok) {
-                  const data = await response.json()
-                  let label = slug
-                  navData.navSections?.forEach((section: any) => {
-                    section.items?.forEach((item: any) => {
-                      if (item.slug === slug) label = item.label
-                      if (item.items) item.items.forEach((n: any) => { if (n.slug === slug) label = n.label })
-                    })
-                  })
-                  return { slug, label, Icon: iconMap[slug] || FileTextIcon, color: colorMap[slug] || '#6b7280', count: data.totalDocs || 0 }
-                }
-              } catch {}
-              return null
-            })
-
-            const results = await Promise.all(statsPromises)
-            setStats(results.filter(Boolean) as CollectionStat[])
-          }
-        } catch {}
-
-        setIsLoading(false)
-      }
-      fetchData()
-    }
-
-    window.addEventListener('seedDataChanged', handleSeedChange)
-    return () => window.removeEventListener('seedDataChanged', handleSeedChange)
   }, [])
 
   const formatDate = (dateString: string) => {
@@ -411,31 +292,9 @@ export const Dashboard: React.FC = () => {
         <p>Welcome back! Here's what's happening with your content.</p>
       </div>
 
-      {/* Sample Data Manager — collapsible panel */}
-      <SeedDataManagerPanel />
-
-      {/* Stats Grid */}
-      <div className="ra-dashboard__stats">
-        {stats.map((stat) => {
-          const IconComponent = stat.Icon
-          return (
-            <a
-              key={stat.slug}
-              href={`/admin/collections/${stat.slug}`}
-              className="ra-dashboard__stat-card"
-            >
-              <div className="ra-dashboard__stat-icon" style={{ backgroundColor: `${stat.color}20`, color: stat.color }}>
-                <IconComponent size={24} />
-              </div>
-              <div className="ra-dashboard__stat-content">
-                <span className="ra-dashboard__stat-count">
-                  {isLoading ? '...' : stat.count}
-                </span>
-                <span className="ra-dashboard__stat-label">{stat.label}</span>
-              </div>
-            </a>
-          )
-        })}
+      {/* Sample Data Manager — always visible, single source of truth for seed actions and counts */}
+      <div style={{ marginBottom: '32px' }}>
+        <SeedDataManager />
       </div>
 
       {/* Two-column grid for recent and drafts */}

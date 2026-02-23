@@ -233,7 +233,95 @@ export const SeedDataManager: React.FC = () => {
     }
   }
 
+  const handleSeedAll = async () => {
+    const seedable = collections.filter(c => c.hasSeedData && c.count === 0)
+    if (seedable.length === 0) {
+      setMessage({ type: 'info', text: 'All collections already have data. Use Re-seed on individual collections to refresh.' })
+      return
+    }
+
+    setActionInProgress('bulk-seed')
+    setMessage({ type: 'info', text: `Seeding ${seedable.length} collections...` })
+
+    let seeded = 0
+    let errors = 0
+    for (const col of seedable) {
+      setMessage({ type: 'info', text: `Seeding ${col.label}... (${seeded + 1}/${seedable.length})` })
+      try {
+        const response = await fetch('/api/seed/collection', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ slug: col.slug, action: 'seed', includeMedia: false }),
+        })
+        if (response.ok) {
+          seeded++
+        } else {
+          errors++
+        }
+      } catch {
+        errors++
+      }
+    }
+
+    await fetchCollectionStatus()
+    window.dispatchEvent(new CustomEvent('seedDataChanged'))
+    setActionInProgress(null)
+    setMessage({
+      type: errors === 0 ? 'success' : 'error',
+      text: errors === 0
+        ? `Successfully seeded ${seeded} collection${seeded !== 1 ? 's' : ''}.`
+        : `Seeded ${seeded} collection${seeded !== 1 ? 's' : ''}, ${errors} failed. Check console for details.`,
+    })
+  }
+
+  const handleClearAll = async () => {
+    const withData = collections.filter(c => c.count > 0)
+    if (withData.length === 0) {
+      setMessage({ type: 'info', text: 'Nothing to clear — all collections are already empty.' })
+      return
+    }
+
+    const confirmed = window.confirm(
+      `This will permanently delete all sample data from ${withData.length} collection${withData.length !== 1 ? 's' : ''}. Are you sure?`
+    )
+    if (!confirmed) return
+
+    setActionInProgress('bulk-clear')
+    setMessage({ type: 'info', text: `Clearing ${withData.length} collections...` })
+
+    let cleared = 0
+    let errors = 0
+    for (const col of withData) {
+      setMessage({ type: 'info', text: `Clearing ${col.label}... (${cleared + 1}/${withData.length})` })
+      try {
+        const response = await fetch('/api/seed/collection', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ slug: col.slug, action: 'clear', includeMedia: false }),
+        })
+        if (response.ok) {
+          cleared++
+        } else {
+          errors++
+        }
+      } catch {
+        errors++
+      }
+    }
+
+    await fetchCollectionStatus()
+    window.dispatchEvent(new CustomEvent('seedDataChanged'))
+    setActionInProgress(null)
+    setMessage({
+      type: errors === 0 ? 'success' : 'error',
+      text: errors === 0
+        ? `Successfully cleared ${cleared} collection${cleared !== 1 ? 's' : ''}.`
+        : `Cleared ${cleared}, ${errors} failed. Check console for details.`,
+    })
+  }
+
   const handlePresetAction = async (action: 'seed' | 'clear' | 'reseed') => {
+    // Kept for "By Preset" tab — uses the preset-specific seeder
     if (!selectedPreset) {
       setMessage({ type: 'error', text: 'Please select a preset first' })
       return
@@ -280,6 +368,7 @@ export const SeedDataManager: React.FC = () => {
       setActionInProgress(null)
     }
   }
+
 
   const handleCreateShowcase = async () => {
     setActionInProgress('pages-showcase')
@@ -400,7 +489,7 @@ export const SeedDataManager: React.FC = () => {
           }}>
             <span style={{ fontWeight: 500, color: 'var(--theme-text)' }}>Bulk Actions:</span>
             <button
-              onClick={() => handlePresetAction('seed')}
+              onClick={handleSeedAll}
               disabled={actionInProgress !== null}
               style={{
                 padding: '8px 16px',
@@ -416,29 +505,27 @@ export const SeedDataManager: React.FC = () => {
                 gap: '6px',
               }}
             >
-              <SettingsIcon size={14} /> {actionInProgress === 'preset-seed' ? 'Seeding...' : 'Seed All'}
+              <SettingsIcon size={14} /> {actionInProgress === 'bulk-seed' ? 'Seeding...' : 'Seed All'}
             </button>
-            {hasAnyData && (
-              <button
-                onClick={() => handlePresetAction('clear')}
-                disabled={actionInProgress !== null}
-                style={{
-                  padding: '8px 16px',
-                  backgroundColor: '#dc3545',
-                  color: 'white',
-                  border: 'none',
-                  borderRadius: '4px',
-                  cursor: actionInProgress ? 'not-allowed' : 'pointer',
-                  opacity: actionInProgress ? 0.6 : 1,
-                  fontSize: '13px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '6px',
-                }}
-              >
-                <TrashIcon size={14} /> {actionInProgress === 'preset-clear' ? 'Clearing...' : 'Clear All'}
-              </button>
-            )}
+            <button
+              onClick={handleClearAll}
+              disabled={actionInProgress !== null}
+              style={{
+                padding: '8px 16px',
+                backgroundColor: '#dc3545',
+                color: 'white',
+                border: 'none',
+                borderRadius: '4px',
+                cursor: actionInProgress ? 'not-allowed' : 'pointer',
+                opacity: actionInProgress ? 0.6 : 1,
+                fontSize: '13px',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px',
+              }}
+            >
+              <TrashIcon size={14} /> {actionInProgress === 'bulk-clear' ? 'Clearing...' : 'Clear All'}
+            </button>
           </div>
 
           {/* Per-Collection Controls */}
