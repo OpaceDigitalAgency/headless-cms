@@ -4,11 +4,9 @@ import type { GlobalConfig } from 'payload'
 /**
  * Feature Settings Global
  *
- * Admin-facing toggle panel for enabling or disabling CMS feature modules.
- * Changes here are informational — they update this global in the DB and display
- * the current state. Actual feature registration requires a server restart
- * (controlled by cms.features.ts). This gives editors clear visibility of
- * what is enabled and provides a reference point for the developer.
+ * Admin-facing reference panel showing which CMS feature modules are active.
+ * Checkboxes are informational — actual feature registration is controlled by
+ * cms.features.ts and requires a server restart to change.
  */
 export const FeatureSettings: GlobalConfig = {
   slug: 'feature-settings',
@@ -17,7 +15,7 @@ export const FeatureSettings: GlobalConfig = {
   admin: {
     group: 'Admin',
     description:
-      'View and manage which CMS feature modules are active. Some changes require a server restart to take full effect.',
+      'View which CMS feature modules are currently active. Changes to features require editing cms.features.ts and restarting the server.',
   },
 
   access: {
@@ -26,191 +24,121 @@ export const FeatureSettings: GlobalConfig = {
   },
 
   fields: [
+    // ==============================================
+    // Core Content (always on)
+    // ==============================================
     {
-      type: 'ui',
-      name: 'featureSettingsInfo',
+      name: 'pagesEnabled',
+      type: 'checkbox',
+      label: 'Pages',
+      defaultValue: true,
       admin: {
-        components: {
-          Field: '/components/EmptyField',
-        },
+        description: 'Page collection with block builder. Always enabled.',
+        readOnly: true,
       },
     },
-
-    // ==============================================
-    // Content Features
-    // ==============================================
     {
-      name: 'contentFeatures',
-      type: 'group',
-      label: 'Content Features',
+      name: 'postsEnabled',
+      type: 'checkbox',
+      label: 'Blog Posts',
+      defaultValue: true,
       admin: {
-        description: 'Core content collections — always enabled.',
+        description: 'Blog/news posts collection. Always enabled.',
+        readOnly: true,
       },
-      fields: [
-        {
-          name: 'pagesEnabled',
-          type: 'checkbox',
-          label: 'Pages',
-          defaultValue: true,
-          admin: {
-            description: 'Page collection with block builder support.',
-            readOnly: true,
-          },
-        },
-        {
-          name: 'postsEnabled',
-          type: 'checkbox',
-          label: 'Blog Posts',
-          defaultValue: true,
-          admin: {
-            description: 'Blog / news posts collection.',
-            readOnly: true,
-          },
-        },
-        {
-          name: 'faqsEnabled',
-          type: 'checkbox',
-          label: 'FAQs',
-          defaultValue: true,
-          admin: {
-            description: 'Frequently Asked Questions collection.',
-            readOnly: true,
-          },
-        },
-        {
-          name: 'testimonialsEnabled',
-          type: 'checkbox',
-          label: 'Testimonials',
-          defaultValue: true,
-          admin: {
-            description: 'Client testimonials collection.',
-            readOnly: true,
-          },
-        },
-      ],
+    },
+    {
+      name: 'faqsEnabled',
+      type: 'checkbox',
+      label: 'FAQs',
+      defaultValue: true,
+      admin: {
+        description: 'Frequently Asked Questions. Always enabled.',
+        readOnly: true,
+      },
+    },
+    {
+      name: 'testimonialsEnabled',
+      type: 'checkbox',
+      label: 'Testimonials',
+      defaultValue: true,
+      admin: {
+        description: 'Client testimonials. Always enabled.',
+        readOnly: true,
+      },
     },
 
     // ==============================================
     // Dynamic Collections
     // ==============================================
     {
-      name: 'dynamicCollections',
-      type: 'group',
-      label: 'Dynamic Collections',
+      name: 'peopleEnabled',
+      type: 'checkbox',
+      label: 'People & Team Members',
+      defaultValue: true,
       admin: {
         description:
-          'People, Places, Events — specialised content modules. Requires server restart to change.',
+          'People collection for team members, speakers, authors. Controlled by features.people in cms.features.ts.',
       },
-      fields: [
-        {
-          name: 'peopleEnabled',
-          type: 'checkbox',
-          label: 'People & Team Members',
-          defaultValue: true,
-          admin: {
-            description:
-              'Enables the People collection for team members, speakers, authors, etc.',
-          },
-        },
-        {
-          name: 'placesEnabled',
-          type: 'checkbox',
-          label: 'Places & Venues',
-          defaultValue: true,
-          admin: {
-            description: 'Enables the Places collection for venues, offices, locations.',
-          },
-        },
-        {
-          name: 'eventsEnabled',
-          type: 'checkbox',
-          label: 'Events',
-          defaultValue: true,
-          admin: {
-            description: 'Enables the Events collection for exhibitions, workshops, performances.',
-          },
-        },
-        {
-          name: 'locationsEnabled',
-          type: 'checkbox',
-          label: 'Locations (Map Data)',
-          defaultValue: true,
-          admin: {
-            description:
-              'Enables the Locations collection for geographic data used in maps.',
-          },
-        },
-      ],
+    },
+    {
+      name: 'eventsEnabled',
+      type: 'checkbox',
+      label: 'Events',
+      defaultValue: true,
+      admin: {
+        description:
+          'Events collection for exhibitions, workshops, performances. Controlled by features.events in cms.features.ts.',
+      },
+    },
+    {
+      name: 'locationsEnabled',
+      type: 'checkbox',
+      label: 'Locations',
+      defaultValue: true,
+      admin: {
+        description:
+          'Locations collection for geographic data. Controlled by features.dynamicCollections in cms.features.ts.',
+      },
     },
 
     // ==============================================
     // Block Library
     // ==============================================
     {
-      name: 'blockLibraryFeatures',
-      type: 'group',
-      label: 'Block Library',
+      name: 'blockLibraryEnabled',
+      type: 'checkbox',
+      label: 'Block Library & Global Blocks',
+      defaultValue: true,
       admin: {
         description:
-          'Reusable blocks, global blocks, and page templates.',
+          'Enables the Block Library, Global Blocks, and Page Templates. Controlled by features.blockLibrary in cms.features.ts.',
       },
-      fields: [
-        {
-          name: 'blockLibraryEnabled',
-          type: 'checkbox',
-          label: 'Block Library',
-          defaultValue: true,
-          admin: {
-            description:
-              'Enables the Block Library, Global Blocks, and Page Templates collections.',
-          },
-        },
-        {
-          name: 'blockLibraryNote',
-          type: 'textarea',
-          label: 'Notes',
-          admin: {
-            description:
-              'Use /admin/collections/block-library to manage saved reusable blocks. Create a block on any page, then use the "Save to Library" button to store it here.',
-            readOnly: true,
-          },
-        },
-      ],
     },
 
     // ==============================================
     // eCommerce
     // ==============================================
     {
-      name: 'ecommerceFeatures',
-      type: 'group',
-      label: 'eCommerce',
+      name: 'ecommerceEnabled',
+      type: 'checkbox',
+      label: 'eCommerce (Products, Orders, Carts)',
+      defaultValue: false,
       admin: {
         description:
-          'Products, orders, carts, and product categories. Requires server restart + database migration to enable.',
+          'When enabled, adds Products, Orders, and Carts to the Shop nav section. Controlled by features.ecommerce in cms.features.ts.',
       },
-      fields: [
-        {
-          name: 'ecommerceEnabled',
-          type: 'checkbox',
-          label: 'eCommerce (Products, Orders, Carts)',
-          defaultValue: false,
-          admin: {
-            description:
-              'When enabled in cms.features.ts, adds Products, Product Categories, Product Collections, Orders, and Carts to the Shop nav section.',
-          },
-        },
-        {
-          name: 'ecommerceNote',
-          type: 'textarea',
-          label: 'How to Enable eCommerce',
-          defaultValue:
-            'To enable eCommerce: (1) Set ecommerce: true in apps/cms/src/cms.features.ts, (2) Run make db-migrate to apply the schema, (3) Restart the dev server. The Shop section will then appear in the top navigation.',
-          admin: {
-            readOnly: true,
-          },
-        },
-      ],
+    },
+    {
+      name: 'ecommerceInstructions',
+      type: 'textarea',
+      label: 'How to Enable eCommerce',
+      defaultValue:
+        'To enable eCommerce: (1) Open apps/cms/src/cms.features.ts, (2) Set ecommerce: true, (3) Run make db-migrate in the terminal, (4) Restart the dev server. The Shop section will then appear in the top navigation.',
+      admin: {
+        description: 'Follow these steps to activate eCommerce features.',
+        readOnly: true,
+      },
     },
   ],
 }

@@ -11196,7 +11196,7 @@ export interface NavigationSetting {
   createdAt?: string | null;
 }
 /**
- * View and manage which CMS feature modules are active. Some changes require a server restart to take full effect.
+ * View which CMS feature modules are currently active. Changes to features require editing cms.features.ts and restarting the server.
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "feature-settings".
@@ -11204,70 +11204,45 @@ export interface NavigationSetting {
 export interface FeatureSetting {
   id: number;
   /**
-   * Core content collections — always enabled.
+   * Page collection with block builder. Always enabled.
    */
-  contentFeatures?: {
-    /**
-     * Page collection with block builder support.
-     */
-    pagesEnabled?: boolean | null;
-    /**
-     * Blog / news posts collection.
-     */
-    postsEnabled?: boolean | null;
-    /**
-     * Frequently Asked Questions collection.
-     */
-    faqsEnabled?: boolean | null;
-    /**
-     * Client testimonials collection.
-     */
-    testimonialsEnabled?: boolean | null;
-  };
+  pagesEnabled?: boolean | null;
   /**
-   * People, Places, Events — specialised content modules. Requires server restart to change.
+   * Blog/news posts collection. Always enabled.
    */
-  dynamicCollections?: {
-    /**
-     * Enables the People collection for team members, speakers, authors, etc.
-     */
-    peopleEnabled?: boolean | null;
-    /**
-     * Enables the Places collection for venues, offices, locations.
-     */
-    placesEnabled?: boolean | null;
-    /**
-     * Enables the Events collection for exhibitions, workshops, performances.
-     */
-    eventsEnabled?: boolean | null;
-    /**
-     * Enables the Locations collection for geographic data used in maps.
-     */
-    locationsEnabled?: boolean | null;
-  };
+  postsEnabled?: boolean | null;
   /**
-   * Reusable blocks, global blocks, and page templates.
+   * Frequently Asked Questions. Always enabled.
    */
-  blockLibraryFeatures?: {
-    /**
-     * Enables the Block Library, Global Blocks, and Page Templates collections.
-     */
-    blockLibraryEnabled?: boolean | null;
-    /**
-     * Use /admin/collections/block-library to manage saved reusable blocks. Create a block on any page, then use the "Save to Library" button to store it here.
-     */
-    blockLibraryNote?: string | null;
-  };
+  faqsEnabled?: boolean | null;
   /**
-   * Products, orders, carts, and product categories. Requires server restart + database migration to enable.
+   * Client testimonials. Always enabled.
    */
-  ecommerceFeatures?: {
-    /**
-     * When enabled in cms.features.ts, adds Products, Product Categories, Product Collections, Orders, and Carts to the Shop nav section.
-     */
-    ecommerceEnabled?: boolean | null;
-    ecommerceNote?: string | null;
-  };
+  testimonialsEnabled?: boolean | null;
+  /**
+   * People collection for team members, speakers, authors. Controlled by features.people in cms.features.ts.
+   */
+  peopleEnabled?: boolean | null;
+  /**
+   * Events collection for exhibitions, workshops, performances. Controlled by features.events in cms.features.ts.
+   */
+  eventsEnabled?: boolean | null;
+  /**
+   * Locations collection for geographic data. Controlled by features.dynamicCollections in cms.features.ts.
+   */
+  locationsEnabled?: boolean | null;
+  /**
+   * Enables the Block Library, Global Blocks, and Page Templates. Controlled by features.blockLibrary in cms.features.ts.
+   */
+  blockLibraryEnabled?: boolean | null;
+  /**
+   * When enabled, adds Products, Orders, and Carts to the Shop nav section. Controlled by features.ecommerce in cms.features.ts.
+   */
+  ecommerceEnabled?: boolean | null;
+  /**
+   * Follow these steps to activate eCommerce features.
+   */
+  ecommerceInstructions?: string | null;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -11807,34 +11782,16 @@ export interface NavigationSettingsSelect<T extends boolean = true> {
  * via the `definition` "feature-settings_select".
  */
 export interface FeatureSettingsSelect<T extends boolean = true> {
-  contentFeatures?:
-    | T
-    | {
-        pagesEnabled?: T;
-        postsEnabled?: T;
-        faqsEnabled?: T;
-        testimonialsEnabled?: T;
-      };
-  dynamicCollections?:
-    | T
-    | {
-        peopleEnabled?: T;
-        placesEnabled?: T;
-        eventsEnabled?: T;
-        locationsEnabled?: T;
-      };
-  blockLibraryFeatures?:
-    | T
-    | {
-        blockLibraryEnabled?: T;
-        blockLibraryNote?: T;
-      };
-  ecommerceFeatures?:
-    | T
-    | {
-        ecommerceEnabled?: T;
-        ecommerceNote?: T;
-      };
+  pagesEnabled?: T;
+  postsEnabled?: T;
+  faqsEnabled?: T;
+  testimonialsEnabled?: T;
+  peopleEnabled?: T;
+  eventsEnabled?: T;
+  locationsEnabled?: T;
+  blockLibraryEnabled?: T;
+  ecommerceEnabled?: T;
+  ecommerceInstructions?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;
