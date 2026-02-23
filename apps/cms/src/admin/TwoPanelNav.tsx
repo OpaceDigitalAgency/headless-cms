@@ -399,7 +399,7 @@ const AdminSearch: React.FC<{
     setResults(searchResults.slice(0, 10))
     setIsOpen(searchResults.length > 0)
     setIsLoading(false)
-  }, [])
+  }, [globalLinks, navSections, collectionSearchConfig])
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value
