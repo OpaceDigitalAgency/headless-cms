@@ -317,7 +317,13 @@ export const seedCollectionEndpoint: Endpoint = {
 
       // Use collection-specific preset override, or fall back to active preset from Settings
       const presetId = COLLECTION_PRESET_OVERRIDES[slug] || await getActivePreset(payload)
-      const seeder = createSeeder(presetId, payload, {
+
+      // If the active preset doesn't natively handle this collection, fall back to CoreSeeder (archive)
+      // which has handlers for all supplementary collections (block-library, faqs, testimonials, etc.)
+      const CORE_ONLY_COLLECTIONS = ['block-library', 'faqs', 'testimonials', 'locations', 'logo-clouds', 'global-blocks']
+      const effectivePresetId = CORE_ONLY_COLLECTIONS.includes(slug) ? 'archive' : presetId
+
+      const seeder = createSeeder(effectivePresetId, payload, {
         downloadMedia: includeMedia && config.hasSeedMedia,
         clearExisting: action === 'reseed',
         collections: [slug], // Only seed this specific collection
