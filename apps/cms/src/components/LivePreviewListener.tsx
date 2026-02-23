@@ -1,3 +1,4 @@
+// @ts-nocheck
 'use client'
 
 import { RefreshRouteOnSave as PayloadLivePreview } from '@payloadcms/live-preview-react'

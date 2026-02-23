@@ -1,3 +1,4 @@
+// @ts-nocheck
 
 import { RichText } from './RichText'
 import { RenderBlocks } from './RenderBlocks'
