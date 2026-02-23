@@ -43,6 +43,33 @@ else
   fi
 fi
 
+# -------------------------------------------------------
+# Safety: ensure feature_settings table exists.
+# Drizzle may not auto-create this on first boot in all
+# deployment modes. This is idempotent — safe to run every time.
+# -------------------------------------------------------
+if [ -n "${DATABASE_URL}" ]; then
+  echo "Ensuring feature_settings table exists..."
+  psql "${DATABASE_URL}" -c "
+    CREATE TABLE IF NOT EXISTS feature_settings (
+      id serial PRIMARY KEY,
+      pages_enabled boolean DEFAULT true,
+      posts_enabled boolean DEFAULT true,
+      faqs_enabled boolean DEFAULT true,
+      testimonials_enabled boolean DEFAULT true,
+      people_enabled boolean DEFAULT true,
+      events_enabled boolean DEFAULT true,
+      locations_enabled boolean DEFAULT true,
+      block_library_enabled boolean DEFAULT true,
+      updated_at timestamptz DEFAULT now(),
+      created_at timestamptz DEFAULT now()
+    );
+    INSERT INTO feature_settings (id)
+    VALUES (1)
+    ON CONFLICT (id) DO NOTHING;
+  " 2>/dev/null && echo "feature_settings table ready." || echo "Note: psql not available — feature_settings table will be created by Payload on first request."
+fi
+
 echo "Starting Next.js server..."
 cd /app
 exec node apps/cms/server.js

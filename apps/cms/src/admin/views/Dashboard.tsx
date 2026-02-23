@@ -81,6 +81,60 @@ interface RecentItem {
 }
 
 /**
+ * Collapsible wrapper for SeedDataManager.
+ * Auto-expands when CMS is completely empty (fresh install).
+ * Collapses by default once any data exists, removing the visual
+ * duplication between the seed cards and the stats grid below.
+ */
+const SeedDataManagerPanel: React.FC = () => {
+  const [isOpen, setIsOpen] = useState<boolean | null>(null) // null = not yet determined
+
+  useEffect(() => {
+    // Check if there's any data at all to decide default open state
+    fetch('/api/pages?limit=0')
+      .then(r => r.ok ? r.json() : null)
+      .then(data => {
+        // If no pages exist, assume fresh install — expand by default
+        setIsOpen((data?.totalDocs ?? 0) === 0)
+      })
+      .catch(() => setIsOpen(false))
+  }, [])
+
+  if (isOpen === null) return null // Wait until we know
+
+  return (
+    <div style={{ marginBottom: '24px', border: '1px solid var(--theme-elevation-200)', borderRadius: '8px', overflow: 'hidden' }}>
+      <button
+        onClick={() => setIsOpen(o => !o)}
+        style={{
+          width: '100%',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          padding: '14px 20px',
+          background: 'var(--theme-elevation-50)',
+          border: 'none',
+          cursor: 'pointer',
+          fontSize: '14px',
+          fontWeight: 600,
+          color: 'var(--theme-text)',
+        }}
+      >
+        <span>🌱 Sample Data Manager</span>
+        <span style={{ fontSize: '11px', fontWeight: 400, color: 'var(--theme-elevation-600)' }}>
+          {isOpen ? '▲ Hide' : '▼ Show — seed, re-seed or clear sample content'}
+        </span>
+      </button>
+      {isOpen && (
+        <div style={{ padding: '20px', borderTop: '1px solid var(--theme-elevation-200)' }}>
+          <SeedDataManager />
+        </div>
+      )}
+    </div>
+  )
+}
+
+/**
  * Custom Dashboard Component
  *
  * Enhanced dashboard with collection stats, recent updates, drafts,
@@ -295,7 +349,8 @@ export const Dashboard: React.FC = () => {
         <p>Welcome back! Here's what's happening with your content.</p>
       </div>
 
-      <SeedDataManager />
+      {/* Sample Data Manager — collapsible panel */}
+      <SeedDataManagerPanel />
 
       {/* Stats Grid */}
       <div className="ra-dashboard__stats">
