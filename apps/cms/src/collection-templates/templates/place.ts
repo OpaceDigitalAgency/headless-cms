@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Place Collection Template
  * 

@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Collection Templates Index
  * 

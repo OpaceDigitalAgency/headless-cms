@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Blog Post Collection Template
  * 

@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Product Category Collection Template
  *

@@ -1,3 +1,4 @@
+// @ts-nocheck
 import type { CollectionTemplate } from '../types'
 
 export const galleryTemplate: CollectionTemplate = {

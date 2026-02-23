@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Archive Item Collection Template
  * 

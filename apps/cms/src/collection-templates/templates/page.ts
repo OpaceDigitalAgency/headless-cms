@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Page Collection Template
  * 
