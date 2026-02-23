@@ -83,12 +83,18 @@ import { seoAdvancedEndpoints } from './endpoints/seo-advanced'
 import { versionEndpoint } from './endpoints/version'
 
 // Endpoints — Block Library
-import { saveBlockToLibraryEndpoint } from './endpoints/saveBlockToLibrary'
+import { saveBlockToLibrary } from './endpoints/saveBlockToLibrary'
 import { clearCacheEndpoint } from './endpoints/clearCache'
 
 // Endpoints — Dynamic Collections
 import { collectionManagerEndpoint } from './endpoints/collectionManager'
-import { collectionTemplateEndpoints } from './endpoints/collectionTemplates'
+import {
+  getTemplatesEndpoint,
+  getInstalledEndpoint,
+  getContentTypesEndpoint,
+  createCustomCollectionEndpoint,
+  addTemplateEndpoint,
+} from './endpoints/collectionTemplates'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -525,9 +531,16 @@ export default buildConfig({
     // Version display endpoint (Railway-aware)
     versionEndpoint,
     // Block Library endpoints
-    ...(features.blockLibrary ? [saveBlockToLibraryEndpoint, clearCacheEndpoint] : []),
+    ...(features.blockLibrary ? [saveBlockToLibrary, clearCacheEndpoint] : []),
     // Dynamic collection management endpoints
-    ...(features.dynamicCollections ? [collectionManagerEndpoint, ...collectionTemplateEndpoints] : []),
+    ...(features.dynamicCollections ? [
+      collectionManagerEndpoint,
+      getTemplatesEndpoint,
+      getInstalledEndpoint,
+      getContentTypesEndpoint,
+      createCustomCollectionEndpoint,
+      addTemplateEndpoint,
+    ] : []),
   ],
 
   // ===========================================
