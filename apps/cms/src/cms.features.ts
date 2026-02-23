@@ -46,14 +46,18 @@ export const features = {
   dynamicCollections: true,
 
   // ── People & Places ───────────────────────────────────────────────────────
-  /** Team members, authors, staff profiles */
-  people: false,
+  /**
+   * Team members, authors, staff profiles.
+   * NOTE: Required when dynamicCollections is true — ArchiveItems and Events
+   * templates contain relationships to 'people' and 'places'.
+   */
+  people: true,
 
   /** Venues, offices, branches, geographic points */
-  places: false,
+  places: true,
 
   /** Events, conferences, appointments */
-  events: false,
+  events: true,
 
   // ── eCommerce ─────────────────────────────────────────────────────────────
   /**
