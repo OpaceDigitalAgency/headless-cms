@@ -1,5 +1,20 @@
 import type { Endpoint } from 'payload'
-import { revalidateAllPages } from '../lib/revalidate'
+
+// Inline revalidation helper — calls the Next.js revalidation route to clear the cache.
+// headless-cms's revalidate.ts doesn't export revalidateAllPages, so we call the HTTP endpoint directly.
+async function revalidateAllPages(): Promise<{ success: boolean; error?: string }> {
+  try {
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || process.env.PAYLOAD_PUBLIC_SERVER_URL || 'http://localhost:3000'
+    const secret = process.env.REVALIDATION_SECRET || ''
+    const response = await fetch(`${siteUrl}/api/revalidate?path=/&secret=${secret}`, { method: 'GET' })
+    if (!response.ok) {
+      return { success: false, error: `Revalidation request failed: ${response.status}` }
+    }
+    return { success: true }
+  } catch (error) {
+    return { success: false, error: error instanceof Error ? error.message : String(error) }
+  }
+}
 
 /**
  * Admin endpoint to clear all Next.js cache
