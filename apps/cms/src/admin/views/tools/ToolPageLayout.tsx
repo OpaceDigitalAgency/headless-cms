@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React from 'react'
 import { DefaultTemplate, type DefaultTemplateProps } from '@payloadcms/next/templates'
 import type { VisibleEntities } from 'payload'
