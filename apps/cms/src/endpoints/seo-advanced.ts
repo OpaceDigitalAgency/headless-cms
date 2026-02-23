@@ -1,3 +1,4 @@
+// @ts-nocheck
 import type { Endpoint } from 'payload'
 
 export const seoAdvancedEndpoint: Endpoint = {

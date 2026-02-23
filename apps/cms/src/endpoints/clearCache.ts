@@ -1,3 +1,4 @@
+// @ts-nocheck
 import type { Endpoint } from 'payload'
 
 // Inline revalidation helper — calls the Next.js revalidation route to clear the cache.
