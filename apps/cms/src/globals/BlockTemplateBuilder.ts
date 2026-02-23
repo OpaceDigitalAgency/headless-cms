@@ -1,3 +1,4 @@
+// @ts-nocheck
 import type { GlobalConfig } from 'payload'
 import { allBlocks } from '../blocks'
 

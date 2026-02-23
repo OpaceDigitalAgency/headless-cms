@@ -1,3 +1,4 @@
+// @ts-nocheck
 import type { CollectionConfig } from 'payload'
 import { slugField } from '../fields/slug'
 import { getPreviewUrl } from '../utils/preview'

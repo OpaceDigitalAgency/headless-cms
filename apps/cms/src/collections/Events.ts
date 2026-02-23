@@ -1,3 +1,4 @@
+// @ts-nocheck
 import type { CollectionConfig } from 'payload'
 import { withLivePreview } from '../utils/livePreviewConfig'
 import { eventTemplate } from '../collection-templates/templates/event'

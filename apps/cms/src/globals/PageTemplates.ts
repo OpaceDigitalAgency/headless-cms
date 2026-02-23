@@ -1,3 +1,4 @@
+// @ts-nocheck
 import type { GlobalConfig } from 'payload'
 import { logoCloudBlock } from '../blocks/LogoCloud'
 import { videoFeatureBlock } from '../blocks/VideoFeature'

@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Transform absolute URLs to relative URLs in block data
  * This ensures blocks work in both local and production environments

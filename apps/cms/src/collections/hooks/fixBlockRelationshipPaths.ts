@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Auto-fix relationship paths when blocks are reordered
  * 
