@@ -20,7 +20,7 @@ export class CoreSeeder extends BaseSeeder {
   }
 
   getCollections(): string[] {
-    return ['pages', 'posts', 'categories', 'tags', 'people', 'places', 'events', 'archive-items', 'content-types', 'custom-items']
+    return ['pages', 'posts', 'categories', 'tags', 'people', 'places', 'events', 'archive-items', 'content-types', 'custom-items', 'block-library', 'faqs', 'testimonials', 'locations', 'logo-clouds', 'global-blocks']
   }
 
   async seed(): Promise<void> {
@@ -37,6 +37,14 @@ export class CoreSeeder extends BaseSeeder {
     await this.seedPosts(categories)
 
     await this.seedShowcaseContentType()
+
+    // Seed supplementary collections
+    await this.seedBlockLibrary()
+    await this.seedFaqs()
+    await this.seedTestimonials()
+    await this.seedLocations()
+    await this.seedLogoClouds()
+    await this.seedGlobalBlocks()
 
     await this.seedGlobals()
 
@@ -57,6 +65,12 @@ export class CoreSeeder extends BaseSeeder {
     await this.clearCollection('content-types')
     await this.clearCollection('categories')
     await this.clearCollection('tags')
+    await this.clearCollection('block-library')
+    await this.clearCollection('faqs')
+    await this.clearCollection('testimonials')
+    await this.clearCollection('locations')
+    await this.clearCollection('logo-clouds')
+    await this.clearCollection('global-blocks')
 
     this.log('Core preset data cleared!')
   }
@@ -100,10 +114,539 @@ export class CoreSeeder extends BaseSeeder {
       case 'custom-items':
         await this.seedShowcaseContentType()
         return
+      case 'block-library':
+        await this.seedBlockLibrary()
+        return
+      case 'faqs':
+        await this.seedFaqs()
+        return
+      case 'testimonials':
+        await this.seedTestimonials()
+        return
+      case 'locations':
+        await this.seedLocations()
+        return
+      case 'logo-clouds':
+        await this.seedLogoClouds()
+        return
+      case 'global-blocks':
+        await this.seedGlobalBlocks()
+        return
       default:
         this.log(`No seed handler for collection: ${collection}`)
     }
   }
+
+  private async seedBlockLibrary(): Promise<void> {
+    if (!this.shouldSeedCollection('block-library')) {
+      return
+    }
+
+    this.log('Seeding block-library...')
+
+    const items = [
+      {
+        name: 'Hero — Full Width with Overlay',
+        slug: 'hero-full-width-overlay',
+        blockType: 'hero',
+        description: 'Full-width hero banner with dark overlay, headline, subheading, and dual CTA buttons. Based on the TRC high-impact landing pattern. Use for homepages and major landing pages.',
+        blockData: {
+          type: 'standard',
+          heading: 'Discover Our World-Class Archive Collection',
+          subheading: 'Explore thousands of items spanning art, science, and history — free and open to all.',
+          style: 'fullWidth',
+          overlay: 'dark',
+          textAlign: 'center',
+          links: [
+            { label: 'Explore the Collection', url: '/archive-items', variant: 'primary' },
+            { label: 'Plan Your Visit', url: '/visit', variant: 'secondary' },
+          ],
+          checkItems: [
+            { text: 'Free Admission' },
+            { text: 'Open 6 Days a Week' },
+            { text: 'Guided Tours Available' },
+            { text: 'Expert Curated Content' },
+          ],
+        },
+      },
+      {
+        name: 'Trust Bar — Key Credentials',
+        slug: 'trust-bar-key-credentials',
+        blockType: 'features',
+        description: 'Horizontal trust strip with 4 key trust signals — icons and short bold text. Based on TRC Trust Bar pattern. Place immediately below the hero section for maximum impact.',
+        blockData: {
+          variant: 'default',
+          layout: 'horizontal',
+          heading: '',
+          items: [
+            { heading: 'Established 1887', description: 'Over 135 years of cultural preservation', icon: '🏛️' },
+            { heading: '500,000+ Items', description: 'One of the UK\'s largest archives', icon: '📚' },
+            { heading: 'Free Entry', description: 'Always free, always open to all', icon: '✅' },
+            { heading: 'Award-Winning', description: 'Museum of the Year finalist', icon: '🏆' },
+          ],
+        },
+      },
+      {
+        name: '10 Reasons to Visit',
+        slug: '10-reasons-to-visit',
+        blockType: 'features',
+        description: 'Dark numbered grid with 10 reasons/benefits. Directly inspired by TRC\'s "10 Reasons" block (variant: trc-v1-10-reasons). Works well as a mid-page trust-builder.',
+        blockData: {
+          variant: 'trc-v1-10-reasons',
+          layout: 'grid',
+          heading: '10 Reasons to Explore Our Collection',
+          subheading: 'From world-first discoveries to hands-on learning — there\'s something extraordinary for everyone.',
+          items: [
+            { heading: 'World-class permanent collection', description: 'Pieces spanning 5,000 years of human creativity.', icon: '🌍' },
+            { heading: 'Free admission — always', description: 'No entry fee, ever. We believe culture belongs to everyone.', icon: '🎟️' },
+            { heading: 'Rotating special exhibitions', description: 'Fresh perspectives every season from leading artists and institutions.', icon: '🔄' },
+            { heading: 'Expert guided tours', description: 'Join a curator-led tour and hear the stories behind the objects.', icon: '🎓' },
+            { heading: 'Family-friendly programming', description: 'Workshops and trails designed for curious minds of all ages.', icon: '👨‍👩‍👧' },
+            { heading: 'Research archive access', description: 'Academic and public access to our full research archive.', icon: '🔬' },
+            { heading: 'Award-winning café', description: 'Locally sourced menus in our stunning atrium café.', icon: '☕' },
+            { heading: 'Fully accessible', description: 'Step-free access, hearing loops, and large-print guides throughout.', icon: '♿' },
+            { heading: 'Central London location', description: 'Five minutes from the nearest tube, with on-site parking.', icon: '📍' },
+            { heading: 'Events year-round', description: 'Talks, workshops, and evening events throughout the year.', icon: '📅' },
+          ],
+        },
+      },
+      {
+        name: 'Testimonials — Verified Reviews Carousel',
+        slug: 'testimonials-verified-reviews',
+        blockType: 'testimonials',
+        description: 'Testimonials carousel with star ratings and verified badges. Based on TRC testimonials-cards pattern (3-column layout with high-trust visual style). Use on homepage and landing pages.',
+        blockData: {
+          variant: 'trc-v1-cards',
+          heading: 'What Our Visitors Say',
+          subheading: 'Thousands of people visit us every year. Here\'s what they think.',
+          items: [
+            {
+              quote: 'The collection is breathtaking. I spent four hours here and felt like I had only scratched the surface.',
+              name: 'Margaret Fitzwilliam',
+              role: 'Art Historian',
+              company: 'University of Edinburgh',
+              rating: 5,
+            },
+            {
+              quote: 'Our school group had an absolutely wonderful visit. The education team went above and beyond.',
+              name: 'James Okafor',
+              role: 'Head of History',
+              company: 'Riverside Academy',
+              rating: 5,
+            },
+            {
+              quote: 'As a researcher, the archive access was invaluable. Staff went out of their way to help.',
+              name: 'Dr. Sophie Chen',
+              role: 'Cultural Heritage Researcher',
+              company: 'Freelance',
+              rating: 5,
+            },
+          ],
+        },
+      },
+      {
+        name: 'CTA — Primary Banner',
+        slug: 'cta-primary-banner',
+        blockType: 'cta',
+        description: 'Full-width CTA banner with accent background, heading, short description, and primary action button. Based on TRC conversion-focused CTA pattern. Use between content sections.',
+        blockData: {
+          variant: 'banner',
+          heading: 'Ready to Explore?',
+          description: 'Plan your visit today. Free admission, expert guidance, and extraordinary collections await.',
+          backgroundColor: 'accent',
+          links: [
+            { label: 'Plan Your Visit', url: '/visit', variant: 'primary' },
+            { label: 'Browse Online', url: '/archive-items', variant: 'secondary' },
+          ],
+        },
+      },
+      {
+        name: 'Process Steps — How It Works',
+        slug: 'process-steps-how-it-works',
+        blockType: 'features',
+        description: 'Numbered process steps block showing a simple 4-step workflow. Based on TRC Simple Process pattern (variant: trc-v1-process). Ideal for onboarding flows or visit guides.',
+        blockData: {
+          variant: 'trc-v1-process',
+          layout: 'horizontal',
+          heading: 'How to Make the Most of Your Visit',
+          items: [
+            { heading: 'Plan Ahead', description: 'Check our current exhibitions and book any ticketed events in advance.', icon: '📋' },
+            { heading: 'Arrive & Explore', description: 'Pick up your free map at reception or join a guided tour.', icon: '🗺️' },
+            { heading: 'Dig Deeper', description: 'Use our interactive kiosks and digital guides to learn more about any object.', icon: '🔍' },
+            { heading: 'Take It Home', description: 'Visit our shop, download our app, or access the archive online.', icon: '📱' },
+          ],
+        },
+      },
+      {
+        name: 'Stats Row — Key Numbers',
+        slug: 'stats-row-key-numbers',
+        blockType: 'stats',
+        description: 'Four headline statistics with labels and descriptions. Based on TRC stats pattern. Use to establish authority and scale at a glance. Works well directly below the hero or trust bar.',
+        blockData: {
+          heading: 'Our Collection in Numbers',
+          stats: [
+            { value: '500k+', label: 'Archive Items', description: 'Objects, photographs, and documents' },
+            { value: '135+', label: 'Years of History', description: 'Collecting and preserving since 1887' },
+            { value: '250k', label: 'Annual Visitors', description: 'From across the UK and beyond' },
+            { value: '4.9★', label: 'Visitor Rating', description: 'Based on 12,000+ reviews' },
+          ],
+        },
+      },
+      {
+        name: 'Gallery — Photo Grid',
+        slug: 'gallery-photo-grid',
+        blockType: 'gallery',
+        description: 'Responsive 3-column image gallery with lightbox and optional captions. Based on TRC "Before/After" gallery pattern. Ideal for showcasing artworks, spaces, or events.',
+        blockData: {
+          heading: 'From Our Collection',
+          description: 'A selection of highlights from our permanent and rotating exhibitions.',
+          layout: 'grid',
+          columns: '3',
+          gap: 'medium',
+          aspectRatio: 'landscape',
+          images: [
+            { caption: 'Exhibition Gallery, Level 1' },
+            { caption: 'The Reading Room Archive' },
+            { caption: 'Sculpture Court' },
+            { caption: 'Interactive Discovery Zone' },
+            { caption: 'The Conservation Studio' },
+            { caption: 'Special Collections Vault' },
+          ],
+          showCaptions: true,
+          enableLightbox: true,
+        },
+      },
+      {
+        name: 'FAQ Section — Visitor Questions',
+        slug: 'faq-visitor-questions',
+        blockType: 'faq',
+        description: 'Accordion FAQ block with common visitor questions. Use on About, Visit, and Contact pages. Edit questions and answers directly via the block data.',
+        blockData: {
+          heading: 'Frequently Asked Questions',
+          subheading: 'Everything you need to know before your visit.',
+          items: [
+            {
+              question: 'Is admission to the museum free?',
+              answer: createRichText('Yes — general admission is entirely free. We do charge for special exhibitions and ticketed events. Donations are always welcome.'),
+            },
+            {
+              question: 'What are your opening hours?',
+              answer: createRichText('We are open Monday to Saturday, 10:00am to 5:00pm, and Sundays from 12:00pm to 4:00pm. We are closed on Christmas Day and Boxing Day.'),
+            },
+            {
+              question: 'Is the museum accessible for visitors with disabilities?',
+              answer: createRichText('All public areas are fully accessible, with step-free entrances, lifts to all floors, induction loops, and large-print guides on request.'),
+            },
+            {
+              question: 'Can I photograph the exhibits?',
+              answer: createRichText('Personal, non-commercial photography is permitted in most areas. Flash photography and tripods are not allowed. Some temporary exhibitions may have photography restrictions.'),
+            },
+          ],
+        },
+      },
+      {
+        name: 'Team Section — Meet the Curators',
+        slug: 'team-section-meet-curators',
+        blockType: 'team',
+        description: 'Team member cards with name, role, bio, and optional social links. Based on TRC Team pattern. Use on About Us pages and staff listings.',
+        blockData: {
+          heading: 'Meet Our Team',
+          subheading: 'The people behind the collection — passionate curators, researchers, and educators.',
+          members: [
+            {
+              name: 'Dr Eleanor Shaw',
+              role: 'Chief Curator',
+              bio: 'Eleanor has led our curatorial programme for over 12 years, specialising in early modern European art and material culture.',
+              socials: [{ label: 'LinkedIn', url: 'https://linkedin.com' }],
+            },
+            {
+              name: 'Marcus Reid',
+              role: 'Head of Digital Archive',
+              bio: 'Marcus oversees our digitisation programme, making over 200,000 items freely accessible online.',
+              socials: [{ label: 'Twitter', url: 'https://twitter.com' }],
+            },
+            {
+              name: 'Priya Kapoor',
+              role: 'Learning & Engagement Manager',
+              bio: 'Priya designs our award-winning education programmes, reaching 25,000 school pupils annually.',
+              socials: [{ label: 'LinkedIn', url: 'https://linkedin.com' }],
+            },
+          ],
+        },
+      },
+    ]
+
+    for (const item of items) {
+      try {
+        const existing = await this.payload.find({
+          collection: 'block-library',
+          where: { name: { equals: item.name } },
+          limit: 1,
+          depth: 0,
+        })
+        if (existing.docs.length > 0) {
+          continue
+        }
+        await this.create('block-library', {
+          name: item.name,
+          blockType: item.blockType,
+          description: item.description,
+          blockData: item.blockData,
+        })
+      } catch {
+        // ignore individual item errors
+      }
+    }
+  }
+
+  private async seedFaqs(): Promise<void> {
+    if (!this.shouldSeedCollection('faqs')) {
+      return
+    }
+
+    this.log('Seeding faqs...')
+
+    const items = [
+      {
+        question: 'Is admission to the museum free?',
+        answer: createRichText('Yes — general admission is entirely free. We do charge for special exhibitions and ticketed events. Donations are always welcome and help us keep our collections accessible to everyone.'),
+        category: 'Visiting',
+      },
+      {
+        question: 'How do I book a group or school visit?',
+        answer: createRichText('Group and school bookings can be made by contacting our education team at least two weeks in advance. We offer tailored programmes for all ages and curriculum stages. Email education@museumcollection.org with your requirements.'),
+        category: 'Visiting',
+      },
+      {
+        question: 'Can I donate objects or photographs to the archive?',
+        answer: createRichText('We welcome donations of objects and photographs relevant to our collection areas. Please contact our curatorial team first to discuss suitability. We assess all donations individually and can arrange an appraisal appointment.'),
+        category: 'Collections',
+      },
+      {
+        question: 'Are your facilities accessible for visitors with disabilities?',
+        answer: createRichText('Yes — all public areas are fully accessible. We have step-free entrances, lifts to all floors, induction loops for visitors with hearing impairments, and large-print guides available on request. Please contact us in advance to arrange any specific assistance.'),
+        category: 'Accessibility',
+      },
+    ]
+
+    for (const item of items) {
+      try {
+        const existing = await this.payload.find({
+          collection: 'faqs',
+          where: { question: { equals: item.question } },
+          limit: 1,
+          depth: 0,
+        })
+        if (existing.docs.length > 0) {
+          continue
+        }
+        await this.create('faqs', { ...item, _status: 'published' })
+      } catch {
+        // ignore individual item errors
+      }
+    }
+  }
+
+  private async seedTestimonials(): Promise<void> {
+    if (!this.shouldSeedCollection('testimonials')) {
+      return
+    }
+
+    this.log('Seeding testimonials...')
+
+    const items = [
+      {
+        quote: 'The collection is breathtaking. I spent four hours here and felt like I had only scratched the surface. A truly world-class institution.',
+        author: 'Margaret Fitzwilliam',
+        role: 'Retired Art Historian',
+        company: 'University of Edinburgh',
+        rating: 5,
+      },
+      {
+        quote: 'Our school group had an absolutely wonderful visit. The education team went above and beyond to engage the students. We\'ll definitely be back.',
+        author: 'James Okafor',
+        role: 'Head of History',
+        company: 'Riverside Academy',
+        rating: 5,
+      },
+      {
+        quote: 'As someone researching local heritage, the archive access was invaluable. The staff were incredibly knowledgeable and went out of their way to help.',
+        author: 'Dr. Sophie Chen',
+        role: 'Cultural Heritage Researcher',
+        company: 'Freelance',
+        rating: 5,
+      },
+    ]
+
+    for (const item of items) {
+      try {
+        const existing = await this.payload.find({
+          collection: 'testimonials',
+          where: { author: { equals: item.author } },
+          limit: 1,
+          depth: 0,
+        })
+        if (existing.docs.length > 0) {
+          continue
+        }
+        await this.create('testimonials', { ...item, _status: 'published' })
+      } catch {
+        // ignore individual item errors
+      }
+    }
+  }
+
+  private async seedLocations(): Promise<void> {
+    if (!this.shouldSeedCollection('locations')) {
+      return
+    }
+
+    this.log('Seeding locations...')
+
+    const items = [
+      {
+        name: 'Main Museum',
+        slug: 'main-museum',
+        address: '1 Museum Square, London, EC1A 1AA',
+        description: 'Our flagship location housing the permanent collection and rotating exhibitions.',
+        coordinates: { latitude: 51.5189, longitude: -0.0985 },
+        phone: '+44 20 1234 5678',
+        email: 'info@museumcollection.org',
+        openingHours: 'Mon–Sat 10:00–17:00, Sun 12:00–16:00',
+      },
+      {
+        name: 'North Wing Gallery',
+        slug: 'north-wing-gallery',
+        address: '3 Gallery Road, Manchester, M1 2AB',
+        description: 'Specialist gallery dedicated to Northern England\'s industrial and cultural heritage.',
+        coordinates: { latitude: 53.4808, longitude: -2.2426 },
+        phone: '+44 161 234 5678',
+        email: 'manchester@museumcollection.org',
+        openingHours: 'Tue–Sun 10:00–17:00',
+      },
+    ]
+
+    for (const item of items) {
+      try {
+        if (await this.checkIfExists('locations', item.slug)) {
+          continue
+        }
+        await this.create('locations', { ...item, _status: 'published' })
+      } catch {
+        // ignore individual item errors
+      }
+    }
+  }
+
+  private async seedLogoClouds(): Promise<void> {
+    if (!this.shouldSeedCollection('logo-clouds')) {
+      return
+    }
+
+    this.log('Seeding logo-clouds...')
+
+    const items = [
+      {
+        name: 'Partner Institutions',
+        slug: 'partner-institutions',
+        description: 'Our network of partner museums, galleries, and cultural organisations.',
+        logos: [
+          { label: 'The National Gallery', url: 'https://www.nationalgallery.org.uk' },
+          { label: 'The British Museum', url: 'https://www.britishmuseum.org' },
+          { label: 'Tate Modern', url: 'https://www.tate.org.uk' },
+          { label: 'The V&A', url: 'https://www.vam.ac.uk' },
+          { label: 'Science Museum', url: 'https://www.sciencemuseum.org.uk' },
+        ],
+      },
+      {
+        name: 'Funding & Support',
+        slug: 'funding-support',
+        description: 'Organisations that generously support our work.',
+        logos: [
+          { label: 'Arts Council England', url: 'https://www.artscouncil.org.uk' },
+          { label: 'Heritage Lottery Fund', url: 'https://www.heritagefund.org.uk' },
+          { label: 'The Wolfson Foundation', url: 'https://www.wolfson.org.uk' },
+        ],
+      },
+    ]
+
+    for (const item of items) {
+      try {
+        const existing = await this.payload.find({
+          collection: 'logo-clouds',
+          where: { name: { equals: item.name } },
+          limit: 1,
+          depth: 0,
+        })
+        if (existing.docs.length > 0) {
+          continue
+        }
+        await this.create('logo-clouds', { ...item, _status: 'published' })
+      } catch {
+        // ignore individual item errors
+      }
+    }
+  }
+
+  private async seedGlobalBlocks(): Promise<void> {
+    if (!this.shouldSeedCollection('global-blocks')) {
+      return
+    }
+
+    this.log('Seeding global-blocks...')
+
+    const items = [
+      {
+        name: 'Site-Wide Newsletter CTA',
+        slug: 'newsletter-cta',
+        description: 'Reusable newsletter sign-up block used across all content pages.',
+        content: [
+          {
+            blockType: 'cta',
+            variant: 'banner',
+            heading: 'Stay Connected to Culture',
+            description: 'Join our mailing list for exhibition previews, event invitations, and archive stories — delivered straight to your inbox.',
+            backgroundColor: 'accent',
+            links: [
+              { label: 'Sign Up Free', url: '/newsletter', variant: 'primary' },
+            ],
+          },
+        ],
+      },
+      {
+        name: 'Visit Information Banner',
+        slug: 'visit-info-banner',
+        description: 'Standard visitor information bar — opening hours, location, free admission message.',
+        content: [
+          {
+            blockType: 'content',
+            backgroundColor: 'muted',
+            paddingTop: 'small',
+            paddingBottom: 'small',
+            columns: [
+              {
+                size: 'full',
+                richText: createRichText('📍 Open Mon–Sat 10:00–17:00 · Free Admission · 1 Museum Square, London · Tel: +44 20 1234 5678'),
+              },
+            ],
+          },
+        ],
+      },
+    ]
+
+    for (const item of items) {
+      try {
+        if (await this.checkIfExists('global-blocks', item.slug)) {
+          continue
+        }
+        await this.create('global-blocks', { ...item, _status: 'published' })
+      } catch {
+        // ignore individual item errors
+      }
+    }
+  }
+
+
 
   private async seedCategories(): Promise<Record<string, string>> {
     if (!this.shouldSeedCollection('categories')) {
