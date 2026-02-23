@@ -13,13 +13,16 @@ export const versionEndpoint: Endpoint = {
       try {
         branch = execSync('git rev-parse --abbrev-ref HEAD', { encoding: 'utf-8' }).trim()
       } catch (e) {
-        branch = 'unknown'
+        // Railway doesn't have git — use Railway env vars as fallback
+        branch = process.env.RAILWAY_GIT_BRANCH || process.env.NODE_ENV || 'unknown'
       }
 
       try {
         version = execSync('git describe --tags --always', { encoding: 'utf-8' }).trim()
       } catch (e) {
-        version = 'unknown'
+        // Use Railway commit SHA (short) or fall back to environment label
+        const commitSha = process.env.RAILWAY_GIT_COMMIT_SHA
+        version = commitSha ? commitSha.substring(0, 7) : (process.env.NODE_ENV === 'production' ? 'prod' : 'dev')
       }
 
       const database = process.env.DATABASE_URL?.split('/').pop()?.split('?')[0] || 'unknown'
