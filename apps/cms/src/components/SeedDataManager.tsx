@@ -150,10 +150,17 @@ export const SeedDataManager: React.FC = () => {
     { slug: 'pages', label: 'Pages', count: 0, hasSeedData: true, hasSeedMedia: false, Icon: FileTextIcon },
     { slug: 'posts', label: 'Posts', count: 0, hasSeedData: true, hasSeedMedia: false, Icon: EditIcon },
     { slug: 'categories', label: 'Categories', count: 0, hasSeedData: true, hasSeedMedia: false, Icon: TagIcon },
-    { slug: 'tags', label: 'Tags', count: 0, hasSeedData: false, hasSeedMedia: false, Icon: TagIcon },
-    { slug: 'archive-items', label: 'Archive Items', count: 0, hasSeedData: true, hasSeedMedia: true, Icon: ArtifactIcon },
-    { slug: 'people', label: 'People', count: 0, hasSeedData: true, hasSeedMedia: true, Icon: UserIcon },
-    { slug: 'places', label: 'Places', count: 0, hasSeedData: true, hasSeedMedia: true, Icon: MapPinIcon },
+    { slug: 'tags', label: 'Tags', count: 0, hasSeedData: true, hasSeedMedia: false, Icon: TagIcon },
+    { slug: 'archive-items', label: 'Archive Items', count: 0, hasSeedData: true, hasSeedMedia: false, Icon: ArtifactIcon },
+    { slug: 'people', label: 'People', count: 0, hasSeedData: true, hasSeedMedia: false, Icon: UserIcon },
+    { slug: 'places', label: 'Places', count: 0, hasSeedData: true, hasSeedMedia: false, Icon: MapPinIcon },
+    { slug: 'block-library', label: 'Block Library', count: 0, hasSeedData: true, hasSeedMedia: false, Icon: FolderIcon },
+    { slug: 'faqs', label: 'FAQs', count: 0, hasSeedData: true, hasSeedMedia: false, Icon: FileTextIcon },
+    { slug: 'testimonials', label: 'Testimonials', count: 0, hasSeedData: true, hasSeedMedia: false, Icon: UserIcon },
+    { slug: 'events', label: 'Events', count: 0, hasSeedData: true, hasSeedMedia: false, Icon: EditIcon },
+    { slug: 'locations', label: 'Locations', count: 0, hasSeedData: true, hasSeedMedia: false, Icon: MapPinIcon },
+    { slug: 'logo-clouds', label: 'Logo Clouds', count: 0, hasSeedData: true, hasSeedMedia: false, Icon: FolderIcon },
+    { slug: 'global-blocks', label: 'Global Blocks', count: 0, hasSeedData: true, hasSeedMedia: false, Icon: FolderIcon },
   ]
 
   const getDefaultPresets = (): PresetInfo[] => [
@@ -215,6 +222,7 @@ export const SeedDataManager: React.FC = () => {
           text: `Successfully ${actionText} ${slug}! ${data.itemsAffected ? `(${data.itemsAffected} items)` : ''}`
         })
         fetchCollectionStatus()
+        window.dispatchEvent(new CustomEvent('seedDataChanged'))
       } else {
         setMessage({ type: 'error', text: data.message || `Failed to ${action} collection` })
       }
@@ -262,6 +270,7 @@ export const SeedDataManager: React.FC = () => {
       if (response.ok) {
         setMessage({ type: 'success', text: data.message || `Successfully ${action}ed sample data!` })
         fetchCollectionStatus()
+        window.dispatchEvent(new CustomEvent('seedDataChanged'))
       } else {
         setMessage({ type: 'error', text: data.message || `Failed to ${action} data` })
       }

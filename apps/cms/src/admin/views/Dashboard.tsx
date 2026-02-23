@@ -327,6 +327,68 @@ export const Dashboard: React.FC = () => {
     fetchData()
   }, [])
 
+  // Re-fetch stats whenever the seed manager seeds or clears data
+  useEffect(() => {
+    const handleSeedChange = () => {
+      const fetchData = async () => {
+        setIsLoading(true)
+
+        try {
+          const navResponse = await fetch('/api/admin/navigation')
+          if (navResponse.ok) {
+            const navData = await navResponse.json()
+            const slugs: string[] = []
+            const isStatsSlug = (slug: string) =>
+              slug &&
+              !slug.startsWith('custom:') &&
+              slug !== 'dashboard' &&
+              slug !== 'tools' &&
+              !slug.endsWith('-manager') &&
+              !['header', 'footer', 'settings', 'navigation-settings', 'redirects'].includes(slug)
+
+            navData.navSections?.forEach((section: any) => {
+              section.items?.forEach((item: any) => {
+                if (item.slug && isStatsSlug(item.slug)) slugs.push(item.slug)
+                if (item.items) {
+                  item.items.forEach((nestedItem: any) => {
+                    if (nestedItem.slug && isStatsSlug(nestedItem.slug)) slugs.push(nestedItem.slug)
+                  })
+                }
+              })
+            })
+
+            const statsPromises = slugs.map(async (slug) => {
+              try {
+                const response = await fetch(`/api/${slug}?limit=0`)
+                if (response.ok) {
+                  const data = await response.json()
+                  let label = slug
+                  navData.navSections?.forEach((section: any) => {
+                    section.items?.forEach((item: any) => {
+                      if (item.slug === slug) label = item.label
+                      if (item.items) item.items.forEach((n: any) => { if (n.slug === slug) label = n.label })
+                    })
+                  })
+                  return { slug, label, Icon: iconMap[slug] || FileTextIcon, color: colorMap[slug] || '#6b7280', count: data.totalDocs || 0 }
+                }
+              } catch {}
+              return null
+            })
+
+            const results = await Promise.all(statsPromises)
+            setStats(results.filter(Boolean) as CollectionStat[])
+          }
+        } catch {}
+
+        setIsLoading(false)
+      }
+      fetchData()
+    }
+
+    window.addEventListener('seedDataChanged', handleSeedChange)
+    return () => window.removeEventListener('seedDataChanged', handleSeedChange)
+  }, [])
+
   const formatDate = (dateString: string) => {
     const date = new Date(dateString)
     const now = new Date()
