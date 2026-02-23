@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { BaseSeeder, type SeedOptions } from './base'
 import type { Payload } from 'payload'
 

@@ -62,6 +62,14 @@ export const Footer: GlobalConfig = {
       },
     },
     {
+      name: 'email',
+      type: 'email',
+      label: 'Contact Email',
+      admin: {
+        description: 'Email address displayed in the footer (e.g. hello@yoursite.com)',
+      },
+    },
+    {
       name: 'columns',
       type: 'array',
       label: 'Footer Columns',

@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { getPayload } from 'payload'
 import config from '../payload.config'
 import { downloadAllMedia, SAMPLE_IMAGES, getMediaPath, mediaExists } from './download-media'

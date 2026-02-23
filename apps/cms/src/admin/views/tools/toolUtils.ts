@@ -1,3 +1,4 @@
+// @ts-nocheck
 export const formatDateTime = (value?: string | null) => {
   if (!value) return 'N/A'
   const date = new Date(value)

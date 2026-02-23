@@ -13,13 +13,16 @@ import path from 'path'
 import { fileURLToPath } from 'url'
 import nodemailer from 'nodemailer'
 
+// Feature flags — edit this file to enable/disable CMS modules per project
+import { features } from './cms.features'
+
 // Environment validation
 import { validateEnv } from './lib/validateEnv'
 
 // Validate environment variables before starting
 validateEnv()
 
-// Collections
+// Collections — Core (always on)
 import { Users } from './collections/Users'
 import { Media } from './collections/Media'
 import { Pages } from './collections/Pages'
@@ -28,13 +31,47 @@ import { Categories } from './collections/Categories'
 import { Tags } from './collections/Tags'
 import { seoCollectionSlugs } from './lib/seo/seoCollections'
 
-// Globals
+// Collections — Content
+import { FAQs } from './collections/FAQs'
+import { Testimonials } from './collections/Testimonials'
+import { Locations } from './collections/Locations'
+import { LogoCloud } from './collections/LogoCloud'
+
+// Collections — Block Library
+import { GlobalBlocks } from './collections/GlobalBlocks'
+import { BlockLibrary } from './collections/BlockLibrary'
+import { BlockTemplateBuilder as BlockTemplateBuilderCollection } from './collections/BlockTemplateBuilder'
+
+// Collections — Dynamic Content Types
+import { ContentTypes } from './collections/ContentTypes'
+import { CustomItems } from './collections/CustomItems'
+import { ArchiveItems } from './collections/ArchiveItems'
+
+// Collections — People & Places
+import { People } from './collections/People'
+import { Places } from './collections/Places'
+import { Events } from './collections/Events'
+
+// Collections — eCommerce
+import { Products } from './collections/Products'
+import { ProductCategories } from './collections/ProductCategories'
+import { ProductCollections } from './collections/ProductCollections'
+import { Orders } from './collections/Orders'
+import { Carts } from './collections/Carts'
+import { ProductReviews } from './collections/ProductReviews'
+
+// Globals — Core
 import { Header } from './globals/Header'
 import { Footer } from './globals/Footer'
 import { Settings } from './globals/Settings'
 import { NavigationSettings } from './globals/NavigationSettings'
+import { FeatureSettings } from './globals/FeatureSettings'
 
-// Revalidation endpoint
+// Globals — Block Library
+import { BlockTemplateBuilder } from './globals/BlockTemplateBuilder'
+import { PageTemplates } from './globals/PageTemplates'
+
+// Endpoints — Core
 import { revalidateEndpoint } from './endpoints/revalidate'
 import { resetDataHandler } from './endpoints/resetData'
 import { seedEndpoints } from './endpoints/seed'
@@ -45,6 +82,20 @@ import { seoEndpoints } from './endpoints/seo'
 import { seoTemplatesEndpoints } from './endpoints/seo-templates'
 import { seoAdvancedEndpoints } from './endpoints/seo-advanced'
 import { versionEndpoint } from './endpoints/version'
+
+// Endpoints — Block Library
+import { saveBlockToLibrary } from './endpoints/saveBlockToLibrary'
+import { clearCacheEndpoint } from './endpoints/clearCache'
+
+// Endpoints — Dynamic Collections
+import { collectionManagerEndpoint } from './endpoints/collectionManager'
+import {
+  getTemplatesEndpoint,
+  getInstalledEndpoint,
+  getContentTypesEndpoint,
+  createCustomCollectionEndpoint,
+  addTemplateEndpoint,
+} from './endpoints/collectionTemplates'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -264,12 +315,33 @@ export default buildConfig({
   // Collections
   // ===========================================
   collections: [
+    // Core — always enabled
     Users,
     Media,
     Pages,
     Posts,
     Categories,
     Tags,
+
+    // Content collections
+    ...(features.faqs          ? [FAQs] : []),
+    ...(features.testimonials  ? [Testimonials] : []),
+    ...(features.locations     ? [Locations] : []),
+    ...(features.logoCloud     ? [LogoCloud] : []),
+
+    // Block Library system
+    ...(features.blockLibrary  ? [GlobalBlocks, BlockLibrary, BlockTemplateBuilderCollection] : []),
+
+    // Dynamic content types
+    ...(features.dynamicCollections ? [ContentTypes, CustomItems, ArchiveItems] : []),
+
+    // People & Places
+    ...(features.people  ? [People] : []),
+    ...(features.places  ? [Places] : []),
+    ...(features.events  ? [Events] : []),
+
+    // eCommerce
+    ...(features.ecommerce ? [Products, ProductCategories, ProductCollections, Orders, Carts, ProductReviews] : []),
   ],
 
   // ===========================================
@@ -280,6 +352,9 @@ export default buildConfig({
     Footer,
     Settings,
     NavigationSettings,
+    FeatureSettings,
+    // Block Library
+    ...(features.blockLibrary ? [BlockTemplateBuilder, PageTemplates] : []),
   ],
 
   // ===========================================
@@ -455,8 +530,19 @@ export default buildConfig({
     ...seoEndpoints,
     ...seoTemplatesEndpoints,
     ...seoAdvancedEndpoints,
-    // Version display endpoint
+    // Version display endpoint (Railway-aware)
     versionEndpoint,
+    // Block Library endpoints
+    ...(features.blockLibrary ? [saveBlockToLibrary, clearCacheEndpoint] : []),
+    // Dynamic collection management endpoints
+    ...(features.dynamicCollections ? [
+      collectionManagerEndpoint,
+      getTemplatesEndpoint,
+      getInstalledEndpoint,
+      getContentTypesEndpoint,
+      createCustomCollectionEndpoint,
+      addTemplateEndpoint,
+    ] : []),
   ],
 
   // ===========================================

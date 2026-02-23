@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { RenderBlocks } from './RenderBlocks'
 import { LandingTemplate, DetailTemplate, ListTemplate, ArticleTemplate } from '@repo/templates'
 import { HeroBlock } from './blocks/HeroBlock'

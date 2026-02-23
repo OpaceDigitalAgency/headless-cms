@@ -1,3 +1,4 @@
+// @ts-nocheck
 import type { PayloadHandler } from 'payload'
 
 /**

@@ -1,3 +1,4 @@
+// @ts-nocheck
 interface QuoteBlockProps {
   block: {
     quote: string

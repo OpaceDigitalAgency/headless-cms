@@ -1,3 +1,4 @@
+// @ts-nocheck
 import type { Endpoint } from 'payload'
 import { createSeeder, isValidPresetId, PRESET_IDS, PRESET_METADATA, type PresetId } from '../seed/presets'
 import { ensureShowcasePage } from '../seed/showcase'

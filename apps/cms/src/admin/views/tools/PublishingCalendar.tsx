@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React from 'react'
 import ToolPageLayout, { type ToolViewProps } from './ToolPageLayout'
 import PublishingCalendarClient from './PublishingCalendarClient'

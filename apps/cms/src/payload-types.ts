@@ -73,6 +73,19 @@ export interface Config {
     posts: Post;
     categories: Category;
     tags: Tag;
+    faqs: Faq;
+    testimonials: Testimonial;
+    locations: Location;
+    'logo-clouds': LogoCloud;
+    'global-blocks': GlobalBlock;
+    'block-library': BlockLibrary;
+    'block-template-builder': BlockTemplateBuilder;
+    'content-types': ContentType;
+    'custom-items': CustomItem;
+    'archive-items': ArchiveItem;
+    people: Person;
+    places: Place;
+    events: Event;
     forms: Form;
     'form-submissions': FormSubmission;
     redirects: Redirect;
@@ -83,7 +96,15 @@ export interface Config {
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
   };
-  collectionsJoins: {};
+  collectionsJoins: {
+    people: {
+      relatedItems: 'archive-items';
+    };
+    places: {
+      relatedItems: 'archive-items';
+      relatedPeople: 'people';
+    };
+  };
   collectionsSelect: {
     users: UsersSelect<false> | UsersSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
@@ -91,6 +112,19 @@ export interface Config {
     posts: PostsSelect<false> | PostsSelect<true>;
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
     tags: TagsSelect<false> | TagsSelect<true>;
+    faqs: FaqsSelect<false> | FaqsSelect<true>;
+    testimonials: TestimonialsSelect<false> | TestimonialsSelect<true>;
+    locations: LocationsSelect<false> | LocationsSelect<true>;
+    'logo-clouds': LogoCloudsSelect<false> | LogoCloudsSelect<true>;
+    'global-blocks': GlobalBlocksSelect<false> | GlobalBlocksSelect<true>;
+    'block-library': BlockLibrarySelect<false> | BlockLibrarySelect<true>;
+    'block-template-builder': BlockTemplateBuilderSelect<false> | BlockTemplateBuilderSelect<true>;
+    'content-types': ContentTypesSelect<false> | ContentTypesSelect<true>;
+    'custom-items': CustomItemsSelect<false> | CustomItemsSelect<true>;
+    'archive-items': ArchiveItemsSelect<false> | ArchiveItemsSelect<true>;
+    people: PeopleSelect<false> | PeopleSelect<true>;
+    places: PlacesSelect<false> | PlacesSelect<true>;
+    events: EventsSelect<false> | EventsSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
     'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
@@ -110,12 +144,18 @@ export interface Config {
     footer: Footer;
     settings: Setting;
     'navigation-settings': NavigationSetting;
+    'feature-settings': FeatureSetting;
+    'block-template-builder': BlockTemplateBuilder;
+    'page-templates': PageTemplate;
   };
   globalsSelect: {
     header: HeaderSelect<false> | HeaderSelect<true>;
     footer: FooterSelect<false> | FooterSelect<true>;
     settings: SettingsSelect<false> | SettingsSelect<true>;
     'navigation-settings': NavigationSettingsSelect<false> | NavigationSettingsSelect<true>;
+    'feature-settings': FeatureSettingsSelect<false> | FeatureSettingsSelect<true>;
+    'block-template-builder': BlockTemplateBuilderSelect<false> | BlockTemplateBuilderSelect<true>;
+    'page-templates': PageTemplatesSelect<false> | PageTemplatesSelect<true>;
   };
   locale: null;
   user: User & {
@@ -913,6 +953,95 @@ export interface Page {
             id?: string | null;
             blockName?: string | null;
             blockType: 'timeline';
+          }
+        | {
+            heading?: string | null;
+            description?: string | null;
+            variant?: ('modern' | 'classic' | 'minimal') | null;
+            /**
+             * Display office address, email, and phone number alongside the form
+             */
+            showContactInfo?: boolean | null;
+            officeAddress?: string | null;
+            email?: string | null;
+            phone?: string | null;
+            /**
+             * Small text shown below the form (e.g., "Calls may be recorded...")
+             */
+            disclaimer?: string | null;
+            /**
+             * Choose which form to display. Create forms in the Forms collection.
+             */
+            form: number | Form;
+            submitButtonText?: string | null;
+            successMessage?: string | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'contactForm';
+          }
+        | {
+            heading?: string | null;
+            /**
+             * Optional description text to display above the social links
+             */
+            description?: string | null;
+            variant?: ('horizontal' | 'grid' | 'large') | null;
+            /**
+             * Display platform names alongside icons
+             */
+            showLabels?: boolean | null;
+            /**
+             * Use social links from Footer global. Uncheck to define custom links below.
+             */
+            useGlobalLinks?: boolean | null;
+            /**
+             * Define custom social links for this block only
+             */
+            customLinks?:
+              | {
+                  platform:
+                    | 'facebook'
+                    | 'twitter'
+                    | 'instagram'
+                    | 'linkedin'
+                    | 'youtube'
+                    | 'tiktok'
+                    | 'github'
+                    | 'discord';
+                  url: string;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'socialLinks';
+          }
+        | {
+            heading?: string | null;
+            /**
+             * Full YouTube URL (e.g., https://www.youtube.com/watch?v=...)
+             */
+            videoUrl?: string | null;
+            /**
+             * Description text shown next to the video
+             */
+            caption?: string | null;
+            /**
+             * Enter each check item on a new line. These will appear as checkmarks.
+             */
+            checkItems?: string | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'videoFeature';
+          }
+        | {
+            /**
+             * Choose a pre-configured block from the Global Blocks library.
+             */
+            libraryItem: number | GlobalBlock;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'reusableBlock';
           }
         | {
             style?: ('space' | 'divider') | null;
@@ -1806,6 +1935,4248 @@ export interface Form {
   createdAt: string;
 }
 /**
+ * Shared block library for "edit once, update everywhere" content units.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "global-blocks".
+ */
+export interface GlobalBlock {
+  id: number;
+  /**
+   * Internal reference name (e.g., "Homepage Offers Grid")
+   */
+  title: string;
+  block: (
+    | {
+        /**
+         * Layout structure (works with any skin)
+         */
+        variant?: ('standard' | 'minimal' | 'fullscreen' | 'split' | 'video' | 'hero-led') | null;
+        /**
+         * Optional badge label displayed above the heading.
+         */
+        eyebrow?: string | null;
+        heading: string;
+        description?: string | null;
+        image?: (number | null) | Media;
+        /**
+         * YouTube or Vimeo URL
+         */
+        videoUrl?: string | null;
+        overlay?: ('none' | 'light' | 'dark' | 'gradient') | null;
+        textAlign?: ('left' | 'center' | 'right') | null;
+        links?:
+          | {
+              label: string;
+              url?: string | null;
+              page?: (number | null) | Page;
+              variant?: ('primary' | 'secondary' | 'outline') | null;
+              newTab?: boolean | null;
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'hero';
+      }
+    | {
+        columns?:
+          | {
+              size?: ('oneThird' | 'half' | 'twoThirds' | 'full') | null;
+              richText?: {
+                root: {
+                  type: string;
+                  children: {
+                    type: any;
+                    version: number;
+                    [k: string]: unknown;
+                  }[];
+                  direction: ('ltr' | 'rtl') | null;
+                  format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                  indent: number;
+                  version: number;
+                };
+                [k: string]: unknown;
+              } | null;
+              enableLink?: boolean | null;
+              link?: {
+                label?: string | null;
+                url?: string | null;
+                page?: (number | null) | Page;
+                newTab?: boolean | null;
+              };
+              id?: string | null;
+            }[]
+          | null;
+        backgroundColor?: ('none' | 'muted' | 'dark' | 'accent') | null;
+        paddingTop?: ('none' | 'small' | 'medium' | 'large') | null;
+        paddingBottom?: ('none' | 'small' | 'medium' | 'large') | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'content';
+      }
+    | {
+        media: number | Media;
+        caption?: string | null;
+        size?: ('small' | 'default' | 'large' | 'fullWidth') | null;
+        position?: ('left' | 'center' | 'right') | null;
+        enableLink?: boolean | null;
+        link?: {
+          url?: string | null;
+          page?: (number | null) | Page;
+          newTab?: boolean | null;
+        };
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'media';
+      }
+    | {
+        variant?: ('standard' | 'banner' | 'card' | 'inline') | null;
+        heading: string;
+        description?: string | null;
+        image?: (number | null) | Media;
+        links?:
+          | {
+              label: string;
+              url?: string | null;
+              page?: (number | null) | Page;
+              variant?: ('primary' | 'secondary' | 'outline') | null;
+              newTab?: boolean | null;
+              id?: string | null;
+            }[]
+          | null;
+        backgroundColor?: ('none' | 'muted' | 'dark' | 'accent') | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'cta';
+      }
+    | {
+        heading?: string | null;
+        description?: string | null;
+        populateBy?: ('collection' | 'selection') | null;
+        relationTo?: ('posts' | 'pages' | 'categories' | 'tags') | null;
+        categories?: (number | Category)[] | null;
+        tags?: (number | Tag)[] | null;
+        limit?: number | null;
+        selectedDocs?:
+          | (
+              | {
+                  relationTo: 'posts';
+                  value: number | Post;
+                }
+              | {
+                  relationTo: 'pages';
+                  value: number | Page;
+                }
+            )[]
+          | null;
+        variant?: ('grid' | 'list' | 'cards' | 'carousel') | null;
+        columns?: ('2' | '3' | '4') | null;
+        showImage?: boolean | null;
+        showExcerpt?: boolean | null;
+        showDate?: boolean | null;
+        showAuthor?: boolean | null;
+        link?: {
+          show?: boolean | null;
+          label?: string | null;
+          url?: string | null;
+        };
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'archive';
+      }
+    | {
+        form: number | Form;
+        enableIntro?: boolean | null;
+        introContent?: {
+          root: {
+            type: string;
+            children: {
+              type: any;
+              version: number;
+              [k: string]: unknown;
+            }[];
+            direction: ('ltr' | 'rtl') | null;
+            format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+            indent: number;
+            version: number;
+          };
+          [k: string]: unknown;
+        } | null;
+        variant?: ('default' | 'card' | 'inline' | 'fullWidth') | null;
+        backgroundColor?: ('none' | 'muted' | 'dark') | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'form';
+      }
+    | {
+        quote: string;
+        author?: string | null;
+        role?: string | null;
+        align?: ('left' | 'center' | 'right') | null;
+        /**
+         * Layout structure (works with any skin)
+         */
+        variant?: ('simple' | 'card' | 'large') | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'quote';
+      }
+    | {
+        heading?: string | null;
+        description?: string | null;
+        /**
+         * Layout structure (works with any skin)
+         */
+        variant?: ('grid' | 'list') | null;
+        items?:
+          | {
+              heading: string;
+              description?: string | null;
+              icon?: string | null;
+              media?: (number | null) | Media;
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'features';
+      }
+    | {
+        heading?: string | null;
+        description?: string | null;
+        /**
+         * Layout structure (works with any skin)
+         */
+        variant?: ('grid' | 'list' | 'cards') | null;
+        items?:
+          | {
+              value: string;
+              label: string;
+              description?: string | null;
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'stats';
+      }
+    | {
+        heading?: string | null;
+        description?: string | null;
+        /**
+         * Layout structure (works with any skin)
+         */
+        variant?: ('grid' | 'ticker') | null;
+        items?:
+          | {
+              media: number | Media;
+              label?: string | null;
+              url?: string | null;
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'logoCloud';
+      }
+    | {
+        heading?: string | null;
+        description?: string | null;
+        /**
+         * Layout structure (works with any skin)
+         */
+        variant?: ('standard' | 'grid' | 'cards') | null;
+        items?:
+          | {
+              quote: string;
+              name: string;
+              role?: string | null;
+              company?: string | null;
+              avatar?: (number | null) | Media;
+              rating?: number | null;
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'testimonials';
+      }
+    | {
+        heading?: string | null;
+        description?: string | null;
+        /**
+         * Layout structure (works with any skin)
+         */
+        variant?: ('accordion' | 'grid' | 'list') | null;
+        items?:
+          | {
+              question: string;
+              answer: {
+                root: {
+                  type: string;
+                  children: {
+                    type: any;
+                    version: number;
+                    [k: string]: unknown;
+                  }[];
+                  direction: ('ltr' | 'rtl') | null;
+                  format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                  indent: number;
+                  version: number;
+                };
+                [k: string]: unknown;
+              };
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'faq';
+      }
+    | {
+        heading?: string | null;
+        description?: string | null;
+        /**
+         * Layout structure (works with any skin)
+         */
+        variant?: ('cards' | 'table' | 'comparison') | null;
+        plans?:
+          | {
+              name: string;
+              price: string;
+              period?: string | null;
+              description?: string | null;
+              features?:
+                | {
+                    feature: string;
+                    id?: string | null;
+                  }[]
+                | null;
+              links?:
+                | {
+                    label: string;
+                    url?: string | null;
+                    page?: (number | null) | Page;
+                    variant?: ('primary' | 'secondary' | 'outline') | null;
+                    id?: string | null;
+                  }[]
+                | null;
+              featured?: boolean | null;
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'pricing';
+      }
+    | {
+        heading?: string | null;
+        description?: string | null;
+        /**
+         * Layout structure (works with any skin)
+         */
+        variant?: ('grid' | 'list' | 'cards') | null;
+        items?:
+          | {
+              name: string;
+              role?: string | null;
+              bio?: string | null;
+              photo?: (number | null) | Media;
+              socials?:
+                | {
+                    label: string;
+                    url: string;
+                    id?: string | null;
+                  }[]
+                | null;
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'team';
+      }
+    | {
+        heading?: string | null;
+        url: string;
+        caption?: string | null;
+        aspectRatio?: ('16:9' | '4:3' | '1:1' | '21:9') | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'embed';
+      }
+    | {
+        style?: ('space' | 'divider') | null;
+        size?: ('xs' | 'sm' | 'md' | 'lg' | 'xl') | null;
+        lineStyle?: ('solid' | 'dashed' | 'dotted') | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'spacer';
+      }
+    | {
+        /**
+         * Use trusted HTML only. This will be rendered as-is on the site.
+         */
+        html: string;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'html';
+      }
+    | {
+        /**
+         * Optional heading for the gallery section
+         */
+        heading?: string | null;
+        /**
+         * Optional description text
+         */
+        description?: string | null;
+        /**
+         * Choose how images are displayed
+         */
+        variant: 'grid' | 'masonry' | 'carousel' | 'lightbox' | 'slider';
+        /**
+         * Number of columns on desktop
+         */
+        columns?: ('2' | '3' | '4' | '5' | '6') | null;
+        /**
+         * Space between images
+         */
+        gap?: ('none' | 'small' | 'medium' | 'large') | null;
+        /**
+         * Force images to a specific aspect ratio
+         */
+        aspectRatio?: ('auto' | 'square' | 'landscape' | 'portrait' | 'wide') | null;
+        images: {
+          image: number | Media;
+          caption?: string | null;
+          link?: {
+            url?: string | null;
+            page?: (number | null) | Page;
+            newTab?: boolean | null;
+          };
+          id?: string | null;
+        }[];
+        showCaptions?: boolean | null;
+        /**
+         * Allow clicking images to view full size
+         */
+        enableLightbox?: boolean | null;
+        autoplay?: boolean | null;
+        autoplaySpeed?: number | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'gallery';
+      }
+    | {
+        heading?: string | null;
+        description?: string | null;
+        /**
+         * Layout structure (works with any skin)
+         */
+        variant: 'cards' | 'features' | 'icons' | 'stats' | 'team' | 'testimonials' | 'logos';
+        /**
+         * Number of columns on desktop
+         */
+        columns: '1' | '2' | '3' | '4' | '5' | '6';
+        gap?: ('none' | 'small' | 'medium' | 'large') | null;
+        /**
+         * Text alignment within grid items
+         */
+        alignment?: ('left' | 'center' | 'right') | null;
+        items: {
+          image?: (number | null) | Media;
+          /**
+           * Lucide icon name (e.g., "star", "heart", "check")
+           */
+          icon?: string | null;
+          heading: string;
+          eyebrow?: string | null;
+          description?: string | null;
+          /**
+           * e.g., "99%", "10K+", "$1M"
+           */
+          stat?: string | null;
+          link?: {
+            url?: string | null;
+            page?: (number | null) | Page;
+            /**
+             * e.g., "Learn More", "Read More"
+             */
+            label?: string | null;
+            newTab?: boolean | null;
+          };
+          id?: string | null;
+        }[];
+        showBorder?: boolean | null;
+        showShadow?: boolean | null;
+        /**
+         * Effect when hovering over items
+         */
+        hoverEffect?: ('none' | 'lift' | 'scale' | 'glow') | null;
+        cta?: {
+          show?: boolean | null;
+          label?: string | null;
+          url?: string | null;
+          page?: (number | null) | Page;
+        };
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'grid';
+      }
+    | {
+        heading?: string | null;
+        description?: string | null;
+        /**
+         * Choose the timeline layout style
+         */
+        variant: 'vertical' | 'alternating' | 'horizontal' | 'compact';
+        lineStyle?: ('solid' | 'dashed' | 'dotted' | 'gradient') | null;
+        markerStyle?: ('circle' | 'diamond' | 'square' | 'icon' | 'number' | 'image') | null;
+        events: {
+          /**
+           * e.g., "2024", "Jan 2024", "1500 BCE", "Renaissance Period"
+           */
+          date: string;
+          heading: string;
+          description?: {
+            root: {
+              type: string;
+              children: {
+                type: any;
+                version: number;
+                [k: string]: unknown;
+              }[];
+              direction: ('ltr' | 'rtl') | null;
+              format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+              indent: number;
+              version: number;
+            };
+            [k: string]: unknown;
+          } | null;
+          image?: (number | null) | Media;
+          /**
+           * Lucide icon name (used when marker style is "icon")
+           */
+          icon?: string | null;
+          /**
+           * Hex color code (e.g., #3B82F6) or leave empty for default
+           */
+          color?: string | null;
+          link?: {
+            url?: string | null;
+            page?: (number | null) | Page;
+            label?: string | null;
+            newTab?: boolean | null;
+          };
+          /**
+           * Highlight this event with special styling
+           */
+          featured?: boolean | null;
+          id?: string | null;
+        }[];
+        showConnectors?: boolean | null;
+        showDates?: boolean | null;
+        /**
+         * Reveal events as user scrolls
+         */
+        animateOnScroll?: boolean | null;
+        sortOrder?: ('chronological' | 'reverse' | 'manual') | null;
+        backgroundColor?: ('transparent' | 'muted' | 'dark' | 'accent') | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'timeline';
+      }
+  )[];
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * Manage FAQ items that can be reused across pages
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "faqs".
+ */
+export interface Faq {
+  id: number;
+  question: string;
+  answer: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  /**
+   * Categorize FAQs for better organization
+   */
+  category?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * Manage testimonial items that can be reused across pages
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "testimonials".
+ */
+export interface Testimonial {
+  id: number;
+  quote: string;
+  name: string;
+  role?: string | null;
+  location?: string | null;
+  company?: string | null;
+  avatar?: (number | null) | Media;
+  rating?: number | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * Location pages data (managed via JSON import - do not edit manually)
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "locations".
+ */
+export interface Location {
+  id: number;
+  /**
+   * e.g., "Glasgow", "Edinburgh"
+   */
+  location_name: string;
+  /**
+   * e.g., "glasgow", "edinburgh" - used in URL path
+   */
+  location_slug: string;
+  /**
+   * Pre-written H1 following SEO rules
+   */
+  h1: string;
+  /**
+   * Location-specific introduction paragraph
+   */
+  intro_copy?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  /**
+   * Additional location-specific content sections
+   */
+  extra_copy?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  /**
+   * Location-specific frequently asked questions
+   */
+  faqs?:
+    | {
+        question: string;
+        answer: {
+          root: {
+            type: string;
+            children: {
+              type: any;
+              version: number;
+              [k: string]: unknown;
+            }[];
+            direction: ('ltr' | 'rtl') | null;
+            format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+            indent: number;
+            version: number;
+          };
+          [k: string]: unknown;
+        };
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * List of nearby location names for internal linking
+   */
+  nearby_locations?:
+    | {
+        name: string;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Quality score from data generation
+   */
+  qa_score?: number | null;
+  /**
+   * Status flag from JSON data
+   */
+  status?: string | null;
+  /**
+   * Full canonical URL path (e.g., "/glasgow")
+   */
+  canonical_path?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * Manage logos for the trust badges / logo cloud that can be reused across pages
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "logo-clouds".
+ */
+export interface LogoCloud {
+  id: number;
+  label: string;
+  media: number | Media;
+  url?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * Reusable block instances that can be shared across multiple pages
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "block-library".
+ */
+export interface BlockLibrary {
+  id: number;
+  /**
+   * Give this block a descriptive name (e.g., "Main CTA Bar", "Homepage Logo Cloud")
+   */
+  name: string;
+  /**
+   * Select the type of block you want to create
+   */
+  blockType:
+    | 'hero'
+    | 'cta'
+    | 'features'
+    | 'content'
+    | 'logoCloud'
+    | 'faq'
+    | 'testimonials'
+    | 'grid'
+    | 'videoFeature'
+    | 'html'
+    | 'archive'
+    | 'form'
+    | 'embed'
+    | 'pricing'
+    | 'quote'
+    | 'stats'
+    | 'team'
+    | 'timeline'
+    | 'gallery'
+    | 'spacer'
+    | 'media';
+  /**
+   * Edit the block configuration as JSON. Tip: Edit blocks visually on a page first, then use "Save to Library" button.
+   */
+  blockData:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  /**
+   * Optional description of what this block is used for and where it appears
+   */
+  description?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * Create block templates visually, then export to Block Library for reuse across pages.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "block-template-builder".
+ */
+export interface BlockTemplateBuilder {
+  id: number;
+  /**
+   * Give this template a descriptive name (e.g., "Homepage Logo Cloud", "FAQ Section")
+   */
+  name: string;
+  /**
+   * Add ONE block and edit it visually. When ready, use the "Export to Block Library" button below.
+   */
+  templates?:
+    | (
+        | {
+            /**
+             * Layout structure (works with any skin)
+             */
+            variant?: ('standard' | 'minimal' | 'fullscreen' | 'split' | 'video' | 'hero-led') | null;
+            /**
+             * Optional badge label displayed above the heading.
+             */
+            eyebrow?: string | null;
+            heading: string;
+            description?: string | null;
+            image?: (number | null) | Media;
+            /**
+             * YouTube or Vimeo URL
+             */
+            videoUrl?: string | null;
+            overlay?: ('none' | 'light' | 'dark' | 'gradient') | null;
+            textAlign?: ('left' | 'center' | 'right') | null;
+            links?:
+              | {
+                  label: string;
+                  url?: string | null;
+                  page?: (number | null) | Page;
+                  variant?: ('primary' | 'secondary' | 'outline') | null;
+                  newTab?: boolean | null;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'hero';
+          }
+        | {
+            columns?:
+              | {
+                  size?: ('oneThird' | 'half' | 'twoThirds' | 'full') | null;
+                  richText?: {
+                    root: {
+                      type: string;
+                      children: {
+                        type: any;
+                        version: number;
+                        [k: string]: unknown;
+                      }[];
+                      direction: ('ltr' | 'rtl') | null;
+                      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                      indent: number;
+                      version: number;
+                    };
+                    [k: string]: unknown;
+                  } | null;
+                  enableLink?: boolean | null;
+                  link?: {
+                    label?: string | null;
+                    url?: string | null;
+                    page?: (number | null) | Page;
+                    newTab?: boolean | null;
+                  };
+                  id?: string | null;
+                }[]
+              | null;
+            backgroundColor?: ('none' | 'muted' | 'dark' | 'accent') | null;
+            paddingTop?: ('none' | 'small' | 'medium' | 'large') | null;
+            paddingBottom?: ('none' | 'small' | 'medium' | 'large') | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'content';
+          }
+        | {
+            media: number | Media;
+            caption?: string | null;
+            size?: ('small' | 'default' | 'large' | 'fullWidth') | null;
+            position?: ('left' | 'center' | 'right') | null;
+            enableLink?: boolean | null;
+            link?: {
+              url?: string | null;
+              page?: (number | null) | Page;
+              newTab?: boolean | null;
+            };
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'media';
+          }
+        | {
+            variant?: ('standard' | 'banner' | 'card' | 'inline') | null;
+            heading: string;
+            description?: string | null;
+            image?: (number | null) | Media;
+            links?:
+              | {
+                  label: string;
+                  url?: string | null;
+                  page?: (number | null) | Page;
+                  variant?: ('primary' | 'secondary' | 'outline') | null;
+                  newTab?: boolean | null;
+                  id?: string | null;
+                }[]
+              | null;
+            backgroundColor?: ('none' | 'muted' | 'dark' | 'accent') | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'cta';
+          }
+        | {
+            heading?: string | null;
+            description?: string | null;
+            populateBy?: ('collection' | 'selection') | null;
+            relationTo?: ('posts' | 'pages' | 'categories' | 'tags') | null;
+            categories?: (number | Category)[] | null;
+            tags?: (number | Tag)[] | null;
+            limit?: number | null;
+            selectedDocs?:
+              | (
+                  | {
+                      relationTo: 'posts';
+                      value: number | Post;
+                    }
+                  | {
+                      relationTo: 'pages';
+                      value: number | Page;
+                    }
+                )[]
+              | null;
+            variant?: ('grid' | 'list' | 'cards' | 'carousel') | null;
+            columns?: ('2' | '3' | '4') | null;
+            showImage?: boolean | null;
+            showExcerpt?: boolean | null;
+            showDate?: boolean | null;
+            showAuthor?: boolean | null;
+            link?: {
+              show?: boolean | null;
+              label?: string | null;
+              url?: string | null;
+            };
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'archive';
+          }
+        | {
+            form: number | Form;
+            enableIntro?: boolean | null;
+            introContent?: {
+              root: {
+                type: string;
+                children: {
+                  type: any;
+                  version: number;
+                  [k: string]: unknown;
+                }[];
+                direction: ('ltr' | 'rtl') | null;
+                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                indent: number;
+                version: number;
+              };
+              [k: string]: unknown;
+            } | null;
+            variant?: ('default' | 'card' | 'inline' | 'fullWidth') | null;
+            backgroundColor?: ('none' | 'muted' | 'dark') | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'form';
+          }
+        | {
+            quote: string;
+            author?: string | null;
+            role?: string | null;
+            align?: ('left' | 'center' | 'right') | null;
+            /**
+             * Layout structure (works with any skin)
+             */
+            variant?: ('simple' | 'card' | 'large') | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'quote';
+          }
+        | {
+            heading?: string | null;
+            description?: string | null;
+            /**
+             * Layout structure (works with any skin)
+             */
+            variant?: ('grid' | 'list') | null;
+            items?:
+              | {
+                  heading: string;
+                  description?: string | null;
+                  icon?: string | null;
+                  media?: (number | null) | Media;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'features';
+          }
+        | {
+            heading?: string | null;
+            description?: string | null;
+            /**
+             * Layout structure (works with any skin)
+             */
+            variant?: ('grid' | 'list' | 'cards') | null;
+            items?:
+              | {
+                  value: string;
+                  label: string;
+                  description?: string | null;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'stats';
+          }
+        | {
+            heading?: string | null;
+            description?: string | null;
+            /**
+             * Layout structure (works with any skin)
+             */
+            variant?: ('grid' | 'ticker') | null;
+            items?:
+              | {
+                  media: number | Media;
+                  label?: string | null;
+                  url?: string | null;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'logoCloud';
+          }
+        | {
+            heading?: string | null;
+            description?: string | null;
+            /**
+             * Layout structure (works with any skin)
+             */
+            variant?: ('standard' | 'grid' | 'cards') | null;
+            items?:
+              | {
+                  quote: string;
+                  name: string;
+                  role?: string | null;
+                  company?: string | null;
+                  avatar?: (number | null) | Media;
+                  rating?: number | null;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'testimonials';
+          }
+        | {
+            heading?: string | null;
+            description?: string | null;
+            /**
+             * Layout structure (works with any skin)
+             */
+            variant?: ('accordion' | 'grid' | 'list') | null;
+            items?:
+              | {
+                  question: string;
+                  answer: {
+                    root: {
+                      type: string;
+                      children: {
+                        type: any;
+                        version: number;
+                        [k: string]: unknown;
+                      }[];
+                      direction: ('ltr' | 'rtl') | null;
+                      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                      indent: number;
+                      version: number;
+                    };
+                    [k: string]: unknown;
+                  };
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'faq';
+          }
+        | {
+            heading?: string | null;
+            description?: string | null;
+            /**
+             * Layout structure (works with any skin)
+             */
+            variant?: ('cards' | 'table' | 'comparison') | null;
+            plans?:
+              | {
+                  name: string;
+                  price: string;
+                  period?: string | null;
+                  description?: string | null;
+                  features?:
+                    | {
+                        feature: string;
+                        id?: string | null;
+                      }[]
+                    | null;
+                  links?:
+                    | {
+                        label: string;
+                        url?: string | null;
+                        page?: (number | null) | Page;
+                        variant?: ('primary' | 'secondary' | 'outline') | null;
+                        id?: string | null;
+                      }[]
+                    | null;
+                  featured?: boolean | null;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'pricing';
+          }
+        | {
+            heading?: string | null;
+            description?: string | null;
+            /**
+             * Layout structure (works with any skin)
+             */
+            variant?: ('grid' | 'list' | 'cards') | null;
+            items?:
+              | {
+                  name: string;
+                  role?: string | null;
+                  bio?: string | null;
+                  photo?: (number | null) | Media;
+                  socials?:
+                    | {
+                        label: string;
+                        url: string;
+                        id?: string | null;
+                      }[]
+                    | null;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'team';
+          }
+        | {
+            heading?: string | null;
+            url: string;
+            caption?: string | null;
+            aspectRatio?: ('16:9' | '4:3' | '1:1' | '21:9') | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'embed';
+          }
+        | {
+            style?: ('space' | 'divider') | null;
+            size?: ('xs' | 'sm' | 'md' | 'lg' | 'xl') | null;
+            lineStyle?: ('solid' | 'dashed' | 'dotted') | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'spacer';
+          }
+        | {
+            /**
+             * Use trusted HTML only. This will be rendered as-is on the site.
+             */
+            html: string;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'html';
+          }
+        | {
+            /**
+             * Optional heading for the gallery section
+             */
+            heading?: string | null;
+            /**
+             * Optional description text
+             */
+            description?: string | null;
+            /**
+             * Choose how images are displayed
+             */
+            variant: 'grid' | 'masonry' | 'carousel' | 'lightbox' | 'slider';
+            /**
+             * Number of columns on desktop
+             */
+            columns?: ('2' | '3' | '4' | '5' | '6') | null;
+            /**
+             * Space between images
+             */
+            gap?: ('none' | 'small' | 'medium' | 'large') | null;
+            /**
+             * Force images to a specific aspect ratio
+             */
+            aspectRatio?: ('auto' | 'square' | 'landscape' | 'portrait' | 'wide') | null;
+            images: {
+              image: number | Media;
+              caption?: string | null;
+              link?: {
+                url?: string | null;
+                page?: (number | null) | Page;
+                newTab?: boolean | null;
+              };
+              id?: string | null;
+            }[];
+            showCaptions?: boolean | null;
+            /**
+             * Allow clicking images to view full size
+             */
+            enableLightbox?: boolean | null;
+            autoplay?: boolean | null;
+            autoplaySpeed?: number | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'gallery';
+          }
+        | {
+            heading?: string | null;
+            description?: string | null;
+            /**
+             * Layout structure (works with any skin)
+             */
+            variant: 'cards' | 'features' | 'icons' | 'stats' | 'team' | 'testimonials' | 'logos';
+            /**
+             * Number of columns on desktop
+             */
+            columns: '1' | '2' | '3' | '4' | '5' | '6';
+            gap?: ('none' | 'small' | 'medium' | 'large') | null;
+            /**
+             * Text alignment within grid items
+             */
+            alignment?: ('left' | 'center' | 'right') | null;
+            items: {
+              image?: (number | null) | Media;
+              /**
+               * Lucide icon name (e.g., "star", "heart", "check")
+               */
+              icon?: string | null;
+              heading: string;
+              eyebrow?: string | null;
+              description?: string | null;
+              /**
+               * e.g., "99%", "10K+", "$1M"
+               */
+              stat?: string | null;
+              link?: {
+                url?: string | null;
+                page?: (number | null) | Page;
+                /**
+                 * e.g., "Learn More", "Read More"
+                 */
+                label?: string | null;
+                newTab?: boolean | null;
+              };
+              id?: string | null;
+            }[];
+            showBorder?: boolean | null;
+            showShadow?: boolean | null;
+            /**
+             * Effect when hovering over items
+             */
+            hoverEffect?: ('none' | 'lift' | 'scale' | 'glow') | null;
+            cta?: {
+              show?: boolean | null;
+              label?: string | null;
+              url?: string | null;
+              page?: (number | null) | Page;
+            };
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'grid';
+          }
+        | {
+            heading?: string | null;
+            description?: string | null;
+            /**
+             * Choose the timeline layout style
+             */
+            variant: 'vertical' | 'alternating' | 'horizontal' | 'compact';
+            lineStyle?: ('solid' | 'dashed' | 'dotted' | 'gradient') | null;
+            markerStyle?: ('circle' | 'diamond' | 'square' | 'icon' | 'number' | 'image') | null;
+            events: {
+              /**
+               * e.g., "2024", "Jan 2024", "1500 BCE", "Renaissance Period"
+               */
+              date: string;
+              heading: string;
+              description?: {
+                root: {
+                  type: string;
+                  children: {
+                    type: any;
+                    version: number;
+                    [k: string]: unknown;
+                  }[];
+                  direction: ('ltr' | 'rtl') | null;
+                  format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                  indent: number;
+                  version: number;
+                };
+                [k: string]: unknown;
+              } | null;
+              image?: (number | null) | Media;
+              /**
+               * Lucide icon name (used when marker style is "icon")
+               */
+              icon?: string | null;
+              /**
+               * Hex color code (e.g., #3B82F6) or leave empty for default
+               */
+              color?: string | null;
+              link?: {
+                url?: string | null;
+                page?: (number | null) | Page;
+                label?: string | null;
+                newTab?: boolean | null;
+              };
+              /**
+               * Highlight this event with special styling
+               */
+              featured?: boolean | null;
+              id?: string | null;
+            }[];
+            showConnectors?: boolean | null;
+            showDates?: boolean | null;
+            /**
+             * Reveal events as user scrolls
+             */
+            animateOnScroll?: boolean | null;
+            sortOrder?: ('chronological' | 'reverse' | 'manual') | null;
+            backgroundColor?: ('transparent' | 'muted' | 'dark' | 'accent') | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'timeline';
+          }
+      )[]
+    | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * Define custom collections like "Services", "FAQs", or "Galleries"
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "content-types".
+ */
+export interface ContentType {
+  id: number;
+  /**
+   * Display name (e.g., "Classic Cars")
+   */
+  name: string;
+  /**
+   * URL-friendly identifier (e.g., "classic-cars")
+   */
+  slug: string;
+  /**
+   * Singular form (e.g., "Classic Car")
+   */
+  singularLabel: string;
+  /**
+   * Plural form (e.g., "Classic Cars")
+   */
+  pluralLabel: string;
+  /**
+   * Icon shown in the admin sidebar
+   */
+  icon?:
+    | (
+        | 'box'
+        | 'product'
+        | 'archive'
+        | 'shopping-bag'
+        | 'person'
+        | 'location'
+        | 'event'
+        | 'document'
+        | 'archive-item'
+        | 'image'
+        | 'settings'
+        | 'users'
+      )
+    | null;
+  /**
+   * Base template determines the default fields available
+   */
+  template: 'archive-item' | 'product' | 'person' | 'place' | 'event' | 'article';
+  /**
+   * Internal reference for template-based collections
+   */
+  templateId?: string | null;
+  uninstalled?: boolean | null;
+  /**
+   * Optional description shown in the admin
+   */
+  description?: string | null;
+  /**
+   * Create an archive/listing page for this content type
+   */
+  hasArchive?: boolean | null;
+  /**
+   * URL path for the archive page (defaults to content type slug)
+   */
+  archiveSlug?: string | null;
+  /**
+   * Define additional fields specific to this content type
+   */
+  customFields?:
+    | {
+        /**
+         * Field name (e.g., "engineSize")
+         */
+        name: string;
+        /**
+         * Display label (e.g., "Engine Size")
+         */
+        label: string;
+        type: 'text' | 'textarea' | 'number' | 'date' | 'checkbox' | 'select' | 'url' | 'email';
+        required?: boolean | null;
+        /**
+         * For select fields: one option per line
+         */
+        options?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Sample data configuration for this content type
+   */
+  seedData?: {
+    /**
+     * Enable sample data for this content type
+     */
+    hasSeedData?: boolean | null;
+    /**
+     * Number of sample items to create
+     */
+    sampleCount?: number | null;
+  };
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * Items belonging to your custom collections
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "custom-items".
+ */
+export interface CustomItem {
+  id: number;
+  title: string;
+  /**
+   * URL-friendly identifier
+   */
+  slug: string;
+  /**
+   * Brief summary for listings and SEO
+   */
+  excerpt?: string | null;
+  /**
+   * Main content body
+   */
+  content?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  /**
+   * Add content sections
+   */
+  blocks?:
+    | (
+        | {
+            /**
+             * Layout structure (works with any skin)
+             */
+            variant?: ('standard' | 'minimal' | 'fullscreen' | 'split' | 'video' | 'hero-led') | null;
+            /**
+             * Optional badge label displayed above the heading.
+             */
+            eyebrow?: string | null;
+            heading: string;
+            description?: string | null;
+            image?: (number | null) | Media;
+            /**
+             * YouTube or Vimeo URL
+             */
+            videoUrl?: string | null;
+            overlay?: ('none' | 'light' | 'dark' | 'gradient') | null;
+            textAlign?: ('left' | 'center' | 'right') | null;
+            links?:
+              | {
+                  label: string;
+                  url?: string | null;
+                  page?: (number | null) | Page;
+                  variant?: ('primary' | 'secondary' | 'outline') | null;
+                  newTab?: boolean | null;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'hero';
+          }
+        | {
+            columns?:
+              | {
+                  size?: ('oneThird' | 'half' | 'twoThirds' | 'full') | null;
+                  richText?: {
+                    root: {
+                      type: string;
+                      children: {
+                        type: any;
+                        version: number;
+                        [k: string]: unknown;
+                      }[];
+                      direction: ('ltr' | 'rtl') | null;
+                      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                      indent: number;
+                      version: number;
+                    };
+                    [k: string]: unknown;
+                  } | null;
+                  enableLink?: boolean | null;
+                  link?: {
+                    label?: string | null;
+                    url?: string | null;
+                    page?: (number | null) | Page;
+                    newTab?: boolean | null;
+                  };
+                  id?: string | null;
+                }[]
+              | null;
+            backgroundColor?: ('none' | 'muted' | 'dark' | 'accent') | null;
+            paddingTop?: ('none' | 'small' | 'medium' | 'large') | null;
+            paddingBottom?: ('none' | 'small' | 'medium' | 'large') | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'content';
+          }
+        | {
+            media: number | Media;
+            caption?: string | null;
+            size?: ('small' | 'default' | 'large' | 'fullWidth') | null;
+            position?: ('left' | 'center' | 'right') | null;
+            enableLink?: boolean | null;
+            link?: {
+              url?: string | null;
+              page?: (number | null) | Page;
+              newTab?: boolean | null;
+            };
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'media';
+          }
+        | {
+            variant?: ('standard' | 'banner' | 'card' | 'inline') | null;
+            heading: string;
+            description?: string | null;
+            image?: (number | null) | Media;
+            links?:
+              | {
+                  label: string;
+                  url?: string | null;
+                  page?: (number | null) | Page;
+                  variant?: ('primary' | 'secondary' | 'outline') | null;
+                  newTab?: boolean | null;
+                  id?: string | null;
+                }[]
+              | null;
+            backgroundColor?: ('none' | 'muted' | 'dark' | 'accent') | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'cta';
+          }
+        | {
+            quote: string;
+            author?: string | null;
+            role?: string | null;
+            align?: ('left' | 'center' | 'right') | null;
+            /**
+             * Layout structure (works with any skin)
+             */
+            variant?: ('simple' | 'card' | 'large') | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'quote';
+          }
+        | {
+            heading?: string | null;
+            description?: string | null;
+            /**
+             * Layout structure (works with any skin)
+             */
+            variant?: ('grid' | 'list') | null;
+            items?:
+              | {
+                  heading: string;
+                  description?: string | null;
+                  icon?: string | null;
+                  media?: (number | null) | Media;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'features';
+          }
+        | {
+            heading?: string | null;
+            description?: string | null;
+            /**
+             * Layout structure (works with any skin)
+             */
+            variant?: ('grid' | 'list' | 'cards') | null;
+            items?:
+              | {
+                  value: string;
+                  label: string;
+                  description?: string | null;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'stats';
+          }
+        | {
+            heading?: string | null;
+            description?: string | null;
+            /**
+             * Layout structure (works with any skin)
+             */
+            variant?: ('grid' | 'ticker') | null;
+            items?:
+              | {
+                  media: number | Media;
+                  label?: string | null;
+                  url?: string | null;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'logoCloud';
+          }
+        | {
+            heading?: string | null;
+            description?: string | null;
+            /**
+             * Layout structure (works with any skin)
+             */
+            variant?: ('standard' | 'grid' | 'cards') | null;
+            items?:
+              | {
+                  quote: string;
+                  name: string;
+                  role?: string | null;
+                  company?: string | null;
+                  avatar?: (number | null) | Media;
+                  rating?: number | null;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'testimonials';
+          }
+        | {
+            heading?: string | null;
+            description?: string | null;
+            /**
+             * Layout structure (works with any skin)
+             */
+            variant?: ('accordion' | 'grid' | 'list') | null;
+            items?:
+              | {
+                  question: string;
+                  answer: {
+                    root: {
+                      type: string;
+                      children: {
+                        type: any;
+                        version: number;
+                        [k: string]: unknown;
+                      }[];
+                      direction: ('ltr' | 'rtl') | null;
+                      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                      indent: number;
+                      version: number;
+                    };
+                    [k: string]: unknown;
+                  };
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'faq';
+          }
+        | {
+            heading?: string | null;
+            description?: string | null;
+            /**
+             * Layout structure (works with any skin)
+             */
+            variant?: ('cards' | 'table' | 'comparison') | null;
+            plans?:
+              | {
+                  name: string;
+                  price: string;
+                  period?: string | null;
+                  description?: string | null;
+                  features?:
+                    | {
+                        feature: string;
+                        id?: string | null;
+                      }[]
+                    | null;
+                  links?:
+                    | {
+                        label: string;
+                        url?: string | null;
+                        page?: (number | null) | Page;
+                        variant?: ('primary' | 'secondary' | 'outline') | null;
+                        id?: string | null;
+                      }[]
+                    | null;
+                  featured?: boolean | null;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'pricing';
+          }
+        | {
+            heading?: string | null;
+            description?: string | null;
+            /**
+             * Layout structure (works with any skin)
+             */
+            variant?: ('grid' | 'list' | 'cards') | null;
+            items?:
+              | {
+                  name: string;
+                  role?: string | null;
+                  bio?: string | null;
+                  photo?: (number | null) | Media;
+                  socials?:
+                    | {
+                        label: string;
+                        url: string;
+                        id?: string | null;
+                      }[]
+                    | null;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'team';
+          }
+        | {
+            heading?: string | null;
+            url: string;
+            caption?: string | null;
+            aspectRatio?: ('16:9' | '4:3' | '1:1' | '21:9') | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'embed';
+          }
+        | {
+            /**
+             * Optional heading for the gallery section
+             */
+            heading?: string | null;
+            /**
+             * Optional description text
+             */
+            description?: string | null;
+            /**
+             * Choose how images are displayed
+             */
+            variant: 'grid' | 'masonry' | 'carousel' | 'lightbox' | 'slider';
+            /**
+             * Number of columns on desktop
+             */
+            columns?: ('2' | '3' | '4' | '5' | '6') | null;
+            /**
+             * Space between images
+             */
+            gap?: ('none' | 'small' | 'medium' | 'large') | null;
+            /**
+             * Force images to a specific aspect ratio
+             */
+            aspectRatio?: ('auto' | 'square' | 'landscape' | 'portrait' | 'wide') | null;
+            images: {
+              image: number | Media;
+              caption?: string | null;
+              link?: {
+                url?: string | null;
+                page?: (number | null) | Page;
+                newTab?: boolean | null;
+              };
+              id?: string | null;
+            }[];
+            showCaptions?: boolean | null;
+            /**
+             * Allow clicking images to view full size
+             */
+            enableLightbox?: boolean | null;
+            autoplay?: boolean | null;
+            autoplaySpeed?: number | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'gallery';
+          }
+        | {
+            heading?: string | null;
+            description?: string | null;
+            /**
+             * Layout structure (works with any skin)
+             */
+            variant: 'cards' | 'features' | 'icons' | 'stats' | 'team' | 'testimonials' | 'logos';
+            /**
+             * Number of columns on desktop
+             */
+            columns: '1' | '2' | '3' | '4' | '5' | '6';
+            gap?: ('none' | 'small' | 'medium' | 'large') | null;
+            /**
+             * Text alignment within grid items
+             */
+            alignment?: ('left' | 'center' | 'right') | null;
+            items: {
+              image?: (number | null) | Media;
+              /**
+               * Lucide icon name (e.g., "star", "heart", "check")
+               */
+              icon?: string | null;
+              heading: string;
+              eyebrow?: string | null;
+              description?: string | null;
+              /**
+               * e.g., "99%", "10K+", "$1M"
+               */
+              stat?: string | null;
+              link?: {
+                url?: string | null;
+                page?: (number | null) | Page;
+                /**
+                 * e.g., "Learn More", "Read More"
+                 */
+                label?: string | null;
+                newTab?: boolean | null;
+              };
+              id?: string | null;
+            }[];
+            showBorder?: boolean | null;
+            showShadow?: boolean | null;
+            /**
+             * Effect when hovering over items
+             */
+            hoverEffect?: ('none' | 'lift' | 'scale' | 'glow') | null;
+            cta?: {
+              show?: boolean | null;
+              label?: string | null;
+              url?: string | null;
+              page?: (number | null) | Page;
+            };
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'grid';
+          }
+        | {
+            heading?: string | null;
+            description?: string | null;
+            /**
+             * Choose the timeline layout style
+             */
+            variant: 'vertical' | 'alternating' | 'horizontal' | 'compact';
+            lineStyle?: ('solid' | 'dashed' | 'dotted' | 'gradient') | null;
+            markerStyle?: ('circle' | 'diamond' | 'square' | 'icon' | 'number' | 'image') | null;
+            events: {
+              /**
+               * e.g., "2024", "Jan 2024", "1500 BCE", "Renaissance Period"
+               */
+              date: string;
+              heading: string;
+              description?: {
+                root: {
+                  type: string;
+                  children: {
+                    type: any;
+                    version: number;
+                    [k: string]: unknown;
+                  }[];
+                  direction: ('ltr' | 'rtl') | null;
+                  format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                  indent: number;
+                  version: number;
+                };
+                [k: string]: unknown;
+              } | null;
+              image?: (number | null) | Media;
+              /**
+               * Lucide icon name (used when marker style is "icon")
+               */
+              icon?: string | null;
+              /**
+               * Hex color code (e.g., #3B82F6) or leave empty for default
+               */
+              color?: string | null;
+              link?: {
+                url?: string | null;
+                page?: (number | null) | Page;
+                label?: string | null;
+                newTab?: boolean | null;
+              };
+              /**
+               * Highlight this event with special styling
+               */
+              featured?: boolean | null;
+              id?: string | null;
+            }[];
+            showConnectors?: boolean | null;
+            showDates?: boolean | null;
+            /**
+             * Reveal events as user scrolls
+             */
+            animateOnScroll?: boolean | null;
+            sortOrder?: ('chronological' | 'reverse' | 'manual') | null;
+            backgroundColor?: ('transparent' | 'muted' | 'dark' | 'accent') | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'timeline';
+          }
+        | {
+            heading?: string | null;
+            description?: string | null;
+            populateBy?: ('collection' | 'selection') | null;
+            relationTo?: ('posts' | 'pages' | 'categories' | 'tags') | null;
+            categories?: (number | Category)[] | null;
+            tags?: (number | Tag)[] | null;
+            limit?: number | null;
+            selectedDocs?:
+              | (
+                  | {
+                      relationTo: 'posts';
+                      value: number | Post;
+                    }
+                  | {
+                      relationTo: 'pages';
+                      value: number | Page;
+                    }
+                )[]
+              | null;
+            variant?: ('grid' | 'list' | 'cards' | 'carousel') | null;
+            columns?: ('2' | '3' | '4') | null;
+            showImage?: boolean | null;
+            showExcerpt?: boolean | null;
+            showDate?: boolean | null;
+            showAuthor?: boolean | null;
+            link?: {
+              show?: boolean | null;
+              label?: string | null;
+              url?: string | null;
+            };
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'archive';
+          }
+        | {
+            form: number | Form;
+            enableIntro?: boolean | null;
+            introContent?: {
+              root: {
+                type: string;
+                children: {
+                  type: any;
+                  version: number;
+                  [k: string]: unknown;
+                }[];
+                direction: ('ltr' | 'rtl') | null;
+                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                indent: number;
+                version: number;
+              };
+              [k: string]: unknown;
+            } | null;
+            variant?: ('default' | 'card' | 'inline' | 'fullWidth') | null;
+            backgroundColor?: ('none' | 'muted' | 'dark') | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'form';
+          }
+        | {
+            style?: ('space' | 'divider') | null;
+            size?: ('xs' | 'sm' | 'md' | 'lg' | 'xl') | null;
+            lineStyle?: ('solid' | 'dashed' | 'dotted') | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'spacer';
+          }
+        | {
+            /**
+             * Use trusted HTML only. This will be rendered as-is on the site.
+             */
+            html: string;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'html';
+          }
+      )[]
+    | null;
+  /**
+   * Main image for listings and social sharing
+   */
+  featuredImage?: (number | null) | Media;
+  /**
+   * Additional images
+   */
+  gallery?:
+    | {
+        image: number | Media;
+        caption?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Custom field values are stored here and rendered based on the content type definition
+   */
+  customData?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  /**
+   * Categorize this item
+   */
+  categories?: (number | Category)[] | null;
+  /**
+   * Add tags for filtering
+   */
+  tags?: (number | Tag)[] | null;
+  /**
+   * The type of content this item belongs to
+   */
+  contentType: number | ContentType;
+  status?: ('draft' | 'published' | 'archived') | null;
+  /**
+   * Publication date
+   */
+  publishedAt?: string | null;
+  author?: (number | null) | User;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * Archive items such as gallery pieces, portfolio items, or collectibles
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "archive-items".
+ */
+export interface ArchiveItem {
+  id: number;
+  title: string;
+  featuredImage?: (number | null) | Media;
+  /**
+   * Brief summary for listings and SEO
+   */
+  excerpt?: string | null;
+  richContent?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  gallery?:
+    | {
+        image: number | Media;
+        caption?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  specifications?: {
+    height?: string | null;
+    width?: string | null;
+    depth?: string | null;
+    weight?: string | null;
+    materials?: string | null;
+    condition?: string | null;
+  };
+  /**
+   * e.g., "circa 1965" or "1920-1925"
+   */
+  dateCreated?: string | null;
+  dateAcquired?: string | null;
+  provenance?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  catalogNumber?: string | null;
+  /**
+   * People who created or owned this item
+   */
+  creators?: (number | Person)[] | null;
+  /**
+   * Where this item was made or found
+   */
+  origins?: (number | Place)[] | null;
+  relatedItems?: (number | ArchiveItem)[] | null;
+  /**
+   * Select one or more categories
+   */
+  categories?: (number | Category)[] | null;
+  /**
+   * Add tags for filtering and search
+   */
+  tags?: (number | Tag)[] | null;
+  /**
+   * Add and arrange content sections
+   */
+  contentBlocks?:
+    | (
+        | {
+            /**
+             * Layout structure (works with any skin)
+             */
+            variant?: ('standard' | 'minimal' | 'fullscreen' | 'split' | 'video' | 'hero-led') | null;
+            /**
+             * Optional badge label displayed above the heading.
+             */
+            eyebrow?: string | null;
+            heading: string;
+            description?: string | null;
+            image?: (number | null) | Media;
+            /**
+             * YouTube or Vimeo URL
+             */
+            videoUrl?: string | null;
+            overlay?: ('none' | 'light' | 'dark' | 'gradient') | null;
+            textAlign?: ('left' | 'center' | 'right') | null;
+            links?:
+              | {
+                  label: string;
+                  url?: string | null;
+                  page?: (number | null) | Page;
+                  variant?: ('primary' | 'secondary' | 'outline') | null;
+                  newTab?: boolean | null;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'hero';
+          }
+        | {
+            columns?:
+              | {
+                  size?: ('oneThird' | 'half' | 'twoThirds' | 'full') | null;
+                  richText?: {
+                    root: {
+                      type: string;
+                      children: {
+                        type: any;
+                        version: number;
+                        [k: string]: unknown;
+                      }[];
+                      direction: ('ltr' | 'rtl') | null;
+                      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                      indent: number;
+                      version: number;
+                    };
+                    [k: string]: unknown;
+                  } | null;
+                  enableLink?: boolean | null;
+                  link?: {
+                    label?: string | null;
+                    url?: string | null;
+                    page?: (number | null) | Page;
+                    newTab?: boolean | null;
+                  };
+                  id?: string | null;
+                }[]
+              | null;
+            backgroundColor?: ('none' | 'muted' | 'dark' | 'accent') | null;
+            paddingTop?: ('none' | 'small' | 'medium' | 'large') | null;
+            paddingBottom?: ('none' | 'small' | 'medium' | 'large') | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'content';
+          }
+        | {
+            media: number | Media;
+            caption?: string | null;
+            size?: ('small' | 'default' | 'large' | 'fullWidth') | null;
+            position?: ('left' | 'center' | 'right') | null;
+            enableLink?: boolean | null;
+            link?: {
+              url?: string | null;
+              page?: (number | null) | Page;
+              newTab?: boolean | null;
+            };
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'media';
+          }
+        | {
+            variant?: ('standard' | 'banner' | 'card' | 'inline') | null;
+            heading: string;
+            description?: string | null;
+            image?: (number | null) | Media;
+            links?:
+              | {
+                  label: string;
+                  url?: string | null;
+                  page?: (number | null) | Page;
+                  variant?: ('primary' | 'secondary' | 'outline') | null;
+                  newTab?: boolean | null;
+                  id?: string | null;
+                }[]
+              | null;
+            backgroundColor?: ('none' | 'muted' | 'dark' | 'accent') | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'cta';
+          }
+        | {
+            heading?: string | null;
+            description?: string | null;
+            populateBy?: ('collection' | 'selection') | null;
+            relationTo?: ('posts' | 'pages' | 'categories' | 'tags') | null;
+            categories?: (number | Category)[] | null;
+            tags?: (number | Tag)[] | null;
+            limit?: number | null;
+            selectedDocs?:
+              | (
+                  | {
+                      relationTo: 'posts';
+                      value: number | Post;
+                    }
+                  | {
+                      relationTo: 'pages';
+                      value: number | Page;
+                    }
+                )[]
+              | null;
+            variant?: ('grid' | 'list' | 'cards' | 'carousel') | null;
+            columns?: ('2' | '3' | '4') | null;
+            showImage?: boolean | null;
+            showExcerpt?: boolean | null;
+            showDate?: boolean | null;
+            showAuthor?: boolean | null;
+            link?: {
+              show?: boolean | null;
+              label?: string | null;
+              url?: string | null;
+            };
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'archive';
+          }
+        | {
+            form: number | Form;
+            enableIntro?: boolean | null;
+            introContent?: {
+              root: {
+                type: string;
+                children: {
+                  type: any;
+                  version: number;
+                  [k: string]: unknown;
+                }[];
+                direction: ('ltr' | 'rtl') | null;
+                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                indent: number;
+                version: number;
+              };
+              [k: string]: unknown;
+            } | null;
+            variant?: ('default' | 'card' | 'inline' | 'fullWidth') | null;
+            backgroundColor?: ('none' | 'muted' | 'dark') | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'form';
+          }
+        | {
+            /**
+             * Optional heading for the gallery section
+             */
+            heading?: string | null;
+            /**
+             * Optional description text
+             */
+            description?: string | null;
+            /**
+             * Choose how images are displayed
+             */
+            variant: 'grid' | 'masonry' | 'carousel' | 'lightbox' | 'slider';
+            /**
+             * Number of columns on desktop
+             */
+            columns?: ('2' | '3' | '4' | '5' | '6') | null;
+            /**
+             * Space between images
+             */
+            gap?: ('none' | 'small' | 'medium' | 'large') | null;
+            /**
+             * Force images to a specific aspect ratio
+             */
+            aspectRatio?: ('auto' | 'square' | 'landscape' | 'portrait' | 'wide') | null;
+            images: {
+              image: number | Media;
+              caption?: string | null;
+              link?: {
+                url?: string | null;
+                page?: (number | null) | Page;
+                newTab?: boolean | null;
+              };
+              id?: string | null;
+            }[];
+            showCaptions?: boolean | null;
+            /**
+             * Allow clicking images to view full size
+             */
+            enableLightbox?: boolean | null;
+            autoplay?: boolean | null;
+            autoplaySpeed?: number | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'gallery';
+          }
+        | {
+            heading?: string | null;
+            description?: string | null;
+            /**
+             * Layout structure (works with any skin)
+             */
+            variant: 'cards' | 'features' | 'icons' | 'stats' | 'team' | 'testimonials' | 'logos';
+            /**
+             * Number of columns on desktop
+             */
+            columns: '1' | '2' | '3' | '4' | '5' | '6';
+            gap?: ('none' | 'small' | 'medium' | 'large') | null;
+            /**
+             * Text alignment within grid items
+             */
+            alignment?: ('left' | 'center' | 'right') | null;
+            items: {
+              image?: (number | null) | Media;
+              /**
+               * Lucide icon name (e.g., "star", "heart", "check")
+               */
+              icon?: string | null;
+              heading: string;
+              eyebrow?: string | null;
+              description?: string | null;
+              /**
+               * e.g., "99%", "10K+", "$1M"
+               */
+              stat?: string | null;
+              link?: {
+                url?: string | null;
+                page?: (number | null) | Page;
+                /**
+                 * e.g., "Learn More", "Read More"
+                 */
+                label?: string | null;
+                newTab?: boolean | null;
+              };
+              id?: string | null;
+            }[];
+            showBorder?: boolean | null;
+            showShadow?: boolean | null;
+            /**
+             * Effect when hovering over items
+             */
+            hoverEffect?: ('none' | 'lift' | 'scale' | 'glow') | null;
+            cta?: {
+              show?: boolean | null;
+              label?: string | null;
+              url?: string | null;
+              page?: (number | null) | Page;
+            };
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'grid';
+          }
+        | {
+            heading?: string | null;
+            description?: string | null;
+            /**
+             * Choose the timeline layout style
+             */
+            variant: 'vertical' | 'alternating' | 'horizontal' | 'compact';
+            lineStyle?: ('solid' | 'dashed' | 'dotted' | 'gradient') | null;
+            markerStyle?: ('circle' | 'diamond' | 'square' | 'icon' | 'number' | 'image') | null;
+            events: {
+              /**
+               * e.g., "2024", "Jan 2024", "1500 BCE", "Renaissance Period"
+               */
+              date: string;
+              heading: string;
+              description?: {
+                root: {
+                  type: string;
+                  children: {
+                    type: any;
+                    version: number;
+                    [k: string]: unknown;
+                  }[];
+                  direction: ('ltr' | 'rtl') | null;
+                  format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                  indent: number;
+                  version: number;
+                };
+                [k: string]: unknown;
+              } | null;
+              image?: (number | null) | Media;
+              /**
+               * Lucide icon name (used when marker style is "icon")
+               */
+              icon?: string | null;
+              /**
+               * Hex color code (e.g., #3B82F6) or leave empty for default
+               */
+              color?: string | null;
+              link?: {
+                url?: string | null;
+                page?: (number | null) | Page;
+                label?: string | null;
+                newTab?: boolean | null;
+              };
+              /**
+               * Highlight this event with special styling
+               */
+              featured?: boolean | null;
+              id?: string | null;
+            }[];
+            showConnectors?: boolean | null;
+            showDates?: boolean | null;
+            /**
+             * Reveal events as user scrolls
+             */
+            animateOnScroll?: boolean | null;
+            sortOrder?: ('chronological' | 'reverse' | 'manual') | null;
+            backgroundColor?: ('transparent' | 'muted' | 'dark' | 'accent') | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'timeline';
+          }
+      )[]
+    | null;
+  /**
+   * URL-friendly identifier. Will be published at: /archive-items/[slug]
+   */
+  slug: string;
+  /**
+   * Show in featured sections
+   */
+  featured?: boolean | null;
+  onDisplay?: boolean | null;
+  location?: string | null;
+  /**
+   * Select the display template
+   */
+  template: 'detail' | 'gallery' | 'timeline';
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * Historical figures, artists, team members, and notable people
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "people".
+ */
+export interface Person {
+  id: number;
+  name: string;
+  portrait?: (number | null) | Media;
+  /**
+   * Brief description for listings and SEO
+   */
+  shortBio?: string | null;
+  biography?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  /**
+   * e.g., "1452" or "circa 1450"
+   */
+  birthDate?: string | null;
+  /**
+   * Leave empty if still living
+   */
+  deathDate?: string | null;
+  birthPlace?: (number | null) | Place;
+  deathPlace?: (number | null) | Place;
+  nationality?: string | null;
+  role?:
+    | (
+        | 'artist'
+        | 'sculptor'
+        | 'architect'
+        | 'craftsman'
+        | 'patron'
+        | 'collector'
+        | 'ruler'
+        | 'scholar'
+        | 'team'
+        | 'contributor'
+        | 'other'
+      )[]
+    | null;
+  movements?:
+    | {
+        movement?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  influences?: (number | Person)[] | null;
+  influenced?: (number | Person)[] | null;
+  email?: string | null;
+  phone?: string | null;
+  website?: string | null;
+  socialLinks?:
+    | {
+        platform?: ('linkedin' | 'twitter' | 'instagram' | 'facebook' | 'youtube' | 'github' | 'other') | null;
+        url: string;
+        id?: string | null;
+      }[]
+    | null;
+  relatedItems?: {
+    docs?: (number | ArchiveItem)[];
+    hasNextPage?: boolean;
+    totalDocs?: number;
+  };
+  /**
+   * Select one or more categories
+   */
+  categories?: (number | Category)[] | null;
+  /**
+   * Add tags for filtering and search
+   */
+  tags?: (number | Tag)[] | null;
+  /**
+   * Add and arrange content sections
+   */
+  contentBlocks?:
+    | (
+        | {
+            /**
+             * Layout structure (works with any skin)
+             */
+            variant?: ('standard' | 'minimal' | 'fullscreen' | 'split' | 'video' | 'hero-led') | null;
+            /**
+             * Optional badge label displayed above the heading.
+             */
+            eyebrow?: string | null;
+            heading: string;
+            description?: string | null;
+            image?: (number | null) | Media;
+            /**
+             * YouTube or Vimeo URL
+             */
+            videoUrl?: string | null;
+            overlay?: ('none' | 'light' | 'dark' | 'gradient') | null;
+            textAlign?: ('left' | 'center' | 'right') | null;
+            links?:
+              | {
+                  label: string;
+                  url?: string | null;
+                  page?: (number | null) | Page;
+                  variant?: ('primary' | 'secondary' | 'outline') | null;
+                  newTab?: boolean | null;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'hero';
+          }
+        | {
+            columns?:
+              | {
+                  size?: ('oneThird' | 'half' | 'twoThirds' | 'full') | null;
+                  richText?: {
+                    root: {
+                      type: string;
+                      children: {
+                        type: any;
+                        version: number;
+                        [k: string]: unknown;
+                      }[];
+                      direction: ('ltr' | 'rtl') | null;
+                      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                      indent: number;
+                      version: number;
+                    };
+                    [k: string]: unknown;
+                  } | null;
+                  enableLink?: boolean | null;
+                  link?: {
+                    label?: string | null;
+                    url?: string | null;
+                    page?: (number | null) | Page;
+                    newTab?: boolean | null;
+                  };
+                  id?: string | null;
+                }[]
+              | null;
+            backgroundColor?: ('none' | 'muted' | 'dark' | 'accent') | null;
+            paddingTop?: ('none' | 'small' | 'medium' | 'large') | null;
+            paddingBottom?: ('none' | 'small' | 'medium' | 'large') | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'content';
+          }
+        | {
+            media: number | Media;
+            caption?: string | null;
+            size?: ('small' | 'default' | 'large' | 'fullWidth') | null;
+            position?: ('left' | 'center' | 'right') | null;
+            enableLink?: boolean | null;
+            link?: {
+              url?: string | null;
+              page?: (number | null) | Page;
+              newTab?: boolean | null;
+            };
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'media';
+          }
+        | {
+            variant?: ('standard' | 'banner' | 'card' | 'inline') | null;
+            heading: string;
+            description?: string | null;
+            image?: (number | null) | Media;
+            links?:
+              | {
+                  label: string;
+                  url?: string | null;
+                  page?: (number | null) | Page;
+                  variant?: ('primary' | 'secondary' | 'outline') | null;
+                  newTab?: boolean | null;
+                  id?: string | null;
+                }[]
+              | null;
+            backgroundColor?: ('none' | 'muted' | 'dark' | 'accent') | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'cta';
+          }
+        | {
+            quote: string;
+            author?: string | null;
+            role?: string | null;
+            align?: ('left' | 'center' | 'right') | null;
+            /**
+             * Layout structure (works with any skin)
+             */
+            variant?: ('simple' | 'card' | 'large') | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'quote';
+          }
+        | {
+            heading?: string | null;
+            description?: string | null;
+            /**
+             * Layout structure (works with any skin)
+             */
+            variant?: ('grid' | 'list') | null;
+            items?:
+              | {
+                  heading: string;
+                  description?: string | null;
+                  icon?: string | null;
+                  media?: (number | null) | Media;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'features';
+          }
+        | {
+            heading?: string | null;
+            description?: string | null;
+            /**
+             * Layout structure (works with any skin)
+             */
+            variant?: ('grid' | 'list' | 'cards') | null;
+            items?:
+              | {
+                  value: string;
+                  label: string;
+                  description?: string | null;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'stats';
+          }
+        | {
+            heading?: string | null;
+            description?: string | null;
+            /**
+             * Layout structure (works with any skin)
+             */
+            variant?: ('grid' | 'ticker') | null;
+            items?:
+              | {
+                  media: number | Media;
+                  label?: string | null;
+                  url?: string | null;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'logoCloud';
+          }
+        | {
+            heading?: string | null;
+            description?: string | null;
+            /**
+             * Layout structure (works with any skin)
+             */
+            variant?: ('standard' | 'grid' | 'cards') | null;
+            items?:
+              | {
+                  quote: string;
+                  name: string;
+                  role?: string | null;
+                  company?: string | null;
+                  avatar?: (number | null) | Media;
+                  rating?: number | null;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'testimonials';
+          }
+        | {
+            heading?: string | null;
+            description?: string | null;
+            /**
+             * Layout structure (works with any skin)
+             */
+            variant?: ('accordion' | 'grid' | 'list') | null;
+            items?:
+              | {
+                  question: string;
+                  answer: {
+                    root: {
+                      type: string;
+                      children: {
+                        type: any;
+                        version: number;
+                        [k: string]: unknown;
+                      }[];
+                      direction: ('ltr' | 'rtl') | null;
+                      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                      indent: number;
+                      version: number;
+                    };
+                    [k: string]: unknown;
+                  };
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'faq';
+          }
+        | {
+            heading?: string | null;
+            description?: string | null;
+            /**
+             * Layout structure (works with any skin)
+             */
+            variant?: ('cards' | 'table' | 'comparison') | null;
+            plans?:
+              | {
+                  name: string;
+                  price: string;
+                  period?: string | null;
+                  description?: string | null;
+                  features?:
+                    | {
+                        feature: string;
+                        id?: string | null;
+                      }[]
+                    | null;
+                  links?:
+                    | {
+                        label: string;
+                        url?: string | null;
+                        page?: (number | null) | Page;
+                        variant?: ('primary' | 'secondary' | 'outline') | null;
+                        id?: string | null;
+                      }[]
+                    | null;
+                  featured?: boolean | null;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'pricing';
+          }
+        | {
+            heading?: string | null;
+            description?: string | null;
+            /**
+             * Layout structure (works with any skin)
+             */
+            variant?: ('grid' | 'list' | 'cards') | null;
+            items?:
+              | {
+                  name: string;
+                  role?: string | null;
+                  bio?: string | null;
+                  photo?: (number | null) | Media;
+                  socials?:
+                    | {
+                        label: string;
+                        url: string;
+                        id?: string | null;
+                      }[]
+                    | null;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'team';
+          }
+        | {
+            heading?: string | null;
+            url: string;
+            caption?: string | null;
+            aspectRatio?: ('16:9' | '4:3' | '1:1' | '21:9') | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'embed';
+          }
+        | {
+            heading?: string | null;
+            description?: string | null;
+            populateBy?: ('collection' | 'selection') | null;
+            relationTo?: ('posts' | 'pages' | 'categories' | 'tags') | null;
+            categories?: (number | Category)[] | null;
+            tags?: (number | Tag)[] | null;
+            limit?: number | null;
+            selectedDocs?:
+              | (
+                  | {
+                      relationTo: 'posts';
+                      value: number | Post;
+                    }
+                  | {
+                      relationTo: 'pages';
+                      value: number | Page;
+                    }
+                )[]
+              | null;
+            variant?: ('grid' | 'list' | 'cards' | 'carousel') | null;
+            columns?: ('2' | '3' | '4') | null;
+            showImage?: boolean | null;
+            showExcerpt?: boolean | null;
+            showDate?: boolean | null;
+            showAuthor?: boolean | null;
+            link?: {
+              show?: boolean | null;
+              label?: string | null;
+              url?: string | null;
+            };
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'archive';
+          }
+        | {
+            form: number | Form;
+            enableIntro?: boolean | null;
+            introContent?: {
+              root: {
+                type: string;
+                children: {
+                  type: any;
+                  version: number;
+                  [k: string]: unknown;
+                }[];
+                direction: ('ltr' | 'rtl') | null;
+                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                indent: number;
+                version: number;
+              };
+              [k: string]: unknown;
+            } | null;
+            variant?: ('default' | 'card' | 'inline' | 'fullWidth') | null;
+            backgroundColor?: ('none' | 'muted' | 'dark') | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'form';
+          }
+        | {
+            /**
+             * Optional heading for the gallery section
+             */
+            heading?: string | null;
+            /**
+             * Optional description text
+             */
+            description?: string | null;
+            /**
+             * Choose how images are displayed
+             */
+            variant: 'grid' | 'masonry' | 'carousel' | 'lightbox' | 'slider';
+            /**
+             * Number of columns on desktop
+             */
+            columns?: ('2' | '3' | '4' | '5' | '6') | null;
+            /**
+             * Space between images
+             */
+            gap?: ('none' | 'small' | 'medium' | 'large') | null;
+            /**
+             * Force images to a specific aspect ratio
+             */
+            aspectRatio?: ('auto' | 'square' | 'landscape' | 'portrait' | 'wide') | null;
+            images: {
+              image: number | Media;
+              caption?: string | null;
+              link?: {
+                url?: string | null;
+                page?: (number | null) | Page;
+                newTab?: boolean | null;
+              };
+              id?: string | null;
+            }[];
+            showCaptions?: boolean | null;
+            /**
+             * Allow clicking images to view full size
+             */
+            enableLightbox?: boolean | null;
+            autoplay?: boolean | null;
+            autoplaySpeed?: number | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'gallery';
+          }
+        | {
+            heading?: string | null;
+            description?: string | null;
+            /**
+             * Layout structure (works with any skin)
+             */
+            variant: 'cards' | 'features' | 'icons' | 'stats' | 'team' | 'testimonials' | 'logos';
+            /**
+             * Number of columns on desktop
+             */
+            columns: '1' | '2' | '3' | '4' | '5' | '6';
+            gap?: ('none' | 'small' | 'medium' | 'large') | null;
+            /**
+             * Text alignment within grid items
+             */
+            alignment?: ('left' | 'center' | 'right') | null;
+            items: {
+              image?: (number | null) | Media;
+              /**
+               * Lucide icon name (e.g., "star", "heart", "check")
+               */
+              icon?: string | null;
+              heading: string;
+              eyebrow?: string | null;
+              description?: string | null;
+              /**
+               * e.g., "99%", "10K+", "$1M"
+               */
+              stat?: string | null;
+              link?: {
+                url?: string | null;
+                page?: (number | null) | Page;
+                /**
+                 * e.g., "Learn More", "Read More"
+                 */
+                label?: string | null;
+                newTab?: boolean | null;
+              };
+              id?: string | null;
+            }[];
+            showBorder?: boolean | null;
+            showShadow?: boolean | null;
+            /**
+             * Effect when hovering over items
+             */
+            hoverEffect?: ('none' | 'lift' | 'scale' | 'glow') | null;
+            cta?: {
+              show?: boolean | null;
+              label?: string | null;
+              url?: string | null;
+              page?: (number | null) | Page;
+            };
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'grid';
+          }
+        | {
+            heading?: string | null;
+            description?: string | null;
+            /**
+             * Choose the timeline layout style
+             */
+            variant: 'vertical' | 'alternating' | 'horizontal' | 'compact';
+            lineStyle?: ('solid' | 'dashed' | 'dotted' | 'gradient') | null;
+            markerStyle?: ('circle' | 'diamond' | 'square' | 'icon' | 'number' | 'image') | null;
+            events: {
+              /**
+               * e.g., "2024", "Jan 2024", "1500 BCE", "Renaissance Period"
+               */
+              date: string;
+              heading: string;
+              description?: {
+                root: {
+                  type: string;
+                  children: {
+                    type: any;
+                    version: number;
+                    [k: string]: unknown;
+                  }[];
+                  direction: ('ltr' | 'rtl') | null;
+                  format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                  indent: number;
+                  version: number;
+                };
+                [k: string]: unknown;
+              } | null;
+              image?: (number | null) | Media;
+              /**
+               * Lucide icon name (used when marker style is "icon")
+               */
+              icon?: string | null;
+              /**
+               * Hex color code (e.g., #3B82F6) or leave empty for default
+               */
+              color?: string | null;
+              link?: {
+                url?: string | null;
+                page?: (number | null) | Page;
+                label?: string | null;
+                newTab?: boolean | null;
+              };
+              /**
+               * Highlight this event with special styling
+               */
+              featured?: boolean | null;
+              id?: string | null;
+            }[];
+            showConnectors?: boolean | null;
+            showDates?: boolean | null;
+            /**
+             * Reveal events as user scrolls
+             */
+            animateOnScroll?: boolean | null;
+            sortOrder?: ('chronological' | 'reverse' | 'manual') | null;
+            backgroundColor?: ('transparent' | 'muted' | 'dark' | 'accent') | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'timeline';
+          }
+        | {
+            style?: ('space' | 'divider') | null;
+            size?: ('xs' | 'sm' | 'md' | 'lg' | 'xl') | null;
+            lineStyle?: ('solid' | 'dashed' | 'dotted') | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'spacer';
+          }
+        | {
+            /**
+             * Use trusted HTML only. This will be rendered as-is on the site.
+             */
+            html: string;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'html';
+          }
+      )[]
+    | null;
+  /**
+   * URL-friendly identifier (auto-generated from title)
+   */
+  slug: string;
+  /**
+   * Select the display template
+   */
+  template?: ('profile' | 'card' | 'biography') | null;
+  featured?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * Geographic locations, venues, and historical sites
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "places".
+ */
+export interface Place {
+  id: number;
+  name: string;
+  featuredImage?: (number | null) | Media;
+  /**
+   * Brief summary for listings and SEO
+   */
+  shortDescription?: string | null;
+  description?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  historicalSignificance?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  address?: {
+    street?: string | null;
+    street2?: string | null;
+    city?: string | null;
+    region?: string | null;
+    postalCode?: string | null;
+    country?: string | null;
+  };
+  historicalNames?:
+    | {
+        name: string;
+        /**
+         * e.g., "Ancient", "Medieval", "1500-1800"
+         */
+        period?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  phone?: string | null;
+  email?: string | null;
+  website?: string | null;
+  hours?:
+    | {
+        day?: ('monday' | 'tuesday' | 'wednesday' | 'thursday' | 'friday' | 'saturday' | 'sunday') | null;
+        open?: string | null;
+        close?: string | null;
+        closed?: boolean | null;
+        id?: string | null;
+      }[]
+    | null;
+  relatedItems?: {
+    docs?: (number | ArchiveItem)[];
+    hasNextPage?: boolean;
+    totalDocs?: number;
+  };
+  relatedPeople?: {
+    docs?: (number | Person)[];
+    hasNextPage?: boolean;
+    totalDocs?: number;
+  };
+  relatedPlaces?: (number | Place)[] | null;
+  gallery?:
+    | {
+        image: number | Media;
+        caption?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Select one or more categories
+   */
+  categories?: (number | Category)[] | null;
+  /**
+   * Add tags for filtering and search
+   */
+  tags?: (number | Tag)[] | null;
+  /**
+   * Add and arrange content sections
+   */
+  contentBlocks?:
+    | (
+        | {
+            /**
+             * Layout structure (works with any skin)
+             */
+            variant?: ('standard' | 'minimal' | 'fullscreen' | 'split' | 'video' | 'hero-led') | null;
+            /**
+             * Optional badge label displayed above the heading.
+             */
+            eyebrow?: string | null;
+            heading: string;
+            description?: string | null;
+            image?: (number | null) | Media;
+            /**
+             * YouTube or Vimeo URL
+             */
+            videoUrl?: string | null;
+            overlay?: ('none' | 'light' | 'dark' | 'gradient') | null;
+            textAlign?: ('left' | 'center' | 'right') | null;
+            links?:
+              | {
+                  label: string;
+                  url?: string | null;
+                  page?: (number | null) | Page;
+                  variant?: ('primary' | 'secondary' | 'outline') | null;
+                  newTab?: boolean | null;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'hero';
+          }
+        | {
+            columns?:
+              | {
+                  size?: ('oneThird' | 'half' | 'twoThirds' | 'full') | null;
+                  richText?: {
+                    root: {
+                      type: string;
+                      children: {
+                        type: any;
+                        version: number;
+                        [k: string]: unknown;
+                      }[];
+                      direction: ('ltr' | 'rtl') | null;
+                      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                      indent: number;
+                      version: number;
+                    };
+                    [k: string]: unknown;
+                  } | null;
+                  enableLink?: boolean | null;
+                  link?: {
+                    label?: string | null;
+                    url?: string | null;
+                    page?: (number | null) | Page;
+                    newTab?: boolean | null;
+                  };
+                  id?: string | null;
+                }[]
+              | null;
+            backgroundColor?: ('none' | 'muted' | 'dark' | 'accent') | null;
+            paddingTop?: ('none' | 'small' | 'medium' | 'large') | null;
+            paddingBottom?: ('none' | 'small' | 'medium' | 'large') | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'content';
+          }
+        | {
+            media: number | Media;
+            caption?: string | null;
+            size?: ('small' | 'default' | 'large' | 'fullWidth') | null;
+            position?: ('left' | 'center' | 'right') | null;
+            enableLink?: boolean | null;
+            link?: {
+              url?: string | null;
+              page?: (number | null) | Page;
+              newTab?: boolean | null;
+            };
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'media';
+          }
+        | {
+            variant?: ('standard' | 'banner' | 'card' | 'inline') | null;
+            heading: string;
+            description?: string | null;
+            image?: (number | null) | Media;
+            links?:
+              | {
+                  label: string;
+                  url?: string | null;
+                  page?: (number | null) | Page;
+                  variant?: ('primary' | 'secondary' | 'outline') | null;
+                  newTab?: boolean | null;
+                  id?: string | null;
+                }[]
+              | null;
+            backgroundColor?: ('none' | 'muted' | 'dark' | 'accent') | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'cta';
+          }
+        | {
+            quote: string;
+            author?: string | null;
+            role?: string | null;
+            align?: ('left' | 'center' | 'right') | null;
+            /**
+             * Layout structure (works with any skin)
+             */
+            variant?: ('simple' | 'card' | 'large') | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'quote';
+          }
+        | {
+            heading?: string | null;
+            description?: string | null;
+            /**
+             * Layout structure (works with any skin)
+             */
+            variant?: ('grid' | 'list') | null;
+            items?:
+              | {
+                  heading: string;
+                  description?: string | null;
+                  icon?: string | null;
+                  media?: (number | null) | Media;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'features';
+          }
+        | {
+            heading?: string | null;
+            description?: string | null;
+            /**
+             * Layout structure (works with any skin)
+             */
+            variant?: ('grid' | 'list' | 'cards') | null;
+            items?:
+              | {
+                  value: string;
+                  label: string;
+                  description?: string | null;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'stats';
+          }
+        | {
+            heading?: string | null;
+            description?: string | null;
+            /**
+             * Layout structure (works with any skin)
+             */
+            variant?: ('grid' | 'ticker') | null;
+            items?:
+              | {
+                  media: number | Media;
+                  label?: string | null;
+                  url?: string | null;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'logoCloud';
+          }
+        | {
+            heading?: string | null;
+            description?: string | null;
+            /**
+             * Layout structure (works with any skin)
+             */
+            variant?: ('standard' | 'grid' | 'cards') | null;
+            items?:
+              | {
+                  quote: string;
+                  name: string;
+                  role?: string | null;
+                  company?: string | null;
+                  avatar?: (number | null) | Media;
+                  rating?: number | null;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'testimonials';
+          }
+        | {
+            heading?: string | null;
+            description?: string | null;
+            /**
+             * Layout structure (works with any skin)
+             */
+            variant?: ('accordion' | 'grid' | 'list') | null;
+            items?:
+              | {
+                  question: string;
+                  answer: {
+                    root: {
+                      type: string;
+                      children: {
+                        type: any;
+                        version: number;
+                        [k: string]: unknown;
+                      }[];
+                      direction: ('ltr' | 'rtl') | null;
+                      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                      indent: number;
+                      version: number;
+                    };
+                    [k: string]: unknown;
+                  };
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'faq';
+          }
+        | {
+            heading?: string | null;
+            description?: string | null;
+            /**
+             * Layout structure (works with any skin)
+             */
+            variant?: ('cards' | 'table' | 'comparison') | null;
+            plans?:
+              | {
+                  name: string;
+                  price: string;
+                  period?: string | null;
+                  description?: string | null;
+                  features?:
+                    | {
+                        feature: string;
+                        id?: string | null;
+                      }[]
+                    | null;
+                  links?:
+                    | {
+                        label: string;
+                        url?: string | null;
+                        page?: (number | null) | Page;
+                        variant?: ('primary' | 'secondary' | 'outline') | null;
+                        id?: string | null;
+                      }[]
+                    | null;
+                  featured?: boolean | null;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'pricing';
+          }
+        | {
+            heading?: string | null;
+            description?: string | null;
+            /**
+             * Layout structure (works with any skin)
+             */
+            variant?: ('grid' | 'list' | 'cards') | null;
+            items?:
+              | {
+                  name: string;
+                  role?: string | null;
+                  bio?: string | null;
+                  photo?: (number | null) | Media;
+                  socials?:
+                    | {
+                        label: string;
+                        url: string;
+                        id?: string | null;
+                      }[]
+                    | null;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'team';
+          }
+        | {
+            heading?: string | null;
+            url: string;
+            caption?: string | null;
+            aspectRatio?: ('16:9' | '4:3' | '1:1' | '21:9') | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'embed';
+          }
+        | {
+            heading?: string | null;
+            description?: string | null;
+            populateBy?: ('collection' | 'selection') | null;
+            relationTo?: ('posts' | 'pages' | 'categories' | 'tags') | null;
+            categories?: (number | Category)[] | null;
+            tags?: (number | Tag)[] | null;
+            limit?: number | null;
+            selectedDocs?:
+              | (
+                  | {
+                      relationTo: 'posts';
+                      value: number | Post;
+                    }
+                  | {
+                      relationTo: 'pages';
+                      value: number | Page;
+                    }
+                )[]
+              | null;
+            variant?: ('grid' | 'list' | 'cards' | 'carousel') | null;
+            columns?: ('2' | '3' | '4') | null;
+            showImage?: boolean | null;
+            showExcerpt?: boolean | null;
+            showDate?: boolean | null;
+            showAuthor?: boolean | null;
+            link?: {
+              show?: boolean | null;
+              label?: string | null;
+              url?: string | null;
+            };
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'archive';
+          }
+        | {
+            form: number | Form;
+            enableIntro?: boolean | null;
+            introContent?: {
+              root: {
+                type: string;
+                children: {
+                  type: any;
+                  version: number;
+                  [k: string]: unknown;
+                }[];
+                direction: ('ltr' | 'rtl') | null;
+                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                indent: number;
+                version: number;
+              };
+              [k: string]: unknown;
+            } | null;
+            variant?: ('default' | 'card' | 'inline' | 'fullWidth') | null;
+            backgroundColor?: ('none' | 'muted' | 'dark') | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'form';
+          }
+        | {
+            /**
+             * Optional heading for the gallery section
+             */
+            heading?: string | null;
+            /**
+             * Optional description text
+             */
+            description?: string | null;
+            /**
+             * Choose how images are displayed
+             */
+            variant: 'grid' | 'masonry' | 'carousel' | 'lightbox' | 'slider';
+            /**
+             * Number of columns on desktop
+             */
+            columns?: ('2' | '3' | '4' | '5' | '6') | null;
+            /**
+             * Space between images
+             */
+            gap?: ('none' | 'small' | 'medium' | 'large') | null;
+            /**
+             * Force images to a specific aspect ratio
+             */
+            aspectRatio?: ('auto' | 'square' | 'landscape' | 'portrait' | 'wide') | null;
+            images: {
+              image: number | Media;
+              caption?: string | null;
+              link?: {
+                url?: string | null;
+                page?: (number | null) | Page;
+                newTab?: boolean | null;
+              };
+              id?: string | null;
+            }[];
+            showCaptions?: boolean | null;
+            /**
+             * Allow clicking images to view full size
+             */
+            enableLightbox?: boolean | null;
+            autoplay?: boolean | null;
+            autoplaySpeed?: number | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'gallery';
+          }
+        | {
+            heading?: string | null;
+            description?: string | null;
+            /**
+             * Layout structure (works with any skin)
+             */
+            variant: 'cards' | 'features' | 'icons' | 'stats' | 'team' | 'testimonials' | 'logos';
+            /**
+             * Number of columns on desktop
+             */
+            columns: '1' | '2' | '3' | '4' | '5' | '6';
+            gap?: ('none' | 'small' | 'medium' | 'large') | null;
+            /**
+             * Text alignment within grid items
+             */
+            alignment?: ('left' | 'center' | 'right') | null;
+            items: {
+              image?: (number | null) | Media;
+              /**
+               * Lucide icon name (e.g., "star", "heart", "check")
+               */
+              icon?: string | null;
+              heading: string;
+              eyebrow?: string | null;
+              description?: string | null;
+              /**
+               * e.g., "99%", "10K+", "$1M"
+               */
+              stat?: string | null;
+              link?: {
+                url?: string | null;
+                page?: (number | null) | Page;
+                /**
+                 * e.g., "Learn More", "Read More"
+                 */
+                label?: string | null;
+                newTab?: boolean | null;
+              };
+              id?: string | null;
+            }[];
+            showBorder?: boolean | null;
+            showShadow?: boolean | null;
+            /**
+             * Effect when hovering over items
+             */
+            hoverEffect?: ('none' | 'lift' | 'scale' | 'glow') | null;
+            cta?: {
+              show?: boolean | null;
+              label?: string | null;
+              url?: string | null;
+              page?: (number | null) | Page;
+            };
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'grid';
+          }
+        | {
+            heading?: string | null;
+            description?: string | null;
+            /**
+             * Choose the timeline layout style
+             */
+            variant: 'vertical' | 'alternating' | 'horizontal' | 'compact';
+            lineStyle?: ('solid' | 'dashed' | 'dotted' | 'gradient') | null;
+            markerStyle?: ('circle' | 'diamond' | 'square' | 'icon' | 'number' | 'image') | null;
+            events: {
+              /**
+               * e.g., "2024", "Jan 2024", "1500 BCE", "Renaissance Period"
+               */
+              date: string;
+              heading: string;
+              description?: {
+                root: {
+                  type: string;
+                  children: {
+                    type: any;
+                    version: number;
+                    [k: string]: unknown;
+                  }[];
+                  direction: ('ltr' | 'rtl') | null;
+                  format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                  indent: number;
+                  version: number;
+                };
+                [k: string]: unknown;
+              } | null;
+              image?: (number | null) | Media;
+              /**
+               * Lucide icon name (used when marker style is "icon")
+               */
+              icon?: string | null;
+              /**
+               * Hex color code (e.g., #3B82F6) or leave empty for default
+               */
+              color?: string | null;
+              link?: {
+                url?: string | null;
+                page?: (number | null) | Page;
+                label?: string | null;
+                newTab?: boolean | null;
+              };
+              /**
+               * Highlight this event with special styling
+               */
+              featured?: boolean | null;
+              id?: string | null;
+            }[];
+            showConnectors?: boolean | null;
+            showDates?: boolean | null;
+            /**
+             * Reveal events as user scrolls
+             */
+            animateOnScroll?: boolean | null;
+            sortOrder?: ('chronological' | 'reverse' | 'manual') | null;
+            backgroundColor?: ('transparent' | 'muted' | 'dark' | 'accent') | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'timeline';
+          }
+        | {
+            style?: ('space' | 'divider') | null;
+            size?: ('xs' | 'sm' | 'md' | 'lg' | 'xl') | null;
+            lineStyle?: ('solid' | 'dashed' | 'dotted') | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'spacer';
+          }
+        | {
+            /**
+             * Use trusted HTML only. This will be rendered as-is on the site.
+             */
+            html: string;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'html';
+          }
+      )[]
+    | null;
+  /**
+   * URL-friendly identifier (auto-generated from title)
+   */
+  slug: string;
+  /**
+   * Select the display template
+   */
+  template?: ('location' | 'map' | 'card') | null;
+  placeType?:
+    | ('city' | 'region' | 'country' | 'venue' | 'store' | 'museum' | 'archaeological' | 'historical' | 'other')
+    | null;
+  featured?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * Events, exhibitions, workshops, or performances with dates and venues
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "events".
+ */
+export interface Event {
+  id: number;
+  title: string;
+  featuredImage?: (number | null) | Media;
+  /**
+   * Brief summary for listings and SEO
+   */
+  excerpt?: string | null;
+  richContent?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  eventType?:
+    | ('exhibition' | 'workshop' | 'conference' | 'performance' | 'lecture' | 'tour' | 'opening' | 'other')
+    | null;
+  startDate: string;
+  endDate?: string | null;
+  allDay?: boolean | null;
+  recurring?: {
+    isRecurring?: boolean | null;
+    frequency?: ('daily' | 'weekly' | 'monthly' | 'yearly') | null;
+    recurrenceEnd?: string | null;
+  };
+  venue?: (number | null) | Place;
+  onlineEvent?: boolean | null;
+  onlineUrl?: string | null;
+  /**
+   * Additional location information
+   */
+  customLocation?: string | null;
+  requiresRegistration?: boolean | null;
+  registrationUrl?: string | null;
+  capacity?: number | null;
+  registered?: number | null;
+  price?: {
+    isFree?: boolean | null;
+    amount?: number | null;
+    currency?: ('GBP' | 'USD' | 'EUR') | null;
+  };
+  /**
+   * Select one or more categories
+   */
+  categories?: (number | Category)[] | null;
+  /**
+   * Add tags for filtering and search
+   */
+  tags?: (number | Tag)[] | null;
+  organizers?: (number | Person)[] | null;
+  relatedEvents?: (number | Event)[] | null;
+  /**
+   * Add and arrange content sections
+   */
+  contentBlocks?:
+    | (
+        | {
+            /**
+             * Layout structure (works with any skin)
+             */
+            variant?: ('standard' | 'minimal' | 'fullscreen' | 'split' | 'video' | 'hero-led') | null;
+            /**
+             * Optional badge label displayed above the heading.
+             */
+            eyebrow?: string | null;
+            heading: string;
+            description?: string | null;
+            image?: (number | null) | Media;
+            /**
+             * YouTube or Vimeo URL
+             */
+            videoUrl?: string | null;
+            overlay?: ('none' | 'light' | 'dark' | 'gradient') | null;
+            textAlign?: ('left' | 'center' | 'right') | null;
+            links?:
+              | {
+                  label: string;
+                  url?: string | null;
+                  page?: (number | null) | Page;
+                  variant?: ('primary' | 'secondary' | 'outline') | null;
+                  newTab?: boolean | null;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'hero';
+          }
+        | {
+            columns?:
+              | {
+                  size?: ('oneThird' | 'half' | 'twoThirds' | 'full') | null;
+                  richText?: {
+                    root: {
+                      type: string;
+                      children: {
+                        type: any;
+                        version: number;
+                        [k: string]: unknown;
+                      }[];
+                      direction: ('ltr' | 'rtl') | null;
+                      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                      indent: number;
+                      version: number;
+                    };
+                    [k: string]: unknown;
+                  } | null;
+                  enableLink?: boolean | null;
+                  link?: {
+                    label?: string | null;
+                    url?: string | null;
+                    page?: (number | null) | Page;
+                    newTab?: boolean | null;
+                  };
+                  id?: string | null;
+                }[]
+              | null;
+            backgroundColor?: ('none' | 'muted' | 'dark' | 'accent') | null;
+            paddingTop?: ('none' | 'small' | 'medium' | 'large') | null;
+            paddingBottom?: ('none' | 'small' | 'medium' | 'large') | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'content';
+          }
+        | {
+            media: number | Media;
+            caption?: string | null;
+            size?: ('small' | 'default' | 'large' | 'fullWidth') | null;
+            position?: ('left' | 'center' | 'right') | null;
+            enableLink?: boolean | null;
+            link?: {
+              url?: string | null;
+              page?: (number | null) | Page;
+              newTab?: boolean | null;
+            };
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'media';
+          }
+        | {
+            variant?: ('standard' | 'banner' | 'card' | 'inline') | null;
+            heading: string;
+            description?: string | null;
+            image?: (number | null) | Media;
+            links?:
+              | {
+                  label: string;
+                  url?: string | null;
+                  page?: (number | null) | Page;
+                  variant?: ('primary' | 'secondary' | 'outline') | null;
+                  newTab?: boolean | null;
+                  id?: string | null;
+                }[]
+              | null;
+            backgroundColor?: ('none' | 'muted' | 'dark' | 'accent') | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'cta';
+          }
+        | {
+            heading?: string | null;
+            description?: string | null;
+            populateBy?: ('collection' | 'selection') | null;
+            relationTo?: ('posts' | 'pages' | 'categories' | 'tags') | null;
+            categories?: (number | Category)[] | null;
+            tags?: (number | Tag)[] | null;
+            limit?: number | null;
+            selectedDocs?:
+              | (
+                  | {
+                      relationTo: 'posts';
+                      value: number | Post;
+                    }
+                  | {
+                      relationTo: 'pages';
+                      value: number | Page;
+                    }
+                )[]
+              | null;
+            variant?: ('grid' | 'list' | 'cards' | 'carousel') | null;
+            columns?: ('2' | '3' | '4') | null;
+            showImage?: boolean | null;
+            showExcerpt?: boolean | null;
+            showDate?: boolean | null;
+            showAuthor?: boolean | null;
+            link?: {
+              show?: boolean | null;
+              label?: string | null;
+              url?: string | null;
+            };
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'archive';
+          }
+        | {
+            form: number | Form;
+            enableIntro?: boolean | null;
+            introContent?: {
+              root: {
+                type: string;
+                children: {
+                  type: any;
+                  version: number;
+                  [k: string]: unknown;
+                }[];
+                direction: ('ltr' | 'rtl') | null;
+                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                indent: number;
+                version: number;
+              };
+              [k: string]: unknown;
+            } | null;
+            variant?: ('default' | 'card' | 'inline' | 'fullWidth') | null;
+            backgroundColor?: ('none' | 'muted' | 'dark') | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'form';
+          }
+        | {
+            /**
+             * Optional heading for the gallery section
+             */
+            heading?: string | null;
+            /**
+             * Optional description text
+             */
+            description?: string | null;
+            /**
+             * Choose how images are displayed
+             */
+            variant: 'grid' | 'masonry' | 'carousel' | 'lightbox' | 'slider';
+            /**
+             * Number of columns on desktop
+             */
+            columns?: ('2' | '3' | '4' | '5' | '6') | null;
+            /**
+             * Space between images
+             */
+            gap?: ('none' | 'small' | 'medium' | 'large') | null;
+            /**
+             * Force images to a specific aspect ratio
+             */
+            aspectRatio?: ('auto' | 'square' | 'landscape' | 'portrait' | 'wide') | null;
+            images: {
+              image: number | Media;
+              caption?: string | null;
+              link?: {
+                url?: string | null;
+                page?: (number | null) | Page;
+                newTab?: boolean | null;
+              };
+              id?: string | null;
+            }[];
+            showCaptions?: boolean | null;
+            /**
+             * Allow clicking images to view full size
+             */
+            enableLightbox?: boolean | null;
+            autoplay?: boolean | null;
+            autoplaySpeed?: number | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'gallery';
+          }
+        | {
+            heading?: string | null;
+            description?: string | null;
+            /**
+             * Layout structure (works with any skin)
+             */
+            variant: 'cards' | 'features' | 'icons' | 'stats' | 'team' | 'testimonials' | 'logos';
+            /**
+             * Number of columns on desktop
+             */
+            columns: '1' | '2' | '3' | '4' | '5' | '6';
+            gap?: ('none' | 'small' | 'medium' | 'large') | null;
+            /**
+             * Text alignment within grid items
+             */
+            alignment?: ('left' | 'center' | 'right') | null;
+            items: {
+              image?: (number | null) | Media;
+              /**
+               * Lucide icon name (e.g., "star", "heart", "check")
+               */
+              icon?: string | null;
+              heading: string;
+              eyebrow?: string | null;
+              description?: string | null;
+              /**
+               * e.g., "99%", "10K+", "$1M"
+               */
+              stat?: string | null;
+              link?: {
+                url?: string | null;
+                page?: (number | null) | Page;
+                /**
+                 * e.g., "Learn More", "Read More"
+                 */
+                label?: string | null;
+                newTab?: boolean | null;
+              };
+              id?: string | null;
+            }[];
+            showBorder?: boolean | null;
+            showShadow?: boolean | null;
+            /**
+             * Effect when hovering over items
+             */
+            hoverEffect?: ('none' | 'lift' | 'scale' | 'glow') | null;
+            cta?: {
+              show?: boolean | null;
+              label?: string | null;
+              url?: string | null;
+              page?: (number | null) | Page;
+            };
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'grid';
+          }
+        | {
+            heading?: string | null;
+            description?: string | null;
+            /**
+             * Choose the timeline layout style
+             */
+            variant: 'vertical' | 'alternating' | 'horizontal' | 'compact';
+            lineStyle?: ('solid' | 'dashed' | 'dotted' | 'gradient') | null;
+            markerStyle?: ('circle' | 'diamond' | 'square' | 'icon' | 'number' | 'image') | null;
+            events: {
+              /**
+               * e.g., "2024", "Jan 2024", "1500 BCE", "Renaissance Period"
+               */
+              date: string;
+              heading: string;
+              description?: {
+                root: {
+                  type: string;
+                  children: {
+                    type: any;
+                    version: number;
+                    [k: string]: unknown;
+                  }[];
+                  direction: ('ltr' | 'rtl') | null;
+                  format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                  indent: number;
+                  version: number;
+                };
+                [k: string]: unknown;
+              } | null;
+              image?: (number | null) | Media;
+              /**
+               * Lucide icon name (used when marker style is "icon")
+               */
+              icon?: string | null;
+              /**
+               * Hex color code (e.g., #3B82F6) or leave empty for default
+               */
+              color?: string | null;
+              link?: {
+                url?: string | null;
+                page?: (number | null) | Page;
+                label?: string | null;
+                newTab?: boolean | null;
+              };
+              /**
+               * Highlight this event with special styling
+               */
+              featured?: boolean | null;
+              id?: string | null;
+            }[];
+            showConnectors?: boolean | null;
+            showDates?: boolean | null;
+            /**
+             * Reveal events as user scrolls
+             */
+            animateOnScroll?: boolean | null;
+            sortOrder?: ('chronological' | 'reverse' | 'manual') | null;
+            backgroundColor?: ('transparent' | 'muted' | 'dark' | 'accent') | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'timeline';
+          }
+      )[]
+    | null;
+  /**
+   * URL-friendly identifier. Will be published at: /events/[slug]
+   */
+  slug: string;
+  /**
+   * Show in featured sections
+   */
+  featured?: boolean | null;
+  /**
+   * Event status (separate from draft/published)
+   */
+  eventStatus?: ('upcoming' | 'ongoing' | 'completed' | 'cancelled' | 'postponed') | null;
+  /**
+   * Select the display template
+   */
+  template: 'event' | 'calendar' | 'card';
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "form-submissions".
  */
@@ -2006,6 +6377,58 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'tags';
         value: number | Tag;
+      } | null)
+    | ({
+        relationTo: 'faqs';
+        value: number | Faq;
+      } | null)
+    | ({
+        relationTo: 'testimonials';
+        value: number | Testimonial;
+      } | null)
+    | ({
+        relationTo: 'locations';
+        value: number | Location;
+      } | null)
+    | ({
+        relationTo: 'logo-clouds';
+        value: number | LogoCloud;
+      } | null)
+    | ({
+        relationTo: 'global-blocks';
+        value: number | GlobalBlock;
+      } | null)
+    | ({
+        relationTo: 'block-library';
+        value: number | BlockLibrary;
+      } | null)
+    | ({
+        relationTo: 'block-template-builder';
+        value: number | BlockTemplateBuilder;
+      } | null)
+    | ({
+        relationTo: 'content-types';
+        value: number | ContentType;
+      } | null)
+    | ({
+        relationTo: 'custom-items';
+        value: number | CustomItem;
+      } | null)
+    | ({
+        relationTo: 'archive-items';
+        value: number | ArchiveItem;
+      } | null)
+    | ({
+        relationTo: 'people';
+        value: number | Person;
+      } | null)
+    | ({
+        relationTo: 'places';
+        value: number | Place;
+      } | null)
+    | ({
+        relationTo: 'events';
+        value: number | Event;
       } | null)
     | ({
         relationTo: 'forms';
@@ -2703,6 +7126,58 @@ export interface PagesSelect<T extends boolean = true> {
               id?: T;
               blockName?: T;
             };
+        contactForm?:
+          | T
+          | {
+              heading?: T;
+              description?: T;
+              variant?: T;
+              showContactInfo?: T;
+              officeAddress?: T;
+              email?: T;
+              phone?: T;
+              disclaimer?: T;
+              form?: T;
+              submitButtonText?: T;
+              successMessage?: T;
+              id?: T;
+              blockName?: T;
+            };
+        socialLinks?:
+          | T
+          | {
+              heading?: T;
+              description?: T;
+              variant?: T;
+              showLabels?: T;
+              useGlobalLinks?: T;
+              customLinks?:
+                | T
+                | {
+                    platform?: T;
+                    url?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        videoFeature?:
+          | T
+          | {
+              heading?: T;
+              videoUrl?: T;
+              caption?: T;
+              checkItems?: T;
+              id?: T;
+              blockName?: T;
+            };
+        reusableBlock?:
+          | T
+          | {
+              libraryItem?: T;
+              id?: T;
+              blockName?: T;
+            };
         spacer?:
           | T
           | {
@@ -3230,6 +7705,2944 @@ export interface TagsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "faqs_select".
+ */
+export interface FaqsSelect<T extends boolean = true> {
+  question?: T;
+  answer?: T;
+  category?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "testimonials_select".
+ */
+export interface TestimonialsSelect<T extends boolean = true> {
+  quote?: T;
+  name?: T;
+  role?: T;
+  location?: T;
+  company?: T;
+  avatar?: T;
+  rating?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "locations_select".
+ */
+export interface LocationsSelect<T extends boolean = true> {
+  location_name?: T;
+  location_slug?: T;
+  h1?: T;
+  intro_copy?: T;
+  extra_copy?: T;
+  faqs?:
+    | T
+    | {
+        question?: T;
+        answer?: T;
+        id?: T;
+      };
+  nearby_locations?:
+    | T
+    | {
+        name?: T;
+        id?: T;
+      };
+  qa_score?: T;
+  status?: T;
+  canonical_path?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "logo-clouds_select".
+ */
+export interface LogoCloudsSelect<T extends boolean = true> {
+  label?: T;
+  media?: T;
+  url?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "global-blocks_select".
+ */
+export interface GlobalBlocksSelect<T extends boolean = true> {
+  title?: T;
+  block?:
+    | T
+    | {
+        hero?:
+          | T
+          | {
+              variant?: T;
+              eyebrow?: T;
+              heading?: T;
+              description?: T;
+              image?: T;
+              videoUrl?: T;
+              overlay?: T;
+              textAlign?: T;
+              links?:
+                | T
+                | {
+                    label?: T;
+                    url?: T;
+                    page?: T;
+                    variant?: T;
+                    newTab?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        content?:
+          | T
+          | {
+              columns?:
+                | T
+                | {
+                    size?: T;
+                    richText?: T;
+                    enableLink?: T;
+                    link?:
+                      | T
+                      | {
+                          label?: T;
+                          url?: T;
+                          page?: T;
+                          newTab?: T;
+                        };
+                    id?: T;
+                  };
+              backgroundColor?: T;
+              paddingTop?: T;
+              paddingBottom?: T;
+              id?: T;
+              blockName?: T;
+            };
+        media?:
+          | T
+          | {
+              media?: T;
+              caption?: T;
+              size?: T;
+              position?: T;
+              enableLink?: T;
+              link?:
+                | T
+                | {
+                    url?: T;
+                    page?: T;
+                    newTab?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        cta?:
+          | T
+          | {
+              variant?: T;
+              heading?: T;
+              description?: T;
+              image?: T;
+              links?:
+                | T
+                | {
+                    label?: T;
+                    url?: T;
+                    page?: T;
+                    variant?: T;
+                    newTab?: T;
+                    id?: T;
+                  };
+              backgroundColor?: T;
+              id?: T;
+              blockName?: T;
+            };
+        archive?:
+          | T
+          | {
+              heading?: T;
+              description?: T;
+              populateBy?: T;
+              relationTo?: T;
+              categories?: T;
+              tags?: T;
+              limit?: T;
+              selectedDocs?: T;
+              variant?: T;
+              columns?: T;
+              showImage?: T;
+              showExcerpt?: T;
+              showDate?: T;
+              showAuthor?: T;
+              link?:
+                | T
+                | {
+                    show?: T;
+                    label?: T;
+                    url?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        form?:
+          | T
+          | {
+              form?: T;
+              enableIntro?: T;
+              introContent?: T;
+              variant?: T;
+              backgroundColor?: T;
+              id?: T;
+              blockName?: T;
+            };
+        quote?:
+          | T
+          | {
+              quote?: T;
+              author?: T;
+              role?: T;
+              align?: T;
+              variant?: T;
+              id?: T;
+              blockName?: T;
+            };
+        features?:
+          | T
+          | {
+              heading?: T;
+              description?: T;
+              variant?: T;
+              items?:
+                | T
+                | {
+                    heading?: T;
+                    description?: T;
+                    icon?: T;
+                    media?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        stats?:
+          | T
+          | {
+              heading?: T;
+              description?: T;
+              variant?: T;
+              items?:
+                | T
+                | {
+                    value?: T;
+                    label?: T;
+                    description?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        logoCloud?:
+          | T
+          | {
+              heading?: T;
+              description?: T;
+              variant?: T;
+              items?:
+                | T
+                | {
+                    media?: T;
+                    label?: T;
+                    url?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        testimonials?:
+          | T
+          | {
+              heading?: T;
+              description?: T;
+              variant?: T;
+              items?:
+                | T
+                | {
+                    quote?: T;
+                    name?: T;
+                    role?: T;
+                    company?: T;
+                    avatar?: T;
+                    rating?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        faq?:
+          | T
+          | {
+              heading?: T;
+              description?: T;
+              variant?: T;
+              items?:
+                | T
+                | {
+                    question?: T;
+                    answer?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        pricing?:
+          | T
+          | {
+              heading?: T;
+              description?: T;
+              variant?: T;
+              plans?:
+                | T
+                | {
+                    name?: T;
+                    price?: T;
+                    period?: T;
+                    description?: T;
+                    features?:
+                      | T
+                      | {
+                          feature?: T;
+                          id?: T;
+                        };
+                    links?:
+                      | T
+                      | {
+                          label?: T;
+                          url?: T;
+                          page?: T;
+                          variant?: T;
+                          id?: T;
+                        };
+                    featured?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        team?:
+          | T
+          | {
+              heading?: T;
+              description?: T;
+              variant?: T;
+              items?:
+                | T
+                | {
+                    name?: T;
+                    role?: T;
+                    bio?: T;
+                    photo?: T;
+                    socials?:
+                      | T
+                      | {
+                          label?: T;
+                          url?: T;
+                          id?: T;
+                        };
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        embed?:
+          | T
+          | {
+              heading?: T;
+              url?: T;
+              caption?: T;
+              aspectRatio?: T;
+              id?: T;
+              blockName?: T;
+            };
+        spacer?:
+          | T
+          | {
+              style?: T;
+              size?: T;
+              lineStyle?: T;
+              id?: T;
+              blockName?: T;
+            };
+        html?:
+          | T
+          | {
+              html?: T;
+              id?: T;
+              blockName?: T;
+            };
+        gallery?:
+          | T
+          | {
+              heading?: T;
+              description?: T;
+              variant?: T;
+              columns?: T;
+              gap?: T;
+              aspectRatio?: T;
+              images?:
+                | T
+                | {
+                    image?: T;
+                    caption?: T;
+                    link?:
+                      | T
+                      | {
+                          url?: T;
+                          page?: T;
+                          newTab?: T;
+                        };
+                    id?: T;
+                  };
+              showCaptions?: T;
+              enableLightbox?: T;
+              autoplay?: T;
+              autoplaySpeed?: T;
+              id?: T;
+              blockName?: T;
+            };
+        grid?:
+          | T
+          | {
+              heading?: T;
+              description?: T;
+              variant?: T;
+              columns?: T;
+              gap?: T;
+              alignment?: T;
+              items?:
+                | T
+                | {
+                    image?: T;
+                    icon?: T;
+                    heading?: T;
+                    eyebrow?: T;
+                    description?: T;
+                    stat?: T;
+                    link?:
+                      | T
+                      | {
+                          url?: T;
+                          page?: T;
+                          label?: T;
+                          newTab?: T;
+                        };
+                    id?: T;
+                  };
+              showBorder?: T;
+              showShadow?: T;
+              hoverEffect?: T;
+              cta?:
+                | T
+                | {
+                    show?: T;
+                    label?: T;
+                    url?: T;
+                    page?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        timeline?:
+          | T
+          | {
+              heading?: T;
+              description?: T;
+              variant?: T;
+              lineStyle?: T;
+              markerStyle?: T;
+              events?:
+                | T
+                | {
+                    date?: T;
+                    heading?: T;
+                    description?: T;
+                    image?: T;
+                    icon?: T;
+                    color?: T;
+                    link?:
+                      | T
+                      | {
+                          url?: T;
+                          page?: T;
+                          label?: T;
+                          newTab?: T;
+                        };
+                    featured?: T;
+                    id?: T;
+                  };
+              showConnectors?: T;
+              showDates?: T;
+              animateOnScroll?: T;
+              sortOrder?: T;
+              backgroundColor?: T;
+              id?: T;
+              blockName?: T;
+            };
+      };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "block-library_select".
+ */
+export interface BlockLibrarySelect<T extends boolean = true> {
+  name?: T;
+  blockType?: T;
+  blockData?: T;
+  description?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "block-template-builder_select".
+ */
+export interface BlockTemplateBuilderSelect<T extends boolean = true> {
+  name?: T;
+  templates?:
+    | T
+    | {
+        hero?:
+          | T
+          | {
+              variant?: T;
+              eyebrow?: T;
+              heading?: T;
+              description?: T;
+              image?: T;
+              videoUrl?: T;
+              overlay?: T;
+              textAlign?: T;
+              links?:
+                | T
+                | {
+                    label?: T;
+                    url?: T;
+                    page?: T;
+                    variant?: T;
+                    newTab?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        content?:
+          | T
+          | {
+              columns?:
+                | T
+                | {
+                    size?: T;
+                    richText?: T;
+                    enableLink?: T;
+                    link?:
+                      | T
+                      | {
+                          label?: T;
+                          url?: T;
+                          page?: T;
+                          newTab?: T;
+                        };
+                    id?: T;
+                  };
+              backgroundColor?: T;
+              paddingTop?: T;
+              paddingBottom?: T;
+              id?: T;
+              blockName?: T;
+            };
+        media?:
+          | T
+          | {
+              media?: T;
+              caption?: T;
+              size?: T;
+              position?: T;
+              enableLink?: T;
+              link?:
+                | T
+                | {
+                    url?: T;
+                    page?: T;
+                    newTab?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        cta?:
+          | T
+          | {
+              variant?: T;
+              heading?: T;
+              description?: T;
+              image?: T;
+              links?:
+                | T
+                | {
+                    label?: T;
+                    url?: T;
+                    page?: T;
+                    variant?: T;
+                    newTab?: T;
+                    id?: T;
+                  };
+              backgroundColor?: T;
+              id?: T;
+              blockName?: T;
+            };
+        archive?:
+          | T
+          | {
+              heading?: T;
+              description?: T;
+              populateBy?: T;
+              relationTo?: T;
+              categories?: T;
+              tags?: T;
+              limit?: T;
+              selectedDocs?: T;
+              variant?: T;
+              columns?: T;
+              showImage?: T;
+              showExcerpt?: T;
+              showDate?: T;
+              showAuthor?: T;
+              link?:
+                | T
+                | {
+                    show?: T;
+                    label?: T;
+                    url?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        form?:
+          | T
+          | {
+              form?: T;
+              enableIntro?: T;
+              introContent?: T;
+              variant?: T;
+              backgroundColor?: T;
+              id?: T;
+              blockName?: T;
+            };
+        quote?:
+          | T
+          | {
+              quote?: T;
+              author?: T;
+              role?: T;
+              align?: T;
+              variant?: T;
+              id?: T;
+              blockName?: T;
+            };
+        features?:
+          | T
+          | {
+              heading?: T;
+              description?: T;
+              variant?: T;
+              items?:
+                | T
+                | {
+                    heading?: T;
+                    description?: T;
+                    icon?: T;
+                    media?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        stats?:
+          | T
+          | {
+              heading?: T;
+              description?: T;
+              variant?: T;
+              items?:
+                | T
+                | {
+                    value?: T;
+                    label?: T;
+                    description?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        logoCloud?:
+          | T
+          | {
+              heading?: T;
+              description?: T;
+              variant?: T;
+              items?:
+                | T
+                | {
+                    media?: T;
+                    label?: T;
+                    url?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        testimonials?:
+          | T
+          | {
+              heading?: T;
+              description?: T;
+              variant?: T;
+              items?:
+                | T
+                | {
+                    quote?: T;
+                    name?: T;
+                    role?: T;
+                    company?: T;
+                    avatar?: T;
+                    rating?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        faq?:
+          | T
+          | {
+              heading?: T;
+              description?: T;
+              variant?: T;
+              items?:
+                | T
+                | {
+                    question?: T;
+                    answer?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        pricing?:
+          | T
+          | {
+              heading?: T;
+              description?: T;
+              variant?: T;
+              plans?:
+                | T
+                | {
+                    name?: T;
+                    price?: T;
+                    period?: T;
+                    description?: T;
+                    features?:
+                      | T
+                      | {
+                          feature?: T;
+                          id?: T;
+                        };
+                    links?:
+                      | T
+                      | {
+                          label?: T;
+                          url?: T;
+                          page?: T;
+                          variant?: T;
+                          id?: T;
+                        };
+                    featured?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        team?:
+          | T
+          | {
+              heading?: T;
+              description?: T;
+              variant?: T;
+              items?:
+                | T
+                | {
+                    name?: T;
+                    role?: T;
+                    bio?: T;
+                    photo?: T;
+                    socials?:
+                      | T
+                      | {
+                          label?: T;
+                          url?: T;
+                          id?: T;
+                        };
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        embed?:
+          | T
+          | {
+              heading?: T;
+              url?: T;
+              caption?: T;
+              aspectRatio?: T;
+              id?: T;
+              blockName?: T;
+            };
+        spacer?:
+          | T
+          | {
+              style?: T;
+              size?: T;
+              lineStyle?: T;
+              id?: T;
+              blockName?: T;
+            };
+        html?:
+          | T
+          | {
+              html?: T;
+              id?: T;
+              blockName?: T;
+            };
+        gallery?:
+          | T
+          | {
+              heading?: T;
+              description?: T;
+              variant?: T;
+              columns?: T;
+              gap?: T;
+              aspectRatio?: T;
+              images?:
+                | T
+                | {
+                    image?: T;
+                    caption?: T;
+                    link?:
+                      | T
+                      | {
+                          url?: T;
+                          page?: T;
+                          newTab?: T;
+                        };
+                    id?: T;
+                  };
+              showCaptions?: T;
+              enableLightbox?: T;
+              autoplay?: T;
+              autoplaySpeed?: T;
+              id?: T;
+              blockName?: T;
+            };
+        grid?:
+          | T
+          | {
+              heading?: T;
+              description?: T;
+              variant?: T;
+              columns?: T;
+              gap?: T;
+              alignment?: T;
+              items?:
+                | T
+                | {
+                    image?: T;
+                    icon?: T;
+                    heading?: T;
+                    eyebrow?: T;
+                    description?: T;
+                    stat?: T;
+                    link?:
+                      | T
+                      | {
+                          url?: T;
+                          page?: T;
+                          label?: T;
+                          newTab?: T;
+                        };
+                    id?: T;
+                  };
+              showBorder?: T;
+              showShadow?: T;
+              hoverEffect?: T;
+              cta?:
+                | T
+                | {
+                    show?: T;
+                    label?: T;
+                    url?: T;
+                    page?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        timeline?:
+          | T
+          | {
+              heading?: T;
+              description?: T;
+              variant?: T;
+              lineStyle?: T;
+              markerStyle?: T;
+              events?:
+                | T
+                | {
+                    date?: T;
+                    heading?: T;
+                    description?: T;
+                    image?: T;
+                    icon?: T;
+                    color?: T;
+                    link?:
+                      | T
+                      | {
+                          url?: T;
+                          page?: T;
+                          label?: T;
+                          newTab?: T;
+                        };
+                    featured?: T;
+                    id?: T;
+                  };
+              showConnectors?: T;
+              showDates?: T;
+              animateOnScroll?: T;
+              sortOrder?: T;
+              backgroundColor?: T;
+              id?: T;
+              blockName?: T;
+            };
+      };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "content-types_select".
+ */
+export interface ContentTypesSelect<T extends boolean = true> {
+  name?: T;
+  slug?: T;
+  singularLabel?: T;
+  pluralLabel?: T;
+  icon?: T;
+  template?: T;
+  templateId?: T;
+  uninstalled?: T;
+  description?: T;
+  hasArchive?: T;
+  archiveSlug?: T;
+  customFields?:
+    | T
+    | {
+        name?: T;
+        label?: T;
+        type?: T;
+        required?: T;
+        options?: T;
+        id?: T;
+      };
+  seedData?:
+    | T
+    | {
+        hasSeedData?: T;
+        sampleCount?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "custom-items_select".
+ */
+export interface CustomItemsSelect<T extends boolean = true> {
+  title?: T;
+  slug?: T;
+  excerpt?: T;
+  content?: T;
+  blocks?:
+    | T
+    | {
+        hero?:
+          | T
+          | {
+              variant?: T;
+              eyebrow?: T;
+              heading?: T;
+              description?: T;
+              image?: T;
+              videoUrl?: T;
+              overlay?: T;
+              textAlign?: T;
+              links?:
+                | T
+                | {
+                    label?: T;
+                    url?: T;
+                    page?: T;
+                    variant?: T;
+                    newTab?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        content?:
+          | T
+          | {
+              columns?:
+                | T
+                | {
+                    size?: T;
+                    richText?: T;
+                    enableLink?: T;
+                    link?:
+                      | T
+                      | {
+                          label?: T;
+                          url?: T;
+                          page?: T;
+                          newTab?: T;
+                        };
+                    id?: T;
+                  };
+              backgroundColor?: T;
+              paddingTop?: T;
+              paddingBottom?: T;
+              id?: T;
+              blockName?: T;
+            };
+        media?:
+          | T
+          | {
+              media?: T;
+              caption?: T;
+              size?: T;
+              position?: T;
+              enableLink?: T;
+              link?:
+                | T
+                | {
+                    url?: T;
+                    page?: T;
+                    newTab?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        cta?:
+          | T
+          | {
+              variant?: T;
+              heading?: T;
+              description?: T;
+              image?: T;
+              links?:
+                | T
+                | {
+                    label?: T;
+                    url?: T;
+                    page?: T;
+                    variant?: T;
+                    newTab?: T;
+                    id?: T;
+                  };
+              backgroundColor?: T;
+              id?: T;
+              blockName?: T;
+            };
+        quote?:
+          | T
+          | {
+              quote?: T;
+              author?: T;
+              role?: T;
+              align?: T;
+              variant?: T;
+              id?: T;
+              blockName?: T;
+            };
+        features?:
+          | T
+          | {
+              heading?: T;
+              description?: T;
+              variant?: T;
+              items?:
+                | T
+                | {
+                    heading?: T;
+                    description?: T;
+                    icon?: T;
+                    media?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        stats?:
+          | T
+          | {
+              heading?: T;
+              description?: T;
+              variant?: T;
+              items?:
+                | T
+                | {
+                    value?: T;
+                    label?: T;
+                    description?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        logoCloud?:
+          | T
+          | {
+              heading?: T;
+              description?: T;
+              variant?: T;
+              items?:
+                | T
+                | {
+                    media?: T;
+                    label?: T;
+                    url?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        testimonials?:
+          | T
+          | {
+              heading?: T;
+              description?: T;
+              variant?: T;
+              items?:
+                | T
+                | {
+                    quote?: T;
+                    name?: T;
+                    role?: T;
+                    company?: T;
+                    avatar?: T;
+                    rating?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        faq?:
+          | T
+          | {
+              heading?: T;
+              description?: T;
+              variant?: T;
+              items?:
+                | T
+                | {
+                    question?: T;
+                    answer?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        pricing?:
+          | T
+          | {
+              heading?: T;
+              description?: T;
+              variant?: T;
+              plans?:
+                | T
+                | {
+                    name?: T;
+                    price?: T;
+                    period?: T;
+                    description?: T;
+                    features?:
+                      | T
+                      | {
+                          feature?: T;
+                          id?: T;
+                        };
+                    links?:
+                      | T
+                      | {
+                          label?: T;
+                          url?: T;
+                          page?: T;
+                          variant?: T;
+                          id?: T;
+                        };
+                    featured?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        team?:
+          | T
+          | {
+              heading?: T;
+              description?: T;
+              variant?: T;
+              items?:
+                | T
+                | {
+                    name?: T;
+                    role?: T;
+                    bio?: T;
+                    photo?: T;
+                    socials?:
+                      | T
+                      | {
+                          label?: T;
+                          url?: T;
+                          id?: T;
+                        };
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        embed?:
+          | T
+          | {
+              heading?: T;
+              url?: T;
+              caption?: T;
+              aspectRatio?: T;
+              id?: T;
+              blockName?: T;
+            };
+        gallery?:
+          | T
+          | {
+              heading?: T;
+              description?: T;
+              variant?: T;
+              columns?: T;
+              gap?: T;
+              aspectRatio?: T;
+              images?:
+                | T
+                | {
+                    image?: T;
+                    caption?: T;
+                    link?:
+                      | T
+                      | {
+                          url?: T;
+                          page?: T;
+                          newTab?: T;
+                        };
+                    id?: T;
+                  };
+              showCaptions?: T;
+              enableLightbox?: T;
+              autoplay?: T;
+              autoplaySpeed?: T;
+              id?: T;
+              blockName?: T;
+            };
+        grid?:
+          | T
+          | {
+              heading?: T;
+              description?: T;
+              variant?: T;
+              columns?: T;
+              gap?: T;
+              alignment?: T;
+              items?:
+                | T
+                | {
+                    image?: T;
+                    icon?: T;
+                    heading?: T;
+                    eyebrow?: T;
+                    description?: T;
+                    stat?: T;
+                    link?:
+                      | T
+                      | {
+                          url?: T;
+                          page?: T;
+                          label?: T;
+                          newTab?: T;
+                        };
+                    id?: T;
+                  };
+              showBorder?: T;
+              showShadow?: T;
+              hoverEffect?: T;
+              cta?:
+                | T
+                | {
+                    show?: T;
+                    label?: T;
+                    url?: T;
+                    page?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        timeline?:
+          | T
+          | {
+              heading?: T;
+              description?: T;
+              variant?: T;
+              lineStyle?: T;
+              markerStyle?: T;
+              events?:
+                | T
+                | {
+                    date?: T;
+                    heading?: T;
+                    description?: T;
+                    image?: T;
+                    icon?: T;
+                    color?: T;
+                    link?:
+                      | T
+                      | {
+                          url?: T;
+                          page?: T;
+                          label?: T;
+                          newTab?: T;
+                        };
+                    featured?: T;
+                    id?: T;
+                  };
+              showConnectors?: T;
+              showDates?: T;
+              animateOnScroll?: T;
+              sortOrder?: T;
+              backgroundColor?: T;
+              id?: T;
+              blockName?: T;
+            };
+        archive?:
+          | T
+          | {
+              heading?: T;
+              description?: T;
+              populateBy?: T;
+              relationTo?: T;
+              categories?: T;
+              tags?: T;
+              limit?: T;
+              selectedDocs?: T;
+              variant?: T;
+              columns?: T;
+              showImage?: T;
+              showExcerpt?: T;
+              showDate?: T;
+              showAuthor?: T;
+              link?:
+                | T
+                | {
+                    show?: T;
+                    label?: T;
+                    url?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        form?:
+          | T
+          | {
+              form?: T;
+              enableIntro?: T;
+              introContent?: T;
+              variant?: T;
+              backgroundColor?: T;
+              id?: T;
+              blockName?: T;
+            };
+        spacer?:
+          | T
+          | {
+              style?: T;
+              size?: T;
+              lineStyle?: T;
+              id?: T;
+              blockName?: T;
+            };
+        html?:
+          | T
+          | {
+              html?: T;
+              id?: T;
+              blockName?: T;
+            };
+      };
+  featuredImage?: T;
+  gallery?:
+    | T
+    | {
+        image?: T;
+        caption?: T;
+        id?: T;
+      };
+  customData?: T;
+  categories?: T;
+  tags?: T;
+  contentType?: T;
+  status?: T;
+  publishedAt?: T;
+  author?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "archive-items_select".
+ */
+export interface ArchiveItemsSelect<T extends boolean = true> {
+  title?: T;
+  featuredImage?: T;
+  excerpt?: T;
+  richContent?: T;
+  gallery?:
+    | T
+    | {
+        image?: T;
+        caption?: T;
+        id?: T;
+      };
+  specifications?:
+    | T
+    | {
+        height?: T;
+        width?: T;
+        depth?: T;
+        weight?: T;
+        materials?: T;
+        condition?: T;
+      };
+  dateCreated?: T;
+  dateAcquired?: T;
+  provenance?: T;
+  catalogNumber?: T;
+  creators?: T;
+  origins?: T;
+  relatedItems?: T;
+  categories?: T;
+  tags?: T;
+  contentBlocks?:
+    | T
+    | {
+        hero?:
+          | T
+          | {
+              variant?: T;
+              eyebrow?: T;
+              heading?: T;
+              description?: T;
+              image?: T;
+              videoUrl?: T;
+              overlay?: T;
+              textAlign?: T;
+              links?:
+                | T
+                | {
+                    label?: T;
+                    url?: T;
+                    page?: T;
+                    variant?: T;
+                    newTab?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        content?:
+          | T
+          | {
+              columns?:
+                | T
+                | {
+                    size?: T;
+                    richText?: T;
+                    enableLink?: T;
+                    link?:
+                      | T
+                      | {
+                          label?: T;
+                          url?: T;
+                          page?: T;
+                          newTab?: T;
+                        };
+                    id?: T;
+                  };
+              backgroundColor?: T;
+              paddingTop?: T;
+              paddingBottom?: T;
+              id?: T;
+              blockName?: T;
+            };
+        media?:
+          | T
+          | {
+              media?: T;
+              caption?: T;
+              size?: T;
+              position?: T;
+              enableLink?: T;
+              link?:
+                | T
+                | {
+                    url?: T;
+                    page?: T;
+                    newTab?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        cta?:
+          | T
+          | {
+              variant?: T;
+              heading?: T;
+              description?: T;
+              image?: T;
+              links?:
+                | T
+                | {
+                    label?: T;
+                    url?: T;
+                    page?: T;
+                    variant?: T;
+                    newTab?: T;
+                    id?: T;
+                  };
+              backgroundColor?: T;
+              id?: T;
+              blockName?: T;
+            };
+        archive?:
+          | T
+          | {
+              heading?: T;
+              description?: T;
+              populateBy?: T;
+              relationTo?: T;
+              categories?: T;
+              tags?: T;
+              limit?: T;
+              selectedDocs?: T;
+              variant?: T;
+              columns?: T;
+              showImage?: T;
+              showExcerpt?: T;
+              showDate?: T;
+              showAuthor?: T;
+              link?:
+                | T
+                | {
+                    show?: T;
+                    label?: T;
+                    url?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        form?:
+          | T
+          | {
+              form?: T;
+              enableIntro?: T;
+              introContent?: T;
+              variant?: T;
+              backgroundColor?: T;
+              id?: T;
+              blockName?: T;
+            };
+        gallery?:
+          | T
+          | {
+              heading?: T;
+              description?: T;
+              variant?: T;
+              columns?: T;
+              gap?: T;
+              aspectRatio?: T;
+              images?:
+                | T
+                | {
+                    image?: T;
+                    caption?: T;
+                    link?:
+                      | T
+                      | {
+                          url?: T;
+                          page?: T;
+                          newTab?: T;
+                        };
+                    id?: T;
+                  };
+              showCaptions?: T;
+              enableLightbox?: T;
+              autoplay?: T;
+              autoplaySpeed?: T;
+              id?: T;
+              blockName?: T;
+            };
+        grid?:
+          | T
+          | {
+              heading?: T;
+              description?: T;
+              variant?: T;
+              columns?: T;
+              gap?: T;
+              alignment?: T;
+              items?:
+                | T
+                | {
+                    image?: T;
+                    icon?: T;
+                    heading?: T;
+                    eyebrow?: T;
+                    description?: T;
+                    stat?: T;
+                    link?:
+                      | T
+                      | {
+                          url?: T;
+                          page?: T;
+                          label?: T;
+                          newTab?: T;
+                        };
+                    id?: T;
+                  };
+              showBorder?: T;
+              showShadow?: T;
+              hoverEffect?: T;
+              cta?:
+                | T
+                | {
+                    show?: T;
+                    label?: T;
+                    url?: T;
+                    page?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        timeline?:
+          | T
+          | {
+              heading?: T;
+              description?: T;
+              variant?: T;
+              lineStyle?: T;
+              markerStyle?: T;
+              events?:
+                | T
+                | {
+                    date?: T;
+                    heading?: T;
+                    description?: T;
+                    image?: T;
+                    icon?: T;
+                    color?: T;
+                    link?:
+                      | T
+                      | {
+                          url?: T;
+                          page?: T;
+                          label?: T;
+                          newTab?: T;
+                        };
+                    featured?: T;
+                    id?: T;
+                  };
+              showConnectors?: T;
+              showDates?: T;
+              animateOnScroll?: T;
+              sortOrder?: T;
+              backgroundColor?: T;
+              id?: T;
+              blockName?: T;
+            };
+      };
+  slug?: T;
+  featured?: T;
+  onDisplay?: T;
+  location?: T;
+  template?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "people_select".
+ */
+export interface PeopleSelect<T extends boolean = true> {
+  name?: T;
+  portrait?: T;
+  shortBio?: T;
+  biography?: T;
+  birthDate?: T;
+  deathDate?: T;
+  birthPlace?: T;
+  deathPlace?: T;
+  nationality?: T;
+  role?: T;
+  movements?:
+    | T
+    | {
+        movement?: T;
+        id?: T;
+      };
+  influences?: T;
+  influenced?: T;
+  email?: T;
+  phone?: T;
+  website?: T;
+  socialLinks?:
+    | T
+    | {
+        platform?: T;
+        url?: T;
+        id?: T;
+      };
+  relatedItems?: T;
+  categories?: T;
+  tags?: T;
+  contentBlocks?:
+    | T
+    | {
+        hero?:
+          | T
+          | {
+              variant?: T;
+              eyebrow?: T;
+              heading?: T;
+              description?: T;
+              image?: T;
+              videoUrl?: T;
+              overlay?: T;
+              textAlign?: T;
+              links?:
+                | T
+                | {
+                    label?: T;
+                    url?: T;
+                    page?: T;
+                    variant?: T;
+                    newTab?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        content?:
+          | T
+          | {
+              columns?:
+                | T
+                | {
+                    size?: T;
+                    richText?: T;
+                    enableLink?: T;
+                    link?:
+                      | T
+                      | {
+                          label?: T;
+                          url?: T;
+                          page?: T;
+                          newTab?: T;
+                        };
+                    id?: T;
+                  };
+              backgroundColor?: T;
+              paddingTop?: T;
+              paddingBottom?: T;
+              id?: T;
+              blockName?: T;
+            };
+        media?:
+          | T
+          | {
+              media?: T;
+              caption?: T;
+              size?: T;
+              position?: T;
+              enableLink?: T;
+              link?:
+                | T
+                | {
+                    url?: T;
+                    page?: T;
+                    newTab?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        cta?:
+          | T
+          | {
+              variant?: T;
+              heading?: T;
+              description?: T;
+              image?: T;
+              links?:
+                | T
+                | {
+                    label?: T;
+                    url?: T;
+                    page?: T;
+                    variant?: T;
+                    newTab?: T;
+                    id?: T;
+                  };
+              backgroundColor?: T;
+              id?: T;
+              blockName?: T;
+            };
+        quote?:
+          | T
+          | {
+              quote?: T;
+              author?: T;
+              role?: T;
+              align?: T;
+              variant?: T;
+              id?: T;
+              blockName?: T;
+            };
+        features?:
+          | T
+          | {
+              heading?: T;
+              description?: T;
+              variant?: T;
+              items?:
+                | T
+                | {
+                    heading?: T;
+                    description?: T;
+                    icon?: T;
+                    media?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        stats?:
+          | T
+          | {
+              heading?: T;
+              description?: T;
+              variant?: T;
+              items?:
+                | T
+                | {
+                    value?: T;
+                    label?: T;
+                    description?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        logoCloud?:
+          | T
+          | {
+              heading?: T;
+              description?: T;
+              variant?: T;
+              items?:
+                | T
+                | {
+                    media?: T;
+                    label?: T;
+                    url?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        testimonials?:
+          | T
+          | {
+              heading?: T;
+              description?: T;
+              variant?: T;
+              items?:
+                | T
+                | {
+                    quote?: T;
+                    name?: T;
+                    role?: T;
+                    company?: T;
+                    avatar?: T;
+                    rating?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        faq?:
+          | T
+          | {
+              heading?: T;
+              description?: T;
+              variant?: T;
+              items?:
+                | T
+                | {
+                    question?: T;
+                    answer?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        pricing?:
+          | T
+          | {
+              heading?: T;
+              description?: T;
+              variant?: T;
+              plans?:
+                | T
+                | {
+                    name?: T;
+                    price?: T;
+                    period?: T;
+                    description?: T;
+                    features?:
+                      | T
+                      | {
+                          feature?: T;
+                          id?: T;
+                        };
+                    links?:
+                      | T
+                      | {
+                          label?: T;
+                          url?: T;
+                          page?: T;
+                          variant?: T;
+                          id?: T;
+                        };
+                    featured?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        team?:
+          | T
+          | {
+              heading?: T;
+              description?: T;
+              variant?: T;
+              items?:
+                | T
+                | {
+                    name?: T;
+                    role?: T;
+                    bio?: T;
+                    photo?: T;
+                    socials?:
+                      | T
+                      | {
+                          label?: T;
+                          url?: T;
+                          id?: T;
+                        };
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        embed?:
+          | T
+          | {
+              heading?: T;
+              url?: T;
+              caption?: T;
+              aspectRatio?: T;
+              id?: T;
+              blockName?: T;
+            };
+        archive?:
+          | T
+          | {
+              heading?: T;
+              description?: T;
+              populateBy?: T;
+              relationTo?: T;
+              categories?: T;
+              tags?: T;
+              limit?: T;
+              selectedDocs?: T;
+              variant?: T;
+              columns?: T;
+              showImage?: T;
+              showExcerpt?: T;
+              showDate?: T;
+              showAuthor?: T;
+              link?:
+                | T
+                | {
+                    show?: T;
+                    label?: T;
+                    url?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        form?:
+          | T
+          | {
+              form?: T;
+              enableIntro?: T;
+              introContent?: T;
+              variant?: T;
+              backgroundColor?: T;
+              id?: T;
+              blockName?: T;
+            };
+        gallery?:
+          | T
+          | {
+              heading?: T;
+              description?: T;
+              variant?: T;
+              columns?: T;
+              gap?: T;
+              aspectRatio?: T;
+              images?:
+                | T
+                | {
+                    image?: T;
+                    caption?: T;
+                    link?:
+                      | T
+                      | {
+                          url?: T;
+                          page?: T;
+                          newTab?: T;
+                        };
+                    id?: T;
+                  };
+              showCaptions?: T;
+              enableLightbox?: T;
+              autoplay?: T;
+              autoplaySpeed?: T;
+              id?: T;
+              blockName?: T;
+            };
+        grid?:
+          | T
+          | {
+              heading?: T;
+              description?: T;
+              variant?: T;
+              columns?: T;
+              gap?: T;
+              alignment?: T;
+              items?:
+                | T
+                | {
+                    image?: T;
+                    icon?: T;
+                    heading?: T;
+                    eyebrow?: T;
+                    description?: T;
+                    stat?: T;
+                    link?:
+                      | T
+                      | {
+                          url?: T;
+                          page?: T;
+                          label?: T;
+                          newTab?: T;
+                        };
+                    id?: T;
+                  };
+              showBorder?: T;
+              showShadow?: T;
+              hoverEffect?: T;
+              cta?:
+                | T
+                | {
+                    show?: T;
+                    label?: T;
+                    url?: T;
+                    page?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        timeline?:
+          | T
+          | {
+              heading?: T;
+              description?: T;
+              variant?: T;
+              lineStyle?: T;
+              markerStyle?: T;
+              events?:
+                | T
+                | {
+                    date?: T;
+                    heading?: T;
+                    description?: T;
+                    image?: T;
+                    icon?: T;
+                    color?: T;
+                    link?:
+                      | T
+                      | {
+                          url?: T;
+                          page?: T;
+                          label?: T;
+                          newTab?: T;
+                        };
+                    featured?: T;
+                    id?: T;
+                  };
+              showConnectors?: T;
+              showDates?: T;
+              animateOnScroll?: T;
+              sortOrder?: T;
+              backgroundColor?: T;
+              id?: T;
+              blockName?: T;
+            };
+        spacer?:
+          | T
+          | {
+              style?: T;
+              size?: T;
+              lineStyle?: T;
+              id?: T;
+              blockName?: T;
+            };
+        html?:
+          | T
+          | {
+              html?: T;
+              id?: T;
+              blockName?: T;
+            };
+      };
+  slug?: T;
+  template?: T;
+  featured?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "places_select".
+ */
+export interface PlacesSelect<T extends boolean = true> {
+  name?: T;
+  featuredImage?: T;
+  shortDescription?: T;
+  description?: T;
+  historicalSignificance?: T;
+  address?:
+    | T
+    | {
+        street?: T;
+        street2?: T;
+        city?: T;
+        region?: T;
+        postalCode?: T;
+        country?: T;
+      };
+  historicalNames?:
+    | T
+    | {
+        name?: T;
+        period?: T;
+        id?: T;
+      };
+  phone?: T;
+  email?: T;
+  website?: T;
+  hours?:
+    | T
+    | {
+        day?: T;
+        open?: T;
+        close?: T;
+        closed?: T;
+        id?: T;
+      };
+  relatedItems?: T;
+  relatedPeople?: T;
+  relatedPlaces?: T;
+  gallery?:
+    | T
+    | {
+        image?: T;
+        caption?: T;
+        id?: T;
+      };
+  categories?: T;
+  tags?: T;
+  contentBlocks?:
+    | T
+    | {
+        hero?:
+          | T
+          | {
+              variant?: T;
+              eyebrow?: T;
+              heading?: T;
+              description?: T;
+              image?: T;
+              videoUrl?: T;
+              overlay?: T;
+              textAlign?: T;
+              links?:
+                | T
+                | {
+                    label?: T;
+                    url?: T;
+                    page?: T;
+                    variant?: T;
+                    newTab?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        content?:
+          | T
+          | {
+              columns?:
+                | T
+                | {
+                    size?: T;
+                    richText?: T;
+                    enableLink?: T;
+                    link?:
+                      | T
+                      | {
+                          label?: T;
+                          url?: T;
+                          page?: T;
+                          newTab?: T;
+                        };
+                    id?: T;
+                  };
+              backgroundColor?: T;
+              paddingTop?: T;
+              paddingBottom?: T;
+              id?: T;
+              blockName?: T;
+            };
+        media?:
+          | T
+          | {
+              media?: T;
+              caption?: T;
+              size?: T;
+              position?: T;
+              enableLink?: T;
+              link?:
+                | T
+                | {
+                    url?: T;
+                    page?: T;
+                    newTab?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        cta?:
+          | T
+          | {
+              variant?: T;
+              heading?: T;
+              description?: T;
+              image?: T;
+              links?:
+                | T
+                | {
+                    label?: T;
+                    url?: T;
+                    page?: T;
+                    variant?: T;
+                    newTab?: T;
+                    id?: T;
+                  };
+              backgroundColor?: T;
+              id?: T;
+              blockName?: T;
+            };
+        quote?:
+          | T
+          | {
+              quote?: T;
+              author?: T;
+              role?: T;
+              align?: T;
+              variant?: T;
+              id?: T;
+              blockName?: T;
+            };
+        features?:
+          | T
+          | {
+              heading?: T;
+              description?: T;
+              variant?: T;
+              items?:
+                | T
+                | {
+                    heading?: T;
+                    description?: T;
+                    icon?: T;
+                    media?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        stats?:
+          | T
+          | {
+              heading?: T;
+              description?: T;
+              variant?: T;
+              items?:
+                | T
+                | {
+                    value?: T;
+                    label?: T;
+                    description?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        logoCloud?:
+          | T
+          | {
+              heading?: T;
+              description?: T;
+              variant?: T;
+              items?:
+                | T
+                | {
+                    media?: T;
+                    label?: T;
+                    url?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        testimonials?:
+          | T
+          | {
+              heading?: T;
+              description?: T;
+              variant?: T;
+              items?:
+                | T
+                | {
+                    quote?: T;
+                    name?: T;
+                    role?: T;
+                    company?: T;
+                    avatar?: T;
+                    rating?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        faq?:
+          | T
+          | {
+              heading?: T;
+              description?: T;
+              variant?: T;
+              items?:
+                | T
+                | {
+                    question?: T;
+                    answer?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        pricing?:
+          | T
+          | {
+              heading?: T;
+              description?: T;
+              variant?: T;
+              plans?:
+                | T
+                | {
+                    name?: T;
+                    price?: T;
+                    period?: T;
+                    description?: T;
+                    features?:
+                      | T
+                      | {
+                          feature?: T;
+                          id?: T;
+                        };
+                    links?:
+                      | T
+                      | {
+                          label?: T;
+                          url?: T;
+                          page?: T;
+                          variant?: T;
+                          id?: T;
+                        };
+                    featured?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        team?:
+          | T
+          | {
+              heading?: T;
+              description?: T;
+              variant?: T;
+              items?:
+                | T
+                | {
+                    name?: T;
+                    role?: T;
+                    bio?: T;
+                    photo?: T;
+                    socials?:
+                      | T
+                      | {
+                          label?: T;
+                          url?: T;
+                          id?: T;
+                        };
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        embed?:
+          | T
+          | {
+              heading?: T;
+              url?: T;
+              caption?: T;
+              aspectRatio?: T;
+              id?: T;
+              blockName?: T;
+            };
+        archive?:
+          | T
+          | {
+              heading?: T;
+              description?: T;
+              populateBy?: T;
+              relationTo?: T;
+              categories?: T;
+              tags?: T;
+              limit?: T;
+              selectedDocs?: T;
+              variant?: T;
+              columns?: T;
+              showImage?: T;
+              showExcerpt?: T;
+              showDate?: T;
+              showAuthor?: T;
+              link?:
+                | T
+                | {
+                    show?: T;
+                    label?: T;
+                    url?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        form?:
+          | T
+          | {
+              form?: T;
+              enableIntro?: T;
+              introContent?: T;
+              variant?: T;
+              backgroundColor?: T;
+              id?: T;
+              blockName?: T;
+            };
+        gallery?:
+          | T
+          | {
+              heading?: T;
+              description?: T;
+              variant?: T;
+              columns?: T;
+              gap?: T;
+              aspectRatio?: T;
+              images?:
+                | T
+                | {
+                    image?: T;
+                    caption?: T;
+                    link?:
+                      | T
+                      | {
+                          url?: T;
+                          page?: T;
+                          newTab?: T;
+                        };
+                    id?: T;
+                  };
+              showCaptions?: T;
+              enableLightbox?: T;
+              autoplay?: T;
+              autoplaySpeed?: T;
+              id?: T;
+              blockName?: T;
+            };
+        grid?:
+          | T
+          | {
+              heading?: T;
+              description?: T;
+              variant?: T;
+              columns?: T;
+              gap?: T;
+              alignment?: T;
+              items?:
+                | T
+                | {
+                    image?: T;
+                    icon?: T;
+                    heading?: T;
+                    eyebrow?: T;
+                    description?: T;
+                    stat?: T;
+                    link?:
+                      | T
+                      | {
+                          url?: T;
+                          page?: T;
+                          label?: T;
+                          newTab?: T;
+                        };
+                    id?: T;
+                  };
+              showBorder?: T;
+              showShadow?: T;
+              hoverEffect?: T;
+              cta?:
+                | T
+                | {
+                    show?: T;
+                    label?: T;
+                    url?: T;
+                    page?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        timeline?:
+          | T
+          | {
+              heading?: T;
+              description?: T;
+              variant?: T;
+              lineStyle?: T;
+              markerStyle?: T;
+              events?:
+                | T
+                | {
+                    date?: T;
+                    heading?: T;
+                    description?: T;
+                    image?: T;
+                    icon?: T;
+                    color?: T;
+                    link?:
+                      | T
+                      | {
+                          url?: T;
+                          page?: T;
+                          label?: T;
+                          newTab?: T;
+                        };
+                    featured?: T;
+                    id?: T;
+                  };
+              showConnectors?: T;
+              showDates?: T;
+              animateOnScroll?: T;
+              sortOrder?: T;
+              backgroundColor?: T;
+              id?: T;
+              blockName?: T;
+            };
+        spacer?:
+          | T
+          | {
+              style?: T;
+              size?: T;
+              lineStyle?: T;
+              id?: T;
+              blockName?: T;
+            };
+        html?:
+          | T
+          | {
+              html?: T;
+              id?: T;
+              blockName?: T;
+            };
+      };
+  slug?: T;
+  template?: T;
+  placeType?: T;
+  featured?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "events_select".
+ */
+export interface EventsSelect<T extends boolean = true> {
+  title?: T;
+  featuredImage?: T;
+  excerpt?: T;
+  richContent?: T;
+  eventType?: T;
+  startDate?: T;
+  endDate?: T;
+  allDay?: T;
+  recurring?:
+    | T
+    | {
+        isRecurring?: T;
+        frequency?: T;
+        recurrenceEnd?: T;
+      };
+  venue?: T;
+  onlineEvent?: T;
+  onlineUrl?: T;
+  customLocation?: T;
+  requiresRegistration?: T;
+  registrationUrl?: T;
+  capacity?: T;
+  registered?: T;
+  price?:
+    | T
+    | {
+        isFree?: T;
+        amount?: T;
+        currency?: T;
+      };
+  categories?: T;
+  tags?: T;
+  organizers?: T;
+  relatedEvents?: T;
+  contentBlocks?:
+    | T
+    | {
+        hero?:
+          | T
+          | {
+              variant?: T;
+              eyebrow?: T;
+              heading?: T;
+              description?: T;
+              image?: T;
+              videoUrl?: T;
+              overlay?: T;
+              textAlign?: T;
+              links?:
+                | T
+                | {
+                    label?: T;
+                    url?: T;
+                    page?: T;
+                    variant?: T;
+                    newTab?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        content?:
+          | T
+          | {
+              columns?:
+                | T
+                | {
+                    size?: T;
+                    richText?: T;
+                    enableLink?: T;
+                    link?:
+                      | T
+                      | {
+                          label?: T;
+                          url?: T;
+                          page?: T;
+                          newTab?: T;
+                        };
+                    id?: T;
+                  };
+              backgroundColor?: T;
+              paddingTop?: T;
+              paddingBottom?: T;
+              id?: T;
+              blockName?: T;
+            };
+        media?:
+          | T
+          | {
+              media?: T;
+              caption?: T;
+              size?: T;
+              position?: T;
+              enableLink?: T;
+              link?:
+                | T
+                | {
+                    url?: T;
+                    page?: T;
+                    newTab?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        cta?:
+          | T
+          | {
+              variant?: T;
+              heading?: T;
+              description?: T;
+              image?: T;
+              links?:
+                | T
+                | {
+                    label?: T;
+                    url?: T;
+                    page?: T;
+                    variant?: T;
+                    newTab?: T;
+                    id?: T;
+                  };
+              backgroundColor?: T;
+              id?: T;
+              blockName?: T;
+            };
+        archive?:
+          | T
+          | {
+              heading?: T;
+              description?: T;
+              populateBy?: T;
+              relationTo?: T;
+              categories?: T;
+              tags?: T;
+              limit?: T;
+              selectedDocs?: T;
+              variant?: T;
+              columns?: T;
+              showImage?: T;
+              showExcerpt?: T;
+              showDate?: T;
+              showAuthor?: T;
+              link?:
+                | T
+                | {
+                    show?: T;
+                    label?: T;
+                    url?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        form?:
+          | T
+          | {
+              form?: T;
+              enableIntro?: T;
+              introContent?: T;
+              variant?: T;
+              backgroundColor?: T;
+              id?: T;
+              blockName?: T;
+            };
+        gallery?:
+          | T
+          | {
+              heading?: T;
+              description?: T;
+              variant?: T;
+              columns?: T;
+              gap?: T;
+              aspectRatio?: T;
+              images?:
+                | T
+                | {
+                    image?: T;
+                    caption?: T;
+                    link?:
+                      | T
+                      | {
+                          url?: T;
+                          page?: T;
+                          newTab?: T;
+                        };
+                    id?: T;
+                  };
+              showCaptions?: T;
+              enableLightbox?: T;
+              autoplay?: T;
+              autoplaySpeed?: T;
+              id?: T;
+              blockName?: T;
+            };
+        grid?:
+          | T
+          | {
+              heading?: T;
+              description?: T;
+              variant?: T;
+              columns?: T;
+              gap?: T;
+              alignment?: T;
+              items?:
+                | T
+                | {
+                    image?: T;
+                    icon?: T;
+                    heading?: T;
+                    eyebrow?: T;
+                    description?: T;
+                    stat?: T;
+                    link?:
+                      | T
+                      | {
+                          url?: T;
+                          page?: T;
+                          label?: T;
+                          newTab?: T;
+                        };
+                    id?: T;
+                  };
+              showBorder?: T;
+              showShadow?: T;
+              hoverEffect?: T;
+              cta?:
+                | T
+                | {
+                    show?: T;
+                    label?: T;
+                    url?: T;
+                    page?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        timeline?:
+          | T
+          | {
+              heading?: T;
+              description?: T;
+              variant?: T;
+              lineStyle?: T;
+              markerStyle?: T;
+              events?:
+                | T
+                | {
+                    date?: T;
+                    heading?: T;
+                    description?: T;
+                    image?: T;
+                    icon?: T;
+                    color?: T;
+                    link?:
+                      | T
+                      | {
+                          url?: T;
+                          page?: T;
+                          label?: T;
+                          newTab?: T;
+                        };
+                    featured?: T;
+                    id?: T;
+                  };
+              showConnectors?: T;
+              showDates?: T;
+              animateOnScroll?: T;
+              sortOrder?: T;
+              backgroundColor?: T;
+              id?: T;
+              blockName?: T;
+            };
+      };
+  slug?: T;
+  featured?: T;
+  eventStatus?: T;
+  template?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "forms_select".
  */
 export interface FormsSelect<T extends boolean = true> {
@@ -3488,6 +10901,18 @@ export interface Header {
    * Displayed if no logo image is set
    */
   logoText?: string | null;
+  /**
+   * Links displayed in the top announcement/info bar above the main navigation
+   */
+  topBarLinks?:
+    | {
+        label: string;
+        url?: string | null;
+        page?: (number | null) | Page;
+        newTab?: boolean | null;
+        id?: string | null;
+      }[]
+    | null;
   navItems?:
     | {
         label: string;
@@ -3534,6 +10959,10 @@ export interface Footer {
    * Short description or tagline
    */
   description?: string | null;
+  /**
+   * Email address displayed in the footer (e.g. hello@yoursite.com)
+   */
+  email?: string | null;
   columns?:
     | {
         heading?: string | null;
@@ -3767,12 +11196,414 @@ export interface NavigationSetting {
   createdAt?: string | null;
 }
 /**
+ * View which CMS feature modules are currently active. Changes to features require editing cms.features.ts and restarting the server.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "feature-settings".
+ */
+export interface FeatureSetting {
+  id: number;
+  /**
+   * Page collection with block builder. Always enabled.
+   */
+  pagesEnabled?: boolean | null;
+  /**
+   * Blog/news posts collection. Always enabled.
+   */
+  postsEnabled?: boolean | null;
+  /**
+   * Frequently Asked Questions. Always enabled.
+   */
+  faqsEnabled?: boolean | null;
+  /**
+   * Client testimonials. Always enabled.
+   */
+  testimonialsEnabled?: boolean | null;
+  /**
+   * People collection for team members, speakers, authors. Controlled by features.people in cms.features.ts.
+   */
+  peopleEnabled?: boolean | null;
+  /**
+   * Events collection for exhibitions, workshops, performances. Controlled by features.events in cms.features.ts.
+   */
+  eventsEnabled?: boolean | null;
+  /**
+   * Locations collection for geographic data. Controlled by features.dynamicCollections in cms.features.ts.
+   */
+  locationsEnabled?: boolean | null;
+  /**
+   * Enables the Block Library, Global Blocks, and Page Templates. Controlled by features.blockLibrary in cms.features.ts.
+   */
+  blockLibraryEnabled?: boolean | null;
+  /**
+   * When enabled, adds Products, Orders, and Carts to the Shop nav section. Controlled by features.ecommerce in cms.features.ts.
+   */
+  ecommerceEnabled?: boolean | null;
+  /**
+   * Follow these steps to activate eCommerce features.
+   */
+  ecommerceInstructions?: string | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * Reusable blocks that can be shared across multiple pages
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "page-templates".
+ */
+export interface PageTemplate {
+  id: number;
+  /**
+   * Shared logo cloud block for all OBC pages
+   */
+  obcLogoCloud?:
+    | {
+        heading?: string | null;
+        description?: string | null;
+        /**
+         * Layout structure (works with any skin)
+         */
+        variant?: ('grid' | 'ticker') | null;
+        items?:
+          | {
+              media: number | Media;
+              label?: string | null;
+              url?: string | null;
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'logoCloud';
+      }[]
+    | null;
+  /**
+   * Shared video block for all OBC pages
+   */
+  obcVideo?:
+    | {
+        heading?: string | null;
+        /**
+         * Full YouTube URL (e.g., https://www.youtube.com/watch?v=...)
+         */
+        videoUrl?: string | null;
+        /**
+         * Description text shown next to the video
+         */
+        caption?: string | null;
+        /**
+         * Enter each check item on a new line. These will appear as checkmarks.
+         */
+        checkItems?: string | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'videoFeature';
+      }[]
+    | null;
+  /**
+   * Shared testimonials block for all OBC pages
+   */
+  obcTestimonials?:
+    | {
+        heading?: string | null;
+        description?: string | null;
+        /**
+         * Layout structure (works with any skin)
+         */
+        variant?: ('standard' | 'grid' | 'cards') | null;
+        items?:
+          | {
+              quote: string;
+              name: string;
+              role?: string | null;
+              company?: string | null;
+              avatar?: (number | null) | Media;
+              rating?: number | null;
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'testimonials';
+      }[]
+    | null;
+  /**
+   * Shared Scotland coverage block for all OBC pages
+   */
+  obcScotlandBlock?:
+    | {
+        columns?:
+          | {
+              size?: ('oneThird' | 'half' | 'twoThirds' | 'full') | null;
+              richText?: {
+                root: {
+                  type: string;
+                  children: {
+                    type: any;
+                    version: number;
+                    [k: string]: unknown;
+                  }[];
+                  direction: ('ltr' | 'rtl') | null;
+                  format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                  indent: number;
+                  version: number;
+                };
+                [k: string]: unknown;
+              } | null;
+              enableLink?: boolean | null;
+              link?: {
+                label?: string | null;
+                url?: string | null;
+                page?: (number | null) | Page;
+                newTab?: boolean | null;
+              };
+              id?: string | null;
+            }[]
+          | null;
+        backgroundColor?: ('none' | 'muted' | 'dark' | 'accent') | null;
+        paddingTop?: ('none' | 'small' | 'medium' | 'large') | null;
+        paddingBottom?: ('none' | 'small' | 'medium' | 'large') | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'content';
+      }[]
+    | null;
+  /**
+   * Shared FAQ block for all OBC pages
+   */
+  obcFaqs?:
+    | {
+        heading?: string | null;
+        description?: string | null;
+        /**
+         * Layout structure (works with any skin)
+         */
+        variant?: ('accordion' | 'grid' | 'list') | null;
+        items?:
+          | {
+              question: string;
+              answer: {
+                root: {
+                  type: string;
+                  children: {
+                    type: any;
+                    version: number;
+                    [k: string]: unknown;
+                  }[];
+                  direction: ('ltr' | 'rtl') | null;
+                  format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                  indent: number;
+                  version: number;
+                };
+                [k: string]: unknown;
+              };
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'faq';
+      }[]
+    | null;
+  /**
+   * Shared CTA block for all OBC pages
+   */
+  obcCta?:
+    | {
+        variant?: ('standard' | 'banner' | 'card' | 'inline') | null;
+        heading: string;
+        description?: string | null;
+        image?: (number | null) | Media;
+        links?:
+          | {
+              label: string;
+              url?: string | null;
+              page?: (number | null) | Page;
+              variant?: ('primary' | 'secondary' | 'outline') | null;
+              newTab?: boolean | null;
+              id?: string | null;
+            }[]
+          | null;
+        backgroundColor?: ('none' | 'muted' | 'dark' | 'accent') | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'cta';
+      }[]
+    | null;
+  /**
+   * Create reusable blocks for any page type
+   */
+  generalBlocks?:
+    | (
+        | {
+            heading?: string | null;
+            description?: string | null;
+            /**
+             * Layout structure (works with any skin)
+             */
+            variant?: ('grid' | 'ticker') | null;
+            items?:
+              | {
+                  media: number | Media;
+                  label?: string | null;
+                  url?: string | null;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'logoCloud';
+          }
+        | {
+            heading?: string | null;
+            /**
+             * Full YouTube URL (e.g., https://www.youtube.com/watch?v=...)
+             */
+            videoUrl?: string | null;
+            /**
+             * Description text shown next to the video
+             */
+            caption?: string | null;
+            /**
+             * Enter each check item on a new line. These will appear as checkmarks.
+             */
+            checkItems?: string | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'videoFeature';
+          }
+        | {
+            heading?: string | null;
+            description?: string | null;
+            /**
+             * Layout structure (works with any skin)
+             */
+            variant?: ('standard' | 'grid' | 'cards') | null;
+            items?:
+              | {
+                  quote: string;
+                  name: string;
+                  role?: string | null;
+                  company?: string | null;
+                  avatar?: (number | null) | Media;
+                  rating?: number | null;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'testimonials';
+          }
+        | {
+            heading?: string | null;
+            description?: string | null;
+            /**
+             * Layout structure (works with any skin)
+             */
+            variant?: ('accordion' | 'grid' | 'list') | null;
+            items?:
+              | {
+                  question: string;
+                  answer: {
+                    root: {
+                      type: string;
+                      children: {
+                        type: any;
+                        version: number;
+                        [k: string]: unknown;
+                      }[];
+                      direction: ('ltr' | 'rtl') | null;
+                      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                      indent: number;
+                      version: number;
+                    };
+                    [k: string]: unknown;
+                  };
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'faq';
+          }
+        | {
+            variant?: ('standard' | 'banner' | 'card' | 'inline') | null;
+            heading: string;
+            description?: string | null;
+            image?: (number | null) | Media;
+            links?:
+              | {
+                  label: string;
+                  url?: string | null;
+                  page?: (number | null) | Page;
+                  variant?: ('primary' | 'secondary' | 'outline') | null;
+                  newTab?: boolean | null;
+                  id?: string | null;
+                }[]
+              | null;
+            backgroundColor?: ('none' | 'muted' | 'dark' | 'accent') | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'cta';
+          }
+        | {
+            columns?:
+              | {
+                  size?: ('oneThird' | 'half' | 'twoThirds' | 'full') | null;
+                  richText?: {
+                    root: {
+                      type: string;
+                      children: {
+                        type: any;
+                        version: number;
+                        [k: string]: unknown;
+                      }[];
+                      direction: ('ltr' | 'rtl') | null;
+                      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                      indent: number;
+                      version: number;
+                    };
+                    [k: string]: unknown;
+                  } | null;
+                  enableLink?: boolean | null;
+                  link?: {
+                    label?: string | null;
+                    url?: string | null;
+                    page?: (number | null) | Page;
+                    newTab?: boolean | null;
+                  };
+                  id?: string | null;
+                }[]
+              | null;
+            backgroundColor?: ('none' | 'muted' | 'dark' | 'accent') | null;
+            paddingTop?: ('none' | 'small' | 'medium' | 'large') | null;
+            paddingBottom?: ('none' | 'small' | 'medium' | 'large') | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'content';
+          }
+      )[]
+    | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "header_select".
  */
 export interface HeaderSelect<T extends boolean = true> {
   logo?: T;
   logoText?: T;
+  topBarLinks?:
+    | T
+    | {
+        label?: T;
+        url?: T;
+        page?: T;
+        newTab?: T;
+        id?: T;
+      };
   navItems?:
     | T
     | {
@@ -3813,6 +11644,7 @@ export interface HeaderSelect<T extends boolean = true> {
 export interface FooterSelect<T extends boolean = true> {
   logo?: T;
   description?: T;
+  email?: T;
   columns?:
     | T
     | {
@@ -3947,6 +11779,280 @@ export interface NavigationSettingsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "feature-settings_select".
+ */
+export interface FeatureSettingsSelect<T extends boolean = true> {
+  pagesEnabled?: T;
+  postsEnabled?: T;
+  faqsEnabled?: T;
+  testimonialsEnabled?: T;
+  peopleEnabled?: T;
+  eventsEnabled?: T;
+  locationsEnabled?: T;
+  blockLibraryEnabled?: T;
+  ecommerceEnabled?: T;
+  ecommerceInstructions?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "page-templates_select".
+ */
+export interface PageTemplatesSelect<T extends boolean = true> {
+  obcLogoCloud?:
+    | T
+    | {
+        logoCloud?:
+          | T
+          | {
+              heading?: T;
+              description?: T;
+              variant?: T;
+              items?:
+                | T
+                | {
+                    media?: T;
+                    label?: T;
+                    url?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+      };
+  obcVideo?:
+    | T
+    | {
+        videoFeature?:
+          | T
+          | {
+              heading?: T;
+              videoUrl?: T;
+              caption?: T;
+              checkItems?: T;
+              id?: T;
+              blockName?: T;
+            };
+      };
+  obcTestimonials?:
+    | T
+    | {
+        testimonials?:
+          | T
+          | {
+              heading?: T;
+              description?: T;
+              variant?: T;
+              items?:
+                | T
+                | {
+                    quote?: T;
+                    name?: T;
+                    role?: T;
+                    company?: T;
+                    avatar?: T;
+                    rating?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+      };
+  obcScotlandBlock?:
+    | T
+    | {
+        content?:
+          | T
+          | {
+              columns?:
+                | T
+                | {
+                    size?: T;
+                    richText?: T;
+                    enableLink?: T;
+                    link?:
+                      | T
+                      | {
+                          label?: T;
+                          url?: T;
+                          page?: T;
+                          newTab?: T;
+                        };
+                    id?: T;
+                  };
+              backgroundColor?: T;
+              paddingTop?: T;
+              paddingBottom?: T;
+              id?: T;
+              blockName?: T;
+            };
+      };
+  obcFaqs?:
+    | T
+    | {
+        faq?:
+          | T
+          | {
+              heading?: T;
+              description?: T;
+              variant?: T;
+              items?:
+                | T
+                | {
+                    question?: T;
+                    answer?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+      };
+  obcCta?:
+    | T
+    | {
+        cta?:
+          | T
+          | {
+              variant?: T;
+              heading?: T;
+              description?: T;
+              image?: T;
+              links?:
+                | T
+                | {
+                    label?: T;
+                    url?: T;
+                    page?: T;
+                    variant?: T;
+                    newTab?: T;
+                    id?: T;
+                  };
+              backgroundColor?: T;
+              id?: T;
+              blockName?: T;
+            };
+      };
+  generalBlocks?:
+    | T
+    | {
+        logoCloud?:
+          | T
+          | {
+              heading?: T;
+              description?: T;
+              variant?: T;
+              items?:
+                | T
+                | {
+                    media?: T;
+                    label?: T;
+                    url?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        videoFeature?:
+          | T
+          | {
+              heading?: T;
+              videoUrl?: T;
+              caption?: T;
+              checkItems?: T;
+              id?: T;
+              blockName?: T;
+            };
+        testimonials?:
+          | T
+          | {
+              heading?: T;
+              description?: T;
+              variant?: T;
+              items?:
+                | T
+                | {
+                    quote?: T;
+                    name?: T;
+                    role?: T;
+                    company?: T;
+                    avatar?: T;
+                    rating?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        faq?:
+          | T
+          | {
+              heading?: T;
+              description?: T;
+              variant?: T;
+              items?:
+                | T
+                | {
+                    question?: T;
+                    answer?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        cta?:
+          | T
+          | {
+              variant?: T;
+              heading?: T;
+              description?: T;
+              image?: T;
+              links?:
+                | T
+                | {
+                    label?: T;
+                    url?: T;
+                    page?: T;
+                    variant?: T;
+                    newTab?: T;
+                    id?: T;
+                  };
+              backgroundColor?: T;
+              id?: T;
+              blockName?: T;
+            };
+        content?:
+          | T
+          | {
+              columns?:
+                | T
+                | {
+                    size?: T;
+                    richText?: T;
+                    enableLink?: T;
+                    link?:
+                      | T
+                      | {
+                          label?: T;
+                          url?: T;
+                          page?: T;
+                          newTab?: T;
+                        };
+                    id?: T;
+                  };
+              backgroundColor?: T;
+              paddingTop?: T;
+              paddingBottom?: T;
+              id?: T;
+              blockName?: T;
+            };
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "TaskSchedulePublish".
  */
 export interface TaskSchedulePublish {
@@ -3961,6 +12067,26 @@ export interface TaskSchedulePublish {
       | ({
           relationTo: 'posts';
           value: number | Post;
+        } | null)
+      | ({
+          relationTo: 'custom-items';
+          value: number | CustomItem;
+        } | null)
+      | ({
+          relationTo: 'archive-items';
+          value: number | ArchiveItem;
+        } | null)
+      | ({
+          relationTo: 'people';
+          value: number | Person;
+        } | null)
+      | ({
+          relationTo: 'places';
+          value: number | Place;
+        } | null)
+      | ({
+          relationTo: 'events';
+          value: number | Event;
         } | null);
     global?: string | null;
     user?: (number | null) | User;

@@ -20,8 +20,13 @@ import { htmlBlock } from '../blocks/HTML'
 import { galleryBlock } from '../blocks/Gallery'
 import { gridBlock } from '../blocks/Grid'
 import { timelineBlock } from '../blocks/Timeline'
+import { contactFormBlock } from '../blocks/ContactForm'
+import { socialLinksBlock } from '../blocks/SocialLinks'
+import { videoFeatureBlock } from '../blocks/VideoFeature'
+import { reusableBlock } from '../blocks/ReusableBlock'
 import { getPreviewUrl } from '../utils/preview'
 import { revalidatePage } from '../lib/revalidate'
+import { fixBlockRelationshipPaths } from './hooks/fixBlockRelationshipPaths'
 
 export const Pages: CollectionConfig = {
   slug: 'pages',
@@ -69,12 +74,28 @@ export const Pages: CollectionConfig = {
 
   // Hooks for revalidation - direct calls since we're in the same Next.js app
   hooks: {
+    beforeChange: [
+      fixBlockRelationshipPaths, // Auto-fix relationship paths when blocks are reordered
+      async ({ data }) => {
+        // Transform absolute URLs to relative URLs for environment portability (Localhost URL Trap fix)
+        if (data.content && Array.isArray(data.content)) {
+          const { transformBlockUrls } = await import('../lib/transformBlockUrls')
+          data.content = transformBlockUrls(data.content)
+        }
+        return data
+      },
+    ],
     afterChange: [
       async ({ doc, previousDoc, req }) => {
-        if (doc._status === 'published') {
-          // Direct revalidation - no webhook needed
-          revalidatePage(doc.slug, previousDoc?.slug)
-          req.payload.logger.info(`Revalidated page: ${doc.slug}`)
+        try {
+          if (doc._status === 'published') {
+            req.payload.logger.info(`Validating page: ${doc.slug}`)
+            await revalidatePage(doc.slug, previousDoc?.slug)
+            req.payload.logger.info(`Revalidated page: ${doc.slug}`)
+          }
+        } catch (error) {
+          req.payload.logger.error(`Error revalidating page ${doc?.slug}: ${error instanceof Error ? error.message : String(error)}`)
+          // Don't throw — save still succeeds even if revalidation fails
         }
         return doc
       },
@@ -198,6 +219,10 @@ export const Pages: CollectionConfig = {
                 galleryBlock,
                 gridBlock,
                 timelineBlock,
+                contactFormBlock,
+                socialLinksBlock,
+                videoFeatureBlock,
+                reusableBlock,
                 spacerBlock,
                 htmlBlock,
               ],

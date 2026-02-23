@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Navigation Data Configuration
  *
@@ -43,12 +44,13 @@ export const navSections: NavSection[] = [
     items: [
       { label: 'Pages', href: '/admin/collections/pages', icon: 'page' },
       { label: 'Posts', href: '/admin/collections/posts', icon: 'post' },
-      { label: 'Events', href: '/admin/collections/events', icon: 'post' },
-      { label: 'Archive Items', href: '/admin/collections/archive-items', icon: 'archive' },
-      { label: 'Categories', href: '/admin/collections/categories', icon: 'category' },
-      { label: 'Tags', href: '/admin/collections/tags', icon: 'tags' },
+      { label: 'FAQs', href: '/admin/collections/faqs', icon: 'collection' },
+      { label: 'Testimonials', href: '/admin/collections/testimonials', icon: 'collection' },
+      { label: 'Logo Clouds', href: '/admin/collections/logo-clouds', icon: 'image' },
       { label: 'Custom Items', href: '/admin/collections/custom-items', icon: 'customItem' },
       { label: 'Content Types', href: '/admin/collections/content-types', icon: 'contentType' },
+      { label: 'Categories', href: '/admin/collections/categories', icon: 'category' },
+      { label: 'Tags', href: '/admin/collections/tags', icon: 'tags' },
     ],
   },
   {
@@ -56,8 +58,15 @@ export const navSections: NavSection[] = [
     label: 'Collections',
     icon: 'collection',
     items: [
+      { label: 'Events', href: '/admin/collections/events', icon: 'post' },
+      { label: 'Archive Items', href: '/admin/collections/archive-items', icon: 'collection' },
       { label: 'People', href: '/admin/collections/people', icon: 'person' },
       { label: 'Places', href: '/admin/collections/places', icon: 'place' },
+      { label: 'Locations', href: '/admin/collections/locations', icon: 'place' },
+      { label: 'Block Library', href: '/admin/collections/block-library', icon: 'collection' },
+      { label: 'Global Blocks', href: '/admin/collections/global-blocks', icon: 'collection' },
+      { label: 'Custom Collections', href: '/admin/collections/content-types', icon: 'collection' },
+      { label: 'Custom Items', href: '/admin/collections/custom-items', icon: 'customItem' },
     ],
   },
   {

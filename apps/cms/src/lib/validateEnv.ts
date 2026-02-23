@@ -55,6 +55,13 @@ const optionalEnvVars: EnvVar[] = [
 ]
 
 export function validateEnv(): void {
+  // Skip validation during Railway build phase.
+  // Railway variables like ${{Postgres.DATABASE_URL}} are only available at runtime, not build time.
+  if (process.env.RAILWAY_STATIC_URL && !process.env.DATABASE_URL) {
+    console.log('ℹ️  Skipping environment validation during Railway build phase\n')
+    return
+  }
+
   const missingVars: EnvVar[] = []
   const warnings: string[] = []
 

@@ -62,6 +62,36 @@ export const Header: GlobalConfig = {
       },
     },
     {
+      name: 'topBarLinks',
+      type: 'array',
+      label: 'Top Bar Links',
+      admin: {
+        description: 'Links displayed in the top announcement/info bar above the main navigation',
+      },
+      maxRows: 6,
+      fields: [
+        {
+          name: 'label',
+          type: 'text',
+          required: true,
+        },
+        {
+          name: 'url',
+          type: 'text',
+        },
+        {
+          name: 'page',
+          type: 'relationship',
+          relationTo: 'pages',
+        },
+        {
+          name: 'newTab',
+          type: 'checkbox',
+          label: 'Open in new tab',
+        },
+      ],
+    },
+    {
       name: 'navItems',
       type: 'array',
       label: 'Navigation Items',

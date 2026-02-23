@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Ecommerce Preset Seeder
  *

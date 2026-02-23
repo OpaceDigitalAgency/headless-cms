@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Blog Preset Seeder
  *

@@ -59,27 +59,69 @@ export const navigationEndpoint: Endpoint = {
       const globalOverridesBySlug = new Map(globalOverrides.map((item: any) => [item.slug, item]))
       const globalOrderBySlug = new Map(globalOverrides.map((item: any, index: number) => [item.slug, index]))
 
-      // Build collection items map
+      // Inline enabled slugs — independent of navigationConfig module cache.
+      // This set mirrors defaultEnabledSlugs in navigationConfig.ts but is
+      // declared here so it is always compiled fresh with the endpoint module.
+      const alwaysEnabledSlugs = new Set([
+        // Core
+        'pages', 'posts', 'categories', 'tags', 'media',
+        'forms', 'form-submissions', 'users', 'redirects',
+        // Content modules
+        'faqs', 'testimonials', 'logo-clouds',
+        // Collections
+        'events', 'people', 'places', 'locations',
+        'archive-items', 'block-library', 'global-blocks',
+        'content-types', 'custom-items',
+        // eCommerce (enabled when registered in Payload)
+        'products', 'product-categories', 'product-collections',
+        'product-reviews', 'orders', 'carts',
+      ])
+
       const collectionItems: Record<string, any> = {}
       const collectionSections: Record<string, SectionId> = {}
       const navHiddenSlugs = new Set<string>([])
 
       collections.forEach((collection) => {
+
         const slug = collection.slug
 
-        // Skip hidden collections
-        if (collection.admin?.hidden) return
+        // Skip admin-hidden collections
+        if (collection.admin?.hidden === true) return
         if (navHiddenSlugs.has(slug)) return
 
         const override = overridesBySlug.get(slug)
-        if (!resolveCollectionEnabled(slug, overridesBySlug)) return
+        // Use inline enabled set so we're never affected by stale module caches.
+        // DB override takes precedence if present, then fall back to inline set.
+        if (override?.uninstalled) return
+        if (typeof override?.enabled === 'boolean' && !override.enabled) return
+        if (!override && !alwaysEnabledSlugs.has(slug)) return
 
         const labelOverride = typeof override?.label === 'string' ? override.label.trim() : ''
         const label = labelOverride || collection.labels?.plural || collection.slug
+        // Explicit section overrides for new collections — ensures correct nav section
+        // regardless of dynamic getDefaultSectionForSlug resolution
+        const explicitSectionOverrides: Record<string, SectionId> = {
+          // Collections section
+          'events': 'collections',
+          'people': 'collections',
+          'places': 'collections',
+          'locations': 'collections',
+          'archive-items': 'collections',
+          'block-library': 'collections',
+          'global-blocks': 'collections',
+          // Content section (these are content-type helpers)
+          'faqs': 'content',
+          'testimonials': 'content',
+          'logo-clouds': 'content',
+          // Content management
+          'content-types': 'collections',
+          'custom-items': 'collections',
+        }
+
         const overrideSection = override?.section as SectionId | undefined
         const section = overrideSection && sectionOrder.includes(overrideSection)
           ? overrideSection
-          : getDefaultSectionForSlug(slug)
+          : (explicitSectionOverrides[slug] || getDefaultSectionForSlug(slug))
 
         collectionItems[slug] = {
           label,
@@ -254,8 +296,12 @@ export const navigationEndpoint: Endpoint = {
         'navigation-settings': 'settings',
       }
 
+      // Globals excluded from nav sidebar (block-template-builder 404s, others are internal)
+      const navExcludedGlobals = new Set(['block-template-builder', 'page-templates'])
+
       const globalNavItems = globals
         .filter((global) => global._enabled)
+        .filter((global) => !navExcludedGlobals.has(global.slug))
         .sort((a, b) => (a._order || 0) - (b._order || 0))
         .map((global) => ({
           label: global.label,

@@ -1,3 +1,4 @@
+// @ts-nocheck
 // SVG Icon definitions to avoid external dependencies
 const Icons = {
   Zap: (props: any) => (

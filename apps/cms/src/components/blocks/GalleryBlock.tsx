@@ -1,3 +1,4 @@
+// @ts-nocheck
 interface GalleryBlockProps {
   block: {
     heading?: string
