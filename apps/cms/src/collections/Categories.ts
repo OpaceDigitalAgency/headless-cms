@@ -10,7 +10,7 @@ export const Categories: CollectionConfig = {
     useAsTitle: 'title',
     group: 'Taxonomy',
     defaultColumns: ['title', 'slug', 'parent', 'totalCount', 'updatedAt'],
-    description: 'Hierarchical categories shared across Posts, Archive Items, Events, People, and Custom Items',
+    description: 'Hierarchical content taxonomy shared across Posts, Archive Items, Events, People, and Custom Items. Categories support parent–child nesting (e.g. "Art" → "Painting" → "Oil on Canvas") and each category gets a dedicated listing page on the frontend. Use Tags for flat, keyword-style labels.',
     preview: (doc) => {
       const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
       return `${baseUrl}/categories/${doc.slug}`

@@ -14,7 +14,7 @@ export const BlockTemplateBuilder: GlobalConfig = {
 
     admin: {
         group: 'Content Management',
-        description: 'Create block templates visually, then save them to Block Library for reuse across pages.',
+        description: 'A visual workspace for building block templates before saving them to the Block Library. Add blocks here, edit them with the full block editor UI, then click the "Save to Library" button to save each finished block to the Block Library where editors can insert it onto any page. Think of this as a drafting area that does not affect the public site — nothing added here is published automatically.',
     },
 
     access: {

@@ -8,7 +8,7 @@ export const Locations: CollectionConfig = {
         useAsTitle: 'location_name',
         group: 'Content',
         defaultColumns: ['location_name', 'location_slug', 'qa_score', 'status', 'updatedAt'],
-        description: 'Location pages data (managed via JSON import - do not edit manually)',
+        description: 'Geo-targeted landing pages, one record per location. Each record stores a location name, URL slug, H1 heading, location-specific intro and body copy, FAQs, and nearby location links for internal cross-linking. Records can be imported in bulk from JSON or edited individually. The frontend renders each as a dedicated location page (e.g. /boiler-installation/glasgow).',
         preview: (doc) => {
             if (doc?.location_slug) {
                 return `${process.env.NEXT_PUBLIC_SERVER_URL}/new-boiler-installation/${doc.location_slug}`

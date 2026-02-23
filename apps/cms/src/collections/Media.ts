@@ -7,7 +7,7 @@ export const Media: CollectionConfig = {
     useAsTitle: 'filename',
     group: 'Content',
     defaultColumns: ['filename', 'alt', 'filesize', 'mimeType', 'createdAt'],
-    description: 'Upload and manage media files with automatic optimisation',
+    description: 'Upload images, video, audio, and PDFs. Images are automatically converted to WebP and AVIF, resized into 14 responsive sizes (from 20px blur placeholder to 2560px desktop), and have their dominant colour extracted for smooth lazy-loading. Alt text is auto-generated from the filename if not provided. Use the Tools → Unused Media page to find files that are no longer referenced anywhere.',
   },
 
   // Enable file uploads with full optimization

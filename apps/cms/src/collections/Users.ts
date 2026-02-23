@@ -7,7 +7,7 @@ export const Users: CollectionConfig = {
     useAsTitle: 'email',
     group: 'Admin',
     defaultColumns: ['email', 'name', 'role', 'createdAt'],
-    description: 'Manage user accounts and permissions',
+    description: 'CMS user accounts with role-based access control. Admin: full access including user management, settings, and destructive actions. Editor: can create and edit content but cannot delete or manage users. User: read-only access (used for API consumers or authenticated frontend users). Only admins can create new accounts or change roles.',
   },
 
   // Enable authentication

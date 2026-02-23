@@ -32,7 +32,7 @@ export const Posts: CollectionConfig = {
     useAsTitle: 'title',
     group: 'Content',
     defaultColumns: ['title', 'author', 'categories', '_status', 'publishedAt', 'preview'],
-    description: 'Create and manage blog posts with flexible content sections',
+    description: 'Blog posts and news articles. Each post has a main rich-text body plus optional additional content blocks (galleries, CTAs, embeds etc.). Supports categories, tags, author attribution, featured image, scheduled publishing, drafts, and up to 25 saved versions.',
     preview: (doc) => getPreviewUrl({ collection: 'posts', slug: doc.slug as string }),
     livePreview: {
       url: ({ data }) => getPreviewUrl({ collection: 'posts', slug: data?.slug }),

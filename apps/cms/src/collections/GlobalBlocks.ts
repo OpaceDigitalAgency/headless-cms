@@ -8,7 +8,7 @@ export const GlobalBlocks: CollectionConfig = {
         useAsTitle: 'title',
         group: 'Collections',
         defaultColumns: ['title', 'blockName', 'updatedAt'],
-        description: 'Shared block library for "edit once, update everywhere" content units.',
+        description: 'Blocks that the frontend renders automatically and consistently across the site — for example a Newsletter CTA that always appears at the bottom of every page, or a site-wide Notice banner. Unlike Block Library entries (which editors insert onto specific pages), Global Blocks are rendered by the layout wrapper unconditionally. Only add a record here if it should appear site-wide without an editor placing it on each page individually.',
     },
     access: {
         read: () => true,

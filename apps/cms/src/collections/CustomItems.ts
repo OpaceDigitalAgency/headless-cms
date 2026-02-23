@@ -48,7 +48,7 @@ export const CustomItems: CollectionConfig = {
     group: 'Collections',
     useAsTitle: 'title',
     defaultColumns: ['title', 'contentType', 'status', 'updatedAt', 'preview'],
-    description: 'Items belonging to your custom collections',
+    description: 'The actual content records for all custom collections defined in Custom Collections (Content Types). Each item is linked to a content type (e.g. a "Classic Cars" type item shows only Classic Cars here). Use the Content Type dropdown in the sidebar to assign each item to its collection. Supports rich-text, blocks, media gallery, categories, tags, drafts, and scheduling.',
     listSearchableFields: ['title', 'slug'],
     components: {
       beforeList: ['/components/CustomItemsListHeader'],

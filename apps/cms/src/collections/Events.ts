@@ -15,7 +15,7 @@ export const Events: CollectionConfig = {
     useAsTitle: 'title',
     group: 'Content',
     defaultColumns: ['title', 'startDate', '_status', 'updatedAt', 'preview'],
-    description: 'Events, exhibitions, workshops, or performances with dates and venues',
+    description: 'Time-based content entries such as exhibitions, workshops, talks, performances, or open days. Each event has start/end dates, location, and a full block-builder layout. Supports drafts and scheduled publishing. Visibility is controlled by the Feature Settings global — if Events is disabled there, this collection will not appear on the frontend.',
     ...withLivePreview('events'),
   },
 

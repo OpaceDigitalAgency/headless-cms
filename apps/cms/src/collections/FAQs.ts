@@ -8,7 +8,7 @@ export const FAQs: CollectionConfig = {
         useAsTitle: 'question',
         group: 'Content',
         defaultColumns: ['question', 'category', 'updatedAt'],
-        description: 'Manage FAQ items that can be reused across pages',
+        description: 'A centralised library of question/answer pairs. FAQs are standalone records here, and the FAQ block on any page or post can pull from this collection. Manage all your frequently asked questions in one place rather than re-entering them on every page. Use the Category field to group related questions (e.g. "Pricing", "Technical", "Delivery").',
     },
 
     // Access control

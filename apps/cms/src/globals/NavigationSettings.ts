@@ -5,7 +5,7 @@ export const NavigationSettings: GlobalConfig = {
   label: 'Admin Navigation',
   admin: {
     group: 'Settings',
-    description: 'Control which collections appear in the admin navigation and how they are grouped.',
+    description: 'Controls the admin panel navigation — which collections appear in the left sidebar, how they are grouped, and any custom links in the horizontal top menu bar. This only affects the CMS admin experience, not the public-facing website navigation (which is managed in the Header global). Only admins can access or change this setting.',
   },
   access: {
     read: ({ req }) => req.user?.role === 'admin',
