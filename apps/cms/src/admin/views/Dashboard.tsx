@@ -105,12 +105,19 @@ export const Dashboard: React.FC = () => {
 
           // Extract all collection slugs from navigation
           const slugs: string[] = []
+          // Slugs that are Payload globals (not REST collections) — fetching /api/{slug} would 404
+          const globalSlugs = new Set([
+            'seo-settings', 'feature-settings', 'navigation-settings',
+            'header', 'footer', 'settings',
+          ])
           const isStatsSlug = (slug: string) =>
             slug &&
             !slug.startsWith('custom:') &&
             slug !== 'dashboard' &&
             slug !== 'tools' &&
+            slug !== 'seo-settings' &&
             !slug.endsWith('-manager') &&
+            !globalSlugs.has(slug) &&
             !['header', 'footer', 'settings', 'navigation-settings', 'redirects'].includes(slug)
 
           navData.navSections?.forEach((section: any) => {

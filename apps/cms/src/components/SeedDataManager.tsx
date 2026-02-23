@@ -59,6 +59,7 @@ export const SeedDataManager: React.FC = () => {
   const [actionInProgress, setActionInProgress] = useState<string | null>(null)
   const [message, setMessage] = useState<{ type: 'success' | 'error' | 'info'; text: string } | null>(null)
   const [includeMedia, setIncludeMedia] = useState<Record<string, boolean>>({})
+  const [confirmClearAll, setConfirmClearAll] = useState(false)
 
   // Fetch data on mount
   useEffect(() => {
@@ -278,11 +279,14 @@ export const SeedDataManager: React.FC = () => {
       setMessage({ type: 'info', text: 'Nothing to clear — all collections are already empty.' })
       return
     }
+    // Show inline confirmation instead of window.confirm (which is blocked in Payload admin context)
+    setConfirmClearAll(true)
+  }
 
-    const confirmed = window.confirm(
-      `This will permanently delete all sample data from ${withData.length} collection${withData.length !== 1 ? 's' : ''}. Are you sure?`
-    )
-    if (!confirmed) return
+  const executeClearAll = async () => {
+    setConfirmClearAll(false)
+    const withData = collections.filter(c => c.count > 0)
+    if (withData.length === 0) return
 
     setActionInProgress('bulk-clear')
     setMessage({ type: 'info', text: `Clearing ${withData.length} collections...` })
@@ -505,25 +509,62 @@ export const SeedDataManager: React.FC = () => {
             >
               <SettingsIcon size={14} /> {actionInProgress === 'bulk-seed' ? 'Seeding...' : 'Seed All'}
             </button>
-            <button
-              onClick={handleClearAll}
-              disabled={actionInProgress !== null}
-              style={{
-                padding: '8px 16px',
-                backgroundColor: '#dc3545',
-                color: 'white',
-                border: 'none',
-                borderRadius: '4px',
-                cursor: actionInProgress ? 'not-allowed' : 'pointer',
-                opacity: actionInProgress ? 0.6 : 1,
-                fontSize: '13px',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '6px',
-              }}
-            >
-              <TrashIcon size={14} /> {actionInProgress === 'bulk-clear' ? 'Clearing...' : 'Clear All'}
-            </button>
+            {confirmClearAll ? (
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+                <span style={{ fontSize: '13px', color: '#dc3545', fontWeight: 500 }}>
+                  Delete all data?
+                </span>
+                <button
+                  onClick={executeClearAll}
+                  style={{
+                    padding: '8px 14px',
+                    backgroundColor: '#dc3545',
+                    color: 'white',
+                    border: 'none',
+                    borderRadius: '4px',
+                    cursor: 'pointer',
+                    fontSize: '13px',
+                    fontWeight: 600,
+                  }}
+                >
+                  Yes, clear all
+                </button>
+                <button
+                  onClick={() => setConfirmClearAll(false)}
+                  style={{
+                    padding: '8px 14px',
+                    backgroundColor: 'var(--theme-elevation-100)',
+                    color: 'var(--theme-elevation-800)',
+                    border: '1px solid var(--theme-elevation-300)',
+                    borderRadius: '4px',
+                    cursor: 'pointer',
+                    fontSize: '13px',
+                  }}
+                >
+                  Cancel
+                </button>
+              </div>
+            ) : (
+              <button
+                onClick={handleClearAll}
+                disabled={actionInProgress !== null}
+                style={{
+                  padding: '8px 16px',
+                  backgroundColor: '#dc3545',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '4px',
+                  cursor: actionInProgress ? 'not-allowed' : 'pointer',
+                  opacity: actionInProgress ? 0.6 : 1,
+                  fontSize: '13px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                }}
+              >
+                <TrashIcon size={14} /> {actionInProgress === 'bulk-clear' ? 'Clearing...' : 'Clear All'}
+              </button>
+            )}
           </div>
 
           {/* Per-Collection Controls */}
