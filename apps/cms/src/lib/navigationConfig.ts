@@ -25,8 +25,33 @@ export const sectionLabels: Record<SectionId, string> = {
 export const nestedCollections: Record<string, string[]> = {}
 
 export const taxonomySlugs = ['categories', 'tags']
-export const shopSlugs: string[] = []
-export const collectionsSectionSlugs: string[] = []
+
+// eCommerce collections → shop section
+export const shopSlugs: string[] = [
+  'products',
+  'product-categories',
+  'product-collections',
+  'product-reviews',
+  'orders',
+  'carts',
+]
+
+// Generic content module collections → collections section
+export const collectionsSectionSlugs: string[] = [
+  'faqs',
+  'testimonials',
+  'locations',
+  'logo-cloud',
+  'global-blocks',
+  'block-library',
+  'block-template-builder',
+  'people',
+  'places',
+  'events',
+  'content-types',
+  'custom-items',
+  'archive-items',
+]
 
 export const defaultEnabledSlugs = new Set<string>([
   'pages',
@@ -38,7 +63,21 @@ export const defaultEnabledSlugs = new Set<string>([
   'form-submissions',
   'users',
   'redirects',
+  // New generic collections — enabled by default so they appear in nav
+  'faqs',
+  'testimonials',
+  'locations',
+  'logo-cloud',
+  'global-blocks',
+  'block-library',
+  'people',
+  'places',
+  'events',
+  'content-types',
+  'custom-items',
+  'archive-items',
 ])
+
 
 export const isDefaultEnabled = (slug: string): boolean => defaultEnabledSlugs.has(slug)
 

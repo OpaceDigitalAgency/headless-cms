@@ -32,6 +32,16 @@ import { PreviewComponent as PreviewComponent_a8a977ebc872c5d5ea7ee689724c0860 }
 import { default as default_af9653989531dda28e4f7c6779fff3cb } from '../../../components/TemplateGallery'
 import { default as default_f816ad831d1914fda4b2fda5a8a5abff } from '../../../components/PreviewButtonCells/PagesPreviewCell'
 import { default as default_2287ff956e96a8539b853bf429423292 } from '../../../components/PreviewButtonCells/PostsPreviewCell'
+import { default as default_4b0655845a7cd1a6b04c8066de9ec3ff } from '@/components/BlockTemplateBuilderInstructions'
+import { default as default_b2be81c351443fa3316f3bbb2a28b098 } from '@/components/ExportTemplatesButton'
+import { default as default_8e3a81edd9c3a515e585367aa801ee42 } from '../../../components/PreviewButtonCells/ContentTypesPreviewCell'
+import { default as default_78d34716f26bbc38d2d51d55b25955ba } from '../../../components/CustomDataField'
+import { default as default_b9ab8409b759872b73c0031ce9ca8d48 } from '../../../components/PreviewButtonCells/CustomItemsPreviewCell'
+import { default as default_d41b387b5a3a4784ca7aa9e406680bf1 } from '../../../components/CustomItemsListHeader'
+import { default as default_f7ea1d98364ee50d9b03b0f1a144bd53 } from '../../../components/PreviewButtonCells/ArchiveItemsPreviewCell'
+import { default as default_a746c4e0133cbe976185d2f319037704 } from '../../../components/PreviewButtonCells/PeoplePreviewCell'
+import { default as default_a4d16b5eab717834fbd80608db478375 } from '../../../components/PreviewButtonCells/PlacesPreviewCell'
+import { default as default_cf5a718e85812f01f14fb7dcb4e9ad4b } from '../../../components/PreviewButtonCells/EventsPreviewCell'
 import { LinkToDoc as LinkToDoc_aead06e4cbf6b2620c5c51c9ab283634 } from '@payloadcms/plugin-search/client'
 import { ReindexButton as ReindexButton_aead06e4cbf6b2620c5c51c9ab283634 } from '@payloadcms/plugin-search/client'
 import { default as default_1723744e6ae59cf3653e63611d4cba7a } from '../../../components/CollectionManagerField'
@@ -87,6 +97,16 @@ export const importMap = {
   "/components/TemplateGallery#default": default_af9653989531dda28e4f7c6779fff3cb,
   "/components/PreviewButtonCells/PagesPreviewCell#default": default_f816ad831d1914fda4b2fda5a8a5abff,
   "/components/PreviewButtonCells/PostsPreviewCell#default": default_2287ff956e96a8539b853bf429423292,
+  "@/components/BlockTemplateBuilderInstructions#default": default_4b0655845a7cd1a6b04c8066de9ec3ff,
+  "@/components/ExportTemplatesButton#default": default_b2be81c351443fa3316f3bbb2a28b098,
+  "/components/PreviewButtonCells/ContentTypesPreviewCell#default": default_8e3a81edd9c3a515e585367aa801ee42,
+  "/components/CustomDataField#default": default_78d34716f26bbc38d2d51d55b25955ba,
+  "/components/PreviewButtonCells/CustomItemsPreviewCell#default": default_b9ab8409b759872b73c0031ce9ca8d48,
+  "/components/CustomItemsListHeader#default": default_d41b387b5a3a4784ca7aa9e406680bf1,
+  "/components/PreviewButtonCells/ArchiveItemsPreviewCell#default": default_f7ea1d98364ee50d9b03b0f1a144bd53,
+  "/components/PreviewButtonCells/PeoplePreviewCell#default": default_a746c4e0133cbe976185d2f319037704,
+  "/components/PreviewButtonCells/PlacesPreviewCell#default": default_a4d16b5eab717834fbd80608db478375,
+  "/components/PreviewButtonCells/EventsPreviewCell#default": default_cf5a718e85812f01f14fb7dcb4e9ad4b,
   "@payloadcms/plugin-search/client#LinkToDoc": LinkToDoc_aead06e4cbf6b2620c5c51c9ab283634,
   "@payloadcms/plugin-search/client#ReindexButton": ReindexButton_aead06e4cbf6b2620c5c51c9ab283634,
   "/components/CollectionManagerField#default": default_1723744e6ae59cf3653e63611d4cba7a,
