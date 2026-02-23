@@ -34,16 +34,14 @@ const COLLECTION_SEED_CONFIG: Record<string, {
   posts: { label: 'Posts', icon: 'edit', hasSeedData: true, hasSeedMedia: false },
   categories: { label: 'Categories', icon: 'tag', hasSeedData: true, hasSeedMedia: false },
   tags: { label: 'Tags', icon: 'tag', hasSeedData: true, hasSeedMedia: false },
-  'block-library': { label: 'Block Library', icon: 'package', hasSeedData: true, hasSeedMedia: false },
-  faqs: { label: 'FAQs', icon: 'file-text', hasSeedData: true, hasSeedMedia: false },
-  testimonials: { label: 'Testimonials', icon: 'user', hasSeedData: true, hasSeedMedia: false },
-  events: { label: 'Events', icon: 'edit', hasSeedData: true, hasSeedMedia: false },
-  locations: { label: 'Locations', icon: 'map-pin', hasSeedData: true, hasSeedMedia: false },
-  'logo-clouds': { label: 'Logo Clouds', icon: 'folder', hasSeedData: true, hasSeedMedia: false },
-  'global-blocks': { label: 'Global Blocks', icon: 'package', hasSeedData: true, hasSeedMedia: false },
-  'archive-items': { label: 'Archive Items', icon: 'artifact', hasSeedData: true, hasSeedMedia: false },
+  'archive-items': { label: 'Archive Items', icon: 'archive', hasSeedData: true, hasSeedMedia: false },
   people: { label: 'People', icon: 'user', hasSeedData: true, hasSeedMedia: false },
   places: { label: 'Places', icon: 'map-pin', hasSeedData: true, hasSeedMedia: false },
+  events: { label: 'Events', icon: 'calendar', hasSeedData: true, hasSeedMedia: false },
+  'block-library': { label: 'Block Library', icon: 'folder', hasSeedData: true, hasSeedMedia: false },
+  faqs: { label: 'FAQs', icon: 'help-circle', hasSeedData: true, hasSeedMedia: false },
+  testimonials: { label: 'Testimonials', icon: 'message-circle', hasSeedData: true, hasSeedMedia: false },
+  'global-blocks': { label: 'Global Blocks', icon: 'folder', hasSeedData: true, hasSeedMedia: false },
 }
 
 const COLLECTION_PRESET_OVERRIDES: Record<string, PresetId> = {
@@ -320,7 +318,7 @@ export const seedCollectionEndpoint: Endpoint = {
 
       // If the active preset doesn't natively handle this collection, fall back to CoreSeeder (archive)
       // which has handlers for all supplementary collections (block-library, faqs, testimonials, etc.)
-      const CORE_ONLY_COLLECTIONS = ['block-library', 'faqs', 'testimonials', 'locations', 'logo-clouds', 'global-blocks']
+      const CORE_ONLY_COLLECTIONS = ['block-library', 'faqs', 'testimonials', 'global-blocks']
       const effectivePresetId = CORE_ONLY_COLLECTIONS.includes(slug) ? 'archive' : presetId
 
       const seeder = createSeeder(effectivePresetId, payload, {

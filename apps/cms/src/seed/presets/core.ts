@@ -457,21 +457,21 @@ export class CoreSeeder extends BaseSeeder {
     const items = [
       {
         quote: 'The collection is breathtaking. I spent four hours here and felt like I had only scratched the surface. A truly world-class institution.',
-        author: 'Margaret Fitzwilliam',
+        name: 'Margaret Fitzwilliam',
         role: 'Retired Art Historian',
         company: 'University of Edinburgh',
         rating: 5,
       },
       {
         quote: 'Our school group had an absolutely wonderful visit. The education team went above and beyond to engage the students. We\'ll definitely be back.',
-        author: 'James Okafor',
+        name: 'James Okafor',
         role: 'Head of History',
         company: 'Riverside Academy',
         rating: 5,
       },
       {
         quote: 'As someone researching local heritage, the archive access was invaluable. The staff were incredibly knowledgeable and went out of their way to help.',
-        author: 'Dr. Sophie Chen',
+        name: 'Dr. Sophie Chen',
         role: 'Cultural Heritage Researcher',
         company: 'Freelance',
         rating: 5,
@@ -482,16 +482,16 @@ export class CoreSeeder extends BaseSeeder {
       try {
         const existing = await this.payload.find({
           collection: 'testimonials',
-          where: { author: { equals: item.author } },
+          where: { name: { equals: item.name } },
           limit: 1,
           depth: 0,
         })
         if (existing.docs.length > 0) {
           continue
         }
-        await this.create('testimonials', { ...item, _status: 'published' })
-      } catch {
-        // ignore individual item errors
+        await this.create('testimonials', item)
+      } catch (err) {
+        this.error(`Failed to seed testimonial: ${err}`)
       }
     }
   }

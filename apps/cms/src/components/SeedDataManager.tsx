@@ -158,8 +158,6 @@ export const SeedDataManager: React.FC = () => {
     { slug: 'faqs', label: 'FAQs', count: 0, hasSeedData: true, hasSeedMedia: false, Icon: FileTextIcon },
     { slug: 'testimonials', label: 'Testimonials', count: 0, hasSeedData: true, hasSeedMedia: false, Icon: UserIcon },
     { slug: 'events', label: 'Events', count: 0, hasSeedData: true, hasSeedMedia: false, Icon: EditIcon },
-    { slug: 'locations', label: 'Locations', count: 0, hasSeedData: true, hasSeedMedia: false, Icon: MapPinIcon },
-    { slug: 'logo-clouds', label: 'Logo Clouds', count: 0, hasSeedData: true, hasSeedMedia: false, Icon: FolderIcon },
     { slug: 'global-blocks', label: 'Global Blocks', count: 0, hasSeedData: true, hasSeedMedia: false, Icon: FolderIcon },
   ]
 
