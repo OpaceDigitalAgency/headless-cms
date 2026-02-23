@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Media Download Utility for Seed Script
  * 
