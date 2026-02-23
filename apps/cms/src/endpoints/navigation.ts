@@ -76,10 +76,30 @@ export const navigationEndpoint: Endpoint = {
 
         const labelOverride = typeof override?.label === 'string' ? override.label.trim() : ''
         const label = labelOverride || collection.labels?.plural || collection.slug
+        // Explicit section overrides for new collections — ensures correct nav section
+        // regardless of dynamic getDefaultSectionForSlug resolution
+        const explicitSectionOverrides: Record<string, SectionId> = {
+          // Collections section
+          'events': 'collections',
+          'people': 'collections',
+          'places': 'collections',
+          'locations': 'collections',
+          'archive-items': 'collections',
+          'block-library': 'collections',
+          'global-blocks': 'collections',
+          // Content section (these are content-type helpers)
+          'faqs': 'content',
+          'testimonials': 'content',
+          'logo-clouds': 'content',
+          // Content management
+          'content-types': 'collections',
+          'custom-items': 'collections',
+        }
+
         const overrideSection = override?.section as SectionId | undefined
         const section = overrideSection && sectionOrder.includes(overrideSection)
           ? overrideSection
-          : getDefaultSectionForSlug(slug)
+          : (explicitSectionOverrides[slug] || getDefaultSectionForSlug(slug))
 
         collectionItems[slug] = {
           label,
@@ -254,8 +274,12 @@ export const navigationEndpoint: Endpoint = {
         'navigation-settings': 'settings',
       }
 
+      // Globals excluded from nav sidebar (block-template-builder 404s, others are internal)
+      const navExcludedGlobals = new Set(['block-template-builder', 'page-templates'])
+
       const globalNavItems = globals
         .filter((global) => global._enabled)
+        .filter((global) => !navExcludedGlobals.has(global.slug))
         .sort((a, b) => (a._order || 0) - (b._order || 0))
         .map((global) => ({
           label: global.label,

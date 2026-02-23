@@ -65,6 +65,8 @@ export const navSections: NavSection[] = [
       { label: 'Locations', href: '/admin/collections/locations', icon: 'place' },
       { label: 'Block Library', href: '/admin/collections/block-library', icon: 'collection' },
       { label: 'Global Blocks', href: '/admin/collections/global-blocks', icon: 'collection' },
+      { label: 'Custom Collections', href: '/admin/collections/content-types', icon: 'collection' },
+      { label: 'Custom Items', href: '/admin/collections/custom-items', icon: 'customItem' },
     ],
   },
   {
@@ -101,8 +103,6 @@ export const navSections: NavSection[] = [
       { label: 'Header', href: '/admin/globals/header', icon: 'header' },
       { label: 'Footer', href: '/admin/globals/footer', icon: 'footer' },
       { label: 'Site Settings', href: '/admin/globals/settings', icon: 'gear' },
-      { label: 'Block Template Builder', href: '/admin/globals/block-template-builder', icon: 'collection' },
-      { label: 'Page Templates', href: '/admin/globals/page-templates', icon: 'page' },
       { label: 'SEO Settings', href: '/admin/seo', icon: 'search' },
       { label: 'Forms', href: '/admin/collections/forms', icon: 'form' },
       { label: 'Redirects', href: '/admin/collections/redirects', icon: 'redirect' },

@@ -65,6 +65,7 @@ import { Header } from './globals/Header'
 import { Footer } from './globals/Footer'
 import { Settings } from './globals/Settings'
 import { NavigationSettings } from './globals/NavigationSettings'
+import { FeatureSettings } from './globals/FeatureSettings'
 
 // Globals — Block Library
 import { BlockTemplateBuilder } from './globals/BlockTemplateBuilder'
@@ -351,6 +352,7 @@ export default buildConfig({
     Footer,
     Settings,
     NavigationSettings,
+    FeatureSettings,
     // Block Library
     ...(features.blockLibrary ? [BlockTemplateBuilder, PageTemplates] : []),
   ],
