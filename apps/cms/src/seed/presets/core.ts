@@ -503,37 +503,72 @@ export class CoreSeeder extends BaseSeeder {
 
     this.log('Seeding locations...')
 
+    // Locations schema: location_name, location_slug (unique), h1, intro_copy, extra_copy, faqs[], nearby_locations[]
+    // This is a geo-targeted landing page system — no address/coordinates fields.
     const items = [
       {
-        name: 'Main Museum',
-        slug: 'main-museum',
-        address: '1 Museum Square, London, EC1A 1AA',
-        description: 'Our flagship location housing the permanent collection and rotating exhibitions.',
-        coordinates: { latitude: 51.5189, longitude: -0.0985 },
-        phone: '+44 20 1234 5678',
-        email: 'info@museumcollection.org',
-        openingHours: 'Mon–Sat 10:00–17:00, Sun 12:00–16:00',
+        location_name: 'London',
+        location_slug: 'london',
+        h1: 'Museum Collection Archive — London',
+        intro_copy: createRichText('Explore our London archive spanning centuries of art, history, and cultural heritage.'),
+        extra_copy: createRichText('The London collection features over 5,000 catalogued items across Renaissance, Classical, and Modern periods.'),
+        faqs: [
+          { question: 'Where is the London archive located?', answer: createRichText('Our flagship London venue is located in central London, open Monday to Saturday.') },
+          { question: 'Is entry free?', answer: createRichText('Yes, general admission to the permanent collection is free.') },
+        ],
+        nearby_locations: [
+          { name: 'Oxford' },
+          { name: 'Cambridge' },
+        ],
+        status: 'active',
       },
       {
-        name: 'North Wing Gallery',
-        slug: 'north-wing-gallery',
-        address: '3 Gallery Road, Manchester, M1 2AB',
-        description: 'Specialist gallery dedicated to Northern England\'s industrial and cultural heritage.',
-        coordinates: { latitude: 53.4808, longitude: -2.2426 },
-        phone: '+44 161 234 5678',
-        email: 'manchester@museumcollection.org',
-        openingHours: 'Tue–Sun 10:00–17:00',
+        location_name: 'Edinburgh',
+        location_slug: 'edinburgh',
+        h1: 'Museum Collection Archive — Edinburgh',
+        intro_copy: createRichText('Discover Scottish art, Celtic history, and international collections at our Edinburgh archive.'),
+        extra_copy: createRichText('The Edinburgh archive holds an extensive collection of Highland art and Jacobite-era artefacts.'),
+        faqs: [
+          { question: 'How do I reach the Edinburgh archive?', answer: createRichText('The archive is a short walk from Edinburgh Waverley station.') },
+          { question: 'Are group tours available?', answer: createRichText('Yes, pre-booked group tours are available Tuesday through Sunday.') },
+        ],
+        nearby_locations: [
+          { name: 'Glasgow' },
+          { name: 'Dundee' },
+        ],
+        status: 'active',
+      },
+      {
+        location_name: 'Manchester',
+        location_slug: 'manchester',
+        h1: 'Museum Collection Archive — Manchester',
+        intro_copy: createRichText('Our Manchester archive celebrates the industrial revolution, textile heritage, and Northern art movements.'),
+        extra_copy: createRichText('Featuring over 2,000 items including Victorian-era photography and industrial design.'),
+        faqs: [
+          { question: 'When is the Manchester archive open?', answer: createRichText('Tuesday to Sunday, 10am–5pm.') },
+        ],
+        nearby_locations: [
+          { name: 'Liverpool' },
+          { name: 'Sheffield' },
+        ],
+        status: 'active',
       },
     ]
 
     for (const item of items) {
       try {
-        if (await this.checkIfExists('locations', item.slug)) {
+        const existing = await this.payload.find({
+          collection: 'locations',
+          where: { location_slug: { equals: item.location_slug } },
+          limit: 1,
+          depth: 0,
+        })
+        if (existing.docs.length > 0) {
           continue
         }
-        await this.create('locations', { ...item, _status: 'published' })
-      } catch {
-        // ignore individual item errors
+        await this.create('locations', item)
+      } catch (err) {
+        this.error(`Failed to seed location "${item.location_name}": ${err}`)
       }
     }
   }

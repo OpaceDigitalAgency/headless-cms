@@ -41,6 +41,7 @@ const COLLECTION_SEED_CONFIG: Record<string, {
   'block-library': { label: 'Block Library', icon: 'folder', hasSeedData: true, hasSeedMedia: false },
   faqs: { label: 'FAQs', icon: 'help-circle', hasSeedData: true, hasSeedMedia: false },
   testimonials: { label: 'Testimonials', icon: 'message-circle', hasSeedData: true, hasSeedMedia: false },
+  locations: { label: 'Locations', icon: 'map-pin', hasSeedData: true, hasSeedMedia: false },
   'global-blocks': { label: 'Global Blocks', icon: 'folder', hasSeedData: true, hasSeedMedia: false },
 }
 
