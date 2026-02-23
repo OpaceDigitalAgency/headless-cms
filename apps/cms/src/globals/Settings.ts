@@ -394,6 +394,7 @@ export const Settings: GlobalConfig = {
         },
         {
           label: 'SEO',
+          description: 'SEO settings are managed via the dedicated SEO Settings page (Settings → SEO Settings). The fields below store the data but are edited there — go to /admin/seo to manage meta titles, descriptions, robots rules, and bulk updates.',
           fields: [
             {
               name: 'seo',

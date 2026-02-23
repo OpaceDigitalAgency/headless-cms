@@ -45,14 +45,14 @@ const SeoBulkEditor: React.FC = () => {
   const [total, setTotal] = useState(0)
   const [searchInput, setSearchInput] = useState('')
   const [query, setQuery] = useState('')
-  const [typeFilter, setTypeFilter] = useState('')
+  const [typeFilter, setTypeFilter] = useState('pages')
   const [missingTitle, setMissingTitle] = useState(false)
   const [missingDesc, setMissingDesc] = useState(false)
   const [showDirtyOnly, setShowDirtyOnly] = useState(false)
   const [sortBy, setSortBy] = useState('updatedAt')
   const [sortDir, setSortDir] = useState<'asc' | 'desc'>('desc')
   const [page, setPage] = useState(1)
-  const [pageSize, setPageSize] = useState(25)
+  const [pageSize, setPageSize] = useState(50)
   const [isLoading, setIsLoading] = useState(true)
   const [isSaving, setIsSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -60,6 +60,7 @@ const SeoBulkEditor: React.FC = () => {
   const [rowErrors, setRowErrors] = useState<Record<string, string>>({})
   const [toast, setToast] = useState<{ type: 'success' | 'error'; message: string } | null>(null)
   const [bulkSummary, setBulkSummary] = useState<{ ok: number; failed: BulkResult[] } | null>(null)
+  const [siteName, setSiteName] = useState('Site')
 
   const baseCollectionTypes = useMemo(
     () => new Set(['pages', 'posts', 'archive-items', 'people', 'places', 'events', 'products', 'custom-items', 'content-types']),
@@ -145,6 +146,24 @@ const SeoBulkEditor: React.FC = () => {
   useEffect(() => {
     setPage(1)
   }, [query, typeFilter, missingTitle, missingDesc, pageSize])
+
+  // Fetch site name on mount
+  useEffect(() => {
+    const fetchSettings = async () => {
+      try {
+        const response = await fetch('/api/globals/settings')
+        if (response.ok) {
+          const data = await response.json()
+          if (data.siteName) {
+            setSiteName(data.siteName)
+          }
+        }
+      } catch (err) {
+        console.error('Failed to fetch site settings:', err)
+      }
+    }
+    fetchSettings()
+  }, [])
 
   const fetchContent = useCallback(async () => {
     setIsLoading(true)
@@ -421,6 +440,56 @@ const SeoBulkEditor: React.FC = () => {
           </label>
         </div>
         <div className="ra-seo-toolbar__actions">
+          <div className="ra-seo-bulk-actions">
+            <button
+              type="button"
+              className="ra-seo-bulk-btn"
+              title="Auto-fill all empty meta titles using pattern: H1 | Site Name"
+              onClick={() => {
+                let count = 0
+                items.forEach((item) => {
+                  const currentTitle = edited[item.id]?.metaTitle ?? item.metaTitle
+                  if (!currentTitle || currentTitle.trim().length === 0) {
+                    if (item.h1) {
+                      updateDraft(item.id, { metaTitle: `${item.h1} | ${siteName}` })
+                      count++
+                    }
+                  }
+                })
+                if (count > 0) {
+                  pushToast('success', `Auto-filled ${count} meta titles`)
+                } else {
+                  pushToast('error', 'No empty meta titles found')
+                }
+              }}
+            >
+              Bulk Auto Titles
+            </button>
+            <button
+              type="button"
+              className="ra-seo-bulk-btn"
+              title="Auto-fill all empty meta descriptions"
+              onClick={() => {
+                let count = 0
+                items.forEach((item) => {
+                  const currentDesc = edited[item.id]?.metaDescription ?? item.metaDescription
+                  if (!currentDesc || currentDesc.trim().length === 0) {
+                    if (item.h1) {
+                      updateDraft(item.id, { metaDescription: `Learn more about ${item.h1}. ${siteName} provides expert services and information.` })
+                      count++
+                    }
+                  }
+                })
+                if (count > 0) {
+                  pushToast('success', `Auto-filled ${count} meta descriptions`)
+                } else {
+                  pushToast('error', 'No empty meta descriptions found')
+                }
+              }}
+            >
+              Bulk Auto Descriptions
+            </button>
+          </div>
           <span className="ra-seo-changed">{dirtyIds.length} changed</span>
           <button
             type="button"
@@ -518,87 +587,64 @@ const SeoBulkEditor: React.FC = () => {
                 />
               </div>
               <div className="ra-seo-cell">
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                  <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
-                    <input
-                      type="text"
-                      className="ra-seo-input"
-                      value={metaTitle || ''}
-                      onChange={(event) => updateDraft(item.id, { metaTitle: event.target.value })}
-                      placeholder="Meta title"
-                    />
-                    <button
-                      type="button"
-                      className="btn btn--size-small btn--style-secondary"
-                      style={{ whiteSpace: 'nowrap', fontSize: '0.75rem', padding: '0.25rem 0.5rem' }}
-                      title="Auto-generate meta title from H1"
-                      onClick={() => {
-                        if (item.h1) {
-                          updateDraft(item.id, { metaTitle: item.h1 })
-                        }
-                      }}
-                    >
-                      Auto
-                    </button>
-                  </div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    {!metaTitle || metaTitle.trim().length === 0 ? (
-                      <span style={{ color: 'var(--theme-error-600)', fontSize: '0.75rem', fontWeight: 600 }}>
-                        Missing
-                      </span>
-                    ) : titleCount < 50 || titleCount > TITLE_LIMIT ? (
-                      <span className={`ra-seo-counter is-warning`}>
-                        {titleCount}/{TITLE_LIMIT}
-                      </span>
-                    ) : (
-                      <span style={{ color: 'var(--theme-success-600)', fontSize: '0.75rem' }}>
-                        ✓ {titleCount}/{TITLE_LIMIT}
-                      </span>
-                    )}
-                  </div>
+                <input
+                  type="text"
+                  className="ra-seo-input"
+                  value={metaTitle || ''}
+                  onChange={(event) => updateDraft(item.id, { metaTitle: event.target.value })}
+                  placeholder="Meta title"
+                />
+                <div className="ra-seo-cell-footer">
+                  {!metaTitle || metaTitle.trim().length === 0 ? (
+                    <span className="ra-seo-status ra-seo-status--error">Missing</span>
+                  ) : titleCount < 50 || titleCount > TITLE_LIMIT ? (
+                    <span className="ra-seo-counter is-warning">{titleCount}/{TITLE_LIMIT}</span>
+                  ) : (
+                    <span className="ra-seo-status ra-seo-status--success">✓ {titleCount}/{TITLE_LIMIT}</span>
+                  )}
+                  <button
+                    type="button"
+                    className="ra-seo-auto-btn"
+                    title="Auto-generate meta title: H1 | Site Name"
+                    onClick={() => {
+                      if (item.h1) {
+                        updateDraft(item.id, { metaTitle: `${item.h1} | ${siteName}` })
+                      }
+                    }}
+                  >
+                    Auto
+                  </button>
                 </div>
               </div>
               <div className="ra-seo-cell">
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                  <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'flex-start' }}>
-                    <textarea
-                      className="ra-seo-textarea"
-                      rows={3}
-                      value={metaDescription || ''}
-                      onChange={(event) => updateDraft(item.id, { metaDescription: event.target.value })}
-                      placeholder="Meta description"
-                    />
-                    <button
-                      type="button"
-                      className="btn btn--size-small btn--style-secondary"
-                      style={{ whiteSpace: 'nowrap', fontSize: '0.75rem', padding: '0.25rem 0.5rem', marginTop: '0.25rem' }}
-                      title="Auto-generate meta description"
-                      onClick={() => {
-                        // Simple auto-generate: use first 150 chars of content or H1
-                        const autoDesc = item.h1 ? `Learn more about ${item.h1}` : ''
-                        if (autoDesc) {
-                          updateDraft(item.id, { metaDescription: autoDesc })
-                        }
-                      }}
-                    >
-                      Auto
-                    </button>
-                  </div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    {!metaDescription || metaDescription.trim().length === 0 ? (
-                      <span style={{ color: 'var(--theme-error-600)', fontSize: '0.75rem', fontWeight: 600 }}>
-                        Missing
-                      </span>
-                    ) : descCount < 100 || descCount > DESC_LIMIT ? (
-                      <span className={`ra-seo-counter is-warning`}>
-                        {descCount}/{DESC_LIMIT}
-                      </span>
-                    ) : (
-                      <span style={{ color: 'var(--theme-success-600)', fontSize: '0.75rem' }}>
-                        ✓ {descCount}/{DESC_LIMIT}
-                      </span>
-                    )}
-                  </div>
+                <textarea
+                  className="ra-seo-textarea"
+                  rows={2}
+                  value={metaDescription || ''}
+                  onChange={(event) => updateDraft(item.id, { metaDescription: event.target.value })}
+                  placeholder="Meta description"
+                />
+                <div className="ra-seo-cell-footer">
+                  {!metaDescription || metaDescription.trim().length === 0 ? (
+                    <span className="ra-seo-status ra-seo-status--error">Missing</span>
+                  ) : descCount < 100 || descCount > DESC_LIMIT ? (
+                    <span className="ra-seo-counter is-warning">{descCount}/{DESC_LIMIT}</span>
+                  ) : (
+                    <span className="ra-seo-status ra-seo-status--success">✓ {descCount}/{DESC_LIMIT}</span>
+                  )}
+                  <button
+                    type="button"
+                    className="ra-seo-auto-btn"
+                    title="Auto-generate meta description"
+                    onClick={() => {
+                      const autoDesc = item.h1 ? `Learn more about ${item.h1}. ${siteName} provides expert services and information.` : ''
+                      if (autoDesc) {
+                        updateDraft(item.id, { metaDescription: autoDesc })
+                      }
+                    }}
+                  >
+                    Auto
+                  </button>
                 </div>
               </div>
               <div className="ra-seo-cell">
