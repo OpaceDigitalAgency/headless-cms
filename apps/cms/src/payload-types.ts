@@ -144,6 +144,7 @@ export interface Config {
     footer: Footer;
     settings: Setting;
     'navigation-settings': NavigationSetting;
+    'feature-settings': FeatureSetting;
     'block-template-builder': BlockTemplateBuilder;
     'page-templates': PageTemplate;
   };
@@ -152,6 +153,7 @@ export interface Config {
     footer: FooterSelect<false> | FooterSelect<true>;
     settings: SettingsSelect<false> | SettingsSelect<true>;
     'navigation-settings': NavigationSettingsSelect<false> | NavigationSettingsSelect<true>;
+    'feature-settings': FeatureSettingsSelect<false> | FeatureSettingsSelect<true>;
     'block-template-builder': BlockTemplateBuilderSelect<false> | BlockTemplateBuilderSelect<true>;
     'page-templates': PageTemplatesSelect<false> | PageTemplatesSelect<true>;
   };
@@ -11194,6 +11196,82 @@ export interface NavigationSetting {
   createdAt?: string | null;
 }
 /**
+ * View and manage which CMS feature modules are active. Some changes require a server restart to take full effect.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "feature-settings".
+ */
+export interface FeatureSetting {
+  id: number;
+  /**
+   * Core content collections — always enabled.
+   */
+  contentFeatures?: {
+    /**
+     * Page collection with block builder support.
+     */
+    pagesEnabled?: boolean | null;
+    /**
+     * Blog / news posts collection.
+     */
+    postsEnabled?: boolean | null;
+    /**
+     * Frequently Asked Questions collection.
+     */
+    faqsEnabled?: boolean | null;
+    /**
+     * Client testimonials collection.
+     */
+    testimonialsEnabled?: boolean | null;
+  };
+  /**
+   * People, Places, Events — specialised content modules. Requires server restart to change.
+   */
+  dynamicCollections?: {
+    /**
+     * Enables the People collection for team members, speakers, authors, etc.
+     */
+    peopleEnabled?: boolean | null;
+    /**
+     * Enables the Places collection for venues, offices, locations.
+     */
+    placesEnabled?: boolean | null;
+    /**
+     * Enables the Events collection for exhibitions, workshops, performances.
+     */
+    eventsEnabled?: boolean | null;
+    /**
+     * Enables the Locations collection for geographic data used in maps.
+     */
+    locationsEnabled?: boolean | null;
+  };
+  /**
+   * Reusable blocks, global blocks, and page templates.
+   */
+  blockLibraryFeatures?: {
+    /**
+     * Enables the Block Library, Global Blocks, and Page Templates collections.
+     */
+    blockLibraryEnabled?: boolean | null;
+    /**
+     * Use /admin/collections/block-library to manage saved reusable blocks. Create a block on any page, then use the "Save to Library" button to store it here.
+     */
+    blockLibraryNote?: string | null;
+  };
+  /**
+   * Products, orders, carts, and product categories. Requires server restart + database migration to enable.
+   */
+  ecommerceFeatures?: {
+    /**
+     * When enabled in cms.features.ts, adds Products, Product Categories, Product Collections, Orders, and Carts to the Shop nav section.
+     */
+    ecommerceEnabled?: boolean | null;
+    ecommerceNote?: string | null;
+  };
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
  * Reusable blocks that can be shared across multiple pages
  *
  * This interface was referenced by `Config`'s JSON-Schema
@@ -11719,6 +11797,43 @@ export interface NavigationSettingsSelect<T extends boolean = true> {
         url?: T;
         insertPosition?: T;
         id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "feature-settings_select".
+ */
+export interface FeatureSettingsSelect<T extends boolean = true> {
+  contentFeatures?:
+    | T
+    | {
+        pagesEnabled?: T;
+        postsEnabled?: T;
+        faqsEnabled?: T;
+        testimonialsEnabled?: T;
+      };
+  dynamicCollections?:
+    | T
+    | {
+        peopleEnabled?: T;
+        placesEnabled?: T;
+        eventsEnabled?: T;
+        locationsEnabled?: T;
+      };
+  blockLibraryFeatures?:
+    | T
+    | {
+        blockLibraryEnabled?: T;
+        blockLibraryNote?: T;
+      };
+  ecommerceFeatures?:
+    | T
+    | {
+        ecommerceEnabled?: T;
+        ecommerceNote?: T;
       };
   updatedAt?: T;
   createdAt?: T;
