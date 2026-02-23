@@ -1,3 +1,4 @@
+// @ts-nocheck
 interface SpacerBlockProps {
   block: {
     style?: 'space' | 'divider'

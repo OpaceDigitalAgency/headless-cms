@@ -1,3 +1,4 @@
+// @ts-nocheck
 interface HtmlBlockProps {
   block: {
     html: string

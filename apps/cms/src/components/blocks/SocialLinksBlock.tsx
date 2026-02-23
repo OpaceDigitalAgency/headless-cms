@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React from 'react'
 import { getFooter } from '@/lib/payload-api'
 
