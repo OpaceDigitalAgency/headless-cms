@@ -313,15 +313,12 @@ export const seedCollectionEndpoint: Endpoint = {
 
       const config = COLLECTION_SEED_CONFIG[slug]
 
-      // Use collection-specific preset override, or fall back to active preset from Settings
-      const presetId = COLLECTION_PRESET_OVERRIDES[slug] || await getActivePreset(payload)
-
-      // If the active preset doesn't natively handle this collection, fall back to CoreSeeder (archive)
-      // which has handlers for all supplementary collections (block-library, faqs, testimonials, etc.)
-      const CORE_ONLY_COLLECTIONS = ['block-library', 'faqs', 'testimonials', 'global-blocks']
-      const effectivePresetId = CORE_ONLY_COLLECTIONS.includes(slug) ? 'archive' : presetId
-
-      const seeder = createSeeder(effectivePresetId, payload, {
+      // Always use CoreSeeder (archive preset) for individual collection seeding.
+      // CoreSeeder.seedCollection() has handlers for all 12 registered collections.
+      // Using the active preset seeder is unreliable — BlogSeeder inherits a no-op
+      // seedCollection() from BaseSeeder, causing people/places/events/tags/archive-items
+      // to silently produce zero results.
+      const seeder = createSeeder('archive', payload, {
         downloadMedia: includeMedia && config.hasSeedMedia,
         clearExisting: action === 'reseed',
         collections: [slug], // Only seed this specific collection
@@ -710,9 +707,11 @@ export const seedAllEndpoint: Endpoint = {
         )
       }
 
-      // Use the active preset from Settings (respects user's choice)
-      const activePreset = await getActivePreset(payload)
-      const seeder = createSeeder(activePreset, payload, {
+      // Always use CoreSeeder (archive preset) for Seed All / Clear All.
+      // CoreSeeder.seedCollection() has handlers for all 12 registered collections.
+      // Using activePreset.seed() only covers that preset's declared collections
+      // (e.g. blog preset covers pages/posts/categories — skipping events, people, places, etc.).
+      const seeder = createSeeder('archive', payload, {
         downloadMedia: false,
         clearExisting: false,
         collections: enabledCollections,
@@ -720,7 +719,11 @@ export const seedAllEndpoint: Endpoint = {
 
       switch (action) {
         case 'seed':
-          await seeder.seed()
+          // Seed each enabled collection individually via CoreSeeder so every collection
+          // that has a handler gets populated, regardless of the active preset.
+          for (const col of enabledCollections) {
+            await seeder.seedCollection(col)
+          }
           return Response.json({
             success: true,
             message: 'Successfully seeded all collections',
