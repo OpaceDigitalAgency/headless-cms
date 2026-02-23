@@ -1919,14 +1919,14 @@
 .ra-seo-panel .input,
 .ra-seo-panel .textarea,
 .ra-seo-panel .select {
-  width: 100%;
-  max-width: 560px;
-  padding: 0.875rem 1rem;
-  font-size: 0.9375rem;
-  border: 1px solid var(--theme-elevation-200);
-  border-radius: var(--border-radius-md);
-  background: var(--theme-elevation-0);
-  color: var(--theme-elevation-900);
+  width: 100% !important;
+  max-width: 560px !important;
+  padding: 0.875rem 1rem !important;
+  font-size: 0.9375rem !important;
+  border: 1px solid var(--theme-elevation-200) !important;
+  border-radius: var(--border-radius-md) !important;
+  background: var(--theme-elevation-0) !important;
+  color: var(--theme-elevation-900) !important;
   transition:
     border-color 0.15s ease,
     box-shadow 0.15s ease;

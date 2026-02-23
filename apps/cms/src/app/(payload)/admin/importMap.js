@@ -44,6 +44,7 @@ import { default as default_a4d16b5eab717834fbd80608db478375 } from '../../../co
 import { default as default_cf5a718e85812f01f14fb7dcb4e9ad4b } from '../../../components/PreviewButtonCells/EventsPreviewCell'
 import { LinkToDoc as LinkToDoc_aead06e4cbf6b2620c5c51c9ab283634 } from '@payloadcms/plugin-search/client'
 import { ReindexButton as ReindexButton_aead06e4cbf6b2620c5c51c9ab283634 } from '@payloadcms/plugin-search/client'
+import { default as default_06f1365223eb8c8fb4466e9d9504b2c0 } from '@/admin/components/SeoTabNotice'
 import { default as default_1723744e6ae59cf3653e63611d4cba7a } from '../../../components/CollectionManagerField'
 import { default as default_81e915c9ba204d29f7fc1265572ed8be } from '../../../admin/TwoPanelNav'
 import { default as default_c7d7fc284b3b0552574b75a0421f4260 } from '../../../admin/views/Dashboard'
@@ -109,6 +110,7 @@ export const importMap = {
   "/components/PreviewButtonCells/EventsPreviewCell#default": default_cf5a718e85812f01f14fb7dcb4e9ad4b,
   "@payloadcms/plugin-search/client#LinkToDoc": LinkToDoc_aead06e4cbf6b2620c5c51c9ab283634,
   "@payloadcms/plugin-search/client#ReindexButton": ReindexButton_aead06e4cbf6b2620c5c51c9ab283634,
+  "@/admin/components/SeoTabNotice#default": default_06f1365223eb8c8fb4466e9d9504b2c0,
   "/components/CollectionManagerField#default": default_1723744e6ae59cf3653e63611d4cba7a,
   "/admin/TwoPanelNav#default": default_81e915c9ba204d29f7fc1265572ed8be,
   "/admin/views/Dashboard#default": default_c7d7fc284b3b0552574b75a0421f4260,

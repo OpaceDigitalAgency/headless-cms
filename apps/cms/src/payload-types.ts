@@ -191,7 +191,7 @@ export interface UserAuthOperations {
   };
 }
 /**
- * Manage user accounts and permissions
+ * CMS user accounts with role-based access control. Admin: full access including user management, settings, and destructive actions. Editor: can create and edit content but cannot delete or manage users. User: read-only access (used for API consumers or authenticated frontend users). Only admins can create new accounts or change roles.
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "users".
@@ -237,7 +237,7 @@ export interface User {
   password?: string | null;
 }
 /**
- * Upload and manage media files with automatic optimisation
+ * Upload images, video, audio, and PDFs. Images are automatically converted to WebP and AVIF, resized into 14 responsive sizes (from 20px blur placeholder to 2560px desktop), and have their dominant colour extracted for smooth lazy-loading. Alt text is auto-generated from the filename if not provided. Use the Tools → Unused Media page to find files that are no longer referenced anywhere.
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "media".
@@ -404,7 +404,7 @@ export interface Media {
   };
 }
 /**
- * Create and manage website pages
+ * Build and manage all website pages using a drag-and-drop block builder. Each page is composed of content blocks (Hero, CTA, Features, FAQ, etc.). Supports drafts, scheduled publishing, version history, and real-time Live Preview.
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "pages".
@@ -1084,7 +1084,7 @@ export interface Page {
   _status?: ('draft' | 'published') | null;
 }
 /**
- * Hierarchical categories shared across Posts, Archive Items, Events, People, and Custom Items
+ * Hierarchical content taxonomy shared across Posts, Archive Items, Events, People, and Custom Items. Categories support parent–child nesting (e.g. "Art" → "Painting" → "Oil on Canvas") and each category gets a dedicated listing page on the frontend. Use Tags for flat, keyword-style labels.
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "categories".
@@ -1123,7 +1123,7 @@ export interface Category {
   createdAt: string;
 }
 /**
- * Flat tags shared across Posts, Archive Items, Events, People, and Custom Items
+ * Flat keyword labels used to tag Posts, Archive Items, Events, People, and Custom Items. Unlike Categories (which are hierarchical and get listing pages), Tags are non-hierarchical. Use them for specific subjects, keywords, or filter criteria — for example "Renaissance", "Oil Painting", "Featured".
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "tags".
@@ -1149,7 +1149,7 @@ export interface Tag {
   createdAt: string;
 }
 /**
- * Create and manage blog posts with flexible content sections
+ * Blog posts and news articles. Each post has a main rich-text body plus optional additional content blocks (galleries, CTAs, embeds etc.). Supports categories, tags, author attribution, featured image, scheduled publishing, drafts, and up to 25 saved versions.
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "posts".
@@ -1935,7 +1935,7 @@ export interface Form {
   createdAt: string;
 }
 /**
- * Shared block library for "edit once, update everywhere" content units.
+ * Blocks that the frontend renders automatically and consistently across the site — for example a Newsletter CTA that always appears at the bottom of every page, or a site-wide Notice banner. Unlike Block Library entries (which editors insert onto specific pages), Global Blocks are rendered by the layout wrapper unconditionally. Only add a record here if it should appear site-wide without an editor placing it on each page individually.
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "global-blocks".
@@ -2493,7 +2493,7 @@ export interface GlobalBlock {
   createdAt: string;
 }
 /**
- * Manage FAQ items that can be reused across pages
+ * A centralised library of question/answer pairs. FAQs are standalone records here, and the FAQ block on any page or post can pull from this collection. Manage all your frequently asked questions in one place rather than re-entering them on every page. Use the Category field to group related questions (e.g. "Pricing", "Technical", "Delivery").
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "faqs".
@@ -2524,7 +2524,7 @@ export interface Faq {
   createdAt: string;
 }
 /**
- * Manage testimonial items that can be reused across pages
+ * A centralised library of client quotes and reviews. Each record stores a quote, the person's name, role, company, location, optional avatar, and star rating. The Testimonials block on any page queries this collection and displays a carousel or grid of reviews. Add all your testimonials here and the block will surface them wherever it is placed.
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "testimonials".
@@ -2542,7 +2542,7 @@ export interface Testimonial {
   createdAt: string;
 }
 /**
- * Location pages data (managed via JSON import - do not edit manually)
+ * Geo-targeted landing pages, one record per location. Each record stores a location name, URL slug, H1 heading, location-specific intro and body copy, FAQs, and nearby location links for internal cross-linking. Records can be imported in bulk from JSON or edited individually. The frontend renders each as a dedicated location page (e.g. /boiler-installation/glasgow).
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "locations".
@@ -2646,7 +2646,7 @@ export interface Location {
   createdAt: string;
 }
 /**
- * Manage logos for the trust badges / logo cloud that can be reused across pages
+ * A library of partner, client, sponsor, or accreditation logos. Each record stores a brand name, logo image, and optional link URL. The Logo Cloud block on any page queries this collection to render a trust-badge strip or logo grid. Manage all logos in one place — adding or removing a logo here updates every Logo Cloud block across the site.
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "logo-clouds".
@@ -2660,7 +2660,7 @@ export interface LogoCloud {
   createdAt: string;
 }
 /**
- * Reusable block instances that can be shared across multiple pages
+ * A library of saved block configurations that editors can insert onto any page. Build a block once (e.g. a Hero, CTA, or Testimonials section) and reuse it anywhere by selecting it from the Block Library. Unlike Global Blocks, editors must actively choose to insert a Block Library entry onto a page — it does not appear automatically.
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "block-library".
@@ -3279,7 +3279,7 @@ export interface BlockTemplateBuilder {
   createdAt: string;
 }
 /**
- * Define custom collections like "Services", "FAQs", or "Galleries"
+ * Define your own content types without code — equivalent to WordPress Custom Post Types. Each record here creates a named collection (e.g. "Classic Cars", "Case Studies", "Recipes") with its own icon, URL slug, and optional custom fields. Actual content records live in Custom Items, filtered by content type. Use this to extend the CMS for any structured content not covered by the built-in collections.
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "content-types".
@@ -3381,7 +3381,7 @@ export interface ContentType {
   createdAt: string;
 }
 /**
- * Items belonging to your custom collections
+ * The actual content records for all custom collections defined in Custom Collections (Content Types). Each item is linked to a content type (e.g. a "Classic Cars" type item shows only Classic Cars here). Use the Content Type dropdown in the sidebar to assign each item to its collection. Supports rich-text, blocks, media gallery, categories, tags, drafts, and scheduling.
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "custom-items".
@@ -4012,7 +4012,7 @@ export interface CustomItem {
   _status?: ('draft' | 'published') | null;
 }
 /**
- * Archive items such as gallery pieces, portfolio items, or collectibles
+ * Catalogued objects — artworks, portfolio pieces, museum objects, collectibles, or any item with provenance. Each archive item links to its creators (People) and places of origin (Places), and has a full block-builder layout for rich contextual content. Supports drafts, scheduled publishing, and Live Preview.
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "archive-items".
@@ -4446,7 +4446,7 @@ export interface ArchiveItem {
   _status?: ('draft' | 'published') | null;
 }
 /**
- * Historical figures, artists, team members, and notable people
+ * Named individuals — team members, authors, historical figures, artists, speakers, or contributors. Each person links to related Archive Items (as creator), birth/death Places, and supports full biography content with blocks. Supports drafts, scheduled publishing, and Live Preview. Visibility is controlled by the Feature Settings global.
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "people".
@@ -5093,7 +5093,7 @@ export interface Person {
   _status?: ('draft' | 'published') | null;
 }
 /**
- * Geographic locations, venues, and historical sites
+ * Geographic locations, venues, and historical sites — from cities and countries to museums, galleries, archaeological sites, and stores. Each place links to related Archive Items (provenance) and People (birth/death place). Includes address, opening hours, gallery, and full block-builder layout. Visibility is controlled by the Feature Settings global.
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "places".
@@ -5757,7 +5757,7 @@ export interface Place {
   _status?: ('draft' | 'published') | null;
 }
 /**
- * Events, exhibitions, workshops, or performances with dates and venues
+ * Time-based content entries such as exhibitions, workshops, talks, performances, or open days. Each event has start/end dates, location, and a full block-builder layout. Supports drafts and scheduled publishing. Visibility is controlled by the Feature Settings global — if Events is disabled there, this collection will not appear on the frontend.
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "events".
@@ -10889,7 +10889,7 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
   createdAt?: T;
 }
 /**
- * Configure the site header and navigation
+ * Controls the site header shown at the top of every page — logo, primary navigation links, and the header CTA button. Changes publish immediately when saved and revalidate the frontend automatically. This is a singleton global (one record, site-wide).
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "header".
@@ -10947,7 +10947,7 @@ export interface Header {
   createdAt?: string | null;
 }
 /**
- * Configure the site footer
+ * Controls the site footer shown at the bottom of every page — navigation columns, social media icons, copyright text, and footer CTA. Changes publish immediately when saved and revalidate the frontend automatically. This is a singleton global (one record, site-wide).
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "footer".
@@ -11133,7 +11133,7 @@ export interface Setting {
   createdAt?: string | null;
 }
 /**
- * Control which collections appear in the admin navigation and how they are grouped.
+ * Controls the admin panel navigation — which collections appear in the left sidebar, how they are grouped, and any custom links in the horizontal top menu bar. This only affects the CMS admin experience, not the public-facing website navigation (which is managed in the Header global). Only admins can access or change this setting.
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "navigation-settings".
@@ -11196,7 +11196,7 @@ export interface NavigationSetting {
   createdAt?: string | null;
 }
 /**
- * View which CMS feature modules are currently active. Changes to features require editing cms.features.ts and restarting the server.
+ * Read-only panel showing which CMS feature modules are currently active. The checkboxes here are indicators, not toggles — you cannot enable or disable features by ticking a box. To change which features are active, a developer must edit apps/cms/src/cms.features.ts and restart the server. Features that are off will not appear in the admin sidebar or on the frontend.
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "feature-settings".
@@ -11247,7 +11247,7 @@ export interface FeatureSetting {
   createdAt?: string | null;
 }
 /**
- * Reusable blocks that can be shared across multiple pages
+ * Shared block content that is automatically injected into specific groups of pages (e.g. all location pages share the same Testimonials block, Logo Cloud, FAQ, and CTA sections). Edit a shared block here once and every page in the group picks up the change instantly — without editing each page individually. This is different from Block Library (editor-chosen insertion) and Global Blocks (unconditional site-wide rendering). Admins only.
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "page-templates".
