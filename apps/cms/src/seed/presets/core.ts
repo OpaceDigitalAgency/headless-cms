@@ -595,53 +595,57 @@ export class CoreSeeder extends BaseSeeder {
 
     this.log('Seeding global-blocks...')
 
+    // GlobalBlocks schema: { title (required), block (blocks field, maxRows: 1) }
+    // Note: no slug or description fields on this collection
     const items = [
       {
-        name: 'Site-Wide Newsletter CTA',
-        slug: 'newsletter-cta',
-        description: 'Reusable newsletter sign-up block used across all content pages.',
-        content: [
-          {
-            blockType: 'cta',
-            variant: 'banner',
-            heading: 'Stay Connected to Culture',
-            description: 'Join our mailing list for exhibition previews, event invitations, and archive stories — delivered straight to your inbox.',
-            backgroundColor: 'accent',
-            links: [
-              { label: 'Sign Up Free', url: '/newsletter', variant: 'primary' },
-            ],
-          },
-        ],
+        title: 'Site-Wide Newsletter CTA',
+        block: {
+          blockType: 'cta',
+          variant: 'banner',
+          heading: 'Stay Connected to Culture',
+          description: 'Join our mailing list for exhibition previews, event invitations, and archive stories — delivered straight to your inbox.',
+          backgroundColor: 'accent',
+          links: [
+            { label: 'Sign Up Free', url: '/newsletter', variant: 'primary' },
+          ],
+        },
       },
       {
-        name: 'Visit Information Banner',
-        slug: 'visit-info-banner',
-        description: 'Standard visitor information bar — opening hours, location, free admission message.',
-        content: [
-          {
-            blockType: 'content',
-            backgroundColor: 'muted',
-            paddingTop: 'small',
-            paddingBottom: 'small',
-            columns: [
-              {
-                size: 'full',
-                richText: createRichText('📍 Open Mon–Sat 10:00–17:00 · Free Admission · 1 Museum Square, London · Tel: +44 20 1234 5678'),
-              },
-            ],
-          },
-        ],
+        title: 'Visit Information Banner',
+        block: {
+          blockType: 'content',
+          backgroundColor: 'muted',
+          paddingTop: 'small',
+          paddingBottom: 'small',
+          columns: [
+            {
+              size: 'full',
+              richText: createRichText('📍 Open Mon–Sat 10:00–17:00 · Free Admission · 1 Museum Square, London · Tel: +44 20 1234 5678'),
+            },
+          ],
+        },
       },
     ]
 
     for (const item of items) {
       try {
-        if (await this.checkIfExists('global-blocks', item.slug)) {
+        const existing = await this.payload.find({
+          collection: 'global-blocks',
+          where: { title: { equals: item.title } },
+          limit: 1,
+          depth: 0,
+        })
+        if (existing.docs.length > 0) {
           continue
         }
-        await this.create('global-blocks', { ...item, _status: 'published' })
-      } catch {
-        // ignore individual item errors
+        await this.create('global-blocks', {
+          title: item.title,
+          block: [item.block],
+          _status: 'published',
+        })
+      } catch (err) {
+        this.error(`Failed to seed global-block "${item.title}": ${err}`)
       }
     }
   }
@@ -1287,52 +1291,35 @@ export class CoreSeeder extends BaseSeeder {
       if (await this.checkIfExists('pages', 'home')) {
         this.log('Home page already exists, skipping.')
       } else {
-        await this.create('pages', {
-          title: 'Home',
-          slug: 'home',
-          template: 'home',
-          _status: 'published',
-          hero: {
-            variant: 'fullscreen',
-            heading: 'Discover Our Collection',
-            subheading: 'Explore thousands of archive items, artworks, and historical treasures from around the world.',
-          },
-          content: [
-            {
-              blockType: 'grid',
-              heading: 'Featured Collections',
-              description: 'Browse highlighted themes from our catalog.',
-              style: 'cards',
-              columns: '3',
-              gap: 'medium',
-              alignment: 'left',
-              items: [
-                { heading: 'Renaissance Masters', description: 'Masterpieces from the Renaissance era' },
-                { heading: 'Ancient Civilizations', description: 'Treasures from the ancient world' },
-                { heading: 'Impressionist Gallery', description: 'Light and color captured on canvas' },
-              ],
+        try {
+          await this.create('pages', {
+            title: 'Home',
+            slug: 'home',
+            template: 'default',
+            _status: 'published',
+            hero: {
+              type: 'fullscreen',
+              heading: 'Discover Our Collection',
+              subheading: 'Explore thousands of archive items, artworks, and historical treasures from around the world.',
             },
-            {
-              blockType: 'archive',
-              heading: 'Featured Archive Items',
-              description: 'A curated selection of standout items.',
-              populateBy: 'collection',
-              relationTo: 'archive-items',
-              limit: 6,
-              layout: 'grid',
-              columns: '3',
-              showImage: true,
-              showExcerpt: true,
-              showDate: false,
-              showAuthor: false,
-              link: {
-                show: true,
-                label: 'View All Archive Items',
-                url: '/archive-items',
+            content: [
+              {
+                blockType: 'grid',
+                heading: 'Featured Collections',
+                description: 'Browse highlighted themes from our catalog.',
+                style: 'cards',
+                columns: '3',
+                items: [
+                  { heading: 'Renaissance Masters', description: 'Masterpieces from the Renaissance era' },
+                  { heading: 'Ancient Civilizations', description: 'Treasures from the ancient world' },
+                  { heading: 'Impressionist Gallery', description: 'Light and color captured on canvas' },
+                ],
               },
-            },
-          ],
-        })
+            ],
+          })
+        } catch (err) {
+          this.error(`Failed to seed Home page: ${err}`)
+        }
       }
     }
 
@@ -1341,105 +1328,96 @@ export class CoreSeeder extends BaseSeeder {
       if (await this.checkIfExists('pages', 'about')) {
         this.log('About page already exists, skipping.')
       } else {
-        await this.create('pages', {
-          title: 'About the Archive',
-          slug: 'about',
-          template: 'detail',
-          _status: 'published',
-          hero: {
-            variant: 'standard',
-            heading: 'About Us',
-            subheading: 'Preserving and sharing cultural heritage for future generations.',
-          },
-          content: [
-            {
-              blockType: 'content',
-              backgroundColor: 'none',
-              paddingTop: 'medium',
-              paddingBottom: 'medium',
-              columns: [
-                {
-                  size: 'full',
-                  richText: createRichTextParagraphs([
-                    'Our archive is dedicated to preserving and sharing the world\'s cultural heritage.',
-                    'With collections spanning thousands of years and multiple continents, we offer visitors a unique journey through human history and creativity.',
-                    'Our mission is to inspire curiosity, foster learning, and connect people with the stories of our shared past.',
-                  ]),
-                },
-              ],
+        try {
+          await this.create('pages', {
+            title: 'About the Archive',
+            slug: 'about',
+            template: 'default',
+            _status: 'published',
+            hero: {
+              type: 'standard',
+              heading: 'About Us',
+              subheading: 'Preserving and sharing cultural heritage for future generations.',
             },
-            {
-              blockType: 'timeline',
-              heading: 'Our History',
-              layout: 'vertical',
-              events: [
-                { date: '1850', heading: 'Foundation', description: createRichText('The archive was founded by a group of passionate collectors.') },
-                { date: '1920', heading: 'Major Expansion', description: createRichText('A new wing was added to house the growing collection.') },
-                { date: '2000', heading: 'Digital Initiative', description: createRichText('The archive launched its first digital collection.') },
-              ],
-            },
-          ],
-        })
+            content: [
+              {
+                blockType: 'content',
+                backgroundColor: 'none',
+                paddingTop: 'medium',
+                paddingBottom: 'medium',
+                columns: [
+                  {
+                    size: 'full',
+                    richText: createRichTextParagraphs([
+                      'Our archive is dedicated to preserving and sharing the world\'s cultural heritage.',
+                      'With collections spanning thousands of years and multiple continents, we offer visitors a unique journey through human history and creativity.',
+                      'Our mission is to inspire curiosity, foster learning, and connect people with the stories of our shared past.',
+                    ]),
+                  },
+                ],
+              },
+            ],
+          })
+        } catch (err) {
+          this.error(`Failed to seed About page: ${err}`)
+        }
       }
     }
 
-    // Collections Page (Archive)
+    // Collections Page
     if (this.shouldSeedItem('collections')) {
       if (await this.checkIfExists('pages', 'collections')) {
         this.log('Collections page already exists, skipping.')
       } else {
-        await this.create('pages', {
-          title: 'Collections',
-          slug: 'collections',
-          template: 'default', // Often a custom archive listing
-          _status: 'published',
-          hero: {
-            variant: 'standard',
-            heading: 'Collections',
-            subheading: 'Explore our vast archives by category and theme.',
-          },
-          content: [
-            {
-              blockType: 'archive',
-              heading: 'Browse Collections',
-              relationTo: 'categories', // Or similar taxonomy
-              limit: 12,
-              showFeaturedImage: true,
-            }
-          ]
-        })
+        try {
+          await this.create('pages', {
+            title: 'Collections',
+            slug: 'collections',
+            template: 'default',
+            _status: 'published',
+            hero: {
+              type: 'standard',
+              heading: 'Collections',
+              subheading: 'Explore our vast archives by category and theme.',
+            },
+          })
+        } catch (err) {
+          this.error(`Failed to seed Collections page: ${err}`)
+        }
       }
     }
 
-    // Search Page (Archive)
+    // Search Page
     if (this.shouldSeedItem('search')) {
       if (await this.checkIfExists('pages', 'search')) {
         this.log('Search page already exists, skipping.')
       } else {
-        await this.create('pages', {
-          title: 'Search',
-          slug: 'search',
-          template: 'default',
-          _status: 'published',
-          hero: {
-            variant: 'minimal',
-            heading: 'Search Archives',
-          },
-          content: [
-            {
-              blockType: 'content',
-              content: createRichText('Search functionality coming soon.')
-            }
-          ]
-        })
+        try {
+          await this.create('pages', {
+            title: 'Search',
+            slug: 'search',
+            template: 'default',
+            _status: 'published',
+            hero: {
+              type: 'minimal',
+              heading: 'Search Archives',
+            },
+            content: [
+              {
+                blockType: 'content',
+                columns: [
+                  {
+                    size: 'full',
+                    richText: createRichText('Search functionality coming soon.'),
+                  },
+                ],
+              },
+            ],
+          })
+        } catch (err) {
+          this.error(`Failed to seed Search page: ${err}`)
+        }
       }
-    }
-
-    // Blocks Showcase Page
-    if (this.shouldSeedItem('blocks-showcase')) {
-      this.log('Creating Blocks Showcase page...')
-      await ensureShowcasePage(this.payload, { updateHeader: false })
-      this.log('Blocks Showcase page created successfully!')
     }
 
   }
