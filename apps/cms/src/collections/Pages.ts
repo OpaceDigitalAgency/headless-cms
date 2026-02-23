@@ -35,7 +35,7 @@ export const Pages: CollectionConfig = {
     useAsTitle: 'title',
     group: 'Content',
     defaultColumns: ['title', 'slug', 'template', '_status', 'updatedAt', 'preview'],
-    description: 'Create and manage website pages',
+    description: 'Build and manage all website pages using a drag-and-drop block builder. Each page is composed of content blocks (Hero, CTA, Features, FAQ, etc.). Supports drafts, scheduled publishing, version history, and real-time Live Preview.',
     preview: (doc) => getPreviewUrl({ collection: 'pages', slug: doc.slug as string }),
     livePreview: {
       url: ({ data }) => getPreviewUrl({ collection: 'pages', slug: data?.slug }),

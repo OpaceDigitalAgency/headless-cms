@@ -8,7 +8,7 @@ export const Testimonials: CollectionConfig = {
         useAsTitle: 'name',
         group: 'Collections',
         defaultColumns: ['name', 'company', 'rating', 'updatedAt'],
-        description: 'Manage testimonial items that can be reused across pages',
+        description: 'A centralised library of client quotes and reviews. Each record stores a quote, the person\'s name, role, company, location, optional avatar, and star rating. The Testimonials block on any page queries this collection and displays a carousel or grid of reviews. Add all your testimonials here and the block will surface them wherever it is placed.',
     },
 
     // Access control

@@ -396,6 +396,15 @@ export const Settings: GlobalConfig = {
           label: 'SEO',
           fields: [
             {
+              name: 'seoNotice',
+              type: 'ui',
+              admin: {
+                components: {
+                  Field: '@/admin/components/SeoTabNotice',
+                },
+              },
+            },
+            {
               name: 'seo',
               type: 'group',
               admin: {

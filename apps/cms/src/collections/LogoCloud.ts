@@ -7,7 +7,7 @@ export const LogoCloud: CollectionConfig = {
         useAsTitle: 'label',
         group: 'Collections',
         defaultColumns: ['label', 'media', 'updatedAt'],
-        description: 'Manage logos for the trust badges / logo cloud that can be reused across pages',
+        description: 'A library of partner, client, sponsor, or accreditation logos. Each record stores a brand name, logo image, and optional link URL. The Logo Cloud block on any page queries this collection to render a trust-badge strip or logo grid. Manage all logos in one place — adding or removing a logo here updates every Logo Cloud block across the site.',
     },
     access: {
         read: () => true,

@@ -38,7 +38,7 @@ export const People: CollectionConfig = {
     useAsTitle: 'name',
     group: 'Collections',
     defaultColumns: ['name', 'role', 'categories', '_status', 'updatedAt', 'preview'],
-    description: 'Historical figures, artists, team members, and notable people',
+    description: 'Named individuals — team members, authors, historical figures, artists, speakers, or contributors. Each person links to related Archive Items (as creator), birth/death Places, and supports full biography content with blocks. Supports drafts, scheduled publishing, and Live Preview. Visibility is controlled by the Feature Settings global.',
     preview: (doc) => getPreviewUrl({ collection: 'people', slug: doc.slug as string }),
     livePreview: {
       url: ({ data }) => getPreviewUrl({ collection: 'people', slug: data?.slug }),

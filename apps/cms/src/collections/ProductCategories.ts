@@ -16,7 +16,7 @@ export const ProductCategories: CollectionConfig = {
     useAsTitle: 'name',
     group: 'Shop',
     defaultColumns: ['name', 'slug', 'parent', 'updatedAt'],
-    description: 'Organise products into categories',
+    description: 'Hierarchical category taxonomy for the Shop — separate from the content Categories used by Posts, Events, and Archive Items. Supports nested parent/child groupings (e.g. "Clothing" → "Men\'s" → "Jackets") and generates breadcrumb trails. Part of the eCommerce module.',
   },
 
   // Enable versions (without drafts for taxonomy items)

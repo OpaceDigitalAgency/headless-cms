@@ -15,7 +15,7 @@ export const FeatureSettings: GlobalConfig = {
   admin: {
     group: 'Admin',
     description:
-      'View which CMS feature modules are currently active. Changes to features require editing cms.features.ts and restarting the server.',
+      'Read-only panel showing which CMS feature modules are currently active. The checkboxes here are indicators, not toggles — you cannot enable or disable features by ticking a box. To change which features are active, a developer must edit apps/cms/src/cms.features.ts and restart the server. Features that are off will not appear in the admin sidebar or on the frontend.',
   },
 
   access: {

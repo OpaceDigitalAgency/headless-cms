@@ -34,16 +34,15 @@ const COLLECTION_SEED_CONFIG: Record<string, {
   posts: { label: 'Posts', icon: 'edit', hasSeedData: true, hasSeedMedia: false },
   categories: { label: 'Categories', icon: 'tag', hasSeedData: true, hasSeedMedia: false },
   tags: { label: 'Tags', icon: 'tag', hasSeedData: true, hasSeedMedia: false },
-  'block-library': { label: 'Block Library', icon: 'package', hasSeedData: true, hasSeedMedia: false },
-  faqs: { label: 'FAQs', icon: 'file-text', hasSeedData: true, hasSeedMedia: false },
-  testimonials: { label: 'Testimonials', icon: 'user', hasSeedData: true, hasSeedMedia: false },
-  events: { label: 'Events', icon: 'edit', hasSeedData: true, hasSeedMedia: false },
-  locations: { label: 'Locations', icon: 'map-pin', hasSeedData: true, hasSeedMedia: false },
-  'logo-clouds': { label: 'Logo Clouds', icon: 'folder', hasSeedData: true, hasSeedMedia: false },
-  'global-blocks': { label: 'Global Blocks', icon: 'package', hasSeedData: true, hasSeedMedia: false },
-  'archive-items': { label: 'Archive Items', icon: 'artifact', hasSeedData: true, hasSeedMedia: false },
+  'archive-items': { label: 'Archive Items', icon: 'archive', hasSeedData: true, hasSeedMedia: false },
   people: { label: 'People', icon: 'user', hasSeedData: true, hasSeedMedia: false },
   places: { label: 'Places', icon: 'map-pin', hasSeedData: true, hasSeedMedia: false },
+  events: { label: 'Events', icon: 'calendar', hasSeedData: true, hasSeedMedia: false },
+  'block-library': { label: 'Block Library', icon: 'folder', hasSeedData: true, hasSeedMedia: false },
+  faqs: { label: 'FAQs', icon: 'help-circle', hasSeedData: true, hasSeedMedia: false },
+  testimonials: { label: 'Testimonials', icon: 'message-circle', hasSeedData: true, hasSeedMedia: false },
+  locations: { label: 'Locations', icon: 'map-pin', hasSeedData: true, hasSeedMedia: false },
+  'global-blocks': { label: 'Global Blocks', icon: 'folder', hasSeedData: true, hasSeedMedia: false },
 }
 
 const COLLECTION_PRESET_OVERRIDES: Record<string, PresetId> = {
@@ -315,9 +314,12 @@ export const seedCollectionEndpoint: Endpoint = {
 
       const config = COLLECTION_SEED_CONFIG[slug]
 
-      // Use collection-specific preset override, or fall back to active preset from Settings
-      const presetId = COLLECTION_PRESET_OVERRIDES[slug] || await getActivePreset(payload)
-      const seeder = createSeeder(presetId, payload, {
+      // Always use CoreSeeder (archive preset) for individual collection seeding.
+      // CoreSeeder.seedCollection() has handlers for all 12 registered collections.
+      // Using the active preset seeder is unreliable — BlogSeeder inherits a no-op
+      // seedCollection() from BaseSeeder, causing people/places/events/tags/archive-items
+      // to silently produce zero results.
+      const seeder = createSeeder('archive', payload, {
         downloadMedia: includeMedia && config.hasSeedMedia,
         clearExisting: action === 'reseed',
         collections: [slug], // Only seed this specific collection
@@ -706,9 +708,11 @@ export const seedAllEndpoint: Endpoint = {
         )
       }
 
-      // Use the active preset from Settings (respects user's choice)
-      const activePreset = await getActivePreset(payload)
-      const seeder = createSeeder(activePreset, payload, {
+      // Always use CoreSeeder (archive preset) for Seed All / Clear All.
+      // CoreSeeder.seedCollection() has handlers for all 12 registered collections.
+      // Using activePreset.seed() only covers that preset's declared collections
+      // (e.g. blog preset covers pages/posts/categories — skipping events, people, places, etc.).
+      const seeder = createSeeder('archive', payload, {
         downloadMedia: false,
         clearExisting: false,
         collections: enabledCollections,
@@ -716,7 +720,11 @@ export const seedAllEndpoint: Endpoint = {
 
       switch (action) {
         case 'seed':
-          await seeder.seed()
+          // Seed each enabled collection individually via CoreSeeder so every collection
+          // that has a handler gets populated, regardless of the active preset.
+          for (const col of enabledCollections) {
+            await seeder.seedCollection(col)
+          }
           return Response.json({
             success: true,
             message: 'Successfully seeded all collections',

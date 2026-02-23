@@ -25,7 +25,7 @@ export const ContentTypes: CollectionConfig = {
     group: 'Collections',
     useAsTitle: 'name',
     defaultColumns: ['name', 'slug', 'template', 'itemCount', 'updatedAt', 'preview'],
-    description: 'Define custom collections like "Services", "FAQs", or "Galleries"',
+    description: 'Define your own content types without code — equivalent to WordPress Custom Post Types. Each record here creates a named collection (e.g. "Classic Cars", "Case Studies", "Recipes") with its own icon, URL slug, and optional custom fields. Actual content records live in Custom Items, filtered by content type. Use this to extend the CMS for any structured content not covered by the built-in collections.',
   },
   access: {
     read: async ({ req }) => (await isCollectionEnabled(req.payload, 'content-types')),

@@ -73,17 +73,14 @@ const SeoTemplatesTab: React.FC = () => {
     }
 
     return (
-        <div style={{ padding: '2rem 0' }}>
-            <div style={{ marginBottom: '1.5rem' }}>
-                <h3 style={{ marginBottom: '0.5rem', fontSize: '1rem', fontWeight: 600 }}>
-                    SEO Defaults
-                </h3>
+        <div className="ra-seo-settings" style={{ padding: '2rem 0' }}>
+            <div className="ra-seo-section">
+                <h3>SEO Defaults</h3>
                 <p style={{ marginBottom: '1.5rem', color: 'var(--theme-elevation-500)', fontSize: '0.875rem' }}>
                     Set default patterns for meta titles and descriptions across your site
                 </p>
 
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-                    {/* Default Meta Title Pattern */}
                     <div className="field-type">
                         <label className="field-label" htmlFor="defaultMetaTitlePattern">
                             Default Meta Title Pattern
@@ -96,12 +93,11 @@ const SeoTemplatesTab: React.FC = () => {
                             onChange={(e) => setTemplates({ ...templates, defaultMetaTitlePattern: e.target.value })}
                             placeholder="%title% | Site Name"
                         />
-                        <div className="field-description" style={{ marginTop: '0.5rem', fontSize: '0.75rem', color: 'var(--theme-elevation-500)' }}>
+                        <div className="field-description">
                             Use %title% as placeholder for page title. Example: %title% | My Site
                         </div>
                     </div>
 
-                    {/* Title Separator */}
                     <div className="field-type">
                         <label className="field-label" htmlFor="titleSeparator">
                             Title Separator
@@ -115,12 +111,11 @@ const SeoTemplatesTab: React.FC = () => {
                             <option value="|">| (Pipe)</option>
                             <option value="-">- (Dash)</option>
                             <option value="·">· (Middle Dot)</option>
-                            <option value="/">/ (Slash)</option>
-                            <option value=">>"> &gt;&gt; (Double Arrow)</option>
+                            <option value="/">"/" (Slash)</option>
+                            <option value=">>">&gt;&gt; (Double Arrow)</option>
                         </select>
                     </div>
 
-                    {/* Default Meta Description */}
                     <div className="field-type">
                         <label className="field-label" htmlFor="defaultMetaDescription">
                             Default Meta Description
@@ -133,12 +128,11 @@ const SeoTemplatesTab: React.FC = () => {
                             onChange={(e) => setTemplates({ ...templates, defaultMetaDescription: e.target.value })}
                             placeholder="A brief description of your site (100-155 characters recommended)"
                         />
-                        <div className="field-description" style={{ marginTop: '0.5rem', fontSize: '0.75rem', color: 'var(--theme-elevation-500)' }}>
+                        <div className="field-description">
                             This will be used when no specific description is set ({(templates.defaultMetaDescription || '').length}/155 characters)
                         </div>
                     </div>
 
-                    {/* Twitter Card Type */}
                     <div className="field-type">
                         <label className="field-label" htmlFor="twitterCardType">
                             Twitter Card Type
@@ -158,8 +152,7 @@ const SeoTemplatesTab: React.FC = () => {
                 </div>
             </div>
 
-            {/* Save Button */}
-            <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', marginTop: '2rem' }}>
+            <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
                 <button
                     type="button"
                     className="btn btn--style-primary btn--size-medium"

@@ -15,7 +15,7 @@ export const ArchiveItems: CollectionConfig = {
     useAsTitle: 'title',
     group: 'Archive',
     defaultColumns: ['title', '_status', 'updatedAt', 'preview'],
-    description: 'Archive items such as gallery pieces, portfolio items, or collectibles',
+    description: 'Catalogued objects — artworks, portfolio pieces, museum objects, collectibles, or any item with provenance. Each archive item links to its creators (People) and places of origin (Places), and has a full block-builder layout for rich contextual content. Supports drafts, scheduled publishing, and Live Preview.',
     preview: (doc) => getPreviewUrl({ collection: 'archive-items', slug: doc.slug as string }),
     livePreview: {
       url: ({ data }) => getPreviewUrl({ collection: 'archive-items', slug: data?.slug }),

@@ -7,7 +7,7 @@ export const Footer: GlobalConfig = {
 
   admin: {
     group: 'Site',
-    description: 'Configure the site footer',
+    description: 'Controls the site footer shown at the bottom of every page — navigation columns, social media icons, copyright text, and footer CTA. Changes publish immediately when saved and revalidate the frontend automatically. This is a singleton global (one record, site-wide).',
   },
 
   access: {

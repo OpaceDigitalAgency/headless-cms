@@ -73,12 +73,9 @@ const SeoAdvancedTab: React.FC = () => {
     }
 
     return (
-        <div style={{ padding: '2rem 0' }}>
-            {/* Search Engine Verification */}
-            <div style={{ marginBottom: '2rem' }}>
-                <h3 style={{ marginBottom: '0.5rem', fontSize: '1rem', fontWeight: 600 }}>
-                    Search Engine Verification
-                </h3>
+        <div className="ra-seo-settings" style={{ padding: '2rem 0' }}>
+            <div className="ra-seo-section">
+                <h3>Search Engine Verification</h3>
                 <p style={{ marginBottom: '1.5rem', color: 'var(--theme-elevation-500)', fontSize: '0.875rem' }}>
                     Meta tags for verifying site ownership with search engines
                 </p>
@@ -96,7 +93,7 @@ const SeoAdvancedTab: React.FC = () => {
                             onChange={(e) => setAdvanced({ ...advanced, googleSiteVerification: e.target.value })}
                             placeholder="your-verification-code"
                         />
-                        <div className="field-description" style={{ marginTop: '0.5rem', fontSize: '0.75rem', color: 'var(--theme-elevation-500)' }}>
+                        <div className="field-description">
                             From Google Search Console verification
                         </div>
                     </div>
@@ -131,11 +128,8 @@ const SeoAdvancedTab: React.FC = () => {
                 </div>
             </div>
 
-            {/* Robots Meta Defaults */}
-            <div style={{ marginBottom: '2rem' }}>
-                <h3 style={{ marginBottom: '0.5rem', fontSize: '1rem', fontWeight: 600 }}>
-                    Default Robots Meta
-                </h3>
+            <div className="ra-seo-section">
+                <h3>Default Robots Meta</h3>
                 <p style={{ marginBottom: '1.5rem', color: 'var(--theme-elevation-500)', fontSize: '0.875rem' }}>
                     Default robots directive for pages without specific SEO settings
                 </p>
@@ -158,11 +152,8 @@ const SeoAdvancedTab: React.FC = () => {
                 </div>
             </div>
 
-            {/* Organization Schema */}
-            <div style={{ marginBottom: '2rem' }}>
-                <h3 style={{ marginBottom: '0.5rem', fontSize: '1rem', fontWeight: 600 }}>
-                    Organization Schema
-                </h3>
+            <div className="ra-seo-section">
+                <h3>Organization Schema</h3>
                 <p style={{ marginBottom: '1.5rem', color: 'var(--theme-elevation-500)', fontSize: '0.875rem' }}>
                     Structured data about your organization for search engines
                 </p>
@@ -203,8 +194,7 @@ const SeoAdvancedTab: React.FC = () => {
                 </div>
             </div>
 
-            {/* Save Button */}
-            <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', marginTop: '2rem' }}>
+            <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
                 <button
                     type="button"
                     className="btn btn--style-primary btn--size-medium"

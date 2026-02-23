@@ -7,7 +7,7 @@ export const Header: GlobalConfig = {
 
   admin: {
     group: 'Site',
-    description: 'Configure the site header and navigation',
+    description: 'Controls the site header shown at the top of every page — logo, primary navigation links, and the header CTA button. Changes publish immediately when saved and revalidate the frontend automatically. This is a singleton global (one record, site-wide).',
   },
 
   access: {

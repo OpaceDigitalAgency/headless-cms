@@ -8,7 +8,7 @@ export const BlockLibrary: CollectionConfig = {
     admin: {
         useAsTitle: 'name',
         group: 'Content Management',
-        description: 'Reusable block instances that can be shared across multiple pages',
+        description: 'A library of saved block configurations that editors can insert onto any page. Build a block once (e.g. a Hero, CTA, or Testimonials section) and reuse it anywhere by selecting it from the Block Library. Unlike Global Blocks, editors must actively choose to insert a Block Library entry onto a page — it does not appear automatically.',
         defaultColumns: ['name', 'blockType', 'updatedAt'],
     },
 

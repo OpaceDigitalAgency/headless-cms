@@ -14,7 +14,7 @@ export const PageTemplates: GlobalConfig = {
 
     admin: {
         group: 'Site',
-        description: 'Reusable blocks that can be shared across multiple pages',
+        description: 'Shared block content that is automatically injected into specific groups of pages (e.g. all location pages share the same Testimonials block, Logo Cloud, FAQ, and CTA sections). Edit a shared block here once and every page in the group picks up the change instantly — without editing each page individually. This is different from Block Library (editor-chosen insertion) and Global Blocks (unconditional site-wide rendering). Admins only.',
     },
 
     access: {

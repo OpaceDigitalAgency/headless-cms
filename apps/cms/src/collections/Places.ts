@@ -38,7 +38,7 @@ export const Places: CollectionConfig = {
     useAsTitle: 'name',
     group: 'Collections',
     defaultColumns: ['name', 'placeType', 'categories', '_status', 'updatedAt', 'preview'],
-    description: 'Geographic locations, venues, and historical sites',
+    description: 'Geographic locations, venues, and historical sites — from cities and countries to museums, galleries, archaeological sites, and stores. Each place links to related Archive Items (provenance) and People (birth/death place). Includes address, opening hours, gallery, and full block-builder layout. Visibility is controlled by the Feature Settings global.',
     preview: (doc) => getPreviewUrl({ collection: 'places', slug: doc.slug as string }),
     livePreview: {
       url: ({ data }) => getPreviewUrl({ collection: 'places', slug: data?.slug }),

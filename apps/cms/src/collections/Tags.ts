@@ -10,7 +10,7 @@ export const Tags: CollectionConfig = {
     useAsTitle: 'title',
     group: 'Taxonomy',
     defaultColumns: ['title', 'slug', 'totalCount', 'updatedAt'],
-    description: 'Flat tags shared across Posts, Archive Items, Events, People, and Custom Items',
+    description: 'Flat keyword labels used to tag Posts, Archive Items, Events, People, and Custom Items. Unlike Categories (which are hierarchical and get listing pages), Tags are non-hierarchical. Use them for specific subjects, keywords, or filter criteria — for example "Renaissance", "Oil Painting", "Featured".',
     preview: (doc) => {
       const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
       return `${baseUrl}/tags/${doc.slug}`

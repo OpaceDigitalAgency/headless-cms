@@ -15,7 +15,7 @@ export const Products: CollectionConfig = {
     useAsTitle: 'title',
     group: 'Shop',
     defaultColumns: ['title', '_status', 'updatedAt'],
-    description: 'Products, services, or inventory items with pricing and variants',
+    description: 'Products, services, or inventory items with pricing, variants, images, and stock control. Part of the eCommerce module — if this section is not visible, enable eCommerce in Feature Settings (Admin → Feature Settings) by following the instructions there. Supports drafts, scheduled publishing, and Live Preview.',
     preview: (doc) => getPreviewUrl({ collection: 'products', slug: doc.slug as string }),
     livePreview: {
       url: ({ data }) => getPreviewUrl({ collection: 'products', slug: data?.slug }),
